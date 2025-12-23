@@ -1,6 +1,5 @@
 const express = require("express");
 const authRouter = express.Router();
-
 const { validateSignUpData } = require("../utils/validation");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
@@ -45,7 +44,7 @@ authRouter.post("/SignUpDB", async (req, res) => {
             expires: new Date(Date.now() + 8 * 3600000),
         });
 
-        res.json({ message: "User Added successfully!", data: { Name: savedUser.FirstName + savedUser.LastName } });
+        res.json({ message: "User Added successfully!", data: { Name: savedUser.FirstName + " " + savedUser.LastName } });
     } catch (err) {
         res.status(400).send("ERROR : " + err.message);
     }
