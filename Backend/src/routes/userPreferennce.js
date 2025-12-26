@@ -30,7 +30,6 @@ userPreference.get("/user/requests/received", userAuth, async (req, res) => {
         });
     }
 });
-
 //all accepted conections
 userPreference.get("/user/connections", userAuth, async (req, res) => {
     try {
@@ -205,9 +204,7 @@ userPreference.get("/user/requests/send", userAuth, async (req, res) => {
         });
     }
 });
-
-
-// cancel / delete sent request
+// cancel delete sent request
 userPreference.delete(
     "/user/requests/send/:requestId",
     userAuth,
@@ -244,7 +241,7 @@ userPreference.delete(
         }
     }
 );
-
+//feed
 userPreference.get("/feed", userAuth, async (req, res) => {
     try {
         const loggedInUser = req.user;

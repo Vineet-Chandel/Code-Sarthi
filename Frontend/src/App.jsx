@@ -1,13 +1,57 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import NavBar from "./components/Navbar";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Body from "./Body";
+import Login from "./Pages/auth/Login";
+import Signup from "./Pages/auth/ Signup";
 import { gsap } from "gsap";
+import ProtectedRoute from "./ProtectedRoute";
+import Dashboard from "./Pages/Dashboard";
+import Discussions from "./Pages/Discussions";
+import Meeting from "./Pages/Meeting";
+import Explore from "./Pages/Explore";
+import Resume from "./Pages/Resume";
+import Shastra from "./Pages/Shatra";
+import Projects from "./Pages/Projects";
+import ProjectManager from "./Pages/Project-Manager";
+
+import Scheduler from "./Pages/Scheduler";
+import Study from "./Pages/Study";
+import Assignment from "./Pages/Assignments";
+import Notes from "./Pages/Notes";
+import ContactUs from "./Pages/Contact-Us";
+import AboutUs from "./Pages/About-Us";
+import PrivacyPolicy from "./Pages/Privacy-Policy";
+
+
+
+
 
 const App = () => {
   return (
-    // <Router>
-    //   <div className="flex">
-    <NavBar />
-
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<ProtectedRoute />}>
+          <Route path="login" element={<Login />} />
+          <Route path="signup" element={<Signup />} />
+        </Route>
+        <Route path="/app" element={<Body />}>
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="discussions" element={<Discussions />} />
+          <Route path="meeting" element={<Meeting />} />
+          <Route path="explore" element={<Explore />} />
+          <Route path="resume" element={<Resume />} />
+          <Route path="shastra" element={<Shastra />} />
+          <Route path="projects" element={<Projects />} />
+          <Route path="projectmanager" element={<ProjectManager />} />
+          <Route path="scheduler" element={<Scheduler />} />
+          <Route path="study" element={<Study />} />
+          <Route path="assignment" element={<Assignment />} />
+          <Route path="notes" element={<Notes />} />
+          <Route path="contactUs" element={<ContactUs />} />
+          <Route path="aboutUs" element={<AboutUs />} />
+          <Route path="privacypolicy" element={<PrivacyPolicy />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 };
 

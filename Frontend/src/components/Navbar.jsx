@@ -1,7 +1,30 @@
-import { Helmet } from "react-helmet";
+
 import { useState, useRef, useEffect } from "react";
 import { gsap } from "gsap";
-import { useNavigate, useLocation } from "react-router-dom";
+// import Dashboard from "../Pages/Dashboard";
+// import Discussions from "../Pages/Discussions";
+// import Explore from "../Pages/Explore";
+// import Meeting from "../Pages/Meeting";
+// import Resume from "../Pages/Resume";
+// import Shastra from "../Pages/Shatra";
+
+// import AboutUs from "../Pages/About-Us";
+// import Assignments from "../Pages/Assignments";
+// import ContactUs from "../Pages/Contact-Us";
+// import Notes from "../Pages/Notes";
+// import PrivacyPolicy from "../Pages/Privacy-Policy";
+// import Study from "../Pages/Study";
+// import Scheduler from "../Pages/Scheduler";
+// import Accessibility from "../personalPages/Accessibility";
+// import Appearence from "../personalPages/Appearence";
+// import Connections from "../personalPages/Connections";
+// import Notifications from "../personalPages/Notifications";
+// import Profile from "../personalPages/Profile";
+// import Settings from "../personalPages/Settings";
+// import ShastraSettings from "../personalPages/Shastra-Settings";
+// import Shop from "../personalPages/Shop";
+
+
 
 import {
     Pages,
@@ -12,6 +35,7 @@ import {
     SettingPlace,
     ByePlace
 } from "./Navigations";
+
 const NavBar = () => {
     const [showSidebar, setShowSidebar] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
@@ -108,21 +132,70 @@ const NavBar = () => {
         return () => document.removeEventListener("keydown", handleEscKey);
     }, [showSidebar, showProfile]);
 
-
+    // const renderPage = () => {
+    //     switch (activePage) {
+    //         case "Dashboard":
+    //             return <Dashboard />;
+    //         case "Discussions":
+    //             return <Discussions />;
+    //         case "Explore":
+    //             return <Explore />;
+    //         case "Meeting":
+    //             return <Meeting />;
+    //         case "Resume":
+    //             return <Resume />;
+    //         case "ShastraAI":
+    //             return <Shastra />;
+    //         case "Projects":
+    //             return <Projects />;
+    //         case "About Us":
+    //             return <AboutUs />;
+    //         case "Assignments":
+    //             return <Assignments />;
+    //         case "Contact Us":
+    //             return <ContactUs />;
+    //         case "Notes":
+    //             return <Notes />;
+    //         case "Privacy Policy":
+    //             return <PrivacyPolicy />;
+    //         case "Scheduler":
+    //             return <Scheduler />;
+    //         case "Project Manager":
+    //             return <ProjectManager />
+    //         case "Study":
+    //             return <Study />;
+    //         case "Accessibility":
+    //             return <Accessibility />;
+    //         case "Appearence":
+    //             return <Appearence />;
+    //         case "Connections":
+    //             return <Connections />;
+    //         case "Notifications":
+    //             return <Notifications />;
+    //         case "Profile":
+    //             return <Profile />;
+    //         case "Settings":
+    //             return <Settings />;
+    //         case "ShastraSettings":
+    //             return <ShastraSettings />;
+    //         case "Shop":
+    //             return <Shop />;
+    //         default:
+    //             return <Dashboard />;
+    //     }
+    // };
 
     return (
 
 
-
-        <div className="navbar bg-gray-100 shadow-sm flex items-center justify-between p-4">
-
+        <div className="navbar bg-gray-100 shadow-sm flex items-center justify-between ">
 
 
 
             {/* Left side - Menu button */}
-            <div className="NavStart flex">
+            <div className="NavStart flex justify-center items-center gap-2.5">
                 <button
-                    className="Nav_svg border border-gray-400 p-[5px] rounded cursor-pointer hover:bg-gray-200 transition-colors duration-200"
+                    className="Nav_svg border border-gray-400 p-[5px] h-[32px] w-[32px] rounded cursor-pointer hover:bg-gray-200 transition-colors duration-200"
                     onClick={openSidebar}
                     aria-label="Open navigation menu"
                 >
@@ -134,13 +207,177 @@ const NavBar = () => {
                         </g>
                     </svg>
                 </button>
+                {/* Main sidebar modal */}
+                {
+                    showSidebar && (
+                        <div className="fixed inset-0 z-40">
+                            {/* Overlay */}
+                            <div
+                                ref={sidebarOverlayRef}
+                                className="absolute inset-0"
+                                onClick={handleSidebarOverlayClick}
+                            />
+
+                            {/* Sidebar */}
+                            <div
+                                ref={sidebarRef}
+                                className="absolute left-0 top-0 h-full w-80 bg-white/20 backdrop-blur-lg shadow-xl z-50 rounded-r-xl"
+                                role="dialog"
+                                aria-modal="true"
+                                aria-label="Navigation menu"
+                            >
+                                {/* Sidebar header */}
+                                <div className="flex justify-between items-center p-3 border-b mb-5 pb-5 relative top-3 border-gray-200">
+                                    <div className="top">
+                                        <div className="flex items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 16 16">
+                                                <path fill="#0f0f0f" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59c.4.07.55-.17.55-.38c0-.19-.01-.82-.01-1.49c-2.01.37-2.53-.49-2.69-.94c-.09-.23-.48-.94-.82-1.13c-.28-.15-.68-.52-.01-.53c.63-.01 1.08.58 1.23.82c.72 1.21 1.87.87 2.33.66c.07-.52.28-.87.51-1.07c-1.78-.2-3.64-.89-3.64-3.95c0-.87.31-1.59.82-2.15c-.08-.2-.36-1.02.08-2.12c0 0 .67-.21 2.2.82c.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82c.44 1.1.16 1.92.08 2.12c.51.56.82 1.27.82 2.15c0 3.07-1.87 3.75-3.65 3.95c.29.25.54.73.54 1.48c0 1.07-.01 1.93-.01 2.2c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8" />
+                                            </svg>
+                                            <span className="text-2xl font-bold text-gray-800">CodeSarthi</span>
+                                        </div>
+
+                                        <p className="pl-10 text-sm">Empowering Dev Workflows</p>
+                                    </div>
+
+                                    <button
+                                        className="w-6 h-6 flex items-center justify-center border border-gray-300 rounded-full hover:bg-gray-100 transition-colors duration-200"
+                                        onClick={closeSidebar}
+                                        aria-label="Close navigation menu"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16">
+                                            <path fill="currentColor" d="m8.707 8l3.646-3.646a.5.5 0 0 0-.707-.707L8 7.293L4.354 3.647a.5.5 0 0 0-.707.707L7.293 8l-3.646 3.646a.5.5 0 0 0 .708.707l3.646-3.646l3.646 3.646a.5.5 0 0 0 .708 0a.5.5 0 0 0 0-.707L8.709 8z" />
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                {/* Navigation links */}
+                                <nav className="p-1 space-y-1 border-b mb-5  pb-5 border-gray-200">
+                                    {Pages.map((item, index) => (
+                                        <button
+                                            key={item.id}
+                                            onClick={() => {
+                                                setActivePage(item.name); closeSidebar();
+                                            }}
+                                            className={`flex items-center gap-3 py-1 px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
+                                            style={{ animationDelay: `${index * 0.05}s` }}
+                                        >
+
+                                            <span className={`w-1 h-6 rounded-md transition-all duration-200 ${activePage === item.name ? "bg-blue-700" : "bg-transparent "} `}></span>
+
+                                            <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold" : "font-normal"}`}>
+                                                {item.icon}
+                                            </span>
+                                            <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold" : "font-normal"}`}>
+                                                {item.name}
+                                            </span>
+                                        </button>
+                                    ))}
+
+                                </nav>
+                                <nav className="p-1 space-y-1 border-b mb-5 pb-5 border-gray-200">
+                                    {NextPages.map((item, index) => (
+                                        <button
+                                            key={item.id}
+                                            onClick={() => { setActivePage(item.name); closeSidebar(); }}
+                                            className={`flex items-center gap-3 py-1 px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
+                                            style={{ animationDelay: `${index * 0.05}s` }}
+                                        >
+
+                                            <span className={`w-1 h-6 rounded-md transition-all duration-200 ${activePage === item.name ? "bg-pink-400" : "bg-transparent "} `}></span>
+
+                                            <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold" : "font-normal"}`}>
+                                                {item.icon}
+                                            </span>
+                                            <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold" : "font-normal"}`}>
+                                                {item.name}
+                                            </span>
+                                        </button>
+                                    ))}
+
+                                </nav>
+                                <nav className="p-1 space-y-1 border-b mb-5 pb-5 border-gray-200">
+                                    {MarketPlace.map((item, index) => (
+                                        <button
+                                            key={item.id}
+                                            onClick={() => { setActivePage(item.name); closeSidebar(); }}
+                                            className={`flex items-center gap-3 py-1 px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
+                                            style={{ animationDelay: `${index * 0.05}s` }}
+
+                                        >
+
+                                            <span className={`w-1 h-6 rounded-md transition-all duration-200 ${activePage === item.name ? "bg-green-500" : "bg-transparent "} `}></span>
+
+                                            <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold" : "font-normal"}`}>
+                                                {item.icon}
+                                            </span>
+                                            <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold" : "font-normal"}`}>
+                                                {item.name}
+                                            </span>
+                                        </button>
+                                    ))}
+
+                                </nav>
+                                <nav className="p-1 space-y-1 border-b pb-5  mb-5 border-gray-200">
+                                    {AboutPlace.map((item, index) => (
+                                        <button
+                                            key={item.id}
+                                            onClick={() => { setActivePage(item.name); closeSidebar(); }}
+                                            className={`flex items-center gap-3 py-1 px-4 w-full text-left rounded-lg transition-all duration-200  ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
+                                            style={{ animationDelay: `${index * 0.05}s` }}
+                                        >
+                                            <span className={`w-1 h-6 rounded-md transition-all duration-200 ${activePage === item.name ? "bg-orange-500" : "bg-transparent "} `}></span>
+
+                                            <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold" : "font-normal"}`}>
+                                                {item.icon}
+                                            </span>
+                                            <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold" : "font-normal"}`}>
+                                                {item.name}
+                                            </span>
+                                        </button>
+                                    ))}
+
+                                </nav>
+
+                                {/* Footer section */}
+                                <div className=" bottom-0 left-0 right-0 p-3">
+                                    <div className="text-center text-gray-500 text-sm">
+                                        <p>© {new Date().getFullYear()} CodeSarthi™ — All rights reserved.</p>
+                                        <p className="mt-1">Dhanyavaad 🌸</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }
+
+
+                <div className="logo flex justify-center items-center gap-4">
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 16 16">
+                        <path fill="#0f0f0f" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59c.4.07.55-.17.55-.38c0-.19-.01-.82-.01-1.49c-2.01.37-2.53-.49-2.69-.94c-.09-.23-.48-.94-.82-1.13c-.28-.15-.68-.52-.01-.53c.63-.01 1.08.58 1.23.82c.72 1.21 1.87.87 2.33.66c.07-.52.28-.87.51-1.07c-1.78-.2-3.64-.89-3.64-3.95c0-.87.31-1.59.82-2.15c-.08-.2-.36-1.02.08-2.12c0 0 .67-.21 2.2.82c.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82c.44 1.1.16 1.92.08 2.12c.51.56.82 1.27.82 2.15c0 3.07-1.87 3.75-3.65 3.95c.29.25.54.73.54 1.48c0 1.07-.01 1.93-.01 2.2c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8" />
+                    </svg>
+
+
+
+
+
+
+                    <div className="name font-semibold text-2xl">
+                        {activePage}
+                    </div>
+                </div>
             </div>
 
+
+
+
+            <div className="items"></div>
             {/* Right side - Profile button */}
             <div className="NavEnd relative">
                 <button
                     onClick={openProfile}
-                    className="h-16 w-16 rounded-full overflow-hidden p-[3px] bg-gradient-to-br from-gray-400 to-gray-100 cursor-pointer transition-all duration-300 hover:shadow-[0_10px_25px_rgba(0,0,0,0.1)] hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-400 relative group"
+                    className="h-12 w-12 rounded-full overflow-hidden bg-gradient-to-br from-gray-400 to-gray-100 cursor-pointer transition-all duration-300 hover:shadow-[0_10px_25px_rgba(0,0,0,0.1)] hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-400 relative group"
                     aria-label="Open profile menu"
                 >
                     <div className="h-full w-full rounded-full overflow-hidden border border-white/50">
@@ -150,7 +387,7 @@ const NavBar = () => {
                             className="h-full w-full object-cover transition-all duration-500 group-hover:scale-125 group-hover:brightness-110 group-active:scale-100"
                         />
                     </div>
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-b from-transparent from-30% to-white/10 to-70% opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+
                 </button>
 
                 {/* Profile modal */}
@@ -267,149 +504,13 @@ const NavBar = () => {
                 )}
             </div>
 
-            {/* Main sidebar modal */}
-            {
-                showSidebar && (
-                    <div className="fixed inset-0 z-40">
-                        {/* Overlay */}
-                        <div
-                            ref={sidebarOverlayRef}
-                            className="absolute inset-0 bg-blue-300/15"
-                            onClick={handleSidebarOverlayClick}
-                        />
 
-                        {/* Sidebar */}
-                        <div
-                            ref={sidebarRef}
-                            className="absolute left-0 top-0 h-full w-80 bg-white shadow-xl z-50 rounded-r-xl"
-                            role="dialog"
-                            aria-modal="true"
-                            aria-label="Navigation menu"
-                        >
-                            {/* Sidebar header */}
-                            <div className="flex justify-between items-center p-3 border-b mb-5 pb-5 relative top-3 border-gray-200">
-                                <div className="top">
-                                    <div className="flex items-center gap-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 16 16">
-                                            <path fill="#0f0f0f" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59c.4.07.55-.17.55-.38c0-.19-.01-.82-.01-1.49c-2.01.37-2.53-.49-2.69-.94c-.09-.23-.48-.94-.82-1.13c-.28-.15-.68-.52-.01-.53c.63-.01 1.08.58 1.23.82c.72 1.21 1.87.87 2.33.66c.07-.52.28-.87.51-1.07c-1.78-.2-3.64-.89-3.64-3.95c0-.87.31-1.59.82-2.15c-.08-.2-.36-1.02.08-2.12c0 0 .67-.21 2.2.82c.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82c.44 1.1.16 1.92.08 2.12c.51.56.82 1.27.82 2.15c0 3.07-1.87 3.75-3.65 3.95c.29.25.54.73.54 1.48c0 1.07-.01 1.93-.01 2.2c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8" />
-                                        </svg>
-                                        <span className="text-2xl font-bold text-gray-800">CodeSarthi</span>
-                                    </div>
-
-                                    <p className="pl-10 text-sm">Empowering Dev Workflows</p>
-                                </div>
-
-                                <button
-                                    className="w-6 h-6 flex items-center justify-center border border-gray-300 rounded-full hover:bg-gray-100 transition-colors duration-200"
-                                    onClick={closeSidebar}
-                                    aria-label="Close navigation menu"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16">
-                                        <path fill="currentColor" d="m8.707 8l3.646-3.646a.5.5 0 0 0-.707-.707L8 7.293L4.354 3.647a.5.5 0 0 0-.707.707L7.293 8l-3.646 3.646a.5.5 0 0 0 .708.707l3.646-3.646l3.646 3.646a.5.5 0 0 0 .708 0a.5.5 0 0 0 0-.707L8.709 8z" />
-                                    </svg>
-                                </button>
-                            </div>
-
-                            {/* Navigation links */}
-                            <nav className="p-1 space-y-1 border-b mb-5  pb-5 border-gray-200">
-                                {Pages.map((item, index) => (
-                                    <button
-                                        key={item.id}
-                                        onClick={() => {
-                                            setActivePage(item.name); closeSidebar();
-                                        }}
-                                        className={`flex items-center gap-3 py-1 px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
-                                        style={{ animationDelay: `${index * 0.05}s` }}
-                                    >
-
-                                        <span className={`w-1 h-6 rounded-md transition-all duration-200 ${activePage === item.name ? "bg-blue-700" : "bg-transparent "} `}></span>
-
-                                        <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold" : "font-normal"}`}>
-                                            {item.icon}
-                                        </span>
-                                        <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold" : "font-normal"}`}>
-                                            {item.name}
-                                        </span>
-                                    </button>
-                                ))}
-
-                            </nav>
-                            <nav className="p-1 space-y-1 border-b mb-5 pb-5 border-gray-200">
-                                {NextPages.map((item, index) => (
-                                    <button
-                                        key={item.id}
-                                        onClick={() => { setActivePage(item.name); closeSidebar(); }}
-                                        className={`flex items-center gap-3 py-1 px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
-                                        style={{ animationDelay: `${index * 0.05}s` }}
-                                    >
-
-                                        <span className={`w-1 h-6 rounded-md transition-all duration-200 ${activePage === item.name ? "bg-pink-400" : "bg-transparent "} `}></span>
-
-                                        <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold" : "font-normal"}`}>
-                                            {item.icon}
-                                        </span>
-                                        <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold" : "font-normal"}`}>
-                                            {item.name}
-                                        </span>
-                                    </button>
-                                ))}
-
-                            </nav>
-                            <nav className="p-1 space-y-1 border-b mb-5 pb-5 border-gray-200">
-                                {MarketPlace.map((item, index) => (
-                                    <button
-                                        key={item.id}
-                                        onClick={() => { setActivePage(item.name); closeSidebar(); }}
-                                        className={`flex items-center gap-3 py-1 px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
-                                        style={{ animationDelay: `${index * 0.05}s` }}
-
-                                    >
-
-                                        <span className={`w-1 h-6 rounded-md transition-all duration-200 ${activePage === item.name ? "bg-green-500" : "bg-transparent "} `}></span>
-
-                                        <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold" : "font-normal"}`}>
-                                            {item.icon}
-                                        </span>
-                                        <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold" : "font-normal"}`}>
-                                            {item.name}
-                                        </span>
-                                    </button>
-                                ))}
-
-                            </nav>
-                            <nav className="p-1 space-y-1 border-b pb-5  mb-5 border-gray-200">
-                                {AboutPlace.map((item, index) => (
-                                    <button
-                                        key={item.id}
-                                        onClick={() => { setActivePage(item.name); closeSidebar(); }}
-                                        className={`flex items-center gap-3 py-1 px-4 w-full text-left rounded-lg transition-all duration-200  ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
-                                        style={{ animationDelay: `${index * 0.05}s` }}
-                                    >
-                                        <span className={`w-1 h-6 rounded-md transition-all duration-200 ${activePage === item.name ? "bg-orange-500" : "bg-transparent "} `}></span>
-
-                                        <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold" : "font-normal"}`}>
-                                            {item.icon}
-                                        </span>
-                                        <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold" : "font-normal"}`}>
-                                            {item.name}
-                                        </span>
-                                    </button>
-                                ))}
-
-                            </nav>
-
-                            {/* Footer section */}
-                            <div className=" bottom-0 left-0 right-0 p-3">
-                                <div className="text-center text-gray-500 text-sm">
-                                    <p>© {new Date().getFullYear()} CodeSarthi™ — All rights reserved.</p>
-                                    <p className="mt-1">Dhanyavaad 🌸</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )
-            }
         </div >
+
+
+
+
+
     );
 };
 
