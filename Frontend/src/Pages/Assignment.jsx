@@ -1,10 +1,11 @@
 import { useSelector } from "react-redux";
-const Discussions = () => {
+const Assignment = () => {
     const user = useSelector((store) => store.user);
     return (
 
-        <div>Discussions {user.FirstName}</div>
+        <div>Assignment {user.FirstName}</div>
 
     )
 }
-export default Discussions;
+
+export default Assignment

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { addUser } from "../../utils/userSlice";
 
 
@@ -12,6 +13,8 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
 
     const togglePassword = () => {
         setShowPassword(prev => !prev);
@@ -29,9 +32,9 @@ const Login = () => {
                 { Gmail, password },
                 { withCredentials: true }
             );
-            console.log("TYPE:", typeof res.data);
-            console.log("DATA:", res.data);
+
             dispatch(addUser(res.data));
+            navigate("/app");
 
 
         } catch (err) {

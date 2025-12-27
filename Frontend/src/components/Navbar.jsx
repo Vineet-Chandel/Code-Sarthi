@@ -1,31 +1,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { gsap } from "gsap";
-// import Dashboard from "../Pages/Dashboard";
-// import Discussions from "../Pages/Discussions";
-// import Explore from "../Pages/Explore";
-// import Meeting from "../Pages/Meeting";
-// import Resume from "../Pages/Resume";
-// import Shastra from "../Pages/Shatra";
-
-// import AboutUs from "../Pages/About-Us";
-// import Assignments from "../Pages/Assignments";
-// import ContactUs from "../Pages/Contact-Us";
-// import Notes from "../Pages/Notes";
-// import PrivacyPolicy from "../Pages/Privacy-Policy";
-// import Study from "../Pages/Study";
-// import Scheduler from "../Pages/Scheduler";
-// import Accessibility from "../personalPages/Accessibility";
-// import Appearence from "../personalPages/Appearence";
-// import Connections from "../personalPages/Connections";
-// import Notifications from "../personalPages/Notifications";
-// import Profile from "../personalPages/Profile";
-// import Settings from "../personalPages/Settings";
-// import ShastraSettings from "../personalPages/Shastra-Settings";
-// import Shop from "../personalPages/Shop";
-
-
-
+import { useNavigate } from "react-router-dom";
 import {
     Pages,
     NextPages,
@@ -35,18 +11,18 @@ import {
     SettingPlace,
     ByePlace
 } from "./Navigations";
+import { useSelector } from "react-redux";
 
 const NavBar = () => {
     const [showSidebar, setShowSidebar] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
     const [activePage, setActivePage] = useState("Dashboard");
-
-
-
     const sidebarRef = useRef(null);
     const sidebarOverlayRef = useRef(null);
     const profileRef = useRef(null);
     const profileOverlayRef = useRef(null);
+    const user = useSelector((store) => store.user);
+    const navigate = useNavigate();
 
     // Sidebar functions
     const openSidebar = () => {
@@ -132,58 +108,7 @@ const NavBar = () => {
         return () => document.removeEventListener("keydown", handleEscKey);
     }, [showSidebar, showProfile]);
 
-    // const renderPage = () => {
-    //     switch (activePage) {
-    //         case "Dashboard":
-    //             return <Dashboard />;
-    //         case "Discussions":
-    //             return <Discussions />;
-    //         case "Explore":
-    //             return <Explore />;
-    //         case "Meeting":
-    //             return <Meeting />;
-    //         case "Resume":
-    //             return <Resume />;
-    //         case "ShastraAI":
-    //             return <Shastra />;
-    //         case "Projects":
-    //             return <Projects />;
-    //         case "About Us":
-    //             return <AboutUs />;
-    //         case "Assignments":
-    //             return <Assignments />;
-    //         case "Contact Us":
-    //             return <ContactUs />;
-    //         case "Notes":
-    //             return <Notes />;
-    //         case "Privacy Policy":
-    //             return <PrivacyPolicy />;
-    //         case "Scheduler":
-    //             return <Scheduler />;
-    //         case "Project Manager":
-    //             return <ProjectManager />
-    //         case "Study":
-    //             return <Study />;
-    //         case "Accessibility":
-    //             return <Accessibility />;
-    //         case "Appearence":
-    //             return <Appearence />;
-    //         case "Connections":
-    //             return <Connections />;
-    //         case "Notifications":
-    //             return <Notifications />;
-    //         case "Profile":
-    //             return <Profile />;
-    //         case "Settings":
-    //             return <Settings />;
-    //         case "ShastraSettings":
-    //             return <ShastraSettings />;
-    //         case "Shop":
-    //             return <Shop />;
-    //         default:
-    //             return <Dashboard />;
-    //     }
-    // };
+
 
     return (
 
@@ -256,7 +181,7 @@ const NavBar = () => {
                                         <button
                                             key={item.id}
                                             onClick={() => {
-                                                setActivePage(item.name); closeSidebar();
+                                                setActivePage(item.name); closeSidebar(); navigate(`/app/${item.path}`)
                                             }}
                                             className={`flex items-center gap-3 py-1 px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
                                             style={{ animationDelay: `${index * 0.05}s` }}
@@ -278,7 +203,7 @@ const NavBar = () => {
                                     {NextPages.map((item, index) => (
                                         <button
                                             key={item.id}
-                                            onClick={() => { setActivePage(item.name); closeSidebar(); }}
+                                            onClick={() => { setActivePage(item.name); closeSidebar(); navigate(`/app/${item.path}`) }}
                                             className={`flex items-center gap-3 py-1 px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
                                             style={{ animationDelay: `${index * 0.05}s` }}
                                         >
@@ -299,7 +224,7 @@ const NavBar = () => {
                                     {MarketPlace.map((item, index) => (
                                         <button
                                             key={item.id}
-                                            onClick={() => { setActivePage(item.name); closeSidebar(); }}
+                                            onClick={() => { setActivePage(item.name); closeSidebar(); navigate(`/app/${item.name}`) }}
                                             className={`flex items-center gap-3 py-1 px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
                                             style={{ animationDelay: `${index * 0.05}s` }}
 
@@ -321,7 +246,7 @@ const NavBar = () => {
                                     {AboutPlace.map((item, index) => (
                                         <button
                                             key={item.id}
-                                            onClick={() => { setActivePage(item.name); closeSidebar(); }}
+                                            onClick={() => { setActivePage(item.name); closeSidebar(); navigate(`/app/${item.path}`) }}
                                             className={`flex items-center gap-3 py-1 px-4 w-full text-left rounded-lg transition-all duration-200  ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
                                             style={{ animationDelay: `${index * 0.05}s` }}
                                         >
@@ -439,7 +364,7 @@ const NavBar = () => {
                                 {ProfilePlace.map((item, index) => (
                                     <button
                                         key={item.id}
-                                        onClick={() => { setActivePage(item.name); closeProfile(); }}
+                                        onClick={() => { setActivePage(item.name); closeProfile(); navigate(`/app/${item.path}`) }}
                                         className={`flex items-center gap-3 py-1 px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
                                         style={{ animationDelay: `${index * 0.05}s` }}
                                     >
@@ -459,7 +384,7 @@ const NavBar = () => {
                                 {SettingPlace.map((item, index) => (
                                     <button
                                         key={item.id}
-                                        onClick={() => { setActivePage(item.name); closeProfile(); }}
+                                        onClick={() => { setActivePage(item.name); closeProfile(); navigate(`/app/${item.path}`) }}
                                         className={`flex items-center gap-3 py-1 px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
                                         style={{ animationDelay: `${index * 0.05}s` }}
                                     >
@@ -480,7 +405,7 @@ const NavBar = () => {
                                 {ByePlace.map((item, index) => (
                                     <button
                                         key={item.id}
-                                        onClick={() => { setActivePage(item.name); closeProfile(); }}
+                                        onClick={() => { setActivePage(item.name); closeProfile(); navigate(`/app/${item.path}`) }}
                                         className={`flex items-center gap-3 py-1 px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
                                         style={{ animationDelay: `${index * 0.05}s` }}
 

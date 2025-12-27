@@ -1,6 +1,10 @@
+import { useSelector } from "react-redux";
 const Collab = () => {
+  const user = useSelector((store) => store.user);
   return (
-    <div>Collab</div>
+
+    <div>Collab {user.FirstName}</div>
+
   )
 }
 

@@ -60,7 +60,7 @@ export const NextPages = [
         id: 2,
         name: "Project Manager",
         icon: <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="none" stroke="#0f0f0f" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="M20 22v-5c0-1.885 0-2.828-.586-3.414S17.886 13 16 13l-4 9l-4-9c-1.886 0-2.828 0-3.414.586S4 15.115 4 17v5" /><path d="m12 15l-.5 4l.5 1.5l.5-1.5zm0 0l-1-2h2zm3.5-8.5v-1a3.5 3.5 0 0 0-7 0v1a3.5 3.5 0 1 0 7 0" /></g></svg>,
-        path: "/management"
+        path: "/manager"
 
     },
     {
@@ -86,9 +86,9 @@ export const MarketPlace = [
     },
     {
         id: 2,
-        name: "Assignments",
+        name: "Assignment",
         icon: <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="none"><path fill="#0f0f0f" fill-opacity="0.16" d="M16 5.2a.8.8 0 0 1-.8.8H8.8a.8.8 0 0 1-.8-.8V3h8z" /><path stroke="#0f0f0f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5" d="M7 14h10M7 11h10M7 17h6M10 3a2 2 0 1 1 4 0M5.4 3h13.2A2.4 2.4 0 0 1 21 5.4v15.2a2.4 2.4 0 0 1-2.4 2.4H5.4A2.4 2.4 0 0 1 3 20.6V5.4A2.4 2.4 0 0 1 5.4 3M16 5.2a.8.8 0 0 1-.8.8H8.8a.8.8 0 0 1-.8-.8V3h8z" /></g></svg>,
-        path: "/assignments"
+        path: "/assignment"
 
     },
     {
@@ -105,20 +105,20 @@ export const AboutPlace = [
         id: 1,
         name: "Contact Us",
         icon: <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="none"><path d="M21 22c-3.8 0-7.338-1.115-10.307-3.036a19.1 19.1 0 0 1-5.657-5.657A18.9 18.9 0 0 1 2 3h6.778L9.97 8.372l-2.024 2.024a15.07 15.07 0 0 0 5.657 5.657l2.024-2.025L21 15.223z" /><path stroke="#0f0f0f" stroke-width="2" d="M21 22c-3.8 0-7.338-1.115-10.307-3.036a19.1 19.1 0 0 1-5.657-5.657A18.9 18.9 0 0 1 2 3h6.778L9.97 8.372l-2.024 2.024a15.07 15.07 0 0 0 5.657 5.657l2.024-2.025L21 15.223z" /></g></svg>,
-        path: "/contact"
+        path: "/contactUs"
     },
     {
         id: 2,
         name: "About Us",
         icon: <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="#0f0f0f" d="M11 9h2V7h-2m1 13c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m0-18A10 10 0 0 0 2 12a10 10 0 0 0 10 10a10 10 0 0 0 10-10A10 10 0 0 0 12 2m-1 15h2v-6h-2z" /></svg>,
-        path: "/about"
+        path: "/aboutUs"
 
     },
     {
         id: 3,
         name: "Privacy Policy",
         icon: <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 48 48"><path fill="none" stroke="#0f0f0f" stroke-linecap="round" stroke-linejoin="round" d="M18.28 22.309c0 2.686-.199 4.576.2 5.77c.596 1.79 3.381 2.387 4.177 0c.398-1.294.2-3.383.2-5.77m1.989-3.88c0 2.38-1.9 4.323-4.278 4.377a4.377 4.377 0 1 1 4.377-4.377zm7.958 18.503l5.47-6.267m-8.952 2.885l3.482 3.481m10.047-2.984a8.953 8.953 0 1 1-17.906 0a8.953 8.953 0 0 1 17.906 0M25.54 37.53l-2.983 1.79l-2.09.697l-1.89-.697l-4.575-2.884l-3.98-2.686c-.696-.697-1.492-1.492-1.989-3.582L5.149 11.467c0-1.393.697-1.99 1.492-2.387L18.58 5.497L20.568 5l2.189.597l11.937 3.482c.995.397 1.591.994 1.293 2.387l-2.09 13.43" stroke-width="2" /></svg>,
-        path: "/privacy"
+        path: "/privacypolicy"
     },
 
 

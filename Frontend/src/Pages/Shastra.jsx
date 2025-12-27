@@ -1,11 +1,10 @@
-const Shastra = () => {
+import { useSelector } from "react-redux";
+const Scheduler = () => {
+    const user = useSelector((store) => store.user);
     return (
 
-        <div>Shastra</div>
+        <div>Scheduler {user.FirstName}</div>
 
-
-    );
+    )
 }
-
-
-export default Shastra;
+export default Scheduler;

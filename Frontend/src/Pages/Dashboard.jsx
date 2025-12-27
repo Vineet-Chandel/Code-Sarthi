@@ -1,7 +1,9 @@
+import { useSelector } from "react-redux";
 const Dashboard = () => {
+    const user = useSelector((store) => store.user);
     return (
 
-        <div>Dashboard</div>
+        <div>Dashboard {user.FirstName}</div>
 
     )
 }
