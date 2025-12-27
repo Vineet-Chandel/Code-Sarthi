@@ -72,7 +72,19 @@ authRouter.post("/SignInDB", async (req, res) => {
             res.cookie("token", token, {
                 expires: new Date(Date.now() + 8 * 3600000),
             });
-            res.send("User logined sucessfully");
+            res.send({
+                FirstName: user.FirstName,
+                MiddleName: user.MiddleName,
+                LastName: user.LastName,
+                username: user.username,
+                age: user.age,
+                Gmail: user.Gmail,
+                gender: user.gender,
+                photoUrl: user.photoUrl,
+                about: user.about,
+                college: user.college,
+                skills: user.skills,
+            });
         } else {
             throw new Error("Invalid credentials");
         }

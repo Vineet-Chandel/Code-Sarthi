@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addUser } from "../../utils/userSlice";
 
 
 
@@ -7,27 +10,42 @@ const Login = () => {
     const [Gmail, setGmailId] = useState("priya.malhotra@gmail.com");
     const [password, setPassword] = useState("Priya@888");
     const [showPassword, setShowPassword] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const dispatch = useDispatch();
+
     const togglePassword = () => {
         setShowPassword(prev => !prev);
     }
+
+    const ToggleDiv = () => {
+        setIsOpen(prev => !prev);
+    }
     const handleLogin = async (e) => {
-        e.preventDefault(); // ⛔ stop navigation
+        e.preventDefault();
 
         try {
             const res = await axios.post(
                 "http://localhost:3000/SignInDB",
                 { Gmail, password },
                 { withCredentials: true }
-            );
+            ); dispatch(addUser(res.data));
 
-            console.log("Login success:", res.data);
+
         } catch (err) {
             console.error("Login error:", err.response?.data || err.message);
         }
     };
 
     const demoAccouts = [
-
+        {
+            adminID: 1, Gmail: "admin@codesarthi.com", password: "Admin@1234"
+        },
+        {
+            adminID: 2, Gmail: "rohit.admin@codesarthi.com", password: "Rohit@Admin1"
+        },
+        {
+            adminID: 3, Gmail: "neha.admin@codesarthi.com", password: "Neha@Admin9"
+        }
     ]
 
 
@@ -39,9 +57,27 @@ const Login = () => {
                 <div className="flex flex-col gap-6 p-5 md:p-12 w-full md:w-[50%] text-white">
                     <div className="space-y-2">
                         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300 leading-tight animate-gradient">
-                            Welcom Back !
+                            Welcome Back !
                         </h1>
                         <p className="text-gray-300 text-lg md:text-xl pl-2">Enter your details to join back the smart developers community! 🚀</p>
+                    </div>
+
+                    <div className="flex text-xl font-bold items-center gap-2 cursor-pointer" onClick={ToggleDiv}><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="#ffffff" d="M12 3c2.21 0 4 1.79 4 4s-1.79 4-4 4s-4-1.79-4-4s1.79-4 4-4m4 10.54c0 1.06-.28 3.53-2.19 6.29L13 15l.94-1.88c-.62-.07-1.27-.12-1.94-.12s-1.32.05-1.94.12L11 15l-.81 4.83C8.28 17.07 8 14.6 8 13.54c-2.39.7-4 1.96-4 3.46v4h16v-4c0-1.5-1.6-2.76-4-3.46" /></svg>Demo Account</div>
+                    <div className={`${isOpen ? "block" : "hidden "} h-[250px] w-[70%] bg-transparent`}>
+                        <div className="text-lg h-[100%] flex text-gray-300 flex-col gap-1">
+                            {demoAccouts.map((item) => (
+                                <ul key={item.adminID} className="group border rounded-xl border-white  h-[33.33%] p-4 flex justify-center items-start  bg-black hover:border-blue-400">
+                                    <div className="flex flex-col justify-center items-start w-full">
+                                        <li className="flex gap-2 justify-center items-center"> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="none"><path fill="skyblue" d="M3 5v-.5a.5.5 0 0 0-.5.5zm18 0h.5a.5.5 0 0 0-.5-.5zM3 5.5h18v-1H3zM20.5 5v12h1V5zM19 18.5H5v1h14zM3.5 17V5h-1v12zM5 18.5A1.5 1.5 0 0 1 3.5 17h-1A2.5 2.5 0 0 0 5 19.5zM20.5 17a1.5 1.5 0 0 1-1.5 1.5v1a2.5 2.5 0 0 0 2.5-2.5z" /><path stroke="skyblue" stroke-linecap="round" stroke-linejoin="round" d="m3 5l9 9l9-9" stroke-width="1" /></g></svg> <span className="text-cyan-300">Email ID :</span> {item.Gmail}</li>
+                                        <li className="flex gap-2 justify-center items-center"> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16"><path fill="skyblue" d="M13.35 16H2.65C1.74 16 1 15.26 1 14.35v-7.7C1 5.74 1.74 5 2.65 5h10.7c.91 0 1.65.74 1.65 1.65v7.69c0 .91-.74 1.65-1.65 1.65ZM2.65 6c-.36 0-.65.29-.65.65v7.69c0 .36.29.65.65.65h10.7c.36 0 .65-.29.65-.65V6.65c0-.36-.29-.65-.65-.65z" /><path fill="skyblue" d="M12.54 6H3.46V4.54C3.46 2.04 5.5 0 8 0s4.54 2.04 4.54 4.54zM4.46 5h7.08v-.46C11.54 2.59 9.95 1 8 1S4.46 2.59 4.46 4.54z" /><circle cx="12" cy="10.5" r="1" fill="skyblue" /><circle cx="8" cy="10.5" r="1" fill="skyblue" /><circle cx="4" cy="10.5" r="1" fill="skyblue" /></svg> <span className="text-cyan-300">Password : </span>{item.password}</li>
+                                    </div>
+                                    <div className=" arrow h-10 w-10 border border-gray-500 rounded-full bg-gray-900 flex justify-center items-center group-hover:bg-gray-800 group-hover:rotate-45 transition-hover duration-[300ms]"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48"><path fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M34 24.008H6M22 12l12 12l-12 12m20-24v24" /></svg></div>
+                                </ul>
+
+
+                            ))}
+
+                        </div>
                     </div>
 
                     <form className="space-y-8 flex flex-col">
@@ -70,7 +106,7 @@ const Login = () => {
                         {/* Password Field */}
                         <div className="space-y-2">
                             <label htmlFor="password" className="text-md ml-3 block">Password <span className="text-orange-500">*</span></label>
-                            <div className="flex items-center rounded-2xl px-4 py-3 border border-gray-700 bg-black/50 focus-within:border-blue-500 transition-all duration-300">
+                            <div className="flex items-center rounded-2xl px-4 py-3 border border-green-500 bg-black/50 focus-within:border-blue-500 transition-all duration-300">
                                 <span className="mr-3">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8fbffa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                         <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
@@ -103,9 +139,12 @@ const Login = () => {
                         <div className="flex flex-col sm:flex-row justify-between items-center text-sm gap-3 px-2">
                             <div className="text-gray-400">
                                 Don't have an account?{" "}
-                                <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors font-medium">
-                                    Sign up
-                                </a>
+                                <Link
+                                    to="/signup"
+                                    className="text-cyan-400 hover:text-cyan-300 transition-colors"
+                                >
+                                    Sign Up
+                                </Link>
                             </div>
                             <div>
                                 <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors font-medium">
@@ -126,7 +165,7 @@ const Login = () => {
                         </div>
                     </form>
 
-                    <div className="bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 backdrop-blur-sm rounded-3xl p-6 md:p-8 border border-white/10 mt-16">
+                    <div className="bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 backdrop-blur-sm rounded-3xl p-6 md:p-8 border border-white/10 mt-5">
                         <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
                             Collab with diverse teams <br />
                             <span className="text-blue-300">accelerate your growth</span>

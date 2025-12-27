@@ -10,12 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.11.2",
     "axios": "^1.13.2",
     "cors": "^2.8.5",
     "gsap": "^3.14.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-helmet": "^6.1.0",
+    "react-redux": "^9.2.0",
     "react-router-dom": "^7.11.0"
   },
   "devDependencies": {
