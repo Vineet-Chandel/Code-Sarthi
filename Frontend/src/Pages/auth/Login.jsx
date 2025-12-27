@@ -28,7 +28,10 @@ const Login = () => {
                 "http://localhost:3000/SignInDB",
                 { Gmail, password },
                 { withCredentials: true }
-            ); dispatch(addUser(res.data));
+            );
+            console.log("TYPE:", typeof res.data);
+            console.log("DATA:", res.data);
+            dispatch(addUser(res.data));
 
 
         } catch (err) {
@@ -80,7 +83,7 @@ const Login = () => {
                         </div>
                     </div>
 
-                    <form className="space-y-8 flex flex-col">
+                    <form className="space-y-8 flex flex-col" onSubmit={handleLogin}>
                         {/* Email Field */}
                         <div className="space-y-2">
                             <label htmlFor="email" className="text-md ml-3 block">Email ID<span className="text-orange-500">*</span></label>
@@ -158,7 +161,7 @@ const Login = () => {
                             <button
                                 type="submit"
                                 className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-2xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 text-lg font-semibold shadow-lg hover:shadow-xl"
-                                onClick={handleLogin}
+
                             >
                                 Sign in
                             </button>
@@ -252,7 +255,7 @@ const Login = () => {
                 </div>
 
                 {/* Add CSS for animations */}
-                <style jsx>{`
+                <style>{`
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(5px); }
           to { opacity: 1; transform: translateY(0); }
