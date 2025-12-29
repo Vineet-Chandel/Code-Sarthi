@@ -22,17 +22,22 @@ import AboutUs from "./Pages/About-Us";
 import PrivacyPolicy from "./Pages/Privacy-Policy";
 import { Provider } from "react-redux";
 import appStore from "./utils/appStore.JS";
+import Hero from "./Main/hero";
 
 
 
 
 
 const App = () => {
+
   return (
+
+
 
     <Provider store={appStore}>
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<Hero />} />
           {/* ✅ Public routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
@@ -61,7 +66,7 @@ const App = () => {
           </Route>
         </Routes>
       </BrowserRouter>
-    </Provider>
+    </Provider >
 
   );
 };

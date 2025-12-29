@@ -5,6 +5,8 @@ const bcrypt = require("bcrypt");
 const { userAuth } = require("../middlewares/userAuth");
 const { validateEditProfileData } = require("../utils/validation");
 const validator = require("validator");
+const upload = require("../middlewares/multer");
+const cloudinary = require("../utils/fileUpload");
 
 profileRouter.get("/profile/view", userAuth, async (req, res) => {
     try {

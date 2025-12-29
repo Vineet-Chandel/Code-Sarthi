@@ -7,6 +7,7 @@ import { addUser } from "../../utils/userSlice";
 
 
 
+
 const Login = () => {
     const [Gmail, setGmailId] = useState("priya.malhotra@gmail.com");
     const [password, setPassword] = useState("Priya@888");
@@ -28,7 +29,7 @@ const Login = () => {
 
         try {
             const res = await axios.post(
-                "http://localhost:3000/SignInDB",
+                BASE_URL + "/SignInDB",
                 { Gmail, password },
                 { withCredentials: true }
             );
@@ -173,12 +174,13 @@ const Login = () => {
 
                     <div className="bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 backdrop-blur-sm rounded-3xl p-6 md:p-8 border border-white/10 mt-5">
                         <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-                            Collab with diverse teams <br />
-                            <span className="text-blue-300">accelerate your growth</span>
+                            All efforts go to the,<br />
+                            <span className="text-blue-300">Team Axonic !!</span>
                         </h2>
                         <p className="text-gray-300 text-lg">
-                            Be among the first developers to experience effortless collaboration
-                            and efficient team management.
+                            <b>Built in India, for the world.</b>   <br />
+                            Our team works relentlessly to deliver a fast, reliable platform —
+                            empowering developers, strengthening India’s tech ecosystem, and proving that world-class innovation proudly comes from India.
                         </p>
 
 
