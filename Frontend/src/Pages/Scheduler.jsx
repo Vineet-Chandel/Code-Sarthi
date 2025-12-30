@@ -3,7 +3,7 @@ const Scheduler = () => {
     const user = useSelector((store) => store.user);
     return (
 
-        <div>Scheduler {user.FirstName}</div>
+        <div>Scheduler {user.user.FirstName}</div>
 
     )
 }

@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { useNavigate } from "react-router-dom";
+
 import {
     Pages,
     NextPages,

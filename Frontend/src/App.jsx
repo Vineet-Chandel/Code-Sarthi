@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Body from "./Body";
 import Login from "./Pages/auth/Login";
 import Signup from "./Pages/auth/Signup";
-import { gsap } from "gsap";
+
 import ProtectedRoute from "./ProtectedRoute";
 import Dashboard from "./Pages/Dashboard";
 import Discussions from "./Pages/Discussions";
@@ -43,8 +43,9 @@ const App = () => {
           <Route path="/signup" element={<Signup />} />
 
           {/* 🔐 Protected routes */}
-          <Route element={<ProtectedRoute />}>
-            <Route path="/app" element={<Body />}>
+          <Route path="/app" element={<Body />}>
+            <Route element={<ProtectedRoute />}>
+
               {/* default route */}
               <Route index element={<Dashboard />} />
               <Route path="dashboard" element={<Dashboard />} />

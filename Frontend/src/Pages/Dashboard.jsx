@@ -1,15 +1,16 @@
 import { useSelector } from "react-redux";
 const Dashboard = () => {
-    const user = useSelector((store) => store.user);
+    const user = useSelector(store => store.user);
     return (
+        console.log("Dashboard user data:", user),
 
-        <div className="h-screen w-[90%]  justify-self-center p-5 flex justify-center items-center">
+        < div className="h-screen w-[90%]  justify-self-center p-5 flex justify-center items-center" >
             <div className="left w-full md:w-[40%] h-full flex flex-col justify-center items-center bg-gradient-to-tr from-gray-800 via-gray-900 to-black p-4 md:p-6 shadow-[inset_0_0_50px_rgba(0,0,0,0.5)] rounded-3xl">
 
                 {/* Profile Picture */}
                 <div className="profilePic border-[3px] border-gray-600 h-[200px] w-[200px] md:h-[300px] md:w-[300px] rounded-full overflow-hidden flex justify-center items-center">
                     <img
-                        src={user?.photoUrl || "/default-avatar.png"}
+                        src={user.user.photoUrl || "/default-avatar.png"}
                         alt="Profile picture"
                         className="w-full h-full object-cover"
                     />
@@ -20,12 +21,12 @@ const Dashboard = () => {
 
                     {/* Full Name */}
                     <p className="text-3xl md:text-4xl lg:text-5xl font-bold text-center">
-                        {user.FirstName} {user.MiddleName} {user.LastName}
+                        {user.user.FirstName} {user.user.MiddleName} {user.user.LastName}
                     </p>
 
                     {/* Username */}
                     <p className="mt-3 md:mt-4 text-xl md:text-2xl text-gray-300">
-                        @{user.username}
+                        @{user.user.username}
                     </p>
 
                     {/* Edit Profile Button */}
@@ -43,7 +44,7 @@ const Dashboard = () => {
                                 About:
                             </b>
                             <p className="text-lg md:text-xl font-normal italic text-gray-300 break-words">
-                                {user.about}
+                                {user.user.about}
                             </p>
                         </div>
                     </div>
@@ -55,7 +56,7 @@ const Dashboard = () => {
                                 <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 24 24">
                                     <path fill="white" d="M18 15h-2v2h2m0-6h-2v2h2m2 6h-8v-2h2v-2h-2v-2h2v-2h-2V9h8M10 7H8V5h2m0 6H8V9h2m0 6H8v-2h2m0 6H8v-2h2M6 7H4V5h2m0 6H4V9h2m0 6H4v-2h2m0 6H4v-2h2m6-10V3H2v18h20V7z" />
                                 </svg>
-                                {user.college}
+                                {user.user.college}
                             </p>
                         </div>
                     </div>
@@ -67,7 +68,7 @@ const Dashboard = () => {
                                 <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 32 32">
                                     <path fill="white" d="M30 30h-8V4h8zm-6-2h4V6h-4zm-4 2h-8V12h8zm-6-2h4V14h-4zm-4 2H2V18h8zm-6-2h4v-8H4z" />
                                 </svg>
-                                {user.skills.join(", ")}
+                                {user.user.skills.join(", ")}
                             </p>
                         </div>
                     </div>
@@ -91,7 +92,7 @@ const Dashboard = () => {
 
 
             </div>
-        </div>
+        </div >
 
     )
 }

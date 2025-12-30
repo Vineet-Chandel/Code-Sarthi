@@ -3,7 +3,7 @@ const ProjectManager = () => {
     const user = useSelector((store) => store.user);
     return (
 
-        <div>ProjectManager {user.FirstName}</div>
+        <div>ProjectManager {user.user.FirstName}</div>
 
     )
 }

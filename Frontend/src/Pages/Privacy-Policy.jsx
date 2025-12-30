@@ -3,7 +3,7 @@ const PrivacyPolicy = () => {
     const user = useSelector((store) => store.user);
     return (
 
-        <div>PrivacyPolicy {user.FirstName}</div>
+        <div>PrivacyPolicy {user.user.FirstName}</div>
 
     )
 }

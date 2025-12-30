@@ -12,17 +12,19 @@ profileRouter.get("/profile/view", userAuth, async (req, res) => {
     try {
         const user = req.user;
         res.send({
-            FirstName: req.user.FirstName,
-            MiddleName: req.user.MiddleName,
-            LastName: req.user.LastName,
-            username: req.user.username,
-            age: req.user.age,
-            Gmail: req.user.Gmail,
-            gender: req.user.gender,
-            photoUrl: req.user.photoUrl,
-            about: req.user.about,
-            college: req.user.college,
-            skills: req.user.skills,
+
+            FirstName: user.FirstName,
+            MiddleName: user.MiddleName,
+            LastName: user.LastName,
+            username: user.username,
+            age: user.age,
+            Gmail: user.Gmail,
+            gender: user.gender,
+            photoUrl: user.photoUrl,
+            about: user.about,
+            college: user.college,
+            skills: user.skills,
+
         });
     } catch (err) {
         res.status(400).send("ERROR : " + err.message);

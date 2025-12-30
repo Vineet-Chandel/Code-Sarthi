@@ -3,7 +3,7 @@ const Collab = () => {
   const user = useSelector((store) => store.user);
   return (
 
-    <div>Collab {user.FirstName}</div>
+    <div>Collab {user.user.FirstName}</div>
 
   )
 }

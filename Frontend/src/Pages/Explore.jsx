@@ -3,7 +3,7 @@ const Explore = () => {
     const user = useSelector((store) => store.user);
     return (
 
-        <div>Explore {user.FirstName}</div>
+        <div>Explore {user.user.FirstName}</div>
 
     )
 }

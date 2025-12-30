@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addUser } from "../../utils/userSlice";
+import { BASE_URL } from "./baseURL";
 
 
 
@@ -29,11 +30,11 @@ const Login = () => {
 
         try {
             const res = await axios.post(
-                BASE_URL + "/SignInDB",
+                `${BASE_URL}/SignInDB`,
                 { Gmail, password },
                 { withCredentials: true }
             );
-
+            console.log("Login successful:", res.data);
             dispatch(addUser(res.data));
             navigate("/app");
 
