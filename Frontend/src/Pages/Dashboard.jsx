@@ -2,7 +2,6 @@ import { useSelector } from "react-redux";
 const Dashboard = () => {
     const user = useSelector(store => store.user);
     return (
-        console.log("Dashboard user data:", user),
 
         < div className="h-screen w-[90%]  justify-self-center p-5 flex justify-center items-center" >
             <div className="left w-full md:w-[40%] h-full flex flex-col justify-center items-center bg-gradient-to-tr from-gray-800 via-gray-900 to-black p-4 md:p-6 shadow-[inset_0_0_50px_rgba(0,0,0,0.5)] rounded-3xl">

@@ -1,12 +1,14 @@
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import NavBar from "./components/Navbar";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "./utils/userSlice";
 import { useEffect, useState } from "react";
-
+import { BASE_URL } from "./Pages/auth/baseURL";
+import { useNavigate } from "react-router-dom";
 const Body = () => {
     const dispatch = useDispatch();
+    const Navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
 
     const fetchUserData = async () => {
@@ -17,20 +19,20 @@ const Body = () => {
                     withCredentials: true, // Required for Cookies
                     headers: {
                         "Cache-Control": "no-cache",
-                        // If using LocalStorage, uncomment the line below:
-                        // "Authorization": `Bearer ${localStorage.getItem("token")}`
                     },
                 }
             );
-
-            console.log("Fetched user data:", response.data);
 
             // IMPORTANT: You must dispatch the user to Redux
             dispatch(addUser(response.data));
 
         } catch (error) {
-            console.error("Authentication failed:", error);
-            dispatch(addUser(null));
+            if (error.status == 401) {
+                Navigate("/login");
+            }
+            else {
+                console.error("Failed to fetch user data:", error);
+            }
         } finally {
             setIsLoading(false);
         }
