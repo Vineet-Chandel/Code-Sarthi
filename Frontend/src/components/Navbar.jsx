@@ -13,6 +13,10 @@ import {
     ByePlace
 } from "./Navigations";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { removeUser } from "../utils/userSlice";
+import axios from "axios";
+import { BASE_URL } from "../Pages/auth/baseURL";
 
 const NavBar = () => {
     const [showSidebar, setShowSidebar] = useState(false);
@@ -109,7 +113,23 @@ const NavBar = () => {
         return () => document.removeEventListener("keydown", handleEscKey);
     }, [showSidebar, showProfile]);
 
+    const dispatch = useDispatch();
+    const userNav = useSelector(store => store.user);
+    const handelLogout = async () => {
 
+        try {
+            if (!userNav) {
+                console.warn("No user is currently logged in.");
+                return;
+            }
+
+            else {
+                const resLogout = await axios.post(`${BASE_URL}/logout`, {}, { withCredentials: true });
+                dispatch(removeUser());
+            }
+        }
+        catch (err) { console.error("Logout failed:", err); }
+    }
 
     return (
 
@@ -284,8 +304,6 @@ const NavBar = () => {
                             <path fill="#0f0f0f" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59c.4.07.55-.17.55-.38c0-.19-.01-.82-.01-1.49c-2.01.37-2.53-.49-2.69-.94c-.09-.23-.48-.94-.82-1.13c-.28-.15-.68-.52-.01-.53c.63-.01 1.08.58 1.23.82c.72 1.21 1.87.87 2.33.66c.07-.52.28-.87.51-1.07c-1.78-.2-3.64-.89-3.64-3.95c0-.87.31-1.59.82-2.15c-.08-.2-.36-1.02.08-2.12c0 0 .67-.21 2.2.82c.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82c.44 1.1.16 1.92.08 2.12c.51.56.82 1.27.82 2.15c0 3.07-1.87 3.75-3.65 3.95c.29.25.54.73.54 1.48c0 1.07-.01 1.93-.01 2.2c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8" />
                         </svg>
 
-
-
                     </button>
 
 
@@ -406,7 +424,7 @@ const NavBar = () => {
                                 {ByePlace.map((item, index) => (
                                     <button
                                         key={item.id}
-                                        onClick={() => { setActivePage(item.name); closeProfile(); navigate(`/app/${item.path}`) }}
+                                        onClick={() => { setActivePage(item.name); closeProfile(); handelLogout(); navigate(`/login`) }}
                                         className={`flex items-center gap-3 py-1 px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
                                         style={{ animationDelay: `${index * 0.05}s` }}
 
