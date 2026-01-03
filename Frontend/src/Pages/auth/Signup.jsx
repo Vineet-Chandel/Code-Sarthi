@@ -31,7 +31,7 @@ const Signup = () => {
     const newErrors = {};
     Object.keys(formData).forEach((key) => {
       if (key !== "MiddleName" && !formData[key]) {
-        newErrors[key] = "This field is required";
+        console.error("This field is required");
       }
       if (!formData["termsAccepted"]) {
         console.error("Please accept terms and conditions");
@@ -63,7 +63,7 @@ const Signup = () => {
       navigate("/app");
 
     } catch (err) {
-      console.error(err);
+      console.error(err.response?.data?.message || err.message);
     } finally {
       // ✅ 5. ALWAYS RESET LOADING
       setIsSubmitting(false);
