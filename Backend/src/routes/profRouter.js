@@ -24,6 +24,7 @@ profileRouter.get("/profile/view", userAuth, async (req, res) => {
             about: user.about,
             college: user.college,
             skills: user.skills,
+            profession: user.profession,
 
         });
     } catch (err) {
@@ -49,14 +50,13 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
                 FirstName: loggedInUser.FirstName,
                 MiddleName: loggedInUser.MiddleName,
                 LastName: loggedInUser.LastName,
-                username: loggedInUser.username,
                 age: loggedInUser.age,
-                Gmail: loggedInUser.Gmail,
                 gender: loggedInUser.gender,
                 photoUrl: loggedInUser.photoUrl,
                 about: loggedInUser.about,
                 college: loggedInUser.college,
                 skills: loggedInUser.skills,
+                profession: loggedInUser.profession,
             },
         });
     } catch (err) {

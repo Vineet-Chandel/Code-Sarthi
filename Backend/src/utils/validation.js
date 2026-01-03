@@ -1,7 +1,7 @@
 const validator = require("validator");
 
 const validateSignUpData = (req) => {
-    const { FirstName, LastName, Gmail, password, username, skills } = req.body;
+    const { FirstName, LastName, Gmail, age, password, username, profession, college } = req.body;
     if (!FirstName || !LastName) {
         throw new Error("Name is not valid!");
     } else if (!validator.isEmail(Gmail)) {
@@ -10,8 +10,16 @@ const validateSignUpData = (req) => {
         throw new Error("Please enter a strong Password!");
     } else if (!validator.matches(username, /^[a-z0-9._]{3,20}$/)) {
         throw new Error("Please enter a strong Password!");
-    } else if (skills.length > 15) {
-        throw new Error("Skills cant be more than 15");
+    } else if (age === undefined || age === null || age === "") {
+        throw new Error("Age is required");
+    } else if (age <= 10) {
+        throw new Error("Age must be greater than 10");
+    }
+    else if (college === undefined || college === null || college === "") {
+        throw new Error("college or company name is required");
+    }
+    else if (profession === undefined || profession === null || profession === "") {
+        throw new Error("profession name is required");
     }
 };
 
@@ -25,6 +33,7 @@ const validateEditProfileData = (req) => {
         "age",
         "about",
         "skills",
+        "profession",
         "college"
     ];
 

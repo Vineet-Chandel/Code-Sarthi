@@ -6,10 +6,10 @@ const bcrypt = require("bcrypt");
 
 authRouter.post("/SignUpDB", async (req, res) => {
     try {
+
+        const { FirstName, MiddleName, LastName, Gmail, password, username, age, gender, photoUrl, about, college, skills, profession, termsAccepted } = req.body;
         // Validation of data
         validateSignUpData(req);
-
-        const { FirstName, MiddleName, LastName, Gmail, password, username, age, gender, photoUrl, about, college, skills, termsAccepted } = req.body;
 
         // Encrypt the password
         const passwordHash = await bcrypt.hash(password, 10);
@@ -28,9 +28,10 @@ authRouter.post("/SignUpDB", async (req, res) => {
             skills,
             college,
             termsAccepted,
+            profession,
             password: passwordHash,
         });
-        if (!FirstName || !LastName || !Gmail || !password) {
+        if (!FirstName || !LastName || !Gmail || !password || !username || !age || !college || !profession || termsAccepted === undefined) {
             return res.status(400).json({
                 success: false,
                 message: "All fields are required.",
@@ -83,6 +84,7 @@ authRouter.post("/SignInDB", async (req, res) => {
                 photoUrl: user.photoUrl,
                 about: user.about,
                 college: user.college,
+                profession: user.profession,
                 skills: user.skills,
             });
         } else {

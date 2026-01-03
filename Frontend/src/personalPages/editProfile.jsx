@@ -10,8 +10,8 @@ const EditProfile = () => {
         username: `${user.user.username}`,
         email: `${user.user.Gmail}`,
         about: `${user.user.about}`,
-        website: '',
-        skills: [`${user.user.skills}`],
+        website: "null",
+        skills: `${user.user.skills.join(', ')}`,
         avatar: `${user.user.photoURL}`,
         banner: `${user.user.bannerURL}`,
         notifications: true,
@@ -87,28 +87,35 @@ const EditProfile = () => {
                                     {/* Avatar */}
                                     <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2">
                                         <div className="relative w-24 h-24 rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 border-4 border-gray-900 overflow-hidden shadow-xl">
-                                            {/* {user.user.photoURL ? ( */}
-                                            <img src={user.user.photoURL} alt="Avatar" className="w-full h-full object-cover" />
-                                            {/* ) : (
+
+                                            {user?.user?.photoURL ? (
+                                                <img
+                                                    src={user.user.photoURL}
+                                                    alt="Avatar"
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            ) : (
                                                 <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-500/10 to-purple-500/10">
                                                     <span className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                                                        {profile.firstName?.[0] || '?'}
-                                                        {profile.lastName?.[0] || ''}
+                                                        {user?.user?.FirstName?.[0] || "?"}
+                                                        {user?.user?.LastName?.[0] || ""}
                                                     </span>
                                                 </div>
-                                            )} */}
+                                            )}
+
                                             <div className="absolute inset-0 border-2 border-blue-500/20 rounded-2xl"></div>
                                         </div>
                                     </div>
+
                                 </div>
 
                                 {/* Preview Info */}
                                 <div className="mt-12 text-center">
                                     <h2 className="text-xl font-bold text-white">
-                                        {profile.firstName || 'First'} {profile.lastName || 'Last'}
+                                        {user.user.FirstName || 'First'} {user.user.MiddleName || ''} {user.user.LastName || 'Last'}
                                     </h2>
-                                    <p className="text-gray-400 text-sm mt-1">@{profile.username || 'username'}</p>
-                                    <p className="text-gray-500 text-sm mt-2">{profile.title || 'Developer'}</p>
+                                    <p className="text-gray-400 text-sm mt-1">@{user.user.username || 'username'}</p>
+                                    <p className="text-gray-500 text-sm mt-2">{user.user.title || 'Developer'}</p>
 
                                     <div className="mt-4">
                                         <div className="flex items-center justify-center gap-2 text-sm text-gray-400">
@@ -116,23 +123,23 @@ const EditProfile = () => {
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                                             </svg>
-                                            {profile.location || 'Location not set'}
+                                            {user.user.location || 'Location not set'}
                                         </div>
                                     </div>
 
                                     {/* Stats Preview */}
                                     <div className="grid grid-cols-3 gap-3 mt-6">
                                         <div className="text-center p-3 bg-gray-800/30 rounded-lg">
-                                            <div className="text-lg font-bold text-blue-400">{profile.skills.length}</div>
+                                            <div className="text-lg font-bold text-blue-400">{user.user.skills.length}</div>
                                             <div className="text-xs text-gray-400">Skills</div>
                                         </div>
                                         <div className="text-center p-3 bg-gray-800/30 rounded-lg">
-                                            <div className="text-lg font-bold text-purple-400">42</div>
+                                            <div className="text-lg font-bold text-purple-400">{0 || "null"}</div>
                                             <div className="text-xs text-gray-400">Projects</div>
                                         </div>
                                         <div className="text-center p-3 bg-gray-800/30 rounded-lg">
-                                            <div className="text-lg font-bold text-amber-400">L5</div>
-                                            <div className="text-xs text-gray-400">Level</div>
+                                            <div className="text-lg font-bold text-amber-400">{0 || "null"}</div>
+                                            <div className="text-xs text-gray-400">Connection</div>
                                         </div>
                                     </div>
                                 </div>
@@ -141,7 +148,7 @@ const EditProfile = () => {
                             {/* Upload Buttons */}
                             <div className="mt-6 space-y-4">
                                 <div>
-                                    <label className="block text-sm text-gray-400 mb-2">Avatar Image</label>
+                                    <label className="block text-sm text-gray-400 mb-2">Profile Image</label>
                                     <label className="relative group cursor-pointer">
                                         <input
                                             type="file"
@@ -149,7 +156,7 @@ const EditProfile = () => {
                                             className="hidden"
                                         />
                                         <div className="px-4 py-3 bg-gray-800/50 border border-gray-700/50 rounded-xl hover:border-blue-500/50 transition-colors text-center">
-                                            <span className="text-gray-300 group-hover:text-blue-300">Upload Avatar</span>
+                                            <span className="text-gray-300 group-hover:text-blue-300">Upload Image</span>
                                         </div>
                                     </label>
                                 </div>
@@ -200,14 +207,11 @@ const EditProfile = () => {
                                             <label className="block text-sm text-gray-400 mb-2">
                                                 <span className="flex items-center gap-2">
                                                     First Name
-                                                    <span className="text-red-400">*</span>
                                                 </span>
                                             </label>
                                             <input
                                                 type="text"
                                                 name="firstName"
-                                                value={profile.firstName}
-
                                                 className="w-full px-4 py-3 bg-gray-900/50 border border-gray-700/50 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all"
                                                 placeholder="Enter first name"
                                             />
@@ -215,15 +219,13 @@ const EditProfile = () => {
                                         <div>
                                             <label className="block text-sm text-gray-400 mb-2">
                                                 <span className="flex items-center gap-2">
-                                                    Last Name
-                                                    <span className="text-red-400">*</span>
+                                                    Middle Name
+
                                                 </span>
                                             </label>
                                             <input
                                                 type="text"
                                                 name="lastName"
-                                                value={profile.lastName}
-
                                                 className="w-full px-4 py-3 bg-gray-900/50 border border-gray-700/50 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all"
                                                 placeholder="Enter last name"
                                             />
@@ -231,36 +233,15 @@ const EditProfile = () => {
                                         <div>
                                             <label className="block text-sm text-gray-400 mb-2">
                                                 <span className="flex items-center gap-2">
-                                                    Username
-                                                    <span className="text-red-400">*</span>
-                                                </span>
-                                            </label>
-                                            <div className="relative">
-                                                <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500">@</span>
-                                                <input
-                                                    type="text"
-                                                    name="username"
-                                                    value={profile.username}
+                                                    Last Name
 
-                                                    className="w-full pl-10 pr-4 py-3 bg-gray-900/50 border border-gray-700/50 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all"
-                                                    placeholder="username"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm text-gray-400 mb-2">
-                                                <span className="flex items-center gap-2">
-                                                    Email
-                                                    <span className="text-red-400">*</span>
                                                 </span>
                                             </label>
                                             <input
-                                                type="email"
-                                                name="email"
-                                                value={profile.email}
-
+                                                type="text"
+                                                name="lastName"
                                                 className="w-full px-4 py-3 bg-gray-900/50 border border-gray-700/50 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all"
-                                                placeholder="your@email.com"
+                                                placeholder="Enter last name"
                                             />
                                         </div>
                                     </div>

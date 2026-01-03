@@ -65,8 +65,8 @@ const Login = () => {
 
 
     return (
-        <div className="min-h-screen w-full flex items-center justify-center bg-[#345957] p-4">
-            <div className="w-full bg-black/40 backdrop-blur-sm rounded-2xl shadow-2xl flex flex-col md:flex-row gap-6 overflow-hidden">
+        <div className="min-h-screen w-full flex items-center justify-center bg-[linear-gradient(135deg,#0c2461,#1e3799,#4a69bd)] p-4">
+            <div className="w-full bg-black/30 backdrop-blur-sm rounded-2xl shadow-2xl flex flex-col md:flex-row gap-6 overflow-hidden">
 
                 {/* LEFT - Login Form */}
                 <div className="flex flex-col gap-6 p-5 md:p-12 w-full md:w-[50%] text-white">

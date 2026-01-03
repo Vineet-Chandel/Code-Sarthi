@@ -36,7 +36,8 @@ const userSchema = new mongoose.Schema(
         age: {
             type: Number,
             min: 10,
-            trim: true
+            trim: true,
+            required: true
         },
         Gmail: {
             type: String,
@@ -71,16 +72,23 @@ const userSchema = new mongoose.Schema(
 
         about: {
             type: String,
-            default: "This is a default about of the user!",
+            default: "Complete your profile to shoqw details here !!",
         },
         college: {
-            type: String
+            type: String,
+            required: true,
         },
         skills: {
             type: [String],
+            default: "No skills added yet",
+        },
+        profession: {
+            type: String,
+            required: true,
         },
         termsAccepted: {
-            type: Boolean
+            type: Boolean,
+            required: true,
         }
     },
     {

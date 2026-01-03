@@ -1,19 +1,75 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addUser } from '../../utils/userSlice';
+import { BASE_URL } from "./baseURL";
+
 
 const Signup = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   // Form state
   const [formData, setFormData] = useState({
-    firstName: '',
-    middleName: '',
-    lastName: '',
+    FirstName: '',
+    MiddleName: '',
+    LastName: '',
     username: '',
     gender: '',
     age: '',
-    email: '',
+    Gmail: '',
     password: '',
-    confirmPassword: '',
-    profession: ''
+    profession: '',
+    college: '',
+    termsAccepted: false,
   });
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+
+    // ✅ 1. VALIDATION FIRST
+    const newErrors = {};
+    Object.keys(formData).forEach((key) => {
+      if (key !== "MiddleName" && !formData[key]) {
+        newErrors[key] = "This field is required";
+      }
+      if (!formData["termsAccepted"]) {
+        console.error("Please accept terms and conditions");
+      }
+    });
+
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    try {
+      // ✅ 2. START LOADING
+      setIsSubmitting(true);
+      console.log("Signup payload:", formData);
+
+
+      const res = await axios.post(
+        `${BASE_URL}/SignUpDB`,
+        formData,
+        { withCredentials: true }
+      );
+
+      // ✅ 3. SAVE USER
+      dispatch(addUser(res.data)); // or res.data.user
+
+      // ✅ 4. NAVIGATE
+      navigate("/app");
+
+    } catch (err) {
+      console.error(err);
+    } finally {
+      // ✅ 5. ALWAYS RESET LOADING
+      setIsSubmitting(false);
+    }
+  };
+
 
   // UI state
   const [errors, setErrors] = useState({});
@@ -21,13 +77,8 @@ const Signup = () => {
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(true);
-  const [isHovered, setIsHovered] = useState(false);
 
-  // Real-time validation
-  useEffect(() => {
-    validatePasswordStrength(formData.password);
-    setPasswordMatch(formData.password === formData.confirmPassword);
-  }, [formData.password, formData.confirmPassword]);
+
 
   const validatePasswordStrength = (password) => {
     let strength = 0;
@@ -49,64 +100,19 @@ const Signup = () => {
     if (errors[id]) {
       setErrors(prev => ({ ...prev, [id]: '' }));
     }
+
+    if (id === 'password') {
+      validatePasswordStrength(value);
+    }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    // Validate all fields
-    const newErrors = {};
-    Object.keys(formData).forEach(key => {
-      if (key !== 'middleName' && !formData[key]) {
-        newErrors[key] = 'This field is required';
-      }
-    });
-
-    if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
-    }
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    // Success animation
-    const button = e.target.querySelector('button[type="submit"]');
-    button.innerHTML = '✓ Account Created!';
-    button.classList.add('bg-green-600', 'from-green-600', 'to-green-700');
-
-    setTimeout(() => {
-      setIsSubmitting(false);
-      // Reset form
-      setFormData({
-        firstName: '',
-        middleName: '',
-        lastName: '',
-        username: '',
-        gender: '',
-        age: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-        profession: ''
-      });
-      button.innerHTML = 'Create Account';
-      button.classList.remove('bg-green-600', 'from-green-600', 'to-green-700');
-      alert('Account created successfully! Redirecting to dashboard...');
-    }, 2000);
-  };
 
   const generateUsername = () => {
-    const firstName = formData.firstName.toLowerCase();
-    const lastName = formData.lastName.toLowerCase();
+    const FirstName = formData.FirstName.toLowerCase();
+    const LastName = formData.LastName.toLowerCase();
     const randomNum = Math.floor(Math.random() * 1000);
-    const username = `${firstName}_${lastName}${randomNum}`;
+    const username = `${FirstName}_${LastName}${randomNum}`;
 
     setFormData(prev => ({ ...prev, username }));
     setErrors(prev => ({ ...prev, username: '' }));
@@ -120,8 +126,8 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-[#345957] via-[#2a4746] to-[#1e3534] p-4">
-      <div className="w-full bg-black/40 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/10 flex flex-col md:flex-row gap-6 overflow-hidden hover:shadow-3xl transition-all duration-500">
+    <div className="min-h-screen w-full flex items-center justify-center bg-[linear-gradient(135deg,#0c2461,#1e3799,#4a69bd)] p-4">
+      <div className="w-full bg-black/30 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/10 flex flex-col md:flex-row gap-6 overflow-hidden hover:shadow-3xl transition-all duration-500">
 
         {/* LEFT - Signup Form */}
         <div className="flex flex-col gap-8 p-8 md:p-12 w-full md:w-[50%] text-white">
@@ -134,35 +140,76 @@ const Signup = () => {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-8 flex flex-col">
+          <form onSubmit={handleUpdate} className="space-y-8 flex flex-col">
+
             {/* Name Fields */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {['firstName', 'middleName', 'lastName'].map((field, index) => (
-                <div key={field} className="space-y-2">
-                  <label htmlFor={field} className="text-md ml-3 block">
-                    {field === 'firstName' ? 'First Name' : field === 'middleName' ? 'Middle Name' : 'Last Name'}
-                    {field !== 'middleName' && <span className="text-red-400 ml-1">*</span>}
-                  </label>
-                  <div className={`flex items-center rounded-2xl px-4 py-3 border transition-all duration-300 ${errors[field] ? 'border-red-500 shake' : 'border-gray-700 focus-within:border-blue-500'} bg-black/50`}>
-                    <span className="mr-3">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8fbffa" strokeWidth="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                        <circle cx="12" cy="7" r="4" />
-                      </svg>
-                    </span>
-                    <input
-                      id={field}
-                      type="text"
-                      placeholder={field === 'firstName' ? 'Vinay' : field === 'middleName' ? 'Singh' : 'Chandel'}
-                      className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base"
-                      value={formData[field]}
-                      onChange={handleChange}
-                      required={field !== 'middleName'}
-                    />
-                  </div>
-                  {errors[field] && <p className="text-red-400 text-sm ml-3 animate-fadeIn">{errors[field]}</p>}
+              <div className="space-y-2 ">
+                <label htmlFor="FirstName" className="text-md ml-3 block">
+                  First Name <span className="text-red-400 ml-1">*</span>
+                </label>
+                <div className={"flex items-center rounded-2xl px-4 py-3 border border-gray-600 transition-all duration-300  bg-black/50"}>
+                  <span className="mr-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8fbffa" strokeWidth="2">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
+                    </svg>
+                  </span>
+                  <input
+                    id="FirstName"
+                    type="text"
+                    placeholder="Vinay"
+                    className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base"
+                    value={formData['FirstName']}
+                    onChange={handleChange}
+                    required={true}
+                  />
                 </div>
-              ))}
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="FirstName" className="text-md ml-3 block">
+                  Middle Name
+                </label>
+                <div className={"flex items-center rounded-2xl px-4 py-3 border border-gray-600 transition-all duration-300  bg-black/50"}>
+                  <span className="mr-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8fbffa" strokeWidth="2">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
+                    </svg>
+                  </span>
+                  <input
+                    id="MiddleName"
+                    type="text"
+                    placeholder="Singh"
+                    className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base"
+                    value={formData['MiddleName']}
+                    onChange={handleChange}
+                    required={false}
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="FirstName" className="text-md ml-3 block">
+                  Last Name <span className="text-red-400 ml-1">*</span>
+                </label>
+                <div className={"flex items-center rounded-2xl px-4 py-3 border border-gray-600 transition-all duration-300  bg-black/50"}>
+                  <span className="mr-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8fbffa" strokeWidth="2">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
+                    </svg>
+                  </span>
+                  <input
+                    id="LastName"
+                    type="text"
+                    placeholder="Chandel"
+                    className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base"
+                    value={formData['LastName']}
+                    onChange={handleChange}
+                    required={true}
+                  />
+                </div>
+              </div>
             </div>
 
             {/* Username with Generator */}
@@ -175,7 +222,7 @@ const Signup = () => {
                   type="button"
                   onClick={generateUsername}
                   className="text-sm text-blue-400 hover:text-blue-300 flex items-center gap-2 transition-colors"
-                  disabled={!formData.firstName || !formData.lastName}
+                  disabled={!formData.FirstName || !formData.LastName}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
@@ -186,7 +233,7 @@ const Signup = () => {
                   Generate
                 </button>
               </div>
-              <div className={`flex items-center rounded-2xl px-4 py-3 border transition-all duration-300 ${errors.username ? 'border-red-500' : 'border-gray-700 focus-within:border-blue-500'} bg-black/50`}>
+              <div className={`flex items-center rounded-2xl px-4 py-3 border border-gray-600 transition-all duration-300  bg-black/50`}>
                 <span className="mr-3">
                   <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 14 14">
                     <g fill="none">
@@ -202,10 +249,10 @@ const Signup = () => {
                   className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base"
                   value={formData.username}
                   onChange={handleChange}
-                  required
+                  required={true}
                 />
               </div>
-              {errors.username && <p className="text-red-400 text-sm ml-3">{errors.username}</p>}
+
             </div>
 
             {/* Gender & Age */}
@@ -214,7 +261,7 @@ const Signup = () => {
                 <label htmlFor="gender" className="text-md ml-3 block">
                   Gender <span className="text-red-400 ml-1">*</span>
                 </label>
-                <div className={`flex items-center rounded-2xl px-4 py-3 border transition-all duration-300 ${errors.gender ? 'border-red-500' : 'border-gray-700 focus-within:border-blue-500'} bg-black/50`}>
+                <div className={`flex items-center rounded-2xl px-4 py-3 border border-gray-600 transition-all duration-300  bg-black/50`}>
                   <span className="mr-3">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8fbffa" strokeWidth="2">
                       <circle cx="12" cy="12" r="10" />
@@ -226,7 +273,7 @@ const Signup = () => {
                     className="w-full outline-none text-gray-200 bg-transparent text-base appearance-none cursor-pointer"
                     value={formData.gender}
                     onChange={handleChange}
-                    required
+                    required={true}
                   >
                     <option value="" disabled hidden className="text-gray-500">Select Gender</option>
                     <option value="male" className="bg-gray-900 text-white">Male</option>
@@ -244,7 +291,7 @@ const Signup = () => {
                 <label htmlFor="age" className="text-md ml-3 block">
                   Age <span className="text-red-400 ml-1">*</span>
                 </label>
-                <div className={`flex items-center rounded-2xl px-4 py-3 border transition-all duration-300 ${errors.age ? 'border-red-500' : 'border-gray-700 focus-within:border-blue-500'} bg-black/50`}>
+                <div className={`flex items-center rounded-2xl px-4 py-3 border border-gray-600 transition-all duration-300  bg-black/50`}>
                   <span className="mr-3">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8fbffa" strokeWidth="2">
                       <circle cx="12" cy="12" r="10" />
@@ -254,13 +301,13 @@ const Signup = () => {
                   <input
                     id="age"
                     type="number"
-                    min="13"
+                    min="10"
                     max="100"
                     placeholder="25"
                     className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     value={formData.age}
                     onChange={handleChange}
-                    required
+                    required={true}
                   />
                 </div>
               </div>
@@ -268,10 +315,10 @@ const Signup = () => {
 
             {/* Email */}
             <div className="space-y-2">
-              <label htmlFor="email" className="text-md ml-3 block">
+              <label htmlFor="Gmail" className="text-md ml-3 block">
                 Email <span className="text-red-400 ml-1">*</span>
               </label>
-              <div className={`flex items-center rounded-2xl px-4 py-3 border transition-all duration-300 ${errors.email ? 'border-red-500' : 'border-gray-700 focus-within:border-blue-500'} bg-black/50`}>
+              <div className={`flex items-center rounded-2xl px-4 py-3 border border-gray-600 transition-all duration-300  bg-black/50`}>
                 <span className="mr-3">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8fbffa" strokeWidth="2">
                     <rect x="2" y="4" width="20" height="16" rx="2" />
@@ -279,16 +326,16 @@ const Signup = () => {
                   </svg>
                 </span>
                 <input
-                  id="email"
+                  id="Gmail"
                   type="email"
                   placeholder="vinay@example.com"
                   className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-lg"
-                  value={formData.email}
+                  value={formData.Gmail}
                   onChange={handleChange}
                   required
                 />
               </div>
-              {errors.email && <p className="text-red-400 text-sm ml-3">{errors.email}</p>}
+
             </div>
 
             {/* Password with Strength Meter */}
@@ -297,7 +344,7 @@ const Signup = () => {
                 <label htmlFor="password" className="text-md ml-3 block">
                   Password <span className="text-red-400 ml-1">*</span>
                 </label>
-                <div className={`flex items-center rounded-2xl px-4 py-3 border transition-all duration-300 ${errors.password ? 'border-red-500' : passwordMatch ? 'border-green-500' : 'border-gray-700 focus-within:border-blue-500'} bg-black/50`}>
+                <div className={`flex items-center rounded-2xl px-4 py-3 border transition-all duration-300 bg-black/50 ${passwordStrength <= 2 ? 'border-red-400' : passwordStrength === 3 ? 'border-yellow-400' : 'border-green-400'}`}>
                   <span className="mr-3">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8fbffa" strokeWidth="2">
                       <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
@@ -371,33 +418,60 @@ const Signup = () => {
             </div>
 
 
-
-            {/* Profession */}
-            <div className="space-y-2">
-              <label htmlFor="profession" className="text-md ml-3 block">
-                College or Company <span className="text-red-400 ml-1">*</span>
-              </label>
-              <div className={`flex items-center rounded-2xl px-4 py-3 border transition-all duration-300 ${errors.profession ? 'border-red-500' : 'border-gray-700 focus-within:border-blue-500'} bg-black/50`}>
-                <span className="mr-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 50 50">
-                    <g fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.4">
-                      <path stroke="#306cfe" d="M33.333 8.333A2.083 2.083 0 0 0 31.25 6.25h-12.5a2.083 2.083 0 0 0-2.083 2.083v6.25h16.666zM43.75 41.667v-25a2.083 2.083 0 0 0-2.083-2.084H8.333a2.083 2.083 0 0 0-2.083 2.084v25a2.083 2.083 0 0 0 2.083 2.083h33.334a2.083 2.083 0 0 0 2.083-2.083" />
-                      <path stroke="#344054" d="M22.917 29.167H18a8.33 8.33 0 0 1-7.583-5.042l-3.792-8.646a2.08 2.08 0 0 1 1.708-.896h33.334a2.08 2.08 0 0 1 1.708.896l-3.792 8.646A8.33 8.33 0 0 1 32 29.167h-4.917" />
-                      <path stroke="#306cfe" d="M27.083 27.083h-4.166v4.167h4.166z" />
-                    </g>
-                  </svg>
-                </span>
-                <input
-                  id="profession"
-                  type="text"
-                  placeholder="IIIT Hyderabad | Microsoft"
-                  className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base"
-                  value={formData.profession}
-                  onChange={handleChange}
-                  required
-                />
+            <div className='flex justify-between items-center w-full'>
+              <div className="space-y-2 w-[48.5%]">
+                <label htmlFor="college" className="text-md ml-3 block ">
+                  College or Company <span className="text-red-400 ml-1">*</span>
+                </label>
+                <div className={`flex items-center rounded-2xl px-4 py-3 border border-gray-600 transition-all duration-300  bg-black/50`}>
+                  <span className="mr-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 50 50">
+                      <g fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.4">
+                        <path stroke="#306cfe" d="M33.333 8.333A2.083 2.083 0 0 0 31.25 6.25h-12.5a2.083 2.083 0 0 0-2.083 2.083v6.25h16.666zM43.75 41.667v-25a2.083 2.083 0 0 0-2.083-2.084H8.333a2.083 2.083 0 0 0-2.083 2.084v25a2.083 2.083 0 0 0 2.083 2.083h33.334a2.083 2.083 0 0 0 2.083-2.083" />
+                        <path stroke="#344054" d="M22.917 29.167H18a8.33 8.33 0 0 1-7.583-5.042l-3.792-8.646a2.08 2.08 0 0 1 1.708-.896h33.334a2.08 2.08 0 0 1 1.708.896l-3.792 8.646A8.33 8.33 0 0 1 32 29.167h-4.917" />
+                        <path stroke="#306cfe" d="M27.083 27.083h-4.166v4.167h4.166z" />
+                      </g>
+                    </svg>
+                  </span>
+                  <input
+                    id="college"
+                    type="text"
+                    placeholder="IIIT Hyderabad | Microsoft"
+                    className="outline-none w-full text-gray-200 bg-transparent placeholder-gray-500 text-base"
+                    value={formData.college}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="space-y-2  w-[48.5%]">
+                <label htmlFor="profession" className="text-md ml-3 block">
+                  Professionaly what you are !  <span className="text-red-400 ml-1">*</span>
+                </label>
+                <div className={`flex items-center rounded-2xl px-4 py-3 border border-gray-600 transition-all duration-300  bg-black/50`}>
+                  <span className="mr-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 50 50">
+                      <g fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.4">
+                        <path stroke="#306cfe" d="M33.333 8.333A2.083 2.083 0 0 0 31.25 6.25h-12.5a2.083 2.083 0 0 0-2.083 2.083v6.25h16.666zM43.75 41.667v-25a2.083 2.083 0 0 0-2.083-2.084H8.333a2.083 2.083 0 0 0-2.083 2.084v25a2.083 2.083 0 0 0 2.083 2.083h33.334a2.083 2.083 0 0 0 2.083-2.083" />
+                        <path stroke="#344054" d="M22.917 29.167H18a8.33 8.33 0 0 1-7.583-5.042l-3.792-8.646a2.08 2.08 0 0 1 1.708-.896h33.334a2.08 2.08 0 0 1 1.708.896l-3.792 8.646A8.33 8.33 0 0 1 32 29.167h-4.917" />
+                        <path stroke="#306cfe" d="M27.083 27.083h-4.166v4.167h4.166z" />
+                      </g>
+                    </svg>
+                  </span>
+                  <input
+                    id="profession"
+                    type="text"
+                    placeholder="Student | Developer | Designer"
+                    className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base"
+                    value={formData.profession}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
               </div>
             </div>
+
+
 
             {/* Links */}
             <div className="flex flex-col sm:flex-row justify-between items-center text-sm gap-3 px-2">
@@ -407,15 +481,30 @@ const Signup = () => {
                   Sign in
                 </a>
               </div>
-              <div className="flex items-center gap-4">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" className="w-4 h-4 accent-blue-500" defaultChecked />
-                  <span className="text-gray-400">Remember me</span>
-                </label>
-                <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors font-medium underline hover:no-underline">
-                  Terms & Conditions
-                </a>
-              </div>
+              <label className="flex items-center gap-2 text-sm text-gray-400">
+                <input
+                  type="checkbox"
+                  checked={formData.termsAccepted}
+                  onChange={(e) =>
+                    setFormData(prev => ({
+                      ...prev,
+                      termsAccepted: e.target.checked
+                    }))
+                  }
+                  className="accent-blue-500"
+                />
+                <span>
+                  I agree to the{" "}
+                  <a href="/terms" className="text-blue-400 underline hover:no-underline">
+                    Terms & Conditions
+                  </a>{" "}
+                  and{" "}
+                  <a href="/privacy" className="text-blue-400 underline hover:no-underline">
+                    Privacy Policy
+                  </a>.
+                </span>
+              </label>
+
             </div>
 
             {/* Submit Button */}
@@ -423,9 +512,7 @@ const Signup = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-                className={`w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-2xl transition-all duration-300 text-lg font-semibold shadow-lg flex items-center justify-center gap-3 ${isSubmitting ? 'opacity-75 cursor-not-allowed' : 'hover:from-blue-700 hover:to-blue-800 hover:shadow-xl'} ${isHovered ? 'scale-[1.02]' : ''}`}
+                className={`w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-2xl transition-all duration-300 text-lg font-semibold shadow-lg flex items-center justify-center gap-3 ${isSubmitting ? 'opacity-75 cursor-not-allowed' : 'hover:from-blue-700 hover:to-blue-800 hover:shadow-xl'} `}
               >
                 {isSubmitting ? (
                   <>
@@ -440,6 +527,9 @@ const Signup = () => {
                 )}
               </button>
             </div>
+
+
+
           </form>
 
 
@@ -515,22 +605,20 @@ const Signup = () => {
 
             <div className="bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 backdrop-blur-sm rounded-3xl p-6 md:p-8 border border-white/10 mt-16">
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-                Collab with diverse teams <br />
-                <span className="text-blue-300">accelerate your growth</span>
+                All efforts go to the,<br />
+                <span className="text-blue-300">Team Axonic !!</span>
               </h2>
               <p className="text-gray-300 text-lg">
-                Be among the first developers to experience effortless collaboration
-                and efficient team management.
+                <b>Built in India, for the world.</b>   <br />
+                Our team works relentlessly to deliver a fast, reliable platform —
+                empowering developers, strengthening India’s tech ecosystem, and proving that world-class innovation proudly comes from India.
+
               </p>
 
 
             </div>
           </div>
         </div>
-
-
-
-
 
       </div>
 
