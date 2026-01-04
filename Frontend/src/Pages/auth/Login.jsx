@@ -150,6 +150,9 @@ const Login = () => {
                             </div>
                         </div>
 
+
+
+
                         <div className="space-y-2">
                             <div className={`${errorisOpen ? "block" : "hidden "} flex items-center rounded-2xl px-4 py-3 border border-red-600 bg-red/50  transition-all duration-30 `} >
                                 <span className="mr-3">

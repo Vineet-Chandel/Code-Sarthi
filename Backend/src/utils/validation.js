@@ -9,7 +9,7 @@ const validateSignUpData = (req) => {
     } else if (!validator.isStrongPassword(password)) {
         throw new Error("Please enter a strong Password!");
     } else if (!validator.matches(username, /^[a-z0-9._]{3,20}$/)) {
-        throw new Error("Please enter a valid username!");
+        throw new Error("Please enter a username! which has lowercase letters , underscores and numbers");
     } else if (age === undefined || age === null || age === "") {
         throw new Error("Age is required");
     } else if (age <= 10) {
