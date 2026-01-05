@@ -29,6 +29,7 @@ const validateEditProfileData = (req) => {
         "LastName",
         "MiddleName",
         "photoUrl",
+        "username",
         "gender",
         "age",
         "about",
@@ -36,11 +37,16 @@ const validateEditProfileData = (req) => {
         "profession",
         "college"
     ];
-
+    const { age, username, college } = req.body;
     const isEditAllowed = Object.keys(req.body).every((field) =>
         allowedEditFields.includes(field)
     );
 
+    if (!validator.matches(username, /^[a-z0-9._]{3,20}$/)) {
+        throw new Error("Please enter a username! which has lowercase letters , underscores and numbers");
+    } if (age <= 10) {
+        throw new Error("Age must be greater than 10");
+    }
     return isEditAllowed;
 };
 

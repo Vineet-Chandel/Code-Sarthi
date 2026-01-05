@@ -289,7 +289,7 @@ const Signup = () => {
                     <option value="male" className="bg-gray-900 text-white">Male</option>
                     <option value="female" className="bg-gray-900 text-white">Female</option>
                     <option value="other" className="bg-gray-900 text-white">Other</option>
-                    <option value="prefer-not-to-say" className="bg-gray-900 text-white">Prefer not to say</option>
+
                   </select>
                   <svg className="ml-2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />

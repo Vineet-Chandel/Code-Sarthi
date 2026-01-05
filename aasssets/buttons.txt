@@ -1,0 +1,87 @@
+<!-- Tailwind + react buttons  -->
+
+<!-- Blue Gradient Button -->
+<button className="group relative w-full max-w-md p-4 mt-4 rounded-xl text-lg font-medium bg-gray-800/40 border-[2px] border-gray-700/50 hover:bg-gray-800/60 transition-all duration-300 overflow-hidden">
+    Upgrade Plan
+    <div className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-blue-500"></div>
+    <div className="absolute inset-x-0 bottom-0 h-[2px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-cyan-400"></div>
+    <div className="absolute inset-x-0 bottom-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] group-hover:blur-sm transition-all duration-300 bg-gradient-to-r from-transparent via-sky-400"></div>
+</button>
+
+<!-- Red/Orange Gradient Button -->
+<button className="group relative w-full max-w-md p-4 mt-4 rounded-xl text-lg font-medium bg-gray-800/40 border-[2px] border-gray-700/50 hover:bg-gray-800/60 transition-all duration-300 overflow-hidden">
+    Delete Account
+    <div className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-red-500"></div>
+    <div className="absolute inset-x-0 bottom-0 h-[2px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-orange-500"></div>
+    <div className="absolute inset-x-0 bottom-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] group-hover:blur-sm transition-all duration-300 bg-gradient-to-r from-transparent via-amber-500"></div>
+</button>
+
+<!-- Green Gradient Button -->
+<button className="group relative w-full max-w-md p-4 mt-4 rounded-xl text-lg font-medium bg-gray-800/40 border-[2px] border-gray-700/50 hover:bg-gray-800/60 transition-all duration-300 overflow-hidden">
+    Save Changes
+    <div className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-emerald-500"></div>
+    <div className="absolute inset-x-0 bottom-0 h-[2px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-green-400"></div>
+    <div className="absolute inset-x-0 bottom-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] group-hover:blur-sm transition-all duration-300 bg-gradient-to-r from-transparent via-lime-400"></div>
+</button>
+
+<!-- Pink/Purple Gradient Button -->
+<button className="group relative w-full max-w-md p-4 mt-4 rounded-xl text-lg font-medium bg-gray-800/40 border-[2px] border-gray-700/50 hover:bg-gray-800/60 transition-all duration-300 overflow-hidden">
+    Subscribe
+    <div className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-pink-500"></div>
+    <div className="absolute inset-x-0 bottom-0 h-[2px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-rose-500"></div>
+    <div className="absolute inset-x-0 bottom-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] group-hover:blur-sm transition-all duration-300 bg-gradient-to-r from-transparent via-fuchsia-400"></div>
+</button>
+
+<!-- Yellow/Amber Gradient Button -->
+<button className="group relative w-full max-w-md p-4 mt-4 rounded-xl text-lg font-medium bg-gray-800/40 border-[2px] border-gray-700/50 hover:bg-gray-800/60 transition-all duration-300 overflow-hidden">
+    View Notifications
+    <div className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-yellow-500"></div>
+    <div className="absolute inset-x-0 bottom-0 h-[2px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-amber-400"></div>
+    <div className="absolute inset-x-0 bottom-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] group-hover:blur-sm transition-all duration-300 bg-gradient-to-r from-transparent via-orange-400"></div>
+</button>
+
+<!-- Teal Gradient Button -->
+<button className="group relative w-full max-w-md p-4 mt-4 rounded-xl text-lg font-medium bg-gray-800/40 border-[2px] border-gray-700/50 hover:bg-gray-800/60 transition-all duration-300 overflow-hidden">
+    Download Now
+    <div className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-teal-500"></div>
+    <div className="absolute inset-x-0 bottom-0 h-[2px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-cyan-400"></div>
+    <div className="absolute inset-x-0 bottom-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] group-hover:blur-sm transition-all duration-300 bg-gradient-to-r from-transparent via-emerald-400"></div>
+</button>
+
+<!-- Indigo/Violet Gradient Button -->
+<button className="group relative w-full max-w-md p-4 mt-4 rounded-xl text-lg font-medium bg-gray-800/40 border-[2px] border-gray-700/50 hover:bg-gray-800/60 transition-all duration-300 overflow-hidden">
+    View Analytics
+    <div className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-indigo-500"></div>
+    <div className="absolute inset-x-0 bottom-0 h-[2px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-violet-500"></div>
+    <div className="absolute inset-x-0 bottom-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] group-hover:blur-sm transition-all duration-300 bg-gradient-to-r from-transparent via-purple-400"></div>
+</button>
+
+
+
+
+
+
+suppperr buutton reacttt
+
+//1 
+
+<div className="tooltip">
+  <div className="tooltip-content">
+    <div className="animate-bounce text-orange-400 -rotate-10 text-2xl font-black">Wow!</div>
+  </div>
+  <button className="btn">Hover me</button>
+</div>
+
+//2
+
+<div className="tooltip" data-tip="hello">
+  <button className="btn">Hover me</button>
+</div>
+
+
+
+
+
+loading featureess
+
+https://daisyui.com/components/loading/

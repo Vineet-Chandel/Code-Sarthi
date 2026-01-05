@@ -72,7 +72,7 @@ const userSchema = new mongoose.Schema(
 
         about: {
             type: String,
-            default: "Complete your profile to shoqw details here !!",
+            default: "Complete your profile to show details here !!",
         },
         college: {
             type: String,
