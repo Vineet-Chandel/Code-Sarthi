@@ -67,7 +67,7 @@ const EditProfile = () => {
     return (
         <div className="min-h-screen w-full bg-black flex justify-center p-6 overflow-y-auto">
 
-            <div className="w-full max-w-9xl p-6 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 flex flex-col gap-12">
+            <div className="w-full max-w-9xl p-4 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 flex flex-col gap-4">
 
                 {/* ================= HEADER ================= */}
                 <div className="w-full flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
@@ -80,23 +80,12 @@ const EditProfile = () => {
                             Your profile is your first impression — make it unforgettable ✨
                         </p>
                     </div>
-                    <button className="group relative w-full max-w-md p-4 mt-4 rounded-xl text-lg font-medium bg-gray-800/40 border-[2px] border-gray-700/50 hover:bg-gray-800/60 transition-all duration-300 overflow-hidden">
-                        Profile Edits
-                        <div className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-indigo-500"></div>
-                        <div className="absolute inset-x-0 bottom-0 h-[2px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-violet-500"></div>
-                        <div className="absolute inset-x-0 bottom-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] group-hover:blur-sm transition-all duration-300 bg-gradient-to-r from-transparent via-purple-400"></div>
-                    </button>
-                    <button className="group relative w-full max-w-md p-4 mt-4 rounded-xl text-lg font-medium bg-gray-800/40 border-[2px] border-gray-700/50 hover:bg-gray-800/60 transition-all duration-300 overflow-hidden">
-                        Skils and Project Edits
-                        <div className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-indigo-500"></div>
-                        <div className="absolute inset-x-0 bottom-0 h-[2px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-violet-500"></div>
-                        <div className="absolute inset-x-0 bottom-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] group-hover:blur-sm transition-all duration-300 bg-gradient-to-r from-transparent via-purple-400"></div>
-                    </button>
+
 
                 </div>
 
                 {/* ================= CONTENT ================= */}
-                <div className="w-full flex flex-col lg:flex-row gap-10">
+                <div className="w-full flex flex-col lg:flex-row gap-3">
 
                     {/* ========== LEFT PANEL ========== */}
                     <div className="w-full lg:w-[30%] rounded-3xl p-6 bg-black/30 border border-white/10 flex flex-col items-center">
@@ -113,16 +102,13 @@ const EditProfile = () => {
                         <p className="text-3xl font-semibold text-white mt-5 tracking-wide text-center">
                             {user?.FirstName || "First"} {user?.MiddleName || ""} {user?.LastName || "Last"}
                         </p>
-                        <div className="flex gap-4 mt-2">
-                            {/* Username */}
-                            <p className="text-base text-gray-400 mt-1">
-                                @{user?.username || "username"}
-                            </p>
-                            {/* Username */}
-                            <div className="text-base text-gray-400 mt-1 flex gap-1 font-bold">
-                                Age : <p className="font-normal">{user.age}</p>
-                            </div>
-                        </div>
+
+                        {/* Username */}
+                        <p className="text-base text-gray-400 mt-1">
+                            @{user?.username || "username"}
+                        </p>
+
+
 
 
                         {/* Divider */}
@@ -131,38 +117,64 @@ const EditProfile = () => {
                         {/* Info Pills */}
                         <div className="w-full flex flex-col gap-3">
 
-                            <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-gray-300">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><g fill="none"><path fill="#66e1ff" d="M21.087 3.87H2.913V23h18.174z" /><path fill="#c2f3ff" d="M19.89 3.87H2.914v16.978z" /><path stroke="#7a7a7a" stroke-linecap="round" stroke-linejoin="round" d="M1 23h22M21.087 3.87H2.913V23h18.174zM1 3.87h22" stroke-width="1" /><path fill="#b2b2b2" stroke="#7a7a7a" stroke-linecap="round" stroke-linejoin="round" d="M20.13 3.87V1.957A.956.956 0 0 0 19.174 1H4.826a.957.957 0 0 0-.956.957V3.87z" stroke-width="1" /><path fill="#fff" stroke="#7a7a7a" stroke-linecap="round" stroke-linejoin="round" d="M10.565 23v-3.348a1.435 1.435 0 0 1 2.87 0V23z" stroke-width="1" /><path stroke="#7a7a7a" stroke-linecap="round" stroke-linejoin="round" d="M5.782 19.174h2.87m6.696 0h2.87M5.782 15.348h3.826m4.782 0h3.827M5.782 11.522h3.826m4.782 0h3.827M5.782 7.696h3.826m4.782 0h3.827" stroke-width="1" /></g></svg> <span>{user?.college || "College Name"}</span>
+                            <div className="flex justify-evenly items-center gap-3 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-gray-300">
+                                <div className="flex justify-center items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><g fill="none"><path fill="#66e1ff" d="M21.087 3.87H2.913V23h18.174z" /><path fill="#c2f3ff" d="M19.89 3.87H2.914v16.978z" /><path stroke="#7a7a7a" stroke-linecap="round" stroke-linejoin="round" d="M1 23h22M21.087 3.87H2.913V23h18.174zM1 3.87h22" stroke-width="1" /><path fill="#b2b2b2" stroke="#7a7a7a" stroke-linecap="round" stroke-linejoin="round" d="M20.13 3.87V1.957A.956.956 0 0 0 19.174 1H4.826a.957.957 0 0 0-.956.957V3.87z" stroke-width="1" /><path fill="#fff" stroke="#7a7a7a" stroke-linecap="round" stroke-linejoin="round" d="M10.565 23v-3.348a1.435 1.435 0 0 1 2.87 0V23z" stroke-width="1" /><path stroke="#7a7a7a" stroke-linecap="round" stroke-linejoin="round" d="M5.782 19.174h2.87m6.696 0h2.87M5.782 15.348h3.826m4.782 0h3.827M5.782 11.522h3.826m4.782 0h3.827M5.782 7.696h3.826m4.782 0h3.827" stroke-width="1" /></g></svg> <span>{user?.college || "College Name"}</span></div>
+                                <div className="flex justify-center items-center gap-2">  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><g fill="none"><path fill="url(#SVGPusuadEO)" d="M17.754 14a2.25 2.25 0 0 1 2.249 2.249v.918a2.75 2.75 0 0 1-.513 1.6C17.945 20.93 15.42 22 12 22s-5.944-1.072-7.486-3.236a2.75 2.75 0 0 1-.51-1.596v-.92A2.25 2.25 0 0 1 6.251 14z" /><path fill="url(#SVG2f7L8cLU)" d="M17.754 14a2.25 2.25 0 0 1 2.249 2.249v.918a2.75 2.75 0 0 1-.513 1.6C17.945 20.93 15.42 22 12 22s-5.944-1.072-7.486-3.236a2.75 2.75 0 0 1-.51-1.596v-.92A2.25 2.25 0 0 1 6.251 14z" /><path fill="url(#SVG9AhnabtW)" d="M12 2.005a5 5 0 1 1 0 10a5 5 0 0 1 0-10" /><defs><linearGradient id="SVGPusuadEO" x1="7.808" x2="10.394" y1="15.064" y2="23.319" gradientUnits="userSpaceOnUse"><stop offset=".125" stop-color="#00c6ff" /><stop offset="1" stop-color="#41d1dc" /></linearGradient><linearGradient id="SVG2f7L8cLU" x1="12.003" x2="15.623" y1="13.047" y2="26.573" gradientUnits="userSpaceOnUse"><stop stop-color="#5edadb" stop-opacity="0" /><stop offset="1" stop-color="#62f8ef" /></linearGradient><linearGradient id="SVG9AhnabtW" x1="9.379" x2="14.475" y1="3.334" y2="11.472" gradientUnits="userSpaceOnUse"><stop offset=".125" stop-color="#00c6ff" /><stop offset="1" stop-color="#41d1dc" /></linearGradient></defs></g></svg>  <span>{user?.profession || "Profession"}</span></div>
+                            </div>
+                            <div className="flex justify-evenly items-center gap-3 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-gray-300">
+                                <div className="flex justify-center items-center gap-2">  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><g fill="none"><path fill="#ff808c" d="M12.95 13.891a3.816 3.816 0 1 0 0-7.632a3.816 3.816 0 0 0 0 7.632" /><path fill="#66e1ff" d="M7.21 15.826a3.815 3.815 0 1 0 0-7.63a3.815 3.815 0 0 0 0 7.63" /><path stroke="#7a7a7a" stroke-linecap="round" stroke-linejoin="round" d="M9.61 14.146a5.26 5.26 0 1 1 3.826 1.18" stroke-width="1" /><path stroke="#7a7a7a" stroke-linecap="round" stroke-linejoin="round" d="M10.578 7.952A5.26 5.26 0 1 1 6.74 6.76m10.043-.5L22.044 1m0 3.826V1h-3.826M6.74 17.26V23m-1.913-1.913h3.826" stroke-width="1" /></g></svg> <span>{user?.gender || "Gender"}</span></div>
+                                <div className="flex justify-center items-center gap-2">  <svg width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20 1C20 0.447715 20.4477 0 21 0C21.5523 0 22 0.447715 22 1V2H23C23.5523 2 24 2.44772 24 3C24 3.55228 23.5523 4 23 4H22V5C22 5.55228 21.5523 6 21 6C20.4477 6 20 5.55228 20 5V4H19C18.4477 4 18 3.55228 18 3C18 2.44772 18.4477 2 19 2H20V1Z" fill="#ff808c" />
+                                    <path d="M21.1936 8.07463C21.7016 7.85776 22.297 8.09138 22.4668 8.6169C23.145 10.7148 23.1792 12.9766 22.5523 15.1064C21.8308 17.5572 20.2788 19.6804 18.1626 21.1117C16.0464 22.5429 13.498 23.193 10.9548 22.9502C8.41165 22.7075 6.03225 21.5871 4.22503 19.7814C2.4178 17.9757 1.29545 15.5972 1.05062 13.0542C0.805783 10.5112 1.45373 7.96227 2.88325 5.84491C4.31277 3.72755 6.43471 2.17379 8.88488 1.4503C11.0142 0.821568 13.2759 0.853957 15.3744 1.53036C15.9001 1.69979 16.1342 2.29501 15.9178 2.80311C15.7013 3.31122 15.1136 3.54496 14.5846 3.38623C12.9184 2.88626 11.1353 2.8783 9.4532 3.37498C7.45003 3.96647 5.71522 5.23677 4.5465 6.96784C3.37778 8.69891 2.84804 10.7828 3.04821 12.8619C3.24838 14.9409 4.16596 16.8855 5.64348 18.3618C7.121 19.8381 9.06631 20.754 11.1455 20.9525C13.2247 21.1509 15.3082 20.6195 17.0383 19.4493C18.7684 18.2792 20.0373 16.5433 20.6271 14.5397C21.1224 12.8572 21.113 11.074 20.6116 9.40826C20.4525 8.87941 20.6857 8.29149 21.1936 8.07463Z" fill="#66e1ff" />
+                                    <path d="M7.71054 9.14472L7.29441 9.35279C6.69971 9.65014 5.99999 9.21769 5.99999 8.55279C5.99999 8.214 6.1914 7.9043 6.49441 7.75279L7.78884 7.10557C7.9277 7.03615 8.08081 7 8.23605 7H8.99999C9.55227 7 9.99999 7.44772 9.99999 8V16C9.99999 16.5523 9.55227 17 8.99999 17C8.4477 17 7.99999 16.5523 7.99999 16V9.32361C7.99999 9.17493 7.84352 9.07823 7.71054 9.14472Z" fill="#66e1ff" />
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M16 7C17.1046 7 18 7.89543 18 9V15C18 16.1046 17.1046 17 16 17H14C12.8954 17 12 16.1046 12 15V9C12 7.89543 12.8954 7 14 7H16ZM15 9C15.5523 9 16 9.44772 16 10V14C16 14.5523 15.5523 15 15 15C14.4477 15 14 14.5523 14 14V10C14 9.44772 14.4477 9 15 9Z" fill="#66e1ff" />
+                                </svg> Age : <span>{user?.age || "Age"}</span></div>
                             </div>
 
-                            <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-gray-300">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><g fill="none"><path fill="url(#SVGPusuadEO)" d="M17.754 14a2.25 2.25 0 0 1 2.249 2.249v.918a2.75 2.75 0 0 1-.513 1.6C17.945 20.93 15.42 22 12 22s-5.944-1.072-7.486-3.236a2.75 2.75 0 0 1-.51-1.596v-.92A2.25 2.25 0 0 1 6.251 14z" /><path fill="url(#SVG2f7L8cLU)" d="M17.754 14a2.25 2.25 0 0 1 2.249 2.249v.918a2.75 2.75 0 0 1-.513 1.6C17.945 20.93 15.42 22 12 22s-5.944-1.072-7.486-3.236a2.75 2.75 0 0 1-.51-1.596v-.92A2.25 2.25 0 0 1 6.251 14z" /><path fill="url(#SVG9AhnabtW)" d="M12 2.005a5 5 0 1 1 0 10a5 5 0 0 1 0-10" /><defs><linearGradient id="SVGPusuadEO" x1="7.808" x2="10.394" y1="15.064" y2="23.319" gradientUnits="userSpaceOnUse"><stop offset=".125" stop-color="#00c6ff" /><stop offset="1" stop-color="#41d1dc" /></linearGradient><linearGradient id="SVG2f7L8cLU" x1="12.003" x2="15.623" y1="13.047" y2="26.573" gradientUnits="userSpaceOnUse"><stop stop-color="#5edadb" stop-opacity="0" /><stop offset="1" stop-color="#62f8ef" /></linearGradient><linearGradient id="SVG9AhnabtW" x1="9.379" x2="14.475" y1="3.334" y2="11.472" gradientUnits="userSpaceOnUse"><stop offset=".125" stop-color="#00c6ff" /><stop offset="1" stop-color="#41d1dc" /></linearGradient></defs></g></svg>  <span>{user?.profession || "Profession"}</span>
+                            <div className="flex flex-col gap-1 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-gray-300">
+                                <div className="flex gap-1 font-bold text-xl"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="#5decff" d="M12 21.577L9.423 19H5.615q-.69 0-1.153-.462T4 17.384V4.616q0-.691.463-1.153T5.616 3h12.769q.69 0 1.153.463T20 4.616v12.769q0 .69-.462 1.153T18.384 19h-3.807zm0-9.5q1.258 0 2.129-.871T15 9.077t-.871-2.129T12 6.077t-2.129.871T9 9.077t.871 2.129t2.129.871M5.423 18h13.154q.211-.133.288-.354t.135-.412q-1.35-1.325-3.138-2.087T12 14.385t-3.863.762T5 17.235q.058.19.134.411t.289.354" /></svg>  About :</div>  {user.about}
                             </div>
-
-                            <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-gray-300">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><g fill="none"><path fill="#ff808c" d="M12.95 13.891a3.816 3.816 0 1 0 0-7.632a3.816 3.816 0 0 0 0 7.632" /><path fill="#66e1ff" d="M7.21 15.826a3.815 3.815 0 1 0 0-7.63a3.815 3.815 0 0 0 0 7.63" /><path stroke="#7a7a7a" stroke-linecap="round" stroke-linejoin="round" d="M9.61 14.146a5.26 5.26 0 1 1 3.826 1.18" stroke-width="1" /><path stroke="#7a7a7a" stroke-linecap="round" stroke-linejoin="round" d="M10.578 7.952A5.26 5.26 0 1 1 6.74 6.76m10.043-.5L22.044 1m0 3.826V1h-3.826M6.74 17.26V23m-1.913-1.913h3.826" stroke-width="1" /></g></svg> <span>{user?.gender || "Gender"}</span>
+                            <div className="flex flex-col gap-1 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-gray-300">
+                                <div className="flex gap-1 font-bold text-xl"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 28 28"><path fill="#5decff" d="M13 20.5c0 2.098.862 3.995 2.25 5.357q-1.077.142-2.25.143c-5.79 0-10-2.567-10-6.285V19a3 3 0 0 1 3-3h8.5a7.47 7.47 0 0 0-1.5 4.5M13 2a6 6 0 1 1 0 12a6 6 0 0 1 0-12m14 18.5a6.5 6.5 0 1 1-13 0a6.5 6.5 0 0 1 13 0m-5.786-3.96a.742.742 0 0 0-1.428 0l-.716 2.298h-2.318c-.727 0-1.03.97-.441 1.416l1.875 1.42l-.716 2.298c-.225.721.567 1.32 1.155.875l1.875-1.42l1.875 1.42c.588.446 1.38-.154 1.155-.875l-.716-2.298l1.875-1.42c.588-.445.286-1.416-.441-1.416H21.93z" /></svg>  Skills :</div>  {user.skills.join(" , ")}
                             </div>
-                            <div className="flex flex-col gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-gray-300">
-                                <div className="flex gap-1 font-bold text-xl"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><defs><mask id="SVGbM9xrexz"><path fill="#fff" d="M5 6c0 -2 2 0 6.5 0c4.5 0 7.5 -2 7.5 0l0 1c0 1.5 -2 2 -6.5 2c-4.5 0 -7.5 0 -7.5 -2l0 -1Z" /><path d="M4 4h16v5h-16Z"><animate fill="freeze" attributeName="d" begin="0.2s" dur="0.2s" to="M4 4h0v5h0Z" /></path></mask><mask id="SVG7b0ZLcJT"><path fill="#fff" fill-opacity="0.3" d="M10.13 18.15c-0.09 -0.86 -0.72 -6.17 -0.72 -6.17c0 0 1.94 0.33 3.1 -0.25c1.16 -0.57 2.48 -0.73 2.48 -0.73c0 0 -0.58 6.96 -0.63 7.46c-0.05 0.5 -0.9 0.84 -1.4 0.84l-1.72 0c-0.5 0 -1.02 -0.3 -1.11 -1.15Z" /><path d="M8 10h8v10h-8Z"><animate fill="freeze" attributeName="d" begin="0.5s" dur="0.2s" to="M8 10h8v0h-8Z" /></path></mask></defs><g fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"><path stroke-dasharray="32" d="M7.5 10.5c0 0 0.83 6.93 1 8.5c0.17 1.57 1.5 2 2.5 2l2 0c1.5 0 2.88 -1.14 3 -2c0.13 -0.86 1 -12 1 -12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.2s" values="32;0" /></path><path stroke-dasharray="14" stroke-dashoffset="14" d="M8 4c1.1 -0.57 2 -1 4 -1c2 0 4.5 0.5 4.5 3"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.1s" to="0" /></path></g><g fill="#ffffff"><path d="M0 0h24v24H0z" mask="url(#SVGbM9xrexz)" /><path d="M0 0h24v24H0z" mask="url(#SVG7b0ZLcJT)" /></g></svg>  About :</div>  {user.about}
+                            <div className="flex flex-col gap-1 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-gray-300">
+                                <div className="flex gap-1 font-bold text-xl"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><g fill="none" stroke="#5decff" stroke-miterlimit="10" stroke-width="1"><path fill="#5decff" fill-opacity="0.16" d="M18.6 3H5.4A2.4 2.4 0 0 0 3 5.4v13.2A2.4 2.4 0 0 0 5.4 21h13.2a2.4 2.4 0 0 0 2.4-2.4V5.4A2.4 2.4 0 0 0 18.6 3Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M10 21V3m-7 7h18M5.4 3h13.2A2.4 2.4 0 0 1 21 5.4v13.2a2.4 2.4 0 0 1-2.4 2.4H5.4A2.4 2.4 0 0 1 3 18.6V5.4A2.4 2.4 0 0 1 5.4 3" /></g></svg>  Projects :</div>  this segment used when second segment start showing his AURA !!
                             </div>
 
                         </div>
                     </div>
 
                     {/* ========== RIGHT PANEL ========== */}
-                    <div className={`w-full lg:w-[70%] rounded-3xl p-8 bg-black/30 border border-white/10 ${showPanel ? 'hidden' : 'flex'} flex-col gap-6 `}>
+                    <div className={`w-full lg:w-[70%] rounded-3xl p-8 bg-black/30 border border-white/10 ${showPanel ? 'hidden' : 'flex'} flex-col gap-1 `}>
 
-                        <h2 className="text-2xl font-semibold text-white">
-                            Profile Information
-                        </h2>
+                        <div className="flex w-full justify-between mb-6">
+                            <button className="group relative w-[48%] max-w-md p-4 mt-4 rounded-xl text-xl font-bold bg-gray-800/40 border-[2px] border-gray-700/50 hover:bg-gray-800/60 transition-all duration-300 overflow-hidden text-white" onClick={() => setShowPanel(false)}>
+                                Profile Edits
+                                <div className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-indigo-500"></div>
+                                <div className="absolute inset-x-0 bottom-0 h-[2px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-violet-500"></div>
+                                <div className="absolute inset-x-0 bottom-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] group-hover:blur-sm transition-all duration-300 bg-gradient-to-r from-transparent via-purple-400"></div>
+                            </button>
+                            <button className="group relative w-[48%] max-w-md p-4 mt-4 rounded-xl text-xl font-bold bg-gray-800/40 border-[2px] border-gray-700/50 hover:bg-gray-800/60 transition-all duration-300 overflow-hidden text-white" onClick={() => setShowPanel(true)}>
+                                Skils and Project Edits
+                                <div className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-indigo-500"></div>
+                                <div className="absolute inset-x-0 bottom-0 h-[2px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-violet-500"></div>
+                                <div className="absolute inset-x-0 bottom-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] group-hover:blur-sm transition-all duration-300 bg-gradient-to-r from-transparent via-purple-400"></div>
+                            </button>
+                        </div>
+                        <div className="mb-3">
+                            <h2 className="text-2xl font-semibold text-white">
+                                Profile Information
+                            </h2>
 
-                        <p className="text-gray-400">
-                            Update your personal details below only fill that feilds which u want to edit !!
-                        </p>
+                            <p className="text-gray-400">
+                                Update your personal details below only fill that feilds which u want to edit !!
+                            </p>
+                        </div>
+
 
                         {/* Inputs go here */}
-                        <div className="h-full p-5 border border-dashed border-white/20 rounded-xl flex items-center justify-center text-gray-500">
-                            <form action="" onSubmit={handleUpdate} className="flex flex-col gap-3">
+                        <div className="h-full p-5 border border-dashed border-white/20 rounded-xl flex  justify-center text-gray-500">
+                            <form action="" onSubmit={handleUpdate} className="flex flex-col gap-2 w-full mt-2">
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <div className="space-y-2 ">
                                         <label htmlFor="FirstName" className="text-md ml-3 block">
@@ -424,7 +436,40 @@ const EditProfile = () => {
 
                     </div>
 
-                    <div className={`w-full lg:w-[70%] rounded-3xl p-8 bg-black/30 border border-white/10 ${showPanel ? 'flex' : 'hidden'} flex-col gap-6 `}></div>
+                    <div className={`w-full lg:w-[70%] rounded-3xl p-8 bg-black/30 border border-white/10 ${showPanel ? 'flex' : 'hidden'} flex-col gap-6 `}>
+                        <div className="flex w-full justify-between mb-6">
+                            <button className="group relative w-[48%] max-w-md p-4 mt-4 rounded-xl text-xl font-bold bg-gray-800/40 border-[2px] border-gray-700/50 hover:bg-gray-800/60 transition-all duration-300 overflow-hidden text-white" onClick={() => setShowPanel(false)}>
+                                Profile Edits
+                                <div className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-indigo-500"></div>
+                                <div className="absolute inset-x-0 bottom-0 h-[2px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-violet-500"></div>
+                                <div className="absolute inset-x-0 bottom-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] group-hover:blur-sm transition-all duration-300 bg-gradient-to-r from-transparent via-purple-400"></div>
+                            </button>
+                            <button className="group relative w-[48%] max-w-md p-4 mt-4 rounded-xl text-xl font-bold bg-gray-800/40 border-[2px] border-gray-700/50 hover:bg-gray-800/60 transition-all duration-300 overflow-hidden text-white" onClick={() => setShowPanel(true)}>
+                                Skils and Project Edits
+                                <div className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-indigo-500"></div>
+                                <div className="absolute inset-x-0 bottom-0 h-[2px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-violet-500"></div>
+                                <div className="absolute inset-x-0 bottom-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] group-hover:blur-sm transition-all duration-300 bg-gradient-to-r from-transparent via-purple-400"></div>
+                            </button>
+                        </div>
+                        <div className="mb-3">
+                            <h2 className="text-4xl font-semibold text-white mb-5">
+                                Skills & Project Information
+                            </h2>
+
+                            <div className="h-full p-5 border border-dashed border-white/20 rounded-xl flex items-center justify-center text-gray-500 flex-col ">
+                                <p className="text-gray-400 text-lg">
+                                    <div className="text-purple-300 font-bold">~ Skill Show off!</div>
+                                </p>
+
+
+                                <p className="text-gray-400 text-lg">
+                                    <div className="text-purple-300 font-bold">~ Projects Show off!</div>
+                                </p>
+                            </div>
+
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div >
