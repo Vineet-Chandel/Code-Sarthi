@@ -24,6 +24,7 @@ import { Provider } from "react-redux";
 import appStore from "./utils/appStore.JS";
 import Hero from "./Main/hero";
 import EditProfile from "./personalPages/editProfile.jsx";
+import Connections from "./personalPages/Connections.jsx";
 
 
 
@@ -51,7 +52,6 @@ const App = () => {
               {/* default route */}
               <Route index element={<Dashboard />} />
               <Route path="dashboard" element={<Dashboard />} />
-              <Route path="editProfile" element={<EditProfile />} />
               <Route path="discussions" element={<Discussions />} />
               <Route path="meeting" element={<Meeting />} />
               <Route path="explore" element={<Explore />} />
@@ -66,6 +66,9 @@ const App = () => {
               <Route path="contactUs" element={<ContactUs />} />
               <Route path="aboutUs" element={<AboutUs />} />
               <Route path="privacypolicy" element={<PrivacyPolicy />} />
+              <Route path="editProfile" element={<EditProfile />} />
+              <Route path="connections" element={<Connections />} />
+
             </Route>
           </Route>
         </Routes>
