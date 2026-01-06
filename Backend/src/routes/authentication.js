@@ -74,6 +74,7 @@ authRouter.post("/SignInDB", async (req, res) => {
                 expires: new Date(Date.now() + 8 * 3600000),
             });
             res.send({
+                identity: user._id,
                 FirstName: user.FirstName,
                 MiddleName: user.MiddleName,
                 LastName: user.LastName,

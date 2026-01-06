@@ -40,28 +40,53 @@ userPreference.get("/user/connections", userAuth, async (req, res) => {
                 { toUserId: loggedInUser._id, status: "accepted" },
                 { fromUserId: loggedInUser._id, status: "accepted" },
             ],
-        }).populate("fromUserId", "FirstName LastName").populate("toUserId", "FirstName LastName");
-
-        const data = connectionRequests.map((row) => {
-            if (row.fromUserId._id.toString() === loggedInUser._id.toString()) {
-                return row.toUserId;
-            }
-            return row.fromUserId;
         });
 
-        res.status(200).json({
+        const connections = await Promise.all(
+            connectionRequests.map(async (row) => {
+                const isFromMe =
+                    row.fromUserId.toString() === loggedInUser._id.toString();
+
+                const otherUserId = isFromMe ? row.toUserId : row.fromUserId;
+
+                const finalizingUser = await User.findById(otherUserId);
+
+                // safety check
+                if (!finalizingUser) return null;
+
+                return {
+                    connectionId: row._id,
+                    userId: finalizingUser._id,
+                    FirstName: finalizingUser.FirstName,
+                    LastName: finalizingUser.LastName,
+                    username: finalizingUser.username,
+                    skills: finalizingUser.skills,
+                    about: finalizingUser.about,
+                    profession: finalizingUser.profession,
+                    college: finalizingUser.college
+                };
+            })
+        );
+
+        // remove nulls (in case user was deleted)
+        const filteredConnections = connections.filter(Boolean);
+
+        return res.status(200).json({
             success: true,
-            totalConnections: connectionRequests.length,
-            data: connectionRequests
+            totalConnections: filteredConnections.length,
+            data: filteredConnections,
         });
 
     } catch (err) {
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
-            message: err.message
+            message: err.message,
         });
     }
 });
+
+
+
 //all blocked connections
 userPreference.get("/user/blocked", userAuth, async (req, res) => {
     try {

@@ -42,6 +42,7 @@ const Login = () => {
                 { withCredentials: true }
             );
             dispatch(addUser(res.data));
+            console.log(res.data);
             navigate("/app");
 
 
