@@ -9,6 +9,8 @@ const EditProfile = () => {
     const [newError, setNewError] = useState(false);
     const [errorisOpen, errorsetIsOpen] = useState(false);
     const [showPanel, setShowPanel] = useState(false);
+    const [showSkillModalPanel, setShowSkillModalPanel] = useState(false);
+
 
 
 
@@ -22,7 +24,8 @@ const EditProfile = () => {
         age: '',
         profession: '',
         college: '',
-        about: ''
+        about: '',
+
     });
 
     const handleUpdate = async (e) => {
@@ -135,7 +138,7 @@ const EditProfile = () => {
                                 <div className="flex gap-1 font-bold text-xl"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="#5decff" d="M12 21.577L9.423 19H5.615q-.69 0-1.153-.462T4 17.384V4.616q0-.691.463-1.153T5.616 3h12.769q.69 0 1.153.463T20 4.616v12.769q0 .69-.462 1.153T18.384 19h-3.807zm0-9.5q1.258 0 2.129-.871T15 9.077t-.871-2.129T12 6.077t-2.129.871T9 9.077t.871 2.129t2.129.871M5.423 18h13.154q.211-.133.288-.354t.135-.412q-1.35-1.325-3.138-2.087T12 14.385t-3.863.762T5 17.235q.058.19.134.411t.289.354" /></svg>  About :</div>  {user.about}
                             </div>
                             <div className="flex flex-col gap-1 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-gray-300">
-                                <div className="flex gap-1 font-bold text-xl"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 28 28"><path fill="#5decff" d="M13 20.5c0 2.098.862 3.995 2.25 5.357q-1.077.142-2.25.143c-5.79 0-10-2.567-10-6.285V19a3 3 0 0 1 3-3h8.5a7.47 7.47 0 0 0-1.5 4.5M13 2a6 6 0 1 1 0 12a6 6 0 0 1 0-12m14 18.5a6.5 6.5 0 1 1-13 0a6.5 6.5 0 0 1 13 0m-5.786-3.96a.742.742 0 0 0-1.428 0l-.716 2.298h-2.318c-.727 0-1.03.97-.441 1.416l1.875 1.42l-.716 2.298c-.225.721.567 1.32 1.155.875l1.875-1.42l1.875 1.42c.588.446 1.38-.154 1.155-.875l-.716-2.298l1.875-1.42c.588-.445.286-1.416-.441-1.416H21.93z" /></svg>  Skills :</div>  {user.skills.join(" , ")}
+                                <div className="flex gap-1 font-bold text-xl"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 28 28"><path fill="#5decff" d="M13 20.5c0 2.098.862 3.995 2.25 5.357q-1.077.142-2.25.143c-5.79 0-10-2.567-10-6.285V19a3 3 0 0 1 3-3h8.5a7.47 7.47 0 0 0-1.5 4.5M13 2a6 6 0 1 1 0 12a6 6 0 0 1 0-12m14 18.5a6.5 6.5 0 1 1-13 0a6.5 6.5 0 0 1 13 0m-5.786-3.96a.742.742 0 0 0-1.428 0l-.716 2.298h-2.318c-.727 0-1.03.97-.441 1.416l1.875 1.42l-.716 2.298c-.225.721.567 1.32 1.155.875l1.875-1.42l1.875 1.42c.588.446 1.38-.154 1.155-.875l-.716-2.298l1.875-1.42c.588-.445.286-1.416-.441-1.416H21.93z" /></svg> Tech Stacks:</div>  {user.skills.join(" , ")}
                             </div>
                             <div className="flex flex-col gap-1 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-gray-300">
                                 <div className="flex gap-1 font-bold text-xl"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><g fill="none" stroke="#5decff" stroke-miterlimit="10" stroke-width="1"><path fill="#5decff" fill-opacity="0.16" d="M18.6 3H5.4A2.4 2.4 0 0 0 3 5.4v13.2A2.4 2.4 0 0 0 5.4 21h13.2a2.4 2.4 0 0 0 2.4-2.4V5.4A2.4 2.4 0 0 0 18.6 3Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M10 21V3m-7 7h18M5.4 3h13.2A2.4 2.4 0 0 1 21 5.4v13.2a2.4 2.4 0 0 1-2.4 2.4H5.4A2.4 2.4 0 0 1 3 18.6V5.4A2.4 2.4 0 0 1 5.4 3" /></g></svg>  Projects :</div>  this segment used when second segment start showing his AURA !!
@@ -439,7 +442,7 @@ const EditProfile = () => {
                     <div className={`w-full lg:w-[70%] rounded-3xl p-8 bg-black/30 border border-white/10 ${showPanel ? 'flex' : 'hidden'} flex-col gap-6 `}>
                         <div className="flex w-full justify-between mb-6">
                             <button className="group relative w-[48%] max-w-md p-4 mt-4 rounded-xl text-xl font-bold bg-gray-800/40 border-[2px] border-gray-700/50 hover:bg-gray-800/60 transition-all duration-300 overflow-hidden text-white" onClick={() => setShowPanel(false)}>
-                                Profile Edits
+                                Profile Edits+
                                 <div className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-indigo-500"></div>
                                 <div className="absolute inset-x-0 bottom-0 h-[2px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-violet-500"></div>
                                 <div className="absolute inset-x-0 bottom-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] group-hover:blur-sm transition-all duration-300 bg-gradient-to-r from-transparent via-purple-400"></div>
@@ -456,22 +459,71 @@ const EditProfile = () => {
                                 Skills & Project Information
                             </h2>
 
-                            <div className="h-full p-5 border border-dashed border-white/20 rounded-xl flex items-center justify-center text-gray-500 flex-col ">
-                                <p className="text-gray-400 text-lg">
-                                    <div className="text-purple-300 font-bold">~ Skill Show off!</div>
-                                </p>
+                            <div className="h-full p-5 border border-dashed border-white/20 rounded-xl flex   text-gray-500 flex-col ">
+
+                                <div className="flex justify-between pr-3 pl-3">
+                                    <h2 className="text-3xl font-semibold text-white mb-3">
+                                        Tech Stacks
+                                    </h2>
+                                    <div onClick={() => setShowSkillModalPanel(true)} className=" border h-[35px] w-[35px] rounded-full flex justify-center items-center border-transparent hover:bg-slate-800"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="#fff" fill-rule="evenodd" d="M11.25 11.25V3.5h1.5v7.75h7.75v1.5h-7.75v7.75h-1.5v-7.75H3.5v-1.5z" /></svg></div>
+
+                                </div>
 
 
-                                <p className="text-gray-400 text-lg">
-                                    <div className="text-purple-300 font-bold">~ Projects Show off!</div>
-                                </p>
+                                <div className="w-full max-w-9xl p-4 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 flex flex-col gap-4 text-white">
+                                    {user.skills.map((item, i) => (
+                                        <div key={i}>#{i + 1} {item} </div>
+                                    ))}
+                                </div>
+
+
+
                             </div>
-
 
                         </div>
                     </div>
                 </div>
+            </div >
+            <div className={`fixed inset-0 bg-black/60 z-50 items-center justify-center ${showSkillModalPanel ? "flex" : "hidden"}`}>
+
+
+                <div className="w-[70%] max-w-9xl p-4 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 flex flex-col  text-white">
+                    <div className="flex justify-between mb-5">
+                        <div>
+                            <h2 className="text-3xl font-semibold text-white ">
+                                Add tech stacks
+                            </h2>
+                            <h2 className="text-lg pl-1 text-gray-400 ">
+                                That you've mastered & let the world see what you're capable of
+                            </h2>
+                        </div>
+
+                        <div onClick={() => setShowSkillModalPanel(false)} className=" border h-[40px] w-[40px] rounded-full flex justify-center items-center border-transparent hover:bg-slate-800"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 48 48"><path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="m8 8l32 32M8 40L40 8" /></svg></div>
+                    </div>
+                    <div className="space-y-2 ">
+                        <label htmlFor="skill" className="text-md ml-3 block">
+                            Tech Stacks <span className="text-orange-700 ml-1">*</span>
+                        </label>
+                        <div className={"flex items-center rounded-2xl px-4 py-3 border border-gray-600 transition-all duration-300  bg-black/50"}>
+                            <span className="mr-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="30" viewBox="0 0 512 512"><path fill="#00e8f4" d="M119.1 25v.1c-25 3.2-47.1 32-47.1 68.8c0 20.4 7.1 38.4 17.5 50.9L99.7 157L84 159.9c-13.7 2.6-23.8 9.9-32.2 21.5c-8.5 11.5-14.9 27.5-19.4 45.8c-8.2 33.6-9.9 74.7-10.1 110.5h44l11.9 158.4h96.3L185 337.7h41.9c0-36.2-.3-77.8-7.8-111.7c-4-18.5-10.2-34.4-18.7-45.9c-8.6-11.4-19.2-18.7-34.5-21l-16-2.5L160 144c10-12.5 16.7-30.2 16.7-50.1c0-39.2-24.8-68.8-52.4-68.8c-2.9 0-4.7-.1-5.2-.1M440 33c-17.2 0-31 13.77-31 31s13.8 31 31 31s31-13.77 31-31s-13.8-31-31-31M311 55v48H208v18h103v158h-55v18h55v110H208v18h103v32h80.8c-.5-2.9-.8-5.9-.8-9s.3-6.1.8-9H329V297h62.8c-.5-2.9-.8-5.9-.8-9s.3-6.1.8-9H329V73h62.8c-.5-2.92-.8-5.93-.8-9s.3-6.08.8-9zm129 202c-17.2 0-31 13.8-31 31s13.8 31 31 31s31-13.8 31-31s-13.8-31-31-31m0 160c-17.2 0-31 13.8-31 31s13.8 31 31 31s31-13.8 31-31s-13.8-31-31-31" /></svg>
+                            </span>
+                            <input
+                                id="skill"
+                                type="text"
+                                placeholder="Skill (ex : React JS)"
+                                className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base"
+                                value={formData['FirstName']}
+                                onChange={handleChange}
+
+                            />
+                        </div>
+                    </div>
+                </div>
+
             </div>
+
+
         </div >
     );
 };
