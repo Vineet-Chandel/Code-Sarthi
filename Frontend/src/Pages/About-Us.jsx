@@ -62,36 +62,10 @@ const AboutUs = () => {
 
     const [activeFeature, setActiveFeature] = useState(null);
     const [activeTeamMember, setActiveTeamMember] = useState(null);
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-    const [pulseButton, setPulseButton] = useState(true);
 
-    // Mouse tracking for interactive background effects
-    useEffect(() => {
-        const handleMouseMove = (e) => {
-            setMousePosition({ x: e.clientX, y: e.clientY });
-        };
 
-        window.addEventListener('mousemove', handleMouseMove);
 
-        // Pulsing animation for CTA button
-        const interval = setInterval(() => {
-            setPulseButton(prev => !prev);
-        }, 3000);
 
-        return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
-            clearInterval(interval);
-        };
-    }, []);
-
-    // Toggle feature card expansion
-    const toggleFeature = (id) => {
-        setActiveFeature(activeFeature === id ? null : id);
-        // Add haptic feedback if available
-        if (navigator.vibrate) {
-            navigator.vibrate(20);
-        }
-    };
 
     // Handle team member click with animation
     const handleTeamMemberClick = (id) => {
@@ -108,23 +82,14 @@ const AboutUs = () => {
         }, 3000);
     };
 
-    // Interactive background gradient based on mouse position
-    const getBackgroundGradient = () => {
-        const x = (mousePosition.x / window.innerWidth) * 100;
-        const y = (mousePosition.y / window.innerHeight) * 100;
-
-        return {
-            background: `radial-gradient(circle at ${x}% ${y}%, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.05) 25%, transparent 50%)`
-        };
-    };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white p-4 md:p-8 overflow-hidden relative">
 
             {/* Interactive background elements */}
             <div
-                className="fixed inset-0 pointer-events-none transition-all duration-1000"
-                style={getBackgroundGradient()}
+                className="fixed inset-0 pointer-events-none transition-all duration-1000 "
+
             />
 
             {/* Floating particles */}
@@ -187,7 +152,6 @@ const AboutUs = () => {
                             transform hover:scale-105 hover:shadow-2xl 
                             hover:shadow-purple-500/30 active:scale-95
                             border-2 border-transparent hover:border-blue-400
-                            ${pulseButton ? 'animate-pulse-slow' : ''}
                         `}
                             onClick={() => {
                                 window.scrollTo({ top: document.getElementById('features').offsetTop - 100, behavior: 'smooth' });
@@ -477,37 +441,7 @@ const AboutUs = () => {
                 </button>
             </footer>
 
-            {/* Add custom animations */}
-            <style jsx>{`
-                @keyframes float {
-                    0%, 100% { transform: translateY(0px) rotate(0deg); }
-                    50% { transform: translateY(-20px) rotate(180deg); }
-                }
-                @keyframes gradient-x {
-                    0%, 100% { background-position: 0% 50%; }
-                    50% { background-position: 100% 50%; }
-                }
-                @keyframes fade-in-up {
-                    from { opacity: 0; transform: translateY(20px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
-                @keyframes slide-up {
-                    from { opacity: 0; transform: translate(-50%, 20px); }
-                    to { opacity: 1; transform: translate(-50%, 0); }
-                }
-                @keyframes pulse-slow {
-                    0%, 100% { opacity: 1; }
-                    50% { opacity: 0.8; }
-                }
-                .animate-float { animation: float 6s ease-in-out infinite; }
-                .animate-gradient-x { 
-                    background-size: 200% 200%;
-                    animation: gradient-x 5s ease infinite; 
-                }
-                .animate-fade-in-up { animation: fade-in-up 1s ease-out; }
-                .animate-slide-up { animation: slide-up 0.3s ease-out; }
-                .animate-pulse-slow { animation: pulse-slow 2s ease-in-out infinite; }
-            `}</style>
+
         </div>
     );
 };
