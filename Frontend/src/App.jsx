@@ -25,6 +25,11 @@ import appStore from "./utils/appStore.JS";
 import Hero from "./Main/hero";
 import EditProfile from "./personalPages/editProfile.jsx";
 import Connections from "./personalPages/Connections.jsx";
+import Discover from "./Main/PagesMain/Discover.jsx";
+import Safety from "./Main/PagesMain/Safety.jsx";
+import Blogs from "./Main/PagesMain/Blogs.JSX";
+import Support from "./Main/PagesMain/Support.jsx";
+import Toutorials from "./Main/PagesMain/Toutorials.jsx";
 
 
 
@@ -41,6 +46,11 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Hero />} />
+          <Route path="/discover" element={<Discover />} />
+          <Route path="/safety" element={<Safety />} />
+          <Route path="/blogs" element={<Blogs />} />
+          <Route path="/support" element={<Support />} />
+          <Route path="/toutorials" element={< Toutorials />} />
           {/* ✅ Public routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
