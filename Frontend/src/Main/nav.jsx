@@ -100,7 +100,7 @@ const Nav = () => {
 
                         </div>
                     </div>
-                    <div className='font-bold text-xl border p-1 px-3 bg-white text-black rounded-xl flex justify-center items-center' onClick={() => navigate("/login")} >Open CodeSarthi</div>
+                    <div className='font-bold text-xl border p-1 px-3 bg-white text-black rounded-xl flex justify-center items-center cursor-pointer' onClick={() => navigate("/login")} >Open CodeSarthi</div>
 
 
                 </div>

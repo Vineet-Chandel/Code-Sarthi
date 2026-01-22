@@ -2,6 +2,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Mainhero from "./main-hero";
 import Nav from "./nav";
+import Content from "./Content";
 const Hero = () => {
 
     return (
@@ -9,7 +10,9 @@ const Hero = () => {
 
         <div>
             <Nav />
+
             <Mainhero />
+
         </div>
 
 
