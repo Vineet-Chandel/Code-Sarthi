@@ -1,17 +1,26 @@
+import { useGSAP } from '@gsap/react';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const Nav = () => {
     const [hovering, setHovering] = useState(false);
+    const [hovering1, setHovering1] = useState(false);
+    const [hovering2, setHovering2] = useState(false);
+    const [hovering3, setHovering3] = useState(false);
+    const [hovering4, setHovering4] = useState(false);
     const navigate = useNavigate();
+
+    useGSAP(() => {
+
+    })
     return (
-        <div>
+        <div className='relative'>
 
             <div className="
                 absolute  z-20 top-5  font-extrabold w-screen text-white font-robert-medium
             ">
                 <div className='flex justify-between item-center px-7'>
-                    <div className='font-bold text-2xl flex justify-center items-center gap-[1px]'><svg className='w-[50px] h-[45px]' viewBox="0 0 711 711" version="1.1" xmlns="http://www.w3.org/2000/svg" width="711" height="711">
+                    <div className='font-extrabold text-2xl flex justify-center items-center gap-[1px] font-robert-medium'><svg className='w-[50px] h-[50px]' viewBox="0 0 711 711" version="1.1" xmlns="http://www.w3.org/2000/svg" width="711" height="711">
                         <path d="M0 0 C6.58508545 2.03840525 12.79753096 4.52564795 18.91015625 7.71484375 C19.53833252 8.0387207 20.16650879 8.36259766 20.8137207 8.69628906 C24.23655667 10.55763943 27.04237365 12.51527976 29.84765625 15.2265625 C34.88945484 19.86566603 39.00358635 23.07913818 46.11181641 23.10107422 C53.79411514 22.49849147 61.33052811 20.87590067 68.8460083 19.23509216 C92.37755121 14.17320322 119.32282149 16.01446826 142.6875 21.203125 C150.54368699 23.17473217 150.54368699 23.17473217 158.33984375 22 C160.9058973 20.19228496 163.142035 18.19041986 165.47265625 16.08984375 C178.37295078 7.43007425 196.22085023 -3.39990514 212.47265625 -1.91015625 C219.27493089 2.43172118 221.41937941 11.12394057 223.22265625 18.58984375 C225.6937507 31.88540626 225.39011116 46.16215584 223.53515625 59.52734375 C222.98978522 65.31903041 224.8493846 67.90322478 228.4296875 72.3125 C240.89593538 89.25992303 243.89666711 112.72207871 243.78515625 133.08984375 C243.78266876 133.81594849 243.78018127 134.54205322 243.77761841 135.29016113 C243.61303361 166.42362048 236.59320823 195.17537568 214.59765625 218.27734375 C195.7482555 236.43668937 169.78153691 244.43333135 144.47265625 248.08984375 C143.24168213 248.26862061 142.01070801 248.44739746 140.74243164 248.6315918 C128.3190644 250.28890085 115.93569308 250.42910033 103.41674805 250.40551758 C99.9396181 250.40237042 96.46335295 250.42586387 92.98632812 250.45117188 C53.52684899 250.56331776 11.24700274 244.61353513 -18.65234375 216.46484375 C-39.74549576 194.60162428 -46.20870018 163.39945767 -46.90234375 133.96484375 C-46.41700595 113.66506267 -43.19458827 86.55721694 -29.12890625 70.49267578 C-26.78701018 67.81356608 -25.56588878 66.08210295 -25.42480469 62.45019531 C-25.61344462 60.41140719 -25.84473773 58.3762583 -26.11132812 56.34619141 C-28.31398905 39.10494056 -29.00545162 15.93135632 -18.52734375 1.08984375 C-13.15134862 -4.0150928 -6.58827739 -1.69996526 0 0 Z M2.6015625 105.5 C-8.92038868 119.51661217 -14.57574399 137.60285859 -13.26953125 155.65234375 C-10.93316069 175.02297968 -2.27285336 191.57173773 13.09765625 203.71484375 C45.80493661 227.1001474 102.23585602 225.18112447 140.47265625 219.08984375 C141.96055664 218.86385498 141.96055664 218.86385498 143.47851562 218.63330078 C165.84964003 215.11116822 184.06830079 208.4239997 198.4375 190 C209.64817678 173.96937774 213.32953961 154.89224908 210.06103516 135.66894531 C206.96689213 122.05710298 200.29193624 110.90912374 190.47265625 101.08984375 C189.90804687 100.52523437 189.3434375 99.960625 188.76171875 99.37890625 C166.13402404 78.51727552 129.93177764 78.86380826 101.03515625 78.83984375 C100.18660065 78.83883667 99.33804504 78.83782959 98.46377563 78.83679199 C64.83335228 78.86356122 27.33532436 79.61583061 2.6015625 105.5 Z " fill="#FEFEFE" transform="translate(247.52734375,150.91015625)" />
                         <path d="M0 0 C1.67017948 0.145233 3.34038118 0.29021951 5.01074219 0.43334961 C6.60594282 0.5737974 8.20024859 0.72451042 9.79394531 0.88110352 C20.29532781 1.82351353 30.77831954 1.81350539 41.3125 1.8125 C42.28061615 1.81555145 43.2487323 1.81860291 44.2461853 1.82174683 C53.79856189 1.84788313 63.30980876 1.85987583 72.82421875 0.9296875 C74.05962402 0.80956299 75.2950293 0.68943848 76.56787109 0.56567383 C78.78484306 0.32139373 80.99838358 0.04234278 83.20556641 -0.27856445 C90.08478327 -1.08032066 90.08478327 -1.08032066 93.29980469 0.97607422 C95.13814271 2.75602933 96.66922803 4.5680808 98.1875 6.625 C98.86039062 7.470625 99.53328125 8.31625 100.2265625 9.1875 C114.78419447 31.5617915 113.41285511 60.37487495 108.1875 85.625 C104.92000764 99.80464085 100.45736914 113.0075134 93.1875 125.625 C92.61128906 126.63691406 92.03507812 127.64882813 91.44140625 128.69140625 C82.86197976 142.93761329 70.86038595 155.3505349 54.8984375 160.734375 C44.25138286 163.28966811 32.99699764 162.55306775 23.1875 157.625 C22.38441406 157.24730469 21.58132813 156.86960937 20.75390625 156.48046875 C8.01686811 149.73493335 -1.13193198 138.09933498 -7.8125 125.625 C-8.41578125 124.53703125 -9.0190625 123.4490625 -9.640625 122.328125 C-23.66038357 95.87345013 -31.5155541 58.77835831 -24.25 29.3125 C-20.81660479 18.79470482 -16.09697219 8.20999169 -7.8125 0.625 C-5.04068462 -0.76090769 -3.08089585 -0.27567871 0 0 Z " fill="#FEFEFE" transform="translate(303.8125,406.375)" />
                         <path d="M0 0 C3.90722179 2.54818812 6.84177542 5.41115678 8.6875 9.8125 C9.22555052 15.73105575 9.16925348 19.76322736 5.875 24.875 C5.02929443 25.47111084 4.18358887 26.06722168 3.31225586 26.68139648 C0.67798543 28.65136075 0.67798543 28.65136075 0.17016602 31.51196289 C0.13592529 32.5921167 0.10168457 33.67227051 0.06640625 34.78515625 C0.0300985 35.7310537 0.0300985 35.7310537 -0.00694275 36.69606018 C-0.08190164 39.08952123 -0.1064095 41.48042408 -0.125 43.875 C-0.14110321 45.42824982 -0.14110321 45.42824982 -0.15753174 47.01287842 C-0.23542097 55.77970962 -0.21619816 64.54548406 -0.1875 73.3125 C-0.18190008 75.99023353 -0.17791428 78.6679665 -0.17382812 81.34570312 C-0.16289656 87.85548889 -0.1462336 94.36524011 -0.125 100.875 C0.80942429 101.38296112 0.80942429 101.38296112 1.76272583 101.90118408 C2.57724213 102.34790466 3.39175842 102.79462524 4.23095703 103.25488281 C5.03953156 103.69664856 5.84810608 104.13841431 6.68118286 104.59356689 C9.11171771 106.01326946 10.91570074 107.48954713 12.75 109.625 C13.28367187 110.21796875 13.81734375 110.8109375 14.3671875 111.421875 C19.16980006 119.23545191 19.34929342 127.28607492 19.26611328 136.24926758 C19.25005445 138.30552783 19.26601511 140.35981555 19.28515625 142.41601562 C19.30147761 152.20919874 18.83496788 161.91898157 11.734375 169.3359375 C5.23533539 174.71539466 -0.8017314 176.54623134 -9.125 175.875 C-10.60451365 171.88134777 -9.76002645 168.09508012 -9.1875 164 C-7.0396836 146.64621435 -6.41556948 127.20137439 -11.1496582 110.19384766 C-12.62556012 103.5963865 -12.38865202 96.87893961 -12.36882973 90.15599632 C-12.36318467 87.68824904 -12.37247595 85.22096266 -12.3860321 82.75325012 C-12.42296668 75.74408633 -12.44165117 68.73508878 -12.43041992 61.72583008 C-12.42457297 57.42285918 -12.44279453 53.1205489 -12.47630882 48.81771278 C-12.48425906 47.18266966 -12.48299085 45.54755448 -12.47228432 43.91252708 C-12.45797292 41.63129758 -12.47420241 39.35215854 -12.49731445 37.07104492 C-12.49794388 35.77470627 -12.4985733 34.47836761 -12.4992218 33.14274597 C-12.82352248 29.71690629 -12.82352248 29.71690629 -15.5196991 27.62837219 C-16.37944839 27.04975937 -17.23919769 26.47114655 -18.125 25.875 C-21.87965442 20.59818838 -22.841715 17.32543497 -22.125 10.875 C-20.26643173 5.60905656 -17.52185804 3.08104232 -13.125 -0.125 C-8.46247142 -1.67917619 -4.63746673 -1.66948802 0 0 Z " fill="#FEFEFE" transform="translate(506.125,143.125)" />
@@ -42,7 +51,7 @@ const Nav = () => {
                         <div className='  cursor-pointer
                 p-1 rounded-lg px-3
                 transition duration-500 ease-in-out
-                hover:bg-white hover:text-black flex justify-center items-center group' onClick={() => navigate("/safety")} onMouseEnter={() => setHovering(true)} onMouseLeave={() => setHovering(false)}>
+                hover:bg-white hover:text-black flex justify-center items-center group' onClick={() => navigate("/safety")} onMouseEnter={() => { setHovering(true), setHovering1(true) }} onMouseLeave={() => { setHovering(false), setHovering1(false) }}>
                             Safety <svg
                                 className="w-4 h-4 ml-1 fill-current stroke-current text-white group-hover:text-black transition duration-500    group-hover:rotate-180"
                                 xmlns="http://www.w3.org/2000/svg"
@@ -52,12 +61,16 @@ const Nav = () => {
                                     d="M831.872 340.864L512 652.672L192.128 340.864a30.59 30.59 0 0 0-42.752 0a29.12 29.12 0 0 0 0 41.6L489.664 714.24a32 32 0 0 0 44.672 0l340.288-331.712a29.12 29.12 0 0 0 0-41.728a30.59 30.59 0 0 0-42.752 0z"
                                 />
                             </svg>
-
                         </div>
+                        <div
+                            className={`absolute top-[4rem] left-1/2 -translate-x-1/2 w-[1200px] h-[500px] rounded-3xl border bg-white text-black transition-all duration-300 ease-out ${hovering1 ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"}`}>
+                            block 1
+                        </div>
+
                         <div className='  cursor-pointer
                 p-1 rounded-lg px-3
                 transition duration-500 ease-in-out
-                hover:bg-white hover:text-black flex justify-center items-center group' onClick={() => navigate("/support")} onMouseEnter={() => setHovering(true)} onMouseLeave={() => setHovering(false)}>
+                hover:bg-white hover:text-black flex justify-center items-center group' onClick={() => navigate("/support")} onMouseEnter={() => { setHovering(true), setHovering2(true) }} onMouseLeave={() => { setHovering(false), setHovering2(false) }}>
                             Support <svg
                                 className="w-4 h-4 ml-1 fill-current stroke-current text-white group-hover:text-black transition duration-500    group-hover:rotate-180"
                                 xmlns="http://www.w3.org/2000/svg"
@@ -69,10 +82,14 @@ const Nav = () => {
                             </svg>
 
                         </div>
+                        <div
+                            className={`absolute top-[4rem] left-1/2 -translate-x-1/2 w-[1200px] h-[500px] rounded-3xl border bg-white text-black transition-all duration-300 ease-out ${hovering2 ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"}`}>
+                            block 2
+                        </div>
                         <div className='  cursor-pointer
                 p-1 rounded-lg px-3
                 transition duration-500 ease-in-out
-                hover:bg-white hover:text-black flex justify-center items-center group ' onClick={() => navigate("/toutorials")} onMouseEnter={() => setHovering(true)} onMouseLeave={() => setHovering(false)}>
+                hover:bg-white hover:text-black flex justify-center items-center group ' onClick={() => navigate("/Tutorials")} onMouseEnter={() => { setHovering(true), setHovering3(true) }} onMouseLeave={() => { setHovering(false), setHovering3(false) }}>
                             Tutorials <svg
                                 className="w-4 h-4 ml-1 fill-current stroke-current text-white group-hover:text-black transition duration-500    group-hover:rotate-180"
                                 xmlns="http://www.w3.org/2000/svg"
@@ -82,23 +99,43 @@ const Nav = () => {
                                     d="M831.872 340.864L512 652.672L192.128 340.864a30.59 30.59 0 0 0-42.752 0a29.12 29.12 0 0 0 0 41.6L489.664 714.24a32 32 0 0 0 44.672 0l340.288-331.712a29.12 29.12 0 0 0 0-41.728a30.59 30.59 0 0 0-42.752 0z"
                                 />
                             </svg>
-
+                        </div>
+                        <div
+                            className={`absolute top-[4rem] left-1/2 -translate-x-1/2 w-[1200px] h-[500px] rounded-3xl border bg-white text-black transition-all duration-300 ease-out ${hovering3 ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"}`}>
+                            block 3
                         </div>
                         <div className='  cursor-pointer
                 p-1 rounded-lg px-3
                 transition duration-500 ease-in-out
-                hover:bg-white hover:text-black flex justify-center items-center group ' onClick={() => navigate("/blogs")} onMouseEnter={() => setHovering(true)} onMouseLeave={() => setHovering(false)}>
-                            Blogs <svg
-                                className="w-4 h-4 ml-1 fill-current stroke-current text-white group-hover:text-black transition duration-500    group-hover:rotate-180"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 1024 1024"
-                            >
-                                <path
-                                    d="M831.872 340.864L512 652.672L192.128 340.864a30.59 30.59 0 0 0-42.752 0a29.12 29.12 0 0 0 0 41.6L489.664 714.24a32 32 0 0 0 44.672 0l340.288-331.712a29.12 29.12 0 0 0 0-41.728a30.59 30.59 0 0 0-42.752 0z"
-                                />
-                            </svg>
+                hover:bg-white hover:text-black flex justify-center items-center group ' onClick={() => navigate("/blogs")} onMouseEnter={() => { setHovering(true), setHovering4(true) }} onMouseLeave={() => { setHovering(false), setHovering4(false) }}>
+                            <div>
+                                <div className='flex justify-center items-center'>
+                                    Blogs <svg
+                                        className="w-4 h-4 ml-1 fill-current stroke-current text-white group-hover:text-black transition duration-500    group-hover:rotate-180"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 1024 1024"
+                                    >
+                                        <path
+                                            d="M831.872 340.864L512 652.672L192.128 340.864a30.59 30.59 0 0 0-42.752 0a29.12 29.12 0 0 0 0 41.6L489.664 714.24a32 32 0 0 0 44.672 0l340.288-331.712a29.12 29.12 0 0 0 0-41.728a30.59 30.59 0 0 0-42.752 0z"
+                                        />
+                                    </svg>
+                                    <div className={`absolute top-[3.5rem] p-5  -translate-x-1/2 w-[300px] h-[300px] rounded-3xl  bg-gradient-to-b from-sky-50 to-blue-100 text-black transition-all duration-300 ease-out ${hovering4 ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"}`}>
+                                        <h1 className='text-lg font-robert-medium text-gray-600'>Blog Documentation</h1>
+                                        <ul className="space-y-2 mt-3">
+                                            <li onClick={() => navigate("/community")} className="cursor-pointer hover:text-blue-500">Community</li>
+                                            <li onClick={() => navigate("/new-updates")} className="cursor-pointer hover:text-blue-500">New Updates</li>
+                                            <li onClick={() => navigate("/engineering")} className="cursor-pointer hover:text-blue-500">Engineering</li>
+                                            <li onClick={() => navigate("/how-to-use")} className="cursor-pointer hover:text-blue-500">How to use CodeSarthi</li>
+                                            <li onClick={() => navigate("/privacy")} className="cursor-pointer hover:text-blue-500">Policy & Safety</li>
+                                            <li onClick={() => navigate("/product")} className="cursor-pointer hover:text-blue-500">Product & Features</li>
+                                        </ul>
+
+                                    </div>
+                                </div>
+                            </div>
 
                         </div>
+
                     </div>
                     <div className='font-bold text-xl border p-1 px-3 bg-white text-black rounded-xl flex justify-center items-center cursor-pointer' onClick={() => navigate("/login")} >Open CodeSarthi</div>
 
@@ -108,7 +145,7 @@ const Nav = () => {
 
             </div>
             <div className={`${hovering ? "h-screen" : "h-0"} w-screen absolute bg-black/80 z-10 inset-0`}></div>
-        </div>
+        </div >
 
     )
 }
