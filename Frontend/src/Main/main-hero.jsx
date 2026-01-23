@@ -24,7 +24,7 @@ const Mainhero = () => {
             />
 
             {/* Center container */}
-            <div className="relative z-10 flex flex-col items-center justify-between h-full w-full pt-[6rem] pb-[2rem]">
+            <div className="relative  flex flex-col items-center justify-between h-full w-full pt-[6rem] pb-[2rem]">
                 <div className='w-screen relative left-5 '>
 
                     <div className="text-[10rem] text-white font-extrabold font-zentry leading-none">
