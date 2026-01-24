@@ -5,8 +5,9 @@
 body {
     width: 100dvw;
     overflow-x: hidden;
-    background-color: #dfdff0;
+
     font-family: "General Sans", sans-serif;
+    background-color: black;
 }
 
 @layer base {
