@@ -41,6 +41,11 @@ body {
     @font-face {
         font-family: "zentry";
         src: url("/fonts/zentry-regular.woff2") format("woff2");
+    }
+
+    @font-face {
+        font-family: "Logo-font";
+        src: url("/fonts/Logo-font.woff2") format("woff2");
         font-weight: 400;
         font-style: normal;
     }
