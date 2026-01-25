@@ -8,18 +8,14 @@ const Footer = () => {
             flex flex-col
             bg-black
             overflow-hidden
+             bg-gradient-to-r from-blue-500/20 to-purple-500/20 
         ">
             <div className="
                 h-1/2 
                 border-b border-gray-800
                 flex items-end justify-center pb-12
             ">
-                <div className="text-white text-center">
-                    <p className="text-sm tracking-[0.3em] mb-2">SCROLL TO EXPLORE</p>
-                    <div className="w-6 h-10 border-2 border-white rounded-full mx-auto flex items-start justify-center pt-2">
-                        <div className="w-1 h-3 bg-white rounded-full animate-bounce"></div>
-                    </div>
-                </div>
+
             </div>
 
             <div className="
@@ -31,7 +27,7 @@ const Footer = () => {
                 text-[18rem] md:text-[22rem] lg:text-[25rem] xl:text-[28rem]
                 tracking-[-0.02em]
                 leading-[0.8]
-                uppercase
+                
                 relative
                 group
             ">
@@ -39,7 +35,6 @@ const Footer = () => {
                 <div className="
                     absolute 
                     inset-0 
-                    bg-gradient-to-r from-blue-500/20 to-purple-500/20 
                     blur-3xl 
                     group-hover:blur-4xl 
                     transition-all 
@@ -47,8 +42,25 @@ const Footer = () => {
                 "></div>
 
                 {/* Main text */}
-                <div className="relative z-10">
-                    CodeSarthi
+                <div className="relative z-10 text-[18rem] tracking-[0.1rem] font-Logo-font">
+                    <div className='flex'>
+                        <div className='flex'>
+                            <div className='hover:opacity-50 transistion-all duration-300 '>C</div>
+                            <div className='hover:opacity-50 transistion-all duration-300 '>o</div>
+                            <div className='hover:opacity-50 transistion-all duration-300 '>d</div>
+                            <div className='hover:opacity-50 transistion-all duration-300 '>e</div>
+                        </div>
+
+                        <div className='flex'>
+                            <div className='hover:opacity-50 transistion-all duration-300 '>S</div>
+                            <div className='hover:opacity-50 transistion-all duration-300 '>a</div>
+                            <div className='hover:opacity-50 transistion-all duration-300 '>r</div>
+                            <div className='hover:opacity-50 transistion-all duration-300 '>t</div>
+                            <div className='hover:opacity-50 transistion-all duration-300 '>h</div>
+                            <div className='hover:opacity-50 transistion-all duration-300 '>i</div>
+                        </div>
+
+                    </div>
                 </div>
 
                 {/* Subtle hint */}

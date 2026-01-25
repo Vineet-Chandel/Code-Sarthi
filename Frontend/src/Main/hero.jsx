@@ -6,6 +6,7 @@ import { useState } from "react";
 
 import Preloader from "./preloader";
 import Footer from "./Footer";
+import ContentFirst from "./ContentFirst";
 const Hero = () => {
     const [loading, setLoading] = useState(true)
     setInterval(() => {
@@ -16,6 +17,7 @@ const Hero = () => {
             {loading && <Preloader loading />}
             <Nav />
             <Mainhero />
+            <ContentFirst />
             <Footer />
         </div>
     )
