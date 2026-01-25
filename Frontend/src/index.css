@@ -5,9 +5,9 @@
 body {
     width: 100dvw;
     overflow-x: hidden;
-
-    font-family: "General Sans", sans-serif;
     background-color: black;
+    font-family: "General Sans", sans-serif;
+
 }
 
 @layer base {
@@ -45,9 +45,8 @@ body {
     }
 
     @font-face {
-        font-family: "Logo-font";
+        font-family: "Logo";
         src: url("/fonts/Logo-font.woff2") format("woff2");
-        font-weight: 400;
         font-style: normal;
     }
 }

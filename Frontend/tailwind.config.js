@@ -13,7 +13,7 @@ module.exports = {
         "circular-web": ["circular-web", "sans-serif"],
         "robert-medium": ["robert-medium", "sans-serif"],
         "robert-regular": ["robert-regular", "sans-serif"],
-        "Logo-font": ["Logo-font", "sans-serif"],
+        "Logo": ["Logo", "sans-serif"],
       },
       colors: {
         blue: {
