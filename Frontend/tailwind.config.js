@@ -14,6 +14,7 @@ module.exports = {
         "robert-medium": ["robert-medium", "sans-serif"],
         "robert-regular": ["robert-regular", "sans-serif"],
         "Logo": ["Logo", "sans-serif"],
+        "head": ["head", "sans-serif"],
       },
       colors: {
         blue: {

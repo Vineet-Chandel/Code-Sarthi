@@ -7,7 +7,7 @@ import Body from "./Body";
 import ProtectedRoute from "./ProtectedRoute";
 
 /* ===== MAIN PUBLIC PAGES ===== */
-import Discover from "./Main/PagesMain/Discover";
+
 import Safety from "./Main/PagesMain/Safety";
 import Blogs from "./Main/PagesMain/Blogs";
 import Support from "./Main/PagesMain/Support";
@@ -44,6 +44,7 @@ import PrivacyPolicy from "./Pages/Privacy-Policy";
 import EditProfile from "./personalPages/editProfile";
 import Connections from "./personalPages/Connections";
 import Collab from "./Pages/Collab";
+import Developers from "./Main/PagesMain/Developers";
 
 const App = () => {
   return (
@@ -53,7 +54,7 @@ const App = () => {
 
           {/* 🌐 PUBLIC ROUTES */}
           <Route path="/" element={<Hero />} />
-          <Route path="/discover" element={<Discover />} />
+          <Route path="/developers" element={<Developers />} />
           <Route path="/safety" element={<Safety />} />
           <Route path="/blogs" element={<Blogs />} />
           <Route path="/support" element={<Support />} />

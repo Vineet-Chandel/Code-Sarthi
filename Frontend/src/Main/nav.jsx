@@ -9,26 +9,13 @@ const Nav = () => {
     const navItems = [
 
         {
-            id: 'safety',
-            label: 'Safety',
-            path: '/safety',
-            hasDropdown: true,
-            dropdownContent: <div>Safety dropdown content</div>
+            id: 'discover',
+            label: 'Discover',
+            path: '/discover',
+            hasDropdown: false,
         },
-        {
-            id: 'support',
-            label: 'Support',
-            path: '/support',
-            hasDropdown: true,
-            dropdownContent: <div>Support dropdown content</div>
-        },
-        {
-            id: 'tutorials',
-            label: 'Tutorials',
-            path: '/Tutorials',
-            hasDropdown: true,
-            dropdownContent: <div>Tutorials dropdown content</div>
-        },
+
+
         {
             id: 'blogs',
             label: 'Blogs',
@@ -52,6 +39,94 @@ const Nav = () => {
                 </div>
             )
         },
+        {
+            id: 'developers',
+            label: 'Developers',
+            path: '/developers',
+            hasDropdown: true,
+            isSmallDropdown: true,
+            dropdownContent: (
+                <div className="p-5 rounded-3xl bg-gradient-to-b from-sky-50 to-blue-100 text-black h-full">
+                    <h1 className='text-lg font-robert-medium text-gray-600'>Featured</h1>
+                    <ul className="space-y-2 mt-3">
+                        {['Developer Toolkit', 'Developer Community', 'Developer Home', 'Developers Newsletters', 'Developers Help Center'].map((item) => (
+                            <li
+                                key={item.toLowerCase().replace(/\s+/g, '-')}
+                                onClick={() => navigate(`/${item.toLowerCase().replace(/\s+/g, '-')}`)}
+                                className="cursor-pointer hover:text-blue-500"
+                            >
+                                {item}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )
+        },
+
+        {
+            id: 'safety',
+            label: 'Safety',
+            path: '/safety',
+            hasDropdown: true,
+
+            dropdownContent: (
+                <div className='flex'>
+                    <div className="p-5 rounded-3xl bg-gradient-to-b from-sky-50 to-blue-100 text-black w-1/2 h-full">
+                        <h1 className='text-lg font-robert-medium text-gray-600'>Resources</h1>
+                        <ul className="space-y-2 mt-3">
+                            {['Family Center', 'Safety Library', 'Safety News', 'Teen Charter', 'Policy & Safety', 'Product & Features'].map((item) => (
+                                <li
+                                    key={item.toLowerCase().replace(/\s+/g, '-')}
+                                    onClick={() => navigate(`/${item.toLowerCase().replace(/\s+/g, '-')}`)}
+                                    className="cursor-pointer hover:text-blue-500"
+                                >
+                                    {item}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    <div className="p-5 rounded-3xl bg-gradient-to-b from-sky-50 to-blue-100 text-black w-1/2 h-full">
+                        <h1 className='text-lg font-robert-medium text-gray-600'>Hub</h1>
+                        <ul className="space-y-2 mt-3">
+                            {['Policy Hub', 'Privacy Hub ', 'Transparency Hub', 'Wellbeing Hub'].map((item) => (
+                                <li
+                                    key={item.toLowerCase().replace(/\s+/g, '-')}
+                                    onClick={() => navigate(`/${item.toLowerCase().replace(/\s+/g, '-')}`)}
+                                    className="cursor-pointer hover:text-blue-500"
+                                >
+                                    {item}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+
+            )
+        },
+        {
+            id: 'support',
+            label: 'Support',
+            path: '/support',
+            hasDropdown: true,
+            dropdownContent: (
+                <div className="p-5 rounded-3xl bg-gradient-to-b from-sky-50 to-blue-100 text-black h-full">
+                    <h1 className='text-lg font-robert-medium text-gray-600'>Featured</h1>
+                    <ul className="space-y-2 mt-3">
+                        {['Developer Toolkit', 'Developer Community', 'Developer Home', 'Developers Newsletters', 'Developers Help Center'].map((item) => (
+                            <li
+                                key={item.toLowerCase().replace(/\s+/g, '-')}
+                                onClick={() => navigate(`/${item.toLowerCase().replace(/\s+/g, '-')}`)}
+                                className="cursor-pointer hover:text-blue-500"
+                            >
+                                {item}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )
+        },
+
+
     ];
 
     useGSAP(() => {
@@ -126,7 +201,7 @@ const Nav = () => {
                                             : "opacity-0 scale-95 pointer-events-none"
                                             } ${item.isSmallDropdown
                                                 ? "w-[300px] h-[300px]"
-                                                : "w-[1200px] h-[500px]"
+                                                : "w-[600px] h-[300 ]"
                                             }`}
                                     >
                                         {item.dropdownContent}
