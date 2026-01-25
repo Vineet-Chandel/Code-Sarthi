@@ -112,7 +112,7 @@ const Nav = () => {
                 <div className="p-5 rounded-3xl bg-gradient-to-b from-sky-50 to-blue-100 text-black h-full">
                     <h1 className='text-lg font-robert-medium text-gray-600'>Featured</h1>
                     <ul className="space-y-2 mt-3">
-                        {['Developer Toolkit', 'Developer Community', 'Developer Home', 'Developers Newsletters', 'Developers Help Center'].map((item) => (
+                        {['Developer Toolkit', 'Global Developers Community', 'Developer Home', 'Developers Newsletters', 'Developers Help Center'].map((item) => (
                             <li
                                 key={item.toLowerCase().replace(/\s+/g, '-')}
                                 onClick={() => navigate(`/${item.toLowerCase().replace(/\s+/g, '-')}`)}
