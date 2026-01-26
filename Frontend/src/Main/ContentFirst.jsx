@@ -10,8 +10,9 @@ const ContentFirst = () => {
                     A PLATFORM FOR ENDLESS POSSIBILITIES
                 </div>
 
-                <div className="text-2xl font-light w-[60%] text-center">
-                    Whether you're launching a community or putting the final touches on your project, CodeSarthi provides the tools to reach, build, and grow with millions of developers.
+                <div className="text-2xl font-extralight w-[60%] text-center">
+                    <b className='font-extrabold'>CodeSarthi</b>  connects you with a global developer community to build and scale.
+                    Designed to boost <b className='font-extrabold'>productivity</b>  while keeping workflows <b className='font-extrabold'>fast</b> and <b className='font-extrabold'>efficient</b>.
                 </div>
 
             </div>
@@ -22,9 +23,23 @@ const ContentFirst = () => {
                     <div className="text-5xl font-extrabold font-head">
                         KEEP DEVELOPERS ENGAGED
                     </div>
-                    <div className="text-2xl ">
-                        Strengthen developer connections and elevate the development experience by integrating CodeSarthi’s social features directly into your projects.
+                    <div className="w-full flex flex-col gap-4 pl-5">
+                        <p className="text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
+                            ✦ A unified interaction layer that seamlessly connects developers, teams, and communities.
+                        </p>
+                        <p className="text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
+                            ✦ Bridges messaging, meetings, and collaboration in one place.
+                        </p>
+                        <p className="text-xl text-start transition-all duration-200 hover:text-green-400 hover:scale-105">
+                            ✦ Enables rich media communication (text, video, files, code).
+                        </p>
+                        <p className="text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
+                            ✦ Improves productivity by keeping all interactions centralized.
+                        </p>
                     </div>
+
+
+
                     <div className='w-full flex items-center justify-start'>
                         <div className='h-[40px]  font-bold text-sm relative top-5 border-transparent p-1 px-5 bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300 text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
                             <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -76,10 +91,23 @@ const ContentFirst = () => {
 
                 <div className="w-1/2 flex flex-col justify-center items-center text-left gap-4 p-11 ">
                     <div className="text-5xl font-extrabold font-head">
-                        BUILD YOUR COMMUNITY
+                        Eliminates dependency on Project Manager
                     </div>
-                    <div className="text-2xl ">
-                        Discord servers are more important than ever for connecting players with your game. Explore our playbook to build, engage, grow and support your community.
+                    <div className="w-full flex flex-col gap-4 pl-5">
+                        <p className="text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
+                            ✦ Combines scheduling, tracking, and accountability in one system
+                        </p>
+                        <p className="text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
+                            ✦ Invite team members with role-based access
+                        </p>
+                        <p className="text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
+                            ✦ Supports flexible team sizes and structures
+                        </p>
+
+                        <p className="text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
+                            ✦ Centralized interface for project leaders where leader track team productivity in real time
+                        </p>
+
                     </div>
                     <div className='w-full flex items-center justify-start'>
                         <div className='h-[40px]  font-bold text-sm relative top-5 border-transparent p-1 px-5 bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300 text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
@@ -104,10 +132,21 @@ const ContentFirst = () => {
             <div className="w-[90%] justify-self-center flex items-center justify-between px-6 mt-20  ">
                 <div className="w-1/2 flex flex-col justify-center items-center text-left gap-4 p-11 ">
                     <div className="text-6xl font-extrabold font-head">
-                        ACQUIRE NEW DEVELOPERS
+                        TIME IS PRECIOUS
                     </div>
-                    <div className="text-2xl">
-                        Break through to the most passionate audience of developers with CodeSarthi Quests, our advertising solution.
+                    <div className="w-full flex flex-col gap-4 pl-5">
+                        <p className="text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
+                            ✦ Task-wise time tracking for each member and Logs time spent on specific tasks
+                        </p>
+                        <p className="text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
+                            ✦ a personal dashboard for each developer where they can Track daily goals and Monitor individual productivity
+                        </p>
+                        <p className="text-xl text-start transition-all duration-200 hover:text-green-400 hover:scale-105">
+                            ✦ Increases team transparency and accountability which reduces management overhead
+                        </p>
+                        <p className="text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
+                            ✦ Faster issue identification and gives a centralized workspace for projects and teams
+                        </p>
                     </div>
                     <div className='w-full flex items-center justify-start'>
                         <div className='h-[40px]  font-bold text-sm relative top-5 border-transparent p-1 px-5 bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300 text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >

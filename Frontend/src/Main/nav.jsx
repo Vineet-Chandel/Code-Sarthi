@@ -26,7 +26,7 @@ const Nav = () => {
                 <div className="p-5 rounded-3xl bg-gradient-to-b from-sky-50 to-blue-100 text-black">
                     <h1 className='text-lg font-robert-medium text-gray-600'>Blog Documentation</h1>
                     <ul className="space-y-2 mt-3">
-                        {['Community', 'New Updates', 'Engineering', 'How to use CodeSarthi', 'Policy & Safety', 'Product & Features'].map((item) => (
+                        {['Community', 'New Updates', 'Resume Generator', 'Engineering and Developers', 'How to use CodeSarthi', 'Policy & Safety', 'Product & Features'].map((item) => (
                             <li
                                 key={item.toLowerCase().replace(/\s+/g, '-')}
                                 onClick={() => navigate(`/${item.toLowerCase().replace(/\s+/g, '-')}`)}
@@ -49,7 +49,7 @@ const Nav = () => {
                 <div className="p-5 rounded-3xl bg-gradient-to-b from-sky-50 to-blue-100 text-black h-full">
                     <h1 className='text-lg font-robert-medium text-gray-600'>Featured</h1>
                     <ul className="space-y-2 mt-3">
-                        {['Developer Toolkit', 'Developer Community', 'Developer Home', 'Developers Newsletters', 'Developers Help Center'].map((item) => (
+                        {['Developer Home', 'Developer Toolkit', 'Global Developers Community', 'Developers Newsletters', 'Developers Help Center'].map((item) => (
                             <li
                                 key={item.toLowerCase().replace(/\s+/g, '-')}
                                 onClick={() => navigate(`/${item.toLowerCase().replace(/\s+/g, '-')}`)}
@@ -70,7 +70,7 @@ const Nav = () => {
             hasDropdown: true,
 
             dropdownContent: (
-                <div className='flex'>
+                <div className='flex '>
                     <div className="p-5 rounded-3xl bg-gradient-to-b from-sky-50 to-blue-100 text-black w-1/2 h-full">
                         <h1 className='text-lg font-robert-medium text-gray-600'>Resources</h1>
                         <ul className="space-y-2 mt-3">
@@ -102,17 +102,20 @@ const Nav = () => {
                 </div>
 
             )
+
+
         },
         {
             id: 'support',
             label: 'Support',
             path: '/support',
             hasDropdown: true,
+            isSmallDropdown: true,
             dropdownContent: (
                 <div className="p-5 rounded-3xl bg-gradient-to-b from-sky-50 to-blue-100 text-black h-full">
-                    <h1 className='text-lg font-robert-medium text-gray-600'>Featured</h1>
+                    <h1 className='text-lg font-robert-medium text-gray-600'>Resources</h1>
                     <ul className="space-y-2 mt-3">
-                        {['Developer Toolkit', 'Global Developers Community', 'Developer Home', 'Developers Newsletters', 'Developers Help Center'].map((item) => (
+                        {['Help Center', 'Feedback', 'Submit a Request'].map((item) => (
                             <li
                                 key={item.toLowerCase().replace(/\s+/g, '-')}
                                 onClick={() => navigate(`/${item.toLowerCase().replace(/\s+/g, '-')}`)}
@@ -200,8 +203,8 @@ const Nav = () => {
                                             ? "opacity-100 scale-100 pointer-events-auto"
                                             : "opacity-0 scale-95 pointer-events-none"
                                             } ${item.isSmallDropdown
-                                                ? "w-[300px] h-[300px]"
-                                                : "w-[600px] h-[300 ]"
+                                                ? "w-[300px] h-auto"
+                                                : "w-[600px] h-auto"
                                             }`}
                                     >
                                         {item.dropdownContent}
