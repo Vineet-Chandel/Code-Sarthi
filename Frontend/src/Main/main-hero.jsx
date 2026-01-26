@@ -53,15 +53,15 @@ const Mainhero = () => {
 
             {/* Center container */}
             <div className="relative  flex flex-col items-center justify-between h-full w-full pt-[6rem] pb-[2rem]">
-                <div className='w-screen relative left-5 '>
+                <div className='w-screen relative left-5 max-xl:left-4 max-lg:left-3 max-md:left-2 max-sm:left-1'>
 
-                    <div className="text-[11rem] text-white font-extrabold font-zentry leading-none">
-                        DEVELOPERS
-                    </div>
-                    <div className="text-lg text-gray-300 font-bold font-robert-medium w-1/3">
+                    <div className=" text-white font-extrabold font-zentry  text-[11rem] max-xl:text-[9rem] max-lg:text-[7rem] max-md:text-[5rem] max-sm:text-[3.5rem] leading-none">DEVELOPERS</div>
+
+                    <div className="text-lg text-gray-300 font-bold font-robert-medium w-1/2">
                         We build what you need — planning, communication, project management,
                         toolkits, blogs, and much more.
                     </div>
+
                     <div className='h-[40px]  font-bold text-sm relative top-5 border-transparent p-1 px-5 bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300 text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
                         <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g clip-path="url(#clip0_0_3844)">
@@ -104,19 +104,29 @@ const Mainhero = () => {
                     />
                 </div>
 
-                <div className="max-w-6xl ml-auto text-right flex relative right-10 flex-col gap-4">
+                <div className="w-screen h-auto flex  flex-col justify-end items-end relative right-5 max-xl:right-4 max-lg:right-3 max-md:right-2 max-sm:right-1">
 
-                    <div className="text-[11rem] text-white font-extrabold   font-zentry leading-none">
+                    <div className="
+                text-white 
+                font-extrabold 
+                font-zentry
+                flex justify-end
+                text-[11rem] 
+                max-xl:text-[9rem] 
+                max-lg:text-[7rem] 
+                max-md:text-[5rem] 
+                max-sm:text-[3.5rem] 
+                leading-none  ">
                         PROJECTS
                     </div>
 
-                    <div className="text-lg sm:text-xl text-gray-300 font-bold font-robert-medium max-w-md ml-auto leading-relaxed
-    ">
-
-                        Solutions to build, grow and engage  Developers community with CodeSarthi.
+                    <div className="text-lg  text-gray-300 font-bold font-robert-medium
+    w-1/2 text-right flex justify-end ">
+                        Solutions to build, grow and engage Developers community with CodeSarthi.
                     </div>
 
                 </div>
+
 
 
             </div>
