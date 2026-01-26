@@ -1,24 +1,70 @@
+import { useGSAP } from '@gsap/react'
+import gsap from 'gsap'
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import React from 'react'
 
+
 const ContentFirst = () => {
+    gsap.registerPlugin(ScrollTrigger);
+    useGSAP(() => {
+        gsap.from(".HEAD1", {
+            duration: 1.6,
+            y: 80,
+            rotationX: 60,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            transformOrigin: "50% 50%",
+            perspective: 1000, // 🔥 IMPORTANT
+
+            scrollTrigger: {
+                trigger: ".BOSSCONT",
+                start: "top 90%",
+
+            },
+        });
+        gsap.from(".SUBHEAD1", {
+            duration: 1.6,
+            y: 80,
+            rotationX: 60,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            scrollTrigger: {
+                trigger: ".BOSSCONT",
+                start: "top 90%",
+            }
+        })
+
+
+        gsap.from(".pointer1", {
+            x: -100,
+            duration: 2,
+            stagger: 0.1,
+            scrub: true
+
+        })
+    });
+
+
     return (
-        <div className="bg-black text-white w-screen flex flex-col justify-center items-center my-[150px]">
+        <div className="BOSSCONT bg-black text-white w-screen flex flex-col justify-center items-center my-[150px]">
 
             <div className=" flex flex-col justify-center items-center w-full gap-6">
 
-                <div className="text-5xl font-extrabold font-head text-center
+                <div className=" HEAD1 text-5xl font-extrabold font-head text-center
                  max-xl:text-4xl 
                 max-lg:text-3xl 
                 max-md:text-2xl 
-                max-sm:text-xl ">
+                max-sm:text-xl  ">
                     A PLATFORM FOR ENDLESS POSSIBILITIES
                 </div>
 
-                <div className="text-2xl font-extralight w-[60%] text-center
+                <div className="SUBHEAD1 text-2xl font-extralight w-[60%] text-center
                 
                 max-lg:text-1xl 
                 max-md:text-lg
-                max-sm:text-md">
+                max-sm:text-md ">
                     <b className='font-extrabold'>CodeSarthi</b>  connects you with a global developer community to build and scale.
                     Designed to boost <b className='font-extrabold'>productivity</b>  while keeping workflows <b className='font-extrabold'>fast</b> and <b className='font-extrabold'>efficient</b>.
                 </div>
@@ -52,7 +98,7 @@ const ContentFirst = () => {
                             KEEP DEVELOPERS ENGAGED
                         </div>
 
-                        <div className="w-full flex flex-col gap-4 pl-5">
+                        <div className="w-full flex flex-col gap-4 pl-5 pointer1">
                             <p className="text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
                                 ✦ A unified interaction layer that seamlessly connects developers, teams, and communities.
                             </p>
@@ -293,17 +339,7 @@ const ContentFirst = () => {
                                 CodeSarthi Developer Toolkit
                             </div>
 
-                            <button className="group relative h-[56px] px-6 mt-6 rounded-3xl font-bold text-sm bg-neutral transition-all duration-300 overflow-hidden flex items-center gap-3">
-                                {/* top border */}
-                                <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-stone-500" />
-                                <div className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-stone-500" />
-
-                                <svg className="rotate-45" width="14" height="14" viewBox="0 0 14 14" fill="#fff">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396L6.95147 7.30682L7.8624 13.6833L13.2084 1.63029Z" />
-                                </svg>
-
-                                VIEW DOCUMENTATION
-                            </button>
+                            <button className="group relative h-[60px] px-6 p-4 mt-4 rounded-3xl font-bold text-sm bg-neutral top-5 transition-all duration-300 overflow-hidden flex justify-center items-center inline-flex gap-3"> <div className="absolute inset-x-0 top-0 h-[2px] w-full bg-gradient-to-r from-transparent via-stone-500"></div> <div className="absolute inset-x-0 top-0 h-[3px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-stone"></div> <div className="absolute inset-x-0 top-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] group-hover:blur-sm transition-all duration-300 bg-gradient-to-r from-transparent via-stone-400"></div> <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="#ffffff" xmlns="http://www.w3.org/2000/svg"> <g clip-path="url(#clip0_0_3844)"> <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#ffffff" /> </g> <defs> <clipPath id="clip0_0_3844"> <rect width="14" height="14" fill="white" /> </clipPath> </defs> </svg> VIEW HELP CENTER <div className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-stone-500"></div> <div className="absolute inset-x-0 bottom-0 h-[3px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-stone"></div> <div className="absolute inset-x-0 bottom-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] group-hover:blur-sm transition-all duration-300 bg-gradient-to-r from-transparent via-stone-400"></div> </button>
                         </div>
 
                         {/* CARD 2 */}
@@ -330,16 +366,7 @@ const ContentFirst = () => {
                                 Global Developers Community
                             </div>
 
-                            <button className="group relative h-[56px] px-6 mt-6 rounded-3xl font-bold text-sm bg-neutral transition-all duration-300 overflow-hidden flex items-center gap-3">
-                                <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-stone-500" />
-                                <div className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-stone-500" />
-
-                                <svg className="rotate-45" width="14" height="14" viewBox="0 0 14 14" fill="#fff">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396L6.95147 7.30682L7.8624 13.6833L13.2084 1.63029Z" />
-                                </svg>
-
-                                JOIN COMMUNITY
-                            </button>
+                            <button className="group relative h-[60px] px-6 p-4 mt-4 rounded-3xl font-bold text-sm bg-neutral top-5 transition-all duration-300 overflow-hidden flex justify-center items-center inline-flex gap-3"> <div className="absolute inset-x-0 top-0 h-[2px] w-full bg-gradient-to-r from-transparent via-stone-500"></div> <div className="absolute inset-x-0 top-0 h-[3px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-stone"></div> <div className="absolute inset-x-0 top-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] group-hover:blur-sm transition-all duration-300 bg-gradient-to-r from-transparent via-stone-400"></div> <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="#ffffff" xmlns="http://www.w3.org/2000/svg"> <g clip-path="url(#clip0_0_3844)"> <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#ffffff" /> </g> <defs> <clipPath id="clip0_0_3844"> <rect width="14" height="14" fill="white" /> </clipPath> </defs> </svg> VIEW HELP CENTER <div className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-stone-500"></div> <div className="absolute inset-x-0 bottom-0 h-[3px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-stone"></div> <div className="absolute inset-x-0 bottom-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] group-hover:blur-sm transition-all duration-300 bg-gradient-to-r from-transparent via-stone-400"></div> </button>
                         </div>
                     </div>
 
@@ -368,16 +395,7 @@ const ContentFirst = () => {
                             Developer Help and Support
                         </div>
 
-                        <button className="group relative h-[56px] px-6 mt-6 rounded-3xl font-bold text-sm bg-neutral transition-all duration-300 overflow-hidden flex items-center gap-3">
-                            <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-stone-500" />
-                            <div className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-stone-500" />
-
-                            <svg className="rotate-45" width="14" height="14" viewBox="0 0 14 14" fill="#fff">
-                                <path d="M12.6286 1.04921L0.4829 5.52396L6.95147 7.30682L7.8624 13.6833L13.2084 1.63029Z" />
-                            </svg>
-
-                            VIEW HELP CENTER
-                        </button>
+                        <button className="group relative h-[60px] px-6 p-4 mt-4 rounded-3xl font-bold text-sm bg-neutral top-5 transition-all duration-300 overflow-hidden flex justify-center items-center inline-flex gap-3"> <div className="absolute inset-x-0 top-0 h-[2px] w-full bg-gradient-to-r from-transparent via-stone-500"></div> <div className="absolute inset-x-0 top-0 h-[3px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-stone"></div> <div className="absolute inset-x-0 top-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] group-hover:blur-sm transition-all duration-300 bg-gradient-to-r from-transparent via-stone-400"></div> <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="#ffffff" xmlns="http://www.w3.org/2000/svg"> <g clip-path="url(#clip0_0_3844)"> <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#ffffff" /> </g> <defs> <clipPath id="clip0_0_3844"> <rect width="14" height="14" fill="white" /> </clipPath> </defs> </svg> VIEW HELP CENTER <div className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-stone-500"></div> <div className="absolute inset-x-0 bottom-0 h-[3px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-stone"></div> <div className="absolute inset-x-0 bottom-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] group-hover:blur-sm transition-all duration-300 bg-gradient-to-r from-transparent via-stone-400"></div> </button>
                     </div>
                 </div>
             </div>
