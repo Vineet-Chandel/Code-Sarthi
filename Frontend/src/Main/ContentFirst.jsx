@@ -35,15 +35,168 @@ const ContentFirst = () => {
                 start: "top 90%",
             }
         })
+        gsap.from(".HEAD2 ", {
+            duration: 1.6,
+            y: 80,
+            rotationX: 60,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            transformOrigin: "50% 50%",
+            perspective: 1000, // 🔥 IMPORTANT
 
+            scrollTrigger: {
+                trigger: ".HEAD2",
+                start: "top 90%",
 
+            },
+        });
         gsap.from(".pointer1", {
-            x: -100,
-            duration: 2,
-            stagger: 0.1,
-            scrub: true
+            duration: 1.6,
+            y: 80,
+            rotationX: 60,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            transformOrigin: "50% 50%",
+            perspective: 1000, // 🔥 IMPORTANT
+
+            scrollTrigger: {
+                trigger: ".pointer1",
+                start: "top 90%",
+
+            },
+        });
+        gsap.from(".HEAD3 ", {
+            duration: 1.6,
+            y: 80,
+            rotationX: 60,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            transformOrigin: "50% 50%",
+            perspective: 1000, // 🔥 IMPORTANT
+
+            scrollTrigger: {
+                trigger: ".HEAD3",
+                start: "top 90%",
+
+            },
+        });
+        gsap.from(".pointer2", {
+            duration: 1.6,
+            y: 80,
+            rotationX: 60,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            transformOrigin: "50% 50%",
+            perspective: 1000, // 🔥 IMPORTANT
+
+            scrollTrigger: {
+                trigger: ".pointer2",
+                start: "top 90%",
+
+            },
+        });
+        gsap.from(".HEAD4 ", {
+            duration: 1.6,
+            y: 80,
+            rotationX: 60,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            transformOrigin: "50% 50%",
+            perspective: 1000, // 🔥 IMPORTANT
+
+            scrollTrigger: {
+                trigger: ".HEAD4",
+                start: "top 90%",
+
+            },
+        });
+        gsap.from(".pointer3", {
+            duration: 1.6,
+            y: 80,
+            rotationX: 60,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            transformOrigin: "50% 50%",
+            perspective: 1000, // 🔥 IMPORTANT
+
+            scrollTrigger: {
+                trigger: ".pointer3",
+                start: "top 90%",
+
+            },
+        });
+        gsap.from(".negMove", {
+            x: -30,
+            opacity: 0,
+            duration: 1,
+            scrollTrigger: {
+                trigger: ".negMove",
+                start: "top 90%",
+
+            },
 
         })
+        gsap.from(".posMove", {
+            x: 30,
+            opacity: 0,
+            duration: 1,
+            scrollTrigger: {
+                trigger: ".posMove",
+                start: "top 90%",
+
+            },
+
+        })
+        gsap.from(".topMove", {
+            y: -50,
+            opacity: 0,
+            duration: 1,
+            scrollTrigger: {
+                trigger: ".topMove",
+                start: "top 90%",
+
+            },
+
+        })
+
+        gsap.from(".HEAD5 ", {
+            duration: 1.6,
+            y: 80,
+            rotationX: 60,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            transformOrigin: "50% 50%",
+            perspective: 1000, // 🔥 IMPORTANT
+
+            scrollTrigger: {
+                trigger: ".HEAD5",
+                start: "top 90%",
+
+            },
+        });
+        gsap.from(".pointer4", {
+            duration: 1.6,
+            y: 80,
+            rotationX: 60,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            transformOrigin: "50% 50%",
+            perspective: 1000, // 🔥 IMPORTANT
+
+            scrollTrigger: {
+                trigger: ".pointer4",
+                start: "top 90%",
+
+            },
+        });
     });
 
 
@@ -93,24 +246,24 @@ const ContentFirst = () => {
   md:text-4xl
   lg:text-5xl
   xl:text-6xl
-  font-extrabold font-head
+  font-extrabold font-head HEAD2
 ">
                             KEEP DEVELOPERS ENGAGED
                         </div>
 
-                        <div className="w-full flex flex-col gap-4 pl-5 pointer1">
-                            <p className="text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
+                        <div className="w-full flex flex-col gap-4 pl-5 pointer1 ">
+                            <div className=" text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
                                 ✦ A unified interaction layer that seamlessly connects developers, teams, and communities.
-                            </p>
-                            <p className="text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
+                            </div>
+                            <div className=" text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
                                 ✦ Bridges messaging, meetings, and collaboration in one place.
-                            </p>
-                            <p className="text-xl text-start transition-all duration-200 hover:text-green-400 hover:scale-105">
+                            </div>
+                            <div className=" text-xl text-start transition-all duration-200 hover:text-green-400 hover:scale-105">
                                 ✦ Enables rich media communication (text, video, files, code).
-                            </p>
-                            <p className="text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
+                            </div>
+                            <div className=" text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
                                 ✦ Improves productivity by keeping all interactions centralized.
-                            </p>
+                            </div>
                         </div>
                         <div className='w-full flex items-center justify-start'>
                             <div className='h-[40px]  font-bold text-sm relative top-5 border-transparent p-1 px-5 bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300 text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
@@ -164,12 +317,12 @@ const ContentFirst = () => {
   md:text-4xl
   lg:text-5xl
   xl:text-6xl
-  font-extrabold font-head
+  font-extrabold font-head HEAD3
 ">
                             Eliminates dependency on Project Manager
                         </div>
 
-                        <div className="w-full flex flex-col gap-4 pl-5">
+                        <div className="w-full flex flex-col gap-4 pl-5 pointer2">
                             <p className="text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
                                 ✦ Combines scheduling, tracking, and accountability in one system
                             </p>
@@ -235,12 +388,12 @@ const ContentFirst = () => {
   md:text-4xl
   lg:text-5xl
   xl:text-6xl
-  font-extrabold font-head
+  font-extrabold font-head HEAD4
 ">
                             TIME IS PRECIOUS
                         </div>
 
-                        <div className="w-full flex flex-col gap-4 pl-5">
+                        <div className="w-full flex flex-col gap-4 pl-5 pointer3">
                             <p className="text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
                                 ✦ Task-wise time tracking for each member and Logs time spent on specific tasks
                             </p>
@@ -333,7 +486,7 @@ const ContentFirst = () => {
             text-white font-head font-extrabold text-center
             text-2xl
             max-lg:text-xl
-            max-md:text-4xl
+            max-md:text-4xl negMove
           "
                             >
                                 CodeSarthi Developer Toolkit
@@ -352,7 +505,7 @@ const ContentFirst = () => {
           p-10
           max-md:w-full
           max-sm:rounded-[40px]
-          max-sm:p-6
+          max-sm:p-6 
         "
                         >
                             <div
@@ -360,7 +513,7 @@ const ContentFirst = () => {
             text-white font-head font-extrabold text-center
             text-2xl
             max-lg:text-xl
-                 max-md:text-4xl
+                 max-md:text-4xl topMove
           "
                             >
                                 Global Developers Community
@@ -389,7 +542,7 @@ const ContentFirst = () => {
           text-white font-head font-extrabold text-center
           text-2xl
           max-lg:text-4xl
-     
+     posMove
         "
                         >
                             Developer Help and Support
@@ -436,6 +589,7 @@ const ContentFirst = () => {
         md:text-[5rem]
         lg:text-[6rem]
         xl:text-[7rem]
+        HEAD5
       "
                     >
                         STAY TUNED
@@ -449,6 +603,7 @@ const ContentFirst = () => {
         sm:text-lg
         md:text-xl
         max-w-2xl
+        pointer4
       "
                     >
                         Want to keep up to date with all the latest news and updates we bring for developers?
