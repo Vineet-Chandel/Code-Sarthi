@@ -45,6 +45,8 @@ import EditProfile from "./personalPages/editProfile";
 import Connections from "./personalPages/Connections";
 import Collab from "./Pages/Collab";
 import Developers from "./Main/PagesMain/Developers";
+import HTML from "./Pages/Toolkit/Htmlw";
+import Toolkit from "./Pages/Toolkit/Toolkitw";
 
 const App = () => {
   return (
@@ -78,9 +80,7 @@ const App = () => {
               <Route index element={<Dashboard />} />
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="discussions" element={<Discussions />} />
-              <Route path="management" element={<Collab
-
-              />} />
+              <Route path="management" element={<Collab />} />
               <Route path="meeting" element={<Meeting />} />
               <Route path="explore" element={<Explore />} />
               <Route path="resume" element={<Resume />} />
@@ -96,6 +96,9 @@ const App = () => {
               <Route path="privacypolicy" element={<PrivacyPolicy />} />
               <Route path="editProfile" element={<EditProfile />} />
               <Route path="connections" element={<Connections />} />
+
+              <Route path="toolkit" element={<Toolkit />} />
+              <Route path="toolkit/html" element={<HTML />} />
             </Route>
           </Route>
 
