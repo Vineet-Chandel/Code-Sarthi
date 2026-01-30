@@ -13,13 +13,10 @@ const Htmlw = () => {
                     This HTML quick reference cheat sheet lists the common HTML and HTML5 tags in readable layout.
                 </p>
             </div>
-
+            {/* first */}
             <div className="w-full flex justify-center items-center font-head font-extrabold text-[3rem] mt-5 mb-5 leading-none ">
                 BASIC HTML STRUCTURE
             </div>
-
-
-            {/* first */}
             <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
                 <div className=" bg-black p-5  rounded-3xl w-2/3 text-white flex flex-col gap-5 justify-center">
                     <div className='h-[40px] w-1/4 font-bold text-sm relative bottom-3 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
@@ -412,8 +409,6 @@ const Htmlw = () => {
                     </div>
                 </div>
             </div>
-
-
             {/* third */}
             <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
                 <div className=" bg-black p-10  rounded-3xl w-1/2 text-white flex flex-col justify-center ">
@@ -645,8 +640,7 @@ const Htmlw = () => {
                     </div>
                 </div>
             </div>
-
-
+            {/* fourth */}
             <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
                 <div className=" bg-black p-10  rounded-3xl w-1/2 text-white">
                     <div>
@@ -679,7 +673,7 @@ const Htmlw = () => {
                                 <span className="text-purple-400">let</span>{" "}
                                 <span className="text-sky-300">text</span>{" "}
                                 <span className="text-white">=</span>{" "}
-                                <span className="text-amber-300">'Hello CheatSheets.zip'</span>
+                                <span className="text-amber-300">'Hello CodeSarhiians'</span>
                                 <span className="text-white">;</span>
                             </div>
 
@@ -910,320 +904,346 @@ const Htmlw = () => {
 
                 </div>
             </div>
-            <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
-                <div className=" bg-black p-10  rounded-3xl w-1/3 text-white">
-
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
-                        <div>
-                            <span className="text-orange-400">&lt;body&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;header&gt;</span>
-                        </div>
-
-                        <div className="pl-8">
-                            <span className="text-orange-400">&lt;nav&gt;</span>
-                            <span className="text-gray-500">...</span>
-                            <span className="text-orange-400">&lt;/nav&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;/header&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;main&gt;</span>
-                        </div>
-
-                        <div className="pl-8">
-                            <span className="text-orange-400">&lt;h1&gt;</span>
-                            <span className="text-gray-200">CheatSheets.zip</span>
-                            <span className="text-orange-400">&lt;/h1&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;/main&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;footer&gt;</span>
-                        </div>
-
-                        <div className="pl-8">
-                            <span className="text-orange-400">&lt;p&gt;</span>
-                            <span className="text-gray-200">©2023 CheatSheets.zip</span>
-                            <span className="text-orange-400">&lt;/p&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;/footer&gt;</span>
-                        </div>
-
-                        <div>
-                            <span className="text-orange-400">&lt;/body&gt;</span>
-                        </div>
-                    </div>
-
-                </div>
-                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-between gap-5 text-white">
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
-                        <div>
-                            <span className="text-orange-400">&lt;header&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;nav&gt;</span>
-                        </div>
-
-                        <div className="pl-8">
-                            <span className="text-orange-400">&lt;ul&gt;</span>
-                        </div>
-
-                        <div className="pl-12">
-                            <span className="text-orange-400">&lt;li&gt;</span>
-                            <span className="text-orange-400">&lt;a</span>{" "}
-                            <span className="text-emerald-400">href</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"#"</span>
-                            <span className="text-orange-400">&gt;</span>
-                            <span className="text-sky-300">Edit Page</span>
-                            <span className="text-orange-400">&lt;/a&gt;</span>
-                            <span className="text-orange-400">&lt;/li&gt;</span>
-                        </div>
-
-                        <div className="pl-12">
-                            <span className="text-orange-400">&lt;li&gt;</span>
-                            <span className="text-orange-400">&lt;a</span>{" "}
-                            <span className="text-emerald-400">href</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"#"</span>
-                            <span className="text-orange-400">&gt;</span>
-                            <span className="text-sky-300">Twitter</span>
-                            <span className="text-orange-400">&lt;/a&gt;</span>
-                            <span className="text-orange-400">&lt;/li&gt;</span>
-                        </div>
-
-                        <div className="pl-12">
-                            <span className="text-orange-400">&lt;li&gt;</span>
-                            <span className="text-orange-400">&lt;a</span>{" "}
-                            <span className="text-emerald-400">href</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"#"</span>
-                            <span className="text-orange-400">&gt;</span>
-                            <span className="text-sky-300">Facebook</span>
-                            <span className="text-orange-400">&lt;/a&gt;</span>
-                            <span className="text-orange-400">&lt;/li&gt;</span>
-                        </div>
-
-                        <div className="pl-8">
-                            <span className="text-orange-400">&lt;/ul&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;/nav&gt;</span>
-                        </div>
-
-                        <div>
-                            <span className="text-orange-400">&lt;/header&gt;</span>
-                        </div>
-                    </div>
-
-
-                </div>
-                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-between gap-5 text-white">
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
-                        {/* opening video tag */}
-                        <div>
-                            <span className="text-orange-400">&lt;video</span>{" "}
-                            <span className="text-emerald-400">controls</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">""</span>{" "}
-                            <span className="text-emerald-400">width</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"100%"</span>
-                            <span className="text-orange-400">&gt;</span>
-                        </div>
-
-                        {/* source tag */}
-                        <div className="pl-8">
-                            <span className="text-orange-400">&lt;source</span>
-                        </div>
-
-                        <div className="pl-12">
-                            <span className="text-emerald-400">src</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300 break-all">
-                                "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
-                            </span>
-                        </div>
-
-                        <div className="pl-12">
-                            <span className="text-emerald-400">type</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"video/mp4"</span>
-                        </div>
-
-                        <div className="pl-8">
-                            <span className="text-orange-400">/&gt;</span>
-                        </div>
-
-                        {/* fallback text */}
-                        <div className="pl-8 text-gray-400">
-                            Sorry, your browser doesn&apos;t support embedded videos.
-                        </div>
-
-                        {/* closing video tag */}
-                        <div>
-                            <span className="text-orange-400">&lt;/video&gt;</span>
-                        </div>
-                    </div>
-
-
-                </div>
+            {/* fifth */}
+            <div className="w-full flex justify-center items-center font-head font-extrabold text-[3rem] mt-5 mb-5 leading-none">
+                HTML 5 TAGS
             </div>
             <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
-                <div className=" bg-black p-10  rounded-3xl w-1/3 text-white">
+                <div className=" bg-black p-5  rounded-3xl w-1/3 text-white">
 
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono  mb-5">
-                        {/* opening audio tag */}
-                        <div>
-                            <span className="text-orange-400">&lt;audio</span>{" "}
-                            <span className="text-emerald-400">controls</span>{" "}
-                            <span className="text-emerald-400">src</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300 break-all">
-                                "https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3"
-                            </span>
-                            <span className="text-orange-400">&gt;</span>
+                    <div>
+                        <div className='h-[40px] w-1/3  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_0_3844)">
+                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_0_3844">
+                                        <rect width="14" height="14" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            Document
+                        </div>
+                        <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
+                            <div>
+                                <span className="text-orange-400">&lt;body&gt;</span>
+                            </div>
+
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;header&gt;</span>
+                            </div>
+
+                            <div className="pl-8">
+                                <span className="text-orange-400">&lt;nav&gt;</span>
+                                <span className="text-gray-500">...</span>
+                                <span className="text-orange-400">&lt;/nav&gt;</span>
+                            </div>
+
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;/header&gt;</span>
+                            </div>
+
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;main&gt;</span>
+                            </div>
+
+                            <div className="pl-8">
+                                <span className="text-orange-400">&lt;h1&gt;</span>
+                                <span className="text-gray-200">CodeSarthi</span>
+                                <span className="text-orange-400">&lt;/h1&gt;</span>
+                            </div>
+
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;/main&gt;</span>
+                            </div>
+
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;footer&gt;</span>
+                            </div>
+
+                            <div className="pl-8">
+                                <span className="text-orange-400">&lt;p&gt;</span>
+                                <span className="text-gray-200">TEAM AXONIC</span>
+                                <span className="text-orange-400">&lt;/p&gt;</span>
+                            </div>
+
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;/footer&gt;</span>
+                            </div>
+
+                            <div>
+                                <span className="text-orange-400">&lt;/body&gt;</span>
+                            </div>
+                        </div>
+                        <hr className="border-t-2 border-gray-500 mt-5" />
+                    </div>
+
+                    <div className="mt-5">
+                        <div className='h-[40px] w-1/2  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_0_3844)">
+                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_0_3844">
+                                        <rect width="14" height="14" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            Header Navigation
+                        </div>
+                        <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
+                            <div>
+                                <span className="text-orange-400">&lt;header&gt;</span>
+                            </div>
+
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;nav&gt;</span>
+                            </div>
+
+                            <div className="pl-8">
+                                <span className="text-orange-400">&lt;ul&gt;</span>
+                            </div>
+
+                            <div className="pl-12">
+                                <span className="text-orange-400">&lt;li&gt;</span>
+                                <span className="text-orange-400">&lt;a</span>{" "}
+                                <span className="text-emerald-400">href</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"#"</span>
+                                <span className="text-orange-400">&gt;</span>
+                                <span className="text-sky-300">Edit Page</span>
+                                <span className="text-orange-400">&lt;/a&gt;</span>
+                                <span className="text-orange-400">&lt;/li&gt;</span>
+                            </div>
+
+                            <div className="pl-12">
+                                <span className="text-orange-400">&lt;li&gt;</span>
+                                <span className="text-orange-400">&lt;a</span>{" "}
+                                <span className="text-emerald-400">href</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"#"</span>
+                                <span className="text-orange-400">&gt;</span>
+                                <span className="text-sky-300">Twitter</span>
+                                <span className="text-orange-400">&lt;/a&gt;</span>
+                                <span className="text-orange-400">&lt;/li&gt;</span>
+                            </div>
+
+                            <div className="pl-12">
+                                <span className="text-orange-400">&lt;li&gt;</span>
+                                <span className="text-orange-400">&lt;a</span>{" "}
+                                <span className="text-emerald-400">href</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"#"</span>
+                                <span className="text-orange-400">&gt;</span>
+                                <span className="text-sky-300">Facebook</span>
+                                <span className="text-orange-400">&lt;/a&gt;</span>
+                                <span className="text-orange-400">&lt;/li&gt;</span>
+                            </div>
+
+                            <div className="pl-8">
+                                <span className="text-orange-400">&lt;/ul&gt;</span>
+                            </div>
+
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;/nav&gt;</span>
+                            </div>
+
+                            <div>
+                                <span className="text-orange-400">&lt;/header&gt;</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-center gap-5 text-white">
+                    <div>
+                        <div className='h-[40px] w-1/3  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_0_3844)">
+                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_0_3844">
+                                        <rect width="14" height="14" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            HTML5 MARK
+                        </div>
+                        <div className="bg-stone-900 p-5 rounded-3xl font-mono">
+                            {/* opening video tag */}
+
+                            <div>
+                                <span className="text-orange-400">&lt;p&gt;</span>
+                                <span className="text-gray-200">I Love </span>
+                                <span className="text-orange-400">&lt;mark&gt;</span>
+                                <span className="text-yellow-300">CodeSarthi</span>
+                                <span className="text-orange-400">&lt;/mark&gt;</span>
+                                <span className="text-orange-400">&lt;/p&gt;</span>
+                            </div>
+                        </div>
+                        <p className="mt-5 justify-self-center">I Love <mark>CodeSarthi</mark></p>
+                        <hr className="border-t-2 border-gray-500 mt-5" />
+                    </div>
+                    <div>
+                        <div className='h-[40px] w-1/2  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_0_3844)">
+                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_0_3844">
+                                        <rect width="14" height="14" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            HTML5 PROGRESS
+                        </div>
+                        <div className="bg-stone-900 p-5 rounded-3xl font-mono">
+
+                            <div>
+                                <span className="text-orange-400">&lt;progress</span>{" "}
+                                <span className="text-emerald-400">value</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"50"</span>{" "}
+                                <span className="text-emerald-400">max</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"100"</span>
+                                <span className="text-orange-400">&gt;</span>
+                                <span className="text-orange-400">&lt;/progress&gt;</span>
+                            </div>
+                        </div>
+                        <progress value="50" max="100" className="w-full mt-5 rounded-xl border overflow-hidden "></progress>
+                        <hr className="border-t-2 border-gray-500 mt-5" />
+                    </div>
+                    <div>
+                        <div className='h-[40px] w-1/3  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_0_3844)">
+                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_0_3844">
+                                        <rect width="14" height="14" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            HTML5 AUDIO
+                        </div>
+                        <div className="bg-stone-900 p-5 rounded-3xl font-mono  mb-5">
+                            {/* opening audio tag */}
+                            <div>
+                                <span className="text-orange-400">&lt;audio</span>{" "}
+                                <span className="text-emerald-400">controls</span>{" "}
+                                <span className="text-emerald-400">src</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300 break-all">
+                                    "sample.mp3"
+                                </span>
+                                <span className="text-orange-400">&gt;</span>
+                            </div>
+
+                            {/* fallback text */}
+                            <div className="pl-8 text-gray-400">
+                                Your browser does not support the audio element.
+                            </div>
+
+                            {/* closing audio tag */}
+                            <div>
+                                <span className="text-orange-400">&lt;/audio&gt;</span>
+                            </div>
                         </div>
 
-                        {/* fallback text */}
-                        <div className="pl-8 text-gray-400">
+                        <audio
+                            controls
+                            src={"/audio/toolkit.mp3"}
+                            className="w-full"
+                        >
                             Your browser does not support the audio element.
-                        </div>
-
-                        {/* closing audio tag */}
-                        <div>
-                            <span className="text-orange-400">&lt;/audio&gt;</span>
-                        </div>
+                        </audio>
                     </div>
-                    <hr className="border-t-2 border-gray-500" />
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
-
-                        <div>
-                            <span className="text-orange-400">&lt;ruby&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-gray-200">汉 </span>
-                            <span className="text-orange-400">&lt;rp&gt;</span>
-                            <span className="text-gray-400">(</span>
-                            <span className="text-orange-400">&lt;/rp&gt;</span>
-                            <span className="text-orange-400">&lt;rt&gt;</span>
-                            <span className="text-sky-300">hàn</span>
-                            <span className="text-orange-400">&lt;/rt&gt;</span>
-                            <span className="text-orange-400">&lt;rp&gt;</span>
-                            <span className="text-gray-400">)</span>
-                            <span className="text-orange-400">&lt;/rp&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-gray-200">字 </span>
-                            <span className="text-orange-400">&lt;rp&gt;</span>
-                            <span className="text-gray-400">(</span>
-                            <span className="text-orange-400">&lt;/rp&gt;</span>
-                            <span className="text-orange-400">&lt;rt&gt;</span>
-                            <span className="text-sky-300">zì</span>
-                            <span className="text-orange-400">&lt;/rt&gt;</span>
-                            <span className="text-orange-400">&lt;rp&gt;</span>
-                            <span className="text-gray-400">)</span>
-                            <span className="text-orange-400">&lt;/rp&gt;</span>
-                        </div>
-
-                        <div>
-                            <span className="text-orange-400">&lt;/ruby&gt;</span>
-                        </div>
-
-                    </div>
-
                 </div>
-                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-between gap-5 text-white">
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
-
-                        <div>
-                            <span className="text-orange-400">&lt;progress</span>{" "}
-                            <span className="text-emerald-400">value</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"50"</span>{" "}
-                            <span className="text-emerald-400">max</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"100"</span>
-                            <span className="text-orange-400">&gt;</span>
-                            <span className="text-orange-400">&lt;/progress&gt;</span>
+                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-center gap-5 text-white">
+                    <div>
+                        <div className='h-[40px] w-1/3  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_0_3844)">
+                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_0_3844">
+                                        <rect width="14" height="14" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            HTML5 VIDEO
                         </div>
+                        <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
+                            {/* opening video tag */}
+                            <div>
+                                <span className="text-orange-400">&lt;video</span>{" "}
+                                <span className="text-emerald-400">controls</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">""</span>{" "}
+                                <span className="text-emerald-400">width</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"100%"</span>
+                                <span className="text-orange-400">&gt;</span>
+                            </div>
+
+                            {/* source tag */}
+                            <div className="pl-8">
+                                <span className="text-orange-400">&lt;source</span>
+                            </div>
+
+                            <div className="pl-12">
+                                <span className="text-emerald-400">src</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300 break-all">
+                                    "sample.mp4"
+                                </span>
+                            </div>
+
+                            <div className="pl-12">
+                                <span className="text-emerald-400">type</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"video/mp4"</span>
+                            </div>
+
+                            <div className="pl-8">
+                                <span className="text-orange-400">/&gt;</span>
+                            </div>
+
+                            {/* fallback text */}
+                            <div className="pl-8 text-gray-400">
+                                Sorry, your browser doesn&apos;t support embedded videos.
+                            </div>
+
+                            {/* closing video tag */}
+                            <div>
+                                <span className="text-orange-400">&lt;/video&gt;</span>
+                            </div>
+                        </div>
+                        <video
+                            src={"/videos/feature-2.mp4"}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            preload="auto"
+                            className="  rounded-3xl object-cover h-[400px] w-full mt-5  "
+                        />
                     </div>
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
-
-                        <div>
-                            <span className="text-orange-400">&lt;ul&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;li&gt;</span>
-                            <span className="text-gray-200">User </span>
-                            <span className="text-orange-400">&lt;bdi&gt;</span>
-                            <span className="text-sky-300">hrefs</span>
-                            <span className="text-orange-400">&lt;/bdi&gt;</span>
-                            <span className="text-gray-200">: 60 points</span>
-                            <span className="text-orange-400">&lt;/li&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;li&gt;</span>
-                            <span className="text-gray-200">User </span>
-                            <span className="text-orange-400">&lt;bdi&gt;</span>
-                            <span className="text-sky-300">jdoe</span>
-                            <span className="text-orange-400">&lt;/bdi&gt;</span>
-                            <span className="text-gray-200">: 80 points</span>
-                            <span className="text-orange-400">&lt;/li&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;li&gt;</span>
-                            <span className="text-gray-200">User </span>
-                            <span className="text-orange-400">&lt;bdi&gt;</span>
-                            <span className="text-sky-300">إيان</span>
-                            <span className="text-orange-400">&lt;/bdi&gt;</span>
-                            <span className="text-gray-200">: 90 points</span>
-                            <span className="text-orange-400">&lt;/li&gt;</span>
-                        </div>
-
-                        <div>
-                            <span className="text-orange-400">&lt;/ul&gt;</span>
-                        </div>
-
-                    </div>
-
-
-                </div>
-                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-between gap-5 text-white">
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
-                        {/* opening video tag */}
-
-                        <div>
-                            <span className="text-orange-400">&lt;p&gt;</span>
-                            <span className="text-gray-200">I Love </span>
-                            <span className="text-orange-400">&lt;mark&gt;</span>
-                            <span className="text-yellow-300">CheatSheets.zip</span>
-                            <span className="text-orange-400">&lt;/mark&gt;</span>
-                            <span className="text-orange-400">&lt;/p&gt;</span>
-                        </div>
-                    </div>
-
-
                 </div>
             </div>
+            {/* sixth */}
             <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
                 <div className=" bg-black p-10 flex gap-5 rounded-3xl w-full text-white">
                     <div className="bg-stone-900 p-5 w-1/3 rounded-3xl font-mono ">
@@ -1440,6 +1460,7 @@ const Htmlw = () => {
 
             </div>
 
+            {/* seventh */}
             <div className="w-full flex justify-center items-center font-head font-extrabold text-[3rem] mt-5 mb-5 leading-none">
                 HTML TABLES
             </div>
@@ -1536,54 +1557,54 @@ const Htmlw = () => {
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">1. &lt;</p>th<p className="text-white inline-flex">&gt;</p></li>
+                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">2. &lt;</p>th<p className="text-white inline-flex">&gt;</p></li>
                             <li className="w-1/2">Defines a header cell in a table</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">1. &lt;</p>tr<p className="text-white inline-flex">&gt;</p></li>
+                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">3. &lt;</p>tr<p className="text-white inline-flex">&gt;</p></li>
                             <li className="w-1/2">Defines a row in a table</li>
                         </ul>
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">1. &lt;</p>td<p className="text-white inline-flex">&gt;</p></li>
+                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">4. &lt;</p>td<p className="text-white inline-flex">&gt;</p></li>
                             <li className="w-1/2">Defines a cell in a table</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">1. &lt;</p>caption<p className="text-white inline-flex">&gt;</p></li>
+                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">5. &lt;</p>caption<p className="text-white inline-flex">&gt;</p></li>
                             <li className="w-1/2">Defines a table caption</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">1. &lt;</p>colgroup<p className="text-white inline-flex">&gt;</p></li>
+                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">6. &lt;</p>colgroup<p className="text-white inline-flex">&gt;</p></li>
                             <li className="w-1/2">Defines a group of columns</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">1. &lt;</p>col<p className="text-white inline-flex">&gt;</p></li>
+                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">7. &lt;</p>col<p className="text-white inline-flex">&gt;</p></li>
                             <li className="w-1/2">Defines a column within a table</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">1. &lt;</p>thead<p className="text-white inline-flex">&gt;</p></li>
+                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">8. &lt;</p>thead<p className="text-white inline-flex">&gt;</p></li>
                             <li className="w-1/2">Groups the header content</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">1. &lt;</p>tbody<p className="text-white inline-flex">&gt;</p></li>
+                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">9. &lt;</p>tbody<p className="text-white inline-flex">&gt;</p></li>
                             <li className="w-1/2">Groups the body content</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">1. &lt;</p>tfoot<p className="text-white inline-flex">&gt;</p></li>
+                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">10. &lt;</p>tfoot<p className="text-white inline-flex">&gt;</p></li>
                             <li className="w-1/2">Groups the footer content
                             </li>
                         </ul>
@@ -1593,19 +1614,19 @@ const Htmlw = () => {
                     <div className="bg-stone-900 p-5 rounded-3xl font-mono  ">
 
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400">colspan</li>
+                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">1.</p> colspan</li>
                             <li className="w-1/2">Number of columns a cell should span</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400">headers</li>
+                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">2.</p> headers</li>
                             <li className="w-1/2">One or more header cells a cell is related to</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400">rowspan</li>
+                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">3.</p> rowspan</li>
                             <li className="w-1/2">Number of rows a cell should span</li>
                         </ul>
 
@@ -1614,30 +1635,30 @@ const Htmlw = () => {
                     <div className="bg-stone-900 p-5 rounded-3xl font-mono  ">
 
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400">headers</li>
+                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">1.</p> headers</li>
                             <li className="w-1/2">Number of columns a cell should span</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400">colspan</li>
+                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">2.</p> colspan</li>
                             <li className="w-1/2">One or more header cells a cell is related to</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400">rowspan</li>
+                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">3.</p> rowspan</li>
                             <li className="w-1/2">Number of rows a cell should span</li>
                         </ul>
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400">abbr</li>
+                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">4.</p> abbr</li>
                             <li className="w-1/2">Description of the cell's content</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400">scope</li>
+                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">5.</p> scope</li>
                             <li className="w-1/2">The header element relates to</li>
                         </ul>
 
