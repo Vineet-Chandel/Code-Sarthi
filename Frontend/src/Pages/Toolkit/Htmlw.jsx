@@ -1243,6 +1243,7 @@ const Htmlw = () => {
                     </div>
                 </div>
             </div>
+
             {/* sixth */}
             <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
                 <div className=" bg-black p-10 flex gap-5 rounded-3xl w-full text-white">
@@ -1465,149 +1466,180 @@ const Htmlw = () => {
                 HTML TABLES
             </div>
             <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
-                <div className=" bg-black p-10  rounded-3xl w-1/3 text-white">
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono  mb-5">
-                        <div>
-                            <span className="text-orange-400">&lt;table&gt;</span>
+                <div className=" bg-black p-5  rounded-3xl w-1/3 text-white">
+                    <div>
+                        <div className='h-[40px] w-1/3  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_0_3844)">
+                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_0_3844">
+                                        <rect width="14" height="14" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            HTML Table
                         </div>
+                        <div className="bg-stone-900 p-5 rounded-3xl font-mono  mb-5">
+                            <div>
+                                <span className="text-orange-400">&lt;table&gt;</span>
+                            </div>
 
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;thead&gt;</span>
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;thead&gt;</span>
+                            </div>
+
+                            <div className="pl-8">
+                                <span className="text-orange-400">&lt;tr&gt;</span>
+                            </div>
+
+                            <div className="pl-12">
+                                <span className="text-orange-400">&lt;td&gt;</span>
+                                <span className="text-gray-200">name</span>
+                                <span className="text-orange-400">&lt;/td&gt;</span>
+
+                                <span className="ml-4 text-orange-400">&lt;td&gt;</span>
+                                <span className="text-gray-200">age</span>
+                                <span className="text-orange-400">&lt;/td&gt;</span>
+                            </div>
+
+                            <div className="pl-8">
+                                <span className="text-orange-400">&lt;/tr&gt;</span>
+                            </div>
+
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;/thead&gt;</span>
+                            </div>
+
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;tbody&gt;</span>
+                            </div>
+
+                            <div className="pl-8">
+                                <span className="text-orange-400">&lt;tr&gt;</span>
+                            </div>
+
+                            <div className="pl-12">
+                                <span className="text-orange-400">&lt;td&gt;</span>
+                                <span className="text-gray-200">Roberta</span>
+                                <span className="text-orange-400">&lt;/td&gt;</span>
+
+                                <span className="ml-4 text-orange-400">&lt;td&gt;</span>
+                                <span className="text-gray-200">39</span>
+                                <span className="text-orange-400">&lt;/td&gt;</span>
+                            </div>
+
+                            <div className="pl-8">
+                                <span className="text-orange-400">&lt;/tr&gt;</span>
+                            </div>
+
+                            <div className="pl-8">
+                                <span className="text-orange-400">&lt;tr&gt;</span>
+                            </div>
+
+                            <div className="pl-12">
+                                <span className="text-orange-400">&lt;td&gt;</span>
+                                <span className="text-gray-200">Oliver</span>
+                                <span className="text-orange-400">&lt;/td&gt;</span>
+
+                                <span className="ml-4 text-orange-400">&lt;td&gt;</span>
+                                <span className="text-gray-200">25</span>
+                                <span className="text-orange-400">&lt;/td&gt;</span>
+                            </div>
+
+                            <div className="pl-8">
+                                <span className="text-orange-400">&lt;/tr&gt;</span>
+                            </div>
+
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;/tbody&gt;</span>
+                            </div>
+
+                            <div>
+                                <span className="text-orange-400">&lt;/table&gt;</span>
+                            </div>
+
                         </div>
-
-                        <div className="pl-8">
-                            <span className="text-orange-400">&lt;tr&gt;</span>
-                        </div>
-
-                        <div className="pl-12">
-                            <span className="text-orange-400">&lt;td&gt;</span>
-                            <span className="text-gray-200">name</span>
-                            <span className="text-orange-400">&lt;/td&gt;</span>
-
-                            <span className="ml-4 text-orange-400">&lt;td&gt;</span>
-                            <span className="text-gray-200">age</span>
-                            <span className="text-orange-400">&lt;/td&gt;</span>
-                        </div>
-
-                        <div className="pl-8">
-                            <span className="text-orange-400">&lt;/tr&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;/thead&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;tbody&gt;</span>
-                        </div>
-
-                        <div className="pl-8">
-                            <span className="text-orange-400">&lt;tr&gt;</span>
-                        </div>
-
-                        <div className="pl-12">
-                            <span className="text-orange-400">&lt;td&gt;</span>
-                            <span className="text-gray-200">Roberta</span>
-                            <span className="text-orange-400">&lt;/td&gt;</span>
-
-                            <span className="ml-4 text-orange-400">&lt;td&gt;</span>
-                            <span className="text-gray-200">39</span>
-                            <span className="text-orange-400">&lt;/td&gt;</span>
-                        </div>
-
-                        <div className="pl-8">
-                            <span className="text-orange-400">&lt;/tr&gt;</span>
-                        </div>
-
-                        <div className="pl-8">
-                            <span className="text-orange-400">&lt;tr&gt;</span>
-                        </div>
-
-                        <div className="pl-12">
-                            <span className="text-orange-400">&lt;td&gt;</span>
-                            <span className="text-gray-200">Oliver</span>
-                            <span className="text-orange-400">&lt;/td&gt;</span>
-
-                            <span className="ml-4 text-orange-400">&lt;td&gt;</span>
-                            <span className="text-gray-200">25</span>
-                            <span className="text-orange-400">&lt;/td&gt;</span>
-                        </div>
-
-                        <div className="pl-8">
-                            <span className="text-orange-400">&lt;/tr&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;/tbody&gt;</span>
-                        </div>
-
-                        <div>
-                            <span className="text-orange-400">&lt;/table&gt;</span>
-                        </div>
-
                     </div>
                 </div>
                 <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-between gap-5 text-white">
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono  ">
+                    <div>
+                        <div className='h-[40px] w-1/2  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_0_3844)">
+                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_0_3844">
+                                        <rect width="14" height="14" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            HTML Table Tags
+                        </div>
+                        <div className="bg-stone-900 p-5 rounded-3xl font-mono  ">
+                            <ul className="flex justify-around mb-2 mt-2">
+                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">1. &lt;</p>table<p className="text-white inline-flex">&gt;</p></li>
+                                <li className="w-1/2">Defines a table</li>
+                            </ul>
 
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">1. &lt;</p>table<p className="text-white inline-flex">&gt;</p></li>
-                            <li className="w-1/2">Defines a table</li>
-                        </ul>
+                            <hr className="border-t-2 border-gray-500" />
+                            <ul className="flex justify-around mb-2 mt-2">
+                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">2. &lt;</p>th<p className="text-white inline-flex">&gt;</p></li>
+                                <li className="w-1/2">Defines a header cell in a table</li>
+                            </ul>
 
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">2. &lt;</p>th<p className="text-white inline-flex">&gt;</p></li>
-                            <li className="w-1/2">Defines a header cell in a table</li>
-                        </ul>
+                            <hr className="border-t-2 border-gray-500" />
+                            <ul className="flex justify-around mb-2 mt-2">
+                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">3. &lt;</p>tr<p className="text-white inline-flex">&gt;</p></li>
+                                <li className="w-1/2">Defines a row in a table</li>
+                            </ul>
+                            <hr className="border-t-2 border-gray-500" />
+                            <ul className="flex justify-around mb-2 mt-2">
+                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">4. &lt;</p>td<p className="text-white inline-flex">&gt;</p></li>
+                                <li className="w-1/2">Defines a cell in a table</li>
+                            </ul>
 
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">3. &lt;</p>tr<p className="text-white inline-flex">&gt;</p></li>
-                            <li className="w-1/2">Defines a row in a table</li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">4. &lt;</p>td<p className="text-white inline-flex">&gt;</p></li>
-                            <li className="w-1/2">Defines a cell in a table</li>
-                        </ul>
+                            <hr className="border-t-2 border-gray-500" />
+                            <ul className="flex justify-around mb-2 mt-2">
+                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">5. &lt;</p>caption<p className="text-white inline-flex">&gt;</p></li>
+                                <li className="w-1/2">Defines a table caption</li>
+                            </ul>
 
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">5. &lt;</p>caption<p className="text-white inline-flex">&gt;</p></li>
-                            <li className="w-1/2">Defines a table caption</li>
-                        </ul>
+                            <hr className="border-t-2 border-gray-500" />
+                            <ul className="flex justify-around mb-2 mt-2">
+                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">6. &lt;</p>colgroup<p className="text-white inline-flex">&gt;</p></li>
+                                <li className="w-1/2">Defines a group of columns</li>
+                            </ul>
 
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">6. &lt;</p>colgroup<p className="text-white inline-flex">&gt;</p></li>
-                            <li className="w-1/2">Defines a group of columns</li>
-                        </ul>
+                            <hr className="border-t-2 border-gray-500" />
+                            <ul className="flex justify-around mb-2 mt-2">
+                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">7. &lt;</p>col<p className="text-white inline-flex">&gt;</p></li>
+                                <li className="w-1/2">Defines a column within a table</li>
+                            </ul>
 
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">7. &lt;</p>col<p className="text-white inline-flex">&gt;</p></li>
-                            <li className="w-1/2">Defines a column within a table</li>
-                        </ul>
+                            <hr className="border-t-2 border-gray-500" />
+                            <ul className="flex justify-around mb-2 mt-2">
+                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">8. &lt;</p>thead<p className="text-white inline-flex">&gt;</p></li>
+                                <li className="w-1/2">Groups the header content</li>
+                            </ul>
 
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">8. &lt;</p>thead<p className="text-white inline-flex">&gt;</p></li>
-                            <li className="w-1/2">Groups the header content</li>
-                        </ul>
+                            <hr className="border-t-2 border-gray-500" />
+                            <ul className="flex justify-around mb-2 mt-2">
+                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">9. &lt;</p>tbody<p className="text-white inline-flex">&gt;</p></li>
+                                <li className="w-1/2">Groups the body content</li>
+                            </ul>
 
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">9. &lt;</p>tbody<p className="text-white inline-flex">&gt;</p></li>
-                            <li className="w-1/2">Groups the body content</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">10. &lt;</p>tfoot<p className="text-white inline-flex">&gt;</p></li>
-                            <li className="w-1/2">Groups the footer content
-                            </li>
-                        </ul>
+                            <hr className="border-t-2 border-gray-500" />
+                            <ul className="flex justify-around mb-2 mt-2">
+                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">10. &lt;</p>tfoot<p className="text-white inline-flex">&gt;</p></li>
+                                <li className="w-1/2">Groups the footer content
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-between gap-5 text-white">
@@ -2742,3 +2774,5 @@ const Htmlw = () => {
 };
 
 export default Htmlw;
+
+//    <hr className="border-t-2 border-gray-500 mt-5" />
