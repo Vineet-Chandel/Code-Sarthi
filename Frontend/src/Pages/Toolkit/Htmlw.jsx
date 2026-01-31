@@ -1,20 +1,123 @@
-import React from "react";
+import { useGSAP } from '@gsap/react'
+import gsap from 'gsap'
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import React, { use } from "react";
 
 const Htmlw = () => {
+    useGSAP(() => {
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.from(".HEAD1", {
+            duration: 1.6,
+            y: 80,
+            rotationX: 60,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            transformOrigin: "50% 50%",
+            perspective: 1000,
+        });
+        gsap.from(".SUBHEAD1", {
+            duration: 1.6,
+            y: 80,
+            rotationX: 60,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+        });
+        gsap.from(".HEAD2 ", {
+            duration: 1.6,
+            y: 80,
+            rotationX: 60,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            transformOrigin: "50% 50%",
+            perspective: 1000, // 🔥 IMPORTANT
+
+            scrollTrigger: {
+                trigger: ".HEAD2",
+                start: "top 90%",
+
+            },
+        });
+        gsap.from(".HEAD3 ", {
+            duration: 1.6,
+            y: 80,
+            rotationX: 60,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            transformOrigin: "50% 50%",
+            perspective: 1000, // 🔥 IMPORTANT
+
+            scrollTrigger: {
+                trigger: ".HEAD3",
+                start: "top 90%",
+
+            },
+        });
+        gsap.from(".HEAD4 ", {
+            duration: 1.6,
+            y: 80,
+            rotationX: 60,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            transformOrigin: "50% 50%",
+            perspective: 1000, // 🔥 IMPORTANT
+
+            scrollTrigger: {
+                trigger: ".HEAD4",
+                start: "top 90%",
+
+            },
+        });
+        gsap.from(".HEAD5 ", {
+            duration: 1.6,
+            y: 80,
+            rotationX: 60,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            transformOrigin: "50% 50%",
+            perspective: 1000, // 🔥 IMPORTANT
+
+            scrollTrigger: {
+                trigger: ".HEAD5",
+                start: "top 90%",
+
+            },
+        });
+        gsap.from(".HEAD6 ", {
+            duration: 1.6,
+            y: 80,
+            rotationX: 60,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            transformOrigin: "50% 50%",
+            perspective: 1000, // 🔥 IMPORTANT
+
+            scrollTrigger: {
+                trigger: ".HEAD6",
+                start: "top 90%",
+
+            },
+        });
+    });
+
     return (
         <div className="w-screen bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300">
-
-
             <div className="bg-gradient-to-br from-[#d9d7f3] via-[#b9e3f6] to-[#6ec6e8] p-10 border border-l-black border-r-black border-b-black rounded-b-[50px]">
-                <div className="w-full flex justify-center items-center font-head font-extrabold text-[5rem] leading-none">
+                <div className="w-full flex justify-center items-center font-head font-extrabold text-[5rem] leading-none HEAD1">
                     <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 32 32"><path fill="#e65100" d="m4 4l2 22l10 2l10-2l2-22Zm19.72 7H11.28l.29 3h11.86l-.802 9.335L15.99 25l-6.635-1.646L8.93 19h3.02l.19 2l3.86.77l3.84-.77l.29-4H8.84L8 8h16Z" /></svg> HTML TOOLKIT
                 </div>
-                <p className="text-xl font-circular-web text-center">
+                <p className="SUBHEAD1 text-xl font-circular-web text-center">
                     This HTML quick reference cheat sheet lists the common HTML and HTML5 tags in readable layout.
                 </p>
             </div>
             {/* first */}
-            <div className="w-full flex justify-center items-center font-head font-extrabold text-[3rem] mt-5 mb-5 leading-none ">
+            <div className="w-full flex justify-center items-center font-head font-extrabold text-[3rem] mt-[50px] mb-[25px] leading-none HEAD1">
                 BASIC HTML STRUCTURE
             </div>
             <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
@@ -107,7 +210,7 @@ const Htmlw = () => {
                 <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-center gap-10 text-white">
 
                     <div className="">
-                        <div className='h-[40px] w-1/3  font-bold text-sm relative bottom-3 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+                        <div className='h-[40px] w-1/2  font-bold text-sm relative bottom-3 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
  text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
                             <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g clip-path="url(#clip0_0_3844)">
@@ -149,9 +252,9 @@ const Htmlw = () => {
                             </div>
                         </div>
                     </div>
-
+                    <hr className="border-t-2 border-gray-500" />
                     <div className="">
-                        <div className='h-[40px] w-1/3  font-bold text-sm relative bottom-3 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+                        <div className='h-[40px] w-1/2  font-bold text-sm relative bottom-3 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
  text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
                             <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g clip-path="url(#clip0_0_3844)">
@@ -183,6 +286,22 @@ const Htmlw = () => {
                                 </span>
                                 <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/p<p className="text-white inline-flex">&gt;</p></span>
                             </div>
+                        </div>
+                        <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent mt-5  p-1 px-5 bg-gradient-to-r from-blue-300 via-sky-300 to-cyan-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1 cursor-pointer'  >
+                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_0_3844)">
+                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_0_3844">
+                                        <rect width="14" height="14" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/p" className="flex justify-center" target="_blank"  >
+                                See : MDN Reference
+                            </a>
                         </div>
                     </div>
 
@@ -905,7 +1024,7 @@ const Htmlw = () => {
                 </div>
             </div>
             {/* fifth */}
-            <div className="w-full flex justify-center items-center font-head font-extrabold text-[3rem] mt-5 mb-5 leading-none">
+            <div className="w-full flex justify-center items-center font-head font-extrabold text-[3rem] mt-5 mb-5 leading-none HEAD2">
                 HTML 5 TAGS
             </div>
             <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
@@ -928,53 +1047,53 @@ const Htmlw = () => {
                         </div>
                         <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
                             <div>
-                                <span className="text-orange-400">&lt;body&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>body<p className="text-white inline-flex">&gt;</p></span>
                             </div>
 
                             <div className="pl-4">
-                                <span className="text-orange-400">&lt;header&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>header<p className="text-white inline-flex">&gt;</p></span>
                             </div>
 
                             <div className="pl-8">
-                                <span className="text-orange-400">&lt;nav&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>nav<p className="text-white inline-flex">&gt;</p></span>
                                 <span className="text-gray-500">...</span>
-                                <span className="text-orange-400">&lt;/nav&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/nav<p className="text-white inline-flex">&gt;</p></span>
                             </div>
 
                             <div className="pl-4">
-                                <span className="text-orange-400">&lt;/header&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/header<p className="text-white inline-flex">&gt;</p></span>
                             </div>
 
                             <div className="pl-4">
-                                <span className="text-orange-400">&lt;main&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>main<p className="text-white inline-flex">&gt;</p></span>
                             </div>
 
                             <div className="pl-8">
-                                <span className="text-orange-400">&lt;h1&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>h1<p className="text-white inline-flex">&gt;</p></span>
                                 <span className="text-gray-200">CodeSarthi</span>
-                                <span className="text-orange-400">&lt;/h1&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/h1<p className="text-white inline-flex">&gt;</p></span>
                             </div>
 
                             <div className="pl-4">
-                                <span className="text-orange-400">&lt;/main&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/main<p className="text-white inline-flex">&gt;</p></span>
                             </div>
 
                             <div className="pl-4">
-                                <span className="text-orange-400">&lt;footer&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>footer<p className="text-white inline-flex">&gt;</p></span>
                             </div>
 
                             <div className="pl-8">
-                                <span className="text-orange-400">&lt;p&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>p<p className="text-white inline-flex">&gt;</p></span>
                                 <span className="text-gray-200">TEAM AXONIC</span>
-                                <span className="text-orange-400">&lt;/p&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/p<p className="text-white inline-flex">&gt;</p></span>
                             </div>
 
                             <div className="pl-4">
-                                <span className="text-orange-400">&lt;/footer&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/footer<p className="text-white inline-flex">&gt;</p></span>
                             </div>
 
                             <div>
-                                <span className="text-orange-400">&lt;/body&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/body<p className="text-white inline-flex">&gt;</p></span>
                             </div>
                         </div>
                         <hr className="border-t-2 border-gray-500 mt-5" />
@@ -997,63 +1116,63 @@ const Htmlw = () => {
                         </div>
                         <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
                             <div>
-                                <span className="text-orange-400">&lt;header&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>header<p className="text-white inline-flex">&gt;</p></span>
                             </div>
 
                             <div className="pl-4">
-                                <span className="text-orange-400">&lt;nav&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>nav<p className="text-white inline-flex">&gt;</p></span>
                             </div>
 
                             <div className="pl-8">
-                                <span className="text-orange-400">&lt;ul&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>ul<p className="text-white inline-flex">&gt;</p></span>
                             </div>
 
                             <div className="pl-12">
-                                <span className="text-orange-400">&lt;li&gt;</span>
-                                <span className="text-orange-400">&lt;a</span>{" "}
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>li<p className="text-white inline-flex">&gt;</p></span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>a</span>{" "}
                                 <span className="text-emerald-400">href</span>
                                 <span className="text-white">=</span>
                                 <span className="text-amber-300">"#"</span>
-                                <span className="text-orange-400">&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&gt;</p></span>
                                 <span className="text-sky-300">Edit Page</span>
-                                <span className="text-orange-400">&lt;/a&gt;</span>
-                                <span className="text-orange-400">&lt;/li&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/a<p className="text-white inline-flex">&gt;</p></span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/li<p className="text-white inline-flex">&gt;</p></span>
                             </div>
 
                             <div className="pl-12">
-                                <span className="text-orange-400">&lt;li&gt;</span>
-                                <span className="text-orange-400">&lt;a</span>{" "}
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>li<p className="text-white inline-flex">&gt;</p></span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>a</span>{" "}
                                 <span className="text-emerald-400">href</span>
                                 <span className="text-white">=</span>
                                 <span className="text-amber-300">"#"</span>
-                                <span className="text-orange-400">&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&gt;</p></span>
                                 <span className="text-sky-300">Twitter</span>
-                                <span className="text-orange-400">&lt;/a&gt;</span>
-                                <span className="text-orange-400">&lt;/li&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/a<p className="text-white inline-flex">&gt;</p></span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/li<p className="text-white inline-flex">&gt;</p></span>
                             </div>
 
                             <div className="pl-12">
-                                <span className="text-orange-400">&lt;li&gt;</span>
-                                <span className="text-orange-400">&lt;a</span>{" "}
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>li<p className="text-white inline-flex">&gt;</p></span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>a</span>{" "}
                                 <span className="text-emerald-400">href</span>
                                 <span className="text-white">=</span>
                                 <span className="text-amber-300">"#"</span>
-                                <span className="text-orange-400">&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&gt;</p></span>
                                 <span className="text-sky-300">Facebook</span>
-                                <span className="text-orange-400">&lt;/a&gt;</span>
-                                <span className="text-orange-400">&lt;/li&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/a<p className="text-white inline-flex">&gt;</p></span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/li<p className="text-white inline-flex">&gt;</p></span>
                             </div>
 
                             <div className="pl-8">
-                                <span className="text-orange-400">&lt;/ul&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/ul<p className="text-white inline-flex">&gt;</p></span>
                             </div>
 
                             <div className="pl-4">
-                                <span className="text-orange-400">&lt;/nav&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/nav<p className="text-white inline-flex">&gt;</p></span>
                             </div>
 
                             <div>
-                                <span className="text-orange-400">&lt;/header&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/header<p className="text-white inline-flex">&gt;</p></span>
                             </div>
                         </div>
                     </div>
@@ -1076,14 +1195,13 @@ const Htmlw = () => {
                         </div>
                         <div className="bg-stone-900 p-5 rounded-3xl font-mono">
                             {/* opening video tag */}
-
                             <div>
-                                <span className="text-orange-400">&lt;p&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>p<p className="text-white inline-flex">&gt;</p></span>
                                 <span className="text-gray-200">I Love </span>
-                                <span className="text-orange-400">&lt;mark&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>mark<p className="text-white inline-flex">&gt;</p></span>
                                 <span className="text-yellow-300">CodeSarthi</span>
-                                <span className="text-orange-400">&lt;/mark&gt;</span>
-                                <span className="text-orange-400">&lt;/p&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/mark<p className="text-white inline-flex">&gt;</p></span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/p<p className="text-white inline-flex">&gt;</p></span>
                             </div>
                         </div>
                         <p className="mt-5 justify-self-center">I Love <mark>CodeSarthi</mark></p>
@@ -1107,15 +1225,15 @@ const Htmlw = () => {
                         <div className="bg-stone-900 p-5 rounded-3xl font-mono">
 
                             <div>
-                                <span className="text-orange-400">&lt;progress</span>{" "}
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>progress</span>{" "}
                                 <span className="text-emerald-400">value</span>
                                 <span className="text-white">=</span>
                                 <span className="text-amber-300">"50"</span>{" "}
                                 <span className="text-emerald-400">max</span>
                                 <span className="text-white">=</span>
                                 <span className="text-amber-300">"100"</span>
-                                <span className="text-orange-400">&gt;</span>
-                                <span className="text-orange-400">&lt;/progress&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&gt;</p></span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/progress<p className="text-white inline-flex">&gt;</p></span>
                             </div>
                         </div>
                         <progress value="50" max="100" className="w-full mt-5 rounded-xl border overflow-hidden "></progress>
@@ -1139,14 +1257,14 @@ const Htmlw = () => {
                         <div className="bg-stone-900 p-5 rounded-3xl font-mono  mb-5">
                             {/* opening audio tag */}
                             <div>
-                                <span className="text-orange-400">&lt;audio</span>{" "}
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>audio</span>{" "}
                                 <span className="text-emerald-400">controls</span>{" "}
                                 <span className="text-emerald-400">src</span>
                                 <span className="text-white">=</span>
                                 <span className="text-amber-300 break-all">
                                     "sample.mp3"
                                 </span>
-                                <span className="text-orange-400">&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&gt;</p></span>
                             </div>
 
                             {/* fallback text */}
@@ -1156,7 +1274,7 @@ const Htmlw = () => {
 
                             {/* closing audio tag */}
                             <div>
-                                <span className="text-orange-400">&lt;/audio&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/audio<p className="text-white inline-flex">&gt;</p></span>
                             </div>
                         </div>
 
@@ -1188,19 +1306,19 @@ const Htmlw = () => {
                         <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
                             {/* opening video tag */}
                             <div>
-                                <span className="text-orange-400">&lt;video</span>{" "}
+                                <span className="text-orange-400"><p className="text-white inline-flex ">&lt;</p>video</span>{" "}
                                 <span className="text-emerald-400">controls</span>
                                 <span className="text-white">=</span>
                                 <span className="text-amber-300">""</span>{" "}
                                 <span className="text-emerald-400">width</span>
                                 <span className="text-white">=</span>
                                 <span className="text-amber-300">"100%"</span>
-                                <span className="text-orange-400">&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex ">&gt;</p></span>
                             </div>
 
                             {/* source tag */}
                             <div className="pl-8">
-                                <span className="text-orange-400">&lt;source</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex ">&lt;</p>source</span>
                             </div>
 
                             <div className="pl-12">
@@ -1218,17 +1336,17 @@ const Htmlw = () => {
                             </div>
 
                             <div className="pl-8">
-                                <span className="text-orange-400">/&gt;</span>
+                                <span className="text-orange-400">/<p className="text-white inline-flex ">&gt;</p></span>
                             </div>
 
                             {/* fallback text */}
                             <div className="pl-8 text-gray-400">
-                                Sorry, your browser doesn&apos;t support embedded videos.
+                                Sorry, your browser does not support embedded videos.
                             </div>
 
                             {/* closing video tag */}
                             <div>
-                                <span className="text-orange-400">&lt;/video&gt;</span>
+                                <span className="text-orange-400"><p className="text-white inline-flex ">&lt;</p>/video<p className="text-white inline-flex ">&gt;</p></span>
                             </div>
                         </div>
                         <video
@@ -1249,139 +1367,137 @@ const Htmlw = () => {
                     <div className="bg-stone-900 p-5 w-1/3 rounded-3xl font-mono ">
 
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">1. article</li>
+                            <li className="w-1/2">1. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/article" target="_blanck" className="text-blue-500">article</a> </li>
                             <li className="w-1/2">Content that’s independent</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">2. aside</li>
+                            <li className="w-1/2">2. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/aside" target="_blanck" className="text-blue-500">aside</a> </li>
                             <li className="w-1/2">Secondary content</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">3. audio</li>
+                            <li className="w-1/2">3. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/audio" target="_blanck" className="text-blue-500">audio</a> </li>
                             <li className="w-1/2">Embeds a sound, or an audio stream</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">4. bdi</li>
+                            <li className="w-1/2">4.<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/bdi" target="_blanck" className="text-blue-500"> bdi</a> </li>
+
                             <li className="w-1/2">Draw graphics via JavaScript</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">5. canvas</li>
+                            <li className="w-1/2">5.<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/canvas" target="_blanck" className="text-blue-500"> canvas</a> </li>
                             <li className="w-1/2">Draw graphics via JavaScript</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">6. data</li>
+                            <li className="w-1/2">6.<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/data" target="_blanck" className="text-blue-500"> data</a> </li>
                             <li className="w-1/2">Machine readable content</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">7. datalist</li>
+                            <li className="w-1/2">7.<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/datalist" target="_blanck" className="text-blue-500"> datalist</a> </li>
                             <li className="w-1/2">A set of pre-defined options</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">8. details</li>
+                            <li className="w-1/2">8.<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details" target="_blanck" className="text-blue-500"> details</a> </li>
                             <li className="w-1/2">Additional information</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">9. dialog</li>
+                            <li className="w-1/2">9.<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dialog" target="_blanck" className="text-blue-500"> dialog</a> </li>
                             <li className="w-1/2">A dialog box or sub-window</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">10. embed</li>
+                            <li className="w-1/2">10.<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/embed" target="_blanck" className="text-blue-500"> embed</a> </li>
                             <li className="w-1/2">Embeds external application</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">11. figcaption</li>
+                            <li className="w-1/2">10.<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/figcaption" target="_blanck" className="text-blue-500"> figcaption</a> </li>
                             <li className="w-1/2">A caption or legend for a figure</li>
                         </ul>
-
-
-
                     </div>
                     <hr className="h-full border-l-2 border-gray-500" />
 
                     <div className="bg-stone-900 p-5 w-1/3 rounded-3xl font-mono ">
 
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">12. figure</li>
+                            <li className="w-1/2">11. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/figure" target="_blanck" className="text-blue-500">figure</a> </li>
                             <li className="w-1/2">A figure illustrated</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">13. footer</li>
+                            <li className="w-1/2">12. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/footer" target="_blanck" className="text-blue-500">footer</a> </li>
                             <li className="w-1/2">Footer or least important</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">14. header</li>
+                            <li className="w-1/2">13. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/header" target="_blanck" className="text-blue-500">footer</a> </li>
                             <li className="w-1/2">Masthead or important information</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">15. main</li>
+                            <li className="w-1/2">14. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/main" target="_blanck" className="text-blue-500">main</a> </li>
                             <li className="w-1/2">The main content of the document</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">16. mark</li>
+                            <li className="w-1/2">15. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/mark" target="_blanck" className="text-blue-500">mark</a> </li>
                             <li className="w-1/2">Text highlighted</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">17. meter</li>
+                            <li className="w-1/2">16. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/meter" target="_blanck" className="text-blue-500">meter</a> </li>
                             <li className="w-1/2">A scalar value within a known range</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">18. nav</li>
+                            <li className="w-1/2">17. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/nav" target="_blanck" className="text-blue-500">nav</a> </li>
                             <li className="w-1/2">A section of navigation links</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">19. output</li>
+                            <li className="w-1/2">18. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/output" target="_blanck" className="text-blue-500">output</a> </li>
                             <li className="w-1/2">The result of a calculation</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">20. picture</li>
+                            <li className="w-1/2">19. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/picture" target="_blanck" className="text-blue-500">picture</a> </li>
                             <li className="w-1/2">A container for multiple image sources</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">21. progress</li>
+                            <li className="w-1/2">20. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/progress" target="_blanck" className="text-blue-500">progress</a> </li>
                             <li className="w-1/2">The completion progress of a task</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">22. rp</li>
+                            <li className="w-1/2">20. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/rp" target="_blanck" className="text-blue-500">rp</a> </li>
                             <li className="w-1/2">Provides fall-back parenthesis</li>
                         </ul>
 
@@ -1393,74 +1509,69 @@ const Htmlw = () => {
                     <div className="bg-stone-900 p-5 w-1/3 rounded-3xl font-mono ">
 
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">23. rt</li>
+                            <li className="w-1/2">21. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/rt" target="_blanck" className="text-blue-500">rt</a> </li>
                             <li className="w-1/2">Defines the pronunciation of character</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">24. ruby</li>
+                            <li className="w-1/2">22. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/ruby" target="_blanck" className="text-blue-500">ruby</a> </li>
                             <li className="w-1/2">Represents a ruby annotation</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">25. section</li>
+                            <li className="w-1/2">23. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/section" target="_blanck" className="text-blue-500">section</a> </li>
                             <li className="w-1/2">A group in a series of related content</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">26. source</li>
+                            <li className="w-1/2">24. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/source" target="_blanck" className="text-blue-500">source</a> </li>
                             <li className="w-1/2">Resources for the media elements</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">27. summary</li>
+                            <li className="w-1/2">25. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary" target="_blanck" className="text-blue-500">summary</a> </li>
                             <li className="w-1/2">A summary for the &lt; details &gt; element</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">28. template</li>
+                            <li className="w-1/2">26. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/template" target="_blanck" className="text-blue-500">template</a> </li>
                             <li className="w-1/2">Defines the fragments of HTML</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">29. time</li>
+                            <li className="w-1/2">27. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/time" target="_blanck" className="text-blue-500">time</a> </li>
                             <li className="w-1/2">A time or date</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">30. track</li>
+                            <li className="w-1/2">27. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/track" target="_blanck" className="text-blue-500">track</a> </li>
                             <li className="w-1/2">Text tracks for the media elements</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">31. video</li>
+                            <li className="w-1/2">27. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/video" target="_blanck" className="text-blue-500">video</a> </li>
                             <li className="w-1/2">Embeds video</li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">32. wbr</li>
+                            <li className="w-1/2">27. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/wbr" target="_blanck" className="text-blue-500">wbr</a> </li>
                             <li className="w-1/2">A line break opportunity</li>
                         </ul>
-
-
-
-
-
                     </div>
                 </div>
 
             </div>
             {/* seventh */}
-            <div className="w-full flex justify-center items-center font-head font-extrabold text-[3rem] mt-5 mb-5 leading-none">
+            <div className="w-full flex justify-center items-center font-head font-extrabold text-[3rem] mt-5 mb-5 leading-none HEAD3">
                 HTML TABLES
             </div>
             <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
@@ -1764,7 +1875,7 @@ const Htmlw = () => {
                 </div>
             </div>
             {/* eighth */}
-            <div className="w-full flex justify-center items-center font-head font-extrabold text-[3rem] mt-5 mb-5 leading-none">
+            <div className="w-full flex justify-center items-center font-head font-extrabold text-[3rem] mt-5 mb-5 leading-none HEAD4">
                 HTML LISTS
             </div>
             <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
@@ -1955,7 +2066,7 @@ const Htmlw = () => {
                 </div>
             </div>
             {/* ninth */}
-            <div className="w-full flex justify-center items-center font-head font-extrabold text-[3rem] mt-5 mb-5 leading-none">
+            <div className="w-full flex justify-center items-center font-head font-extrabold text-[3rem] mt-5 mb-5 leading-none HEAD5">
                 HTML FORMS
             </div>
             <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
@@ -2441,8 +2552,6 @@ const Htmlw = () => {
                     </div>
                 </div>
             </div>
-
-
             {/* tenth */}
             <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
                 <div className=" bg-black p-10  rounded-3xl w-1/3 text-white">
@@ -2903,9 +3012,8 @@ const Htmlw = () => {
 
                 </div>
             </div>
-
             {/* eleventh */}
-            <div className="w-full flex justify-center items-center font-head font-extrabold text-[3rem] mt-5 mb-5 leading-none">
+            <div className="w-full flex justify-center items-center font-head font-extrabold text-[3rem] mt-5 mb-5 leading-none HEAD6">
                 HTML INPUT ATTRIBUTES
             </div>
             <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
