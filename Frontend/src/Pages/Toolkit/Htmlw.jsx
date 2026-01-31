@@ -270,7 +270,7 @@ const Htmlw = () => {
                                     </clipPath>
                                 </defs>
                             </svg>
-                            <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/a#attributes" className="w-full" target="_blank"  >
+                            <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/a#attributes" className="flex justify-center" target="_blank"  >
                                 See : MDN Reference
                             </a>
                         </div>
@@ -375,7 +375,7 @@ const Htmlw = () => {
                                     </clipPath>
                                 </defs>
                             </svg>
-                            <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/img" className="w-full" target="_blank"  >
+                            <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/img" className="flex justify-center" target="_blank"  >
                                 See : MDN Reference
                             </a>
                         </div>
@@ -827,7 +827,7 @@ const Htmlw = () => {
                                         </clipPath>
                                     </defs>
                                 </svg>
-                                <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe" className="w-full" target="_blank"  >
+                                <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe" className="flex justify-center" target="_blank"  >
                                     See : MDN Reference
                                 </a>
                             </div>
@@ -1243,7 +1243,6 @@ const Htmlw = () => {
                     </div>
                 </div>
             </div>
-
             {/* sixth */}
             <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
                 <div className=" bg-black p-10 flex gap-5 rounded-3xl w-full text-white">
@@ -1460,7 +1459,6 @@ const Htmlw = () => {
                 </div>
 
             </div>
-
             {/* seventh */}
             <div className="w-full flex justify-center items-center font-head font-extrabold text-[3rem] mt-5 mb-5 leading-none">
                 HTML TABLES
@@ -1643,66 +1641,148 @@ const Htmlw = () => {
                     </div>
                 </div>
                 <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-between gap-5 text-white">
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono  ">
+                    <div>
+                        <div className='h-[40px] w-1/2  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_0_3844)">
+                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_0_3844">
+                                        <rect width="14" height="14" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            &lt;td&gt; Attributes
+                        </div>
+                        <div className="bg-stone-900 p-5 rounded-3xl font-mono  ">
 
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">1.</p> colspan</li>
-                            <li className="w-1/2">Number of columns a cell should span</li>
-                        </ul>
+                            <ul className="flex justify-around mb-2 mt-2">
+                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">1.</p> colspan</li>
+                                <li className="w-1/2">Number of columns a cell should span</li>
+                            </ul>
 
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">2.</p> headers</li>
-                            <li className="w-1/2">One or more header cells a cell is related to</li>
-                        </ul>
+                            <hr className="border-t-2 border-gray-500" />
+                            <ul className="flex justify-around mb-2 mt-2">
+                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">2.</p> headers</li>
+                                <li className="w-1/2">One or more header cells a cell is related to</li>
+                            </ul>
 
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">3.</p> rowspan</li>
-                            <li className="w-1/2">Number of rows a cell should span</li>
-                        </ul>
+                            <hr className="border-t-2 border-gray-500" />
+                            <ul className="flex justify-around mb-2 mt-2">
+                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">3.</p> rowspan</li>
+                                <li className="w-1/2">Number of rows a cell should span</li>
+                            </ul>
 
 
+                        </div>
+
+                        <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent mt-5  p-1 px-5 bg-gradient-to-r from-blue-300 via-sky-300 to-cyan-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1 cursor-pointer'  >
+                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_0_3844)">
+                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_0_3844">
+                                        <rect width="14" height="14" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/td#attributes" className="flex justify-center" target="_blank"  >
+                                See : MDN Reference
+                            </a>
+                        </div>
                     </div>
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono  ">
+                    <hr className="border-t-2 border-gray-500" />
+                    <div>
+                        <div className='h-[40px] w-1/2  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_0_3844)">
+                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_0_3844">
+                                        <rect width="14" height="14" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            &lt;td&gt; Attributes
+                        </div>
+                        <div className="bg-stone-900 p-5 rounded-3xl font-mono  ">
 
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">1.</p> headers</li>
-                            <li className="w-1/2">Number of columns a cell should span</li>
-                        </ul>
+                            <ul className="flex justify-around mb-2 mt-2">
+                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">1.</p> headers</li>
+                                <li className="w-1/2">Number of columns a cell should span</li>
+                            </ul>
 
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">2.</p> colspan</li>
-                            <li className="w-1/2">One or more header cells a cell is related to</li>
-                        </ul>
+                            <hr className="border-t-2 border-gray-500" />
+                            <ul className="flex justify-around mb-2 mt-2">
+                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">2.</p> colspan</li>
+                                <li className="w-1/2">One or more header cells a cell is related to</li>
+                            </ul>
 
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">3.</p> rowspan</li>
-                            <li className="w-1/2">Number of rows a cell should span</li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">4.</p> abbr</li>
-                            <li className="w-1/2">Description of the cell's content</li>
-                        </ul>
+                            <hr className="border-t-2 border-gray-500" />
+                            <ul className="flex justify-around mb-2 mt-2">
+                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">3.</p> rowspan</li>
+                                <li className="w-1/2">Number of rows a cell should span</li>
+                            </ul>
+                            <hr className="border-t-2 border-gray-500" />
+                            <ul className="flex justify-around mb-2 mt-2">
+                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">4.</p> abbr</li>
+                                <li className="w-1/2">Description of the cell's content</li>
+                            </ul>
 
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">5.</p> scope</li>
-                            <li className="w-1/2">The header element relates to</li>
-                        </ul>
+                            <hr className="border-t-2 border-gray-500" />
+                            <ul className="flex justify-around mb-2 mt-2">
+                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">5.</p> scope</li>
+                                <li className="w-1/2">The header element relates to</li>
+                            </ul>
 
 
+                        </div>
+                        <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent mt-5  p-1 px-5 bg-gradient-to-r from-blue-300 via-sky-300 to-cyan-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3  py-1 cursor-pointer'  >
+                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_0_3844)">
+                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_0_3844">
+                                        <rect width="14" height="14" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/th#attributes" className=" flex justify-center " target="_blank"  >
+                                See : MDN Reference
+                            </a>
+                        </div>
                     </div>
+
                 </div>
             </div>
-
-
+            {/* eighth */}
+            <div className="w-full flex justify-center items-center font-head font-extrabold text-[3rem] mt-5 mb-5 leading-none">
+                HTML LISTS
+            </div>
             <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
-                <div className=" bg-black p-10  rounded-3xl w-1/3 text-white">
-
+                <div className=" bg-black p-5  rounded-3xl w-1/3 text-white">
+                    <div className='h-[40px] w-1/2  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                        <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_0_3844)">
+                                <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_0_3844">
+                                    <rect width="14" height="14" fill="white" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        Unordered List
+                    </div>
                     <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
                         <div>
                             <span className="text-orange-400">&lt;ul&gt;</span>
@@ -1730,10 +1810,39 @@ const Htmlw = () => {
                             <span className="text-orange-400">&lt;/ul&gt;</span>
                         </div>
                     </div>
-
+                    <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent mt-5  p-1 px-5 bg-gradient-to-r from-blue-300 via-sky-300 to-cyan-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1 cursor-pointer'  >
+                        <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_0_3844)">
+                                <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_0_3844">
+                                    <rect width="14" height="14" fill="white" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/ul" className="flex justify-center" target="_blank"  >
+                            See : MDN Reference
+                        </a>
+                    </div>
                 </div>
-                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-between gap-5 text-white">
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
+                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-center  text-white">
+                    <div className='h-[40px] w-1/2  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                        <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_0_3844)">
+                                <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_0_3844">
+                                    <rect width="14" height="14" fill="white" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        Ordered List
+                    </div>
+                    <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
                         <div>
                             <span className="text-orange-400">&lt;ol&gt;</span>
                         </div>
@@ -1760,11 +1869,40 @@ const Htmlw = () => {
                             <span className="text-orange-400">&lt;/ol&gt;</span>
                         </div>
                     </div>
-
+                    <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent mt-5  p-1 px-5 bg-gradient-to-r from-blue-300 via-sky-300 to-cyan-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1 cursor-pointer'  >
+                        <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_0_3844)">
+                                <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_0_3844">
+                                    <rect width="14" height="14" fill="white" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/ol" className="flex justify-center" target="_blank"  >
+                            See : MDN Reference
+                        </a>
+                    </div>
 
                 </div>
-                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-between gap-5 text-white">
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
+                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-center  text-white">
+                    <div className='h-[40px] w-1/2  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                        <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_0_3844)">
+                                <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_0_3844">
+                                    <rect width="14" height="14" fill="white" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        Definition List
+                    </div>
+                    <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
                         <div>
                             <span className="text-orange-400">&lt;dl&gt;</span>
                         </div>
@@ -1797,15 +1935,45 @@ const Htmlw = () => {
                             <span className="text-orange-400">&lt;/dl&gt;</span>
                         </div>
                     </div>
-
+                    <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent mt-5  p-1 px-5 bg-gradient-to-r from-blue-300 via-sky-300 to-cyan-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1 cursor-pointer'  >
+                        <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_0_3844)">
+                                <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_0_3844">
+                                    <rect width="14" height="14" fill="white" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dl" className="flex justify-center" target="_blank"  >
+                            See : MDN Reference
+                        </a>
+                    </div>
 
                 </div>
             </div>
+            {/* ninth */}
             <div className="w-full flex justify-center items-center font-head font-extrabold text-[3rem] mt-5 mb-5 leading-none">
                 HTML FORMS
             </div>
             <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
                 <div className=" bg-black p-10  rounded-3xl w-1/3 text-white">
+                    <div className='h-[40px] w-1/2  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                        <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_0_3844)">
+                                <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_0_3844">
+                                    <rect width="14" height="14" fill="white" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        HTML Form Example
+                    </div>
                     <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
                         {/* opening form */}
                         <div>
@@ -1923,9 +2091,41 @@ const Htmlw = () => {
                             <span className="text-orange-400">&lt;/form&gt;</span>
                         </div>
                     </div>
+                    <div className="mt-5 border-2 border-gray-600 p-5 rounded-3xl ">
+                        <form method="POST" action="api/login" >
+                            <label for="mail">Email: </label>
+                            <input type="email" id="mail" name="mail" className="text-black" />
+                            <br />
+                            <br />
+                            <label for="pw">Password: </label>
+                            <input type="password" id="pw" name="pw" className="text-black" />
+                            <br />
+                            <br />
+                            <input type="submit" value="Login" />
+                            <br />
+                            <br />
+                            <input type="checkbox" id="ck" name="ck" />
+                            <label for="ck">Remember me</label>
+                        </form>
+                    </div>
+
                 </div>
-                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-between gap-5 text-white">
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
+                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-between  text-white">
+                    <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                        <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_0_3844)">
+                                <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_0_3844">
+                                    <rect width="14" height="14" fill="white" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        Lable Tag
+                    </div>
+                    <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
                         {/* Nested label */}
                         <div className="text-gray-500">
                             &lt;!-- Nested label --&gt;
@@ -1989,7 +2189,22 @@ const Htmlw = () => {
                         </div>
 
                     </div>
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
+                    <hr className="border-t-2 border-gray-500" />
+                    <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                        <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_0_3844)">
+                                <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_0_3844">
+                                    <rect width="14" height="14" fill="white" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        Radio Buttons
+                    </div>
+                    <div className="bg-stone-900 p-5 rounded-3xl font-mono">
 
                         <div>
                             <span className="text-orange-400">&lt;input</span>{" "}
@@ -2042,443 +2257,654 @@ const Htmlw = () => {
                         </div>
 
                     </div>
+                    <div className="border-2 p-5 flex flex-col gap-3 rounded-xl border-gray-600">
+                        <div className="flex  gap-2">
+                            <input type="radio" name="gender" id="m" />
+                            <label for="m">Male</label>
+                        </div>
+                        <div className="flex  gap-2">
+                            <input type="radio" name="gender" id="f" />
+                            <label for="f">Female</label>
+                        </div>
+                    </div>
                 </div>
-                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-between gap-5 text-white">
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
-                        <div>
-                            <span className="text-orange-400">&lt;label</span>{" "}
-                            <span className="text-emerald-400">for</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"Name"</span>
-                            <span className="text-orange-400">&gt;</span>
-                            <span className="text-gray-200">Name:</span>
-                            <span className="text-orange-400">&lt;/label&gt;</span>{" "}
-                            <span className="text-orange-400">&lt;input</span>{" "}
-                            <span className="text-emerald-400">type</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"text"</span>{" "}
-                            <span className="text-emerald-400">name</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"Name"</span>{" "}
-                            <span className="text-emerald-400">id</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">""</span>{" "}
-                            <span className="text-orange-400">/&gt;</span>
+                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-between  text-white">
+                    <div>
+                        <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_0_3844)">
+                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_0_3844">
+                                        <rect width="14" height="14" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            Input Tag
                         </div>
-                    </div>
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
-
-                        <div>
-                            <span className="text-orange-400">&lt;textarea</span>{" "}
-                            <span className="text-emerald-400">rows</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"2"</span>{" "}
-                            <span className="text-emerald-400">cols</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"30"</span>{" "}
-                            <span className="text-emerald-400">name</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"address"</span>{" "}
-                            <span className="text-emerald-400">id</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"address"</span>
-                            <span className="text-orange-400">&gt;</span>
+                        <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
+                            <div>
+                                <span className="text-orange-400">&lt;label</span>{" "}
+                                <span className="text-emerald-400">for</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"Name"</span>
+                                <span className="text-orange-400">&gt;</span>
+                                <span className="text-gray-200">Name:</span>
+                                <span className="text-orange-400">&lt;/label&gt;</span>{" "}
+                                <span className="text-orange-400">&lt;input</span>{" "}
+                                <span className="text-emerald-400">type</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"text"</span>{" "}
+                                <span className="text-emerald-400">name</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"Name"</span>{" "}
+                                <span className="text-emerald-400">id</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">""</span>{" "}
+                                <span className="text-orange-400">/&gt;</span>
+                            </div>
                         </div>
-
-                        {/* textarea content (empty) */}
-                        <div className="pl-4 text-gray-500"></div>
-
-                        <div>
-                            <span className="text-orange-400">&lt;/textarea&gt;</span>
+                        <div className="border-2 border-gray-600 rounded-xl p-5 mt-3">
+                            <label for="Name">Name:</label> <input type="text" name="Name" id="" className="text-black" />
                         </div>
 
                     </div>
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
+                    <hr className="border-t-2 border-gray-500  mt-5 mb-5" />
+                    <div>
+                        <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_0_3844)">
+                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_0_3844">
+                                        <rect width="14" height="14" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            Textarea Tag
+                        </div>
+                        <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
 
-                        <div>
-                            <span className="text-orange-400">&lt;input</span>{" "}
-                            <span className="text-emerald-400">type</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"checkbox"</span>{" "}
-                            <span className="text-emerald-400">name</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"s"</span>{" "}
-                            <span className="text-emerald-400">id</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"soc"</span>{" "}
-                            <span className="text-orange-400">/&gt;</span>
+                            <div>
+                                <span className="text-orange-400">&lt;textarea</span>{" "}
+                                <span className="text-emerald-400">rows</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"2"</span>{" "}
+                                <span className="text-emerald-400">cols</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"30"</span>{" "}
+                                <span className="text-emerald-400">name</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"address"</span>{" "}
+                                <span className="text-emerald-400">id</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"address"</span>
+                                <span className="text-orange-400">&gt;</span>
+                            </div>
+
+                            {/* textarea content (empty) */}
+                            <div className="pl-4 text-gray-500"></div>
+
+                            <div>
+                                <span className="text-orange-400">&lt;/textarea&gt;</span>
+                            </div>
+
+                        </div>
+                        <div className="border-2 border-gray-600 rounded-xl p-5 mt-3 flex justify-center items-center gap-2">
+                            TextArea :
+                            <textarea className="text-black" rows="2" cols="30" name="address" id="address">
+                            </textarea>
                         </div>
 
-                        <div>
-                            <span className="text-orange-400">&lt;label</span>{" "}
-                            <span className="text-emerald-400">for</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"soc"</span>
-                            <span className="text-orange-400">&gt;</span>
-                            <span className="text-gray-200">Soccer</span>
-                            <span className="text-orange-400">&lt;/label&gt;</span>
+                    </div>
+                    <hr className="border-t-2 border-gray-500 mt-5 mb-5" />
+                    <div>
+                        <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_0_3844)">
+                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_0_3844">
+                                        <rect width="14" height="14" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            Checkboxes
                         </div>
+                        <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
 
-                        <br />
+                            <div>
+                                <span className="text-orange-400">&lt;input</span>{" "}
+                                <span className="text-emerald-400">type</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"checkbox"</span>{" "}
+                                <span className="text-emerald-400">name</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"s"</span>{" "}
+                                <span className="text-emerald-400">id</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"soc"</span>{" "}
+                                <span className="text-orange-400">/&gt;</span>
+                            </div>
 
-                        <div>
-                            <span className="text-orange-400">&lt;input</span>{" "}
-                            <span className="text-emerald-400">type</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"checkbox"</span>{" "}
-                            <span className="text-emerald-400">name</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"s"</span>{" "}
-                            <span className="text-emerald-400">id</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"bas"</span>{" "}
-                            <span className="text-orange-400">/&gt;</span>
+                            <div>
+                                <span className="text-orange-400">&lt;label</span>{" "}
+                                <span className="text-emerald-400">for</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"soc"</span>
+                                <span className="text-orange-400">&gt;</span>
+                                <span className="text-gray-200">Soccer</span>
+                                <span className="text-orange-400">&lt;/label&gt;</span>
+                            </div>
+
+                            <br />
+
+                            <div>
+                                <span className="text-orange-400">&lt;input</span>{" "}
+                                <span className="text-emerald-400">type</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"checkbox"</span>{" "}
+                                <span className="text-emerald-400">name</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"s"</span>{" "}
+                                <span className="text-emerald-400">id</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"bas"</span>{" "}
+                                <span className="text-orange-400">/&gt;</span>
+                            </div>
+
+                            <div>
+                                <span className="text-orange-400">&lt;label</span>{" "}
+                                <span className="text-emerald-400">for</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"bas"</span>
+                                <span className="text-orange-400">&gt;</span>
+                                <span className="text-gray-200">Baseball</span>
+                                <span className="text-orange-400">&lt;/label&gt;</span>
+                            </div>
+
                         </div>
+                        <div className="border-2 border-gray-600 rounded-xl p-5 mt-3 flex justify-center items-center gap-2">
+                            <input type="checkbox" name="s" id="soc" />
+                            <label for="soc">Soccer</label>
 
-                        <div>
-                            <span className="text-orange-400">&lt;label</span>{" "}
-                            <span className="text-emerald-400">for</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"bas"</span>
-                            <span className="text-orange-400">&gt;</span>
-                            <span className="text-gray-200">Baseball</span>
-                            <span className="text-orange-400">&lt;/label&gt;</span>
+                            <input type="checkbox" name="s" id="bas" />
+                            <label for="bas">Baseball</label>
                         </div>
 
                     </div>
                 </div>
             </div>
+
+
+            {/* tenth */}
             <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
                 <div className=" bg-black p-10  rounded-3xl w-1/3 text-white">
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
-                        {/* label */}
-                        <div>
-                            <span className="text-orange-400">&lt;label</span>{" "}
-                            <span className="text-emerald-400">for</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"city"</span>
-                            <span className="text-orange-400">&gt;</span>
-                            <span className="text-gray-200">City:</span>
-                            <span className="text-orange-400">&lt;/label&gt;</span>
+
+                    <div>
+                        <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_0_3844)">
+                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_0_3844">
+                                        <rect width="14" height="14" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            Feildset Tag
+                        </div>
+                        <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
+                            <div>
+                                <span className="text-orange-400">&lt;fieldset&gt;</span>
+                            </div>
+
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;legend&gt;</span>
+                                <span className="text-gray-200">Your favorite monster</span>
+                                <span className="text-orange-400">&lt;/legend&gt;</span>
+                            </div>
+
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;input</span>{" "}
+                                <span className="text-emerald-400">type</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"radio"</span>{" "}
+                                <span className="text-emerald-400">id</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"kra"</span>{" "}
+                                <span className="text-emerald-400">name</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"m"</span>{" "}
+                                <span className="text-orange-400">/&gt;</span>
+                            </div>
+
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;label</span>{" "}
+                                <span className="text-emerald-400">for</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"kra"</span>
+                                <span className="text-orange-400">&gt;</span>
+                                <span className="text-gray-200">Kraken</span>
+                                <span className="text-orange-400">&lt;/label&gt;</span>
+                                <span className="text-orange-400 ml-2">&lt;br /&gt;</span>
+                            </div>
+
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;input</span>{" "}
+                                <span className="text-emerald-400">type</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"radio"</span>{" "}
+                                <span className="text-emerald-400">id</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"sas"</span>{" "}
+                                <span className="text-emerald-400">name</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"m"</span>{" "}
+                                <span className="text-orange-400">/&gt;</span>
+                            </div>
+
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;label</span>{" "}
+                                <span className="text-emerald-400">for</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"sas"</span>
+                                <span className="text-orange-400">&gt;</span>
+                                <span className="text-gray-200">Sasquatch</span>
+                                <span className="text-orange-400">&lt;/label&gt;</span>
+                            </div>
+
+                            <div>
+                                <span className="text-orange-400">&lt;/fieldset&gt;</span>
+                            </div>
+                        </div>
+                        <fieldset className="border-2 border-gray-600 rounded-xl p-5 mt-3">
+                            <legend>Your favorite monster</legend>
+                            <input type="radio" id="kra" name="m" />
+                            <label for="kra">Kraken</label><br />
+                            <input type="radio" id="sas" name="m" />
+                            <label for="sas">Sasquatch</label>
+                        </fieldset>
+                    </div>
+
+                </div>
+                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-center gap-5 text-white">
+
+
+                    <div>
+                        <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_0_3844)">
+                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_0_3844">
+                                        <rect width="14" height="14" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            Select Tag
+                        </div>
+                        <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
+                            {/* label */}
+                            <div>
+                                <span className="text-orange-400">&lt;label</span>{" "}
+                                <span className="text-emerald-400">for</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"city"</span>
+                                <span className="text-orange-400">&gt;</span>
+                                <span className="text-gray-200">City:</span>
+                                <span className="text-orange-400">&lt;/label&gt;</span>
+                            </div>
+
+                            {/* select */}
+                            <div>
+                                <span className="text-orange-400">&lt;select</span>{" "}
+                                <span className="text-emerald-400">name</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"city"</span>{" "}
+                                <span className="text-emerald-400">id</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"city"</span>
+                                <span className="text-orange-400">&gt;</span>
+                            </div>
+
+                            {/* options */}
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;option</span>{" "}
+                                <span className="text-emerald-400">value</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"1"</span>
+                                <span className="text-orange-400">&gt;</span>
+                                <span className="text-gray-200">Kanpur</span>
+                                <span className="text-orange-400">&lt;/option&gt;</span>
+                            </div>
+
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;option</span>{" "}
+                                <span className="text-emerald-400">value</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"2"</span>
+                                <span className="text-orange-400">&gt;</span>
+                                <span className="text-gray-200">Banglore</span>
+                                <span className="text-orange-400">&lt;/option&gt;</span>
+                            </div>
+
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;option</span>{" "}
+                                <span className="text-emerald-400">value</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"3"</span>
+                                <span className="text-orange-400">&gt;</span>
+                                <span className="text-gray-200">
+                                    Mumbai
+                                </span>
+                                <span className="text-orange-400">&lt;/option&gt;</span>
+                            </div>
+
+                            <div>
+                                <span className="text-orange-400">&lt;/select&gt;</span>
+                            </div>
+                        </div>
+                        <div className="border-2 border-gray-600 rounded-xl p-5 mt-3">
+                            <label for="city">City:</label>
+                            <select name="city" id="city" className="text-black ml-3">
+                                <option value="1">Kanpur</option>
+                                <option value="2">Banglore</option>
+                                <option value="3">Mumbai</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr className="border-t-2 border-gray-500" />
+                    <div>
+                        <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_0_3844)">
+                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_0_3844">
+                                        <rect width="14" height="14" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            Datalist tags(HTML5)
+                        </div>
+                        <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
+
+                            {/* label */}
+                            <div>
+                                <span className="text-orange-400">&lt;label</span>{" "}
+                                <span className="text-emerald-400">for</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"b"</span>
+                                <span className="text-orange-400">&gt;</span>
+                                <span className="text-gray-200">Choose a browser: </span>
+                                <span className="text-orange-400">&lt;/label&gt;</span>
+                            </div>
+
+                            {/* input */}
+                            <div>
+                                <span className="text-orange-400">&lt;input</span>{" "}
+                                <span className="text-emerald-400">list</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"list"</span>{" "}
+                                <span className="text-emerald-400">id</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"b"</span>{" "}
+                                <span className="text-emerald-400">name</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"browser"</span>{" "}
+                                <span className="text-orange-400">/&gt;</span>
+                            </div>
+
+                            {/* datalist */}
+                            <div>
+                                <span className="text-orange-400">&lt;datalist</span>{" "}
+                                <span className="text-emerald-400">id</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"list"</span>
+                                <span className="text-orange-400">&gt;</span>
+                            </div>
+
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;option</span>{" "}
+                                <span className="text-emerald-400">value</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"Chrome"</span>
+                                <span className="text-orange-400">&gt;&lt;/option&gt;</span>
+                            </div>
+
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;option</span>{" "}
+                                <span className="text-emerald-400">value</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"Firefox"</span>
+                                <span className="text-orange-400">&gt;&lt;/option&gt;</span>
+                            </div>
+
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;option</span>{" "}
+                                <span className="text-emerald-400">value</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"Internet Explorer"</span>
+                                <span className="text-orange-400">&gt;&lt;/option&gt;</span>
+                            </div>
+
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;option</span>{" "}
+                                <span className="text-emerald-400">value</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"Opera"</span>
+                                <span className="text-orange-400">&gt;&lt;/option&gt;</span>
+                            </div>
+
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;option</span>{" "}
+                                <span className="text-emerald-400">value</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"Safari"</span>
+                                <span className="text-orange-400">&gt;&lt;/option&gt;</span>
+                            </div>
+
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;option</span>{" "}
+                                <span className="text-emerald-400">value</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"Microsoft Edge"</span>
+                                <span className="text-orange-400">&gt;&lt;/option&gt;</span>
+                            </div>
+
+                            <div>
+                                <span className="text-orange-400">&lt;/datalist&gt;</span>
+                            </div>
+
+                        </div>
+                        <div className="border-2 border-gray-600 rounded-xl p-5 mt-3">
+                            <label for="b" >Choose a browser: </label>
+                            <input list="list" id="b" name="browser" className="text-black" />
+                            <datalist id="list">
+                                <option value="Chrome"></option>
+                                <option value="Firefox"></option>
+                                <option value="Internet Explorer"></option>
+                                <option value="Opera"></option>
+                                <option value="Safari"></option>
+                                <option value="Microsoft Edge"></option>
+                            </datalist>
                         </div>
 
-                        {/* select */}
-                        <div>
-                            <span className="text-orange-400">&lt;select</span>{" "}
-                            <span className="text-emerald-400">name</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"city"</span>{" "}
-                            <span className="text-emerald-400">id</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"city"</span>
-                            <span className="text-orange-400">&gt;</span>
-                        </div>
-
-                        {/* options */}
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;option</span>{" "}
-                            <span className="text-emerald-400">value</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"1"</span>
-                            <span className="text-orange-400">&gt;</span>
-                            <span className="text-gray-200">Sydney</span>
-                            <span className="text-orange-400">&lt;/option&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;option</span>{" "}
-                            <span className="text-emerald-400">value</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"2"</span>
-                            <span className="text-orange-400">&gt;</span>
-                            <span className="text-gray-200">Melbourne</span>
-                            <span className="text-orange-400">&lt;/option&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;option</span>{" "}
-                            <span className="text-emerald-400">value</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"3"</span>
-                            <span className="text-orange-400">&gt;</span>
-                            <span className="text-gray-200">Cromwell</span>
-                            <span className="text-orange-400">&lt;/option&gt;</span>
-                        </div>
-
-                        <div>
-                            <span className="text-orange-400">&lt;/select&gt;</span>
-                        </div>
                     </div>
                 </div>
                 <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-between gap-5 text-white">
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
-                        <div>
-                            <span className="text-orange-400">&lt;fieldset&gt;</span>
-                        </div>
+                    <div>
+                        <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_0_3844)">
+                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_0_3844">
+                                        <rect width="14" height="14" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            Submit and Reset Buttons
 
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;legend&gt;</span>
-                            <span className="text-gray-200">Your favorite monster</span>
-                            <span className="text-orange-400">&lt;/legend&gt;</span>
-                        </div>
 
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;input</span>{" "}
-                            <span className="text-emerald-400">type</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"radio"</span>{" "}
-                            <span className="text-emerald-400">id</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"kra"</span>{" "}
-                            <span className="text-emerald-400">name</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"m"</span>{" "}
-                            <span className="text-orange-400">/&gt;</span>
                         </div>
+                        <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
+                            {/* opening form */}
+                            <div>
+                                <span className="text-orange-400">&lt;form</span>{" "}
+                                <span className="text-emerald-400">action</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"register.php"</span>{" "}
+                                <span className="text-emerald-400">method</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"post"</span>
+                                <span className="text-orange-400">&gt;</span>
+                            </div>
 
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;label</span>{" "}
-                            <span className="text-emerald-400">for</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"kra"</span>
-                            <span className="text-orange-400">&gt;</span>
-                            <span className="text-gray-200">Kraken</span>
-                            <span className="text-orange-400">&lt;/label&gt;</span>
-                            <span className="text-orange-400 ml-2">&lt;br /&gt;</span>
+                            {/* name field */}
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;label</span>{" "}
+                                <span className="text-emerald-400">for</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"foo"</span>
+                                <span className="text-orange-400">&gt;</span>
+                                <span className="text-gray-200">Name:</span>
+                                <span className="text-orange-400">&lt;/label&gt;</span>
+                            </div>
+
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;input</span>{" "}
+                                <span className="text-emerald-400">type</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"text"</span>{" "}
+                                <span className="text-emerald-400">name</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"name"</span>{" "}
+                                <span className="text-emerald-400">id</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"foo"</span>{" "}
+                                <span className="text-orange-400">/&gt;</span>
+                            </div>
+
+                            {/* submit */}
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;input</span>{" "}
+                                <span className="text-emerald-400">type</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"submit"</span>{" "}
+                                <span className="text-emerald-400">value</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"Submit"</span>{" "}
+                                <span className="text-orange-400">/&gt;</span>
+                            </div>
+
+                            {/* reset */}
+                            <div className="pl-4">
+                                <span className="text-orange-400">&lt;input</span>{" "}
+                                <span className="text-emerald-400">type</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"reset"</span>{" "}
+                                <span className="text-emerald-400">value</span>
+                                <span className="text-white">=</span>
+                                <span className="text-amber-300">"Reset"</span>{" "}
+                                <span className="text-orange-400">/&gt;</span>
+                            </div>
+
+                            {/* closing form */}
+                            <div>
+                                <span className="text-orange-400">&lt;/form&gt;</span>
+                            </div>
+
                         </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;input</span>{" "}
-                            <span className="text-emerald-400">type</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"radio"</span>{" "}
-                            <span className="text-emerald-400">id</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"sas"</span>{" "}
-                            <span className="text-emerald-400">name</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"m"</span>{" "}
-                            <span className="text-orange-400">/&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;label</span>{" "}
-                            <span className="text-emerald-400">for</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"sas"</span>
-                            <span className="text-orange-400">&gt;</span>
-                            <span className="text-gray-200">Sasquatch</span>
-                            <span className="text-orange-400">&lt;/label&gt;</span>
-                        </div>
-
-                        <div>
-                            <span className="text-orange-400">&lt;/fieldset&gt;</span>
-                        </div>
-                    </div>
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
-
-                        {/* label */}
-                        <div>
-                            <span className="text-orange-400">&lt;label</span>{" "}
-                            <span className="text-emerald-400">for</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"b"</span>
-                            <span className="text-orange-400">&gt;</span>
-                            <span className="text-gray-200">Choose a browser: </span>
-                            <span className="text-orange-400">&lt;/label&gt;</span>
-                        </div>
-
-                        {/* input */}
-                        <div>
-                            <span className="text-orange-400">&lt;input</span>{" "}
-                            <span className="text-emerald-400">list</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"list"</span>{" "}
-                            <span className="text-emerald-400">id</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"b"</span>{" "}
-                            <span className="text-emerald-400">name</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"browser"</span>{" "}
-                            <span className="text-orange-400">/&gt;</span>
-                        </div>
-
-                        {/* datalist */}
-                        <div>
-                            <span className="text-orange-400">&lt;datalist</span>{" "}
-                            <span className="text-emerald-400">id</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"list"</span>
-                            <span className="text-orange-400">&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;option</span>{" "}
-                            <span className="text-emerald-400">value</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"Chrome"</span>
-                            <span className="text-orange-400">&gt;&lt;/option&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;option</span>{" "}
-                            <span className="text-emerald-400">value</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"Firefox"</span>
-                            <span className="text-orange-400">&gt;&lt;/option&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;option</span>{" "}
-                            <span className="text-emerald-400">value</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"Internet Explorer"</span>
-                            <span className="text-orange-400">&gt;&lt;/option&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;option</span>{" "}
-                            <span className="text-emerald-400">value</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"Opera"</span>
-                            <span className="text-orange-400">&gt;&lt;/option&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;option</span>{" "}
-                            <span className="text-emerald-400">value</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"Safari"</span>
-                            <span className="text-orange-400">&gt;&lt;/option&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;option</span>{" "}
-                            <span className="text-emerald-400">value</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"Microsoft Edge"</span>
-                            <span className="text-orange-400">&gt;&lt;/option&gt;</span>
-                        </div>
-
-                        <div>
-                            <span className="text-orange-400">&lt;/datalist&gt;</span>
+                        <div className="border-2 border-gray-600 rounded-xl p-5 mt-3  ">
+                            <form action="register.php" method="post" className="flex gap-5" >
+                                <label for="foo">Name:</label>
+                                <input type="text" name="name" id="foo" className="text-black" />
+                                <input type="submit" value="Submit" className="border-2 border-gray-600 rounded-xl px-2" />
+                                <input type="reset" value="Reset" className="border-2 border-gray-600 rounded-xl px-2" />
+                            </form>
                         </div>
 
                     </div>
-                </div>
-                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-between gap-5 text-white">
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
-                        {/* opening form */}
-                        <div>
-                            <span className="text-orange-400">&lt;form</span>{" "}
-                            <span className="text-emerald-400">action</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"register.php"</span>{" "}
-                            <span className="text-emerald-400">method</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"post"</span>
-                            <span className="text-orange-400">&gt;</span>
+                    <hr className="border-t-2 border-gray-500" />
+                    <div>
+                        <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_0_3844)">
+                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_0_3844">
+                                        <rect width="14" height="14" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            FORM ATTRIBUTES
                         </div>
+                        <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
 
-                        {/* name field */}
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;label</span>{" "}
-                            <span className="text-emerald-400">for</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"foo"</span>
-                            <span className="text-orange-400">&gt;</span>
-                            <span className="text-gray-200">Name:</span>
-                            <span className="text-orange-400">&lt;/label&gt;</span>
+                            <ul className="flex justify-around mb-2 mt-2">
+                                <li className="w-1/2 text-orange-400">name</li>
+                                <li className="w-1/2">	Name of form for scripting</li>
+                            </ul>
+
+                            <hr className="border-t-2 border-gray-500" />
+                            <ul className="flex justify-around mb-2 mt-2">
+                                <li className="w-1/2 text-orange-400">action</li>
+                                <li className="w-1/2">URL of form script</li>
+                            </ul>
+
+                            <hr className="border-t-2 border-gray-500" />
+                            <ul className="flex justify-around mb-2 mt-2">
+                                <li className="w-1/2 text-orange-400">method</li>
+                                <li className="w-1/2">HTTP method, POST / GET (default)</li>
+                            </ul>
+
+                            <hr className="border-t-2 border-gray-500" />
+                            <ul className="flex justify-around mb-2 mt-2">
+                                <li className="w-1/2 text-orange-400">enctype</li>
+                                <li className="w-1/2">Media type, See enctype</li>
+                            </ul>
+
+                            <hr className="border-t-2 border-gray-500" />
+                            <ul className="flex justify-around mb-2 mt-2">
+                                <li className="w-1/2 text-orange-400">onsubmit</li>
+                                <li className="w-1/2">Runs when the form was submit</li>
+                            </ul>
+
+                            <hr className="border-t-2 border-gray-500" />
+                            <ul className="flex justify-around mb-2 mt-2">
+                                <li className="w-1/2 text-orange-400">onreset</li>
+                                <li className="w-1/2">Runs when the form was reset</li>
+                            </ul>
+
+                            <hr className="border-t-2 border-gray-500" />
+
                         </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;input</span>{" "}
-                            <span className="text-emerald-400">type</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"text"</span>{" "}
-                            <span className="text-emerald-400">name</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"name"</span>{" "}
-                            <span className="text-emerald-400">id</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"foo"</span>{" "}
-                            <span className="text-orange-400">/&gt;</span>
-                        </div>
-
-                        {/* submit */}
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;input</span>{" "}
-                            <span className="text-emerald-400">type</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"submit"</span>{" "}
-                            <span className="text-emerald-400">value</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"Submit"</span>{" "}
-                            <span className="text-orange-400">/&gt;</span>
-                        </div>
-
-                        {/* reset */}
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;input</span>{" "}
-                            <span className="text-emerald-400">type</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"reset"</span>{" "}
-                            <span className="text-emerald-400">value</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"Reset"</span>{" "}
-                            <span className="text-orange-400">/&gt;</span>
-                        </div>
-
-                        {/* closing form */}
-                        <div>
-                            <span className="text-orange-400">&lt;/form&gt;</span>
-                        </div>
-
                     </div>
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
 
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400">name</li>
-                            <li className="w-1/2">	Name of form for scripting</li>
-                        </ul>
 
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400">action</li>
-                            <li className="w-1/2">URL of form script</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400">method</li>
-                            <li className="w-1/2">HTTP method, POST / GET (default)</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400">enctype</li>
-                            <li className="w-1/2">Media type, See enctype</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400">onsubmit</li>
-                            <li className="w-1/2">Runs when the form was submit</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2 text-orange-400">onreset</li>
-                            <li className="w-1/2">Runs when the form was reset</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-
-                    </div>
 
                 </div>
             </div>
 
+            {/* eleventh */}
             <div className="w-full flex justify-center items-center font-head font-extrabold text-[3rem] mt-5 mb-5 leading-none">
                 HTML INPUT ATTRIBUTES
             </div>
@@ -2486,6 +2912,20 @@ const Htmlw = () => {
 
 
                 <div className=" bg-black p-5 rounded-3xl w-1/2 flex flex-col justify-between gap-5 text-white">
+                    <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                        <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_0_3844)">
+                                <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_0_3844">
+                                    <rect width="14" height="14" fill="white" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        Input Tag Attributes
+                    </div>
                     <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
                         <div>
                             <span className="text-orange-400">&lt;input</span>{" "}
@@ -2628,65 +3068,70 @@ const Htmlw = () => {
                     </div>
                 </div>
 
-                <div className=" bg-black p-10  rounded-3xl w-1/2 text-white">
-
+                <div className=" bg-black p-5  rounded-3xl w-1/2 text-white">
+                    <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
+ text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                        <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_0_3844)">
+                                <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_0_3844">
+                                    <rect width="14" height="14" fill="white" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        INPUT TYPES
+                    </div>
                     <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
-
-
-
-
-
-
-
-
                         <ul className="flex justify-around mb-2 mt-2">
                             <li className="w-1/2">1. type="checkbox"</li>
-                            <li className="w-1/2">The type of data that is being input</li>
+                            <li className="w-1/2"><input type="checkbox" name="" id="" /></li>
                         </ul>
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
                             <li className="w-1/2">2. type="radio"	</li>
-                            <li className="w-1/2">Default value</li>
+                            <li className="w-1/2"><input type="radio" name="" id="" /></li>
                         </ul>
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
                             <li className="w-1/2">3. type="file"	No file chosen</li>
-                            <li className="w-1/2">Used to describe this data in the HTTP request</li>
+                            <li className="w-1/2"><input type="file" name="No file choosen" className="border border-gray-600" id="" /></li>
                         </ul>
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
                             <li className="w-1/2">4. type="hidden"	</li>
-                            <li className="w-1/2">Unique identifier that other HTML elements</li>
+                            <li className="w-1/2"><input type="hidden" name="" id="" /></li>
                         </ul>
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
                             <li className="w-1/2">5.  type="text"</li>
-                            <li className="w-1/2">Stops the user from modifying</li>
+                            <li className="w-1/2"><input type="text" name="" id="" className="text-black" /></li>
                         </ul>
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
                             <li className="w-1/2">6.    type="password"</li>
-                            <li className="w-1/2">Stops any interaction</li>
+                            <li className="w-1/2"><input type="password" name="" id="" className="text-black" /></li>
                         </ul>
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
                             <li className="w-1/2">7.   type="image"	Submit</li>
-                            <li className="w-1/2">The radio or checkbox select or not</li>
+                            <li className="w-1/2"><input type="image" name="" id="" className="border border-gray-600 px-5 py-1 rounded-xl" /></li>
                         </ul>
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
                             <li className="w-1/2">8.   type="reset"</li>
-                            <li className="w-1/2">	Being compulsory, See required</li>
+                            <li className="w-1/2">	<input type="reset" name="" id="" className="border border-gray-600 px-5 py-1 rounded-xl" /></li>
                         </ul>
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
                             <li className="w-1/2">9.  type="button"</li>
-                            <li className="w-1/2">Adds a temporary, See ::placeholder</li>
+                            <li className="w-1/2"><input type="button" name="button" value="button" id="" className="border border-gray-600 px-5 py-1 rounded-xl" /></li>
                         </ul>
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
                             <li className="w-1/2">10.  type="submit"</li>
-                            <li className="w-1/2">Disable auto completion</li>
+                            <li className="w-1/2"><input type="submit" name="" id="" className="border border-gray-600 px-5 py-1 rounded-xl" /></li>
                         </ul>
 
 
@@ -2703,63 +3148,63 @@ const Htmlw = () => {
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
                             <li className="w-1/2">11.type="color"</li>
-                            <li className="w-1/2">Disable auto capitalization</li>
+                            <li className="w-1/2"><input type="color" name="" id="" className="border border-gray-600  w-1/2 h-full rounded-xl" /></li>
                         </ul>
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
                             <li className="w-1/2">12. type="date"	</li>
-                            <li className="w-1/2">Display a specific keyboard, See inputmode</li>
+                            <li className="w-1/2"><input type="date" name="" id="" className="border text-black border-gray-600 px-5 py-1 rounded-xl" /></li>
                         </ul>
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
                             <li className="w-1/2">13. type="time"</li>
-                            <li className="w-1/2">The id of an associated datalist</li>
+                            <li className="w-1/2"><input type="time" name="" id="" className="border text-black border-gray-600 px-5 py-1 rounded-xl" /></li>
                         </ul>
 
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
                             <li className="w-1/2">14.       type="month"	</li>
-                            <li className="w-1/2">Maximum number of characters</li>
+                            <li className="w-1/2"><input type="month" name="" id="" className="border text-black border-gray-600 px-5 py-1 rounded-xl" /></li>
                         </ul>
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">14.  type="datetime-local"</li>
-                            <li className="w-1/2">Minimum number of characters</li>
+                            <li className="w-1/2">15.  type="datetime-local"</li>
+                            <li className="w-1/2"><input type="datetime-local" name="" id="" className="border text-black border-gray-600 px-5 py-1 rounded-xl" /></li>
                         </ul>
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">14.  type="week"</li>
-                            <li className="w-1/2">Minimum numerical value on range & number</li>
+                            <li className="w-1/2">16.  type="week"</li>
+                            <li className="w-1/2"><input type="week" name="" id="" className="border text-black border-gray-600 px-5 py-1 rounded-xl" /></li>
                         </ul>
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">14.       type="email"</li>
-                            <li className="w-1/2">Maximum numerical value on range & number</li>
+                            <li className="w-1/2">17.       type="email"</li>
+                            <li className="w-1/2"><input type="email" name="" id="" className="border text-black border-gray-600 px-5 py-1 rounded-xl" /></li>
                         </ul>
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">14. type="tel"</li>
-                            <li className="w-1/2">How the number will increment in range & number</li>
+                            <li className="w-1/2">18. type="tel"</li>
+                            <li className="w-1/2"><input type="tel" name="" id="" className="border text-black border-gray-600 px-5 py-1 rounded-xl" /></li>
                         </ul>
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">14.type="url"</li>
-                            <li className="w-1/2">Specifies a Regular expression, See pattern</li>
+                            <li className="w-1/2">19.type="url"</li>
+                            <li className="w-1/2"><input type="url" name="" id="" className="border text-black border-gray-600 px-5 py-1 rounded-xl" /></li>
                         </ul>
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">14.     type="number"</li>
-                            <li className="w-1/2">Be focused</li>
+                            <li className="w-1/2">20.     type="number"</li>
+                            <li className="w-1/2"><input type="number" name="" id="" className="border text-black border-gray-600 px-5 py-1 rounded-xl" /></li>
                         </ul>
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">14.  type="search"</li>
-                            <li className="w-1/2">Perform spell checking</li>
+                            <li className="w-1/2">21.  type="search"</li>
+                            <li className="w-1/2"><input type="search" name=" " id="" className="border text-black border-gray-600 px-5 py-1 rounded-xl" /></li>
                         </ul>
                         <hr className="border-t-2 border-gray-500" />
                         <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">14.    type="range"</li>
-                            <li className="w-1/2">Whether to allow multiple values</li>
+                            <li className="w-1/2">22.    type="range"</li>
+                            <li className="w-1/2"><input type="range" name=" " id="" className="border text-black border-gray-600 px-5 py-1 rounded-xl" /></li>
                         </ul>
 
 
