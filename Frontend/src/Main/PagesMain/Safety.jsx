@@ -2,7 +2,7 @@ import React from 'react'
 
 const Safety = () => {
     return (
-        <div>Safety</div>
+        <div className='text-black'>Safety</div>
     )
 }
 

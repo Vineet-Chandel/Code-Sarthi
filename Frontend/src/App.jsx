@@ -47,6 +47,7 @@ import Collab from "./Pages/Collab";
 import Developers from "./Main/PagesMain/Developers";
 import HTML from "./Pages/Toolkit/Htmlw";
 import Toolkit from "./Pages/Toolkit/Toolkitw";
+import Discover from "./Main/PagesMain/Discover";
 
 const App = () => {
   return (
@@ -56,6 +57,8 @@ const App = () => {
 
           {/* 🌐 PUBLIC ROUTES */}
           <Route path="/" element={<Hero />} />
+
+          <Route path="/discover" element={<Discover />} />
           <Route path="/developers" element={<Developers />} />
           <Route path="/safety" element={<Safety />} />
           <Route path="/blogs" element={<Blogs />} />
@@ -67,7 +70,7 @@ const App = () => {
           <Route path="/engineering" element={<Engineering />} />
           <Route path="/new-updates" element={<NewUpdates />} />
           <Route path="/product" element={<Product />} />
-          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/privacy-center" element={<Privacy />} />
           <Route path="/how-to-use" element={<UseCodeSarthi />} />
 
           {/* 🔐 AUTH */}
