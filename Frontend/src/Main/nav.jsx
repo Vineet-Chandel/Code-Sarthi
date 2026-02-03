@@ -77,7 +77,7 @@ const Nav = () => {
                         title="Hub"
                         items={[
                             "Policy Hub",
-                            "Privacy Hub",
+                            "Privacy Center",
                             "Transparency Hub",
                             "Wellbeing Hub",
                         ]}
