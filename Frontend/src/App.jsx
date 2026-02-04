@@ -48,6 +48,7 @@ import Developers from "./Main/PagesMain/Developers";
 import HTML from "./Pages/Toolkit/Htmlw";
 import Toolkit from "./Pages/Toolkit/Toolkitw";
 import Discover from "./Main/PagesMain/Discover";
+import Policy from "./Main/PagesMain/category/Policy";
 
 const App = () => {
   return (
@@ -72,6 +73,7 @@ const App = () => {
           <Route path="/product" element={<Product />} />
           <Route path="/privacy-center" element={<Privacy />} />
           <Route path="/how-to-use" element={<UseCodeSarthi />} />
+          <Route path="/policy-hub" element={<Policy />} />
 
           {/* 🔐 AUTH */}
           <Route path="/login" element={<Login />} />
