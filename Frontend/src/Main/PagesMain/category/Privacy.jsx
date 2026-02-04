@@ -2,35 +2,150 @@ import React from 'react'
 import Nav from '../../nav.jsx'
 import Footer from '../../Footer.jsx'
 import { useNavigate } from "react-router-dom";
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap'
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const Privacy = () => {
+
+    gsap.registerPlugin(ScrollTrigger);
+    useGSAP(() => {
+        gsap.from(".HEAD1", {
+            duration: 1.6,
+            y: 80,
+            rotationX: 60,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            transformOrigin: "50% 50%",
+            perspective: 1000, // 🔥 IMPORTANT
+
+            scrollTrigger: {
+                trigger: ".BOSSCONT",
+                start: "top 90%",
+
+            },
+        });
+        gsap.from(".SUBHEAD1", {
+            duration: 1.6,
+            y: 80,
+            rotationX: 60,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            scrollTrigger: {
+                trigger: ".BOSSCONT",
+                start: "top 90%",
+            }
+        })
+        gsap.from(".HEAD2", {
+            duration: 1.6,
+            x: 80,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            transformOrigin: "50% 50%",
+            perspective: 1000, // 🔥 IMPORTANT
+
+            scrollTrigger: {
+                trigger: ".HEAD2",
+                start: "top 110%",
+
+            },
+        });
+        gsap.from(".HEAD3", {
+            duration: 1.6,
+            x: 80,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            transformOrigin: "50% 50%",
+            perspective: 1000, // 🔥 IMPORTANT
+
+            scrollTrigger: {
+                trigger: ".HEAD3",
+                start: "top 110%",
+
+            },
+        });
+        gsap.from(".SUBHEAD2", {
+            duration: 1.6,
+            x: 80,
+
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            scrollTrigger: {
+                trigger: ".HEAD2",
+                start: "top 90%",
+            }
+        });
+        gsap.from(".SUBHEAD3", {
+            duration: 1.6,
+            x: 80,
+
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            scrollTrigger: {
+                trigger: ".HEAD3",
+                start: "top 90%",
+            }
+        })
+
+        gsap.from(".HEAD4", {
+            duration: 1.6,
+            y: 80,
+            rotationX: 60,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            transformOrigin: "50% 50%",
+            perspective: 1000, // 🔥 IMPORTANT
+
+            scrollTrigger: {
+                trigger: ".HEAD4",
+                start: "top 90%",
+
+            },
+        });
+    });
     const navigate = useNavigate();
     return (
         <div className="h-auto  w-full bg-black overflohidden bg-black absolute">
             <Nav />
 
-            <div className="flex flex-col justify-center items-center h-1/2 mt-[200px] ">
+            <div className="flex flex-col justify-center items-center h-1/2 mt-[150px] ">
 
-                <div className="text-[6rem] font-head text-white leading-none font-extrabold">
+                <div className=" HEAD1 text-[6rem] font-head text-white leading-none font-extrabold">
                     CodeSarthi
                 </div>
-                <div className="text-[5rem] font-head text-white leading-none font-extrabold">
+                <div className="HEAD1 text-[5rem] font-head text-white leading-none font-extrabold">
                     PRIVACY CENTER
                 </div>
-                <div className="text-3xl font-circular-web text-gray-200  relative top-6">
+                <div className=" HEAD1 text-3xl font-circular-web text-gray-200  relative top-6">
                     Because protecting your privacy is essential to feeling safe.
                 </div>
             </div>
-            <div className="flex flex-col justify-center items-center h-1/2 m-[200px]  ">
+            <div className=" HEAD1 flex flex-col justify-center items-center h-1/2 m-[200px]  ">
 
                 <div className="text-[3rem] font-head text-white leading-none font-extrabold">
                     OUR COMMITMENT TO PRIVACY
                 </div>
 
-                <div className="text-3xl font-circular-web text-gray-200  relative top-6 w-[80%] text-center">
+                <div className="text-3xl font-circular-web text-gray-200   mt-6 w-[80%] text-center">
                     Team Axonic created CodeSarthi to be a platform that brings developers together while respecting your privacy.Across CodeSarthi, we build privacy into our products, and we keep you informed about what’s happening with your data. Here are our guiding principles:
                 </div>
+                <div className='w-full  flex flex-col justify-center items-center mt-10' >
+                    <div className='h-[55px] w-[35px] rounded-2xl border flex justify-center items-start py-3'>
+                        <div className='h-[13px] w-[5px] bg-white rounded-2xl animate-bounce'></div>
+                    </div>
+                    <div className="text-xl font-head font-extralight text-gray-200   mt-6 w-[80%] text-center">
+                        SCROLL
+                    </div>
+                </div>
             </div>
+
 
             <div>
                 <div
@@ -41,10 +156,10 @@ const Privacy = () => {
                             <div className='w-full  p-0 relative top-0 px-5'>
                                 <img src="public/img/privacy-3.webp" alt="" className='w-[200px]' />
                             </div>
-                            <div className=" text-white font-circular-web font-extrabold text-start text-3xl max-lg:text-4xl relative bottom-3 w-full px-10">
+                            <div className=" HEAD2 text-white font-circular-web font-extrabold text-start text-3xl max-lg:text-4xl relative bottom-3 w-full px-10">
                                 We manage your data responsibly :
                             </div>
-                            <div className="text-xl font-circular-web text-gray-400  w-full mt-4 pl-20 pr-10 relative bottom-3">
+                            <div className="SUBHEAD2 text-xl font-circular-web text-gray-400  w-full mt-4 pl-20 pr-10 relative bottom-3">
                                 Collecting, storing, and using data is a big responsibility, and we take it seriously. Privacy only exists when data is secure, so we invest heavily in protecting our systems. We design our architecture with privacy in mind and build features that help everyone stay safe and in control.
                             </div>
                         </div>
@@ -55,10 +170,10 @@ const Privacy = () => {
                             <div className='w-full  p-0 relative top-0 px-5'>
                                 <img src="public/img/privacy-2.webp" alt="" className='w-[250px]' />
                             </div>
-                            <div className=" text-white font-circular-web font-extrabold text-start text-3xl max-lg:text-4xl  w-full px-10">
+                            <div className="HEAD2 text-white font-circular-web font-extrabold text-start text-3xl max-lg:text-4xl  w-full px-10">
                                 You will never be seen as the product :
                             </div>
-                            <div className="text-xl font-circular-web text-gray-400  w-full mt-4 pl-20 pr-10">
+                            <div className="SUBHEAD2 text-xl font-circular-web text-gray-400  w-full mt-4 pl-20 pr-10">
                                 We don’t sell your personal information. Our only business is providing our service, never selling your data to third parties. At CodeSarthi, what’s yours is truly yours.
                             </div>
 
@@ -76,29 +191,25 @@ const Privacy = () => {
                             <div className='w-full  p-0 relative top-0 px-5 rounded-full'>
                                 <img src="public/img/privacy-4.webp" alt="" className='w-[150px]     rounded-[40px]' />
                             </div>
-                            <div className=" text-white font-circular-web font-extrabold text-start text-3xl max-lg:text-4xl mt-5 w-full px-10">
+                            <div className="HEAD3 text-white font-circular-web font-extrabold text-start text-3xl max-lg:text-4xl mt-5 w-full px-10">
                                 Privacy starts with you :
                             </div>
-                            <div className="text-xl font-circular-web text-gray-400  w-full mt-4 pl-20 pr-10 ">
+                            <div className="SUBHEAD3 text-xl font-circular-web text-gray-400  w-full mt-4 pl-20 pr-10 ">
                                 Real privacy begins when you have control over your experience. On CodeSarthi, you decide what information you share, who you interact with, and how you use the platform. From data preferences to communication settings, the choice is always yours.
                             </div>
 
 
                         </div>
-
-
-
-
                         {/* RIGHT CARD */}
                         <div
                             className=" w-1/2 h-[450px] rounded-[100px] bg-gray-900 flex flex-col justify-center items-center p-10 max-lg:w-full max-sm:rounded-[40px] max-sm:p-6">
                             <div className='w-full  p-0 relative top-0 px-5 rounded-full'>
                                 <img src="public/img/privacy-5.webp" alt="" className='w-[130px]     rounded-[40px]' />
                             </div>
-                            <div className=" text-white font-circular-web font-extrabold text-start text-3xl max-lg:text-4xl mt-5 w-full px-10">
+                            <div className=" HEAD3 text-white font-circular-web font-extrabold text-start text-3xl max-lg:text-4xl mt-5 w-full px-10">
                                 Less data collected , More clarity delivered :
                             </div>
-                            <div className="text-xl font-circular-web text-gray-400  w-full mt-4 pl-20 pr-10 ">
+                            <div className="SUBHEAD3 text-xl font-circular-web text-gray-400  w-full mt-4 pl-20 pr-10 ">
                                 We want you to always understand how your personal information is handled on Discord—whether through our <p className='inline-flex cursor-pointer underline underline-offset-4 ' onClick={() => navigate("/policy-hub")}>Privacy Policy</p>, within the app, or here on our site. We intentionally limit the data we collect. When your information is no longer needed, we anonymize, aggregate, or delete it.
                             </div>
 
@@ -111,11 +222,11 @@ const Privacy = () => {
 
             <div className="flex flex-col justify-center items-center h-1/2 m-[150px]   ">
 
-                <div className="text-[3rem] font-head text-white leading-none font-extrabold">
+                <div className="HEAD4 text-[3rem] font-head text-white leading-none font-extrabold">
                     PRIVACY POLICIES
                 </div>
 
-                <div className="text-3xl font-circular-web text-gray-200  relative top-6 w-[80%] text-center">
+                <div className="HEAD4 text-3xl font-circular-web text-gray-200  relative top-6 w-[80%] text-center">
                     Our Privacy Policies goes into all the details about how we collect, use, store, protect and share your personal information.
                 </div>
             </div>
