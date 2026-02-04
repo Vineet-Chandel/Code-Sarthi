@@ -115,7 +115,7 @@ const Footer = () => {
         //             </div>
         //         </div>
 
-        <div className="w-full  bg-black text-white flex justify-center items-center overflow-hidden group " onClick={() => navigate("/login")} >
+        <div className="w-full  bg-black text-white flex justify-center items-center overflow-hidden group  cursor-pointer" onClick={() => navigate("/login")} >
 
             <div className="flex flex-col transition-transform duration-500 ease-in-out 
                   group-hover:-translate-y-[350px] h-80">
