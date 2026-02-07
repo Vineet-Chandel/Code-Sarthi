@@ -43,11 +43,7 @@ const userSchema = new Schema(
         },
         middleName: {
             type: String,
-            trim: true,
-            minLength: 4,
-            maxLength: 50,
             trim: true
-
         },
         lastName: {
             type: String,
@@ -110,6 +106,7 @@ const userSchema = new Schema(
     }
 );
 
+
 userSchema.methods.getJWT = async function () {
     const user = this;
 
@@ -122,10 +119,10 @@ userSchema.methods.getJWT = async function () {
     return token;
 };
 
+//Password validation 
 userSchema.methods.validatePassword = async function (passwordInputByUser) {
     const user = this;
     const passwordHash = user.password;
-
     const isPasswordValid = await bcrypt.compare(
         passwordInputByUser,
         passwordHash
