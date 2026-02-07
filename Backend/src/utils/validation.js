@@ -21,7 +21,7 @@ const validateSignUpData = (data) => {
     else if (profession === undefined || profession === null || profession === "") {
         throw new Error("profession name is required");
     } else if (termsAccepted == 0 || termsAccepted == false) {
-        throw new Error("Terms and Condition should be accepted")
+        throw new Error("You must accept the terms and conditions")
     } else if (!["male", "female", "other"].includes(gender)) {
         throw new Error("Please specify your gender properly");
     }

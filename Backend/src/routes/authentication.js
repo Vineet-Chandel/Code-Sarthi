@@ -3,6 +3,7 @@ const authRouter = express.Router();
 const { validateSignUpData } = require("../utils/validation");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
+const { userAuth } = require("../middlewares/userAuth");
 
 //signUp
 authRouter.post("/auth/signup", async (req, res) => {
@@ -12,6 +13,24 @@ authRouter.post("/auth/signup", async (req, res) => {
         // Validation of data
         validateSignUpData(req.body);
 
+        const existingGmailUser = await User.findOne({
+            gmail
+        });
+
+        if (existingGmailUser) {
+            return res.status(409).json({
+                message: "Gmail already exists"
+            });
+        }
+        const existingUsernameUser = await User.findOne({
+            username
+        });
+
+        if (existingUsernameUser) {
+            return res.status(409).json({
+                message: "Username already exists"
+            });
+        }
         // Encrypt the password
         const passwordHash = await bcrypt.hash(password, 10);
 
@@ -36,28 +55,51 @@ authRouter.post("/auth/signup", async (req, res) => {
         const token = await savedUser.getJWT();
 
         res.cookie("token", token, {
+            httpOnly: true,        // JS can't access it
+            secure: true,          // HTTPS only (required in prod)
+            sameSite: "strict",    // CSRF protection
             expires: new Date(Date.now() + 8 * 3600000),
         });
 
-        res.json({ message: "User Added successfully!", data: { Name: savedUser.firstName + " " + savedUser.lastName } });
+        res.status(201).json({
+            DATA: {
+                identity: user._id,
+                firstName: user.firstName,
+                middleName: user.middleName,
+                lastName: user.lastName,
+                username: user.username,
+                age: user.age,
+                gender: user.gender,
+                photoUrl: user.photoUrl,
+                about: user.about,
+                college: user.college,
+                skills: user.skills,
+                profession: user.profession,
+                gmail: user.gmail,
+                isVerified: user.isVerified,
+            }
+        });
     } catch (err) {
-        res.status(400).send("ERROR : " + err.message);
+        res.status(400).json({ message: "Request Failed" });
     }
 });
-
-authRouter.post("/SignInDB", async (req, res) => {
+//sigin
+authRouter.post("/auth/signin", async (req, res) => {
     try {
-        const { Gmail, password } = req.body;
-        if (!Gmail || !password) {
+        const { gmail, password } = req.body;
+        if (!gmail || !password) {
             return res.status(400).json({
                 success: false,
                 message: "Email and password are required"
             });
         }
 
-        const user = await User.findOne({ Gmail: Gmail.toLowerCase() });
+        const user = await User.findOne({ gmail: gmail.toLowerCase() }).select("+password");
         if (!user) {
-            throw new Error("Email or Password is invalid ");
+            return res.status(401).json({
+                success: false,
+                message: "Invalid email or password"
+            });
         }
         const isPasswordValid = await user.validatePassword(password);
 
@@ -71,20 +113,23 @@ authRouter.post("/SignInDB", async (req, res) => {
                 sameSite: "strict",      // CSRF protection
                 maxAge: 8 * 60 * 60 * 1000
             });
-            res.send({
-                identity: user._id,
-                FirstName: user.FirstName,
-                MiddleName: user.MiddleName,
-                LastName: user.LastName,
-                username: user.username,
-                age: user.age,
-                Gmail: user.Gmail,
-                gender: user.gender,
-                photoUrl: user.photoUrl,
-                about: user.about,
-                college: user.college,
-                profession: user.profession,
-                skills: user.skills,
+            res.status(200).json({
+                DATA: {
+                    identity: user._id,
+                    firstName: user.firstName,
+                    middleName: user.middleName,
+                    lastName: user.lastName,
+                    username: user.username,
+                    age: user.age,
+                    gender: user.gender,
+                    photoUrl: user.photoUrl,
+                    about: user.about,
+                    college: user.college,
+                    skills: user.skills,
+                    profession: user.profession,
+                    gmail: user.gmail,
+                    isVerified: user.isVerified,
+                }
             });
         } else {
             return res.status(401).json({
@@ -93,17 +138,35 @@ authRouter.post("/SignInDB", async (req, res) => {
             });
         }
     } catch (err) {
-        res.status(400).send("ERROR : " + err.message);
+        res.status(400).json({ message: "Login Failed" });
     }
 });
-
-authRouter.post("/logout", async (req, res) => {
+//signout
+authRouter.post("/auth/signout", async (req, res) => {
     res.cookie("token", null, {
         expires: new Date(Date.now()),
     });
     res.send("Logout Successful!!");
 });
 
+//email verification
+authRouter.get("/auth/verify-email", userAuth, async (req, res) => {
+    const { gmail: userGmail } = req.user;
+    if (!userGmail) {
+        return res.status(400).json({
+            success: false,
+            message: "Something went wrong"
+        });
+    }
+    const currentUser = await User.findOne({ gmail: userGmail.toLowerCase() })
+    if (!currentUser) {
+        return res.status(401).json({
+            success: false,
+            message: "Something went wrong"
+        });
+    }
+    res.json({ "data ": currentUser.username })
+})
 
 
 module.exports = authRouter;
