@@ -509,7 +509,7 @@ const Signup = () => {
                     Terms & Conditions
                   </a>{" "}
                   and{" "}
-                  <a href="/privacy" className="text-blue-400 underline hover:no-underline">
+                  <a href="/privacy-center" className="text-blue-400 underline hover:no-underline">
                     Privacy Policy
                   </a>.
                 </span>

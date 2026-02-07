@@ -1,10 +1,10 @@
 const validator = require("validator");
 
-const validateSignUpData = (req) => {
-    const { FirstName, LastName, Gmail, age, password, username, profession, college } = req.body;
-    if (!FirstName || !LastName) {
+const validateSignUpData = (data) => {
+    const { firstName, lastName, gmail, age, password, username, profession, college, termsAccepted, gender } = data;
+    if (!firstName || !lastName) {
         throw new Error("Name is not valid!");
-    } else if (!validator.isEmail(Gmail)) {
+    } else if (!validator.isEmail(gmail)) {
         throw new Error("Email is not valid!");
     } else if (!validator.isStrongPassword(password)) {
         throw new Error("Please enter a strong Password!");
@@ -20,6 +20,10 @@ const validateSignUpData = (req) => {
     }
     else if (profession === undefined || profession === null || profession === "") {
         throw new Error("profession name is required");
+    } else if (termsAccepted == 0 || termsAccepted == false) {
+        throw new Error("Terms and Condition should be accepted")
+    } else if (!["male", "female", "other"].includes(gender)) {
+        throw new Error("Please specify your gender properly");
     }
 };
 

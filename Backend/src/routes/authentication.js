@@ -4,39 +4,33 @@ const { validateSignUpData } = require("../utils/validation");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 
-authRouter.post("/SignUpDB", async (req, res) => {
+//signUp
+authRouter.post("/auth/signup", async (req, res) => {
     try {
 
-        const { FirstName, MiddleName, LastName, Gmail, password, username, age, gender, photoUrl, about, college, skills, profession, termsAccepted } = req.body;
+        const { firstName, middleName, lastName, gmail, password, username, age, gender, college, profession, termsAccepted } = req.body;
         // Validation of data
-        validateSignUpData(req);
+        validateSignUpData(req.body);
 
         // Encrypt the password
         const passwordHash = await bcrypt.hash(password, 10);
 
         //   Creating a new instance of the User model
         const user = new User({
-            FirstName,
-            MiddleName,
-            LastName,
-            Gmail,
-            age,
-            username,
-            gender,
-            photoUrl,
-            about,
-            skills,
-            college,
-            termsAccepted,
-            profession,
+            //Authentication
+            gmail,
             password: passwordHash,
+            termsAccepted,
+            //Identity
+            firstName,
+            middleName,
+            lastName,
+            username,
+            age,
+            gender,
+            college,
+            profession,
         });
-        if (!FirstName || !LastName || !Gmail || !password || !username || !age || !college || !profession || termsAccepted === undefined) {
-            return res.status(400).json({
-                success: false,
-                message: "All fields are required.",
-            });
-        }
 
         const savedUser = await user.save();
         const token = await savedUser.getJWT();
@@ -45,7 +39,7 @@ authRouter.post("/SignUpDB", async (req, res) => {
             expires: new Date(Date.now() + 8 * 3600000),
         });
 
-        res.json({ message: "User Added successfully!", data: { Name: savedUser.FirstName + " " + savedUser.LastName } });
+        res.json({ message: "User Added successfully!", data: { Name: savedUser.firstName + " " + savedUser.lastName } });
     } catch (err) {
         res.status(400).send("ERROR : " + err.message);
     }
@@ -55,15 +49,15 @@ authRouter.post("/SignInDB", async (req, res) => {
     try {
         const { Gmail, password } = req.body;
         if (!Gmail || !password) {
-            throw new Error({
+            return res.status(400).json({
                 success: false,
-                message: "Gmail and password are required"
+                message: "Email and password are required"
             });
         }
 
-        const user = await User.findOne({ Gmail: Gmail });
+        const user = await User.findOne({ Gmail: Gmail.toLowerCase() });
         if (!user) {
-            throw new Error("Invalid credentials");
+            throw new Error("Email or Password is invalid ");
         }
         const isPasswordValid = await user.validatePassword(password);
 
@@ -71,7 +65,11 @@ authRouter.post("/SignInDB", async (req, res) => {
             const token = await user.getJWT();
 
             res.cookie("token", token, {
-                expires: new Date(Date.now() + 8 * 3600000),
+                // expires: new Date(Date.now() + 8 * 3600000),
+                httpOnly: true,          // JS can’t access it
+                secure: true,            // HTTPS only
+                sameSite: "strict",      // CSRF protection
+                maxAge: 8 * 60 * 60 * 1000
             });
             res.send({
                 identity: user._id,
@@ -89,7 +87,10 @@ authRouter.post("/SignInDB", async (req, res) => {
                 skills: user.skills,
             });
         } else {
-            throw new Error("Invalid credentials");
+            return res.status(401).json({
+                success: false,
+                message: "Invalid email or password"
+            });
         }
     } catch (err) {
         res.status(400).send("ERROR : " + err.message);
