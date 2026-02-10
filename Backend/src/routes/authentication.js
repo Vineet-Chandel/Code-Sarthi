@@ -1,9 +1,24 @@
+
 const express = require("express");
 const authRouter = express.Router();
 const { validateSignUpData } = require("../utils/validation");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const { userAuth } = require("../middlewares/userAuth");
+const sendMail = require("../configs/sendMail");
+
+let otp;
+function generateOTP(length = 6) {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    otp = "";
+
+    for (let i = 0; i < length; i++) {
+        otp += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+
+    return otp;
+}
+generateOTP();
 
 //signUp
 authRouter.post("/auth/signup", async (req, res) => {
@@ -80,7 +95,7 @@ authRouter.post("/auth/signup", async (req, res) => {
             }
         });
     } catch (err) {
-        res.status(400).json({ message: "Request Failed" });
+        res.status(400).json({ message: "Request Failed" + err.message });
     }
 });
 //sigin
@@ -148,25 +163,176 @@ authRouter.post("/auth/signout", async (req, res) => {
     });
     res.send("Logout Successful!!");
 });
+// email verification
+authRouter.get("/auth/verify-email/get-otp", userAuth, async (req, res) => {
+    try {
+        const { gmail: userGmail } = req.user;
 
-//email verification
-authRouter.get("/auth/verify-email", userAuth, async (req, res) => {
-    const { gmail: userGmail } = req.user;
-    if (!userGmail) {
-        return res.status(400).json({
+        if (!userGmail) {
+            return res.status(400).json({
+                success: false,
+                message: "Something went wrong"
+            });
+        }
+
+        await sendMail({
+            gmail: userGmail,
+            subject: "Your CodeSarthi verification code",
+            html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
+
+    <!-- Preheader -->
+    <div
+        style="display:none; font-size:1px; color:#ffffff; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden;">
+        Verify your email for CodeSarthi. Your verification code is {{OTP}}.
+    </div>
+
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:30px 20px;">
+        <tr>
+            <td align="center">
+
+                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:500px;">
+
+                    <!-- LOGO -->
+                    <tr>
+                        <td align="center" style="padding-bottom:30px;">
+                            <table cellpadding="0" cellspacing="0" border="0"
+                                style="background:#000000; border-radius:20px;">
+                                <tr>
+                                    <td style="padding:12px 24px;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td>
+                                                    <img src="https://res.cloudinary.com/dj0ivep44/image/upload/v1770692070/WhatsApp_Image_2026-02-08_at_09.56.39_jrys9v.jpg"
+                                                        alt="CodeSarthi Logo" width="60" height="60"
+                                                        style="border-radius:20px; display:block;">
+                                                </td>
+                                                <td
+                                                    style="padding-left:10px; font-size:24px; font-weight:700; color:#ffffff;">
+                                                    CodeSarthi
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- CARD -->
+                    <tr>
+                        <td style="
+              background:#ffffff;
+              background:linear-gradient(145deg,#ffffff 0%,#f8f9ff 100%);
+              border-radius:16px;
+              border:1px solid #e0e4ff;
+              padding:40px 32px;
+              text-align:center;
+              box-shadow:0 8px 30px rgba(102,126,234,0.1);
+            ">
+
+                            <h1 style="margin:0 0 16px 0; font-size:28px; color:#2d3748;">
+                                Verify Your Email Address
+                            </h1>
+
+                            <p style="margin:0 0 8px 0; font-size:16px; color:#4a5568;">
+                                Hello there! 👋
+                            </p>
+
+                            <p style="margin:0 0 24px 0; font-size:15px; color:#718096; line-height:1.6;">
+                                Thank you for joining CodeSarthi! Use the verification code below to complete your
+                                registration.
+                            </p>
+
+                            <!-- OTP BOX -->
+                            <table align="center" cellpadding="0" cellspacing="0" border="0"
+                                style="margin-bottom:16px;">
+                                <tr>
+                                    <td style="
+                    background:#667eea;
+                    background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+                    padding:24px;
+                    border-radius:12px;
+                    text-align:center;
+                    min-width:260px;
+                  ">
+                                        <div style="
+                      font-size:36px;
+                      font-weight:700;
+                      letter-spacing:4px;
+                      font-family:'Courier New', monospace;
+                      color:#ffffff;
+                    ">
+                                           ${otp}
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p style="margin:0 0 24px 0; font-size:14px; color:#e53e3e; font-weight:600;">
+                                This code expires in <strong>2 minutes</strong>
+                            </p>
+
+                            <hr style="border:none; height:1px; background:#e2e8f0; margin:0 0 24px 0;">
+
+                            <!-- SECURITY -->
+                            <table align="center" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:8px;">
+                                <tr>
+
+                                    <td style="padding-left:8px; font-size:13px; color:#a0aec0;">
+                                        🔒 <strong>Security Tip:</strong> Never share this code with anyone.
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p style="margin:0; font-size:13px; color:#a0aec0; line-height:1.5;">
+                                If you didn’t request this email, please ignore it or
+                                <a href="#" style="color:#667eea; text-decoration:none; font-weight:600;">
+                                    contact support
+                                </a>.
+                            </p>
+
+                        </td>
+                    </tr>
+
+                    <!-- FOOTER -->
+                    <tr>
+                        <td align="center" style="padding-top:32px;">
+                            <p style="margin:0 0 16px 0; font-size:14px; color:#718096;">
+                                Need help?
+                                <a href="#" style="color:#667eea; text-decoration:none;">
+                                    Contact our support team
+                                </a>
+                            </p>
+
+                            <p style="margin:0; font-size:12px; color:#a0aec0; line-height:1.5;">
+                                © 2024 CodeSarthi. All rights reserved.<br>
+                                Kanpur, Uttar Pradesh, India
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+
+            </td>
+        </tr>
+    </table>
+
+</body>
+`,
+        });
+        res.status(200).json({
+            success: true,
+            message: " verification send to email"
+        })
+
+    } catch (error) {
+        console.error("Verify email error:", error);
+        return res.status(500).json({
             success: false,
-            message: "Something went wrong"
+            message: "Failed to send verification email"
         });
     }
-    const currentUser = await User.findOne({ gmail: userGmail.toLowerCase() })
-    if (!currentUser) {
-        return res.status(401).json({
-            success: false,
-            message: "Something went wrong"
-        });
-    }
-    res.json({ "data ": currentUser.username })
-})
+});
 
 
 module.exports = authRouter;
