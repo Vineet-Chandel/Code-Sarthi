@@ -3,6 +3,7 @@ const CodeSarthi = require("./configs/Database");
 const app = express();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+
 require("dotenv").config();
 
 app.use(express.json());
@@ -18,6 +19,7 @@ const authRouter = require("./routes/authentication");
 const profileRouter = require("./routes/profRouter");
 const requestRouter = require("./routes/request");
 const userPreference = require("./routes/userPreferennce");
+const redis = require("./configs/redis")
 
 app.use("/", authRouter);
 app.use("/", profileRouter);
@@ -31,6 +33,8 @@ const PORT = process.env.PORT || 8000;
         await CodeSarthi();
         console.log("✅ Database connected successfully");
         app.listen(PORT, () => { console.log(`🚀 Server running at http://localhost:${PORT}`); });
+
+        await redis.connect(); // 🔥 VERY IMPORTANT
     } catch (error) {
         console.error("❌ Database connection failed:", error.message); process.exit(1);
     }

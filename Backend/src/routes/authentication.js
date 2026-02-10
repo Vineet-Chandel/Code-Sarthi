@@ -6,19 +6,9 @@ const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const { userAuth } = require("../middlewares/userAuth");
 const sendMail = require("../configs/sendMail");
+const redis = require("../configs/redis");
+const crypto = require("crypto")
 
-let otp;
-function generateOTP(length = 6) {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    otp = "";
-
-    for (let i = 0; i < length; i++) {
-        otp += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-
-    return otp;
-}
-generateOTP();
 
 //signUp
 authRouter.post("/auth/signup", async (req, res) => {
@@ -166,8 +156,9 @@ authRouter.post("/auth/signout", async (req, res) => {
 // email verification
 authRouter.get("/auth/verify-email/get-otp", userAuth, async (req, res) => {
     try {
-        const { gmail: userGmail } = req.user;
 
+        /* ----------------  USER MAIL  ---------------- */
+        const { gmail: userGmail } = req.user;
         if (!userGmail) {
             return res.status(400).json({
                 success: false,
@@ -175,6 +166,36 @@ authRouter.get("/auth/verify-email/get-otp", userAuth, async (req, res) => {
             });
         }
 
+        /* ---------------- OTP GENERATION ---------------- */
+        const otp = crypto.randomInt(100000, 999999).toString();
+        const otpHash = await bcrypt.hash(otp, 10);
+
+        /* ---------------- RATE LIMITING ---------------- */
+        const rateKey = `otp:rate:${userGmail}`;
+        const attempts = await redis.incr(rateKey);
+        if (attempts === 1) {
+            await redis.expire(rateKey, 120);
+        }
+        if (attempts > 3) {
+            return res.status(429).json({
+                success: false,
+                message: "Too many OTP requests. Try again later.",
+            });
+        }
+
+
+
+        /* ---------------- STORE OTP ---------------- */
+        const otpKey = `otp:hash:${userGmail}`;
+        await redis.set(otpKey, otpHash, {
+            EX: 120 // 2 minutes
+        });
+
+        /* ---------------- MORE RESTRICTIONS ---------------- */
+
+        console.log(attempts);
+
+        /* ---------------- SEND EMAIL ---------------- */
         await sendMail({
             gmail: userGmail,
             subject: "Your CodeSarthi verification code",
@@ -333,6 +354,8 @@ authRouter.get("/auth/verify-email/get-otp", userAuth, async (req, res) => {
         });
     }
 });
+
+
 
 
 module.exports = authRouter;
