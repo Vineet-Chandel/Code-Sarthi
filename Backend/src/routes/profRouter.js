@@ -96,38 +96,7 @@ profileRouter.delete("/profile/delete", userAuth, async (req, res) => {
     }
 });
 
-profileRouter.post("/changePassword", userAuth, async (req, res) => {
-    try {
-        const { OldPassword, NewPassword } = req.body;
 
-        if (!OldPassword || !NewPassword) {
-            throw new Error("Old and new password are required");
-        }
-
-        const user = req.user;
-
-        const isOldPasswordCorrect = await user.validatePassword(OldPassword);
-        if (!isOldPasswordCorrect) {
-            throw new Error("Old password is incorrect");
-        }
-        if (!validator.isStrongPassword(NewPassword)) {
-            throw new Error("New password is too weak")
-        }
-        const passwordHash = await bcrypt.hash(NewPassword, 10);
-        user.password = passwordHash;
-        await user.save();
-
-        res.status(200).json({
-            success: true,
-            message: "Password changed successfully"
-        });
-    } catch (err) {
-        res.status(400).json({
-            success: false,
-            message: err.message
-        });
-    }
-});
 profileRouter.post("/userProfile/:userame", userAuth, async (req, res) => {
     try {
         const { OldPassword, NewPassword } = req.body;

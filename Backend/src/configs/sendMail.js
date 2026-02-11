@@ -22,7 +22,7 @@ transporter.verify((error, success) => {
 
 module.exports = async ({ gmail, subject, html }) => {
     await transporter.sendMail({
-        from: "CodeSarthi <codesarthi.axonic@gmail.com>",
+        from: "CodeSarthi Manager <codesarthi.axonic@gmail.com>",
         to: gmail,
         subject,
         html

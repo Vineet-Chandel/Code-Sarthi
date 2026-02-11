@@ -1,4 +1,3 @@
-
 const express = require("express");
 const authRouter = express.Router();
 const { validateSignUpData } = require("../utils/validation");
@@ -192,7 +191,7 @@ authRouter.get("/auth/verify-email/get-otp", userAuth, async (req, res) => {
         /* ---------------- SEND EMAIL ---------------- */
         await sendMail({
             gmail: userGmail,
-            subject: "Your CodeSarthi verification code",
+            subject: "Your Verification Code",
             html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
 
     <!-- Preheader -->
@@ -337,7 +336,7 @@ authRouter.get("/auth/verify-email/get-otp", userAuth, async (req, res) => {
         });
         res.status(200).json({
             success: true,
-            message: " verification send to email"
+            message: "Verification send to email"
         })
 
     } catch (error) {
@@ -382,7 +381,7 @@ authRouter.post("/auth/verify-email/match-otp", userAuth, async (req, res) => {
             if (isPasswordValid) {
                 res.status(200).json({
                     success: true,
-                    message: " email verified"
+                    message: "Email verified"
                 })
                 await redis.del(otpKey);
             } else {
