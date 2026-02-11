@@ -154,9 +154,9 @@ authRouter.post("/auth/signout", async (req, res) => {
     res.send("Logout Successful!!");
 });
 // email verification
+//get otp
 authRouter.get("/auth/verify-email/get-otp", userAuth, async (req, res) => {
     try {
-
         /* ----------------  USER MAIL  ---------------- */
         const { gmail: userGmail } = req.user;
         if (!userGmail) {
@@ -165,10 +165,16 @@ authRouter.get("/auth/verify-email/get-otp", userAuth, async (req, res) => {
                 message: "Something went wrong"
             });
         }
-
         /* ---------------- OTP GENERATION ---------------- */
         const otp = crypto.randomInt(100000, 999999).toString();
         const otpHash = await bcrypt.hash(otp, 10);
+
+
+        /* ---------------- STORE OTP ---------------- */
+        const otpKey = `otp:hash:${userGmail}`;
+        await redis.set(otpKey, otpHash, {
+            EX: 120 // 2 minutes
+        });
 
         /* ---------------- RATE LIMITING ---------------- */
         const rateKey = `otp:rate:${userGmail}`;
@@ -182,18 +188,6 @@ authRouter.get("/auth/verify-email/get-otp", userAuth, async (req, res) => {
                 message: "Too many OTP requests. Try again later.",
             });
         }
-
-
-
-        /* ---------------- STORE OTP ---------------- */
-        const otpKey = `otp:hash:${userGmail}`;
-        await redis.set(otpKey, otpHash, {
-            EX: 120 // 2 minutes
-        });
-
-        /* ---------------- MORE RESTRICTIONS ---------------- */
-
-        console.log(attempts);
 
         /* ---------------- SEND EMAIL ---------------- */
         await sendMail({
@@ -355,7 +349,65 @@ authRouter.get("/auth/verify-email/get-otp", userAuth, async (req, res) => {
     }
 });
 
+//email verification 
+//match otp
+authRouter.post("/auth/verify-email/match-otp", userAuth, async (req, res) => {
+    try {
 
+        const { toVerifyOtpotp } = req.body;
+        /* ----------------  USER MAIL  ---------------- */
+        const { gmail: userGmail } = req.user;
+        if (!userGmail) {
+            return res.status(400).json({
+                success: false,
+                message: "Something went wrong"
+            });
+        }
+
+        const otpKey = `otp:hash:${userGmail}`;
+        const exists = await redis.exists(otpKey);
+        if (exists) {
+            const storedOtpHash = await redis.get(otpKey, "otp");
+
+            if (!storedOtpHash) {
+                return res.status(400).json({
+                    success: false,
+                    message: "OTP expired"
+                });
+            }
+            const isPasswordValid = await bcrypt.compare(
+                toVerifyOtpotp,
+                storedOtpHash,
+            );
+            if (isPasswordValid) {
+                res.status(200).json({
+                    success: true,
+                    message: " email verified"
+                })
+                await redis.del(otpKey);
+            } else {
+                return res.status(400).json({
+                    success: false,
+                    message: "Please Enter the valid otp"
+                });
+
+            }
+        }
+        else {
+            return res.status(400).json({
+                success: false,
+                message: "Please resend the OTP !"
+            });
+        }
+
+    } catch (error) {
+        console.error("Verify email error:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to verify email"
+        });
+    }
+});
 
 
 module.exports = authRouter;
