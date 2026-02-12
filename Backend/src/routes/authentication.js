@@ -152,9 +152,9 @@ authRouter.post("/auth/signout", async (req, res) => {
     });
     res.send("Logout Successful!!");
 });
-// email verification
+//email verification
 //get otp
-authRouter.get("/auth/verify-email/get-otp", userAuth, async (req, res) => {
+authRouter.get("/auth/verify-email", userAuth, async (req, res) => {
     try {
         /* ----------------  USER MAIL  ---------------- */
         const { gmail: userGmail } = req.user;
@@ -347,10 +347,9 @@ authRouter.get("/auth/verify-email/get-otp", userAuth, async (req, res) => {
         });
     }
 });
-
 //email verification 
 //match otp
-authRouter.post("/auth/verify-email/match-otp", userAuth, async (req, res) => {
+authRouter.post("/auth/verify-email", userAuth, async (req, res) => {
     try {
         const targetUser = req.user;
         const { toVerifyotp } = req.body;
