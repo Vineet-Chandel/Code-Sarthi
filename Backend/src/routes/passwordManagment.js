@@ -1,33 +1,38 @@
 const express = require("express");
 const passRoute = express.Router();
+const { userAuth } = require("../middlewares/userAuth");
+const User = require("../models/user");
+const bcrypt = require("bcrypt");
+const validator = require("validator");
 
-passRoute.post("/changePassword", async (req, res) => {
+passRoute.post("/changePassword", userAuth, async (req, res) => {
     try {
-        const { userGmail, OldPassword, NewPassword } = req.body;
-
-
-        if (!OldPassword) {
+        const { oldPassword, newPassword } = req.body;
+        const user = req.user;
+        if (!oldPassword) {
             throw new Error("If you forgot the password click on forgot password");
         }
-        if (!NewPassword) {
+        if (!newPassword) {
             throw new Error("Please enter the new password");
         }
-        if (!OldPassword || !NewPassword || !userGmail) {
+        if (!oldPassword || !newPassword) {
             throw new Error("Enter all the entries properly");
         }
-        const user = await
-
-        const isOldPasswordCorrect = await user.validatePassword(OldPassword);
+        if (oldPassword === newPassword) {
+            throw new Error("Password is as same as the old password");
+        }
+        const isOldPasswordCorrect = await user.validatePassword(oldPassword);
         if (!isOldPasswordCorrect) {
             throw new Error("Old password is incorrect");
         }
-        if (!validator.isStrongPassword(NewPassword)) {
-            throw new Error("New password is too weak")
+
+        if (!validator.isStrongPassword(newPassword)) {
+            throw new Error("New Password! iss too weak");
         }
-        const passwordHash = await bcrypt.hash(NewPassword, 10);
+
+        const passwordHash = await bcrypt.hash(newPassword, 10);
         user.password = passwordHash;
         await user.save();
-
         res.status(200).json({
             success: true,
             message: "Password changed successfully"
