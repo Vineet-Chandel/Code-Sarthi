@@ -352,10 +352,10 @@ authRouter.get("/auth/verify-email/get-otp", userAuth, async (req, res) => {
 //match otp
 authRouter.post("/auth/verify-email/match-otp", userAuth, async (req, res) => {
     try {
-
-        const { toVerifyOtpotp } = req.body;
+        const targetUser = req.user;
+        const { toVerifyotp } = req.body;
         /* ----------------  USER MAIL  ---------------- */
-        const { gmail: userGmail } = req.user;
+        const userGmail = targetUser.gmail;
         if (!userGmail) {
             return res.status(400).json({
                 success: false,
@@ -374,16 +374,22 @@ authRouter.post("/auth/verify-email/match-otp", userAuth, async (req, res) => {
                     message: "OTP expired"
                 });
             }
-            const isPasswordValid = await bcrypt.compare(
-                toVerifyOtpotp,
+            const isOtpValid = await bcrypt.compare(
+                toVerifyotp,
                 storedOtpHash,
             );
-            if (isPasswordValid) {
+            if (isOtpValid) {
+
+                if (targetUser.isVerified === false) {
+                    targetUser.isVerified = true;
+                    await targetUser.save();
+                }
+                await redis.del(otpKey);
                 res.status(200).json({
                     success: true,
                     message: "Email verified"
                 })
-                await redis.del(otpKey);
+
             } else {
                 return res.status(400).json({
                     success: false,

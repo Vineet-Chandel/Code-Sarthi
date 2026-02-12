@@ -19,12 +19,14 @@ const authRouter = require("./routes/authentication");
 const profileRouter = require("./routes/profRouter");
 const requestRouter = require("./routes/request");
 const userPreference = require("./routes/userPreferennce");
+const passwordManagment = require("./routes/passwordManagment");
 const redis = require("./configs/redis")
 
 app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);
 app.use("/", userPreference);
+app.use("/", passwordManagment);
 
 
 const PORT = process.env.PORT || 8000;

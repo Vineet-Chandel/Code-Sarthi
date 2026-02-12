@@ -5,34 +5,47 @@ const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const validator = require("validator");
 
+
+//CHANGING PASSWORD API WHEN USER REMEMBERED THE PASS + LOGINED
 passRoute.post("/changePassword", userAuth, async (req, res) => {
     try {
+        // DATA 
         const { oldPassword, newPassword } = req.body;
-        const user = req.user;
-        if (!oldPassword) {
-            throw new Error("If you forgot the password click on forgot password");
-        }
-        if (!newPassword) {
-            throw new Error("Please enter the new password");
-        }
+        const { gmail } = req.user;
+
+        //VALIDATION 
         if (!oldPassword || !newPassword) {
             throw new Error("Enter all the entries properly");
         }
         if (oldPassword === newPassword) {
             throw new Error("Password is as same as the old password");
         }
-        const isOldPasswordCorrect = await user.validatePassword(oldPassword);
+
+
+        //DIGGING OUT THE PRIVATE INFORMATION
+        const targetUser = await User.findOne({ gmail: gmail.toLowerCase() }).select("+password");
+        const { isVerified } = targetUser;
+
+        if (!targetUser) {
+            throw new Error("Something went wrong please re-login");
+        }
+        if (!isVerified) {
+            throw new Error("Please verify your email first")
+        }
+
+        // OLD IS CORRECT OR NOT
+        const isOldPasswordCorrect = await targetUser.validatePassword(oldPassword);
         if (!isOldPasswordCorrect) {
             throw new Error("Old password is incorrect");
         }
-
+        //NEW IS MEETING OUR STANDARDS OR NOT 
         if (!validator.isStrongPassword(newPassword)) {
             throw new Error("New Password! iss too weak");
         }
 
         const passwordHash = await bcrypt.hash(newPassword, 10);
-        user.password = passwordHash;
-        await user.save();
+        targetUser.password = passwordHash;
+        await targetUser.save();
         res.status(200).json({
             success: true,
             message: "Password changed successfully"
@@ -44,3 +57,6 @@ passRoute.post("/changePassword", userAuth, async (req, res) => {
         });
     }
 });
+
+
+module.exports = passRoute;
