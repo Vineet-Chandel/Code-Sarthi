@@ -157,7 +157,11 @@ authRouter.post("/auth/signout", async (req, res) => {
 authRouter.get("/auth/verify-email", userAuth, async (req, res) => {
     try {
         /* ----------------  USER MAIL  ---------------- */
-        const { gmail: userGmail } = req.user;
+        const { gmail: userGmail, isVerified } = req.user;
+
+        if (isVerified) {
+            throw new Error("You are already verified !")
+        }
         if (!userGmail) {
             return res.status(400).json({
                 success: false,
@@ -172,14 +176,14 @@ authRouter.get("/auth/verify-email", userAuth, async (req, res) => {
         /* ---------------- STORE OTP ---------------- */
         const otpKey = `otp:hash:${userGmail}`;
         await redis.set(otpKey, otpHash, {
-            EX: 120 // 2 minutes
+            EX: 300 // 5 minutes
         });
 
         /* ---------------- RATE LIMITING ---------------- */
         const rateKey = `otp:rate:${userGmail}`;
         const attempts = await redis.incr(rateKey);
         if (attempts === 1) {
-            await redis.expire(rateKey, 120);
+            await redis.expire(rateKey, 300);
         }
         if (attempts > 3) {
             return res.status(429).json({
