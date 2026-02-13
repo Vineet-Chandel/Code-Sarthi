@@ -59,6 +59,9 @@ passRoute.patch("/auth/reset-password", userAuth, async (req, res) => {
         });
     }
 });
+
+
+
 //through gmail or username
 passRoute.post("/auth/forgot-password", async (req, res) => {
     try {
@@ -198,7 +201,7 @@ passRoute.post("/auth/forgot-password", async (req, res) => {
                             </table>
 
                             <p style="margin:0 0 24px 0; font-size:14px; color:#e53e3e; font-weight:600;">
-                                This code expires in <strong>2 minutes</strong>
+                                This code expires in <strong>5 minutes</strong>
                             </p>
 
                             <hr style="border:none; height:1px; background:#e2e8f0; margin:0 0 24px 0;">
@@ -292,6 +295,13 @@ passRoute.post("/auth/forgot-password/:token", async (req, res) => {
         await redis.del(sessionKey);
         await redis.del(otpKey);
 
+
+        //CREATING A SESSION
+        const token1 = crypto.randomBytes(32).toString("hex");
+        const passChangeSession1 = `forgotPassOtp:passChangeSession:${token1}`;
+        await redis.set(passChangeSession1, userID, {
+            EX: 300
+        });
         res.status(200).json({
             success: true,
             message: "OTP verified successfully"
@@ -303,60 +313,21 @@ passRoute.post("/auth/forgot-password/:token", async (req, res) => {
         });
     }
 });
-passRoute.patch("/auth/forgot-password", async (req, res) => {
+
+
+
+passRoute.patch("/auth/forgot-password/:token1", async (req, res) => {
     try {
-        // DATA 
-        const { newPassword, enteredPassOtp } = req.body;
-        const sessionKey = `forgotPassOtp:session`
-        const session = await redis.get(sessionKey);
-        if (!session) {
-            throw new Error("Something went wrong");
-        }
-        const matchPassOtp = `forgotPassOtp:hash:`;
-        const isPassOtpValid = await bcrypt.compare(
-            enteredPassOtp,
-            matchPassOtp,
-        );
+        const { token1 } = req.params;
 
-        if (!isPassOtpValid) {
-            throw new Error("OTP is not valid")
-        }
-        await redis.del(matchPassOtp);
-        //VALIDATION 
-        if (!newPassword) {
-            throw new Error("Enter the New Password");
-        }
-        if (!validator.isStrongPassword(newPassword)) {
-            throw new Error("New Password! iss too weak");
+        const { newPassword } = req.body;
+
+        const sessionKey = `forgotPassOtp:session:${token}`;
+        const userID = await redis.get(sessionKey);
+        if (!userID) {
+            throw new Error("Session Expired");
         }
 
-        const userId = `forgotPassOtp:hash`;
-
-        //DIGGING OUT THE PRIVATE INFORMATION
-        const targetUser = await User.findById(userId).select("+password");
-        if (!targetUser) {
-            throw new Error("Something went wrong please re-login");
-        }
-
-        const { isVerified } = targetUser;
-        if (!isVerified) {
-            targetUser.isVerified = true;
-        }
-
-
-
-        //NEW IS MEETING OUR STANDARDS OR NOT 
-        if (!validator.isStrongPassword(newPassword)) {
-            throw new Error("New Password! iss too weak");
-        }
-
-        const passwordHash = await bcrypt.hash(newPassword, 10);
-        targetUser.password = passwordHash;
-        await targetUser.save();
-        res.status(200).json({
-            success: true,
-            message: "Password changed successfully"
-        });
     } catch (err) {
         res.status(400).json({
             success: false,
