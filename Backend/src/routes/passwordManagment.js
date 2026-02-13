@@ -304,7 +304,8 @@ passRoute.post("/auth/forgot-password/:token", async (req, res) => {
         });
         res.status(200).json({
             success: true,
-            message: "OTP verified successfully"
+            message: "OTP verified successfully",
+            resetToken: token1
         });
     } catch (err) {
         res.status(400).json({
@@ -313,20 +314,157 @@ passRoute.post("/auth/forgot-password/:token", async (req, res) => {
         });
     }
 });
-
-
-
 passRoute.patch("/auth/forgot-password/:token1", async (req, res) => {
     try {
         const { token1 } = req.params;
 
         const { newPassword } = req.body;
-
-        const sessionKey = `forgotPassOtp:session:${token}`;
-        const userID = await redis.get(sessionKey);
+        //NEW IS MEETING OUR STANDARDS OR NOT 
+        if (!newPassword) {
+            throw new Error("New Password required");
+        }
+        if (!validator.isStrongPassword(newPassword)) {
+            throw new Error("New Password! iss too weak");
+        }
+        const passChangeSessionKey = `forgotPassOtp:passChangeSession:${token1}`;
+        const userID = await redis.get(passChangeSessionKey);
         if (!userID) {
             throw new Error("Session Expired");
         }
+        const user = await User.findById(userID).select("+password");
+        if (!user) {
+            throw new Error("Invalid Credantials");
+        }
+        const isNewPassIsSame = await user.validatePassword(newPassword);
+
+        if (isNewPassIsSame) {
+            throw new Error("Entered password is same as the Old password")
+        }
+
+        const passwordHash = await bcrypt.hash(newPassword, 10);
+        user.password = passwordHash;
+        await user.save();
+        await redis.del(passChangeSessionKey);
+
+        await sendMail({
+            gmail: user.gmail,
+            subject: "Your Password Changed Sucessfully",
+            html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
+
+    <!-- Preheader -->
+    <div
+        style="display:none; font-size:1px; color:#ffffff; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden;">
+        Verify your email for CodeSarthi. Your verification code is {{OTP}}.
+    </div>
+
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:30px 20px;">
+        <tr>
+            <td align="center">
+
+                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:500px;">
+
+                    <!-- LOGO -->
+                    <tr>
+                        <td align="center" style="padding-bottom:30px;">
+                            <table cellpadding="0" cellspacing="0" border="0"
+                                style="background:#000000; border-radius:20px;">
+                                <tr>
+                                    <td style="padding:12px 24px;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td>
+                                                    <img src="https://res.cloudinary.com/dj0ivep44/image/upload/v1770692070/WhatsApp_Image_2026-02-08_at_09.56.39_jrys9v.jpg"
+                                                        alt="CodeSarthi Logo" width="60" height="60"
+                                                        style="border-radius:20px; display:block;">
+                                                </td>
+                                                <td
+                                                    style="padding-left:10px; font-size:24px; font-weight:700; color:#ffffff;">
+                                                    CodeSarthi
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- CARD -->
+                    <tr>
+                        <td style="
+              background:#ffffff;
+              background:linear-gradient(145deg,#ffffff 0%,#f8f9ff 100%);
+              border-radius:16px;
+              border:1px solid #e0e4ff;
+              padding:40px 32px;
+              text-align:center;
+              box-shadow:0 8px 30px rgba(102,126,234,0.1);
+            ">
+
+                            <h1 style="margin:0 0 16px 0; font-size:28px; color:#2d3748;">
+                                Password Changed Sucessfully
+                            </h1>
+
+                            <p style="margin:0 0 8px 0; font-size:16px; color:#4a5568;">
+                                Hello there! 👋
+                            </p>
+
+                            <p style="margin:0 0 24px 0; font-size:15px; color:#718096; line-height:1.6;">
+                                 This mail is just to inform you that your password has been reset just few seconds back
+                            </p>
+
+                            <hr style="border:none; height:1px; background:#e2e8f0; margin:0 0 24px 0;">
+
+                            <!-- SECURITY -->
+                            <table align="center" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:8px;">
+                                <tr>
+
+                                    <td style="padding-left:8px; font-size:13px; color:#a0aec0;">
+                                        🔒 <strong>Security Tip:</strong>Ingnore if you changes the password
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p style="margin:0; font-size:13px; color:#a0aec0; line-height:1.5;">
+                                If you didn’t change the password please change the password again by 
+                                <a href="#" style="color:#667eea; text-decoration:none; font-weight:600;">
+                                    Forgot Password
+                                </a>.
+                            </p>
+
+                        </td>
+                    </tr>
+
+                    <!-- FOOTER -->
+                    <tr>
+                        <td align="center" style="padding-top:32px;">
+                            <p style="margin:0 0 16px 0; font-size:14px; color:#718096;">
+                                Need help?
+                                <a href="#" style="color:#667eea; text-decoration:none;">
+                                    Contact our support team
+                                </a>
+                            </p>
+
+                            <p style="margin:0; font-size:12px; color:#a0aec0; line-height:1.5;">
+                                © 2024 CodeSarthi. All rights reserved.<br>
+                                Kanpur, Uttar Pradesh, India
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+
+            </td>
+        </tr>
+    </table>
+
+</body>
+`,
+        });
+        res.status(200).json({
+            success: true,
+            message: "Password changed successfully"
+        });
 
     } catch (err) {
         res.status(400).json({
