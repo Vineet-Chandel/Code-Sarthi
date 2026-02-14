@@ -110,14 +110,10 @@ passRoute.post("/auth/forgot-password", async (req, res) => {
         /* ---------------- SEND EMAIL ---------------- */
         await sendMail({
             gmail: user.gmail,
-            subject: "Your Password Verification Code",
+            subject: "CodeSarthi Verification Code",
             html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
 
-    <!-- Preheader -->
-    <div
-        style="display:none; font-size:1px; color:#ffffff; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden;">
-        Verify your email for CodeSarthi. Your verification code is {{OTP}}.
-    </div>
+
 
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:30px 20px;">
         <tr>
@@ -168,11 +164,11 @@ passRoute.post("/auth/forgot-password", async (req, res) => {
                             </h1>
 
                             <p style="margin:0 0 8px 0; font-size:16px; color:#4a5568;">
-                                Hello there! 👋
+                                Hello ${user.firstName}! 👋
                             </p>
 
                             <p style="margin:0 0 24px 0; font-size:15px; color:#718096; line-height:1.6;">
-                                 Use the verification code below to reset your CodeSarthi Password
+                                 We received a request to acess you CodeSarthi Account ${user.gmail} through your email address. Your CodeSarthi verification code is :
                             </p>
 
                             <!-- OTP BOX -->
@@ -211,16 +207,13 @@ passRoute.post("/auth/forgot-password", async (req, res) => {
                                 <tr>
 
                                     <td style="padding-left:8px; font-size:13px; color:#a0aec0;">
-                                        🔒 <strong>Security Tip:</strong> Never share this code with anyone.
+                                        🔒 <strong>Security Tip:</strong> If you didn't request this code it is possible that someone else is trying to acess the CodeSarthi Account ${user.gmail}.
                                     </td>
                                 </tr>
                             </table>
 
-                            <p style="margin:0; font-size:13px; color:#a0aec0; line-height:1.5;">
-                                If you didn’t request this email, please ignore it or
-                                <a href="#" style="color:#667eea; text-decoration:none; font-weight:600;">
-                                    contact support
-                                </a>.
+                            <p style="margin:0; font-size:13px; color:#000000; line-height:1.5;">
+                               <strong>Do not forward or give this code to anyone</strong>
                             </p>
 
                         </td>
@@ -230,10 +223,8 @@ passRoute.post("/auth/forgot-password", async (req, res) => {
                     <tr>
                         <td align="center" style="padding-top:32px;">
                             <p style="margin:0 0 16px 0; font-size:14px; color:#718096;">
-                                Need help?
-                                <a href="#" style="color:#667eea; text-decoration:none;">
-                                    Contact our support team
-                                </a>
+                              Sincerely yours, <br>
+                              The CodeSarthi Team
                             </p>
 
                             <p style="margin:0; font-size:12px; color:#a0aec0; line-height:1.5;">
@@ -348,14 +339,8 @@ passRoute.patch("/auth/forgot-password/:token1", async (req, res) => {
 
         await sendMail({
             gmail: user.gmail,
-            subject: "Your Password Changed Sucessfully",
+            subject: "Security Alert",
             html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
-
-    <!-- Preheader -->
-    <div
-        style="display:none; font-size:1px; color:#ffffff; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden;">
-        Verify your email for CodeSarthi. Your verification code is {{OTP}}.
-    </div>
 
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:30px 20px;">
         <tr>
@@ -402,15 +387,13 @@ passRoute.patch("/auth/forgot-password/:token1", async (req, res) => {
             ">
 
                             <h1 style="margin:0 0 16px 0; font-size:28px; color:#2d3748;">
-                                Password Changed Sucessfully
+                                Your password was changed
                             </h1>
 
-                            <p style="margin:0 0 8px 0; font-size:16px; color:#4a5568;">
-                                Hello there! 👋
-                            </p>
+                            
 
                             <p style="margin:0 0 24px 0; font-size:15px; color:#718096; line-height:1.6;">
-                                 This mail is just to inform you that your password has been reset just few seconds back
+                                 The password for the CodeSarthi Account ${user.gmail} was changed.
                             </p>
 
                             <hr style="border:none; height:1px; background:#e2e8f0; margin:0 0 24px 0;">
@@ -426,7 +409,7 @@ passRoute.patch("/auth/forgot-password/:token1", async (req, res) => {
                             </table>
 
                             <p style="margin:0; font-size:13px; color:#a0aec0; line-height:1.5;">
-                                If you didn’t change the password please change the password again by 
+                                If you didn’t change the password you should change the password again by 
                                 <a href="#" style="color:#667eea; text-decoration:none; font-weight:600;">
                                     Forgot Password
                                 </a>.
@@ -439,10 +422,8 @@ passRoute.patch("/auth/forgot-password/:token1", async (req, res) => {
                     <tr>
                         <td align="center" style="padding-top:32px;">
                             <p style="margin:0 0 16px 0; font-size:14px; color:#718096;">
-                                Need help?
-                                <a href="#" style="color:#667eea; text-decoration:none;">
-                                    Contact our support team
-                                </a>
+                               Sincerely yours,<br>
+                               The CodeSarthi Team
                             </p>
 
                             <p style="margin:0; font-size:12px; color:#a0aec0; line-height:1.5;">
@@ -474,6 +455,6 @@ passRoute.patch("/auth/forgot-password/:token1", async (req, res) => {
     }
 });
 
-//throudh usernam
+
 
 module.exports = passRoute;
