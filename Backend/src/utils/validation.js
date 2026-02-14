@@ -14,11 +14,9 @@ const validateSignUpData = (data) => {
         throw new Error("Age is required");
     } else if (age <= 10) {
         throw new Error("Age must be greater than 10");
-    }
-    else if (college === undefined || college === null || college === "") {
+    } else if (college === undefined || college === null || college === "") {
         throw new Error("college or company name is required");
-    }
-    else if (profession === undefined || profession === null || profession === "") {
+    } else if (profession === undefined || profession === null || profession === "") {
         throw new Error("profession name is required");
     } else if (termsAccepted == 0 || termsAccepted == false) {
         throw new Error("You must accept the terms and conditions")
@@ -28,12 +26,12 @@ const validateSignUpData = (data) => {
 };
 
 const validateEditProfileData = (req) => {
+
     const allowedEditFields = [
-        "FirstName",
-        "LastName",
-        "MiddleName",
+        "firstName",
+        "lastName",
+        "middleName",
         "photoUrl",
-        "username",
         "gender",
         "age",
         "about",
@@ -41,18 +39,33 @@ const validateEditProfileData = (req) => {
         "profession",
         "college"
     ];
-    const { age, username, college } = req.body;
-    const isEditAllowed = Object.keys(req.body).every((field) =>
+
+    const isEditAllowed = Object.keys(req.body).every(field =>
         allowedEditFields.includes(field)
     );
 
-    if (!validator.matches(username, /^[a-z0-9._]{3,20}$/)) {
-        throw new Error("Please enter a username! which has lowercase letters , underscores and numbers");
-    } if (age <= 10) {
+    if (!isEditAllowed) {
+        throw new Error("Invalid edit fields");
+    }
+
+    const { age, gender, skills } = req.body;
+
+    // ✅ validate only if provided
+    if (age !== undefined && age <= 10) {
         throw new Error("Age must be greater than 10");
     }
-    return isEditAllowed;
+
+    if (gender && !["male", "female", "other"].includes(gender)) {
+        throw new Error("Please specify your gender properly");
+    }
+
+    if (skills && skills.length > 15) {
+        throw new Error("Skills can't be more than 15");
+    }
+
+    return true;
 };
+
 
 module.exports = {
     validateSignUpData,
