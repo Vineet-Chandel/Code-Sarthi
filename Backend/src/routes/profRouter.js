@@ -267,7 +267,8 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
         if (!gmailID) {
             throw new Error("Please re-login");
         }
-
+        const oldID = gmailID;
+        const newID = newGmail;
 
         const changeGmailOtpKey = `updateGmailOtp:hash:${gmailID}`;
         const exists = await redis.exists(changeGmailOtpKey);
@@ -285,34 +286,10 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
                 storedOtpHash,
             );
             if (isOtpValid) {
-
-                if (newGmail === gmailID) {
-                    throw new Error("You ")
-                }
-                if (user.isVerified === false) {
-                    user.isVerified = true;
-                    user.gmail = newGmail
-                    await user.save();
-                }
-            } else {
-                return res.status(400).json({
-                    success: false,
-                    message: "Please Enter the valid otp"
-                });
-
-            }
-        }
-        else {
-            return res.status(400).json({
-                success: false,
-                message: "Please resend the OTP !"
-            });
-        }
-        /* ----------------  SENDING GMAIL  ---------------- */
-        await sendMail({
-            gmail: user.gmail,
-            subject: "Security Alert",
-            html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
+                await sendMail({
+                    gmail: user.gmail,
+                    subject: "Security Alert",
+                    html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
     
         <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:30px 20px;">
             <tr>
@@ -365,7 +342,7 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
                                 
     
                                 <p style="margin:0 0 24px 0; font-size:15px; color:#718096; line-height:1.6;">
-                                     The gmail for the CodeSarthi Account ${gmailID} was changed to ${newGmail}.
+                                     The gmail for the CodeSarthi Account ${oldID} was changed to ${newID}.
                                 </p>
     
                                 <hr style="border:none; height:1px; background:#e2e8f0; margin:0 0 24px 0;">
@@ -413,7 +390,32 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
     
     </body>
     `,
-        });
+                });
+                user.gmail = newGmail
+                if (newGmail === gmailID) {
+                    throw new Error("New email cannot be same as current email ")
+                }
+                if (user.isVerified === false) {
+                    user.isVerified = true;
+                }
+
+                await user.save();
+            } else {
+                return res.status(400).json({
+                    success: false,
+                    message: "Please Enter the valid otp"
+                });
+
+            }
+        }
+        else {
+            return res.status(400).json({
+                success: false,
+                message: "Please resend the OTP !"
+            });
+        }
+        /* ----------------  SENDING GMAIL  ---------------- */
+
         await sendMail({
             gmail: newGmail,
             subject: "CodeSarthi Account was recovered sucessfully",
@@ -469,7 +471,7 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
                             
 
                             <p style="margin:0 0 24px 0; font-size:15px; color:#718096; line-height:1.6;">
-                                 This mail is just to inform you that your gmail has been update just few seconds back
+                                 This mail is just to inform you that your gmail has been update just few seconds back from ${oldID} to ${newID}
                             </p>
 
                             <hr style="border:none; height:1px; background:#e2e8f0; margin:0 0 24px 0;">
