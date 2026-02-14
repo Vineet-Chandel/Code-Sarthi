@@ -43,7 +43,7 @@ profileRouter.get("/profile/me", userAuth, async (req, res) => {
         res.status(400).send("ERROR : " + err.message);
     }
 });
-profileRouter.patch("/profile/me", userAuth, async (req, res) => {
+profileRouter.patch("/profile/me/edit", userAuth, async (req, res) => {
     try {
 
         validateEditProfileData(req);
@@ -83,23 +83,24 @@ profileRouter.post("/profile/update-identity", userAuth, async (req, res) => {
         if (!gmailID) {
             throw new Error("Please re-login");
         }
-        const changeGmailRateKey = `updateGmailOtp:rate:${gmailID}`;
-        const gmailChangeOtpAttempts = await redis.incr(changeGmailRateKey);
-        if (gmailChangeOtpAttempts === 1) {
-            await redis.expire(changeGmailRateKey, 300);
+
+        const changeIdentityRateKey = `updateIdentityOtp:rate:${user._id}`;
+        const identityChangeOtpAttempts = await redis.incr(changeIdentityRateKey);
+        if (identityChangeOtpAttempts === 1) {
+            await redis.expire(changeIdentityRateKey, 300);
         }
-        if (gmailChangeOtpAttempts > 3) {
+        if (identityChangeOtpAttempts > 3) {
             return res.status(429).json({
                 success: false,
                 message: "Too many verification requests. Try again later.",
             });
         }
         /* ---------------- OTP GENERATION ---------------- */
-        const changeGmailOtp = crypto.randomInt(100000, 999999).toString();
-        const changeGmailOtpHash = await bcrypt.hash(changeGmailOtp, 5);
+        const changeIdentityOtp = crypto.randomInt(100000, 999999).toString();
+        const changeIdentityOtpHash = await bcrypt.hash(changeIdentityOtp, 5);
         /* ---------------- STORE OTP ---------------- */
-        const changeGmailOtpKey = `updateGmailOtp:hash:${gmailID}`;
-        await redis.set(changeGmailOtpKey, changeGmailOtpHash, {
+        const changeIdentityOtpKey = `updateIdentityOtp:hash:${user._id}`;
+        await redis.set(changeIdentityOtpKey, changeIdentityOtpHash, {
             EX: 300 // 5 minutes
         });
 
@@ -184,7 +185,7 @@ We received a request to acess you CodeSarthi Account ${user.gmail} through your
                       font-family:'Courier New', monospace;
                       color:#ffffff;
                     ">
-                                           ${changeGmailOtp}
+                                           ${changeIdentityOtp}
                                         </div>
                                     </td>
                                 </tr>
@@ -254,12 +255,14 @@ We received a request to acess you CodeSarthi Account ${user.gmail} through your
 });
 profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
     try {
+        //taking input by the user
+        const { enteredChangeIdentityOtp, newGmail, newUsername } = req.body;
 
-        const { enteredChangeGmailOtp, newGmail } = req.body;
-        const user = req.user;
-        if (!validator.isEmail(newGmail)) {
-            throw new Error("New Email is not valid!");
+        // First validation does the user should enter atleast one of the entery to change either mail or username
+        if (!newGmail && !newUsername) {
+            throw new Error("Nothing to update");
         }
+        const user = req.user;
         if (!user) {
             throw new Error("Please re-login");
         }
@@ -267,29 +270,74 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
         if (!gmailID) {
             throw new Error("Please re-login");
         }
-        const oldID = gmailID;
-        const newID = newGmail;
+        const oldGmail = user.gmail;
 
-        const changeGmailOtpKey = `updateGmailOtp:hash:${gmailID}`;
-        const exists = await redis.exists(changeGmailOtpKey);
+        if (!(newGmail && newUsername)) {
+            if (newGmail) {
+                if (!validator.isEmail(newGmail)) {
+                    throw new Error("New Email is not valid!");
+                }
+                if (newGmail === oldGmail) {
+                    throw new Error("New email cannot be same as current email ")
+                }
+            }
+            if (newUsername) {
+                if (newUsername === user.username) {
+                    throw new Error("New username cannot be same as current username ")
+                }
+                if (!validator.matches(newUsername, /^[a-z0-9._]{3,20}$/)) {
+                    throw new Error("Please enter a username! which has lowercase letters , underscores and numbers");
+                }
+            }
+        }
+
+        if (newGmail && newUsername) {
+            if (!validator.isEmail(newGmail)) {
+                throw new Error("New Email is not valid!");
+            }
+            if (newGmail === oldGmail) {
+                throw new Error("New email cannot be same as current email ")
+            }
+            if (newUsername === user.username) {
+                throw new Error("New username cannot be same as current username ")
+            }
+            if (!validator.matches(newUsername, /^[a-z0-9._]{3,20}$/)) {
+                throw new Error("Please enter a username! which has lowercase letters , underscores and numbers");
+            }
+        }
+
+        // Determine old and new values based on which field is being update
+        const newChange = newUsername ?? newGmail;
+        const oldOnes = newUsername ? user.username : user.gmail;
+
+        //taking the hashed otp stored in the redis DB
+        const changeIdentityOtpKey = `updateIdentityOtp:hash:${user._id}`;
+        //is the hashed otp exists??
+        const exists = await redis.exists(changeIdentityOtpKey);
         if (exists) {
-            const storedOtpHash = await redis.get(changeGmailOtpKey);
 
+            //hashed otp stored in this variable 
+            const storedOtpHash = await redis.get(changeIdentityOtpKey);
             if (!storedOtpHash) {
                 return res.status(400).json({
                     success: false,
                     message: "OTP expired"
                 });
             }
+            //comparing the otp is this is same as the user entered
             const isOtpValid = await bcrypt.compare(
-                enteredChangeGmailOtp,
+                enteredChangeIdentityOtp,
                 storedOtpHash,
             );
             if (isOtpValid) {
-                await sendMail({
-                    gmail: user.gmail,
-                    subject: "Security Alert",
-                    html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
+
+                if (!(newGmail && newUsername)) {
+                    if (newGmail) {
+
+                        await sendMail({
+                            gmail: oldGmail,
+                            subject: "Security Alert",
+                            html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
     
         <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:30px 20px;">
             <tr>
@@ -342,7 +390,7 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
                                 
     
                                 <p style="margin:0 0 24px 0; font-size:15px; color:#718096; line-height:1.6;">
-                                     The gmail for the CodeSarthi Account ${oldID} was changed to ${newID}.
+                                     The gmail for the CodeSarthi Account ${oldOnes} was changed to ${newChange}.
                                 </p>
     
                                 <hr style="border:none; height:1px; background:#e2e8f0; margin:0 0 24px 0;">
@@ -390,36 +438,13 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
     
     </body>
     `,
-                });
-                user.gmail = newGmail
-                if (newGmail === gmailID) {
-                    throw new Error("New email cannot be same as current email ")
-                }
-                if (user.isVerified === false) {
-                    user.isVerified = true;
-                }
-
-                await user.save();
-            } else {
-                return res.status(400).json({
-                    success: false,
-                    message: "Please Enter the valid otp"
-                });
-
-            }
-        }
-        else {
-            return res.status(400).json({
-                success: false,
-                message: "Please resend the OTP !"
-            });
-        }
-        /* ----------------  SENDING GMAIL  ---------------- */
-
-        await sendMail({
-            gmail: newGmail,
-            subject: "CodeSarthi Account was recovered sucessfully",
-            html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
+                        });
+                        user.gmail = newGmail;
+                        await user.save();
+                        await sendMail({
+                            gmail: newGmail,
+                            subject: "CodeSarthi Account was recovered sucessfully",
+                            html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:30px 20px;">
         <tr>
             <td align="center">
@@ -471,7 +496,7 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
                             
 
                             <p style="margin:0 0 24px 0; font-size:15px; color:#718096; line-height:1.6;">
-                                 This mail is just to inform you that your gmail has been update just few seconds back from ${oldID} to ${newID}
+                                 This mail is just to inform you that your gmail has been update just few seconds back from ${oldOnes} to ${newChange}
                             </p>
 
                             <hr style="border:none; height:1px; background:#e2e8f0; margin:0 0 24px 0;">
@@ -523,14 +548,363 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
 
 </body>
 `,
-        });
+                        });
+                    }
+                    if (newUsername) {
 
+                        await sendMail({
+                            gmail: user.gmail,
+                            subject: "Security Alert",
+                            html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
+    
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:30px 20px;">
+            <tr>
+                <td align="center">
+    
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:500px;">
+    
+                        <!-- LOGO -->
+                        <tr>
+                            <td align="center" style="padding-bottom:30px;">
+                                <table cellpadding="0" cellspacing="0" border="0"
+                                    style="background:#000000; border-radius:20px;">
+                                    <tr>
+                                        <td style="padding:12px 24px;">
+                                            <table cellpadding="0" cellspacing="0" border="0">
+                                                <tr>
+                                                    <td>
+                                                        <img src="https://res.cloudinary.com/dj0ivep44/image/upload/v1770692070/WhatsApp_Image_2026-02-08_at_09.56.39_jrys9v.jpg"
+                                                            alt="CodeSarthi Logo" width="60" height="60"
+                                                            style="border-radius:20px; display:block;">
+                                                    </td>
+                                                    <td
+                                                        style="padding-left:10px; font-size:24px; font-weight:700; color:#ffffff;">
+                                                        CodeSarthi
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+    
+                        <!-- CARD -->
+                        <tr>
+                            <td style="
+                  background:#ffffff;
+                  background:linear-gradient(145deg,#ffffff 0%,#f8f9ff 100%);
+                  border-radius:16px;
+                  border:1px solid #e0e4ff;
+                  padding:40px 32px;
+                  text-align:center;
+                  box-shadow:0 8px 30px rgba(102,126,234,0.1);
+                ">
+    
+                                <h1 style="margin:0 0 16px 0; font-size:28px; color:#2d3748;">
+                                    Your Username was changed
+                                </h1>
+    
+                                
+    
+                                <p style="margin:0 0 24px 0; font-size:15px; color:#718096; line-height:1.6;">
+                                     The username for the CodeSarthi Account ${oldOnes} was changed to ${newChange}.
+                                </p>
+    
+                                <hr style="border:none; height:1px; background:#e2e8f0; margin:0 0 24px 0;">
+    
+                                <!-- SECURITY -->
+                                <table align="center" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:8px;">
+                                    <tr>
+    
+                                        <td style="padding-left:8px; font-size:13px; color:#a0aec0;">
+                                            🔒 <strong>Security Tip:</strong>Ingnore if you changed the username
+                                        </td>
+                                    </tr>
+                                </table>
+    
+                                <p style="margin:0; font-size:13px; color:#a0aec0; line-height:1.5;">
+                                    If you didn’t change the username you should change the password again by 
+                                    <a href="#" style="color:#667eea; text-decoration:none; font-weight:600;">
+                                        Forgot Password
+                                    </a>.
+                                </p>
+    
+                            </td>
+                        </tr>
+    
+                        <!-- FOOTER -->
+                        <tr>
+                            <td align="center" style="padding-top:32px;">
+                                <p style="margin:0 0 16px 0; font-size:14px; color:#718096;">
+                                   Sincerely yours,<br>
+                                   The CodeSarthi Team
+                                </p>
+    
+                                <p style="margin:0; font-size:12px; color:#a0aec0; line-height:1.5;">
+                                    © 2024 CodeSarthi. All rights reserved.<br>
+                                    Kanpur, Uttar Pradesh, India
+                                </p>
+                            </td>
+                        </tr>
+    
+                    </table>
+    
+                </td>
+            </tr>
+        </table>
+    
+    </body>
+    `,
+                        });
+                        user.username = newUsername;
+                        await user.save();
+                    }
+                } else if (newGmail && newUsername) {
+                    await sendMail({
+                        gmail: oldGmail,
+                        subject: "Security Alert",
+                        html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
+    
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:30px 20px;">
+            <tr>
+                <td align="center">
+    
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:500px;">
+    
+                        <!-- LOGO -->
+                        <tr>
+                            <td align="center" style="padding-bottom:30px;">
+                                <table cellpadding="0" cellspacing="0" border="0"
+                                    style="background:#000000; border-radius:20px;">
+                                    <tr>
+                                        <td style="padding:12px 24px;">
+                                            <table cellpadding="0" cellspacing="0" border="0">
+                                                <tr>
+                                                    <td>
+                                                        <img src="https://res.cloudinary.com/dj0ivep44/image/upload/v1770692070/WhatsApp_Image_2026-02-08_at_09.56.39_jrys9v.jpg"
+                                                            alt="CodeSarthi Logo" width="60" height="60"
+                                                            style="border-radius:20px; display:block;">
+                                                    </td>
+                                                    <td
+                                                        style="padding-left:10px; font-size:24px; font-weight:700; color:#ffffff;">
+                                                        CodeSarthi
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+    
+                        <!-- CARD -->
+                        <tr>
+                            <td style="
+                  background:#ffffff;
+                  background:linear-gradient(145deg,#ffffff 0%,#f8f9ff 100%);
+                  border-radius:16px;
+                  border:1px solid #e0e4ff;
+                  padding:40px 32px;
+                  text-align:center;
+                  box-shadow:0 8px 30px rgba(102,126,234,0.1);
+                ">
+    
+                                <h1 style="margin:0 0 16px 0; font-size:28px; color:#2d3748;">
+                                    Your Gmail & Username was changed
+                                </h1>
+    
+                                
+    
+                                <p style="margin:0 0 24px 0; font-size:15px; color:#718096; line-height:1.6;">
+                                     The gmail for the CodeSarthi Account ${oldGmail} was changed to ${newGmail} and 
+                                     username ${user.username} changed to ${newUsername}.
+                                </p>
+    
+                                <hr style="border:none; height:1px; background:#e2e8f0; margin:0 0 24px 0;">
+    
+                                <!-- SECURITY -->
+                                <table align="center" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:8px;">
+                                    <tr>
+    
+                                        <td style="padding-left:8px; font-size:13px; color:#a0aec0;">
+                                            🔒 <strong>Security Tip:</strong>Ingnore if you changed the gmail and username
+                                        </td>
+                                    </tr>
+                                </table>
+    
+                                <p style="margin:0; font-size:13px; color:#a0aec0; line-height:1.5;">
+                                    If you didn’t change the gmail and username you should change the password by 
+                                     <a href="#" style="color:#667eea; text-decoration:none; font-weight:600;">
+                                        Reset Password 
+                                    </a> or by 
+                                    <a href="#" style="color:#667eea; text-decoration:none; font-weight:600;">
+                                        Forgot Password
+                                    </a>.
+                                </p>
+    
+                            </td>
+                        </tr>
+    
+                        <!-- FOOTER -->
+                        <tr>
+                            <td align="center" style="padding-top:32px;">
+                                <p style="margin:0 0 16px 0; font-size:14px; color:#718096;">
+                                   Sincerely yours,<br>
+                                   The CodeSarthi Team
+                                </p>
+    
+                                <p style="margin:0; font-size:12px; color:#a0aec0; line-height:1.5;">
+                                    © 2024 CodeSarthi. All rights reserved.<br>
+                                    Kanpur, Uttar Pradesh, India
+                                </p>
+                            </td>
+                        </tr>
+    
+                    </table>
+    
+                </td>
+            </tr>
+        </table>
+    
+    </body>
+    `,
+                    });
+                    await sendMail({
+                        gmail: newGmail,
+                        subject: "CodeSarthi Account was recovered sucessfully",
+                        html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:30px 20px;">
+        <tr>
+            <td align="center">
 
+                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:500px;">
 
-        await redis.del(changeGmailOtpKey);
+                    <!-- LOGO -->
+                    <tr>
+                        <td align="center" style="padding-bottom:30px;">
+                            <table cellpadding="0" cellspacing="0" border="0"
+                                style="background:#000000; border-radius:20px;">
+                                <tr>
+                                    <td style="padding:12px 24px;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td>
+                                                    <img src="https://res.cloudinary.com/dj0ivep44/image/upload/v1770692070/WhatsApp_Image_2026-02-08_at_09.56.39_jrys9v.jpg"
+                                                        alt="CodeSarthi Logo" width="60" height="60"
+                                                        style="border-radius:20px; display:block;">
+                                                </td>
+                                                <td
+                                                    style="padding-left:10px; font-size:24px; font-weight:700; color:#ffffff;">
+                                                    CodeSarthi
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- CARD -->
+                    <tr>
+                        <td style="
+              background:#ffffff;
+              background:linear-gradient(145deg,#ffffff 0%,#f8f9ff 100%);
+              border-radius:16px;
+              border:1px solid #e0e4ff;
+              padding:40px 32px;
+              text-align:center;
+              box-shadow:0 8px 30px rgba(102,126,234,0.1);
+            ">
+
+                            <h1 style="margin:0 0 16px 0; font-size:28px; color:#2d3748;">
+                                Account recovered sucessfully
+                            </h1>
+
+                            
+
+                            <p style="margin:0 0 24px 0; font-size:15px; color:#718096; line-height:1.6;">
+Account of the CodeSarthi ${oldGmail} is been switched to this email !!
+                            </p>
+
+                            <hr style="border:none; height:1px; background:#e2e8f0; margin:0 0 24px 0;">
+
+                            <!-- SECURITY -->
+                            <table align="center" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:8px;">
+                                <tr>
+
+                                    <td style="padding-left:8px; font-size:13px; color:#a0aec0;">
+                                        🔒 <strong>Security Tip:</strong>Ingnore if you changes the gmail
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p style="margin:0; font-size:13px; color:#a0aec0; line-height:1.5;">
+                                If you didn’t change the gmail --------- 
+                                <a href="#" style="color:#667eea; text-decoration:none; font-weight:600;">
+                                    Reset Password
+                                </a> or <a href="#" style="color:#667eea; text-decoration:none; font-weight:600;">
+                                    Forgot Password
+                                </a>.
+                            </p>
+
+                        </td>
+                    </tr>
+
+                    <!-- FOOTER -->
+                    <tr>
+                        <td align="center" style="padding-top:32px;">
+                            <p style="margin:0 0 16px 0; font-size:14px; color:#718096;">
+                                Need help?
+                                <a href="#" style="color:#667eea; text-decoration:none;">
+                                    Contact our support team
+                                </a>
+                            </p>
+
+                            <p style="margin:0; font-size:12px; color:#a0aec0; line-height:1.5;">
+                                © 2024 CodeSarthi. All rights reserved.<br>
+                                Kanpur, Uttar Pradesh, India
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+
+            </td>
+        </tr>
+    </table>
+
+</body>
+`,
+                    });
+                    user.gmail = newGmail;
+                    user.username = newUsername;
+                    await user.save();
+                }
+
+                if (user.isVerified === false) {
+                    user.isVerified = true;
+                }
+
+            } else {
+                return res.status(400).json({
+                    success: false,
+                    message: "Please Enter the valid otp"
+                });
+
+            }
+        }
+        else {
+            return res.status(400).json({
+                success: false,
+                message: "Please resend the OTP !"
+            });
+        }
+        await redis.del(changeIdentityOtpKey);
         res.status(200).json({
             success: true,
-            message: "OTP sent successfully",
+            message: "Identity updated successfully",
         });
 
 
@@ -543,13 +917,10 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
 
 
 
-
 profileRouter.delete("/profile/me/delete", userAuth, async (req, res) => {
     try {
         console.log(req.user._id);
         const deletedUser = await User.findByIdAndDelete(req.user._id);
-
-
         if (!deletedUser) {
             return res.status(404).json({
                 success: false,
