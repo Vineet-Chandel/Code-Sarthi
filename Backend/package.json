@@ -11,10 +11,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cloudinary": "^2.8.0",
+    "cloudinary": "^2.9.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "crypto-js": "^4.2.0",
+    "datauri": "^4.1.0",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",

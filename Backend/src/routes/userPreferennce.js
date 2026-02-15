@@ -84,9 +84,6 @@ userPreference.get("/user/connections", userAuth, async (req, res) => {
         });
     }
 });
-
-
-
 //all blocked connections
 userPreference.get("/user/blocked", userAuth, async (req, res) => {
     try {

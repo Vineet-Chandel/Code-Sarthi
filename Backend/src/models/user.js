@@ -5,6 +5,7 @@ const { Schema } = mongoose; //“We are extracting the Schema property from the
 const validator = require("validator");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const { type } = require("os");
 
 
 const userSchema = new Schema(
@@ -75,12 +76,13 @@ const userSchema = new Schema(
             },
         },
         photoUrl: {
-            type: String,
-            default: "https://geographyandyou.com/images/user-profile.png",
-            validate(value) {
-                if (!validator.isURL(value)) {
-                    throw new Error("Invalid Photo URL: " + value);
-                }
+            url: {
+                type: String,
+                default: "https://geographyandyou.com/images/user-profile.png",
+            },
+            id: {
+                type: String,
+                default: null
             },
         },
         about: {

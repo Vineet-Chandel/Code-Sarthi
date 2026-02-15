@@ -1,6 +1,6 @@
 const express = require("express");
 const profileRouter = express.Router();
-const User = require("../models/user")
+const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const { userAuth } = require("../middlewares/userAuth");
 const { validateEditProfileData } = require("../utils/validation");
@@ -1253,9 +1253,6 @@ Your CodeSarthi Account ${user.gmail} has been sucessfully deleted.
         });
     }
 });
-
-
-
 profileRouter.post("/profile/others", userAuth, async (req, res) => {
     try {
         const loggedInUser = req.user;

@@ -1,28 +1,26 @@
-import multer from "multer";
+const multer = require("multer");
 
+// memory storage (buffer-based upload)
+const storage = multer.memoryStorage();
 
+// MIME filter
+const fileFilter = (req, file, cb) => {
+    const allowed = ["image/jpeg", "image/png", "image/webp"];
 
-//make the name unique
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, "./public/temp");
-    },
-    filename: function (req, file, cb) {
-        const uniqueName =
-            Date.now() + "-" + Math.round(Math.random() * 1e9);
-        const ext = path.extname(file.originalname);
-
-        cb(null, uniqueName + ext);
+    if (allowed.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error("Invalid file type"), false);
     }
-});
+};
 
-
-
-//filter
-export const upload = multer({
+const uploadFile = multer({
     storage,
-
+    fileFilter,
     limits: {
         fileSize: 2 * 1024 * 1024, // 2MB
+        files: 1,
     },
 });
+
+module.exports = uploadFile;

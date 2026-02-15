@@ -20,13 +20,22 @@ const profileRouter = require("./routes/profRouter");
 const requestRouter = require("./routes/request");
 const userPreference = require("./routes/userPreferennce");
 const passwordManagment = require("./routes/passwordManagment");
+const fileUpload = require("./routes/profilePic")
 const redis = require("./configs/redis")
+const cloudinary = require("cloudinary").v2;
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUD_KEY,
+    api_secret: process.env.CLOUD_SECRET
+});
+
 
 app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);
 app.use("/", userPreference);
 app.use("/", passwordManagment);
+app.use("/", fileUpload);
 
 
 const PORT = process.env.PORT || 8000;
