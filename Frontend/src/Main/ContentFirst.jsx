@@ -201,8 +201,8 @@ const ContentFirst = () => {
 
 
     const featuredData2 = [{
-        img: "img.jpg",
-        heading: "kuch bhi",
+        img: "../public/img/dev.webp",
+        heading: "DEVELOPERS TOOLKIT",
         tagLine1: "kuchbhi1",
         tagLine2: "kuchbhi2",
         tagLine3: "kuchbhi3",
@@ -210,8 +210,8 @@ const ContentFirst = () => {
         tagLine5: "kuchbhi5",
         tagLine6: "kuchbhi6"
     }, {
-        img: "img.jpg",
-        heading: "kuch bhi",
+        img: "../public/img/RESUME-GEN.webp",
+        heading: "RESUME GENERATOR",
         tagLine1: "kuchbhi1",
         tagLine2: "kuchbhi2",
         tagLine3: "kuchbhi3",
@@ -219,17 +219,8 @@ const ContentFirst = () => {
         tagLine5: "kuchbhi5",
         tagLine6: "kuchbhi6"
     }, {
-        img: "img.jpg",
-        heading: "kuch bhi",
-        tagLine1: "kuchbhi1",
-        tagLine2: "kuchbhi2",
-        tagLine3: "kuchbhi3",
-        tagLine4: "kuchbhi4",
-        tagLine5: "kuchbhi5",
-        tagLine6: "kuchbhi6"
-    }, {
-        img: "img.jpg",
-        heading: "kuch bhi",
+        img: "../public/img/SCHEDULER.webp",
+        heading: "SMART SCHEDULER",
         tagLine1: "kuchbhi1",
         tagLine2: "kuchbhi2",
         tagLine3: "kuchbhi3",
@@ -478,14 +469,33 @@ const ContentFirst = () => {
                 </div>
             </div>
 
+            <div className=" flex flex-col justify-center items-center w-full gap-6 mt-[150px] mb-[70px]">
 
+                <div className=" HEAD1 text-5xl font-extrabold font-head text-center
+                 max-xl:text-4xl 
+                max-lg:text-3xl 
+                max-md:text-2xl 
+                max-sm:text-xl  ">
+                    A PLATFORM FOR ENDLESS POSSIBILITIES
+                </div>
+
+                <div className="SUBHEAD1 text-2xl font-extralight w-[60%] text-center
+                
+                max-lg:text-1xl 
+                max-md:text-lg
+                max-sm:text-md ">
+                    <b className='font-extrabold'>CodeSarthi</b>  connects you with a global developer community to build and scale.
+                    Designed to boost <b className='font-extrabold'>productivity</b>  while keeping workflows <b className='font-extrabold'>fast</b> and <b className='font-extrabold'>efficient</b>.
+                </div>
+
+            </div>
             <div className='w-full  flex flex-col justify-center items-center p-5 gap-5'>
 
 
-                {featuredData2.map((item) => (
-                    <div className='w-full  flex gap-10'>
+                {featuredData2.map((item, index) => (
+                    <div key={index} className='w-full  flex gap-10'>
                         <div className='w-full  border border-gray-700 rounded-[40px] flex gap-10'>
-                            <img src={featuredData2.img} alt="" className='w-1/3 rounded-[40px]' />
+                            <img src={item.img} alt="" className='w-1/3 rounded-[40px]' />
                             <div className="w-2/3 flex flex-col justify-center items-center text-left gap-4 p-11 
                 max-xl:px-7 
                 max-lg:px-3 
@@ -502,21 +512,21 @@ const ContentFirst = () => {
   xl:text-6xl
   font-extrabold font-head HEAD2
 ">
-                                    {featuredData2.heading}
+                                    {item.heading}
                                 </div>
 
                                 <div className="w-full flex flex-col gap-4 pl-5 pointer1 ">
                                     <div className=" text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
-                                        {featuredData2.tagLine1}
+                                        {item.tagLine1}
                                     </div>
                                     <div className=" text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
-                                        {featuredData2.tagLine2}
+                                        {item.tagLine2}
                                     </div>
                                     <div className=" text-xl text-start transition-all duration-200 hover:text-green-400 hover:scale-105">
-                                        {featuredData2.tagLine3}
+                                        {item.tagLine3}
                                     </div>
                                     <div className=" text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
-                                        {featuredData2.tagLine4}
+                                        {item.tagLine4}
                                     </div>
                                 </div>
                                 <div className='w-full flex items-center justify-start'>

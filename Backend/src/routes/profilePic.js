@@ -40,6 +40,16 @@ profilePic.post(
             const cloud = await cloudinary.uploader.upload(fileBuffer.content, {
                 folder: "CodeSarthi-ProfileCloud",
                 resource_type: "image",
+                transformation: [
+                    {
+                        width: 500,
+                        height: 500,
+                        crop: "thumb",
+                        gravity: "face",
+                        quality: "auto",
+                        fetch_format: "auto"
+                    }
+                ]
             });
 
             // update EXISTING user (not create new one)
