@@ -128,7 +128,10 @@ requestRouter.post("/block/:toUserName",
 
             const toUserData = await User.findOne({ username: toUserName });
             if (!toUserData) {
-                throw new Error("User not found")
+                return res.status(404).json({
+                    success: false,
+                    message: "User not found"
+                });
             }
 
             const toUserId = toUserData._id; //reciever ID 
@@ -201,22 +204,17 @@ requestRouter.post("/block/:toUserName",
         }
     }
 );
-
 requestRouter.post("/request/review/:status/:connectionId", userAuth, async (req, res) => {
     try {
         const loggedInUser = req.user;
         const { status, connectionId } = req.params;
 
-        const allowedStatus = ["accepted", "rejected"];
+        const allowedStatus = ["ACCEPTED", "REJECTED"];
         if (!allowedStatus.includes(status)) {
-            return res.status(400).json({ messaage: "Status not allowed!" });
+            return res.status(400).json({ message: "Status not allowed!" });
         }
 
-        const connectionRequest = await ConnectionRequest.findOne({
-            _id: connectionId,
-            toUserId: loggedInUser._id,
-            status: "interested",
-        });
+        const connectionRequest = await ConnectionRequest.findById(connectionId);
 
         if (!connectionRequest) {
             return res
@@ -224,13 +222,54 @@ requestRouter.post("/request/review/:status/:connectionId", userAuth, async (req
                 .json({ message: "Connection request not found" });
         }
 
-        connectionRequest.status = status;
+        if (!loggedInUser._id.equals(connectionRequest.receiverId)) {
+            return res.status(403).json({
+                message: "Only receiver can review request"
+            });
+        }
 
-        const data = await connectionRequest.save();
+        const connection = await connections.findOne({
+            $or: [
+                {
+                    requesterId: connectionRequest.requesterId,
+                    receiverId: connectionRequest.receiverId
+                },
+                {
+                    requesterId: connectionRequest.receiverId,
+                    receiverId: connectionRequest.requesterId
+                }
+            ]
+        });
 
-        res.json({ message: "Connection request " + status, data });
+
+        if (connection) {
+            return res
+                .status(400)
+                .json({ message: "You both are already connected" });
+        }
+
+        if (status === "ACCEPTED") {
+
+            await connections.create({
+                requesterId: connectionRequest.requesterId,
+                receiverId: connectionRequest.receiverId
+            });
+
+            await ConnectionRequest.deleteOne({ _id: connectionId });
+
+            return res.json({ message: "Connection accepted" });
+        }
+
+        // REJECTED
+        if (status === "REJECTED") {
+            connectionRequest.status = "REJECTED";
+            await connectionRequest.save();
+            return res.json({ message: "Connection rejected" });
+        }
+
+
     } catch (err) {
-        res.status(400).send("ERROR: " + err.message);
+        res.status(500).send("ERROR: " + err.message);
     }
 }
 );
