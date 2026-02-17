@@ -4,83 +4,69 @@ const mongoose = require("mongoose");
 const { userAuth } = require("../middlewares/userAuth");
 const ConnectionRequest = require("../models/connectionRequest");
 const User = require("../models/user");
-
-// Get all the pending connection request for the loggedIn user
-userPreference.get("/user/requests/received", userAuth, async (req, res) => {
-    try {
-        const loggedInUser = req.user;
-
-        const connectionRequests = await ConnectionRequest.find({
-            toUserId: loggedInUser._id,
-            status: "interested",
-        }).populate("fromUserId", "FirstName" + " " + "LastName");
+const blockConnection = require("../models/blockConnection")
+const connections = require("../models/connections");
 
 
-
-        res.json({
-            success: true,
-            message: "Pending connection requests fetched",
-            total: connectionRequests.length,
-            data: connectionRequests,
-        });
-    } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: err.message
-        });
-    }
-});
-//all accepted conections
+// GET all accepted connections
 userPreference.get("/user/connections", userAuth, async (req, res) => {
     try {
         const loggedInUser = req.user;
 
-        const connectionRequests = await ConnectionRequest.find({
-            $or: [
-                { toUserId: loggedInUser._id, status: "accepted" },
-                { fromUserId: loggedInUser._id, status: "accepted" },
-            ],
-        });
+        // fetch connections + auto load users
+        const connectionDocs = await connections
+            .find({
+                $or: [
+                    { requesterId: loggedInUser._id },
+                    { receiverId: loggedInUser._id }
+                ]
+            })
+            .populate(
+                "requesterId receiverId",
+                "firstName lastName username skills about profession college"
+            )
 
-        const connections = await Promise.all(
-            connectionRequests.map(async (row) => {
+
+        // format response
+        const formattedConnections = connectionDocs
+            .map((row) => {
+
+                // determine who is the other person
                 const isFromMe =
-                    row.fromUserId.toString() === loggedInUser._id.toString();
+                    row.requesterId?._id.toString() ===
+                    loggedInUser._id.toString();
 
-                const otherUserId = isFromMe ? row.toUserId : row.fromUserId;
+                const otherUser = isFromMe
+                    ? row.receiverId
+                    : row.requesterId;
 
-                const finalizingUser = await User.findById(otherUserId);
-
-                // safety check
-                if (!finalizingUser) return null;
+                // safety check (user might be deleted)
+                if (!otherUser) return null;
 
                 return {
                     connectionId: row._id,
-                    userId: finalizingUser._id,
-                    FirstName: finalizingUser.FirstName,
-                    LastName: finalizingUser.LastName,
-                    username: finalizingUser.username,
-                    skills: finalizingUser.skills,
-                    about: finalizingUser.about,
-                    profession: finalizingUser.profession,
-                    college: finalizingUser.college
+                    userId: otherUser._id,
+                    FirstName: otherUser.firstName,
+                    LastName: otherUser.lastName,
+                    username: otherUser.username,
+                    skills: otherUser.skills,
+                    about: otherUser.about,
+                    profession: otherUser.profession,
+                    college: otherUser.college
                 };
             })
-        );
-
-        // remove nulls (in case user was deleted)
-        const filteredConnections = connections.filter(Boolean);
+            .filter(Boolean); // remove null users
 
         return res.status(200).json({
             success: true,
-            totalConnections: filteredConnections.length,
-            data: filteredConnections,
+            totalConnections: formattedConnections.length,
+            data: formattedConnections
         });
 
     } catch (err) {
         return res.status(500).json({
             success: false,
-            message: err.message,
+            message: err.message
         });
     }
 });
@@ -89,19 +75,47 @@ userPreference.get("/user/blocked", userAuth, async (req, res) => {
     try {
         const loggedInUser = req.user;
 
-        const blockedConnection = await ConnectionRequest.find({
-            fromUserId: loggedInUser._id, status: "blocked"
-        }).populate("toUserId", "FirstName LastName");
+        // fetch connections + auto load users
+        const blockDocs = await blockConnection
+            .find({
+                requesterId: loggedInUser._id
+            })
+            .populate(
+                "requesterId receiverId",
+                "firstName lastName username skills about profession college"
+            )
 
 
-        res.status(200).json({
+        // format response
+        const formattedBlock = blockDocs
+            .map((row) => {
+                const otherUser = row.receiverId;
+                // safety check (user might be deleted)
+                if (!otherUser) return null;
+
+                return {
+                    connectionId: row._id,
+                    FirstName: otherUser.firstName,
+                    MiddleName: otherUser.middleName,
+                    LastName: otherUser.lastName,
+                    username: otherUser.username,
+                    skills: otherUser.skills,
+                    about: otherUser.about,
+                    profession: otherUser.profession,
+                    college: otherUser.college,
+                    isVerified: otherUser.isVerified
+                };
+            })
+            .filter(Boolean); // remove null users
+
+        return res.status(200).json({
             success: true,
-            totalBlocked: blockedConnection.length,
-            data: blockedConnection
+            totalConnections: formattedBlock.length,
+            data: formattedBlock
         });
 
     } catch (err) {
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: err.message
         });
@@ -120,10 +134,9 @@ userPreference.delete("/user/blocked/:blockedConUserId", userAuth, async (req, r
             });
         }
 
-        const deletedConnection = await ConnectionRequest.findOneAndDelete({
+        const deletedConnection = await blockConnection.findOneAndDelete({
             _id: blockedConUserId,
-            fromUserId: loggedInUserId,
-            status: "blocked"
+            requesterId: loggedInUserId,
         });
 
 
@@ -160,11 +173,14 @@ userPreference.delete("/user/connections/:connectionUserId", userAuth, async (re
             });
         }
 
-        const deletedConnection = await ConnectionRequest.find(connectionUserId);
 
-        if (deletedConnection.status == "rejected" || deletedConnection.status == "blocked" || deletedConnection.status == "interested") {
-            throw new Error("These are not your connections")
-        }
+        const deletedConnection = await connections.findOneAndDelete({
+            _id: connectionUserId,
+            $or: [
+                { requesterId: loggedInUserId },
+                { receiverId: loggedInUserId }
+            ]
+        });
 
         if (!deletedConnection) {
             return res.status(404).json({
@@ -185,19 +201,50 @@ userPreference.delete("/user/connections/:connectionUserId", userAuth, async (re
         });
     }
 });
+// Get all the pending connection request for the loggedIn user
+userPreference.get("/user/requests/received", userAuth, async (req, res) => {
+    try {
+        const loggedInUser = req.user;
+
+        const connectionRequests = await ConnectionRequest.find({
+            receiverId: loggedInUser._id,
+            status: "REQUESTED",
+        }).populate("requesterId", "firstName middleName lastName username skills about profession college isVerified");
+
+        if (!connectionRequests || connectionRequests.length === 0) {
+            return res.status(200).json({
+                success: true,
+                total: 0,
+                data: []
+            });
+        }
+
+        res.json({
+            success: true,
+            message: "Pending connection requests fetched",
+            total: connectionRequests.length,
+            data: connectionRequests,
+        });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: err.message
+        });
+    }
+});
 //all send req
 userPreference.get("/user/requests/send", userAuth, async (req, res) => {
     try {
         const loggedInUserId = req.user._id;
 
-        const STATUS_INTERESTED = "interested";
+        const STATUS_INTERESTED = "REQUESTED";
         const USER_SAFE_DATA = "username";
 
         const requests = await ConnectionRequest.find({
-            fromUserId: loggedInUserId,
+            requesterId: loggedInUserId,
             status: STATUS_INTERESTED
         })
-            .populate("toUserId", USER_SAFE_DATA)
+            .populate("receiverId", USER_SAFE_DATA)
 
 
         if (!requests || requests.length === 0) {
@@ -210,7 +257,7 @@ userPreference.get("/user/requests/send", userAuth, async (req, res) => {
 
         const formattedRequests = requests.map(r => ({
             _id: r._id,
-            username: r.toUserId.username
+            username: r.receiverId.username
         }));
 
         return res.status(200).json({
@@ -227,44 +274,42 @@ userPreference.get("/user/requests/send", userAuth, async (req, res) => {
     }
 });
 // cancel delete sent request
-userPreference.delete(
-    "/user/requests/send/:requestId",
-    userAuth,
-    async (req, res) => {
-        try {
-            const loggedInUserId = req.user._id;
-            const { requestId } = req.params;
+userPreference.delete("/user/requests/send/:requestId", userAuth, async (req, res) => {
+    try {
+        const loggedInUserId = req.user._id;
+        const { requestId } = req.params;
 
-            const STATUS_INTERESTED = "interested";
+        const STATUS_INTERESTED = "REQUESTED";
 
-            const deletedRequest = await ConnectionRequest.findOneAndDelete({
-                _id: requestId,
-                fromUserId: loggedInUserId,
-                status: STATUS_INTERESTED
-            });
+        const deletedRequest = await ConnectionRequest.findOneAndDelete({
+            _id: requestId,
+            requesterId: loggedInUserId,
+            status: STATUS_INTERESTED
+        });
 
-            if (!deletedRequest) {
-                return res.status(404).json({
-                    success: false,
-                    message: "Request not found or cannot be deleted"
-                });
-            }
-
-            return res.status(200).json({
-                success: true,
-                message: "Request cancelled successfully"
-            });
-
-        } catch (error) {
-            return res.status(500).json({
+        if (!deletedRequest) {
+            return res.status(404).json({
                 success: false,
-                message: error.message
+                message: "Request not found or cannot be deleted"
             });
         }
+
+        return res.status(200).json({
+            success: true,
+            message: "Request cancelled successfully"
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        });
     }
+}
 );
+
 //feed
-userPreference.get("/feed", userAuth, async (req, res) => {
+userPreference.get("/user/feed", userAuth, async (req, res) => {
     try {
         const loggedInUser = req.user;
 
@@ -274,16 +319,44 @@ userPreference.get("/feed", userAuth, async (req, res) => {
         limit = limit > 15 ? 15 : limit;
         const skip = (page - 1) * limit;
 
-        const connectionRequests = await ConnectionRequest.find({
-            $or: [{ fromUserId: loggedInUser._id }, { toUserId: loggedInUser._id }],
-        }).select("fromUserId  toUserId");
+        const requests = await ConnectionRequest.find({
+            $or: [
+                { requesterId: loggedInUser._id },
+                { receiverId: loggedInUser._id }
+            ]
+        }).select("requesterId receiverId").lean();
+
+        const connectionDocs = await connections.find({
+            $or: [
+                { requesterId: loggedInUser._id },
+                { receiverId: loggedInUser._id }
+            ]
+        }).select("requesterId receiverId").lean();
+
+        const blockedDocs = await blockConnection.find({
+            $or: [
+                { requesterId: loggedInUser._id },
+                { receiverId: loggedInUser._id }
+            ]
+        }).select("requesterId receiverId").lean();
 
 
+        const allHiddenDocs = [
+            ...requests,
+            ...connectionDocs,
+            ...blockedDocs
+        ];
         const hideUsersFromFeed = new Set();
-        connectionRequests.forEach((req) => {
-            hideUsersFromFeed.add(req.fromUserId.toString());
-            hideUsersFromFeed.add(req.toUserId.toString());
+        allHiddenDocs.forEach((doc) => {
+            if (doc.requesterId) {
+                hideUsersFromFeed.add(doc.requesterId.toString());
+            }
+            if (doc.receiverId) {
+                hideUsersFromFeed.add(doc.receiverId.toString());
+            }
         });
+
+        hideUsersFromFeed.delete(loggedInUser._id.toString());
 
         const users = await User.find({
             $and: [
@@ -291,7 +364,7 @@ userPreference.get("/feed", userAuth, async (req, res) => {
                 { _id: { $ne: loggedInUser._id } },
             ],
         })
-            .select("FirstName MiddleName LastName username gender photoUrl about college skills age")
+            .select("firstName middleName lastName username gender photoUrl about college skills age")
             .skip(skip)
             .limit(limit);
 

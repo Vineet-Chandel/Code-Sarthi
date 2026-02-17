@@ -20,11 +20,6 @@ const connectionRequestSchema = new mongoose.Schema(
                 message: `{VALUE} is incorrect status type`,
             }
         },
-        actionBy: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Users",
-            required: true,
-        }
     },
     { timestamps: true }
 );

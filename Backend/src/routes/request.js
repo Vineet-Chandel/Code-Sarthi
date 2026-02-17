@@ -86,7 +86,7 @@ requestRouter.post("/request/send/:toUserName",
                 if (existingConnectionRequest.status === "REQUESTED") {
                     return res.status(400).json({
                         success: false,
-                        message: "Connection already requested",
+                        message: "Connection already requested state",
                     });
                 }
             }
