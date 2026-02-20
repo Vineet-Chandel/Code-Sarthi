@@ -10,12 +10,22 @@ import { BASE_URL } from "./baseURL";
 
 
 const Login = () => {
-    const [Gmail, setGmailId] = useState("priya.malhotra@gmail.com");
-    const [password, setPassword] = useState("Priya@888");
+
+    //intake of the gmail + password
+    /*
+     here, 
+     default gmail = vineetsinghbitu@gmail.com
+     default password = Vineet@1234
+     */
+    const [gmail, setGmailId] = useState("vineetsinghbitu@gmail.com");
+    const [password, setPassword] = useState("Vineet@1234");
+
     const [showPassword, setShowPassword] = useState(false);
     const [newError, setNewError] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [errorisOpen, errorsetIsOpen] = useState(false);
+
+    //redux management
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -37,17 +47,22 @@ const Login = () => {
 
         try {
             const res = await axios.post(
-                `${BASE_URL}/SignInDB`,
-                { Gmail, password },
+                `${BASE_URL}/auth/signin`,
+                { gmail, password },
                 { withCredentials: true }
             );
-            dispatch(addUser(res.data));
+
+            const user = res.data;
+            localStorage.setItem("user", JSON.stringify(res.data));
+            dispatch(addUser(user));
+            navigate("/app");
+
             console.log(res.data);
             navigate("/app");
 
 
         } catch (err) {
-            setNewError(err.response?.data || "Login failed. Please try again.");
+            setNewError(err.response?.data?.message || "Login failed. Please try again.");
             errorsetIsOpen(true);
         }
     };
@@ -113,7 +128,7 @@ const Login = () => {
                                     placeholder="vivek007@gmail.com"
                                     className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-lg"
                                     required
-                                    value={Gmail}
+                                    value={gmail}
                                     onChange={(e) => setGmailId(e.target.value)}
                                 />
                             </div>

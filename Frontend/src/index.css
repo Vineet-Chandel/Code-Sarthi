@@ -6,7 +6,8 @@ body {
     width: 100dvw;
     overflow-x: hidden;
     background-color: black;
-    font-family: "General Sans", sans-serif;
+    font-family: "general";
+
 
 }
 
@@ -20,10 +21,11 @@ body {
 
     @font-face {
         font-family: "general";
-        src: url("/fonts/general.woff2") format("woff2");
+        src: url("/fonts/general.ttf") format("truetype");
         font-weight: 400;
         font-style: normal;
     }
+
 
     @font-face {
         font-family: "robert-medium";

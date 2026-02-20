@@ -17,16 +17,18 @@ import { useDispatch } from "react-redux";
 import { removeUser } from "../utils/userSlice";
 import axios from "axios";
 import { BASE_URL } from "../Pages/auth/baseURL";
+import Search from "./navSearch";
 
 const NavBar = () => {
     const [showSidebar, setShowSidebar] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
+    const [open, setOpen] = useState(false);
     const [activePage, setActivePage] = useState("Dashboard");
     const sidebarRef = useRef(null);
     const sidebarOverlayRef = useRef(null);
     const profileRef = useRef(null);
     const profileOverlayRef = useRef(null);
-    const user = useSelector((store) => store.user);
+    const user = useSelector((store) => store.user.user.DATA);
     const navigate = useNavigate();
 
     // Sidebar functions
@@ -130,6 +132,9 @@ const NavBar = () => {
         }
         catch (err) { console.error("Logout failed:", err); }
     }
+
+
+
 
     return (
 
@@ -438,17 +443,17 @@ c27 14 67 39 90 55 22 16 44 29 48 29 5 0 16 -15 25 -32z m-2631 -13 l80 -26
 
 
 
-            <div className="items"></div>
             {/* Right side - Profile button */}
-            <div className="NavEnd relative">
+            <div className="NavEnd relative flex justify-end gap-5 w-[30%] items-center ">
+                <Search />
                 <button
                     onClick={openProfile}
-                    className="h-12 w-12 rounded-full overflow-hidden bg-gradient-to-br from-gray-400 to-gray-100 cursor-pointer transition-all duration-300 hover:shadow-[0_10px_25px_rgba(0,0,0,0.1)] hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-400 relative group"
+                    className="h-[100%] w-20 rounded-full overflow-hidden bg-gradient-to-br from-gray-400 to-gray-100 cursor-pointer transition-all duration-300 hover:shadow-[0_10px_25px_rgba(0,0,0,0.1)] hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-400 relative group"
                     aria-label="Open profile menu"
                 >
                     <div className="h-full w-full rounded-full overflow-hidden border border-white/50">
                         <img
-                            src="asset/img/image.png"
+                            src={user.photoUrl.url}
                             alt="Profile"
                             className="h-full w-full object-cover transition-all duration-500 group-hover:scale-125 group-hover:brightness-110 group-active:scale-100"
                         />

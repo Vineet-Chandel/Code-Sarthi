@@ -16,16 +16,14 @@ const EditProfile = () => {
 
     const { user } = useSelector(store => store.user || {});
     const [formData, setFormData] = useState({
-        FirstName: '',
-        MiddleName: '',
-        LastName: '',
-        username: '',
+        firstName: '',
+        middleName: '',
+        lastName: '',
         gender: '',
         age: '',
         profession: '',
         college: '',
         about: '',
-
     });
 
     const handleUpdate = async (e) => {
@@ -97,13 +95,13 @@ const EditProfile = () => {
                         <div className="relative w-[180px] h-[180px] rounded-2xl bg-gray-900 border border-gray-700 flex items-center justify-center">
                             <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-400/20 to-blue-600/20 blur-xl"></div>
                             <span className="relative text-5xl font-bold text-cyan-400">
-                                {user?.FirstName?.[0] || "U"}
+                                {user?.firstName?.[0] || "U"}
                             </span>
                         </div>
 
                         {/* Name */}
                         <p className="text-3xl font-semibold text-white mt-5 tracking-wide text-center">
-                            {user?.FirstName || "First"} {user?.MiddleName || ""} {user?.LastName || "Last"}
+                            {user?.firstName || "First"} {user?.middleName || ""} {user?.lastName || "Last"}
                         </p>
 
                         {/* Username */}

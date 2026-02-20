@@ -1,7 +1,6 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import React from 'react'
 
 
 const ContentFirst = () => {
@@ -197,8 +196,86 @@ const ContentFirst = () => {
 
             },
         });
-    });
 
+        gsap.from(".HEAD6 ", {
+            duration: 1.6,
+            y: 80,
+            rotationX: 60,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            transformOrigin: "50% 50%",
+            perspective: 1000, // 🔥 IMPORTANT
+
+            scrollTrigger: {
+                trigger: ".HEAD6",
+                start: "top 90%",
+
+            },
+        });
+
+        gsap.from(".SUBHEAD6", {
+            duration: 1.6,
+            y: 80,
+            rotationX: 60,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            scrollTrigger: {
+                trigger: ".SUBHEAD6",
+                start: "top 90%",
+            }
+        })
+
+
+        gsap.from(".HEAD7 ", {
+            duration: 1.6,
+            y: 80,
+            rotationX: 60,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            transformOrigin: "50% 50%",
+            perspective: 1000, // 🔥 IMPORTANT
+
+            scrollTrigger: {
+                trigger: ".HEAD7",
+                start: "top 90%",
+
+            },
+        });
+
+        gsap.from(".SUBHEAD7", {
+            duration: 1.6,
+            y: 80,
+            rotationX: 60,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            scrollTrigger: {
+                trigger: ".SUBHEAD7",
+                start: "top 90%",
+            }
+        })
+        gsap.from(".pointer5", {
+            duration: 1.6,
+            y: 80,
+            rotationX: 60,
+            scale: 0.95,
+            opacity: 0,
+            ease: "power4.out",
+            transformOrigin: "50% 50%",
+            perspective: 1000, // 🔥 IMPORTANT
+
+            scrollTrigger: {
+                trigger: ".pointer5",
+                start: "top 90%",
+
+            },
+        });
+
+
+    });
 
     const featuredData2 = [{
         img: "../public/img/dev.webp",
@@ -229,6 +306,7 @@ const ContentFirst = () => {
         tagLine2: "✦ Share your skills ,experience on the various community at the same time learn from others",
         tagLine3: "✦ Collab with developers from across the world over at any project where  ",
     }];
+
     return (
         <div className="BOSSCONT bg-black text-white w-screen flex flex-col justify-center items-center my-[150px]">
 
@@ -472,7 +550,7 @@ const ContentFirst = () => {
 
             <div className=" flex flex-col justify-center items-center w-full gap-6 mt-[150px] mb-[70px]">
 
-                <div className=" HEAD1 text-5xl font-extrabold font-head text-center
+                <div className=" HEAD6 text-5xl font-extrabold font-head text-center
                  max-xl:text-4xl 
                 max-lg:text-3xl 
                 max-md:text-2xl 
@@ -480,7 +558,7 @@ const ContentFirst = () => {
                     LOTS OF THINGS ARE STILL LEFT TO EXPLORE
                 </div>
 
-                <div className="SUBHEAD1 text-2xl font-extralight w-[60%] text-center
+                <div className="SUBHEAD6 text-2xl font-extralight w-[60%] text-center
   max-lg:text-xl 
   max-md:text-lg
   max-sm:text-base ">
@@ -513,13 +591,13 @@ const ContentFirst = () => {
                  max-[630px]:p-11
                   ">
                                 <div className="
-  text-6xl text-center
-  font-extrabold font-head HEAD2
+  text-6xl text-center HEAD7
+  font-extrabold font-head 
 ">
                                     {item[0].heading}
                                 </div>
 
-                                <div className="w-full flex flex-col gap-4 pl-5 pointer1 ">
+                                <div className=" w-full flex flex-col gap-4 pl-5 pointer5 ">
                                     <div className=" text-xl text-center  transition-all duration-200 hover:text-green-400 hover:scale-105">
                                         {item[0].tagLine1}
                                     </div>
@@ -533,7 +611,7 @@ const ContentFirst = () => {
                                         {item[0].tagLine4}
                                     </div>
                                 </div>
-                                <div className='w-full flex items-center justify-start'>
+                                <div className='w-full flex items-center justify-center font-general'>
                                     <div className='h-[40px]  font-bold text-sm relative top-5 border-transparent p-1 px-5 bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300 text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
                                         <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <g clip-path="url(#clip0_0_3844)">
@@ -562,26 +640,26 @@ const ContentFirst = () => {
                   ">
                                     <div className="
   text-6xl text-center
-  font-extrabold font-head HEAD2
+  font-extrabold font-head HEAD7
 ">
                                         {item[1].heading}
                                     </div>
 
-                                    <div className="w-full flex flex-col gap-4 pl-5 pointer1 ">
-                                        <div className=" text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
+                                    <div className="w-full flex flex-col gap-4 pl-5 pointer5 ">
+                                        <div className=" text-xl text-center  transition-all duration-200 hover:text-green-400 hover:scale-105">
                                             {item[1].tagLine1}
                                         </div>
-                                        <div className=" text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
+                                        <div className=" text-xl text-center  transition-all duration-200 hover:text-green-400 hover:scale-105">
                                             {item[1].tagLine2}
                                         </div>
-                                        <div className=" text-xl text-start transition-all duration-200 hover:text-green-400 hover:scale-105">
+                                        <div className=" text-xl text-center transition-all duration-200 hover:text-green-400 hover:scale-105">
                                             {item[1].tagLine3}
                                         </div>
-                                        <div className=" text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
+                                        <div className=" text-xl text-center  transition-all duration-200 hover:text-green-400 hover:scale-105">
                                             {item[1].tagLine4}
                                         </div>
                                     </div>
-                                    <div className='w-full flex items-center justify-start'>
+                                    <div className='w-full flex items-center justify-center  '>
                                         <div className='h-[40px]  font-bold text-sm relative top-5 border-transparent p-1 px-5 bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300 text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
                                             <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <g clip-path="url(#clip0_0_3844)">
