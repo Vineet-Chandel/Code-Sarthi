@@ -8,13 +8,10 @@ const EditProfile = () => {
 
     const [newError, setNewError] = useState(false);
     const [errorisOpen, errorsetIsOpen] = useState(false);
-    const [showPanel, setShowPanel] = useState(false);
-    const [showSkillModalPanel, setShowSkillModalPanel] = useState(false);
+    const [editProfileIMG, editProfileIMGisOpen] = useState(false);
+    const [uploading, setUploading] = useState(false);
 
-
-
-
-    const { user } = useSelector(store => store.user || {});
+    const user = useSelector(store => store.user.user.DATA);
     const [formData, setFormData] = useState({
         firstName: '',
         middleName: '',
@@ -39,16 +36,18 @@ const EditProfile = () => {
                 updatedData[key] = formData[key];
             }
         });
-
-
+        if (Object.keys(updatedData).length === 0) return;
         try {
             const res = await axios.patch(
-                `${BASE_URL}/profile/edit`,
+
+                `${BASE_URL}/profile/me/edit`,
                 updatedData,
                 { withCredentials: true }
+
             );
 
-
+            // ✅ reload AFTER success
+            window.location.reload();
         } catch (err) {
             setNewError(err.response.data || err.message);
             errorsetIsOpen(true)
@@ -63,12 +62,36 @@ const EditProfile = () => {
             [id]: value
         }));
     }
+    const handleFileChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
 
+        const formData = new FormData();
 
+        // ⭐ must match backend multer field
+        formData.append("profilePic", file);
+
+        try {
+            setUploading(true);
+
+            await axios.post(
+                `${BASE_URL}/profile-pic/upload`,
+                formData,
+                { withCredentials: true }
+            );
+
+            window.location.reload();
+            editProfileIMGisOpen(false);
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setUploading(false);
+        }
+    };
     return (
-        <div className="min-h-screen w-full bg-black flex justify-center p-6 overflow-y-auto">
+        <div className=" w-full bg-black flex justify-center p-6 overflow-y-auto">
 
-            <div className="w-full max-w-9xl p-4 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 flex flex-col gap-4">
+            <div className=" w-full max-w-9xl p-4 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 flex flex-col gap-4">
 
                 {/* ================= HEADER ================= */}
                 <div className="w-full flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
@@ -88,30 +111,23 @@ const EditProfile = () => {
                 {/* ================= CONTENT ================= */}
                 <div className="w-full flex flex-col lg:flex-row gap-3">
 
-                    {/* ========== LEFT PANEL ========== */}
+                    {/* ========== ProfilePreview Panel ========== */}
                     <div className="w-full lg:w-[30%] rounded-3xl p-6 bg-black/30 border border-white/10 flex flex-col items-center">
-
                         {/* Avatar */}
-                        <div className="relative w-[180px] h-[180px] rounded-2xl bg-gray-900 border border-gray-700 flex items-center justify-center">
+                        <div className="relative w-[180px] h-[180px] rounded-2xl bg-gray-900 border border-gray-700 flex items-center justify-center" onClick={() => editProfileIMGisOpen(true)}>
                             <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-400/20 to-blue-600/20 blur-xl"></div>
                             <span className="relative text-5xl font-bold text-cyan-400">
-                                {user?.firstName?.[0] || "U"}
+                                <img src={user?.photoUrl?.url} className="h-full w-full" alt="" />
                             </span>
                         </div>
-
                         {/* Name */}
                         <p className="text-3xl font-semibold text-white mt-5 tracking-wide text-center">
                             {user?.firstName || "First"} {user?.middleName || ""} {user?.lastName || "Last"}
                         </p>
-
                         {/* Username */}
                         <p className="text-base text-gray-400 mt-1">
                             @{user?.username || "username"}
                         </p>
-
-
-
-
                         {/* Divider */}
                         <div className="w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent my-6"></div>
 
@@ -133,10 +149,12 @@ const EditProfile = () => {
                             </div>
 
                             <div className="flex flex-col gap-1 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-gray-300">
-                                <div className="flex gap-1 font-bold text-xl"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="#5decff" d="M12 21.577L9.423 19H5.615q-.69 0-1.153-.462T4 17.384V4.616q0-.691.463-1.153T5.616 3h12.769q.69 0 1.153.463T20 4.616v12.769q0 .69-.462 1.153T18.384 19h-3.807zm0-9.5q1.258 0 2.129-.871T15 9.077t-.871-2.129T12 6.077t-2.129.871T9 9.077t.871 2.129t2.129.871M5.423 18h13.154q.211-.133.288-.354t.135-.412q-1.35-1.325-3.138-2.087T12 14.385t-3.863.762T5 17.235q.058.19.134.411t.289.354" /></svg>  About :</div>  {user.about}
+                                <div className="flex gap-1 font-bold text-xl"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="#5decff" d="M12 21.577L9.423 19H5.615q-.69 0-1.153-.462T4 17.384V4.616q0-.691.463-1.153T5.616 3h12.769q.69 0 1.153.463T20 4.616v12.769q0 .69-.462 1.153T18.384 19h-3.807zm0-9.5q1.258 0 2.129-.871T15 9.077t-.871-2.129T12 6.077t-2.129.871T9 9.077t.871 2.129t2.129.871M5.423 18h13.154q.211-.133.288-.354t.135-.412q-1.35-1.325-3.138-2.087T12 14.385t-3.863.762T5 17.235q.058.19.134.411t.289.354" /></svg>  About : </div>
+                                {user.about}
                             </div>
                             <div className="flex flex-col gap-1 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-gray-300">
-                                <div className="flex gap-1 font-bold text-xl"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 28 28"><path fill="#5decff" d="M13 20.5c0 2.098.862 3.995 2.25 5.357q-1.077.142-2.25.143c-5.79 0-10-2.567-10-6.285V19a3 3 0 0 1 3-3h8.5a7.47 7.47 0 0 0-1.5 4.5M13 2a6 6 0 1 1 0 12a6 6 0 0 1 0-12m14 18.5a6.5 6.5 0 1 1-13 0a6.5 6.5 0 0 1 13 0m-5.786-3.96a.742.742 0 0 0-1.428 0l-.716 2.298h-2.318c-.727 0-1.03.97-.441 1.416l1.875 1.42l-.716 2.298c-.225.721.567 1.32 1.155.875l1.875-1.42l1.875 1.42c.588.446 1.38-.154 1.155-.875l-.716-2.298l1.875-1.42c.588-.445.286-1.416-.441-1.416H21.93z" /></svg> Tech Stacks:</div>  {user.skills.join(" , ")}
+                                <div className="flex gap-1 font-bold text-xl"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 28 28"><path fill="#5decff" d="M13 20.5c0 2.098.862 3.995 2.25 5.357q-1.077.142-2.25.143c-5.79 0-10-2.567-10-6.285V19a3 3 0 0 1 3-3h8.5a7.47 7.47 0 0 0-1.5 4.5M13 2a6 6 0 1 1 0 12a6 6 0 0 1 0-12m14 18.5a6.5 6.5 0 1 1-13 0a6.5 6.5 0 0 1 13 0m-5.786-3.96a.742.742 0 0 0-1.428 0l-.716 2.298h-2.318c-.727 0-1.03.97-.441 1.416l1.875 1.42l-.716 2.298c-.225.721.567 1.32 1.155.875l1.875-1.42l1.875 1.42c.588.446 1.38-.154 1.155-.875l-.716-2.298l1.875-1.42c.588-.445.286-1.416-.441-1.416H21.93z" /></svg> Tech Stacks:</div>
+                                {user.skills}
                             </div>
                             <div className="flex flex-col gap-1 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-gray-300">
                                 <div className="flex gap-1 font-bold text-xl"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><g fill="none" stroke="#5decff" stroke-miterlimit="10" stroke-width="1"><path fill="#5decff" fill-opacity="0.16" d="M18.6 3H5.4A2.4 2.4 0 0 0 3 5.4v13.2A2.4 2.4 0 0 0 5.4 21h13.2a2.4 2.4 0 0 0 2.4-2.4V5.4A2.4 2.4 0 0 0 18.6 3Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M10 21V3m-7 7h18M5.4 3h13.2A2.4 2.4 0 0 1 21 5.4v13.2a2.4 2.4 0 0 1-2.4 2.4H5.4A2.4 2.4 0 0 1 3 18.6V5.4A2.4 2.4 0 0 1 5.4 3" /></g></svg>  Projects :</div>  this segment used when second segment start showing his AURA !!
@@ -146,39 +164,26 @@ const EditProfile = () => {
                     </div>
 
                     {/* ========== RIGHT PANEL ========== */}
-                    <div className={`w-full lg:w-[70%] rounded-3xl p-8 bg-black/30 border border-white/10 ${showPanel ? 'hidden' : 'flex'} flex-col gap-1 `}>
+                    <div className={`w-full lg:w-[70%] rounded-3xl p-8 bg-black/30 border border-white/10  flex-col gap-5 `}>
 
-                        <div className="flex w-full justify-between mb-6">
-                            <button className="group relative w-[48%] max-w-md p-4 mt-4 rounded-xl text-xl font-bold bg-gray-800/40 border-[2px] border-gray-700/50 hover:bg-gray-800/60 transition-all duration-300 overflow-hidden text-white" onClick={() => setShowPanel(false)}>
-                                Profile Edits
-                                <div className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-indigo-500"></div>
-                                <div className="absolute inset-x-0 bottom-0 h-[2px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-violet-500"></div>
-                                <div className="absolute inset-x-0 bottom-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] group-hover:blur-sm transition-all duration-300 bg-gradient-to-r from-transparent via-purple-400"></div>
-                            </button>
-                            <button className="group relative w-[48%] max-w-md p-4 mt-4 rounded-xl text-xl font-bold bg-gray-800/40 border-[2px] border-gray-700/50 hover:bg-gray-800/60 transition-all duration-300 overflow-hidden text-white" onClick={() => setShowPanel(true)}>
-                                Skils and Project Edits
-                                <div className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-indigo-500"></div>
-                                <div className="absolute inset-x-0 bottom-0 h-[2px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-violet-500"></div>
-                                <div className="absolute inset-x-0 bottom-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] group-hover:blur-sm transition-all duration-300 bg-gradient-to-r from-transparent via-purple-400"></div>
-                            </button>
-                        </div>
+
                         <div className="mb-3">
                             <h2 className="text-2xl font-semibold text-white">
                                 Profile Information
                             </h2>
 
                             <p className="text-gray-400">
-                                Update your personal details below only fill that feilds which u want to edit !!
+                                Update your personal details below to update them in the main profile !!
                             </p>
                         </div>
 
 
                         {/* Inputs go here */}
-                        <div className="h-full p-5 border border-dashed border-white/20 rounded-xl flex  justify-center text-gray-500">
-                            <form action="" onSubmit={handleUpdate} className="flex flex-col gap-2 w-full mt-2">
+                        <div className="mt-10 p-5 border border-dashed border-white/20 rounded-xl flex  justify-center text-gray-500 ">
+                            <form action="" onSubmit={handleUpdate} className="flex flex-col gap-[20px] w-full mt-2">
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <div className="space-y-2 ">
-                                        <label htmlFor="FirstName" className="text-md ml-3 block">
+                                        <label htmlFor="firstName" className="text-md ml-3 block">
                                             First Name
                                         </label>
                                         <div className={"flex items-center rounded-2xl px-4 py-3 border border-gray-600 transition-all duration-300  bg-black/50"}>
@@ -189,18 +194,18 @@ const EditProfile = () => {
                                                 </svg>
                                             </span>
                                             <input
-                                                id="FirstName"
+                                                id="firstName"
                                                 type="text"
-                                                placeholder={user.FirstName}
+                                                placeholder={user.firstName}
                                                 className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base"
-                                                value={formData['FirstName']}
+                                                value={formData['firstName']}
                                                 onChange={handleChange}
 
                                             />
                                         </div>
                                     </div>
                                     <div className="space-y-2">
-                                        <label htmlFor="FirstName" className="text-md ml-3 block">
+                                        <label htmlFor="middleName" className="text-md ml-3 block">
                                             Middle Name
                                         </label>
                                         <div className={"flex items-center rounded-2xl px-4 py-3 border border-gray-600 transition-all duration-300  bg-black/50"}>
@@ -211,18 +216,18 @@ const EditProfile = () => {
                                                 </svg>
                                             </span>
                                             <input
-                                                id="MiddleName"
+                                                id="middleName"
                                                 type="text"
-                                                placeholder={user.MiddleName}
+                                                placeholder={user.middleName}
                                                 className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base"
-                                                value={formData['MiddleName']}
+                                                value={formData['middleName']}
                                                 onChange={handleChange}
                                                 required={false}
                                             />
                                         </div>
                                     </div>
                                     <div className="space-y-2">
-                                        <label htmlFor="FirstName" className="text-md ml-3 block">
+                                        <label htmlFor="lastName" className="text-md ml-3 block">
                                             Last Name
                                         </label>
                                         <div className={"flex items-center rounded-2xl px-4 py-3 border border-gray-600 transition-all duration-300  bg-black/50"}>
@@ -233,11 +238,11 @@ const EditProfile = () => {
                                                 </svg>
                                             </span>
                                             <input
-                                                id="LastName"
+                                                id="lastName"
                                                 type="text"
-                                                placeholder={user.LastName}
+                                                placeholder={user.lastName}
                                                 className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base"
-                                                value={formData['LastName']}
+                                                value={formData['lastName']}
                                                 onChange={handleChange}
 
                                             />
@@ -248,7 +253,7 @@ const EditProfile = () => {
 
 
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="grid grid-cols-3 gap-4">
                                     <div className="space-y-2">
                                         <label htmlFor="gender" className="text-md ml-3 block">
                                             Gender
@@ -267,7 +272,7 @@ const EditProfile = () => {
                                                 onChange={handleChange}
 
                                             >
-                                                <option value="" disabled hidden className="text-gray-500">{user.gender}</option>
+                                                <option value="" disabled hidden className="text-gray-500"></option>
                                                 <option value="male" className="bg-gray-900 text-white">Male</option>
                                                 <option value="female" className="bg-gray-900 text-white">Female</option>
                                                 <option value="other" className="bg-gray-900 text-white">Other</option>
@@ -278,7 +283,6 @@ const EditProfile = () => {
                                             </svg>
                                         </div>
                                     </div>
-
                                     <div className="space-y-2">
                                         <label htmlFor="age" className="text-md ml-3 block">
                                             Age
@@ -303,11 +307,7 @@ const EditProfile = () => {
                                             />
                                         </div>
                                     </div>
-                                </div>
-
-
-                                <div className='flex justify-between items-center w-full'>
-                                    <div className="space-y-2 w-[48.5%]">
+                                    <div className="space-y-2 ">
                                         <label htmlFor="college" className="text-md ml-3 block ">
                                             College or Company
                                         </label>
@@ -332,6 +332,11 @@ const EditProfile = () => {
                                             />
                                         </div>
                                     </div>
+                                </div>
+
+
+                                <div className='flex justify-between items-center w-full'>
+
                                     <div className="space-y-2  w-[48.5%]">
                                         <label htmlFor="profession" className="text-md ml-3 block">
                                             Professionaly what you are !
@@ -356,39 +361,8 @@ const EditProfile = () => {
                                             />
                                         </div>
                                     </div>
-                                </div>
-                                <div className="flex justify-between">
+                                    {/* ABOUT EDITS */}
                                     <div className="space-y-2 w-[48%]">
-                                        <div className="flex justify-between items-center">
-                                            <label htmlFor="username" className="text-md ml-3 block">
-                                                Username
-                                            </label>
-
-                                        </div>
-                                        <div className={`flex items-center rounded-2xl px-4 py-3 border border-gray-600 transition-all duration-300  bg-black/50`}>
-                                            <span className="mr-3">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 14 14">
-                                                    <g fill="none">
-                                                        <path stroke="#4147d5" d="M13.5 10.5v2a1 1 0 0 1-1 1h-2m0-13h2a1 1 0 0 1 1 1v2m-13 0v-2a1 1 0 0 1 1-1h2m0 13h-2a1 1 0 0 1-1-1v-2" />
-                                                        <path fill="#d7e0ff" d="M7 6.5a2 2 0 1 0 0-4a2 2 0 0 0 0 4m3.803 4.5a3.994 3.994 0 0 0-7.606 0z" />
-                                                    </g>
-                                                </svg>
-                                            </span>
-                                            <input
-                                                id="username"
-                                                type="text"
-                                                placeholder={user.username}
-                                                className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base"
-                                                value={formData.username}
-                                                onChange={handleChange}
-
-                                            />
-                                        </div>
-
-                                    </div>
-
-                                    <div className="space-y-2 w-[48%]">
-
 
                                         <div className="flex justify-between items-center">
                                             <label htmlFor="about" className="text-md ml-3 block">
@@ -415,7 +389,15 @@ const EditProfile = () => {
                                         </div>
 
                                     </div>
+
                                 </div>
+
+
+
+
+
+
+
                                 <div className="space-y-2">
                                     <div className={`${errorisOpen ? "block" : "hidden "} flex items-center rounded-2xl px-4 py-3 border border-red-600 bg-red/50  transition-all duration-30 `} >
                                         <span className="mr-3">
@@ -426,103 +408,75 @@ const EditProfile = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <button type="submit" className="group relative  w-[100%] p-4 mt-4 rounded-xl text-xl font-medium bg-gray-800/40 border-[2px] border-gray-700/50 hover:bg-gray-800/60 transition-all duration-300 overflow-hidden text-white">
-                                    Save Your Changes
-                                    <div className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-blue-500"></div>
-                                    <div className="absolute inset-x-0 bottom-0 h-[2px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-cyan-400"></div>
-                                    <div className="absolute inset-x-0 bottom-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] group-hover:blur-sm transition-all duration-300 bg-gradient-to-r from-transparent via-sky-400"></div>
-                                </button>
+                                <div className="w-[100%] flex justify-center">
+                                    <button type="submit" className="group relative  w-[50%] p-4 mt-4 rounded-xl text-xl font-medium bg-gray-800/40 border-[2px] border-gray-700/50 hover:bg-gray-800/60 transition-all duration-300 overflow-hidden text-white">
+                                        Save Your Changes
+                                        <div className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-blue-500"></div>
+                                        <div className="absolute inset-x-0 bottom-0 h-[2px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-cyan-400"></div>
+                                        <div className="absolute inset-x-0 bottom-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] group-hover:blur-sm transition-all duration-300 bg-gradient-to-r from-transparent via-sky-400"></div>
+                                    </button>
+                                </div>
+
                             </form>
                         </div>
 
                     </div>
-
-                    <div className={`w-full lg:w-[70%] rounded-3xl p-8 bg-black/30 border border-white/10 ${showPanel ? 'flex' : 'hidden'} flex-col gap-6 `}>
-                        <div className="flex w-full justify-between mb-6">
-                            <button className="group relative w-[48%] max-w-md p-4 mt-4 rounded-xl text-xl font-bold bg-gray-800/40 border-[2px] border-gray-700/50 hover:bg-gray-800/60 transition-all duration-300 overflow-hidden text-white" onClick={() => setShowPanel(false)}>
-                                Profile Edits+
-                                <div className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-indigo-500"></div>
-                                <div className="absolute inset-x-0 bottom-0 h-[2px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-violet-500"></div>
-                                <div className="absolute inset-x-0 bottom-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] group-hover:blur-sm transition-all duration-300 bg-gradient-to-r from-transparent via-purple-400"></div>
-                            </button>
-                            <button className="group relative w-[48%] max-w-md p-4 mt-4 rounded-xl text-xl font-bold bg-gray-800/40 border-[2px] border-gray-700/50 hover:bg-gray-800/60 transition-all duration-300 overflow-hidden text-white" onClick={() => setShowPanel(true)}>
-                                Skils and Project Edits
-                                <div className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-indigo-500"></div>
-                                <div className="absolute inset-x-0 bottom-0 h-[2px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-violet-500"></div>
-                                <div className="absolute inset-x-0 bottom-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] group-hover:blur-sm transition-all duration-300 bg-gradient-to-r from-transparent via-purple-400"></div>
-                            </button>
-                        </div>
-                        <div className="mb-3">
-                            <h2 className="text-4xl font-semibold text-white mb-5">
-                                Skills & Project Information
-                            </h2>
-
-                            <div className="h-full p-5 border border-dashed border-white/20 rounded-xl flex   text-gray-500 flex-col ">
-
-                                <div className="flex justify-between pr-3 pl-3">
-                                    <h2 className="text-3xl font-semibold text-white mb-3">
-                                        Tech Stacks
-                                    </h2>
-                                    <div onClick={() => setShowSkillModalPanel(true)} className=" border h-[35px] w-[35px] rounded-full flex justify-center items-center border-transparent hover:bg-slate-800"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="#fff" fill-rule="evenodd" d="M11.25 11.25V3.5h1.5v7.75h7.75v1.5h-7.75v7.75h-1.5v-7.75H3.5v-1.5z" /></svg></div>
-
-                                </div>
-
-
-                                <div className="w-full max-w-9xl p-4 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 flex flex-col gap-4 text-white">
-                                    {user.skills.map((item, i) => (
-                                        <div key={i}>#{i + 1} {item} </div>
-                                    ))}
-                                </div>
-
-
-
-                            </div>
-
-                        </div>
-                    </div>
                 </div>
             </div >
-            <div className={`fixed inset-0 bg-black/60 z-50 items-center justify-center ${showSkillModalPanel ? "flex" : "hidden"}`}>
 
+            {editProfileIMG && (<div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex justify-center items-center " onClick={() => editProfileIMGisOpen(false)}>
 
-                <div className="w-[70%] max-w-9xl p-4 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 flex flex-col  text-white">
-                    <div className="flex justify-between mb-5">
-                        <div>
-                            <h2 className="text-3xl font-semibold text-white ">
-                                Add tech stacks
-                            </h2>
-                            <h2 className="text-lg pl-1 text-gray-400 ">
-                                That you've mastered & let the world see what you're capable of
-                            </h2>
-                        </div>
+                {/* CARD */}
+                <div className="w-[380px] rounded-2xl overflow-hidden bg-[#111] border border-white/10 shadow-2xl " onClick={(e) => e.stopPropagation()} >
 
-                        <div onClick={() => setShowSkillModalPanel(false)} className=" border h-[40px] w-[40px] rounded-full flex justify-center items-center border-transparent hover:bg-slate-800"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 48 48"><path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="m8 8l32 32M8 40L40 8" /></svg></div>
+                    {/* HEADER */}
+                    <div className="flex items-center justify-center gap-3 px-6 py-4 border-b border-white/10">
+                        <h2 className="text-xl font-semibold text-white">
+                            Change Profile Photo
+                        </h2>
+
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 14 14">
+                            <g fill="none" fill-rule="evenodd" clip-rule="evenodd">
+                                <path fill="#fff" d="M1.573 1.573A.25.25 0 0 1 1.75 1.5h1.5a.75.75 0 0 0 0-1.5h-1.5A1.75 1.75 0 0 0 0 1.75v1.5a.75.75 0 0 0 1.5 0v-1.5a.25.25 0 0 1 .073-.177M14 10.75a.75.75 0 0 0-1.5 0v1.5a.25.25 0 0 1-.25.25h-1.5a.75.75 0 0 0 0 1.5h1.5A1.75 1.75 0 0 0 14 12.25zM.75 10a.75.75 0 0 1 .75.75v1.5a.25.25 0 0 0 .25.25h1.5a.75.75 0 0 1 0 1.5h-1.5A1.75 1.75 0 0 1 0 12.25v-1.5A.75.75 0 0 1 .75 10m10-10a.75.75 0 0 0 0 1.5h1.5a.25.25 0 0 1 .25.25v1.5a.75.75 0 0 0 1.5 0v-1.5A1.75 1.75 0 0 0 12.25 0z" />
+                                <path fill="#2859c5" d="M9.208 4.46a2.21 2.21 0 1 1-4.421 0a2.21 2.21 0 0 1 4.421 0m-6.353 6.195a4.423 4.423 0 0 1 8.288 0c.112.299-.126.595-.446.595H3.301c-.32 0-.558-.296-.446-.595" />
+                            </g>
+                        </svg>
                     </div>
-                    <div className="space-y-2 ">
-                        <label htmlFor="skill" className="text-md ml-3 block">
-                            Tech Stacks <span className="text-orange-700 ml-1">*</span>
+
+                    {/* BODY */}
+                    <div className="flex flex-col gap-3 p-5">
+
+                        {/* Upload Button */}
+                        <label className="cursor-pointer w-full text-center py-3 rounded-xl 
+      bg-white/5 hover:bg-white/10 border border-white/10 transition text-gray-200">
+
+                            Upload New Photo
+                            <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
                         </label>
-                        <div className={"flex items-center rounded-2xl px-4 py-3 border border-gray-600 transition-all duration-300  bg-black/50"}>
-                            <span className="mr-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="30" viewBox="0 0 512 512"><path fill="#00e8f4" d="M119.1 25v.1c-25 3.2-47.1 32-47.1 68.8c0 20.4 7.1 38.4 17.5 50.9L99.7 157L84 159.9c-13.7 2.6-23.8 9.9-32.2 21.5c-8.5 11.5-14.9 27.5-19.4 45.8c-8.2 33.6-9.9 74.7-10.1 110.5h44l11.9 158.4h96.3L185 337.7h41.9c0-36.2-.3-77.8-7.8-111.7c-4-18.5-10.2-34.4-18.7-45.9c-8.6-11.4-19.2-18.7-34.5-21l-16-2.5L160 144c10-12.5 16.7-30.2 16.7-50.1c0-39.2-24.8-68.8-52.4-68.8c-2.9 0-4.7-.1-5.2-.1M440 33c-17.2 0-31 13.77-31 31s13.8 31 31 31s31-13.77 31-31s-13.8-31-31-31M311 55v48H208v18h103v158h-55v18h55v110H208v18h103v32h80.8c-.5-2.9-.8-5.9-.8-9s.3-6.1.8-9H329V297h62.8c-.5-2.9-.8-5.9-.8-9s.3-6.1.8-9H329V73h62.8c-.5-2.92-.8-5.93-.8-9s.3-6.08.8-9zm129 202c-17.2 0-31 13.8-31 31s13.8 31 31 31s31-13.8 31-31s-13.8-31-31-31m0 160c-17.2 0-31 13.8-31 31s13.8 31 31 31s31-13.8 31-31s-13.8-31-31-31" /></svg>
-                            </span>
-                            <input
-                                id="skill"
-                                type="text"
-                                placeholder="Skill (ex : React JS)"
-                                className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base"
-                                value={formData['FirstName']}
-                                onChange={handleChange}
 
-                            />
-                        </div>
+                        {/* Remove */}
+                        <button className="w-full py-3 rounded-xl text-red-400 
+      hover:bg-red-500/10 border border-transparent transition">
+                            Remove Current Photo
+                        </button>
+
                     </div>
+
+                    {/* FOOTER */}
+                    <div className="border-t border-white/10">
+                        <button className="w-full py-3 text-gray-400 hover:text-white transition" onClick={() => editProfileIMGisOpen(false)}>
+                            Cancel
+                        </button>
+                    </div>
+
                 </div>
+            </div>)}
 
-            </div>
 
 
-        </div >
+        </div>
+
+
     );
 };
 

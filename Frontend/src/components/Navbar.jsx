@@ -448,7 +448,7 @@ c27 14 67 39 90 55 22 16 44 29 48 29 5 0 16 -15 25 -32z m-2631 -13 l80 -26
                 <Search />
                 <button
                     onClick={openProfile}
-                    className="h-[100%] w-20 rounded-full overflow-hidden bg-gradient-to-br from-gray-400 to-gray-100 cursor-pointer transition-all duration-300 hover:shadow-[0_10px_25px_rgba(0,0,0,0.1)] hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-400 relative group"
+                    className="h-14 rounded-full overflow-hidden bg-gradient-to-br from-gray-400 to-gray-100 cursor-pointer transition-all duration-300 hover:shadow-[0_10px_25px_rgba(0,0,0,0.1)] hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-400 relative group"
                     aria-label="Open profile menu"
                 >
                     <div className="h-full w-full rounded-full overflow-hidden border border-white/50">
@@ -484,14 +484,14 @@ c27 14 67 39 90 55 22 16 44 29 48 29 5 0 16 -15 25 -32z m-2631 -13 l80 -26
                                 <div className="flex items-center gap-3">
                                     <div className="h-12 w-12 rounded-full overflow-hidden">
                                         <img
-                                            src="asset/img/image.png"
+                                            src={user.photoUrl.url}
                                             alt="Profile"
                                             className="h-full w-full object-cover"
                                         />
                                     </div>
                                     <div>
-                                        <h3 className="text-lg font-semibold text-gray-800">John Doe</h3>
-                                        <p className="text-sm text-gray-500">john@example.com</p>
+                                        <h3 className="text-lg font-semibold text-gray-800">{user.firstName} {user.lastName}</h3>
+                                        <p className="text-sm text-gray-500">{user.gmail}</p>
                                     </div>
                                 </div>
                                 <button

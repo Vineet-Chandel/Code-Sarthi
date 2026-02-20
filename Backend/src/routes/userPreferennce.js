@@ -23,7 +23,7 @@ userPreference.get("/user/connections", userAuth, async (req, res) => {
             })
             .populate(
                 "requesterId receiverId",
-                "firstName lastName username skills about profession college"
+                "firstName lastName username skills about profession college photoUrl isVerified age gender"
             )
 
 
@@ -52,7 +52,11 @@ userPreference.get("/user/connections", userAuth, async (req, res) => {
                     skills: otherUser.skills,
                     about: otherUser.about,
                     profession: otherUser.profession,
-                    college: otherUser.college
+                    college: otherUser.college,
+                    photoUrl: otherUser.photoUrl.url,
+                    isVerified: otherUser.isVerified,
+                    age: otherUser.age,
+                    gender: otherUser.gender
                 };
             })
             .filter(Boolean); // remove null users

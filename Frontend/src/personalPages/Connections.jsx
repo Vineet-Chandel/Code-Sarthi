@@ -49,14 +49,15 @@ const Connections = () => {
                                 <div className="flex flex-col items-center md:items-start space-y-4">
                                     {/* Avatar with tech ring */}
                                     <div className="relative">
-                                        <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full blur-lg opacity-30 group-hover:opacity-50 transition-opacity"></div>
+                                        <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full blur-lg opacity-30 group-hover:opacity-50 transition-opacity">
+
+                                        </div>
                                         <div className="relative w-28 h-28 rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700/50 shadow-xl overflow-hidden">
                                             <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-purple-600/10"></div>
                                             <div className="absolute inset-0 flex items-center justify-center">
-                                                <span className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                                                    {item.FirstName?.[0]}
-                                                    {item.LastName?.[0]}
-                                                </span>
+
+                                                <img src={item.photoUrl} alt="kucchh nhi" className="absolute z-50" />
+
                                             </div>
                                             {/* Tech corner accents */}
                                             <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-blue-400/50"></div>
@@ -70,18 +71,14 @@ const Connections = () => {
                                     </div>
 
                                     {/* Tech stats */}
-                                    <div className="grid grid-cols-3 gap-2 w-full">
+                                    <div className="grid grid-cols-2 gap-2 w-full">
                                         <div className="text-center p-2 bg-gray-800/50 rounded-lg border border-gray-700/30">
-                                            <div className="text-xs text-gray-400">LEVEL</div>
-                                            <div className="text-lg font-bold text-blue-400">42</div>
+                                            <div className="text-xs text-gray-400">Age</div>
+                                            <div className="text-lg font-bold text-blue-400">{item.age}</div>
                                         </div>
                                         <div className="text-center p-2 bg-gray-800/50 rounded-lg border border-gray-700/30">
-                                            <div className="text-xs text-gray-400">XP</div>
-                                            <div className="text-lg font-bold text-purple-400">1.2K</div>
-                                        </div>
-                                        <div className="text-center p-2 bg-gray-800/50 rounded-lg border border-gray-700/30">
-                                            <div className="text-xs text-gray-400">RANK</div>
-                                            <div className="text-lg font-bold text-amber-400">#5</div>
+                                            <div className="text-xs text-gray-400">Gender</div>
+                                            <div className="text-lg font-bold text-purple-400">{item.gender}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -95,19 +92,21 @@ const Connections = () => {
                                                 <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-gray-200 to-gray-300 bg-clip-text text-transparent">
                                                     {item.FirstName} {item.MiddleName} {item.LastName}
                                                 </h1>
-                                                <span className="text-xs px-2 py-1 bg-blue-500/20 text-blue-300 rounded-full border border-blue-500/30">PRO</span>
+                                                {item.isVerified && (
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24"><path fill="#44f53d" fill-rule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clip-rule="evenodd" /><path fill="#44f53d" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#44f53d" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
+                                                )}
                                             </div>
                                             <div className="flex items-center gap-2 mt-1">
                                                 <code className="text-gray-400 text-sm font-mono">@{item.username}</code>
                                                 <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
-                                                <span className="text-xs text-gray-500">Full Stack Dev</span>
+                                                <span className="text-lg text-gray-500">{item.profession}</span>
                                             </div>
                                         </div>
 
                                         {/* Connection status */}
                                         <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-800/50 rounded-full border border-gray-700/30">
                                             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                                            <span className="text-xs text-gray-300">Available for collab</span>
+                                            <span className="text-md text-gray-300">{item.college}</span>
                                         </div>
                                     </div>
 

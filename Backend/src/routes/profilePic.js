@@ -3,7 +3,7 @@ const profilePic = express.Router();
 const { userAuth } = require("../middlewares/userAuth");
 const uploadFile = require("../middlewares/multer");
 const getDataUrl = require("../utils/buffer");
-const user = require("../models/user");
+const User = require("../models/user");
 const cloudinary = require("cloudinary").v2;
 
 profilePic.post(
@@ -29,7 +29,7 @@ profilePic.post(
             const fileBuffer = getDataUrl(file);
 
             // get current user
-            const currentUser = await user.findById(req.user._id);
+            const currentUser = await User.findById(req.user._id);
 
             // delete old image if exists
             if (currentUser?.photoUrl?.id) {
@@ -53,7 +53,7 @@ profilePic.post(
             });
 
             // update EXISTING user (not create new one)
-            const updatedUser = await user.findByIdAndUpdate(
+            const updatedUser = await User.findByIdAndUpdate(
                 req.user._id,
                 {
                     photoUrl: {
