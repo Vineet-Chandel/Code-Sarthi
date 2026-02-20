@@ -368,7 +368,7 @@ userPreference.get("/user/feed", userAuth, async (req, res) => {
                 { _id: { $ne: loggedInUser._id } },
             ],
         })
-            .select("firstName middleName lastName username gender photoUrl about college skills age")
+            .select("firstName middleName lastName username gender photoUrl about college skills age profession ")
             .skip(skip)
             .limit(limit);
 

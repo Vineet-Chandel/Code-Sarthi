@@ -49,6 +49,7 @@ import HTML from "./Pages/Toolkit/Htmlw";
 import Toolkit from "./Pages/Toolkit/Toolkitw";
 import Discover from "./Main/PagesMain/Discover";
 import Policy from "./Main/PagesMain/category/Policy";
+import Settings from "./personalPages/Settings/Settings";
 
 const App = () => {
   return (
@@ -101,6 +102,7 @@ const App = () => {
               <Route path="privacypolicy" element={<PrivacyPolicy />} />
               <Route path="editProfile" element={<EditProfile />} />
               <Route path="connections" element={<Connections />} />
+              <Route path="settings" element={<Settings />} />
 
               <Route path="toolkit" element={<Toolkit />} />
               <Route path="toolkit/html" element={<HTML />} />

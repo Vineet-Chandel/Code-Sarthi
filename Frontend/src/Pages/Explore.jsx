@@ -6,14 +6,14 @@ import { useDispatch, useSelector } from "react-redux";
 
 
 const Explore = () => {
-
+    const user = useSelector(store => store.user.user.DATA);
     const feed = useSelector(store => store.feed.users || []);
     const dispatch = useDispatch();
     const [page, setPage] = useState(1); // ✅ page defined
     const feedUser = async () => {
         try {
             const response = await axios.get(
-                `${BASE_URL}/Feed?page=${page}&limit=12`,
+                `${BASE_URL}/user/feed?page=${page}&limit=12`,
                 { withCredentials: true }
             );
             console.log(response.data);
@@ -29,7 +29,7 @@ const Explore = () => {
     }, [page]);
 
     return (
-        <div className="w-full min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-950 p-4 md:p-8">
+        <div className="w-full min-h-screen bg-black p-4 md:p-8">
             <div className="w-full/2 mx-auto">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {feed.map((item, index) => (
@@ -48,14 +48,15 @@ const Explore = () => {
                                 <div className="flex flex-col items-center md:items-start space-y-4">
                                     {/* Avatar with tech ring */}
                                     <div className="relative">
-                                        <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full blur-lg opacity-30 group-hover:opacity-50 transition-opacity"></div>
+                                        <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full blur-lg opacity-30 group-hover:opacity-50 transition-opacity">
+
+                                        </div>
                                         <div className="relative w-28 h-28 rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700/50 shadow-xl overflow-hidden">
                                             <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-purple-600/10"></div>
                                             <div className="absolute inset-0 flex items-center justify-center">
-                                                <span className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                                                    {item.FirstName?.[0]}
-                                                    {item.LastName?.[0]}
-                                                </span>
+
+                                                <img src={item.photoUrl.url} alt="kucchh nhi" className="absolute z-50" />
+
                                             </div>
                                             {/* Tech corner accents */}
                                             <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-blue-400/50"></div>
@@ -69,18 +70,14 @@ const Explore = () => {
                                     </div>
 
                                     {/* Tech stats */}
-                                    <div className="grid grid-cols-3 gap-2 w-full">
+                                    <div className="grid grid-cols-2 gap-2 w-full">
                                         <div className="text-center p-2 bg-gray-800/50 rounded-lg border border-gray-700/30">
-                                            <div className="text-xs text-gray-400">LEVEL</div>
-                                            <div className="text-lg font-bold text-blue-400">42</div>
+                                            <div className="text-xs text-gray-400">Age</div>
+                                            <div className="text-lg font-bold text-blue-400">{item.age}</div>
                                         </div>
                                         <div className="text-center p-2 bg-gray-800/50 rounded-lg border border-gray-700/30">
-                                            <div className="text-xs text-gray-400">XP</div>
-                                            <div className="text-lg font-bold text-purple-400">1.2K</div>
-                                        </div>
-                                        <div className="text-center p-2 bg-gray-800/50 rounded-lg border border-gray-700/30">
-                                            <div className="text-xs text-gray-400">RANK</div>
-                                            <div className="text-lg font-bold text-amber-400">#5</div>
+                                            <div className="text-xs text-gray-400">Gender</div>
+                                            <div className="text-lg font-bold text-purple-400">{item.gender}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -92,21 +89,23 @@ const Explore = () => {
                                         <div>
                                             <div className="flex items-center gap-2">
                                                 <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-gray-200 to-gray-300 bg-clip-text text-transparent">
-                                                    {item.FirstName} {item.MiddleName} {item.LastName}
+                                                    {item.firstName} {item.middleName} {item.lastName}
                                                 </h1>
-                                                <span className="text-xs px-2 py-1 bg-blue-500/20 text-blue-300 rounded-full border border-blue-500/30">PRO</span>
+                                                {item.isVerified && (
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24"><path fill="#44f53d" fill-rule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clip-rule="evenodd" /><path fill="#44f53d" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#44f53d" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
+                                                )}
                                             </div>
                                             <div className="flex items-center gap-2 mt-1">
                                                 <code className="text-gray-400 text-sm font-mono">@{item.username}</code>
                                                 <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
-                                                <span className="text-xs text-gray-500">Full Stack Dev</span>
+                                                <span className="text-lg text-gray-500">{item.profession}</span>
                                             </div>
                                         </div>
 
                                         {/* Connection status */}
                                         <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-800/50 rounded-full border border-gray-700/30">
                                             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                                            <span className="text-xs text-gray-300">Available for collab</span>
+                                            <span className="text-md text-gray-300">{item.college}</span>
                                         </div>
                                     </div>
 
@@ -146,16 +145,6 @@ const Explore = () => {
 
                                     {/* Action buttons with tech style */}
                                     <div className="flex flex-wrap gap-3 pt-2">
-                                        <button className="relative group flex-1 min-w-[140px] bg-gradient-to-r from-blue-600/90 to-blue-700/90 text-white px-4 py-2.5 rounded-xl font-medium hover:from-blue-500 hover:to-blue-600 transition-all duration-300 active:scale-95 shadow-lg shadow-blue-900/20 border border-blue-500/30 overflow-hidden">
-                                            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                            <span className="relative z-10 flex items-center justify-center gap-2">
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
-                                                </svg>
-                                                Connect
-                                            </span>
-                                            <div className="absolute inset-0 border border-white/10 rounded-xl group-hover:border-white/20 transition-colors"></div>
-                                        </button>
 
                                         <button className="relative group flex-1 min-w-[140px] bg-gradient-to-r from-gray-800/80 to-gray-900/80 text-gray-300 px-4 py-2.5 rounded-xl font-medium hover:from-gray-700 hover:to-gray-800 transition-all duration-300 active:scale-95 border border-gray-700/50 hover:border-gray-600/50 overflow-hidden">
                                             <span className="relative z-10 flex items-center justify-center gap-2">
@@ -172,7 +161,7 @@ const Explore = () => {
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                                 </svg>
-                                                View Profile
+                                                Send Request
                                             </span>
                                         </button>
                                     </div>
