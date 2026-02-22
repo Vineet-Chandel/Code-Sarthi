@@ -139,10 +139,7 @@ const NavBar = () => {
     return (
 
 
-        <div className="navbar bg-gray-100 shadow-sm flex items-center justify-between ">
-
-
-
+        <div className="navbar bg-gray-100 shadow-sm flex items-center justify-between rounded-b-3xl px-4">
             {/* Left side - Menu button */}
             <div className="NavStart flex justify-center items-center gap-2.5">
                 <button
@@ -172,7 +169,7 @@ const NavBar = () => {
                             {/* Sidebar */}
                             <div
                                 ref={sidebarRef}
-                                className="absolute left-0 top-0 h-full w-80 bg-white/20 backdrop-blur-lg shadow-xl z-50 rounded-r-xl"
+                                className="absolute left-0 top-0 h-full w-80 bg-white/80 backdrop-blur-lg shadow-xl z-50 rounded-r-xl"
                                 role="dialog"
                                 aria-modal="true"
                                 aria-label="Navigation menu"
@@ -248,16 +245,27 @@ c27 14 67 39 90 55 22 16 44 29 48 29 5 0 16 -15 25 -32z m-2631 -13 l80 -26
                                             <span className="text-2xl font-bold text-gray-800">CodeSarthi</span>
                                         </div>
 
-                                        <p className="pl-10 text-sm">Empowering Dev Workflows</p>
+                                        <p className="pl-14 text-sm text-gray-800 mt-[-10px]">Empowering Dev Workflows</p>
                                     </div>
 
                                     <button
-                                        className="w-6 h-6 flex items-center justify-center border border-gray-300 rounded-full hover:bg-gray-100 transition-colors duration-200"
+                                        className=" flex items-center justify-center  transition-colors duration-200"
                                         onClick={closeSidebar}
                                         aria-label="Close navigation menu"
                                     >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16">
-                                            <path fill="currentColor" d="m8.707 8l3.646-3.646a.5.5 0 0 0-.707-.707L8 7.293L4.354 3.647a.5.5 0 0 0-.707.707L7.293 8l-3.646 3.646a.5.5 0 0 0 .708.707l3.646-3.646l3.646 3.646a.5.5 0 0 0 .708 0a.5.5 0 0 0 0-.707L8.709 8z" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 40 40">
+                                            <g fill="none">
+                                                <g stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" clip-path="url(#SVGw9scfcdR)" stroke-width="1">
+                                                    <path fill="#000" d="M19.02.5C8.8.5.515 8.784.515 19.003c0 10.547 9.918 20.465 20.465 20.465c10.219 0 18.503-8.285 18.503-18.504C39.484 10.418 29.566.5 19.019.5z" />
+                                                    <path fill="#00fbff" d="M19.003 37.506c10.219 0 18.503-8.284 18.503-18.503S29.222.5 19.003.5S.5 8.784.5 19.003s8.284 18.503 18.503 18.503" />
+                                                    <path fill="#fff" d="M28.568 24.136c-.152-.73-2.192-2.988-4.251-5.133c2.059-2.144 4.099-4.403 4.25-5.133c.437-.845-.597-2.002-1.508-2.923c-.91-.92-2.078-1.898-2.923-1.509c-.73.152-2.988 2.192-5.133 4.251C16.859 11.63 14.6 9.59 13.87 9.44c-.845-.437-2.002.597-2.913 1.508s-1.955 2.078-1.519 2.923c.152.73 2.192 2.989 4.251 5.133c-2.059 2.145-4.099 4.403-4.25 5.133c-.437.845.597 2.003 1.508 2.923s2.078 1.945 2.923 1.509c.73-.152 2.989-2.192 5.133-4.251c2.145 2.059 4.403 4.099 5.133 4.25c.845.437 2.003-.597 2.923-1.508c.92-.91 1.945-2.079 1.509-2.924" />
+                                                </g>
+                                                <defs>
+                                                    <clipPath id="SVGw9scfcdR">
+                                                        <path fill="#fff" d="M0 0h40v40H0z" />
+                                                    </clipPath>
+                                                </defs>
+                                            </g>
                                         </svg>
                                     </button>
                                 </div>
@@ -434,15 +442,11 @@ c27 14 67 39 90 55 22 16 44 29 48 29 5 0 16 -15 25 -32z m-2631 -13 l80 -26
                     </button>
 
 
-                    <div className="name font-semibold text-2xl">
+                    <div className="name font-semibold text-3xl text-black">
                         {activePage}
                     </div>
                 </div>
             </div>
-
-
-
-
             {/* Right side - Profile button */}
             <div className="NavEnd relative flex justify-end gap-5 w-[30%] items-center ">
                 <Search />
@@ -574,8 +578,6 @@ c27 14 67 39 90 55 22 16 44 29 48 29 5 0 16 -15 25 -32z m-2631 -13 l80 -26
                     </div>
                 )}
             </div>
-
-
         </div >
 
 

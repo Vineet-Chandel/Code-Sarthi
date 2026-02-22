@@ -38,6 +38,8 @@ const EditProfile = () => {
         });
         if (Object.keys(updatedData).length === 0) return;
         try {
+
+
             const res = await axios.patch(
 
                 `${BASE_URL}/profile/me/edit`,
@@ -117,7 +119,7 @@ const EditProfile = () => {
                         <div className="relative w-[180px] h-[180px] rounded-2xl bg-gray-900 border border-gray-700 flex items-center justify-center" onClick={() => editProfileIMGisOpen(true)}>
                             <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-400/20 to-blue-600/20 blur-xl"></div>
                             <span className="relative text-5xl font-bold text-cyan-400">
-                                <img src={user?.photoUrl?.url} className="h-full w-full" alt="" />
+                                <img src={user?.photoUrl?.url} className="h-full rounded-2xl w-full" alt="" />
                             </span>
                         </div>
                         {/* Name */}
@@ -156,9 +158,9 @@ const EditProfile = () => {
                                 <div className="flex gap-1 font-bold text-xl"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 28 28"><path fill="#5decff" d="M13 20.5c0 2.098.862 3.995 2.25 5.357q-1.077.142-2.25.143c-5.79 0-10-2.567-10-6.285V19a3 3 0 0 1 3-3h8.5a7.47 7.47 0 0 0-1.5 4.5M13 2a6 6 0 1 1 0 12a6 6 0 0 1 0-12m14 18.5a6.5 6.5 0 1 1-13 0a6.5 6.5 0 0 1 13 0m-5.786-3.96a.742.742 0 0 0-1.428 0l-.716 2.298h-2.318c-.727 0-1.03.97-.441 1.416l1.875 1.42l-.716 2.298c-.225.721.567 1.32 1.155.875l1.875-1.42l1.875 1.42c.588.446 1.38-.154 1.155-.875l-.716-2.298l1.875-1.42c.588-.445.286-1.416-.441-1.416H21.93z" /></svg> Tech Stacks:</div>
                                 {user.skills}
                             </div>
-                            <div className="flex flex-col gap-1 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-gray-300">
+                            {/* <div className="flex flex-col gap-1 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-gray-300">
                                 <div className="flex gap-1 font-bold text-xl"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><g fill="none" stroke="#5decff" stroke-miterlimit="10" stroke-width="1"><path fill="#5decff" fill-opacity="0.16" d="M18.6 3H5.4A2.4 2.4 0 0 0 3 5.4v13.2A2.4 2.4 0 0 0 5.4 21h13.2a2.4 2.4 0 0 0 2.4-2.4V5.4A2.4 2.4 0 0 0 18.6 3Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M10 21V3m-7 7h18M5.4 3h13.2A2.4 2.4 0 0 1 21 5.4v13.2a2.4 2.4 0 0 1-2.4 2.4H5.4A2.4 2.4 0 0 1 3 18.6V5.4A2.4 2.4 0 0 1 5.4 3" /></g></svg>  Projects :</div>  this segment used when second segment start showing his AURA !!
-                            </div>
+                            </div> */}
 
                         </div>
                     </div>
@@ -424,7 +426,7 @@ const EditProfile = () => {
                 </div>
             </div >
 
-            {editProfileIMG && (<div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex justify-center items-center " onClick={() => editProfileIMGisOpen(false)}>
+            {editProfileIMG && (<div className="fixed inset-0 z-10 bg-black/70 backdrop-blur-sm flex justify-center items-center " onClick={() => editProfileIMGisOpen(false)}>
 
                 {/* CARD */}
                 <div className="w-[380px] rounded-2xl overflow-hidden bg-[#111] border border-white/10 shadow-2xl " onClick={(e) => e.stopPropagation()} >
@@ -472,7 +474,11 @@ const EditProfile = () => {
                 </div>
             </div>)}
 
+            <div className="bg-black/70 fixed inset-0 z-50 h-screen w-screen  flex justify-center items-center">
+                <div className="w-[30%] h-[60%] bg-cyan-100  rounded-xl">
 
+                </div>
+            </div>
 
         </div>
 

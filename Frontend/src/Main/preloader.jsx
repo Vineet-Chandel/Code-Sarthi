@@ -70,12 +70,12 @@ const Preloader = ({ onFinish }) => {
                 max-md:gap-5 
                 max-sm:gap-3
             ">
-                <div className="text-1 text-[12rem] font-extrabold 
+                <div className="text-1 text-[12rem] font-generalbold
                 max-xl:text-[10rem] 
                 max-lg:text-[8rem] 
                 max-md:text-[6rem] 
                 max-sm:text-[4rem] "><b>Code</b></div>
-                <div className="text-2 text-[12rem] font-extrabold 
+                <div className="text-2 text-[12rem] font-generalbold
                 max-xl:text-[10rem] 
                 max-lg:text-[8rem] 
                 max-md:text-[6rem] 

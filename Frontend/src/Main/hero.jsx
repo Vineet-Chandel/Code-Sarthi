@@ -6,6 +6,8 @@ import { useState } from "react";
 import Preloader from "./preloader";
 import Footer from "./Footer";
 import ContentFirst from "./ContentFirst";
+import ContentSecond from "./ContentSecond";
+import ContentThird from "./ContentThird";
 const Hero = () => {
     const [loading, setLoading] = useState(true)
     setInterval(() => {
@@ -17,6 +19,8 @@ const Hero = () => {
             <Nav />
             <Mainhero />
             <ContentFirst />
+            <ContentSecond />
+            <ContentThird />
             <Footer />
         </div>
     )

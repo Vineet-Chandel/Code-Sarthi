@@ -20,9 +20,16 @@ body {
     }
 
     @font-face {
+        font-family: "generalbold";
+        src: url("/fonts/general.woff2") format("woff2");
+        font-weight: 400px;
+        font-style: normal;
+    }
+
+    @font-face {
         font-family: "general";
-        src: url("/fonts/general.ttf") format("truetype");
-        font-weight: 400;
+        src: url("/fonts/general.woff2") format("woff2");
+        font-weight: 100px;
         font-style: normal;
     }
 

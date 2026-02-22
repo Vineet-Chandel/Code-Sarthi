@@ -260,6 +260,273 @@ const settingIcons = {
     }
 };
 
+const allChanges = [
+    {
+        "Tag": "Verify Email",
+        "svg": (<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 16 16">
+            <g fill="none">
+                <path fill="url(#SVGbHn6MeQb)" d="M7.647 2.146a.5.5 0 0 1 .708 0C9.595 3.39 10.969 4 12.5 4a.5.5 0 0 1 .5.5v3.001c0 3.219-1.641 5.407-4.842 6.473a.5.5 0 0 1-.316 0C4.642 12.908 3 10.72 3 7.501V4.5a.5.5 0 0 1 .5-.5c1.53 0 2.904-.611 4.147-1.854" />
+                <path fill="url(#SVGHi9NGNOE)" fill-opacity="0.3" d="M7.647 2.146a.5.5 0 0 1 .708 0C9.595 3.39 10.969 4 12.5 4a.5.5 0 0 1 .5.5v3.001c0 3.219-1.641 5.407-4.842 6.473a.5.5 0 0 1-.316 0C4.642 12.908 3 10.72 3 7.501V4.5a.5.5 0 0 1 .5-.5c1.53 0 2.904-.611 4.147-1.854" />
+                <path fill="url(#SVGTam6Sbjq)" d="M15 10.5a4.5 4.5 0 1 1-9 0a4.5 4.5 0 0 1 9 0" />
+                <path fill="url(#SVGTc6Bp6hh)" fill-rule="evenodd" d="M12.854 8.646a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1-1a.5.5 0 0 1 .708-.708l.646.647l2.646-2.647a.5.5 0 0 1 .708 0" clip-rule="evenodd" />
+                <defs>
+                    <radialGradient id="SVGbHn6MeQb" cx="0" cy="0" r="1" gradientTransform="rotate(56.554 3.95 -3.238)scale(27.864 23.943)" gradientUnits="userSpaceOnUse">
+                        <stop offset=".338" stop-color="#0fafff" />
+                        <stop offset=".529" stop-color="#367af2" />
+                        <stop offset=".682" stop-color="#5750e2" />
+                        <stop offset=".861" stop-color="#cc23d1" />
+                    </radialGradient>
+                    <radialGradient id="SVGHi9NGNOE" cx="0" cy="0" r="1" gradientTransform="matrix(0 6 -5.71428 0 10 12)" gradientUnits="userSpaceOnUse">
+                        <stop offset=".5" stop-color="#1e1868" />
+                        <stop offset="1" stop-color="#1e1868" stop-opacity="0" />
+                    </radialGradient>
+                    <linearGradient id="SVGTam6Sbjq" x1="6.321" x2="12.533" y1="7.688" y2="14.141" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#52d17c" />
+                        <stop offset="1" stop-color="#22918b" />
+                    </linearGradient>
+                    <linearGradient id="SVGTc6Bp6hh" x1="8.938" x2="9.946" y1="8.908" y2="13.36" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fff" />
+                        <stop offset="1" stop-color="#e3ffd9" />
+                    </linearGradient>
+                </defs>
+            </g>
+        </svg>)
+    },
+
+    {
+        "Tag": "Renew Password",
+        "svg": (<svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 16 16">
+            <g fill="none">
+                <path fill="url(#SVGsfI0Rddh)" d="M11 3.5v1h-1v-1a2 2 0 1 0-4 0v1H5v-1a3 3 0 0 1 6 0" />
+                <path fill="url(#SVGbTQINdJb)" d="M14 6.5A2.5 2.5 0 0 0 11.5 4h-7A2.5 2.5 0 0 0 2 6.5v5A2.5 2.5 0 0 0 4.5 14h7a2.5 2.5 0 0 0 2.5-2.5z" />
+                <path fill="url(#SVGAWAl77FK)" d="M9 9a1 1 0 1 1-2 0a1 1 0 0 1 2 0" />
+                <path fill="url(#SVGzKJRbcbh)" d="M14 6.5A2.5 2.5 0 0 0 11.5 4h-7A2.5 2.5 0 0 0 2 6.5v5A2.5 2.5 0 0 0 4.5 14h7a2.5 2.5 0 0 0 2.5-2.5z" />
+                <path fill="url(#SVGLotQ6dhT)" d="M12.88 7.16c.508.532 1.484 1.379 2.684 1.552a.5.5 0 0 1 .436.482v2.323c0 3.122-2.784 4.255-3.386 4.463a.34.34 0 0 1-.228 0C11.785 15.772 9 14.64 9 11.517V9.194a.5.5 0 0 1 .436-.482c1.2-.173 2.175-1.02 2.683-1.553a.535.535 0 0 1 .762 0" />
+                <defs>
+                    <linearGradient id="SVGsfI0Rddh" x1="6.286" x2="10.672" y1="-.264" y2="7.206" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#ffc205" />
+                        <stop offset="1" stop-color="#fb5937" />
+                    </linearGradient>
+                    <linearGradient id="SVGbTQINdJb" x1="14.857" x2="4.404" y1="14.625" y2="4.404" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#ff6f47" />
+                        <stop offset="1" stop-color="#ffcd0f" />
+                    </linearGradient>
+                    <linearGradient id="SVGLotQ6dhT" x1="10.313" x2="17.166" y1="7" y2="14.648" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#62be55" />
+                        <stop offset="1" stop-color="#1e794a" />
+                    </linearGradient>
+                    <radialGradient id="SVGAWAl77FK" cx="0" cy="0" r="1" gradientTransform="matrix(-.99997 -3.5 4.85626 -1.38747 8.5 10)" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#944600" />
+                        <stop offset="1" stop-color="#cd8e02" />
+                    </radialGradient>
+                    <radialGradient id="SVGzKJRbcbh" cx="0" cy="0" r="1" gradientTransform="rotate(157.947 4.768 7.114)scale(5.54881 5.87385)" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#eb4824" />
+                        <stop offset=".99" stop-color="#eb4824" stop-opacity="0" />
+                    </radialGradient>
+                </defs>
+            </g>
+        </svg>)
+    },
+    {
+        "Tag": "Forgot Password",
+        "svg": (<svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 32 32">
+            <g fill="none">
+                <path fill="#367af2" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
+                <path fill="url(#SVGH8QKvcBK)" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
+                <path fill="url(#SVGkOCYvtuq)" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
+                <path fill="url(#SVGcCmlT1Jm)" fill-opacity="0.75" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
+                <path fill="url(#SVGsZMU2dcf)" fill-opacity="0.7" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
+                <path fill="url(#SVGSLELubFH)" d="M2 9.5A4.5 4.5 0 0 1 6.5 5h19c1.414 0 2.675.652 3.5 1.671V10h1v.59l-13.526 7.292a1 1 0 0 1-.948 0L2 10.59z" />
+                <path fill="url(#SVGJ6GwFbSV)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
+                <path fill="url(#SVGqEKOOddH)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
+                <path fill="url(#SVGI9snPxQZ)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
+                <path fill="url(#SVGQAUgWbdX)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
+                <circle cx="24.5" cy="13" r="3" fill="url(#SVGNJ3uZNIx)" />
+                <path fill="url(#SVGLtXXXbyB)" d="M19.729 5A5 5 0 0 1 29.5 6.5v2.657l2.308 2.596A.75.75 0 0 1 31.299 13h-13.6a.75.75 0 0 1-.508-1.247L19.5 9.156V6.5c0-.523.08-1.026.229-1.5" />
+                <defs>
+                    <linearGradient id="SVGH8QKvcBK" x1="19.555" x2="26.862" y1="13.332" y2="27.873" gradientUnits="userSpaceOnUse">
+                        <stop offset=".199" stop-color="#0094f0" stop-opacity="0" />
+                        <stop offset=".431" stop-color="#0094f0" />
+                    </linearGradient>
+                    <linearGradient id="SVGkOCYvtuq" x1="12" x2="4.914" y1="11.79" y2="28.328" gradientUnits="userSpaceOnUse">
+                        <stop offset=".191" stop-color="#0094f0" stop-opacity="0" />
+                        <stop offset=".431" stop-color="#0094f0" />
+                    </linearGradient>
+                    <linearGradient id="SVGcCmlT1Jm" x1="23.383" x2="24.532" y1="20.142" y2="28.575" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#2764e7" stop-opacity="0" />
+                        <stop offset="1" stop-color="#2764e7" />
+                    </linearGradient>
+                    <linearGradient id="SVGsZMU2dcf" x1="20.333" x2="22.43" y1="12.088" y2="29.25" gradientUnits="userSpaceOnUse">
+                        <stop offset=".533" stop-color="#ff6ce8" stop-opacity="0" />
+                        <stop offset="1" stop-color="#ff6ce8" />
+                    </linearGradient>
+                    <linearGradient id="SVGSLELubFH" x1="10.318" x2="18.903" y1=".976" y2="23.436" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#6ce0ff" />
+                        <stop offset=".462" stop-color="#29c3ff" />
+                        <stop offset="1" stop-color="#4894fe" />
+                    </linearGradient>
+                    <linearGradient id="SVGNJ3uZNIx" x1="24.519" x2="24.519" y1="12.499" y2="15.999" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#eb4824" />
+                        <stop offset="1" stop-color="#ffcd0f" stop-opacity="0.988" />
+                    </linearGradient>
+                    <linearGradient id="SVGLtXXXbyB" x1="32.02" x2="20.9" y1="12.995" y2="1.131" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#ff6f47" />
+                        <stop offset="1" stop-color="#ffcd0f" />
+                    </linearGradient>
+                    <radialGradient id="SVGJ6GwFbSV" cx="0" cy="0" r="1" gradientTransform="matrix(0 5 -5.06764 0 24.5 13)" gradientUnits="userSpaceOnUse">
+                        <stop offset=".535" stop-color="#4a43cb" />
+                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
+                    </radialGradient>
+                    <radialGradient id="SVGqEKOOddH" cx="0" cy="0" r="1" gradientTransform="matrix(0 2 -9.1875 0 24.5 12.5)" gradientUnits="userSpaceOnUse">
+                        <stop offset=".535" stop-color="#4a43cb" />
+                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
+                    </radialGradient>
+                    <radialGradient id="SVGI9snPxQZ" cx="0" cy="0" r="1" gradientTransform="matrix(1 1.5 -1.875 1.25 19 11)" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#4a43cb" />
+                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
+                    </radialGradient>
+                    <radialGradient id="SVGQAUgWbdX" cx="0" cy="0" r="1" gradientTransform="rotate(90.406 9.271 15.163)scale(8.5 6.24951)" gradientUnits="userSpaceOnUse">
+                        <stop offset=".604" stop-color="#4a43cb" />
+                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
+                    </radialGradient>
+                </defs>
+            </g>
+        </svg>)
+    },
+    {
+        "Tag": "Change Email",
+        "svg": (<svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 32 32">
+            <g fill="none">
+                <path fill="#367af2" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
+                <path fill="url(#SVGH8QKvcBK)" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
+                <path fill="url(#SVGkOCYvtuq)" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
+                <path fill="url(#SVGcCmlT1Jm)" fill-opacity="0.75" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
+                <path fill="url(#SVGsZMU2dcf)" fill-opacity="0.7" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
+                <path fill="url(#SVGSLELubFH)" d="M2 9.5A4.5 4.5 0 0 1 6.5 5h19c1.414 0 2.675.652 3.5 1.671V10h1v.59l-13.526 7.292a1 1 0 0 1-.948 0L2 10.59z" />
+                <path fill="url(#SVGJ6GwFbSV)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
+                <path fill="url(#SVGqEKOOddH)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
+                <path fill="url(#SVGI9snPxQZ)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
+                <path fill="url(#SVGQAUgWbdX)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
+                <circle cx="24.5" cy="13" r="3" fill="url(#SVGNJ3uZNIx)" />
+                <path fill="url(#SVGLtXXXbyB)" d="M19.729 5A5 5 0 0 1 29.5 6.5v2.657l2.308 2.596A.75.75 0 0 1 31.299 13h-13.6a.75.75 0 0 1-.508-1.247L19.5 9.156V6.5c0-.523.08-1.026.229-1.5" />
+                <defs>
+                    <linearGradient id="SVGH8QKvcBK" x1="19.555" x2="26.862" y1="13.332" y2="27.873" gradientUnits="userSpaceOnUse">
+                        <stop offset=".199" stop-color="#0094f0" stop-opacity="0" />
+                        <stop offset=".431" stop-color="#0094f0" />
+                    </linearGradient>
+                    <linearGradient id="SVGkOCYvtuq" x1="12" x2="4.914" y1="11.79" y2="28.328" gradientUnits="userSpaceOnUse">
+                        <stop offset=".191" stop-color="#0094f0" stop-opacity="0" />
+                        <stop offset=".431" stop-color="#0094f0" />
+                    </linearGradient>
+                    <linearGradient id="SVGcCmlT1Jm" x1="23.383" x2="24.532" y1="20.142" y2="28.575" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#2764e7" stop-opacity="0" />
+                        <stop offset="1" stop-color="#2764e7" />
+                    </linearGradient>
+                    <linearGradient id="SVGsZMU2dcf" x1="20.333" x2="22.43" y1="12.088" y2="29.25" gradientUnits="userSpaceOnUse">
+                        <stop offset=".533" stop-color="#ff6ce8" stop-opacity="0" />
+                        <stop offset="1" stop-color="#ff6ce8" />
+                    </linearGradient>
+                    <linearGradient id="SVGSLELubFH" x1="10.318" x2="18.903" y1=".976" y2="23.436" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#6ce0ff" />
+                        <stop offset=".462" stop-color="#29c3ff" />
+                        <stop offset="1" stop-color="#4894fe" />
+                    </linearGradient>
+                    <linearGradient id="SVGNJ3uZNIx" x1="24.519" x2="24.519" y1="12.499" y2="15.999" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#eb4824" />
+                        <stop offset="1" stop-color="#ffcd0f" stop-opacity="0.988" />
+                    </linearGradient>
+                    <linearGradient id="SVGLtXXXbyB" x1="32.02" x2="20.9" y1="12.995" y2="1.131" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#ff6f47" />
+                        <stop offset="1" stop-color="#ffcd0f" />
+                    </linearGradient>
+                    <radialGradient id="SVGJ6GwFbSV" cx="0" cy="0" r="1" gradientTransform="matrix(0 5 -5.06764 0 24.5 13)" gradientUnits="userSpaceOnUse">
+                        <stop offset=".535" stop-color="#4a43cb" />
+                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
+                    </radialGradient>
+                    <radialGradient id="SVGqEKOOddH" cx="0" cy="0" r="1" gradientTransform="matrix(0 2 -9.1875 0 24.5 12.5)" gradientUnits="userSpaceOnUse">
+                        <stop offset=".535" stop-color="#4a43cb" />
+                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
+                    </radialGradient>
+                    <radialGradient id="SVGI9snPxQZ" cx="0" cy="0" r="1" gradientTransform="matrix(1 1.5 -1.875 1.25 19 11)" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#4a43cb" />
+                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
+                    </radialGradient>
+                    <radialGradient id="SVGQAUgWbdX" cx="0" cy="0" r="1" gradientTransform="rotate(90.406 9.271 15.163)scale(8.5 6.24951)" gradientUnits="userSpaceOnUse">
+                        <stop offset=".604" stop-color="#4a43cb" />
+                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
+                    </radialGradient>
+                </defs>
+            </g>
+        </svg>)
+    },
+    {
+        "Tag": "Change Username",
+        "svg": (<svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 32 32">
+            <g fill="none">
+                <path fill="#367af2" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
+                <path fill="url(#SVGH8QKvcBK)" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
+                <path fill="url(#SVGkOCYvtuq)" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
+                <path fill="url(#SVGcCmlT1Jm)" fill-opacity="0.75" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
+                <path fill="url(#SVGsZMU2dcf)" fill-opacity="0.7" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
+                <path fill="url(#SVGSLELubFH)" d="M2 9.5A4.5 4.5 0 0 1 6.5 5h19c1.414 0 2.675.652 3.5 1.671V10h1v.59l-13.526 7.292a1 1 0 0 1-.948 0L2 10.59z" />
+                <path fill="url(#SVGJ6GwFbSV)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
+                <path fill="url(#SVGqEKOOddH)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
+                <path fill="url(#SVGI9snPxQZ)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
+                <path fill="url(#SVGQAUgWbdX)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
+                <circle cx="24.5" cy="13" r="3" fill="url(#SVGNJ3uZNIx)" />
+                <path fill="url(#SVGLtXXXbyB)" d="M19.729 5A5 5 0 0 1 29.5 6.5v2.657l2.308 2.596A.75.75 0 0 1 31.299 13h-13.6a.75.75 0 0 1-.508-1.247L19.5 9.156V6.5c0-.523.08-1.026.229-1.5" />
+                <defs>
+                    <linearGradient id="SVGH8QKvcBK" x1="19.555" x2="26.862" y1="13.332" y2="27.873" gradientUnits="userSpaceOnUse">
+                        <stop offset=".199" stop-color="#0094f0" stop-opacity="0" />
+                        <stop offset=".431" stop-color="#0094f0" />
+                    </linearGradient>
+                    <linearGradient id="SVGkOCYvtuq" x1="12" x2="4.914" y1="11.79" y2="28.328" gradientUnits="userSpaceOnUse">
+                        <stop offset=".191" stop-color="#0094f0" stop-opacity="0" />
+                        <stop offset=".431" stop-color="#0094f0" />
+                    </linearGradient>
+                    <linearGradient id="SVGcCmlT1Jm" x1="23.383" x2="24.532" y1="20.142" y2="28.575" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#2764e7" stop-opacity="0" />
+                        <stop offset="1" stop-color="#2764e7" />
+                    </linearGradient>
+                    <linearGradient id="SVGsZMU2dcf" x1="20.333" x2="22.43" y1="12.088" y2="29.25" gradientUnits="userSpaceOnUse">
+                        <stop offset=".533" stop-color="#ff6ce8" stop-opacity="0" />
+                        <stop offset="1" stop-color="#ff6ce8" />
+                    </linearGradient>
+                    <linearGradient id="SVGSLELubFH" x1="10.318" x2="18.903" y1=".976" y2="23.436" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#6ce0ff" />
+                        <stop offset=".462" stop-color="#29c3ff" />
+                        <stop offset="1" stop-color="#4894fe" />
+                    </linearGradient>
+                    <linearGradient id="SVGNJ3uZNIx" x1="24.519" x2="24.519" y1="12.499" y2="15.999" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#eb4824" />
+                        <stop offset="1" stop-color="#ffcd0f" stop-opacity="0.988" />
+                    </linearGradient>
+                    <linearGradient id="SVGLtXXXbyB" x1="32.02" x2="20.9" y1="12.995" y2="1.131" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#ff6f47" />
+                        <stop offset="1" stop-color="#ffcd0f" />
+                    </linearGradient>
+                    <radialGradient id="SVGJ6GwFbSV" cx="0" cy="0" r="1" gradientTransform="matrix(0 5 -5.06764 0 24.5 13)" gradientUnits="userSpaceOnUse">
+                        <stop offset=".535" stop-color="#4a43cb" />
+                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
+                    </radialGradient>
+                    <radialGradient id="SVGqEKOOddH" cx="0" cy="0" r="1" gradientTransform="matrix(0 2 -9.1875 0 24.5 12.5)" gradientUnits="userSpaceOnUse">
+                        <stop offset=".535" stop-color="#4a43cb" />
+                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
+                    </radialGradient>
+                    <radialGradient id="SVGI9snPxQZ" cx="0" cy="0" r="1" gradientTransform="matrix(1 1.5 -1.875 1.25 19 11)" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#4a43cb" />
+                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
+                    </radialGradient>
+                    <radialGradient id="SVGQAUgWbdX" cx="0" cy="0" r="1" gradientTransform="rotate(90.406 9.271 15.163)scale(8.5 6.24951)" gradientUnits="userSpaceOnUse">
+                        <stop offset=".604" stop-color="#4a43cb" />
+                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
+                    </radialGradient>
+                </defs>
+            </g>
+        </svg>)
+    }
+
+]
 // Glitch effect component
 const GlitchText = ({ text }) => (
     <div className="relative group">
@@ -292,7 +559,7 @@ const TechToggle = ({ enabled, onChange }) => (
 // Main settings components with techy UI
 const PasswordSecuritySettings = () => {
 
-    const [passwordStrength, setPasswordStrength] = useState(100);
+    const [editPrivate, setEditPrivateisOpen] = useState(false)
 
     return (
         <motion.div
@@ -310,257 +577,65 @@ const PasswordSecuritySettings = () => {
                             <path fill="#00afff" d="M12.75 10a.75.75 0 0 0-1.5 0v.701l-.607-.35a.75.75 0 1 0-.75 1.298l.607.35l-.607.351a.75.75 0 1 0 .75 1.3l.607-.351V14a.75.75 0 1 0 1.5 0v-.7l.607.35a.75.75 0 0 0 .75-1.3L13.5 12l.607-.35a.75.75 0 0 0-.75-1.3l-.607.35zm-6.017-.75a.75.75 0 0 1 .75.75v.7l.606-.35a.75.75 0 0 1 .75 1.3l-.607.35l.607.35a.75.75 0 1 1-.75 1.3l-.606-.35v.7a.75.75 0 0 1-1.5 0v-.701l-.608.35a.75.75 0 0 1-.75-1.298L5.232 12l-.607-.35a.75.75 0 1 1 .75-1.3l.608.351V10a.75.75 0 0 1 .75-.75m11.285.75a.75.75 0 0 0-1.5 0v.701l-.607-.35a.75.75 0 1 0-.75 1.298l.607.35l-.607.351a.75.75 0 0 0 .75 1.3l.607-.351V14a.75.75 0 0 0 1.5 0v-.7l.607.35a.75.75 0 0 0 .75-1.3l-.607-.35l.607-.35a.75.75 0 1 0-.75-1.3l-.607.35z" />
                         </svg> Change Credentials</span>
                     </div>
-                    <div className="flex flex-col justify-center justify-between ml-11 gap-2">
-                        <span className="text-cyan-400 font-mono text-2xl  flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 16 16">
-                            <g fill="none">
-                                <path fill="url(#SVGbHn6MeQb)" d="M7.647 2.146a.5.5 0 0 1 .708 0C9.595 3.39 10.969 4 12.5 4a.5.5 0 0 1 .5.5v3.001c0 3.219-1.641 5.407-4.842 6.473a.5.5 0 0 1-.316 0C4.642 12.908 3 10.72 3 7.501V4.5a.5.5 0 0 1 .5-.5c1.53 0 2.904-.611 4.147-1.854" />
-                                <path fill="url(#SVGHi9NGNOE)" fill-opacity="0.3" d="M7.647 2.146a.5.5 0 0 1 .708 0C9.595 3.39 10.969 4 12.5 4a.5.5 0 0 1 .5.5v3.001c0 3.219-1.641 5.407-4.842 6.473a.5.5 0 0 1-.316 0C4.642 12.908 3 10.72 3 7.501V4.5a.5.5 0 0 1 .5-.5c1.53 0 2.904-.611 4.147-1.854" />
-                                <path fill="url(#SVGTam6Sbjq)" d="M15 10.5a4.5 4.5 0 1 1-9 0a4.5 4.5 0 0 1 9 0" />
-                                <path fill="url(#SVGTc6Bp6hh)" fill-rule="evenodd" d="M12.854 8.646a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1-1a.5.5 0 0 1 .708-.708l.646.647l2.646-2.647a.5.5 0 0 1 .708 0" clip-rule="evenodd" />
-                                <defs>
-                                    <radialGradient id="SVGbHn6MeQb" cx="0" cy="0" r="1" gradientTransform="rotate(56.554 3.95 -3.238)scale(27.864 23.943)" gradientUnits="userSpaceOnUse">
-                                        <stop offset=".338" stop-color="#0fafff" />
-                                        <stop offset=".529" stop-color="#367af2" />
-                                        <stop offset=".682" stop-color="#5750e2" />
-                                        <stop offset=".861" stop-color="#cc23d1" />
-                                    </radialGradient>
-                                    <radialGradient id="SVGHi9NGNOE" cx="0" cy="0" r="1" gradientTransform="matrix(0 6 -5.71428 0 10 12)" gradientUnits="userSpaceOnUse">
-                                        <stop offset=".5" stop-color="#1e1868" />
-                                        <stop offset="1" stop-color="#1e1868" stop-opacity="0" />
-                                    </radialGradient>
-                                    <linearGradient id="SVGTam6Sbjq" x1="6.321" x2="12.533" y1="7.688" y2="14.141" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#52d17c" />
-                                        <stop offset="1" stop-color="#22918b" />
-                                    </linearGradient>
-                                    <linearGradient id="SVGTc6Bp6hh" x1="8.938" x2="9.946" y1="8.908" y2="13.36" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#fff" />
-                                        <stop offset="1" stop-color="#e3ffd9" />
-                                    </linearGradient>
-                                </defs>
-                            </g>
-                        </svg> Verify Email</span>
-                        <span className="text-cyan-400 font-mono text-2xl flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 16 16">
-                            <g fill="none">
-                                <path fill="url(#SVGsfI0Rddh)" d="M11 3.5v1h-1v-1a2 2 0 1 0-4 0v1H5v-1a3 3 0 0 1 6 0" />
-                                <path fill="url(#SVGbTQINdJb)" d="M14 6.5A2.5 2.5 0 0 0 11.5 4h-7A2.5 2.5 0 0 0 2 6.5v5A2.5 2.5 0 0 0 4.5 14h7a2.5 2.5 0 0 0 2.5-2.5z" />
-                                <path fill="url(#SVGAWAl77FK)" d="M9 9a1 1 0 1 1-2 0a1 1 0 0 1 2 0" />
-                                <path fill="url(#SVGzKJRbcbh)" d="M14 6.5A2.5 2.5 0 0 0 11.5 4h-7A2.5 2.5 0 0 0 2 6.5v5A2.5 2.5 0 0 0 4.5 14h7a2.5 2.5 0 0 0 2.5-2.5z" />
-                                <path fill="url(#SVGLotQ6dhT)" d="M12.88 7.16c.508.532 1.484 1.379 2.684 1.552a.5.5 0 0 1 .436.482v2.323c0 3.122-2.784 4.255-3.386 4.463a.34.34 0 0 1-.228 0C11.785 15.772 9 14.64 9 11.517V9.194a.5.5 0 0 1 .436-.482c1.2-.173 2.175-1.02 2.683-1.553a.535.535 0 0 1 .762 0" />
-                                <defs>
-                                    <linearGradient id="SVGsfI0Rddh" x1="6.286" x2="10.672" y1="-.264" y2="7.206" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#ffc205" />
-                                        <stop offset="1" stop-color="#fb5937" />
-                                    </linearGradient>
-                                    <linearGradient id="SVGbTQINdJb" x1="14.857" x2="4.404" y1="14.625" y2="4.404" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#ff6f47" />
-                                        <stop offset="1" stop-color="#ffcd0f" />
-                                    </linearGradient>
-                                    <linearGradient id="SVGLotQ6dhT" x1="10.313" x2="17.166" y1="7" y2="14.648" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#62be55" />
-                                        <stop offset="1" stop-color="#1e794a" />
-                                    </linearGradient>
-                                    <radialGradient id="SVGAWAl77FK" cx="0" cy="0" r="1" gradientTransform="matrix(-.99997 -3.5 4.85626 -1.38747 8.5 10)" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#944600" />
-                                        <stop offset="1" stop-color="#cd8e02" />
-                                    </radialGradient>
-                                    <radialGradient id="SVGzKJRbcbh" cx="0" cy="0" r="1" gradientTransform="rotate(157.947 4.768 7.114)scale(5.54881 5.87385)" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#eb4824" />
-                                        <stop offset=".99" stop-color="#eb4824" stop-opacity="0" />
-                                    </radialGradient>
-                                </defs>
-                            </g>
-                        </svg> Renew password</span>
-                        <span className="text-cyan-400 font-mono text-2xl  flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 32 32">
-                            <g fill="none">
-                                <path fill="#367af2" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                                <path fill="url(#SVGH8QKvcBK)" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                                <path fill="url(#SVGkOCYvtuq)" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                                <path fill="url(#SVGcCmlT1Jm)" fill-opacity="0.75" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                                <path fill="url(#SVGsZMU2dcf)" fill-opacity="0.7" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                                <path fill="url(#SVGSLELubFH)" d="M2 9.5A4.5 4.5 0 0 1 6.5 5h19c1.414 0 2.675.652 3.5 1.671V10h1v.59l-13.526 7.292a1 1 0 0 1-.948 0L2 10.59z" />
-                                <path fill="url(#SVGJ6GwFbSV)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                                <path fill="url(#SVGqEKOOddH)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                                <path fill="url(#SVGI9snPxQZ)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                                <path fill="url(#SVGQAUgWbdX)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                                <circle cx="24.5" cy="13" r="3" fill="url(#SVGNJ3uZNIx)" />
-                                <path fill="url(#SVGLtXXXbyB)" d="M19.729 5A5 5 0 0 1 29.5 6.5v2.657l2.308 2.596A.75.75 0 0 1 31.299 13h-13.6a.75.75 0 0 1-.508-1.247L19.5 9.156V6.5c0-.523.08-1.026.229-1.5" />
-                                <defs>
-                                    <linearGradient id="SVGH8QKvcBK" x1="19.555" x2="26.862" y1="13.332" y2="27.873" gradientUnits="userSpaceOnUse">
-                                        <stop offset=".199" stop-color="#0094f0" stop-opacity="0" />
-                                        <stop offset=".431" stop-color="#0094f0" />
-                                    </linearGradient>
-                                    <linearGradient id="SVGkOCYvtuq" x1="12" x2="4.914" y1="11.79" y2="28.328" gradientUnits="userSpaceOnUse">
-                                        <stop offset=".191" stop-color="#0094f0" stop-opacity="0" />
-                                        <stop offset=".431" stop-color="#0094f0" />
-                                    </linearGradient>
-                                    <linearGradient id="SVGcCmlT1Jm" x1="23.383" x2="24.532" y1="20.142" y2="28.575" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#2764e7" stop-opacity="0" />
-                                        <stop offset="1" stop-color="#2764e7" />
-                                    </linearGradient>
-                                    <linearGradient id="SVGsZMU2dcf" x1="20.333" x2="22.43" y1="12.088" y2="29.25" gradientUnits="userSpaceOnUse">
-                                        <stop offset=".533" stop-color="#ff6ce8" stop-opacity="0" />
-                                        <stop offset="1" stop-color="#ff6ce8" />
-                                    </linearGradient>
-                                    <linearGradient id="SVGSLELubFH" x1="10.318" x2="18.903" y1=".976" y2="23.436" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#6ce0ff" />
-                                        <stop offset=".462" stop-color="#29c3ff" />
-                                        <stop offset="1" stop-color="#4894fe" />
-                                    </linearGradient>
-                                    <linearGradient id="SVGNJ3uZNIx" x1="24.519" x2="24.519" y1="12.499" y2="15.999" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#eb4824" />
-                                        <stop offset="1" stop-color="#ffcd0f" stop-opacity="0.988" />
-                                    </linearGradient>
-                                    <linearGradient id="SVGLtXXXbyB" x1="32.02" x2="20.9" y1="12.995" y2="1.131" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#ff6f47" />
-                                        <stop offset="1" stop-color="#ffcd0f" />
-                                    </linearGradient>
-                                    <radialGradient id="SVGJ6GwFbSV" cx="0" cy="0" r="1" gradientTransform="matrix(0 5 -5.06764 0 24.5 13)" gradientUnits="userSpaceOnUse">
-                                        <stop offset=".535" stop-color="#4a43cb" />
-                                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                                    </radialGradient>
-                                    <radialGradient id="SVGqEKOOddH" cx="0" cy="0" r="1" gradientTransform="matrix(0 2 -9.1875 0 24.5 12.5)" gradientUnits="userSpaceOnUse">
-                                        <stop offset=".535" stop-color="#4a43cb" />
-                                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                                    </radialGradient>
-                                    <radialGradient id="SVGI9snPxQZ" cx="0" cy="0" r="1" gradientTransform="matrix(1 1.5 -1.875 1.25 19 11)" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#4a43cb" />
-                                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                                    </radialGradient>
-                                    <radialGradient id="SVGQAUgWbdX" cx="0" cy="0" r="1" gradientTransform="rotate(90.406 9.271 15.163)scale(8.5 6.24951)" gradientUnits="userSpaceOnUse">
-                                        <stop offset=".604" stop-color="#4a43cb" />
-                                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                                    </radialGradient>
-                                </defs>
-                            </g>
-                        </svg> Forgot password</span>
-                        <span className="text-cyan-400 font-mono text-2xl  flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 32 32">
-                            <g fill="none">
-                                <path fill="#367af2" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                                <path fill="url(#SVGH8QKvcBK)" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                                <path fill="url(#SVGkOCYvtuq)" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                                <path fill="url(#SVGcCmlT1Jm)" fill-opacity="0.75" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                                <path fill="url(#SVGsZMU2dcf)" fill-opacity="0.7" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                                <path fill="url(#SVGSLELubFH)" d="M2 9.5A4.5 4.5 0 0 1 6.5 5h19c1.414 0 2.675.652 3.5 1.671V10h1v.59l-13.526 7.292a1 1 0 0 1-.948 0L2 10.59z" />
-                                <path fill="url(#SVGJ6GwFbSV)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                                <path fill="url(#SVGqEKOOddH)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                                <path fill="url(#SVGI9snPxQZ)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                                <path fill="url(#SVGQAUgWbdX)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                                <circle cx="24.5" cy="13" r="3" fill="url(#SVGNJ3uZNIx)" />
-                                <path fill="url(#SVGLtXXXbyB)" d="M19.729 5A5 5 0 0 1 29.5 6.5v2.657l2.308 2.596A.75.75 0 0 1 31.299 13h-13.6a.75.75 0 0 1-.508-1.247L19.5 9.156V6.5c0-.523.08-1.026.229-1.5" />
-                                <defs>
-                                    <linearGradient id="SVGH8QKvcBK" x1="19.555" x2="26.862" y1="13.332" y2="27.873" gradientUnits="userSpaceOnUse">
-                                        <stop offset=".199" stop-color="#0094f0" stop-opacity="0" />
-                                        <stop offset=".431" stop-color="#0094f0" />
-                                    </linearGradient>
-                                    <linearGradient id="SVGkOCYvtuq" x1="12" x2="4.914" y1="11.79" y2="28.328" gradientUnits="userSpaceOnUse">
-                                        <stop offset=".191" stop-color="#0094f0" stop-opacity="0" />
-                                        <stop offset=".431" stop-color="#0094f0" />
-                                    </linearGradient>
-                                    <linearGradient id="SVGcCmlT1Jm" x1="23.383" x2="24.532" y1="20.142" y2="28.575" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#2764e7" stop-opacity="0" />
-                                        <stop offset="1" stop-color="#2764e7" />
-                                    </linearGradient>
-                                    <linearGradient id="SVGsZMU2dcf" x1="20.333" x2="22.43" y1="12.088" y2="29.25" gradientUnits="userSpaceOnUse">
-                                        <stop offset=".533" stop-color="#ff6ce8" stop-opacity="0" />
-                                        <stop offset="1" stop-color="#ff6ce8" />
-                                    </linearGradient>
-                                    <linearGradient id="SVGSLELubFH" x1="10.318" x2="18.903" y1=".976" y2="23.436" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#6ce0ff" />
-                                        <stop offset=".462" stop-color="#29c3ff" />
-                                        <stop offset="1" stop-color="#4894fe" />
-                                    </linearGradient>
-                                    <linearGradient id="SVGNJ3uZNIx" x1="24.519" x2="24.519" y1="12.499" y2="15.999" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#eb4824" />
-                                        <stop offset="1" stop-color="#ffcd0f" stop-opacity="0.988" />
-                                    </linearGradient>
-                                    <linearGradient id="SVGLtXXXbyB" x1="32.02" x2="20.9" y1="12.995" y2="1.131" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#ff6f47" />
-                                        <stop offset="1" stop-color="#ffcd0f" />
-                                    </linearGradient>
-                                    <radialGradient id="SVGJ6GwFbSV" cx="0" cy="0" r="1" gradientTransform="matrix(0 5 -5.06764 0 24.5 13)" gradientUnits="userSpaceOnUse">
-                                        <stop offset=".535" stop-color="#4a43cb" />
-                                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                                    </radialGradient>
-                                    <radialGradient id="SVGqEKOOddH" cx="0" cy="0" r="1" gradientTransform="matrix(0 2 -9.1875 0 24.5 12.5)" gradientUnits="userSpaceOnUse">
-                                        <stop offset=".535" stop-color="#4a43cb" />
-                                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                                    </radialGradient>
-                                    <radialGradient id="SVGI9snPxQZ" cx="0" cy="0" r="1" gradientTransform="matrix(1 1.5 -1.875 1.25 19 11)" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#4a43cb" />
-                                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                                    </radialGradient>
-                                    <radialGradient id="SVGQAUgWbdX" cx="0" cy="0" r="1" gradientTransform="rotate(90.406 9.271 15.163)scale(8.5 6.24951)" gradientUnits="userSpaceOnUse">
-                                        <stop offset=".604" stop-color="#4a43cb" />
-                                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                                    </radialGradient>
-                                </defs>
-                            </g>
-                        </svg> Change Email</span>
-                        <span className="text-cyan-400 font-mono text-2xl  flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 32 32">
-                            <g fill="none">
-                                <path fill="#367af2" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                                <path fill="url(#SVGH8QKvcBK)" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                                <path fill="url(#SVGkOCYvtuq)" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                                <path fill="url(#SVGcCmlT1Jm)" fill-opacity="0.75" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                                <path fill="url(#SVGsZMU2dcf)" fill-opacity="0.7" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                                <path fill="url(#SVGSLELubFH)" d="M2 9.5A4.5 4.5 0 0 1 6.5 5h19c1.414 0 2.675.652 3.5 1.671V10h1v.59l-13.526 7.292a1 1 0 0 1-.948 0L2 10.59z" />
-                                <path fill="url(#SVGJ6GwFbSV)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                                <path fill="url(#SVGqEKOOddH)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                                <path fill="url(#SVGI9snPxQZ)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                                <path fill="url(#SVGQAUgWbdX)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                                <circle cx="24.5" cy="13" r="3" fill="url(#SVGNJ3uZNIx)" />
-                                <path fill="url(#SVGLtXXXbyB)" d="M19.729 5A5 5 0 0 1 29.5 6.5v2.657l2.308 2.596A.75.75 0 0 1 31.299 13h-13.6a.75.75 0 0 1-.508-1.247L19.5 9.156V6.5c0-.523.08-1.026.229-1.5" />
-                                <defs>
-                                    <linearGradient id="SVGH8QKvcBK" x1="19.555" x2="26.862" y1="13.332" y2="27.873" gradientUnits="userSpaceOnUse">
-                                        <stop offset=".199" stop-color="#0094f0" stop-opacity="0" />
-                                        <stop offset=".431" stop-color="#0094f0" />
-                                    </linearGradient>
-                                    <linearGradient id="SVGkOCYvtuq" x1="12" x2="4.914" y1="11.79" y2="28.328" gradientUnits="userSpaceOnUse">
-                                        <stop offset=".191" stop-color="#0094f0" stop-opacity="0" />
-                                        <stop offset=".431" stop-color="#0094f0" />
-                                    </linearGradient>
-                                    <linearGradient id="SVGcCmlT1Jm" x1="23.383" x2="24.532" y1="20.142" y2="28.575" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#2764e7" stop-opacity="0" />
-                                        <stop offset="1" stop-color="#2764e7" />
-                                    </linearGradient>
-                                    <linearGradient id="SVGsZMU2dcf" x1="20.333" x2="22.43" y1="12.088" y2="29.25" gradientUnits="userSpaceOnUse">
-                                        <stop offset=".533" stop-color="#ff6ce8" stop-opacity="0" />
-                                        <stop offset="1" stop-color="#ff6ce8" />
-                                    </linearGradient>
-                                    <linearGradient id="SVGSLELubFH" x1="10.318" x2="18.903" y1=".976" y2="23.436" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#6ce0ff" />
-                                        <stop offset=".462" stop-color="#29c3ff" />
-                                        <stop offset="1" stop-color="#4894fe" />
-                                    </linearGradient>
-                                    <linearGradient id="SVGNJ3uZNIx" x1="24.519" x2="24.519" y1="12.499" y2="15.999" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#eb4824" />
-                                        <stop offset="1" stop-color="#ffcd0f" stop-opacity="0.988" />
-                                    </linearGradient>
-                                    <linearGradient id="SVGLtXXXbyB" x1="32.02" x2="20.9" y1="12.995" y2="1.131" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#ff6f47" />
-                                        <stop offset="1" stop-color="#ffcd0f" />
-                                    </linearGradient>
-                                    <radialGradient id="SVGJ6GwFbSV" cx="0" cy="0" r="1" gradientTransform="matrix(0 5 -5.06764 0 24.5 13)" gradientUnits="userSpaceOnUse">
-                                        <stop offset=".535" stop-color="#4a43cb" />
-                                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                                    </radialGradient>
-                                    <radialGradient id="SVGqEKOOddH" cx="0" cy="0" r="1" gradientTransform="matrix(0 2 -9.1875 0 24.5 12.5)" gradientUnits="userSpaceOnUse">
-                                        <stop offset=".535" stop-color="#4a43cb" />
-                                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                                    </radialGradient>
-                                    <radialGradient id="SVGI9snPxQZ" cx="0" cy="0" r="1" gradientTransform="matrix(1 1.5 -1.875 1.25 19 11)" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#4a43cb" />
-                                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                                    </radialGradient>
-                                    <radialGradient id="SVGQAUgWbdX" cx="0" cy="0" r="1" gradientTransform="rotate(90.406 9.271 15.163)scale(8.5 6.24951)" gradientUnits="userSpaceOnUse">
-                                        <stop offset=".604" stop-color="#4a43cb" />
-                                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                                    </radialGradient>
-                                </defs>
-                            </g>
-                        </svg> Change Username</span>
-                    </div>
+
+                    {allChanges.map((items) => (
+                        <div key={items} className="flex flex-col justify-center justify-between ml-11 gap-2">
+                            <span onClick={() => setEditPrivateisOpen(true)} className="text-cyan-400 cursor-pointer font-mono text-2xl  flex items-center gap-3"> {items.svg} {items.Tag}<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24">
+                                <path fill="#5ff4fc" d="M8 19V5l11 7z" />
+                            </svg></span>
+                        </div>
+                    ))}
+
                 </div>
+
+
+                {editPrivate && (<div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex justify-center items-center " onClick={() => setEditPrivateisOpen(false)}>
+
+                    {/* CARD */}
+                    <div className="w-[380px] rounded-2xl overflow-hidden bg-[#111] border border-white/10 shadow-2xl " onClick={(e) => e.stopPropagation()} >
+
+                        {/* HEADER */}
+                        <div className="flex items-center justify-center gap-3 px-6 py-4 border-b border-white/10">
+                            <h2 className="text-xl font-semibold text-white">
+                                Change Profile Photo
+                            </h2>
+
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 14 14">
+                                <g fill="none" fill-rule="evenodd" clip-rule="evenodd">
+                                    <path fill="#fff" d="M1.573 1.573A.25.25 0 0 1 1.75 1.5h1.5a.75.75 0 0 0 0-1.5h-1.5A1.75 1.75 0 0 0 0 1.75v1.5a.75.75 0 0 0 1.5 0v-1.5a.25.25 0 0 1 .073-.177M14 10.75a.75.75 0 0 0-1.5 0v1.5a.25.25 0 0 1-.25.25h-1.5a.75.75 0 0 0 0 1.5h1.5A1.75 1.75 0 0 0 14 12.25zM.75 10a.75.75 0 0 1 .75.75v1.5a.25.25 0 0 0 .25.25h1.5a.75.75 0 0 1 0 1.5h-1.5A1.75 1.75 0 0 1 0 12.25v-1.5A.75.75 0 0 1 .75 10m10-10a.75.75 0 0 0 0 1.5h1.5a.25.25 0 0 1 .25.25v1.5a.75.75 0 0 0 1.5 0v-1.5A1.75 1.75 0 0 0 12.25 0z" />
+                                    <path fill="#2859c5" d="M9.208 4.46a2.21 2.21 0 1 1-4.421 0a2.21 2.21 0 0 1 4.421 0m-6.353 6.195a4.423 4.423 0 0 1 8.288 0c.112.299-.126.595-.446.595H3.301c-.32 0-.558-.296-.446-.595" />
+                                </g>
+                            </svg>
+                        </div>
+
+                        {/* BODY */}
+                        <div className="flex flex-col gap-3 p-5">
+
+                            {/* Upload Button */}
+                            <label className="cursor-pointer w-full text-center py-3 rounded-xl 
+      bg-white/5 hover:bg-white/10 border border-white/10 transition text-gray-200">
+
+                                Upload New Photo
+
+                            </label>
+
+                            {/* Remove */}
+                            <button className="w-full py-3 rounded-xl text-red-400 
+      hover:bg-red-500/10 border border-transparent transition">
+                                Remove Current Photo
+                            </button>
+
+                        </div>
+
+                        {/* FOOTER */}
+                        <div className="border-t border-white/10">
+                            <button className="w-full py-3 text-gray-400 hover:text-white transition" onClick={() => editProfileIMGisOpen(false)}>
+                                Cancel
+                            </button>
+                        </div>
+
+                    </div>
+                </div>)}
 
 
 
