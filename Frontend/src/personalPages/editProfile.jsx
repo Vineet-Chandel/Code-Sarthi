@@ -474,11 +474,76 @@ const EditProfile = () => {
                 </div>
             </div>)}
 
-            <div className="bg-black/70 fixed inset-0 z-50 h-screen w-screen  flex justify-center items-center">
-                <div className="w-[30%] h-[60%] bg-cyan-100  rounded-xl">
+
+            {uploading && (<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md">
+
+                <div className="
+relative
+animate-novaEnter
+w-[90%] max-w-[700px]
+bg-gradient-to-br from-cyan-100/90 to-white/70
+shadow-[0_0_80px_rgba(0,255,255,0.25)]
+border border-white/40
+rounded-[40px]
+p-12
+flex flex-col items-center text-center
+">
+
+                    {/* Glow background */}
+                    <div className="absolute inset-0 rounded-[40px] bg-cyan-300/20 blur-3xl -z-10"></div>
+
+                    {/* Image */}
+                    <img
+                        src="/img/cs-identity-manager.png"
+                        alt=""
+                        className=" w-[180px] rounded-[30px] shadow-xl border border-black/10 " />
+
+                    {/* Title */}
+                    <h1
+                        className="
+        text-black
+        font-head
+        font-extrabold
+        text-4xl md:text-5xl
+        mt-8
+        tracking-wide
+        leading-tight
+      "
+                    >
+                        NOVA is updating your identity
+
+                        <span className="inline-flex ml-4 align-middle">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="45"
+                                height="45"
+                                viewBox="0 0 24 24"
+                            >
+                                <circle cx="12" cy="12" r="3" fill="#000" />
+                                <g>
+                                    <circle cx="4" cy="12" r="3" fill="#000" />
+                                    <circle cx="20" cy="12" r="3" fill="#000" />
+                                    <animateTransform
+                                        attributeName="transform"
+                                        calcMode="spline"
+                                        dur="1s"
+                                        keySplines=".36,.6,.31,1;.36,.6,.31,1"
+                                        repeatCount="indefinite"
+                                        type="rotate"
+                                        values="0 12 12;180 12 12;360 12 12"
+                                    />
+                                </g>
+                            </svg>
+                        </span>
+                    </h1>
+
+                    {/* Subtext */}
+                    <p className="mt-4 text-black/60 font-medium tracking-wide">
+                        Please wait while NOVA securely synchronizes your profile
+                    </p>
 
                 </div>
-            </div>
+            </div>)}
 
         </div>
 

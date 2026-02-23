@@ -126,7 +126,7 @@ const NavBar = () => {
             }
 
             else {
-                const resLogout = await axios.post(`${BASE_URL}/logout`, {}, { withCredentials: true });
+                const resLogout = await axios.post(`${BASE_URL}/auth/signout`, {}, { withCredentials: true });
                 dispatch(removeUser());
             }
         }

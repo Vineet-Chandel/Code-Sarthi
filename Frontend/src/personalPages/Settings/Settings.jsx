@@ -1,5 +1,9 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { BASE_URL } from "../../Pages/auth/baseURL";
+import axios from "axios";
+import { useSelector } from "react-redux";
+
 
 // Constants
 const SETTINGS_ITEMS = [
@@ -290,11 +294,14 @@ const allChanges = [
                     </linearGradient>
                 </defs>
             </g>
-        </svg>)
+        </svg>),
+        "index": 1,
+
+
     },
 
     {
-        "Tag": "Renew Password",
+        "Tag": "Forgot Password",
         "svg": (<svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 16 16">
             <g fill="none">
                 <path fill="url(#SVGsfI0Rddh)" d="M11 3.5v1h-1v-1a2 2 0 1 0-4 0v1H5v-1a3 3 0 0 1 6 0" />
@@ -325,10 +332,18 @@ const allChanges = [
                     </radialGradient>
                 </defs>
             </g>
-        </svg>)
+        </svg>),
+        "index": 2,
+        "api-send-otp": `${BASE_URL}/auth/forgot-password`,
+
+
+        "api-send-otp-type": "POST",
+        "api-match-otp-type": "POST",
+        "api-new-pass-type": "PATCH"
+
     },
     {
-        "Tag": "Forgot Password",
+        "Tag": "Renew Password",
         "svg": (<svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 32 32">
             <g fill="none">
                 <path fill="#367af2" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
@@ -391,7 +406,10 @@ const allChanges = [
                     </radialGradient>
                 </defs>
             </g>
-        </svg>)
+        </svg>),
+        "index": 3,
+        "api": `${BASE_URL}/auth/reset-password`,
+        "api-type": "PATCH"
     },
     {
         "Tag": "Change Email",
@@ -457,76 +475,17 @@ const allChanges = [
                     </radialGradient>
                 </defs>
             </g>
-        </svg>)
+        </svg>),
+        "api-send-otp": `${BASE_URL}/profile/update-identity`,
+        "api-match-and-new-credential-otp": `${BASE_URL}/profile/update-identity`,
+        "api-send-otp-type": "POST",
+        "api-match-and-new-credential-otp-type": "PATCH"
     },
-    {
-        "Tag": "Change Username",
-        "svg": (<svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 32 32">
-            <g fill="none">
-                <path fill="#367af2" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                <path fill="url(#SVGH8QKvcBK)" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                <path fill="url(#SVGkOCYvtuq)" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                <path fill="url(#SVGcCmlT1Jm)" fill-opacity="0.75" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                <path fill="url(#SVGsZMU2dcf)" fill-opacity="0.7" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                <path fill="url(#SVGSLELubFH)" d="M2 9.5A4.5 4.5 0 0 1 6.5 5h19c1.414 0 2.675.652 3.5 1.671V10h1v.59l-13.526 7.292a1 1 0 0 1-.948 0L2 10.59z" />
-                <path fill="url(#SVGJ6GwFbSV)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                <path fill="url(#SVGqEKOOddH)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                <path fill="url(#SVGI9snPxQZ)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                <path fill="url(#SVGQAUgWbdX)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                <circle cx="24.5" cy="13" r="3" fill="url(#SVGNJ3uZNIx)" />
-                <path fill="url(#SVGLtXXXbyB)" d="M19.729 5A5 5 0 0 1 29.5 6.5v2.657l2.308 2.596A.75.75 0 0 1 31.299 13h-13.6a.75.75 0 0 1-.508-1.247L19.5 9.156V6.5c0-.523.08-1.026.229-1.5" />
-                <defs>
-                    <linearGradient id="SVGH8QKvcBK" x1="19.555" x2="26.862" y1="13.332" y2="27.873" gradientUnits="userSpaceOnUse">
-                        <stop offset=".199" stop-color="#0094f0" stop-opacity="0" />
-                        <stop offset=".431" stop-color="#0094f0" />
-                    </linearGradient>
-                    <linearGradient id="SVGkOCYvtuq" x1="12" x2="4.914" y1="11.79" y2="28.328" gradientUnits="userSpaceOnUse">
-                        <stop offset=".191" stop-color="#0094f0" stop-opacity="0" />
-                        <stop offset=".431" stop-color="#0094f0" />
-                    </linearGradient>
-                    <linearGradient id="SVGcCmlT1Jm" x1="23.383" x2="24.532" y1="20.142" y2="28.575" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#2764e7" stop-opacity="0" />
-                        <stop offset="1" stop-color="#2764e7" />
-                    </linearGradient>
-                    <linearGradient id="SVGsZMU2dcf" x1="20.333" x2="22.43" y1="12.088" y2="29.25" gradientUnits="userSpaceOnUse">
-                        <stop offset=".533" stop-color="#ff6ce8" stop-opacity="0" />
-                        <stop offset="1" stop-color="#ff6ce8" />
-                    </linearGradient>
-                    <linearGradient id="SVGSLELubFH" x1="10.318" x2="18.903" y1=".976" y2="23.436" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#6ce0ff" />
-                        <stop offset=".462" stop-color="#29c3ff" />
-                        <stop offset="1" stop-color="#4894fe" />
-                    </linearGradient>
-                    <linearGradient id="SVGNJ3uZNIx" x1="24.519" x2="24.519" y1="12.499" y2="15.999" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#eb4824" />
-                        <stop offset="1" stop-color="#ffcd0f" stop-opacity="0.988" />
-                    </linearGradient>
-                    <linearGradient id="SVGLtXXXbyB" x1="32.02" x2="20.9" y1="12.995" y2="1.131" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#ff6f47" />
-                        <stop offset="1" stop-color="#ffcd0f" />
-                    </linearGradient>
-                    <radialGradient id="SVGJ6GwFbSV" cx="0" cy="0" r="1" gradientTransform="matrix(0 5 -5.06764 0 24.5 13)" gradientUnits="userSpaceOnUse">
-                        <stop offset=".535" stop-color="#4a43cb" />
-                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                    </radialGradient>
-                    <radialGradient id="SVGqEKOOddH" cx="0" cy="0" r="1" gradientTransform="matrix(0 2 -9.1875 0 24.5 12.5)" gradientUnits="userSpaceOnUse">
-                        <stop offset=".535" stop-color="#4a43cb" />
-                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                    </radialGradient>
-                    <radialGradient id="SVGI9snPxQZ" cx="0" cy="0" r="1" gradientTransform="matrix(1 1.5 -1.875 1.25 19 11)" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#4a43cb" />
-                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                    </radialGradient>
-                    <radialGradient id="SVGQAUgWbdX" cx="0" cy="0" r="1" gradientTransform="rotate(90.406 9.271 15.163)scale(8.5 6.24951)" gradientUnits="userSpaceOnUse">
-                        <stop offset=".604" stop-color="#4a43cb" />
-                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                    </radialGradient>
-                </defs>
-            </g>
-        </svg>)
-    }
+
 
 ]
+
+
 // Glitch effect component
 const GlitchText = ({ text }) => (
     <div className="relative group">
@@ -560,7 +519,139 @@ const TechToggle = ({ enabled, onChange }) => (
 const PasswordSecuritySettings = () => {
 
     const [editPrivate, setEditPrivateisOpen] = useState(false)
+    const [activeIndex, setActiveIndex] = useState()
+    const activeChange = allChanges.find(c => c.index === activeIndex);
+    const [isSending, setIsSending] = useState(false);
+    const [errrorInVerification, setError] = useState("");
+    const [otpSentEmail, setOtpSentEmail] = useState(false);
+    const [otpSentForgot, setOtpSentForgot] = useState(false);
+    const [newOTP, setOTP] = useState("");
+    const [isVerified, setIsVerified] = useState(false);
+    const [isVerified2, setIsVerified2] = useState(false);
+    const [isVerified3, setIsVerified3] = useState(false);
+    const user = useSelector(store => store?.user?.user?.DATA || {});
+    const [newPaass1, setNewPaass1] = useState("");
+    const [token1, setToken1] = useState("");
+    const [token2, setToken2] = useState("");
+    // Verify Email
+    const sendVerificationEmail = async () => {
+        try {
+            setError("")
+            setIsSending(true);
 
+            await axios.get(
+                `${BASE_URL}/auth/verify-email`,
+                { withCredentials: true }
+            );
+            setOtpSentEmail(true);
+        } catch (err) {
+            setError(err?.response?.data?.message || "Sending OTP failed");
+        } finally {
+            setIsSending(false);
+
+        }
+    }
+    const verifyOTP = async () => {
+        try {
+            if (!newOTP.trim()) {
+                setError("Enter OTP first");
+                return;
+            }
+            setError("")
+            setIsVerified(false);
+            await axios.post(`${BASE_URL}/auth/verify-email`, {
+                toVerifyotp: newOTP
+            },
+                { withCredentials: true });
+            setOTP("")
+            setIsVerified(true);
+        } catch (err) {
+            setError(err?.response?.data?.message || "OTP verification failed");
+        }
+    }
+    const sendForgotPassEmail = async () => {
+        try {
+            setError("")
+            setIsSending(true);
+            if (!user?.gmail) {
+                setError("Unathourized Acess");
+                return;
+            }
+            const res = await axios.post(
+                `${BASE_URL}/auth/forgot-password`,
+                {
+                    "gmail": `${user.gmail}`
+                },
+                { withCredentials: true }
+            );
+            const token = res.data.token;
+            if (!token) {
+                setError("Unathourized acess!!");
+                return;
+            }
+            setToken1(token);
+            setOTP("");
+            setOtpSentForgot(true);
+        } catch (err) {
+            setError(err?.response?.data?.message || "Sending OTP failed");
+        } finally {
+            setIsSending(false);
+
+        }
+    }
+    const verifyForgotPassOTP = async () => {
+        try {
+            if (!newOTP.trim()) {
+                setError("Enter OTP first");
+                return;
+            }
+            if (!token1) {
+                setError("Session expired. Request OTP again.");
+                return;
+            }
+            setError("")
+            setIsVerified2(false);
+            const res = await axios.post(`${BASE_URL}/auth/forgot-password/${token1}`, {
+                enteredOtpByUser: newOTP
+            },
+
+                { withCredentials: true });
+            const token = res.data.resetToken;
+            if (!token) {
+                setError("Unathourized acess!!");
+                return;
+            }
+            setToken2(token);
+            setOTP("")
+            setIsVerified2(true);
+        } catch (err) {
+            setError(err?.response?.data?.message || "OTP verification failed");
+        }
+    }
+    const newForgotPassChange = async () => {
+        try {
+            if (isSending) return;
+            setError("")
+
+            if (!newPaass1.trim()) {
+                setError("Enter new password first");
+                return;
+            }
+            if (!token2) {
+                setError("Verification expired. Try again.");
+                return;
+            }
+            setIsVerified3(false);
+            await axios.patch(`${BASE_URL}/auth/forgot-password/${token2}`, {
+                newPassword: newPaass1
+            },
+                { withCredentials: true });
+            setIsVerified3(true);
+
+        } catch (err) {
+            setError(err?.response?.data?.message || "OTP verification failed");
+        }
+    }
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -579,8 +670,8 @@ const PasswordSecuritySettings = () => {
                     </div>
 
                     {allChanges.map((items) => (
-                        <div key={items} className="flex flex-col justify-center justify-between ml-11 gap-2">
-                            <span onClick={() => setEditPrivateisOpen(true)} className="text-cyan-400 cursor-pointer font-mono text-2xl  flex items-center gap-3"> {items.svg} {items.Tag}<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24">
+                        <div key={items.index} className="flex flex-col justify-center  ml-11 ">
+                            <span onClick={() => { setEditPrivateisOpen(true); setActiveIndex(items.index) }} className="text-cyan-400 cursor-pointer font-mono text-2xl  flex items-center gap-3 mb-7 font-extrabold"> {items.svg} {items.Tag}<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24">
                                 <path fill="#5ff4fc" d="M8 19V5l11 7z" />
                             </svg></span>
                         </div>
@@ -589,7 +680,7 @@ const PasswordSecuritySettings = () => {
                 </div>
 
 
-                {editPrivate && (<div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex justify-center items-center " onClick={() => setEditPrivateisOpen(false)}>
+                {editPrivate && (<div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex justify-center items-center " onClick={() => { setEditPrivateisOpen(false); setError("") }}>
 
                     {/* CARD */}
                     <div className="w-[380px] rounded-2xl overflow-hidden bg-[#111] border border-white/10 shadow-2xl " onClick={(e) => e.stopPropagation()} >
@@ -597,7 +688,7 @@ const PasswordSecuritySettings = () => {
                         {/* HEADER */}
                         <div className="flex items-center justify-center gap-3 px-6 py-4 border-b border-white/10">
                             <h2 className="text-xl font-semibold text-white">
-                                Change Profile Photo
+                                {allChanges.find(c => c.index === activeIndex)?.Tag}
                             </h2>
 
                             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 14 14">
@@ -608,39 +699,191 @@ const PasswordSecuritySettings = () => {
                             </svg>
                         </div>
 
+
                         {/* BODY */}
                         <div className="flex flex-col gap-3 p-5">
 
-                            {/* Upload Button */}
-                            <label className="cursor-pointer w-full text-center py-3 rounded-xl 
-      bg-white/5 hover:bg-white/10 border border-white/10 transition text-gray-200">
+                            {/* ================= VERIFY EMAIL ================= */}
+                            {activeChange?.index === 1 && ((!user.isVerified && (
+                                <div>
+                                    {!otpSentEmail && (
+                                        <button className="w-full py-3 rounded-xl bg-cyan-500/20 border border-cyan-500/30 flex justify-center items-center gap-4" onClick={sendVerificationEmail}>
+                                            Send Verification OTP {isSending && (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                                                <path fill="#efeded" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity="0.25" />
+                                                <path fill="#efeded" d="M10.72,19.9a8,8,0,0,1-6.5-9.79A7.77,7.77,0,0,1,10.4,4.16a8,8,0,0,1,9.49,6.52A1.54,1.54,0,0,0,21.38,12h.13a1.37,1.37,0,0,0,1.38-1.54,11,11,0,1,0-12.7,12.39A1.54,1.54,0,0,0,12,21.34h0A1.47,1.47,0,0,0,10.72,19.9Z">
+                                                    <animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" />
+                                                </path>
+                                            </svg>)}
+                                        </button>
+                                    )}
+                                    {!isVerified && (otpSentEmail && (
+                                        <div className=" flex flex-col gap-5">
+                                            <input
+                                                placeholder="Enter the OTP sent by ASTRA"
+                                                className="w-full text-center py-3 rounded-xl bg-white/5 border border-white/10"
+                                                value={newOTP}
+                                                onChange={(e) => setOTP(e.target.value)} />
+                                            <button
+                                                className="w-full py-3 rounded-xl bg-cyan-500/20 border border-cyan-500/30"
+                                                onClick={verifyOTP}
+                                            >
+                                                Verify OTP
+                                            </button>
+                                        </div>
+                                    ))}
+                                    {isVerified && (
+                                        <div className="w-full flex flex-col justify-center items-center ">
+                                            < div >
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24"><path fill="#44f53d" fill-rule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clip-rule="evenodd" /><path fill="#44f53d" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#44f53d" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
+                                            </div>
+                                            <h2 className="text-4xl font-semibold text-white">
+                                                Email Verified
+                                            </h2>
+                                        </div>
+                                    )}
+                                    {errrorInVerification && (<div className="space-y-2 mt-5">
+                                        <div className={`${errrorInVerification ? "block" : "hidden "} flex items-center rounded-2xl px-4 py-3 border border-red-600 bg-red-500/20  transition-all duration-30 `} >
+                                            <span className="mr-3">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#FF6F6F" d="M12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m0-18C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2m2.59 6L12 10.59L9.41 8L8 9.41L10.59 12L8 14.59L9.41 16L12 13.41L14.59 16L16 14.59L13.41 12L16 9.41z" /></svg>
+                                            </span>
+                                            <div className="text-red-500 ml-2">
+                                                {errrorInVerification}
+                                            </div>
+                                        </div>
+                                    </div>)}
+                                </div>
+                            )) || (user.isVerified && (
+                                <div className="w-full flex flex-col justify-center items-center ">
+                                    < div >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24"><path fill="#44f53d" fill-rule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clip-rule="evenodd" /><path fill="#44f53d" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#44f53d" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
+                                    </div>
+                                    <h2 className="text-2xl font-semibold text-white">
+                                        Email Already Verified !
+                                    </h2>
+                                </div>
+                            ))
+                            )}
 
-                                Upload New Photo
 
-                            </label>
+                            {/* ================= FORGOT PASSWORD ================= */}
+                            {activeChange?.index === 2 && (
+                                <>
 
-                            {/* Remove */}
-                            <button className="w-full py-3 rounded-xl text-red-400 
-      hover:bg-red-500/10 border border-transparent transition">
-                                Remove Current Photo
-                            </button>
+                                    {!otpSentForgot && (
+                                        <button className="w-full py-3 rounded-xl bg-cyan-500/20 border border-cyan-500/30 flex justify-center items-center gap-4" onClick={sendForgotPassEmail}>
+                                            Send Verification OTP {isSending && (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                                                <path fill="#efeded" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity="0.25" />
+                                                <path fill="#efeded" d="M10.72,19.9a8,8,0,0,1-6.5-9.79A7.77,7.77,0,0,1,10.4,4.16a8,8,0,0,1,9.49,6.52A1.54,1.54,0,0,0,21.38,12h.13a1.37,1.37,0,0,0,1.38-1.54,11,11,0,1,0-12.7,12.39A1.54,1.54,0,0,0,12,21.34h0A1.47,1.47,0,0,0,10.72,19.9Z">
+                                                    <animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" />
+                                                </path>
+                                            </svg>)}
+                                        </button>
+                                    )}
+                                    {!isVerified2 && (otpSentForgot && (
+                                        <div className=" flex flex-col gap-5">
+                                            <input
+                                                placeholder="Enter the OTP sent by ASTRA"
+                                                className="w-full text-center py-3 rounded-xl bg-white/5 border border-white/10"
+                                                value={newOTP}
+                                                onChange={(e) => setOTP(e.target.value)} />
+                                            <button
+                                                className="w-full py-3 rounded-xl bg-cyan-500/20 border border-cyan-500/30"
+                                                onClick={verifyForgotPassOTP}
+                                            >
+                                                Verify OTP
+                                            </button>
+                                        </div>
+                                    ))}
+                                    {isVerified2 && (!isVerified3) && (<div className=" flex flex-col gap-5">
+                                        <input
+                                            placeholder="Enter the new password"
+                                            className="w-full text-center py-3 rounded-xl bg-white/5 border border-white/10"
+                                            value={newPaass1}
+                                            onChange={(e) => setNewPaass1(e.target.value)} />
+                                        <button
+                                            className="w-full py-3 rounded-xl bg-cyan-500/20 border border-cyan-500/30"
+                                            onClick={newForgotPassChange}
+                                        >
+                                            Confirm New Password
+                                        </button>
+                                    </div>)}
+                                    {errrorInVerification && (<div className="space-y-2 mt-5">
+                                        <div className={`${errrorInVerification ? "block" : "hidden "} flex items-center rounded-2xl px-4 py-3 border border-red-600 bg-red-500/20  transition-all duration-30 `} >
+                                            <span className="mr-3">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#FF6F6F" d="M12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m0-18C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2m2.59 6L12 10.59L9.41 8L8 9.41L10.59 12L8 14.59L9.41 16L12 13.41L14.59 16L16 14.59L13.41 12L16 9.41z" /></svg>
+                                            </span>
+                                            <div className="text-red-500 ml-2">
+                                                {errrorInVerification}
+                                            </div>
+                                        </div>
+                                    </div>)}
+                                    {isVerified3 && (
+                                        <div className="w-full flex flex-col justify-center items-center ">
+                                            < div >
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24"><path fill="#44f53d" fill-rule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clip-rule="evenodd" /><path fill="#44f53d" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#44f53d" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
+                                            </div>
+                                            <h2 className="text-2xl font-semibold text-white">
+                                                Password has been changed
+                                            </h2>
+                                        </div>
+                                    )}
+
+
+                                </>
+                            )}
+
+                            {/* ================= RENEW PASSWORD ================= */}
+                            {activeChange?.index === 3 && (
+                                <>
+                                    <input
+                                        placeholder="Old Password"
+                                        className="w-full text-center py-3 rounded-xl bg-white/5 border border-white/10"
+                                    />
+
+                                    <input
+                                        placeholder="New Password"
+                                        className="w-full text-center py-3 rounded-xl bg-white/5 border border-white/10"
+                                    />
+                                </>
+                            )}
+
+                            {/* ================= CHANGE EMAIL ================= */}
+                            {activeChange?.index === 4 && (
+                                <>
+                                    <input
+                                        placeholder="New Email"
+                                        className="w-full text-center py-3 rounded-xl bg-white/5 border border-white/10"
+                                    />
+
+                                    <button className="w-full py-3 rounded-xl bg-cyan-500/20 border border-cyan-500/30">
+                                        Send OTP
+                                    </button>
+
+                                    <input
+                                        placeholder="Enter OTP"
+                                        className="w-full text-center py-3 rounded-xl bg-white/5 border border-white/10"
+                                    />
+                                </>
+                            )}
 
                         </div>
 
+
                         {/* FOOTER */}
                         <div className="border-t border-white/10">
-                            <button className="w-full py-3 text-gray-400 hover:text-white transition" onClick={() => editProfileIMGisOpen(false)}>
+                            <button className="w-full py-3 text-gray-400 hover:text-white transition" onClick={() => { setEditPrivateisOpen(false); setError("") }}>
                                 Cancel
                             </button>
                         </div>
 
                     </div>
-                </div>)}
+                </div>)
+                }
 
 
 
-            </div>
-        </motion.div>
+            </div >
+        </motion.div >
     );
 };
 
@@ -683,7 +926,7 @@ const SettingContent = ({ activeSetting }) => {
     const contentMap = {
         "Password and security": <PasswordSecuritySettings />,
         "Personal details": <PersonalDetailsSettings />,
-        "Your information and permissions": (
+        "Information and permissions": (
             <div className="space-y-4">
                 <div className="text-cyan-400 font-mono">[ PERMISSIONS MATRIX ]</div>
                 {['Camera', 'Microphone', 'Location', 'Notifications'].map((perm, i) => (

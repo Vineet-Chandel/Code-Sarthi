@@ -160,7 +160,10 @@ authRouter.get("/auth/verify-email", userAuth, async (req, res) => {
         const { gmail: userGmail, isVerified } = req.user;
 
         if (isVerified) {
-            throw new Error("You are already verified !")
+            return res.status(400).json({
+                success: false,
+                message: "User is already verified"
+            });
         }
         if (!userGmail) {
             return res.status(400).json({

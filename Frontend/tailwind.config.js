@@ -6,6 +6,15 @@ module.exports = {
   ],
   theme: {
     extend: {
+      keyframes: {
+        novaEnter: {
+          "0%": { transform: "translateY(200px)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
+        },
+      },
+      animation: {
+        novaEnter: "novaEnter 1.5s cubic-bezier(.22,1,.36,1) forwards",
+      },
 
       fontFamily: {
         zentry: ["zentry", "sans-serif"],
@@ -34,5 +43,6 @@ module.exports = {
       },
     },
   },
+
   plugins: [require("daisyui")],
 }
