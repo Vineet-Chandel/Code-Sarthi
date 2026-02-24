@@ -296,8 +296,6 @@ const allChanges = [
             </g>
         </svg>),
         "index": 1,
-
-
     },
 
     {
@@ -333,14 +331,7 @@ const allChanges = [
                 </defs>
             </g>
         </svg>),
-        "index": 2,
-        "api-send-otp": `${BASE_URL}/auth/forgot-password`,
-
-
-        "api-send-otp-type": "POST",
-        "api-match-otp-type": "POST",
-        "api-new-pass-type": "PATCH"
-
+        "index": 2
     },
     {
         "Tag": "Renew Password",
@@ -408,8 +399,6 @@ const allChanges = [
             </g>
         </svg>),
         "index": 3,
-        "api": `${BASE_URL}/auth/reset-password`,
-        "api-type": "PATCH"
     },
     {
         "Tag": "Change Email",
@@ -476,10 +465,6 @@ const allChanges = [
                 </defs>
             </g>
         </svg>),
-        "api-send-otp": `${BASE_URL}/profile/update-identity`,
-        "api-match-and-new-credential-otp": `${BASE_URL}/profile/update-identity`,
-        "api-send-otp-type": "POST",
-        "api-match-and-new-credential-otp-type": "PATCH"
     },
 
 
@@ -529,10 +514,14 @@ const PasswordSecuritySettings = () => {
     const [isVerified, setIsVerified] = useState(false);
     const [isVerified2, setIsVerified2] = useState(false);
     const [isVerified3, setIsVerified3] = useState(false);
+    const [isVerified4, setIsVerified4] = useState(false);
     const user = useSelector(store => store?.user?.user?.DATA || {});
     const [newPaass1, setNewPaass1] = useState("");
+    const [oldPass, setOldPass] = useState("")
+    const [newPaass2, setNewPaass2] = useState("");
     const [token1, setToken1] = useState("");
     const [token2, setToken2] = useState("");
+    const [show, setShow] = useState("true")
     // Verify Email
     const sendVerificationEmail = async () => {
         try {
@@ -652,6 +641,30 @@ const PasswordSecuritySettings = () => {
             setError(err?.response?.data?.message || "OTP verification failed");
         }
     }
+    const newRenewPassChange = async () => {
+        try {
+            if (isSending) return;
+            setError("")
+
+            if (!newPaass2.trim()) {
+                setError("Enter new password first");
+                return;
+            }
+            setIsVerified4(false);
+            await axios.patch(`${BASE_URL}/auth/reset-password`, {
+                newPassword: newPaass2,
+                oldPassword: oldPass,
+
+            },
+                { withCredentials: true });
+            setIsVerified4(true);
+            setOldPass("");
+            setNewPaass2("");
+            setShow(false);
+        } catch (err) {
+            setError(err?.response?.data?.message || "OTP verification failed");
+        }
+    }
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -722,7 +735,7 @@ const PasswordSecuritySettings = () => {
                                                 placeholder="Enter the OTP sent by ASTRA"
                                                 className="w-full text-center py-3 rounded-xl bg-white/5 border border-white/10"
                                                 value={newOTP}
-                                                onChange={(e) => setOTP(e.target.value)} />
+                                                onChange={(e) => setOTP(e.target.value.trim())} />
                                             <button
                                                 className="w-full py-3 rounded-xl bg-cyan-500/20 border border-cyan-500/30"
                                                 onClick={verifyOTP}
@@ -763,8 +776,6 @@ const PasswordSecuritySettings = () => {
                                 </div>
                             ))
                             )}
-
-
                             {/* ================= FORGOT PASSWORD ================= */}
                             {activeChange?.index === 2 && (
                                 <>
@@ -785,7 +796,7 @@ const PasswordSecuritySettings = () => {
                                                 placeholder="Enter the OTP sent by ASTRA"
                                                 className="w-full text-center py-3 rounded-xl bg-white/5 border border-white/10"
                                                 value={newOTP}
-                                                onChange={(e) => setOTP(e.target.value)} />
+                                                onChange={(e) => setOTP(e.target.value.trim())} />
                                             <button
                                                 className="w-full py-3 rounded-xl bg-cyan-500/20 border border-cyan-500/30"
                                                 onClick={verifyForgotPassOTP}
@@ -799,7 +810,7 @@ const PasswordSecuritySettings = () => {
                                             placeholder="Enter the new password"
                                             className="w-full text-center py-3 rounded-xl bg-white/5 border border-white/10"
                                             value={newPaass1}
-                                            onChange={(e) => setNewPaass1(e.target.value)} />
+                                            onChange={(e) => setNewPaass1(e.target.value.trim())} />
                                         <button
                                             className="w-full py-3 rounded-xl bg-cyan-500/20 border border-cyan-500/30"
                                             onClick={newForgotPassChange}
@@ -831,22 +842,55 @@ const PasswordSecuritySettings = () => {
 
                                 </>
                             )}
-
                             {/* ================= RENEW PASSWORD ================= */}
                             {activeChange?.index === 3 && (
                                 <>
-                                    <input
-                                        placeholder="Old Password"
-                                        className="w-full text-center py-3 rounded-xl bg-white/5 border border-white/10"
-                                    />
 
-                                    <input
-                                        placeholder="New Password"
-                                        className="w-full text-center py-3 rounded-xl bg-white/5 border border-white/10"
-                                    />
+                                    {show && (<>
+                                        <input
+                                            placeholder="Old Password"
+                                            className="w-full text-center py-3 rounded-xl bg-white/5 border border-white/10"
+                                            value={oldPass}
+                                            onChange={(e) => setOldPass(e.target.value.trim())}
+                                        />
+
+                                        <input
+                                            placeholder="New Password"
+                                            className="w-full text-center py-3 rounded-xl bg-white/5 border border-white/10"
+                                            value={newPaass2}
+                                            onChange={(e) => setNewPaass2(e.target.value.trim())}
+                                        />
+                                        <button
+                                            className="w-full py-3 rounded-xl bg-cyan-500/20 border border-cyan-500/30"
+                                            onClick={newRenewPassChange}
+
+                                        >
+                                            Confirm New Password
+                                        </button></>)}
+
+
+                                    {errrorInVerification && (<div className="space-y-2 mt-5">
+                                        <div className={`${errrorInVerification ? "block" : "hidden "} flex items-center rounded-2xl px-4 py-3 border border-red-600 bg-red-500/20  transition-all duration-30 `} >
+                                            <span className="mr-3">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#FF6F6F" d="M12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m0-18C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2m2.59 6L12 10.59L9.41 8L8 9.41L10.59 12L8 14.59L9.41 16L12 13.41L14.59 16L16 14.59L13.41 12L16 9.41z" /></svg>
+                                            </span>
+                                            <div className="text-red-500 ml-2">
+                                                {errrorInVerification}
+                                            </div>
+                                        </div>
+                                    </div>)}
+                                    {isVerified4 && (
+                                        <div className="w-full flex flex-col justify-center items-center ">
+                                            < div >
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24"><path fill="#44f53d" fill-rule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clip-rule="evenodd" /><path fill="#44f53d" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#44f53d" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
+                                            </div>
+                                            <h2 className="text-2xl font-semibold text-white">
+                                                Password has been changed
+                                            </h2>
+                                        </div>
+                                    )}
                                 </>
                             )}
-
                             {/* ================= CHANGE EMAIL ================= */}
                             {activeChange?.index === 4 && (
                                 <>
@@ -865,7 +909,6 @@ const PasswordSecuritySettings = () => {
                                     />
                                 </>
                             )}
-
                         </div>
 
 
