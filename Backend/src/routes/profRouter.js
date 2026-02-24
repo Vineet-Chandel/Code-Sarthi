@@ -73,7 +73,7 @@ profileRouter.patch("/profile/me/edit", userAuth, async (req, res) => {
         res.status(400).send("ERROR : " + err.message);
     }
 });
-profileRouter.post("/profile/update-identity", userAuth, async (req, res) => {
+profileRouter.get("/profile/update-identity", userAuth, async (req, res) => {
     try {
         const user = req.user;
         if (!user) {
