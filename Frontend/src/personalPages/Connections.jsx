@@ -13,7 +13,6 @@ const Connections = () => {
                 `${BASE_URL}/user/connections`,
                 { withCredentials: true }
             );
-            console.log(response.data);
             dispatch(addConnectionUser(response.data.data));
 
 

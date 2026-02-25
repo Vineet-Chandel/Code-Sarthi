@@ -2,13 +2,12 @@ import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { BASE_URL } from "../../Pages/auth/baseURL";
 import axios from "axios";
-import { useSelector } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
+import { addBlockedUsers } from "../../utils/blockedSlice";
 
 // Constants
 const SETTINGS_ITEMS = [
     "Password and security",
-    "Personal details",
     "Blocked",
     "Information and permissions",
     "Account Status",
@@ -36,46 +35,6 @@ const settingIcons = {
                 <path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" d="M30.85 22.43a6.6 6.6 0 0 1 2.49 1.11q.401-.257.84-.44" stroke-width="1" />
                 <path fill="#ffe236" stroke="#231f20" stroke-miterlimit="10" d="M31.276 9.487c.091.31.426.536.93.626c.503.09 1.134.038 1.755-.145s1.18-.482 1.554-.83c.374-.35.533-.72.442-1.03a.73.73 0 0 0-.31-.396a1.6 1.6 0 0 0-.62-.23a3.3 3.3 0 0 0-.834-.03a4.6 4.6 0 0 0-.922.175c-.307.09-.602.21-.869.353s-.5.305-.685.478c-.185.172-.32.352-.395.529a.73.73 0 0 0-.046.5Zm-2.02-3.645c.218.24.617.296 1.11.157c.492-.14 1.037-.462 1.516-.898c.478-.436.85-.949 1.035-1.426s.165-.88-.053-1.119c-.218-.24-.617-.295-1.11-.156c-.492.139-1.037.462-1.515.897c-.479.436-.85.949-1.035 1.426c-.184.478-.165.88.052 1.12Z" stroke-width="1" />
                 <path fill="#ffe236" stroke="#231f20" stroke-linecap="round" stroke-miterlimit="10" d="M33.7 14.81a1.54 1.54 0 1 0 3.08 0a1.54 1.54 0 0 0-3.08 0Z" stroke-width="1" />
-            </g>
-        </svg>)
-    },
-    "Personal details": {
-        "globalSVG": (<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 48 48">
-            <g fill="none">
-                <path fill="url(#SVGVyZogeSB)" d="M12.25 28A4.25 4.25 0 0 0 8 32.249V33c0 3.756 1.942 6.567 4.92 8.38C15.85 43.163 19.786 44 24 44s8.15-.837 11.08-2.62C38.058 39.567 40 36.756 40 33v-.751A4.25 4.25 0 0 0 35.75 28z" />
-                <path fill="url(#SVGNT2VgdIW)" d="M12.25 28A4.25 4.25 0 0 0 8 32.249V33c0 3.756 1.942 6.567 4.92 8.38C15.85 43.163 19.786 44 24 44s8.15-.837 11.08-2.62C38.058 39.567 40 36.756 40 33v-.751A4.25 4.25 0 0 0 35.75 28z" />
-                <path fill="url(#SVGbs188dcy)" d="M24 4c-5.523 0-10 4.477-10 10s4.477 10 10 10s10-4.477 10-10S29.523 4 24 4" />
-                <defs>
-                    <linearGradient id="SVGVyZogeSB" x1="15.61" x2="20.779" y1="30.127" y2="46.635" gradientUnits="userSpaceOnUse">
-                        <stop offset=".125" stop-color="#00c6ff" />
-                        <stop offset="1" stop-color="#41d1dc" />
-                    </linearGradient>
-                    <linearGradient id="SVGNT2VgdIW" x1="24" x2="31.238" y1="26.095" y2="53.143" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#5edadb" stop-opacity="0" />
-                        <stop offset="1" stop-color="#62f8ef" />
-                    </linearGradient>
-                    <linearGradient id="SVGbs188dcy" x1="18.756" x2="28.949" y1="6.659" y2="22.934" gradientUnits="userSpaceOnUse">
-                        <stop offset=".125" stop-color="#00c6ff" />
-                        <stop offset="1" stop-color="#41d1dc" />
-                    </linearGradient>
-                </defs>
-            </g>
-        </svg>),
-        "localSVG": (<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 40 40">
-            <g fill="none" stroke-miterlimit="10">
-                <path fill="#ffe236" stroke="#231f20" d="M16.8 14.49a11.35 11.35 0 1 0 22.7 0a11.35 11.35 0 0 0-22.7 0Z" stroke-width="1" />
-                <path stroke="#231f20" stroke-linecap="round" d="M27.18 24.19c-1.75-1.52-2.82-4.9-3.14-9.41s.26-8 1.79-9.75m3.28-.23c1.76 1.51 2.82 4.9 3.14 9.4s-.26 8-1.78 9.76" stroke-width="1" />
-                <path stroke="#231f20" stroke-linecap="round" d="M19 11.63a62 62 0 0 1 8.85-1.18a63 63 0 0 1 8.93-.08m.51 6.99a63 63 0 0 1-8.86 1.18a63 63 0 0 1-8.93.08" stroke-width="1" />
-                <path stroke="#fff" stroke-linecap="round" d="M35.81 7.93a7.9 7.9 0 0 0-3.24-2.69" stroke-width="1" />
-                <path fill="#48eeff" stroke="#231f20" d="M22.28 30.58c1.09-.66 1.49-2.22 1.62-3.49s.09-2.88-.83-3.76c1.09-.66 1.49-2.22 1.63-3.49c.17-1.56.07-3.66-1.6-4.25c-.82-.5-5.36-1.4-9.15-1.82s-8.43-.51-9.33-.2c-1.76.21-2.31 2.25-2.48 3.8c-.14 1.27-.09 2.88.86 3.76c-1.09.67-1.49 2.23-1.63 3.49s-.08 2.88.84 3.77c-1.12.66-1.52 2.22-1.66 3.49c-.17 1.55-.07 3.66 1.6 4.25c.82.5 5.36 1.4 9.15 1.81s8.43.52 9.33.21c1.76-.22 2.31-2.25 2.48-3.81c.14-1.26.09-2.87-.83-3.76Z" stroke-width="1" />
-                <path stroke="#231f20" stroke-linecap="round" d="M20.29 22.85a64 64 0 0 0-6.42-.93a62 62 0 0 0-6.47-.48M20 18a16 16 0 0 0-1.61-.23a13 13 0 0 0-1.62-.12m3.03 2.23c-.31-.07-.84-.15-1.6-.24s-1.31-.12-1.62-.12M6.57 29.05c1.23.27 3.37.59 6.42.93s5.21.48 6.47.48" stroke-width="1" />
-                <path fill="#fff" stroke="#231f20" stroke-linecap="round" d="M5.39 17.46a1.22 1.22 0 1 0 2.44 0a1.22 1.22 0 0 0-2.44 0Zm4.84.52a1.22 1.22 0 1 0 2.44 0a1.22 1.22 0 0 0-2.44 0Z" stroke-width="1" />
-                <path stroke="#231f20" stroke-linecap="round" d="M19.21 25.25a15 15 0 0 0-1.6-.23q-.802-.105-1.61-.12m3 2.23a15 15 0 0 0-1.61-.23a13 13 0 0 0-1.62-.12" stroke-width="1" />
-                <path fill="#fff" stroke="#231f20" stroke-linecap="round" d="M4.6 24.71a1.22 1.22 0 1 0 2.441 0a1.22 1.22 0 0 0-2.441 0Zm4.83.53a1.22 1.22 0 1 0 2.441 0a1.22 1.22 0 0 0-2.441 0Z" stroke-width="1" />
-                <path stroke="#231f20" stroke-linecap="round" d="M18.33 33.31c-.31-.07-.84-.15-1.6-.24S15.42 33 15.11 33m3.02 2.18c-.31-.06-.85-.14-1.61-.23s-1.3-.12-1.62-.12" stroke-width="1" />
-                <path fill="#fff" stroke="#231f20" stroke-linecap="round" d="M3.72 32.76a1.22 1.22 0 1 0 2.44 0a1.22 1.22 0 0 0-2.44 0Zm4.83.53a1.22 1.22 0 1 0 2.44 0a1.22 1.22 0 0 0-2.44 0Z" stroke-width="1" />
-                <path stroke="#fff" stroke-linecap="round" d="M21.83 16.63C22.74 17 23 17 23 18" stroke-width="1" />
-                <path fill="#ff52a1" stroke="#231f20" d="M5.67 8.94a1.62 1.62 0 1 0 3.24 0a1.62 1.62 0 0 0-3.24 0Zm24.44 22.33a2.23 2.23 0 1 0 4.46 0a2.23 2.23 0 0 0-4.46 0ZM9.85 5.49a1.22 1.22 0 0 1-.17-1.71A4.9 4.9 0 0 1 17.1 3a1.22 1.22 0 0 1-1.54 1.89c-1.48-1.21-2.79-1.08-4 .4a1.22 1.22 0 0 1-1.71.2Z" stroke-width="1" />
             </g>
         </svg>)
     },
@@ -1211,45 +1170,34 @@ const PasswordSecuritySettings = () => {
     );
 };
 
-const PersonalDetailsSettings = () => {
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="space-y-4"
-        >
-            <div className="grid grid-cols-2 gap-4">
-                {['First Name', 'Last Name', 'Email', 'Phone'].map((field, i) => (
-                    <motion.div
-                        key={field}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.1 }}
-                        className="relative"
-                    >
-                        <label className="text-xs text-cyan-400 font-mono block mb-1">{`> ${field.toUpperCase()}`}</label>
-                        <input
-                            type="text"
-                            placeholder={`Enter ${field}`}
-                            className="w-full px-4 py-2 bg-black/30 border border-cyan-500/30 rounded-lg
-                focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_10px_rgba(0,255,255,0.3)]
-                transition-all text-sm font-mono"
-                        />
-                        <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-cyan-500/0 via-cyan-500/5 to-cyan-500/0 
-              pointer-events-none animate-pulse" />
-                    </motion.div>
-                ))}
-            </div>
-        </motion.div>
-    );
-};
-
 // Content mapping
+
 const SettingContent = ({ activeSetting }) => {
+    const user = useSelector(store => store.user);
+    const blockedUsers = useSelector(
+        store => store.blockedUsers?.users || []
+    );
+
+    const dispatch = useDispatch();
+    const blockedPeoples = async () => {
+        try {
+            const res = await axios.get(
+                `${BASE_URL}/user/blocked`,
+                { withCredentials: true }
+            )
+            dispatch(addBlockedUsers(res.data.data));
+
+        } catch (err) {
+            console.error(err?.message || err);
+        }
+    }
+    useEffect(() => {
+        blockedPeoples();
+    }, []);
+
     const contentMap = {
         "Password and security": <PasswordSecuritySettings />,
-        "Personal details": <PersonalDetailsSettings />,
+
         "Information and permissions": (
             <div className="space-y-4">
                 <div className="text-cyan-400 font-mono">[ PERMISSIONS MATRIX ]</div>
@@ -1283,25 +1231,21 @@ const SettingContent = ({ activeSetting }) => {
         ),
         "Blocked": (
             <div className="space-y-2">
-                {[1, 2, 3].map((i) => (
+                {blockedUsers.map((item) => (
                     <motion.div
-                        key={i}
+                        key={item.connectionId}
                         className="flex items-center justify-between p-3 bg-black/20 border border-red-500/20 rounded-lg"
                         whileHover={{ scale: 1.02, borderColor: 'rgba(255,0,0,0.5)' }}
                     >
-                        <span className="font-mono text-sm">USER_{i}_BLOCKED</span>
-                        <button className="text-xs text-red-400 hover:text-red-300">[UNBLOCK]</button>
+                        <span className="font-mono text-sm">{item.firstName} {item.middleName} {item.lastName}</span>
+                        <button className="text-xs text-red-400 hover:text-red-300">UNBLOCK</button>
                     </motion.div>
                 ))}
             </div>
         ),
         "Account Status": (
             <div className="relative">
-                <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-green-500/20 to-cyan-500/20 rounded-lg blur-xl"
-                    animate={{ scale: [1, 1.1, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                />
+
                 <div className="relative p-6 bg-black/40 border border-green-500/30 rounded-lg text-center">
                     <div className="text-6xl mb-4 animate-pulse">🟢</div>
                     <div className="text-2xl font-mono text-green-400">SYSTEM ONLINE</div>
@@ -1496,11 +1440,10 @@ const Settings = () => {
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
             >
-                <motion.div
-                    className="bg-black/40 border border-cyan-500/30 rounded-3xl p-8 backdrop-blur-xl
-            shadow-[0_0_60px_rgba(0,255,255,0.1)] relative overflow-hidden"
-                    whileHover={{ boxShadow: '0 0 80px rgba(0,255,255,0.2)' }}
-                    transition={{ duration: 0.3 }}
+                <div
+                    className="bg-black/40 border border-cyan-500/30 rounded-3xl p-8 
+             relative overflow-hidden"
+
                 >
                     {/* Decorative elements */}
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 to-blue-500" />
@@ -1557,7 +1500,7 @@ const Settings = () => {
                         <span>{`[${new Date().toLocaleTimeString()}]`}</span>
                         <span className="text-cyan-400/50">{"[SYSTEM_READY]"}</span>
                     </motion.div>
-                </motion.div>
+                </div>
             </motion.div>
 
             {/* Add global styles for animations */}

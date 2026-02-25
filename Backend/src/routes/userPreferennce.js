@@ -98,16 +98,10 @@ userPreference.get("/user/blocked", userAuth, async (req, res) => {
                 if (!otherUser) return null;
 
                 return {
-                    connectionId: row._id,
-                    FirstName: otherUser.firstName,
-                    MiddleName: otherUser.middleName,
-                    LastName: otherUser.lastName,
+                    firstName: otherUser.firstName,
+                    middleName: otherUser.middleName,
+                    lastName: otherUser.lastName,
                     username: otherUser.username,
-                    skills: otherUser.skills,
-                    about: otherUser.about,
-                    profession: otherUser.profession,
-                    college: otherUser.college,
-                    isVerified: otherUser.isVerified
                 };
             })
             .filter(Boolean); // remove null users
