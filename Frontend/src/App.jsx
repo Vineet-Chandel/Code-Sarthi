@@ -50,6 +50,7 @@ import Toolkit from "./Pages/Toolkit/Toolkitw";
 import Discover from "./Main/PagesMain/Discover";
 import Policy from "./Main/PagesMain/category/Policy";
 import Settings from "./personalPages/Settings/Settings";
+import RequestedUser from "./personalPages/RequestedUser";
 
 const App = () => {
   return (
@@ -103,6 +104,7 @@ const App = () => {
               <Route path="editProfile" element={<EditProfile />} />
               <Route path="connections" element={<Connections />} />
               <Route path="settings" element={<Settings />} />
+              <Route path="requestedUser" element={<RequestedUser />} />
 
               <Route path="toolkit" element={<Toolkit />} />
               <Route path="toolkit/html" element={<HTML />} />

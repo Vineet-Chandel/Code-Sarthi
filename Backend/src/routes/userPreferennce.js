@@ -230,20 +230,20 @@ userPreference.get("/user/requests/received", userAuth, async (req, res) => {
         });
     }
 });
-//all send req
+// all sent requests
 userPreference.get("/user/requests/send", userAuth, async (req, res) => {
     try {
         const loggedInUserId = req.user._id;
 
         const STATUS_INTERESTED = "REQUESTED";
-        const USER_SAFE_DATA = "username";
+
+        const USER_SAFE_DATA =
+            "username firstName middleName lastName age gender photoUrl about college skills profession gmail isVerified";
 
         const requests = await ConnectionRequest.find({
             requesterId: loggedInUserId,
             status: STATUS_INTERESTED
-        })
-            .populate("receiverId", USER_SAFE_DATA)
-
+        }).populate("receiverId", USER_SAFE_DATA);
 
         if (!requests || requests.length === 0) {
             return res.status(200).json({
@@ -253,10 +253,26 @@ userPreference.get("/user/requests/send", userAuth, async (req, res) => {
             });
         }
 
-        const formattedRequests = requests.map(r => ({
-            _id: r._id,
-            username: r.receiverId.username
-        }));
+        const formattedRequests = requests.map(r => {
+            const user = r.receiverId;
+
+            return {
+                _id: r._id,
+                username: user.username,
+                firstName: user.firstName,
+                middleName: user.middleName,
+                lastName: user.lastName,
+                age: user.age,
+                gender: user.gender,
+                photoUrl: user.photoUrl,
+                about: user.about,
+                college: user.college,
+                skills: user.skills,
+                profession: user.profession,
+                gmail: user.gmail,
+                isVerified: user.isVerified,
+            };
+        });
 
         return res.status(200).json({
             success: true,

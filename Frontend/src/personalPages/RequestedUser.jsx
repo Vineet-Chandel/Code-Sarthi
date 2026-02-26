@@ -1,26 +1,27 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { BASE_URL } from "./auth/baseURL";
-import { addFeedUser } from "../utils/feedSlice";
+import { BASE_URL } from "../Pages/auth/baseURL"
+import { addRequestedUser } from "../utils/requestedUserSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Search from "../components/navSearch";
 import { RiUserUnfollowFill } from "react-icons/ri";
 
-const Explore = () => {
+
+const RequestedUser = () => {
     const user = useSelector(store => store.user.user.DATA);
-    const feed = useSelector(store => store.feed.users || []);
+    const reqUser = useSelector(store => store.requestedUser.users || []);
     const dispatch = useDispatch();
-    const [page, setPage] = useState(1); // ✅ page defined
+
 
     const [showRequestModal, setShowRequestModal] = useState(false);
-    const feedUser = async () => {
+    const requestedUsers = async () => {
         try {
             const response = await axios.get(
-                `${BASE_URL}/user/feed?page=${page}&limit=12`,
+                `${BASE_URL}/user/requests/send`,
                 { withCredentials: true }
             );
 
-            dispatch(addFeedUser(response.data.data));
+            dispatch(addRequestedUser(response.data.data));
 
         } catch (err) {
             console.error(err?.message || err);
@@ -28,8 +29,8 @@ const Explore = () => {
     };
 
     useEffect(() => {
-        feedUser();
-    }, [page]);
+        requestedUsers();
+    }, []);
 
     const sendRequest = async (username) => {
 
@@ -45,9 +46,7 @@ const Explore = () => {
         }
 
     }
-    useEffect(() => {
-        sendRequest()
-    }, [targetedUsername])
+
     return (
         <div className="
 w-full min-h-screen
@@ -67,7 +66,7 @@ relative overflow-hidden
             </div>
             <div className="max-w-9xl mx-auto">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-20 gap-y-10">
-                    {feed.map((item, index) => (
+                    {reqUser.map((item, index) => (
                         <div
                             key={item._id}
                             className=" relative group bg-[#030712]/70 backdrop-blur-3xl rounded-3xl border border-white/[0.08] shadow-[0_0_40px_rgba(59,130,246,0.06)] hover:shadow-[0_0_60px_rgba(168,85,247,0.15)] transition-all duration-500 hover:-translate-y-1 overflow-hidden before:absolute before:inset-0 before:rounded-3xl before:bg-gradient-to-br before:from-blue-500/[0.05] before:to-purple-500/[0.05] before:opacity-0 group-hover:before:opacity-100 before:transition-opacity">
@@ -85,7 +84,7 @@ relative overflow-hidden
                                             <div className="absolute inset-0 flex items-center justify-center">
 
                                                 <img
-                                                    src={item.photoUrl.url}
+                                                    src={item?.photoUrl?.url}
                                                     className=" w-full h-full object-cover rounded-2xl group-hover:scale-110 transition-transform duration-700
 "
                                                 />
@@ -185,13 +184,12 @@ relative overflow-hidden
                                         </button>
 
                                         <button className="relative group flex-1 min-w-[140px] bg-gradient-to-r from-purple-600/90 to-purple-700/90 text-white px-4 py-2.5 rounded-xl font-medium hover:from-purple-500 hover:to-purple-600 transition-all duration-300 active:scale-95  border border-purple-500/30 overflow-hidden" onClick={() => sendRequest(item.username)}>
+
                                             <span className="relative z-10 flex items-center justify-center gap-2">
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                                </svg>
-                                                Send Request
+                                                <RiUserUnfollowFill size={25} />
+                                                Delete Request
                                             </span>
+
                                         </button>
                                     </div>
                                 </div>
@@ -203,22 +201,7 @@ relative overflow-hidden
                     ))}
                 </div>
 
-                {/* Load More Button */}
-                <div className="flex justify-center mt-10">
-                    <button
-                        onClick={() => setPage(prev => prev + 1)}
-                        className="relative group bg-gradient-to-r from-gray-900 to-gray-950 text-gray-300 px-8 py-3.5 rounded-xl font-medium hover:text-white transition-all duration-300 border border-gray-700/50 hover:border-blue-500/50 overflow-hidden"
-                    >
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                        <span className="relative z-10 flex items-center gap-3">
-                            <svg className="w-5 h-5 group-hover:animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                            </svg>
-                            LOAD MORE PROFILES
-                        </span>
-                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
-                    </button>
-                </div>
+
             </div>
             {showRequestModal && (
                 <div className="fixed inset-0 z-[999] flex items-center justify-center">
@@ -261,11 +244,6 @@ relative overflow-hidden
         </div>
 
     );
-};
+}
 
-export default Explore;
-// onClick = {() => setPage(prev => prev + 1)}
-
-
-
-
+export default RequestedUser
