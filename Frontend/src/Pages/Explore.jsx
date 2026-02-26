@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { BASE_URL } from "./auth/baseURL";
 import { addFeedUser } from "../utils/feedSlice";
 import { useDispatch, useSelector } from "react-redux";
+import Search from "../components/navSearch";
 
 
 const Explore = () => {
@@ -29,40 +30,49 @@ const Explore = () => {
     }, [page]);
 
     return (
-        <div className="w-full min-h-screen bg-black p-4 md:p-8">
-            <div className="w-full/2 mx-auto">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="
+w-full min-h-screen
+bg-[radial-gradient(circle_at_top,#0a0f1f,black_70%)]
+p-4 md:p-10
+relative overflow-hidden
+">
+
+            <div className="w-screen h-screen/2  flex flex-col justify-center items-center mb-[100px]">
+                <div className="text-[7rem] font-extrabold">Collab with Developers</div>
+                <div className="text-2xl text-gray-400 mt-[-20px]">You can collab with new developers from all over world</div>
+                <div className="w-[50%] flex justify-center items-center mt-[40px]"> <Search height={70} /></div>
+
+            </div>
+            <div className="w-screen h-screen/2  flex justify-start items-center mb-[30px]">
+                <div className="text-[3rem] text-gray-300 font-extrabold">Suggested Developers for you</div>
+            </div>
+            <div className="max-w-9xl mx-auto">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-20 gap-y-10">
                     {feed.map((item, index) => (
                         <div
                             key={item._id}
-                            className="group relative bg-gradient-to-br from-gray-800/50 to-gray-900/70 backdrop-blur-xl rounded-2xl border border-gray-700/50 shadow-2xl shadow-black/30 hover:shadow-blue-900/20 transition-all duration-500 hover:scale-[1.02] overflow-hidden"
-                        >
-                            {/* Animated background grid effect */}
-                            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:20px_20px] opacity-30"></div>
+                            className=" relative group bg-[#030712]/70 backdrop-blur-3xl rounded-3xl border border-white/[0.08] shadow-[0_0_40px_rgba(59,130,246,0.06)] hover:shadow-[0_0_60px_rgba(168,85,247,0.15)] transition-all duration-500 hover:-translate-y-1 overflow-hidden before:absolute before:inset-0 before:rounded-3xl before:bg-gradient-to-br before:from-blue-500/[0.05] before:to-purple-500/[0.05] before:opacity-0 group-hover:before:opacity-100 before:transition-opacity">
 
-                            {/* Glow effect on hover */}
-                            <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-blue-600/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-70 transition-opacity duration-500"></div>
+
 
                             <div className="relative p-6 flex flex-col md:flex-row gap-6">
                                 {/* Left Profile Section */}
                                 <div className="flex flex-col items-center md:items-start space-y-4">
                                     {/* Avatar with tech ring */}
                                     <div className="relative">
-                                        <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full blur-lg opacity-30 group-hover:opacity-50 transition-opacity">
 
-                                        </div>
-                                        <div className="relative w-28 h-28 rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700/50 shadow-xl overflow-hidden">
-                                            <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-purple-600/10"></div>
+                                        <div className="relative w-28 h-28 rounded-2xl bg-gradient-to-br from-[#111827] to-black border border-blue-500/20 bg-gradient-to-br from-gray-800 to-gray-900 overflow-hidden">
+
                                             <div className="absolute inset-0 flex items-center justify-center">
 
-                                                <img src={item.photoUrl.url} alt="kucchh nhi" className="absolute z-50" />
+                                                <img
+                                                    src={item.photoUrl.url}
+                                                    className=" w-full h-full object-cover rounded-2xl group-hover:scale-110 transition-transform duration-700
+"
+                                                />
 
                                             </div>
-                                            {/* Tech corner accents */}
-                                            <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-blue-400/50"></div>
-                                            <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-purple-400/50"></div>
-                                            <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-blue-400/50"></div>
-                                            <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-purple-400/50"></div>
+
                                         </div>
 
 
@@ -110,7 +120,7 @@ const Explore = () => {
                                     </div>
 
                                     {/* About section */}
-                                    <div className="bg-gray-900/40 rounded-xl p-4 border border-gray-700/30">
+                                    <div className=" rounded-xl p-4  bg-[#020617]/60 border border-white/[0.08] shadow-inner shadow-blue-500/[0.04] backdrop-blur-xl ">
                                         <div className="flex items-center gap-2 mb-2">
                                             <div className="w-1 h-4 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"></div>
                                             <h3 className="text-sm font-semibold text-gray-300">SYSTEM PROFILE</h3>
@@ -130,7 +140,7 @@ const Explore = () => {
                                             {item.skills?.map((skill, idx) => (
                                                 <span
                                                     key={idx}
-                                                    className="px-3 py-1.5 text-xs font-medium rounded-lg bg-gradient-to-r from-gray-800 to-gray-900 border border-gray-700/50 text-gray-300 hover:border-blue-500/50 hover:text-blue-300 transition-all duration-300 group relative overflow-hidden"
+                                                    className=" px-3 py-1.5 text-xs font-medium rounded-xl bg-white/[0.04] border border-white/10 text-gray-300 hover:border-blue-400/40 hover:text-blue-300 backdrop-blur-md  transition-all duration-300 group relative overflow-hidden "
                                                 >
                                                     <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                                     <span className="relative">{skill}</span>
@@ -155,7 +165,7 @@ const Explore = () => {
                                             </span>
                                         </button>
 
-                                        <button className="relative group flex-1 min-w-[140px] bg-gradient-to-r from-purple-600/90 to-purple-700/90 text-white px-4 py-2.5 rounded-xl font-medium hover:from-purple-500 hover:to-purple-600 transition-all duration-300 active:scale-95 shadow-lg shadow-purple-900/20 border border-purple-500/30 overflow-hidden">
+                                        <button className="relative group flex-1 min-w-[140px] bg-gradient-to-r from-purple-600/90 to-purple-700/90 text-white px-4 py-2.5 rounded-xl font-medium hover:from-purple-500 hover:to-purple-600 transition-all duration-300 active:scale-95  border border-purple-500/30 overflow-hidden">
                                             <span className="relative z-10 flex items-center justify-center gap-2">
                                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />

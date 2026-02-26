@@ -4,13 +4,16 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BASE_URL } from "../Pages/auth/baseURL";
 
+import { MdEdit } from "react-icons/md";
+
+
 const EditProfile = () => {
 
     const [newError, setNewError] = useState(false);
     const [errorisOpen, errorsetIsOpen] = useState(false);
     const [editProfileIMG, editProfileIMGisOpen] = useState(false);
     const [uploading, setUploading] = useState(false);
-
+    const [hoveringImg, setHoveringImg] = useState(false);
     const user = useSelector(store => store.user.user.DATA);
     const [formData, setFormData] = useState({
         firstName: '',
@@ -91,16 +94,16 @@ const EditProfile = () => {
         }
     };
     return (
-        <div className=" w-full bg-black flex justify-center p-6 overflow-y-auto">
+        <div className=" w-screen min-h-screen bg-black flex justify-center items-start py-10 overflow-y-auto">
 
-            <div className=" w-full max-w-9xl p-4 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 flex flex-col gap-4">
-
+            <div className=" w-full  max-w-[1600px] relative mx-auto p-6 md:p-8 rounded-[32px] bg-white/5 backdrop-blur-2xl border border-white/10 shadow-[0_0_60px_rgba(0,255,255,0.08)] flex flex-col gap-6">
+                <div className="pointer-events-none absolute inset-0 rounded-[32px] bg-[radial-gradient(circle_at_30%_20%,rgba(0,255,255,0.08),transparent_60%)]"></div>
                 {/* ================= HEADER ================= */}
                 <div className="w-full flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
 
                     <div>
                         <h1 className="text-5xl font-extrabold bg-[linear-gradient(135deg,#00c6ff,#0072ff)] bg-clip-text text-transparent flex items-center gap-3">
-                            Edit Profile <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 32 32"><g fill="none"><path fill="url(#SVGKCH4Jk8K)" d="M25.125 18.056v4.166l-8.095 7.75q-.51.027-1.03.028c-3.198 0-6.14-.823-8.315-2.207C5.523 26.417 4 24.393 4 22v-.5A3.5 3.5 0 0 1 7.5 18h17q.32.001.625.056" /><path fill="url(#SVGcp1ycBLD)" d="M25.125 18.056v4.166l-8.095 7.75q-.51.027-1.03.028c-3.198 0-6.14-.823-8.315-2.207C5.523 26.417 4 24.393 4 22v-.5A3.5 3.5 0 0 1 7.5 18h17q.32.001.625.056" /><path fill="url(#SVGoCl5vdmK)" fill-opacity="0.75" d="M25.125 18.056v4.166l-8.095 7.75q-.51.027-1.03.028c-3.198 0-6.14-.823-8.315-2.207C5.523 26.417 4 24.393 4 22v-.5A3.5 3.5 0 0 1 7.5 18h17q.32.001.625.056" /><path fill="url(#SVGTVs4bdKw)" fill-opacity="0.75" d="M25.125 18.056v4.166l-8.095 7.75q-.51.027-1.03.028c-3.198 0-6.14-.823-8.315-2.207C5.523 26.417 4 24.393 4 22v-.5A3.5 3.5 0 0 1 7.5 18h17q.32.001.625.056" /><path fill="url(#SVGUxDSsduC)" d="M16 16a7 7 0 1 0 0-14a7 7 0 0 0 0 14" /><path fill="url(#SVGXETk5dzY)" d="m21.539 29.469l7.61-7.543v-4.074h-4.073l-7.567 7.64l.308 3.695z" /><path fill="url(#SVG0UyewtcI)" d="m21.539 29.47l.223-.223s-1.726-.661-2.535-1.47c-.809-.81-1.47-2.534-1.47-2.534l-.248.249a2.66 2.66 0 0 0-.686 1.206l-.79 3.051a1 1 0 0 0 1.217 1.22l3.02-.778a2.8 2.8 0 0 0 1.269-.722" /><path fill="url(#SVGVV4hJcjm)" d="m27.937 23.14l2.211-2.214a2.88 2.88 0 0 0 .072-4.017a2.88 2.88 0 0 0-4.144-.057l-2.238 2.241z" /><path fill="url(#SVGb0sU2cqf)" d="M25.094 17.838a5.43 5.43 0 0 0 4.106 4.038l-1.55 1.551a5.43 5.43 0 0 1-4.106-4.04z" /><defs><linearGradient id="SVGKCH4Jk8K" x1="9.707" x2="13.584" y1="19.595" y2="31.977" gradientUnits="userSpaceOnUse"><stop offset=".125" stop-color="#00c6ff" /><stop offset="1" stop-color="#41d1dc" /></linearGradient><linearGradient id="SVGcp1ycBLD" x1="16" x2="21.429" y1="16.571" y2="36.857" gradientUnits="userSpaceOnUse"><stop stop-color="#5edadb" stop-opacity="0" /><stop offset="1" stop-color="#62f8ef" /></linearGradient><linearGradient id="SVGUxDSsduC" x1="12.329" x2="19.464" y1="3.861" y2="15.254" gradientUnits="userSpaceOnUse"><stop offset=".125" stop-color="#00c6ff" /><stop offset="1" stop-color="#41d1dc" /></linearGradient><linearGradient id="SVGXETk5dzY" x1="20.861" x2="27.044" y1="19.948" y2="26.149" gradientUnits="userSpaceOnUse"><stop stop-color="#ffa43d" /><stop offset="1" stop-color="#fb5937" /></linearGradient><linearGradient id="SVG0UyewtcI" x1="15.174" x2="19.325" y1="26.847" y2="30.975" gradientUnits="userSpaceOnUse"><stop offset=".255" stop-color="#ffd394" /><stop offset="1" stop-color="#ff921f" /></linearGradient><linearGradient id="SVGVV4hJcjm" x1="29.502" x2="26.869" y1="17.485" y2="19.969" gradientUnits="userSpaceOnUse"><stop stop-color="#7bfffd" /><stop offset="1" stop-color="#dd3ce2" /></linearGradient><linearGradient id="SVGb0sU2cqf" x1="26.469" x2="22.489" y1="21.664" y2="19.902" gradientUnits="userSpaceOnUse"><stop stop-color="#ff921f" /><stop offset="1" stop-color="#ffe994" /></linearGradient><radialGradient id="SVGoCl5vdmK" cx="0" cy="0" r="1" gradientTransform="rotate(-59.267 40.498 -1.073)scale(18.9466 9.80314)" gradientUnits="userSpaceOnUse"><stop stop-color="#0a1852" stop-opacity="0.75" /><stop offset="1" stop-color="#0a1852" stop-opacity="0" /></radialGradient><radialGradient id="SVGTVs4bdKw" cx="0" cy="0" r="1" gradientTransform="matrix(0 -5.5 7.25 0 26 21.5)" gradientUnits="userSpaceOnUse"><stop stop-color="#0a1852" stop-opacity="0.75" /><stop offset="1" stop-color="#0a1852" stop-opacity="0" /></radialGradient></defs></g></svg>
+                            Edit Main Profile <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 32 32"><g fill="none"><path fill="url(#SVGKCH4Jk8K)" d="M25.125 18.056v4.166l-8.095 7.75q-.51.027-1.03.028c-3.198 0-6.14-.823-8.315-2.207C5.523 26.417 4 24.393 4 22v-.5A3.5 3.5 0 0 1 7.5 18h17q.32.001.625.056" /><path fill="url(#SVGcp1ycBLD)" d="M25.125 18.056v4.166l-8.095 7.75q-.51.027-1.03.028c-3.198 0-6.14-.823-8.315-2.207C5.523 26.417 4 24.393 4 22v-.5A3.5 3.5 0 0 1 7.5 18h17q.32.001.625.056" /><path fill="url(#SVGoCl5vdmK)" fill-opacity="0.75" d="M25.125 18.056v4.166l-8.095 7.75q-.51.027-1.03.028c-3.198 0-6.14-.823-8.315-2.207C5.523 26.417 4 24.393 4 22v-.5A3.5 3.5 0 0 1 7.5 18h17q.32.001.625.056" /><path fill="url(#SVGTVs4bdKw)" fill-opacity="0.75" d="M25.125 18.056v4.166l-8.095 7.75q-.51.027-1.03.028c-3.198 0-6.14-.823-8.315-2.207C5.523 26.417 4 24.393 4 22v-.5A3.5 3.5 0 0 1 7.5 18h17q.32.001.625.056" /><path fill="url(#SVGUxDSsduC)" d="M16 16a7 7 0 1 0 0-14a7 7 0 0 0 0 14" /><path fill="url(#SVGXETk5dzY)" d="m21.539 29.469l7.61-7.543v-4.074h-4.073l-7.567 7.64l.308 3.695z" /><path fill="url(#SVG0UyewtcI)" d="m21.539 29.47l.223-.223s-1.726-.661-2.535-1.47c-.809-.81-1.47-2.534-1.47-2.534l-.248.249a2.66 2.66 0 0 0-.686 1.206l-.79 3.051a1 1 0 0 0 1.217 1.22l3.02-.778a2.8 2.8 0 0 0 1.269-.722" /><path fill="url(#SVGVV4hJcjm)" d="m27.937 23.14l2.211-2.214a2.88 2.88 0 0 0 .072-4.017a2.88 2.88 0 0 0-4.144-.057l-2.238 2.241z" /><path fill="url(#SVGb0sU2cqf)" d="M25.094 17.838a5.43 5.43 0 0 0 4.106 4.038l-1.55 1.551a5.43 5.43 0 0 1-4.106-4.04z" /><defs><linearGradient id="SVGKCH4Jk8K" x1="9.707" x2="13.584" y1="19.595" y2="31.977" gradientUnits="userSpaceOnUse"><stop offset=".125" stop-color="#00c6ff" /><stop offset="1" stop-color="#41d1dc" /></linearGradient><linearGradient id="SVGcp1ycBLD" x1="16" x2="21.429" y1="16.571" y2="36.857" gradientUnits="userSpaceOnUse"><stop stop-color="#5edadb" stop-opacity="0" /><stop offset="1" stop-color="#62f8ef" /></linearGradient><linearGradient id="SVGUxDSsduC" x1="12.329" x2="19.464" y1="3.861" y2="15.254" gradientUnits="userSpaceOnUse"><stop offset=".125" stop-color="#00c6ff" /><stop offset="1" stop-color="#41d1dc" /></linearGradient><linearGradient id="SVGXETk5dzY" x1="20.861" x2="27.044" y1="19.948" y2="26.149" gradientUnits="userSpaceOnUse"><stop stop-color="#ffa43d" /><stop offset="1" stop-color="#fb5937" /></linearGradient><linearGradient id="SVG0UyewtcI" x1="15.174" x2="19.325" y1="26.847" y2="30.975" gradientUnits="userSpaceOnUse"><stop offset=".255" stop-color="#ffd394" /><stop offset="1" stop-color="#ff921f" /></linearGradient><linearGradient id="SVGVV4hJcjm" x1="29.502" x2="26.869" y1="17.485" y2="19.969" gradientUnits="userSpaceOnUse"><stop stop-color="#7bfffd" /><stop offset="1" stop-color="#dd3ce2" /></linearGradient><linearGradient id="SVGb0sU2cqf" x1="26.469" x2="22.489" y1="21.664" y2="19.902" gradientUnits="userSpaceOnUse"><stop stop-color="#ff921f" /><stop offset="1" stop-color="#ffe994" /></linearGradient><radialGradient id="SVGoCl5vdmK" cx="0" cy="0" r="1" gradientTransform="rotate(-59.267 40.498 -1.073)scale(18.9466 9.80314)" gradientUnits="userSpaceOnUse"><stop stop-color="#0a1852" stop-opacity="0.75" /><stop offset="1" stop-color="#0a1852" stop-opacity="0" /></radialGradient><radialGradient id="SVGTVs4bdKw" cx="0" cy="0" r="1" gradientTransform="matrix(0 -5.5 7.25 0 26 21.5)" gradientUnits="userSpaceOnUse"><stop stop-color="#0a1852" stop-opacity="0.75" /><stop offset="1" stop-color="#0a1852" stop-opacity="0" /></radialGradient></defs></g></svg>
                         </h1>
                         <p className="text-lg text-gray-400 mt-2">
                             Your profile is your first impression — make it unforgettable ✨
@@ -114,12 +117,19 @@ const EditProfile = () => {
                 <div className="w-full flex flex-col lg:flex-row gap-3">
 
                     {/* ========== ProfilePreview Panel ========== */}
-                    <div className="w-full lg:w-[30%] rounded-3xl p-6 bg-black/30 border border-white/10 flex flex-col items-center">
+                    <div className="w-full lg:w-[30%] rounded-2xl p-6 bg-black/40 backdrop-blur-xl border border-white/5 shadow-[inset_0_0_40px_rgba(255,255,255,0.02)] flex flex-col items-center">
                         {/* Avatar */}
-                        <div className="relative w-[180px] h-[180px] rounded-2xl bg-gray-900 border border-gray-700 flex items-center justify-center" onClick={() => editProfileIMGisOpen(true)}>
-                            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-400/20 to-blue-600/20 blur-xl"></div>
-                            <span className="relative text-5xl font-bold text-cyan-400">
-                                <img src={user?.photoUrl?.url} className="h-full rounded-2xl w-full" alt="" />
+                        <div className="relative w-[180px] h-[180px] rounded-2xl bg-gray-900 border border-gray-700 flex items-center justify-center" onClick={() => editProfileIMGisOpen(true)} onMouseEnter={() => setHoveringImg(true)} onMouseLeave={() => setHoveringImg(false)}>
+                            <div className="absolute inset-0 rounded-2xl "></div>
+                            <span className="relative text-5xl rounded-2xl font-bold text-cyan-400 ">
+                                <div
+                                    className={`absolute inset-0 rounded-2xl bg-black/60 flex justify-center items-center transition-all duration-300 ease-out ${hoveringImg ? "opacity-100 scale-100" : "opacity-0 scale-95"}
+`}
+                                >
+                                    <MdEdit className="text-white" size={35} />
+                                </div>
+
+                                <img src={user?.photoUrl?.url} className="h-full rounded-2xl w-full object-cover transition-transform duration-500 group-hover:scale-110" alt="" />
                             </span>
                         </div>
                         {/* Name */}
@@ -426,10 +436,10 @@ const EditProfile = () => {
                 </div>
             </div >
 
-            {editProfileIMG && (<div className="fixed inset-0 z-10 bg-black/70 backdrop-blur-sm flex justify-center items-center " onClick={() => editProfileIMGisOpen(false)}>
+            {editProfileIMG && (<div className=" z-10 fixed inset-0 bg-black/80 backdrop-blur-sm animate-fadeIn flex justify-center items-center " onClick={() => editProfileIMGisOpen(false)}>
 
                 {/* CARD */}
-                <div className="w-[380px] rounded-2xl overflow-hidden bg-[#111] border border-white/10 shadow-2xl " onClick={(e) => e.stopPropagation()} >
+                <div className="w-[380px] rounded-2xl overflow-hidden bg-black/60 backdrop-blur-2xl border border-white/10 shadow-[0_0_60px_rgba(0,255,255,0.08)] shadow-2xl " onClick={(e) => e.stopPropagation()} >
 
                     {/* HEADER */}
                     <div className="flex items-center justify-center gap-3 px-6 py-4 border-b border-white/10">

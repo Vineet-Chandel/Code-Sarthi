@@ -4,7 +4,12 @@ import { BASE_URL } from "../../Pages/auth/baseURL";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { addBlockedUsers } from "../../utils/blockedSlice";
-
+import { RiVerifiedBadgeFill } from "react-icons/ri";
+import { TbPasswordFingerprint } from "react-icons/tb";
+import { MdAutorenew } from "react-icons/md";
+import { MdMarkEmailUnread } from "react-icons/md";
+import { MdOutgoingMail } from "react-icons/md";
+import { FaUserTag } from "react-icons/fa";
 // Constants
 const SETTINGS_ITEMS = [
     "Password and security",
@@ -226,271 +231,29 @@ const settingIcons = {
 const allChanges = [
     {
         "Tag": "Verify Email",
-        "svg": (<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 16 16">
-            <g fill="none">
-                <path fill="url(#SVGbHn6MeQb)" d="M7.647 2.146a.5.5 0 0 1 .708 0C9.595 3.39 10.969 4 12.5 4a.5.5 0 0 1 .5.5v3.001c0 3.219-1.641 5.407-4.842 6.473a.5.5 0 0 1-.316 0C4.642 12.908 3 10.72 3 7.501V4.5a.5.5 0 0 1 .5-.5c1.53 0 2.904-.611 4.147-1.854" />
-                <path fill="url(#SVGHi9NGNOE)" fill-opacity="0.3" d="M7.647 2.146a.5.5 0 0 1 .708 0C9.595 3.39 10.969 4 12.5 4a.5.5 0 0 1 .5.5v3.001c0 3.219-1.641 5.407-4.842 6.473a.5.5 0 0 1-.316 0C4.642 12.908 3 10.72 3 7.501V4.5a.5.5 0 0 1 .5-.5c1.53 0 2.904-.611 4.147-1.854" />
-                <path fill="url(#SVGTam6Sbjq)" d="M15 10.5a4.5 4.5 0 1 1-9 0a4.5 4.5 0 0 1 9 0" />
-                <path fill="url(#SVGTc6Bp6hh)" fill-rule="evenodd" d="M12.854 8.646a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1-1a.5.5 0 0 1 .708-.708l.646.647l2.646-2.647a.5.5 0 0 1 .708 0" clip-rule="evenodd" />
-                <defs>
-                    <radialGradient id="SVGbHn6MeQb" cx="0" cy="0" r="1" gradientTransform="rotate(56.554 3.95 -3.238)scale(27.864 23.943)" gradientUnits="userSpaceOnUse">
-                        <stop offset=".338" stop-color="#0fafff" />
-                        <stop offset=".529" stop-color="#367af2" />
-                        <stop offset=".682" stop-color="#5750e2" />
-                        <stop offset=".861" stop-color="#cc23d1" />
-                    </radialGradient>
-                    <radialGradient id="SVGHi9NGNOE" cx="0" cy="0" r="1" gradientTransform="matrix(0 6 -5.71428 0 10 12)" gradientUnits="userSpaceOnUse">
-                        <stop offset=".5" stop-color="#1e1868" />
-                        <stop offset="1" stop-color="#1e1868" stop-opacity="0" />
-                    </radialGradient>
-                    <linearGradient id="SVGTam6Sbjq" x1="6.321" x2="12.533" y1="7.688" y2="14.141" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#52d17c" />
-                        <stop offset="1" stop-color="#22918b" />
-                    </linearGradient>
-                    <linearGradient id="SVGTc6Bp6hh" x1="8.938" x2="9.946" y1="8.908" y2="13.36" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#fff" />
-                        <stop offset="1" stop-color="#e3ffd9" />
-                    </linearGradient>
-                </defs>
-            </g>
-        </svg>),
+        "svg": <RiVerifiedBadgeFill size={40} color="skyblue" />,
         "index": 1,
     },
 
     {
         "Tag": "Forgot Password",
-        "svg": (<svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 16 16">
-            <g fill="none">
-                <path fill="url(#SVGsfI0Rddh)" d="M11 3.5v1h-1v-1a2 2 0 1 0-4 0v1H5v-1a3 3 0 0 1 6 0" />
-                <path fill="url(#SVGbTQINdJb)" d="M14 6.5A2.5 2.5 0 0 0 11.5 4h-7A2.5 2.5 0 0 0 2 6.5v5A2.5 2.5 0 0 0 4.5 14h7a2.5 2.5 0 0 0 2.5-2.5z" />
-                <path fill="url(#SVGAWAl77FK)" d="M9 9a1 1 0 1 1-2 0a1 1 0 0 1 2 0" />
-                <path fill="url(#SVGzKJRbcbh)" d="M14 6.5A2.5 2.5 0 0 0 11.5 4h-7A2.5 2.5 0 0 0 2 6.5v5A2.5 2.5 0 0 0 4.5 14h7a2.5 2.5 0 0 0 2.5-2.5z" />
-                <path fill="url(#SVGLotQ6dhT)" d="M12.88 7.16c.508.532 1.484 1.379 2.684 1.552a.5.5 0 0 1 .436.482v2.323c0 3.122-2.784 4.255-3.386 4.463a.34.34 0 0 1-.228 0C11.785 15.772 9 14.64 9 11.517V9.194a.5.5 0 0 1 .436-.482c1.2-.173 2.175-1.02 2.683-1.553a.535.535 0 0 1 .762 0" />
-                <defs>
-                    <linearGradient id="SVGsfI0Rddh" x1="6.286" x2="10.672" y1="-.264" y2="7.206" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#ffc205" />
-                        <stop offset="1" stop-color="#fb5937" />
-                    </linearGradient>
-                    <linearGradient id="SVGbTQINdJb" x1="14.857" x2="4.404" y1="14.625" y2="4.404" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#ff6f47" />
-                        <stop offset="1" stop-color="#ffcd0f" />
-                    </linearGradient>
-                    <linearGradient id="SVGLotQ6dhT" x1="10.313" x2="17.166" y1="7" y2="14.648" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#62be55" />
-                        <stop offset="1" stop-color="#1e794a" />
-                    </linearGradient>
-                    <radialGradient id="SVGAWAl77FK" cx="0" cy="0" r="1" gradientTransform="matrix(-.99997 -3.5 4.85626 -1.38747 8.5 10)" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#944600" />
-                        <stop offset="1" stop-color="#cd8e02" />
-                    </radialGradient>
-                    <radialGradient id="SVGzKJRbcbh" cx="0" cy="0" r="1" gradientTransform="rotate(157.947 4.768 7.114)scale(5.54881 5.87385)" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#eb4824" />
-                        <stop offset=".99" stop-color="#eb4824" stop-opacity="0" />
-                    </radialGradient>
-                </defs>
-            </g>
-        </svg>),
+        "svg": <MdMarkEmailUnread size={35} color="skyblue" />,
         "index": 2
     },
     {
         "Tag": "Renew Password",
-        "svg": (<svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 32 32">
-            <g fill="none">
-                <path fill="#367af2" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                <path fill="url(#SVGH8QKvcBK)" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                <path fill="url(#SVGkOCYvtuq)" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                <path fill="url(#SVGcCmlT1Jm)" fill-opacity="0.75" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                <path fill="url(#SVGsZMU2dcf)" fill-opacity="0.7" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                <path fill="url(#SVGSLELubFH)" d="M2 9.5A4.5 4.5 0 0 1 6.5 5h19c1.414 0 2.675.652 3.5 1.671V10h1v.59l-13.526 7.292a1 1 0 0 1-.948 0L2 10.59z" />
-                <path fill="url(#SVGJ6GwFbSV)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                <path fill="url(#SVGqEKOOddH)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                <path fill="url(#SVGI9snPxQZ)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                <path fill="url(#SVGQAUgWbdX)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                <circle cx="24.5" cy="13" r="3" fill="url(#SVGNJ3uZNIx)" />
-                <path fill="url(#SVGLtXXXbyB)" d="M19.729 5A5 5 0 0 1 29.5 6.5v2.657l2.308 2.596A.75.75 0 0 1 31.299 13h-13.6a.75.75 0 0 1-.508-1.247L19.5 9.156V6.5c0-.523.08-1.026.229-1.5" />
-                <defs>
-                    <linearGradient id="SVGH8QKvcBK" x1="19.555" x2="26.862" y1="13.332" y2="27.873" gradientUnits="userSpaceOnUse">
-                        <stop offset=".199" stop-color="#0094f0" stop-opacity="0" />
-                        <stop offset=".431" stop-color="#0094f0" />
-                    </linearGradient>
-                    <linearGradient id="SVGkOCYvtuq" x1="12" x2="4.914" y1="11.79" y2="28.328" gradientUnits="userSpaceOnUse">
-                        <stop offset=".191" stop-color="#0094f0" stop-opacity="0" />
-                        <stop offset=".431" stop-color="#0094f0" />
-                    </linearGradient>
-                    <linearGradient id="SVGcCmlT1Jm" x1="23.383" x2="24.532" y1="20.142" y2="28.575" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#2764e7" stop-opacity="0" />
-                        <stop offset="1" stop-color="#2764e7" />
-                    </linearGradient>
-                    <linearGradient id="SVGsZMU2dcf" x1="20.333" x2="22.43" y1="12.088" y2="29.25" gradientUnits="userSpaceOnUse">
-                        <stop offset=".533" stop-color="#ff6ce8" stop-opacity="0" />
-                        <stop offset="1" stop-color="#ff6ce8" />
-                    </linearGradient>
-                    <linearGradient id="SVGSLELubFH" x1="10.318" x2="18.903" y1=".976" y2="23.436" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#6ce0ff" />
-                        <stop offset=".462" stop-color="#29c3ff" />
-                        <stop offset="1" stop-color="#4894fe" />
-                    </linearGradient>
-                    <linearGradient id="SVGNJ3uZNIx" x1="24.519" x2="24.519" y1="12.499" y2="15.999" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#eb4824" />
-                        <stop offset="1" stop-color="#ffcd0f" stop-opacity="0.988" />
-                    </linearGradient>
-                    <linearGradient id="SVGLtXXXbyB" x1="32.02" x2="20.9" y1="12.995" y2="1.131" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#ff6f47" />
-                        <stop offset="1" stop-color="#ffcd0f" />
-                    </linearGradient>
-                    <radialGradient id="SVGJ6GwFbSV" cx="0" cy="0" r="1" gradientTransform="matrix(0 5 -5.06764 0 24.5 13)" gradientUnits="userSpaceOnUse">
-                        <stop offset=".535" stop-color="#4a43cb" />
-                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                    </radialGradient>
-                    <radialGradient id="SVGqEKOOddH" cx="0" cy="0" r="1" gradientTransform="matrix(0 2 -9.1875 0 24.5 12.5)" gradientUnits="userSpaceOnUse">
-                        <stop offset=".535" stop-color="#4a43cb" />
-                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                    </radialGradient>
-                    <radialGradient id="SVGI9snPxQZ" cx="0" cy="0" r="1" gradientTransform="matrix(1 1.5 -1.875 1.25 19 11)" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#4a43cb" />
-                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                    </radialGradient>
-                    <radialGradient id="SVGQAUgWbdX" cx="0" cy="0" r="1" gradientTransform="rotate(90.406 9.271 15.163)scale(8.5 6.24951)" gradientUnits="userSpaceOnUse">
-                        <stop offset=".604" stop-color="#4a43cb" />
-                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                    </radialGradient>
-                </defs>
-            </g>
-        </svg>),
+        "svg": <TbPasswordFingerprint size={45} color="skyblue" />,
         "index": 3,
     },
     {
         "Tag": "Change Gmail",
-        "svg": (<svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 32 32">
-            <g fill="none">
-                <path fill="#367af2" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                <path fill="url(#SVGH8QKvcBK)" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                <path fill="url(#SVGkOCYvtuq)" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                <path fill="url(#SVGcCmlT1Jm)" fill-opacity="0.75" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                <path fill="url(#SVGsZMU2dcf)" fill-opacity="0.7" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                <path fill="url(#SVGSLELubFH)" d="M2 9.5A4.5 4.5 0 0 1 6.5 5h19c1.414 0 2.675.652 3.5 1.671V10h1v.59l-13.526 7.292a1 1 0 0 1-.948 0L2 10.59z" />
-                <path fill="url(#SVGJ6GwFbSV)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                <path fill="url(#SVGqEKOOddH)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                <path fill="url(#SVGI9snPxQZ)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                <path fill="url(#SVGQAUgWbdX)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                <circle cx="24.5" cy="13" r="3" fill="url(#SVGNJ3uZNIx)" />
-                <path fill="url(#SVGLtXXXbyB)" d="M19.729 5A5 5 0 0 1 29.5 6.5v2.657l2.308 2.596A.75.75 0 0 1 31.299 13h-13.6a.75.75 0 0 1-.508-1.247L19.5 9.156V6.5c0-.523.08-1.026.229-1.5" />
-                <defs>
-                    <linearGradient id="SVGH8QKvcBK" x1="19.555" x2="26.862" y1="13.332" y2="27.873" gradientUnits="userSpaceOnUse">
-                        <stop offset=".199" stop-color="#0094f0" stop-opacity="0" />
-                        <stop offset=".431" stop-color="#0094f0" />
-                    </linearGradient>
-                    <linearGradient id="SVGkOCYvtuq" x1="12" x2="4.914" y1="11.79" y2="28.328" gradientUnits="userSpaceOnUse">
-                        <stop offset=".191" stop-color="#0094f0" stop-opacity="0" />
-                        <stop offset=".431" stop-color="#0094f0" />
-                    </linearGradient>
-                    <linearGradient id="SVGcCmlT1Jm" x1="23.383" x2="24.532" y1="20.142" y2="28.575" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#2764e7" stop-opacity="0" />
-                        <stop offset="1" stop-color="#2764e7" />
-                    </linearGradient>
-                    <linearGradient id="SVGsZMU2dcf" x1="20.333" x2="22.43" y1="12.088" y2="29.25" gradientUnits="userSpaceOnUse">
-                        <stop offset=".533" stop-color="#ff6ce8" stop-opacity="0" />
-                        <stop offset="1" stop-color="#ff6ce8" />
-                    </linearGradient>
-                    <linearGradient id="SVGSLELubFH" x1="10.318" x2="18.903" y1=".976" y2="23.436" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#6ce0ff" />
-                        <stop offset=".462" stop-color="#29c3ff" />
-                        <stop offset="1" stop-color="#4894fe" />
-                    </linearGradient>
-                    <linearGradient id="SVGNJ3uZNIx" x1="24.519" x2="24.519" y1="12.499" y2="15.999" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#eb4824" />
-                        <stop offset="1" stop-color="#ffcd0f" stop-opacity="0.988" />
-                    </linearGradient>
-                    <linearGradient id="SVGLtXXXbyB" x1="32.02" x2="20.9" y1="12.995" y2="1.131" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#ff6f47" />
-                        <stop offset="1" stop-color="#ffcd0f" />
-                    </linearGradient>
-                    <radialGradient id="SVGJ6GwFbSV" cx="0" cy="0" r="1" gradientTransform="matrix(0 5 -5.06764 0 24.5 13)" gradientUnits="userSpaceOnUse">
-                        <stop offset=".535" stop-color="#4a43cb" />
-                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                    </radialGradient>
-                    <radialGradient id="SVGqEKOOddH" cx="0" cy="0" r="1" gradientTransform="matrix(0 2 -9.1875 0 24.5 12.5)" gradientUnits="userSpaceOnUse">
-                        <stop offset=".535" stop-color="#4a43cb" />
-                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                    </radialGradient>
-                    <radialGradient id="SVGI9snPxQZ" cx="0" cy="0" r="1" gradientTransform="matrix(1 1.5 -1.875 1.25 19 11)" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#4a43cb" />
-                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                    </radialGradient>
-                    <radialGradient id="SVGQAUgWbdX" cx="0" cy="0" r="1" gradientTransform="rotate(90.406 9.271 15.163)scale(8.5 6.24951)" gradientUnits="userSpaceOnUse">
-                        <stop offset=".604" stop-color="#4a43cb" />
-                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                    </radialGradient>
-                </defs>
-            </g>
-        </svg>),
+        "svg": <MdOutgoingMail size={40} color="skyblue" />,
+
         "index": 4,
     },
     {
         "Tag": "Change Username",
-        "svg": (<svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 32 32">
-            <g fill="none">
-                <path fill="#367af2" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                <path fill="url(#SVGH8QKvcBK)" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                <path fill="url(#SVGkOCYvtuq)" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                <path fill="url(#SVGcCmlT1Jm)" fill-opacity="0.75" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                <path fill="url(#SVGsZMU2dcf)" fill-opacity="0.7" d="m30 10l-13.526 7.292a1 1 0 0 1-.948 0L2 10v12.5A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5z" />
-                <path fill="url(#SVGSLELubFH)" d="M2 9.5A4.5 4.5 0 0 1 6.5 5h19c1.414 0 2.675.652 3.5 1.671V10h1v.59l-13.526 7.292a1 1 0 0 1-.948 0L2 10.59z" />
-                <path fill="url(#SVGJ6GwFbSV)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                <path fill="url(#SVGqEKOOddH)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                <path fill="url(#SVGI9snPxQZ)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                <path fill="url(#SVGQAUgWbdX)" fill-opacity="0.3" d="M6.5 5A4.5 4.5 0 0 0 2 9.5v13A4.5 4.5 0 0 0 6.5 27h19a4.5 4.5 0 0 0 4.5-4.5V10h-1V6.671A4.5 4.5 0 0 0 25.5 5z" />
-                <circle cx="24.5" cy="13" r="3" fill="url(#SVGNJ3uZNIx)" />
-                <path fill="url(#SVGLtXXXbyB)" d="M19.729 5A5 5 0 0 1 29.5 6.5v2.657l2.308 2.596A.75.75 0 0 1 31.299 13h-13.6a.75.75 0 0 1-.508-1.247L19.5 9.156V6.5c0-.523.08-1.026.229-1.5" />
-                <defs>
-                    <linearGradient id="SVGH8QKvcBK" x1="19.555" x2="26.862" y1="13.332" y2="27.873" gradientUnits="userSpaceOnUse">
-                        <stop offset=".199" stop-color="#0094f0" stop-opacity="0" />
-                        <stop offset=".431" stop-color="#0094f0" />
-                    </linearGradient>
-                    <linearGradient id="SVGkOCYvtuq" x1="12" x2="4.914" y1="11.79" y2="28.328" gradientUnits="userSpaceOnUse">
-                        <stop offset=".191" stop-color="#0094f0" stop-opacity="0" />
-                        <stop offset=".431" stop-color="#0094f0" />
-                    </linearGradient>
-                    <linearGradient id="SVGcCmlT1Jm" x1="23.383" x2="24.532" y1="20.142" y2="28.575" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#2764e7" stop-opacity="0" />
-                        <stop offset="1" stop-color="#2764e7" />
-                    </linearGradient>
-                    <linearGradient id="SVGsZMU2dcf" x1="20.333" x2="22.43" y1="12.088" y2="29.25" gradientUnits="userSpaceOnUse">
-                        <stop offset=".533" stop-color="#ff6ce8" stop-opacity="0" />
-                        <stop offset="1" stop-color="#ff6ce8" />
-                    </linearGradient>
-                    <linearGradient id="SVGSLELubFH" x1="10.318" x2="18.903" y1=".976" y2="23.436" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#6ce0ff" />
-                        <stop offset=".462" stop-color="#29c3ff" />
-                        <stop offset="1" stop-color="#4894fe" />
-                    </linearGradient>
-                    <linearGradient id="SVGNJ3uZNIx" x1="24.519" x2="24.519" y1="12.499" y2="15.999" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#eb4824" />
-                        <stop offset="1" stop-color="#ffcd0f" stop-opacity="0.988" />
-                    </linearGradient>
-                    <linearGradient id="SVGLtXXXbyB" x1="32.02" x2="20.9" y1="12.995" y2="1.131" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#ff6f47" />
-                        <stop offset="1" stop-color="#ffcd0f" />
-                    </linearGradient>
-                    <radialGradient id="SVGJ6GwFbSV" cx="0" cy="0" r="1" gradientTransform="matrix(0 5 -5.06764 0 24.5 13)" gradientUnits="userSpaceOnUse">
-                        <stop offset=".535" stop-color="#4a43cb" />
-                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                    </radialGradient>
-                    <radialGradient id="SVGqEKOOddH" cx="0" cy="0" r="1" gradientTransform="matrix(0 2 -9.1875 0 24.5 12.5)" gradientUnits="userSpaceOnUse">
-                        <stop offset=".535" stop-color="#4a43cb" />
-                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                    </radialGradient>
-                    <radialGradient id="SVGI9snPxQZ" cx="0" cy="0" r="1" gradientTransform="matrix(1 1.5 -1.875 1.25 19 11)" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#4a43cb" />
-                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                    </radialGradient>
-                    <radialGradient id="SVGQAUgWbdX" cx="0" cy="0" r="1" gradientTransform="rotate(90.406 9.271 15.163)scale(8.5 6.24951)" gradientUnits="userSpaceOnUse">
-                        <stop offset=".604" stop-color="#4a43cb" />
-                        <stop offset="1" stop-color="#4a43cb" stop-opacity="0" />
-                    </radialGradient>
-                </defs>
-            </g>
-        </svg>),
+        "svg": <FaUserTag size={35} color="skyblue" />,
         "index": 5,
     },
 
@@ -797,6 +560,7 @@ const PasswordSecuritySettings = () => {
             setError(err?.response?.data?.message || "OTP verification failed");
         }
     }
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -804,7 +568,16 @@ const PasswordSecuritySettings = () => {
             exit={{ opacity: 0, y: -20 }}
             className="space-y-6"
         >
-            <div className="bg-gradient-to-r from-cyan-500/10 to-blue-600/10 p-4 rounded-xl border border-cyan-500/30">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(0,255,255,0.08),transparent_60%)] pointer-events-none" />
+            <div className="
+relative
+bg-gradient-to-br from-[#0a0f1f]/80 to-[#06090f]/80
+p-6 rounded-3xl
+border border-cyan-400/20
+backdrop-blur-xl
+shadow-[0_0_40px_rgba(0,255,255,0.08)]
+overflow-hidden
+">
 
                 <div className="mb-10">
                     <div className="flex items-center justify-between mb-8">
@@ -816,9 +589,23 @@ const PasswordSecuritySettings = () => {
 
                     {allChanges.map((items) => (
                         <div key={items.index} className="flex flex-col justify-center  ml-11 ">
-                            <span onClick={() => { setEditPrivateisOpen(true); setActiveIndex(items.index); closEveryTHING() }} className="text-cyan-400 cursor-pointer font-mono text-2xl  flex items-center gap-3 mb-7 font-extrabold"> {items.svg} {items.Tag}<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24">
-                                <path fill="#5ff4fc" d="M8 19V5l11 7z" />
-                            </svg></span>
+                            <span onClick={() => { setEditPrivateisOpen(true); setActiveIndex(items.index); closEveryTHING() }} className="text-cyan-400 ">
+                                <div className="flex items-center mb-7 bg-cyan-500/10 rounded-xl px-4 py-3 cursor-pointer ">
+
+                                    <div className=" group  font-mono text-2xl flex items-center gap-3 font-extrabold px-4 py-3 hover:border-cyan-400/30 transition-all duration-300
+">
+                                        {items.svg} {items.Tag}<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24">
+                                            <path fill="#5ff4fc" d="M8 19V5l11 7z" />
+                                        </svg>
+                                    </div>
+                                    {(items.index === 5) && (<div className="text-gray-400 ">{user.username}</div>)}
+                                    {(items.index === 1) && (<div className="text-gray-400 ">{user.gmail}</div>)}
+                                    {(items.index === 4) && (<div className="text-gray-400 ">{user.gmail}</div>)}
+
+
+                                </div>
+
+                            </span>
                         </div>
                     ))}
 
@@ -828,10 +615,22 @@ const PasswordSecuritySettings = () => {
                 {editPrivate && (<div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex justify-center items-center " onClick={() => { setEditPrivateisOpen(false); setError("") }}>
 
                     {/* CARD */}
-                    <div className="w-[380px] rounded-2xl overflow-hidden bg-[#111] border border-white/10 shadow-2xl " onClick={(e) => e.stopPropagation()} >
+                    <div className="
+w-[440px]
+rounded-3xl
+overflow-hidden
+bg-gradient-to-br from-[#0b0f1a] to-[#070a11]
+border border-cyan-400/20
+shadow-[0_0_60px_rgba(0,255,255,0.12)]
+backdrop-blur-2xl
+" onClick={(e) => e.stopPropagation()} >
 
                         {/* HEADER */}
-                        <div className="flex items-center justify-center gap-3 px-6 py-4 border-b border-white/10">
+                        <div className="
+flex items-center justify-center gap-3 px-6 py-5
+border-b border-cyan-400/10
+bg-gradient-to-r from-cyan-500/5 to-blue-500/5
+">
                             <h2 className="text-xl font-semibold text-white">
                                 {allChanges.find(c => c.index === activeIndex)?.Tag}
                             </h2>
@@ -852,7 +651,7 @@ const PasswordSecuritySettings = () => {
                             {activeChange?.index === 1 && ((!user.isVerified && (
                                 <div>
                                     {!otpSentEmail && (
-                                        <button className="w-full py-3 rounded-xl bg-cyan-500/20 border border-cyan-500/30 flex justify-center items-center gap-4" onClick={sendVerificationEmail}>
+                                        <button className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-400/40 shadow-[0_0_18px_rgba(0,255,255,0.2)] transition-all duration-300 flex justify-center items-center gap-4" onClick={sendVerificationEmail}>
                                             Send Verification OTP {isSending && (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                                                 <path fill="#efeded" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity="0.25" />
                                                 <path fill="#efeded" d="M10.72,19.9a8,8,0,0,1-6.5-9.79A7.77,7.77,0,0,1,10.4,4.16a8,8,0,0,1,9.49,6.52A1.54,1.54,0,0,0,21.38,12h.13a1.37,1.37,0,0,0,1.38-1.54,11,11,0,1,0-12.7,12.39A1.54,1.54,0,0,0,12,21.34h0A1.47,1.47,0,0,0,10.72,19.9Z">
@@ -865,11 +664,12 @@ const PasswordSecuritySettings = () => {
                                         <div className=" flex flex-col gap-5">
                                             <input
                                                 placeholder="Enter the OTP sent by ASTRA"
-                                                className="w-full text-center py-3 rounded-xl bg-white/5 border border-white/10"
+                                                className=" w-full text-center py-3 px-4 rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none backdrop-blur-md transition-all duration-300"
+                                                type="number"
                                                 value={newOTP}
                                                 onChange={(e) => setOTP(e.target.value.trim())} />
                                             <button
-                                                className="w-full py-3 rounded-xl bg-cyan-500/20 border border-cyan-500/30"
+                                                className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-400/40 shadow-[0_0_18px_rgba(0,255,255,0.2)] transition-all duration-300"
                                                 onClick={verifyOTP}
                                             >
                                                 Verify OTP
@@ -887,7 +687,7 @@ const PasswordSecuritySettings = () => {
                                         </div>
                                     )}
                                     {errrorInVerification && (<div className="space-y-2 mt-5">
-                                        <div className={`${errrorInVerification ? "block" : "hidden "} flex items-center rounded-2xl px-4 py-3 border border-red-600 bg-red-500/20  transition-all duration-30 `} >
+                                        <div className={`${errrorInVerification ? "block" : "hidden "} flex items-center rounded-2xl px-4 py-3 border border-red-600 bg-gradient-to-r from-red-500/20 to-rose-500/20 border border-red-400/40 backdrop-blur-md shadow-[0_0_15px_rgba(255,0,0,0.2)]  transition-all duration-30 `} >
                                             <span className="mr-3">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#FF6F6F" d="M12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m0-18C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2m2.59 6L12 10.59L9.41 8L8 9.41L10.59 12L8 14.59L9.41 16L12 13.41L14.59 16L16 14.59L13.41 12L16 9.41z" /></svg>
                                             </span>
@@ -913,7 +713,7 @@ const PasswordSecuritySettings = () => {
                                 <>
 
                                     {!otpSentForgot && (
-                                        <button className="w-full py-3 rounded-xl bg-cyan-500/20 border border-cyan-500/30 flex justify-center items-center gap-4" onClick={sendForgotPassEmail}>
+                                        <button className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-400/40 shadow-[0_0_ 18px_rgba(0,255,255,0.2)]transition-all duration-300 flex justify-center items-center gap-4" onClick={sendForgotPassEmail}>
                                             Send Verification OTP {isSending && (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                                                 <path fill="#efeded" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity="0.25" />
                                                 <path fill="#efeded" d="M10.72,19.9a8,8,0,0,1-6.5-9.79A7.77,7.77,0,0,1,10.4,4.16a8,8,0,0,1,9.49,6.52A1.54,1.54,0,0,0,21.38,12h.13a1.37,1.37,0,0,0,1.38-1.54,11,11,0,1,0-12.7,12.39A1.54,1.54,0,0,0,12,21.34h0A1.47,1.47,0,0,0,10.72,19.9Z">
@@ -926,7 +726,7 @@ const PasswordSecuritySettings = () => {
                                         <div className=" flex flex-col gap-5">
                                             <input
                                                 placeholder="Enter the OTP sent by ASTRA"
-                                                className="w-full text-center py-3 rounded-xl bg-white/5 border border-white/10"
+                                                className=" w-full text-center py-3 px-4 rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none backdrop-blur-md transition-all duration-300 " type="number"
                                                 value={newOTP}
                                                 onChange={(e) => setOTP(e.target.value.trim())} />
                                             <button
@@ -940,7 +740,16 @@ const PasswordSecuritySettings = () => {
                                     {isVerified2 && (!isVerified3) && (<div className=" flex flex-col gap-5">
                                         <input
                                             placeholder="Enter the new password"
-                                            className="w-full text-center py-3 rounded-xl bg-white/5 border border-white/10"
+                                            className="
+w-full text-center py-3 px-4 rounded-xl
+bg-white/[0.03]
+border border-white/10
+focus:border-cyan-400/60
+focus:ring-2 focus:ring-cyan-500/20
+outline-none
+backdrop-blur-md
+transition-all duration-300
+"
                                             value={newPaass1}
                                             onChange={(e) => setNewPaass1(e.target.value.trim())} />
                                         <button
@@ -951,7 +760,7 @@ const PasswordSecuritySettings = () => {
                                         </button>
                                     </div>)}
                                     {errrorInVerification && (<div className="space-y-2 mt-5">
-                                        <div className={`${errrorInVerification ? "block" : "hidden "} flex items-center rounded-2xl px-4 py-3 border border-red-600 bg-red-500/20  transition-all duration-30 `} >
+                                        <div className={`${errrorInVerification ? "block" : "hidden "} flex items-center rounded-2xl px-4 py-3 border border-red-600 bg-gradient-to-r from-red-500/20 to-rose-500/20 border border-red-400/40 backdrop-blur-md shadow-[0_0_15px_rgba(255,0,0,0.2)] transition-all duration-30 `} >
                                             <span className="mr-3">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#FF6F6F" d="M12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m0-18C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2m2.59 6L12 10.59L9.41 8L8 9.41L10.59 12L8 14.59L9.41 16L12 13.41L14.59 16L16 14.59L13.41 12L16 9.41z" /></svg>
                                             </span>
@@ -981,14 +790,16 @@ const PasswordSecuritySettings = () => {
                                     {show && (<>
                                         <input
                                             placeholder="Old Password"
-                                            className="w-full text-center py-3 rounded-xl bg-white/5 border border-white/10"
+                                            className=" w-full text-center py-3 px-4 rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none backdrop-blur-md transition-all duration-300"
+                                            type="number"
                                             value={oldPass}
                                             onChange={(e) => setOldPass(e.target.value.trim())}
                                         />
 
                                         <input
                                             placeholder="New Password"
-                                            className="w-full text-center py-3 rounded-xl bg-white/5 border border-white/10"
+                                            className=" w-full text-center py-3 px-4 rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none backdrop-blur-md transition-all duration-300
+"
                                             value={newPaass2}
                                             onChange={(e) => setNewPaass2(e.target.value.trim())}
                                         />
@@ -1002,7 +813,7 @@ const PasswordSecuritySettings = () => {
 
 
                                     {errrorInVerification && (<div className="space-y-2 mt-5">
-                                        <div className={`${errrorInVerification ? "block" : "hidden "} flex items-center rounded-2xl px-4 py-3 border border-red-600 bg-red-500/20  transition-all duration-30 `} >
+                                        <div className={`${errrorInVerification ? "block" : "hidden "} flex items-center rounded-2xl px-4 py-3 border border-red-600 bg-gradient-to-r from-red-500/20 to-rose-500/20 border border-red-400/40 backdrop-blur-md shadow-[0_0_15px_rgba(255,0,0,0.2)]  transition-all duration-30 `} >
                                             <span className="mr-3">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#FF6F6F" d="M12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m0-18C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2m2.59 6L12 10.59L9.41 8L8 9.41L10.59 12L8 14.59L9.41 16L12 13.41L14.59 16L16 14.59L13.41 12L16 9.41z" /></svg>
                                             </span>
@@ -1041,12 +852,14 @@ const PasswordSecuritySettings = () => {
                                         <div className=" flex flex-col gap-5">
                                             <input
                                                 placeholder="Enter the OTP sent by ASTRA"
-                                                className="w-full text-center py-3 rounded-xl bg-white/5 border border-white/10"
+                                                className=" w-full text-center py-3 px-4 rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none backdrop-blur-md transition-all duration-300 "
+                                                type="number"
                                                 value={newOTP}
                                                 onChange={(e) => setOTP(e.target.value.trim())} />
                                             <input
                                                 placeholder="Hey NOVA here ! Enter new GmailID"
-                                                className="w-full text-center py-3 rounded-xl bg-white/5 border border-white/10"
+                                                className=" w-full text-center py-3 px-4 rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none backdrop-blur-md transition-all duration-300
+"
                                                 value={newGmail}
                                                 onChange={(e) => setNewGmailId(e.target.value.trim())} />
 
@@ -1062,7 +875,7 @@ const PasswordSecuritySettings = () => {
                                                 </svg>)}
                                             </button>
                                             {errrorInVerification && (<div className="space-y-2 mt-5">
-                                                <div className={`${errrorInVerification ? "block" : "hidden "} flex items-center rounded-2xl px-4 py-3 border border-red-600 bg-red-500/20  transition-all duration-30 `} >
+                                                <div className={`${errrorInVerification ? "block" : "hidden "} flex items-center rounded-2xl px-4 py-3 border border-red-600 bg-gradient-to-r from-red-500/20 to-rose-500/20 border border-red-400/40 backdrop-blur-md shadow-[0_0_15px_rgba(255,0,0,0.2)] transition-all duration-30 `} >
                                                     <span className="mr-3">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#FF6F6F" d="M12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m0-18C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2m2.59 6L12 10.59L9.41 8L8 9.41L10.59 12L8 14.59L9.41 16L12 13.41L14.59 16L16 14.59L13.41 12L16 9.41z" /></svg>
                                                     </span>
@@ -1106,12 +919,22 @@ const PasswordSecuritySettings = () => {
                                         <div className=" flex flex-col gap-5">
                                             <input
                                                 placeholder="Enter the OTP sent by ASTRA"
-                                                className="w-full text-center py-3 rounded-xl bg-white/5 border border-white/10"
+                                                className=" w-full text-center py-3 px-4 rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none backdrop-blur-md transition-all duration-300 "
                                                 value={newOTP}
+                                                type="number"
                                                 onChange={(e) => setOTP(e.target.value.trim())} />
                                             <input
                                                 placeholder="Hey NOVA here ! Enter new Username"
-                                                className="w-full text-center py-3 rounded-xl bg-white/5 border border-white/10"
+                                                className="
+w-full text-center py-3 px-4 rounded-xl
+bg-white/[0.03]
+border border-white/10
+focus:border-cyan-400/60
+focus:ring-2 focus:ring-cyan-500/20
+outline-none
+backdrop-blur-md
+transition-all duration-300
+"
                                                 value={newUsername}
                                                 onChange={(e) => setNewUsername(e.target.value.trim())} />
                                             <button
@@ -1126,7 +949,7 @@ const PasswordSecuritySettings = () => {
                                                 </svg>)}
                                             </button>
                                             {errrorInVerification && (<div className="space-y-2 mt-5">
-                                                <div className={`${errrorInVerification ? "block" : "hidden "} flex items-center rounded-2xl px-4 py-3 border border-red-600 bg-red-500/20  transition-all duration-30 `} >
+                                                <div className={`${errrorInVerification ? "block" : "hidden "} flex items-center rounded-2xl px-4 py-3 border border-red-600 bg-gradient-to-r from-red-500/20 to-rose-500/20 border border-red-400/40 backdrop-blur-md shadow-[0_0_15px_rgba(255,0,0,0.2)]  transition-all duration-30 `} >
                                                     <span className="mr-3">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#FF6F6F" d="M12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m0-18C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2m2.59 6L12 10.59L9.41 8L8 9.41L10.59 12L8 14.59L9.41 16L12 13.41L14.59 16L16 14.59L13.41 12L16 9.41z" /></svg>
                                                     </span>

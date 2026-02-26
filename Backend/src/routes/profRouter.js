@@ -1295,7 +1295,7 @@ profileRouter.post("/profile/others", userAuth, async (req, res) => {
 
         const otherUser = await User.findOne({ username: trimmedUsername })
             .select(
-                "firstName lastName username about profilePic skills gmail profession college"
+                "firstName middleName lastName username about photoUrl skills gmail profession college gender age"
             );
 
 
