@@ -207,7 +207,7 @@ userPreference.get("/user/requests/received", userAuth, async (req, res) => {
         const connectionRequests = await ConnectionRequest.find({
             receiverId: loggedInUser._id,
             status: "REQUESTED",
-        }).populate("requesterId", "firstName middleName lastName username skills about profession college isVerified");
+        }).populate("requesterId", "firstName middleName lastName username skills about profession college isVerified gender age photoUrl");
 
         if (!connectionRequests || connectionRequests.length === 0) {
             return res.status(200).json({

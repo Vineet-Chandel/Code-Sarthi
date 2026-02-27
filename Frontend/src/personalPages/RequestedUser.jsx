@@ -56,14 +56,12 @@ relative overflow-hidden
 ">
 
             <div className="w-screen h-screen/2  flex flex-col justify-center items-center mb-[100px]">
-                <div className="text-[7rem] font-extrabold">Collab with Developers</div>
+                <div className="text-[7rem] font-extrabold">Collab with New Developers</div>
                 <div className="text-2xl text-gray-400 mt-[-20px]">You can collab with new developers from all over world</div>
                 <div className="w-[50%] flex justify-center items-center mt-[40px]"> <Search height={70} /></div>
 
             </div>
-            <div className="w-screen h-screen/2  flex justify-start items-center mb-[30px]">
-                <div className="text-[3rem] text-gray-300 font-extrabold">Suggested Developers for you</div>
-            </div>
+
             <div className="max-w-9xl mx-auto">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-20 gap-y-10">
                     {reqUser.map((item, index) => (

@@ -1,61 +1,53 @@
+import React from 'react'
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { BASE_URL } from "../Pages/auth/baseURL";
-import { addConnectionUser } from "../utils/connectionSlice";
+import { BASE_URL } from "../Pages/auth/baseURL"
+import { addReceviedConnectionUser } from "../utils/receivedConnection";
 import { useDispatch, useSelector } from "react-redux";
-import { MdDelete } from "react-icons/md";
-import { FaPeopleCarry } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
-const Connections = () => {
-    const connections = useSelector(state => state.connections || []);
-    const connectionsARR = useSelector(state => state.connections.user || []);
-    const user = useSelector(store => store.user);
-    const navigate = useNavigate();
+import { RiUserUnfollowFill } from "react-icons/ri";
 
+const ReceivedRequests = () => {
+    const user = useSelector(store => store.user.user.DATA);
+    const receivedConnections = useSelector(store => store.receivedConnection.users || []);
     const dispatch = useDispatch();
+
+
     const [showRequestModal, setShowRequestModal] = useState(false);
-    const connectionUser = async () => {
+    const fetchReceivedConnections = async () => {
         try {
             const response = await axios.get(
-                `${BASE_URL}/user/connections`,
+                `${BASE_URL}/user/requests/received`,
                 { withCredentials: true }
             );
-            dispatch(addConnectionUser(response.data.data));
 
+            dispatch(addReceviedConnectionUser(response.data.data.map(req => req.requesterId)));
 
         } catch (err) {
             console.error(err?.message || err);
         }
     };
+
     useEffect(() => {
-        connectionUser();
+        fetchReceivedConnections();
     }, []);
 
-    const deleteConnections = async (idtodelte) => {
-
-        try {
-            const response = await axios.delete(
-                `${BASE_URL}/user/connections/${idtodelte}`,
-                { withCredentials: true }
-            );
-            setShowRequestModal(true);
-            setTimeout(() => setShowRequestModal(false), 2200);
-        } catch (err) {
-            console.log(err?.message || "not send");
-        }
-
-    }
-    useEffect(() => {
-        deleteConnections()
-    }, [])
 
     return (
-        <div className="w-full min-h-screen bg-black p-4 md:p-8">
-            <div className="w-full/2 mx-auto">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="
+w-full min-h-screen
+bg-[radial-gradient(circle_at_top,#0a0f1f,black_70%)]
+p-4 md:p-10
+relative overflow-hidden
+">
 
+            <div className="w-screen h-screen/2  flex flex-col justify-center items-center mb-[50px]">
+                <div className="text-[7rem] font-extrabold">Received Connection Request</div>
+                <div className="text-2xl text-gray-400 mt-[-20px]">Collab with the developers by accepting their connection request</div>
+            </div>
 
-                    {connectionsARR.map((item, index) => (
+            <div className="max-w-9xl mx-auto">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-20 gap-y-10">
+                    {receivedConnections.map((item, index) => (
                         <div
                             key={item._id}
                             className=" relative group bg-[#030712]/70 backdrop-blur-3xl rounded-3xl border border-white/[0.08] shadow-[0_0_40px_rgba(59,130,246,0.06)] hover:shadow-[0_0_60px_rgba(168,85,247,0.15)] transition-all duration-500 hover:-translate-y-1 overflow-hidden before:absolute before:inset-0 before:rounded-3xl before:bg-gradient-to-br before:from-blue-500/[0.05] before:to-purple-500/[0.05] before:opacity-0 group-hover:before:opacity-100 before:transition-opacity">
@@ -73,7 +65,7 @@ const Connections = () => {
                                             <div className="absolute inset-0 flex items-center justify-center">
 
                                                 <img
-                                                    src={item.photoUrl}
+                                                    src={item?.photoUrl?.url}
                                                     className=" w-full h-full object-cover rounded-2xl group-hover:scale-110 transition-transform duration-700
 "
                                                 />
@@ -106,7 +98,7 @@ const Connections = () => {
                                         <div>
                                             <div className="flex items-center gap-2">
                                                 <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-gray-200 to-gray-300 bg-clip-text text-transparent">
-                                                    {item.FirstName} {item.MiddleName} {item.LastName}
+                                                    {item.firstName} {item.middleName} {item.lastName}
                                                 </h1>
                                                 {item.isVerified && (
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24"><path fill="#44f53d" fill-rule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clip-rule="evenodd" /><path fill="#44f53d" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#44f53d" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
@@ -172,11 +164,13 @@ const Connections = () => {
                                             </span>
                                         </button>
 
-                                        <button className="relative group flex-1 min-w-[140px] bg-gradient-to-r from-purple-600/90 to-purple-700/90 text-white px-4 py-2.5 rounded-xl font-medium hover:from-purple-500 hover:to-purple-600 transition-all duration-300 active:scale-95  border border-purple-500/30 overflow-hidden" onClick={() => deleteConnections(item.connectionId)}>
+                                        <button className="relative group flex-1 min-w-[140px] bg-gradient-to-r from-purple-600/90 to-purple-700/90 text-white px-4 py-2.5 rounded-xl font-medium hover:from-purple-500 hover:to-purple-600 transition-all duration-300 active:scale-95  border border-purple-500/30 overflow-hidden" >
+
                                             <span className="relative z-10 flex items-center justify-center gap-2">
-                                                <MdDelete size={25} />
-                                                Delete Connection
+                                                <RiUserUnfollowFill size={25} />
+                                                Delete Request
                                             </span>
+
                                         </button>
                                     </div>
                                 </div>
@@ -217,61 +211,11 @@ const Connections = () => {
                             {/* TEXT */}
                             <div>
                                 <div className="text-lg font-semibold text-white">
-                                    Connection Deleted
+                                    Request Sent 🚀
                                 </div>
                                 <div className="text-sm text-gray-400">
-                                    Connection has been deleted.
+                                    Your collaboration request has been delivered.
                                 </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            )}
-
-
-            {connections.total == 0 && (
-                <div className=" min-h-screen   inset-0 flex items-center justify-center px-4">
-
-                    <div className="relative w-full max-w-3xl p-10 rounded-3xl 
-                bg-gradient-to-br from-[#0f172a]/90 to-[#020617]/90
-                backdrop-blur-2xl border border-purple-500/20
-            
-                animate-[modalPop_0.3s_ease]">
-
-                        <div className="flex flex-col md:flex-row items-center gap-8">
-
-                            {/* ICON */}
-                            <div className="w-36 h-36 flex items-center justify-center 
-                        rounded-full bg-purple-600/10 
-                        border border-purple-500/40
-                    ">
-                                <FaPeopleCarry className="text-purple-400" size={60} />
-                            </div>
-
-                            {/* TEXT SECTION */}
-                            <div className="text-center md:text-left">
-                                <h2 className="text-4xl font-bold text-white mb-4">
-                                    No Connections Found
-                                </h2>
-
-                                <p className="text-lg text-gray-400 mb-6 max-w-md">
-                                    Discover and connect with developers from around the world.
-                                    Start exploring new profiles today.
-                                </p>
-
-                                {/* BUTTON */}
-
-                                <button
-                                    onClick={() => navigate("/app/explore")}
-                                    className="px-6 py-3 rounded-xl 
-                                bg-gradient-to-r from-purple-500 to-pink-500
-                                hover:scale-105 
-                                transition-all duration-300
-                                text-white font-semibold"
-                                >
-                                    Explore Developers
-                                </button>
                             </div>
 
                         </div>
@@ -283,4 +227,4 @@ const Connections = () => {
     );
 }
 
-export default Connections
+export default ReceivedRequests

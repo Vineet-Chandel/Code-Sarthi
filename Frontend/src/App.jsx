@@ -51,6 +51,7 @@ import Discover from "./Main/PagesMain/Discover";
 import Policy from "./Main/PagesMain/category/Policy";
 import Settings from "./personalPages/Settings/Settings";
 import RequestedUser from "./personalPages/RequestedUser";
+import ReceivedRequests from "./personalPages/ReceivedRequests";
 
 const App = () => {
   return (
@@ -105,6 +106,8 @@ const App = () => {
               <Route path="connections" element={<Connections />} />
               <Route path="settings" element={<Settings />} />
               <Route path="requestedUser" element={<RequestedUser />} />
+              <Route path="requestedUser" element={<RequestedUser />} />
+              <Route path="requestreceived" element={<ReceivedRequests />} />
 
               <Route path="toolkit" element={<Toolkit />} />
               <Route path="toolkit/html" element={<HTML />} />

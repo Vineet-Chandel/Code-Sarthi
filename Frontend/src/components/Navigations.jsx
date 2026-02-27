@@ -1,4 +1,5 @@
 import { RiUserFollowFill } from "react-icons/ri";
+import { MdEmojiPeople } from "react-icons/md";
 export const Pages = [
 
     {
@@ -153,9 +154,9 @@ export const ProfilePlace = [
     },
     {
         id: 4,
-        name: "Notifications",
-        icon: <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 512 512"><path fill="none" stroke="#0f0f0f" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M427.68 351.43C402 320 383.87 304 383.87 217.35C383.87 138 343.35 109.73 310 96c-4.43-1.82-8.6-6-9.95-10.55C294.2 65.54 277.8 48 256 48s-38.21 17.55-44 37.47c-1.35 4.6-5.52 8.71-9.95 10.53c-33.39 13.75-73.87 41.92-73.87 121.35C128.13 304 110 320 84.32 351.43C73.68 364.45 83 384 101.61 384h308.88c18.51 0 27.77-19.61 17.19-32.57M320 384v16a64 64 0 0 1-128 0v-16" /></svg>,
-        path: "/notifications"
+        name: "Received Requests",
+        icon: (<MdEmojiPeople size={25} />),
+        path: "/requestreceived"
     },
     {
         id: 5,

@@ -4,6 +4,7 @@ import feedReducer from "./feedSlice";
 import connectionReducer from "./connectionSlice";
 import blocksReducer from "./blockedSlice";
 import RequestedUser from "./requestedUserSlice";
+import ReceivedRequests from "./receivedConnection";
 
 const appStore = configureStore({
     reducer: {
@@ -11,7 +12,8 @@ const appStore = configureStore({
         feed: feedReducer,
         connections: connectionReducer,
         blockedUsers: blocksReducer,
-        requestedUser: RequestedUser
+        requestedUser: RequestedUser,
+        receivedConnection: ReceivedRequests
     },
     devTools: {
         trace: true,
