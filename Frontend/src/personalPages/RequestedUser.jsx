@@ -5,14 +5,16 @@ import { addRequestedUser } from "../utils/requestedUserSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Search from "../components/navSearch";
 import { RiUserUnfollowFill } from "react-icons/ri";
-
+import { useNavigate } from "react-router-dom";
+import { FaPeopleCarry } from "react-icons/fa";
 
 const RequestedUser = () => {
     const user = useSelector(store => store.user.user.DATA);
     const reqUser = useSelector(store => store.requestedUser.users || []);
+    const reqUserTotal = useSelector(store => store.requestedUser.total);
     const dispatch = useDispatch();
-
-
+    const navigate = useNavigate();
+    const [deletingId, setDeletingId] = useState(null);
     const [showRequestModal, setShowRequestModal] = useState(false);
     const requestedUsers = async () => {
         try {
@@ -29,23 +31,39 @@ const RequestedUser = () => {
     };
 
     useEffect(() => {
+
         requestedUsers();
+
     }, []);
 
-    const sendRequest = async (username) => {
-
+    const deleteRequest = async (requestId) => {
         try {
-            const response = await axios.post(
-                `${BASE_URL}/request/send/${username}`, {},
+            setDeletingId(requestId);
+
+            await axios.delete(
+                `${BASE_URL}/user/requests/send/${requestId}`,
                 { withCredentials: true }
             );
+
+            // remove instantly from UI
+            dispatch(
+                addRequestedUser(
+                    reqUser.filter(item => item._id !== requestId)
+                )
+            );
+
             setShowRequestModal(true);
+
             setTimeout(() => setShowRequestModal(false), 2200);
+
         } catch (err) {
-            console.log(err?.message || "not send");
+            console.log(err?.message || "Delete failed");
+        } finally {
+            setDeletingId(null);
         }
 
-    }
+    };
+
 
     return (
         <div className="
@@ -54,12 +72,13 @@ bg-[radial-gradient(circle_at_top,#0a0f1f,black_70%)]
 p-4 md:p-10
 relative overflow-hidden
 ">
-
-            <div className="w-screen h-screen/2  flex flex-col justify-center items-center mb-[100px]">
-                <div className="text-[7rem] font-extrabold">Collab with New Developers</div>
-                <div className="text-2xl text-gray-400 mt-[-20px]">You can collab with new developers from all over world</div>
-                <div className="w-[50%] flex justify-center items-center mt-[40px]"> <Search height={70} /></div>
-
+            <div className="text-center mb-24">
+                <h1 className="text-9xl font-extrabold bg-gradient-to-b from-white to-blue-10 bg-clip-text text-transparent">
+                    Requested Developers
+                </h1>
+                <p className="text-2xl text-gray-400 mt-6 max-w-3xl mx-auto">
+                    Collaborate with developers worldwide from the explore section.
+                </p>
             </div>
 
             <div className="max-w-9xl mx-auto">
@@ -181,10 +200,15 @@ relative overflow-hidden
                                             </span>
                                         </button>
 
-                                        <button className="relative group flex-1 min-w-[140px] bg-gradient-to-r from-purple-600/90 to-purple-700/90 text-white px-4 py-2.5 rounded-xl font-medium hover:from-purple-500 hover:to-purple-600 transition-all duration-300 active:scale-95  border border-purple-500/30 overflow-hidden" onClick={() => sendRequest(item.username)}>
+                                        <button className="relative group flex-1 min-w-[140px] bg-gradient-to-r from-purple-600/90 to-purple-700/90 text-white px-4 py-2.5 rounded-xl font-medium hover:from-purple-500 hover:to-purple-600 transition-all duration-300 active:scale-95  border border-purple-500/30 overflow-hidden" onClick={() => deleteRequest(item._id)}>
 
                                             <span className="relative z-10 flex items-center justify-center gap-2">
-                                                <RiUserUnfollowFill size={25} />
+                                                {deletingId === item._id && (<svg xmlns="http://www.w3.org/2000/svg" width={32} height={32} viewBox="0 0 24 24">
+                                                    <path fill="#efeded" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity={0.3}></path>
+                                                    <path fill="#efeded" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z">
+                                                        <animateTransform attributeName="transform" dur="1s" from="0 12 12" repeatCount="indefinite" to="360 12 12" type="rotate"></animateTransform>
+                                                    </path>
+                                                </svg>)}  <RiUserUnfollowFill size={25} />
                                                 Delete Request
                                             </span>
 
@@ -228,10 +252,10 @@ relative overflow-hidden
                             {/* TEXT */}
                             <div>
                                 <div className="text-lg font-semibold text-white">
-                                    Request Sent 🚀
+                                    Request Deleted
                                 </div>
                                 <div className="text-sm text-gray-400">
-                                    Your collaboration request has been delivered.
+                                    Request has been deleted.
                                 </div>
                             </div>
 
@@ -239,6 +263,52 @@ relative overflow-hidden
                     </div>
                 </div>
             )}
+
+            {(reqUserTotal == 0 || reqUser.length === 0) && (
+                <div className="inset-0 flex items-center justify-center px-4">
+
+                    <div className="relative w-full max-w-3xl p-10 rounded-3xl  bg-gradient-to-br from-[#0f172a]/90 to-[#020617]/90 backdrop-blur-2xl border border-purple-500/20 animate-[modalPop_0.3s_ease]">
+
+                        <div className="flex flex-col md:flex-row items-center gap-8">
+
+                            {/* ICON */}
+                            <div className="w-36 h-36 flex items-center justify-center 
+                                        rounded-full bg-purple-600/10 
+                                        border border-purple-500/40
+                                    ">
+                                <FaPeopleCarry className="text-purple-400" size={60} />
+                            </div>
+
+                            {/* TEXT SECTION */}
+                            <div className="text-center md:text-left">
+                                <h2 className="text-4xl font-bold text-white mb-4">
+                                    No request found
+                                </h2>
+
+                                <p className="text-lg text-gray-400 mb-6 max-w-md">
+                                    Discover and connect with developers from around the world.
+                                    Start exploring new profiles today.
+                                </p>
+
+                                {/* BUTTON */}
+
+                                <button
+                                    onClick={() => navigate("/app/explore")}
+                                    className="px-6 py-3 rounded-xl 
+                                                bg-gradient-to-r from-purple-500 to-pink-500
+                                                hover:scale-105 
+                                                transition-all duration-300
+                                                text-white font-semibold"
+                                >
+                                    Explore Developers
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </div>
 
     );

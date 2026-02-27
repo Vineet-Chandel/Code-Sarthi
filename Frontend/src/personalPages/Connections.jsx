@@ -8,7 +8,7 @@ import { FaPeopleCarry } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 const Connections = () => {
     const connections = useSelector(state => state.connections || []);
-    const connectionsARR = useSelector(state => state.connections.user || []);
+    const connectionsARR = useSelector(state => state.connections.users || []);
     const user = useSelector(store => store.user);
     const navigate = useNavigate();
 
@@ -34,10 +34,17 @@ const Connections = () => {
     const deleteConnections = async (idtodelte) => {
 
         try {
-            const response = await axios.delete(
+            await axios.delete(
                 `${BASE_URL}/user/connections/${idtodelte}`,
                 { withCredentials: true }
             );
+            // remove instantly from UI
+            dispatch(
+                addConnectionUser(
+                    connectionsARR.filter(item => item.connectionId !== connectionId)
+                )
+            );
+
             setShowRequestModal(true);
             setTimeout(() => setShowRequestModal(false), 2200);
         } catch (err) {
@@ -52,6 +59,12 @@ const Connections = () => {
     return (
         <div className="w-full min-h-screen bg-black p-4 md:p-8">
             <div className="w-full/2 mx-auto">
+                <div className="text-center mb-24">
+                    <h1 className="text-9xl font-extrabold bg-gradient-to-b from-white to-blue-10 bg-clip-text text-transparent">
+                        Your Connections
+                    </h1>
+
+                </div>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
 
@@ -231,7 +244,7 @@ const Connections = () => {
 
 
             {connections.total == 0 && (
-                <div className=" min-h-screen   inset-0 flex items-center justify-center px-4">
+                <div className="  inset-0 flex items-center justify-center px-4">
 
                     <div className="relative w-full max-w-3xl p-10 rounded-3xl 
                 bg-gradient-to-br from-[#0f172a]/90 to-[#020617]/90

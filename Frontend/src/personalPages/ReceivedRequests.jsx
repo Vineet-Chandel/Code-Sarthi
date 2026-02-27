@@ -4,34 +4,66 @@ import { useEffect, useState } from "react";
 import { BASE_URL } from "../Pages/auth/baseURL"
 import { addReceviedConnectionUser } from "../utils/receivedConnection";
 import { useDispatch, useSelector } from "react-redux";
-import { RiUserUnfollowFill } from "react-icons/ri";
+
 
 const ReceivedRequests = () => {
     const user = useSelector(store => store.user.user.DATA);
     const receivedConnections = useSelector(store => store.receivedConnection.users || []);
+
     const dispatch = useDispatch();
-
-
     const [showRequestModal, setShowRequestModal] = useState(false);
+    const [actionId, setActionId] = useState(null);
     const fetchReceivedConnections = async () => {
         try {
-            const response = await axios.get(
+            const { data } = await axios.get(
                 `${BASE_URL}/user/requests/received`,
                 { withCredentials: true }
             );
 
-            dispatch(addReceviedConnectionUser(response.data.data.map(req => req.requesterId)));
+            const formattedData = data.data.map(req => ({
+                connectionId: req._id,      // ✅ connection id
+                ...req.requesterId          // ✅ spread user data
+            }));
+
+            dispatch(addReceviedConnectionUser(formattedData));
 
         } catch (err) {
             console.error(err?.message || err);
         }
     };
-
     useEffect(() => {
+
         fetchReceivedConnections();
+
     }, []);
 
+    const handelRequest = async (status, connectionId) => {
+        try {
+            setActionId(connectionId);
 
+            await axios.post(
+                `${BASE_URL}/request/review/${status}/${connectionId}`,
+                {},
+                { withCredentials: true }
+            );
+
+            dispatch(
+                addReceviedConnectionUser(
+                    receivedConnections.filter(
+                        item => item.connectionId !== connectionId
+                    )
+                )
+            );
+
+            setShowRequestModal(true);
+            setTimeout(() => setShowRequestModal(false), 2000);
+
+        } catch (err) {
+            console.error(err?.message || err);
+        } finally {
+            setActionId(null);
+        }
+    };
     return (
         <div className="
 w-full min-h-screen
@@ -40,16 +72,22 @@ p-4 md:p-10
 relative overflow-hidden
 ">
 
-            <div className="w-screen h-screen/2  flex flex-col justify-center items-center mb-[50px]">
-                <div className="text-[7rem] font-extrabold">Received Connection Request</div>
-                <div className="text-2xl text-gray-400 mt-[-20px]">Collab with the developers by accepting their connection request</div>
+
+
+            <div className="text-center mb-24">
+                <h1 className="text-9xl font-extrabold bg-gradient-to-b from-white to-blue-10 bg-clip-text text-transparent">
+                    Received Requests
+                </h1>
+                <p className="text-2xl text-gray-400 mt-6 max-w-3xl mx-auto">
+                    Collab with the developers by accepting their connection request
+                </p>
             </div>
 
             <div className="max-w-9xl mx-auto">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-20 gap-y-10">
                     {receivedConnections.map((item, index) => (
                         <div
-                            key={item._id}
+                            key={item.connectionId}
                             className=" relative group bg-[#030712]/70 backdrop-blur-3xl rounded-3xl border border-white/[0.08] shadow-[0_0_40px_rgba(59,130,246,0.06)] hover:shadow-[0_0_60px_rgba(168,85,247,0.15)] transition-all duration-500 hover:-translate-y-1 overflow-hidden before:absolute before:inset-0 before:rounded-3xl before:bg-gradient-to-br before:from-blue-500/[0.05] before:to-purple-500/[0.05] before:opacity-0 group-hover:before:opacity-100 before:transition-opacity">
 
 
@@ -137,10 +175,7 @@ relative overflow-hidden
                                         </div>
                                         <div className="flex flex-wrap gap-2">
                                             {item.skills?.map((skill, idx) => (
-                                                <span
-                                                    key={idx}
-                                                    className=" px-3 py-1.5 text-xs font-medium rounded-xl bg-white/[0.04] border border-white/10 text-gray-300 hover:border-blue-400/40 hover:text-blue-300 backdrop-blur-md  transition-all duration-300 group relative overflow-hidden "
-                                                >
+                                                <span key={idx} className=" px-3 py-1.5 text-xs font-medium rounded-xl bg-white/[0.04] border border-white/10 text-gray-300 hover:border-blue-400/40 hover:text-blue-300 backdrop-blur-md  transition-all duration-300 group relative overflow-hidden ">
                                                     <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                                     <span className="relative">{skill}</span>
                                                 </span>
@@ -156,19 +191,21 @@ relative overflow-hidden
                                     <div className="flex flex-wrap gap-3 pt-2">
 
                                         <button className="relative group flex-1 min-w-[140px] bg-gradient-to-r from-gray-800/80 to-gray-900/80 text-gray-300 px-4 py-2.5 rounded-xl font-medium hover:from-gray-700 hover:to-gray-800 transition-all duration-300 active:scale-95 border border-gray-700/50 hover:border-gray-600/50 overflow-hidden">
-                                            <span className="relative z-10 flex items-center justify-center gap-2">
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                            <span className="relative z-10 flex items-center justify-center gap-2 text-2xl" onClick={() => handelRequest("REJECTED", item.connectionId)}>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width={32} height={32} viewBox="0 0 20 20">
+                                                    <path fill="#efeded" d="M18 5.75a.75.75 0 0 0-.75-.75H2.75a.75.75 0 1 0 0 1.5h14.5a.75.75 0 0 0 .75-.75m0 3a.75.75 0 0 0-.75-.75H2.75a.75.75 0 1 0 0 1.5h9.456A5.5 5.5 0 0 1 14.5 9a5.5 5.5 0 0 1 2.294.5h.456a.75.75 0 0 0 .75-.75M9.09 15.5H2.75a.75.75 0 0 1 0-1.5h6.272a5.6 5.6 0 0 0 .069 1.5m.285-3H2.75a.75.75 0 0 1 0-1.5h7.507a5.5 5.5 0 0 0-.882 1.5m9.625 2a4.5 4.5 0 1 1-9 0a4.5 4.5 0 0 1 9 0m-4.5.707l1.146 1.147a.5.5 0 0 0 .708-.708L15.207 14.5l1.147-1.146a.5.5 0 0 0-.708-.708L14.5 13.793l-1.146-1.147a.5.5 0 0 0-.708.708l1.147 1.146l-1.147 1.146a.5.5 0 0 0 .708.708z"></path>
                                                 </svg>
-                                                Message
+                                                Reject
                                             </span>
                                         </button>
 
                                         <button className="relative group flex-1 min-w-[140px] bg-gradient-to-r from-purple-600/90 to-purple-700/90 text-white px-4 py-2.5 rounded-xl font-medium hover:from-purple-500 hover:to-purple-600 transition-all duration-300 active:scale-95  border border-purple-500/30 overflow-hidden" >
 
-                                            <span className="relative z-10 flex items-center justify-center gap-2">
-                                                <RiUserUnfollowFill size={25} />
-                                                Delete Request
+                                            <span className="relative z-10 flex items-center justify-center gap-2 text-2xl" onClick={() => handelRequest("ACCEPTED", item.connectionId)}>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width={32} height={32} viewBox="0 0 512 512">
+                                                    <path fill="#efeded" d="M405.333 42.666v32h48l2.171.146c7.1.963 12.72 6.583 13.683 13.683l.146 2.171l-.146 2.171c-.963 7.1-6.583 12.72-13.683 13.683l-2.171.146h-48v42.667h48l2.171.146c7.1.963 12.72 6.583 13.683 13.683l.146 2.171l-.146 2.171c-.963 7.099-6.583 12.719-13.683 13.683l-2.171.146h-48v32h-64l-4.259-.105c-37.866-1.861-69.243-28.404-78.381-63.879l-27.687-.016l-2.804.185a21.33 21.33 0 0 0-12.28 6.063c-7.691 7.69-8.282 19.791-1.775 28.16l1.775 2.01l110.326 110.327l2.891 3.087a64 64 0 0 1 15.855 42.168c0 34.084-26.644 61.944-60.24 63.891l-3.76.109l-27.687.016c-9.138 35.475-40.515 62.018-78.381 63.879l-4.259.105h-64v-32h-48c-8.1 0-14.795-6.02-15.854-13.829l-.146-2.171c0-8.1 6.019-14.795 13.829-15.854l2.17-.146h48.001v-42.667h-48c-8.1 0-14.795-6.019-15.854-13.829l-.146-2.171c0-8.1 6.019-14.794 13.829-15.854l2.17-.146h48.001v-32h64c39.763 0 73.175 27.198 82.646 64.005l27.681-.005l2.487-.143c10.61-1.233 18.846-10.25 18.846-21.19a21.34 21.34 0 0 0-4.396-12.972l-1.852-2.113l-110.327-110.327l-2.88-3.072c-22.074-25.139-21.114-63.444 2.88-87.438a64 64 0 0 1 41.028-18.605l4.226-.14l27.681.005c9.12-35.444 40.441-61.977 78.255-63.894l4.391-.111zM170.667 341.333h-21.334v85.333h21.334l3.184-.117c20.973-1.547 37.73-18.256 39.353-39.208l.129-3.342l-.117-3.184c-1.547-20.973-18.255-37.73-39.207-39.353zm192-256h-21.334l-3.342.129c-19.787 1.533-35.79 16.565-38.811 35.898l-.396 3.455l-.117 3.184l.129 3.342c1.533 19.788 16.565 35.791 35.898 38.812l3.455.396l3.184.117h21.334z"></path>
+                                                </svg>
+                                                Accept
                                             </span>
 
                                         </button>
@@ -211,18 +248,19 @@ relative overflow-hidden
                             {/* TEXT */}
                             <div>
                                 <div className="text-lg font-semibold text-white">
-                                    Request Sent 🚀
+                                    Connection Request Accepted 🚀
                                 </div>
                                 <div className="text-sm text-gray-400">
-                                    Your collaboration request has been delivered.
+                                    You can acess the details from the connections option in the right hand sidebar
                                 </div>
                             </div>
 
                         </div>
                     </div>
                 </div>
-            )}
-        </div>
+            )
+            }
+        </div >
 
     );
 }

@@ -27,10 +27,13 @@ const Explore = () => {
         }
     };
 
-    useEffect(() => {
-        feedUser();
-    }, [page]);
 
+
+    useEffect(() => {
+        if (!feed.length) {
+            feedUser();
+        }
+    }, [feed.length]);
     const sendRequest = async (username) => {
 
         try {
