@@ -4,11 +4,14 @@ import { useEffect, useState } from "react";
 import { BASE_URL } from "../Pages/auth/baseURL"
 import { addReceviedConnectionUser } from "../utils/receivedConnection";
 import { useDispatch, useSelector } from "react-redux";
-
+import { useNavigate } from "react-router-dom";
+import { FaPeopleCarry } from "react-icons/fa";
 
 const ReceivedRequests = () => {
+    const navigate = useNavigate();
     const user = useSelector(store => store.user.user.DATA);
     const receivedConnections = useSelector(store => store.receivedConnection.users || []);
+    const receivedConnectionsTotal = useSelector(store => store.receivedConnection.total || []);
 
     const dispatch = useDispatch();
     const [showRequestModal, setShowRequestModal] = useState(false);
@@ -54,9 +57,14 @@ const ReceivedRequests = () => {
                     )
                 )
             );
-
-            setShowRequestModal(true);
-            setTimeout(() => setShowRequestModal(false), 2000);
+            if (status === "ACCEPTED") {
+                setShowRequestModal(true);
+                setTimeout(() => setShowRequestModal(false), 2000);
+            }
+            if (status === "REJECTED") {
+                setShowRequestModal(true);
+                setTimeout(() => setShowRequestModal(false), 2000);
+            }
 
         } catch (err) {
             console.error(err?.message || err);
@@ -74,14 +82,61 @@ relative overflow-hidden
 
 
 
-            <div className="text-center mb-24">
-                <h1 className="text-9xl font-extrabold bg-gradient-to-b from-white to-blue-10 bg-clip-text text-transparent">
+
+
+
+
+            <div className="text-center mb-16 sm:mb-20 lg:mb-24 w-full flex flex-col items-center px-4">
+
+                {/* Heading */}
+                <h1 className="
+        text-4xl 
+        sm:text-6xl 
+        md:text-7xl 
+        lg:text-8xl 
+        xl:text-9xl
+        font-extrabold 
+        bg-gradient-to-b 
+        from-white 
+        to-blue-400 
+        bg-clip-text 
+        text-transparent
+        leading-tight
+    ">
                     Received Requests
                 </h1>
-                <p className="text-2xl text-gray-400 mt-6 max-w-3xl mx-auto">
+
+                {/* Subtitle */}
+                <p className="
+        text-base 
+        sm:text-lg 
+        md:text-xl 
+        lg:text-2xl 
+        text-gray-400 
+        mt-6 
+        max-w-xl 
+        lg:max-w-3xl
+    ">
                     Collab with the developers by accepting their connection request
                 </p>
+
+                {/* Search */}
+                <div className="
+        w-full 
+        sm:w-4/5 
+        md:w-3/5 
+        lg:w-1/2 
+        xl:w-2/5 
+        mt-10
+    ">
+
+                </div>
             </div>
+
+
+
+
+
 
             <div className="max-w-9xl mx-auto">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-20 gap-y-10">
@@ -174,7 +229,7 @@ relative overflow-hidden
                                             <h3 className="text-sm font-semibold text-gray-300">TECH STACK</h3>
                                         </div>
                                         <div className="flex flex-wrap gap-2">
-                                            {item.skills?.map((skill, idx) => (
+                                            {item?.skills?.map((skill, idx) => (
                                                 <span key={idx} className=" px-3 py-1.5 text-xs font-medium rounded-xl bg-white/[0.04] border border-white/10 text-gray-300 hover:border-blue-400/40 hover:text-blue-300 backdrop-blur-md  transition-all duration-300 group relative overflow-hidden ">
                                                     <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                                     <span className="relative">{skill}</span>
@@ -192,20 +247,27 @@ relative overflow-hidden
 
                                         <button className="relative group flex-1 min-w-[140px] bg-gradient-to-r from-gray-800/80 to-gray-900/80 text-gray-300 px-4 py-2.5 rounded-xl font-medium hover:from-gray-700 hover:to-gray-800 transition-all duration-300 active:scale-95 border border-gray-700/50 hover:border-gray-600/50 overflow-hidden">
                                             <span className="relative z-10 flex items-center justify-center gap-2 text-2xl" onClick={() => handelRequest("REJECTED", item.connectionId)}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width={32} height={32} viewBox="0 0 20 20">
-                                                    <path fill="#efeded" d="M18 5.75a.75.75 0 0 0-.75-.75H2.75a.75.75 0 1 0 0 1.5h14.5a.75.75 0 0 0 .75-.75m0 3a.75.75 0 0 0-.75-.75H2.75a.75.75 0 1 0 0 1.5h9.456A5.5 5.5 0 0 1 14.5 9a5.5 5.5 0 0 1 2.294.5h.456a.75.75 0 0 0 .75-.75M9.09 15.5H2.75a.75.75 0 0 1 0-1.5h6.272a5.6 5.6 0 0 0 .069 1.5m.285-3H2.75a.75.75 0 0 1 0-1.5h7.507a5.5 5.5 0 0 0-.882 1.5m9.625 2a4.5 4.5 0 1 1-9 0a4.5 4.5 0 0 1 9 0m-4.5.707l1.146 1.147a.5.5 0 0 0 .708-.708L15.207 14.5l1.147-1.146a.5.5 0 0 0-.708-.708L14.5 13.793l-1.146-1.147a.5.5 0 0 0-.708.708l1.147 1.146l-1.147 1.146a.5.5 0 0 0 .708.708z"></path>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width={50} height={50} viewBox="0 0 40 40">
+                                                    <g fill="none" strokeMiterlimit={10}>
+                                                        <path fill="#ff52a1" stroke="#231f20" d="M.5 20a19.5 19.5 0 1 0 39 0a19.5 19.5 0 0 0-39 0Z" strokeWidth={1}></path>
+                                                        <path fill="#fff" stroke="#231f20" d="M30.08 25.41c-.16-.77-2.31-3.15-4.48-5.41c2.17-2.26 4.32-4.64 4.48-5.41c.46-.89-.63-2.11-1.59-3.08s-2.19-2-3.08-1.59c-.77.16-3.15 2.31-5.41 4.48c-2.26-2.17-4.64-4.32-5.41-4.48c-.89-.46-2.11.63-3.07 1.59s-2.06 2.19-1.6 3.08c.16.77 2.31 3.15 4.48 5.41c-2.17 2.26-4.32 4.64-4.48 5.41c-.46.89.63 2.11 1.59 3.08s2.19 2.05 3.08 1.59c.77-.16 3.15-2.31 5.41-4.48c2.26 2.17 4.64 4.32 5.41 4.48c.89.46 2.11-.63 3.08-1.59s2.05-2.19 1.59-3.08Z" strokeWidth={1}></path>
+                                                        <path stroke="#fff" strokeLinecap="round" d="M27.56 5a15.4 15.4 0 0 1 5.26 3.73" strokeWidth={1}></path>
+                                                    </g>
                                                 </svg>
-                                                Reject
+                                                REJECT
                                             </span>
                                         </button>
 
                                         <button className="relative group flex-1 min-w-[140px] bg-gradient-to-r from-purple-600/90 to-purple-700/90 text-white px-4 py-2.5 rounded-xl font-medium hover:from-purple-500 hover:to-purple-600 transition-all duration-300 active:scale-95  border border-purple-500/30 overflow-hidden" >
 
                                             <span className="relative z-10 flex items-center justify-center gap-2 text-2xl" onClick={() => handelRequest("ACCEPTED", item.connectionId)}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width={32} height={32} viewBox="0 0 512 512">
-                                                    <path fill="#efeded" d="M405.333 42.666v32h48l2.171.146c7.1.963 12.72 6.583 13.683 13.683l.146 2.171l-.146 2.171c-.963 7.1-6.583 12.72-13.683 13.683l-2.171.146h-48v42.667h48l2.171.146c7.1.963 12.72 6.583 13.683 13.683l.146 2.171l-.146 2.171c-.963 7.099-6.583 12.719-13.683 13.683l-2.171.146h-48v32h-64l-4.259-.105c-37.866-1.861-69.243-28.404-78.381-63.879l-27.687-.016l-2.804.185a21.33 21.33 0 0 0-12.28 6.063c-7.691 7.69-8.282 19.791-1.775 28.16l1.775 2.01l110.326 110.327l2.891 3.087a64 64 0 0 1 15.855 42.168c0 34.084-26.644 61.944-60.24 63.891l-3.76.109l-27.687.016c-9.138 35.475-40.515 62.018-78.381 63.879l-4.259.105h-64v-32h-48c-8.1 0-14.795-6.02-15.854-13.829l-.146-2.171c0-8.1 6.019-14.795 13.829-15.854l2.17-.146h48.001v-42.667h-48c-8.1 0-14.795-6.019-15.854-13.829l-.146-2.171c0-8.1 6.019-14.794 13.829-15.854l2.17-.146h48.001v-32h64c39.763 0 73.175 27.198 82.646 64.005l27.681-.005l2.487-.143c10.61-1.233 18.846-10.25 18.846-21.19a21.34 21.34 0 0 0-4.396-12.972l-1.852-2.113l-110.327-110.327l-2.88-3.072c-22.074-25.139-21.114-63.444 2.88-87.438a64 64 0 0 1 41.028-18.605l4.226-.14l27.681.005c9.12-35.444 40.441-61.977 78.255-63.894l4.391-.111zM170.667 341.333h-21.334v85.333h21.334l3.184-.117c20.973-1.547 37.73-18.256 39.353-39.208l.129-3.342l-.117-3.184c-1.547-20.973-18.255-37.73-39.207-39.353zm192-256h-21.334l-3.342.129c-19.787 1.533-35.79 16.565-38.811 35.898l-.396 3.455l-.117 3.184l.129 3.342c1.533 19.788 16.565 35.791 35.898 38.812l3.455.396l3.184.117h21.334z"></path>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width={50} height={50} viewBox="0 0 40 40">
+                                                    <g fill="none" strokeMiterlimit={10}>
+                                                        <path fill="#48eaff" stroke="#231f20" d="M37 4.24c-1.89-1.44-4.45-2.38-7 0c-1.52 1-5.67 5-10.22 11c-1.19 1.58-2.32 3.08-3.35 4.49c-3.74-2.84-6.69-4.85-7.91-5c-2.07-.8-4.31 1.45-5.75 3.34S-.32 22.63 1 24.4c.47 1.14 3.13 3.53 6.87 6.38c4.49 3.41 7.73 6 9.63 6.24c2.91 1.13 5-2.31 13.37-13.36c4.55-6 7.45-11 8-12.69c1.56-3.08-.03-5.29-1.87-6.73Z" strokeWidth={1}></path>
+                                                        <path stroke="#fff" strokeLinecap="round" d="M28.56 8.89c1.64-1.84 3.16-3.58 4.55-3.73" strokeWidth={1}></path>
+                                                    </g>
                                                 </svg>
-                                                Accept
+                                                ACCEPT
                                             </span>
 
                                         </button>
@@ -236,21 +298,28 @@ relative overflow-hidden
                         <div className="flex items-center gap-4">
 
                             {/* ICON */}
-                            <div className="w-12 h-12 flex items-center justify-center rounded-full bg-purple-600/20 border border-purple-500/40">
-                                <svg width="26" height="26" viewBox="0 0 24 24">
-                                    <path
-                                        fill="#a855f7"
-                                        d="M9 16.2l-3.5-3.5L4 14.2l5 5l11-11l-1.5-1.5z"
-                                    />
+                            <div className="w-[150px] h-[150px] flex items-center justify-center rounded-full bg-purple-600/20 border border-purple-500/40">
+                                <svg xmlns="http://www.w3.org/2000/svg" width={80} height={80} viewBox="0 0 40 40">
+                                    <g fill="none">
+                                        <path fill="#ffe236" stroke="#231f20" strokeMiterlimit={10} d="M.5 20.06a12.23 12.23 0 1 0 24.46 0a12.23 12.23 0 0 0-24.46 0Z" strokeWidth={1}></path>
+                                        <path stroke="#231f20" strokeLinecap="round" strokeMiterlimit={10} d="M11 30.42c-1.82-1.77-2.7-5.49-2.7-10.36s.88-8.58 2.7-10.35m3.51 0c1.77 1.77 2.66 5.49 2.66 10.35s-.89 8.59-2.66 10.36" strokeWidth={1}></path>
+                                        <path stroke="#231f20" strokeLinecap="round" strokeMiterlimit={10} d="M3.12 16.29a66 66 0 0 1 9.61-.59c3.213-.038 6.425.16 9.61.59m0 7.55c-3.185.43-6.397.628-9.61.59a66 66 0 0 1-9.61-.59" strokeWidth={1}></path>
+                                        <path stroke="#fff" strokeLinecap="round" strokeMiterlimit={10} d="M21.47 13.59a8.46 8.46 0 0 0-3.27-3.14" strokeWidth={1}></path>
+                                        <path fill="#48eaff" stroke="#231f20" strokeMiterlimit={10} d="M37 30.93c2.56-4.73 3.58-13.36 1-14c-7.09-1.81-14.26.75-16.82 5.49c-2.06 3.82-1.86 7.53 1.05 10.31a16 16 0 0 0-.84 1.44a5.94 5.94 0 0 0-.88 2.62c0 .56 1.07 1.23 1.92 1.56s2.07.52 2.47.12a5.86 5.86 0 0 0 1.1-2.55l.17-.72c4.67 1.87 8.49.06 10.83-4.27Z" strokeWidth={1}></path>
+                                        <path fill="#48eaff" d="M30.36 23a12.25 12.25 0 0 0-5.09 6.72Z"></path>
+                                        <path stroke="#231f20" strokeLinecap="round" strokeMiterlimit={10} d="M30.36 23a12.25 12.25 0 0 0-5.09 6.72" strokeWidth={1}></path>
+                                        <path stroke="#fff" strokeLinecap="round" strokeMiterlimit={10} d="M31.55 18.35a10.8 10.8 0 0 1 4.5 0" strokeWidth={1}></path>
+                                        <path fill="#ff52a1" stroke="#231f20" strokeMiterlimit={10} d="M21.823 6.464c.167.038.349.01.533-.083c.184-.092.368-.248.541-.458s.332-.47.467-.765s.244-.62.32-.955c.078-.336.12-.675.128-1a3.5 3.5 0 0 0-.087-.892c-.064-.264-.162-.484-.287-.648s-.277-.268-.445-.307a.8.8 0 0 0-.533.083a1.7 1.7 0 0 0-.541.458c-.173.21-.331.47-.467.765s-.244.62-.32.955c-.078.336-.12.675-.128 1c-.006.324.023.628.087.892s.162.485.288.648s.276.268.444.307Zm3.567 2.5c.263.228.695.238 1.203.028c.507-.21 1.048-.623 1.504-1.148s.788-1.118.924-1.65c.137-.533.066-.96-.197-1.187c-.262-.228-.695-.238-1.202-.028c-.508.21-1.049.623-1.504 1.148s-.788 1.119-.924 1.65c-.137.533-.066.96.196 1.187Zm1.746 3.619a.8.8 0 0 0 .307.444c.164.125.384.222.649.286s.567.093.892.086a5 5 0 0 0 1-.129c.334-.077.659-.187.954-.323c.295-.135.554-.294.764-.467s.365-.358.458-.542a.8.8 0 0 0 .081-.534a.78.78 0 0 0-.307-.443c-.164-.126-.384-.223-.649-.287s-.567-.092-.892-.085a5 5 0 0 0-1 .128a5 5 0 0 0-.954.323a3.5 3.5 0 0 0-.764.468c-.21.173-.365.357-.458.542a.8.8 0 0 0-.081.533Z" strokeWidth={1}></path>
+                                    </g>
                                 </svg>
                             </div>
 
                             {/* TEXT */}
                             <div>
-                                <div className="text-lg font-semibold text-white">
-                                    Connection Request Accepted 🚀
+                                <div className="text-4xl font-semibold text-white">
+                                    Connection Request Accepted!
                                 </div>
-                                <div className="text-sm text-gray-400">
+                                <div className="text-xl text-gray-400">
                                     You can acess the details from the connections option in the right hand sidebar
                                 </div>
                             </div>
@@ -260,6 +329,52 @@ relative overflow-hidden
                 </div>
             )
             }
+
+
+            {(receivedConnectionsTotal == 0 || reqUser.length === 0) && (
+                <div className="inset-0 flex items-center justify-center px-4">
+
+                    <div className="relative w-full max-w-3xl p-10 rounded-3xl  bg-gradient-to-br from-[#0f172a]/90 to-[#020617]/90 backdrop-blur-2xl border border-purple-500/20 animate-[modalPop_0.3s_ease]">
+
+                        <div className="flex flex-col md:flex-row items-center gap-8">
+
+                            {/* ICON */}
+                            <div className="w-36 h-36 flex items-center justify-center 
+                                                    rounded-full bg-purple-600/10 
+                                                    border border-purple-500/40
+                                                ">
+                                <FaPeopleCarry className="text-purple-400" size={60} />
+                            </div>
+
+                            {/* TEXT SECTION */}
+                            <div className="text-center md:text-left">
+                                <h2 className="text-4xl font-bold text-white mb-4">
+                                    No requests found
+                                </h2>
+
+                                <p className="text-lg text-gray-400 mb-6 max-w-md">
+                                    Discover and connect with developers from around the world.
+                                    Start exploring new profiles today.
+                                </p>
+
+                                {/* BUTTON */}
+
+                                <button
+                                    onClick={() => navigate("/app/explore")}
+                                    className="px-6 py-3 rounded-xl 
+                                                            bg-gradient-to-r from-purple-500 to-pink-500
+                                                            hover:scale-105 
+                                                            transition-all duration-300
+                                                            text-white font-semibold"
+                                >
+                                    Explore Developers
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            )}
         </div >
 
     );

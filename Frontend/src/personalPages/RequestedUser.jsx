@@ -72,15 +72,55 @@ bg-[radial-gradient(circle_at_top,#0a0f1f,black_70%)]
 p-4 md:p-10
 relative overflow-hidden
 ">
-            <div className="text-center mb-24">
-                <h1 className="text-9xl font-extrabold bg-gradient-to-b from-white to-blue-10 bg-clip-text text-transparent">
+
+
+
+            <div className="text-center mb-16 sm:mb-20 lg:mb-24 w-full flex flex-col items-center px-4">
+
+                {/* Heading */}
+                <h1 className="
+        text-4xl 
+        sm:text-6xl 
+        md:text-7xl 
+        lg:text-8xl 
+        xl:text-9xl
+        font-extrabold 
+        bg-gradient-to-b 
+        from-white 
+        to-blue-400 
+        bg-clip-text 
+        text-transparent
+        leading-tight
+    ">
                     Requested Developers
                 </h1>
-                <p className="text-2xl text-gray-400 mt-6 max-w-3xl mx-auto">
+
+                {/* Subtitle */}
+                <p className="
+        text-base 
+        sm:text-lg 
+        md:text-xl 
+        lg:text-2xl 
+        text-gray-400 
+        mt-6 
+        max-w-xl 
+        lg:max-w-3xl
+    ">
                     Collaborate with developers worldwide from the explore section.
                 </p>
-            </div>
 
+                {/* Search */}
+                <div className="
+        w-full 
+        sm:w-4/5 
+        md:w-3/5 
+        lg:w-1/2 
+        xl:w-2/5 
+        mt-10
+    ">
+
+                </div>
+            </div>
             <div className="max-w-9xl mx-auto">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-20 gap-y-10">
                     {reqUser.map((item, index) => (
@@ -192,9 +232,13 @@ relative overflow-hidden
                                     <div className="flex flex-wrap gap-3 pt-2">
 
                                         <button className="relative group flex-1 min-w-[140px] bg-gradient-to-r from-gray-800/80 to-gray-900/80 text-gray-300 px-4 py-2.5 rounded-xl font-medium hover:from-gray-700 hover:to-gray-800 transition-all duration-300 active:scale-95 border border-gray-700/50 hover:border-gray-600/50 overflow-hidden">
-                                            <span className="relative z-10 flex items-center justify-center gap-2">
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                            <span className="relative z-10 flex items-center justify-center gap-2 text-2xl">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width={40} height={40} viewBox="0 -0.5 41 41">
+                                                    <g fill="none" strokeMiterlimit={10}>
+                                                        <path fill="#ffe236" stroke="#231f20" d="M36 33.59c3-1.36 3.53-8.34 3.53-13.59S38.94 7.77 36 6.41c-1.48-1.36-9.4-1.73-16-1.73S5.52 5.05 4 6.41C1.06 7.77.5 14.75.5 20S1.06 32.23 4 33.59c1.49 1.36 9.41 1.73 16 1.73s14.49-.32 16-1.73Z" strokeWidth={1}></path>
+                                                        <path stroke="#231f20" strokeLinecap="round" d="M4.67 13c3.65 3.81 8.94 7.93 10.57 8.64a10.81 10.81 0 0 0 9.52 0c1.62-.64 6.91-4.79 10.56-8.64m-20.89 8.39l-6.96 6.97m18.1-6.97l6.97 6.97" strokeWidth={1}></path>
+                                                        <path stroke="#fff" strokeLinecap="round" d="M29.05 7.53a15.4 15.4 0 0 1 5.27.92" strokeWidth={1}></path>
+                                                    </g>
                                                 </svg>
                                                 Message
                                             </span>
@@ -202,13 +246,19 @@ relative overflow-hidden
 
                                         <button className="relative group flex-1 min-w-[140px] bg-gradient-to-r from-purple-600/90 to-purple-700/90 text-white px-4 py-2.5 rounded-xl font-medium hover:from-purple-500 hover:to-purple-600 transition-all duration-300 active:scale-95  border border-purple-500/30 overflow-hidden" onClick={() => deleteRequest(item._id)}>
 
-                                            <span className="relative z-10 flex items-center justify-center gap-2">
+                                            <span className="relative z-10 flex items-center justify-center gap-2 text-2xl">
                                                 {deletingId === item._id && (<svg xmlns="http://www.w3.org/2000/svg" width={32} height={32} viewBox="0 0 24 24">
                                                     <path fill="#efeded" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity={0.3}></path>
                                                     <path fill="#efeded" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z">
                                                         <animateTransform attributeName="transform" dur="1s" from="0 12 12" repeatCount="indefinite" to="360 12 12" type="rotate"></animateTransform>
                                                     </path>
-                                                </svg>)}  <RiUserUnfollowFill size={25} />
+                                                </svg>)}  <svg xmlns="http://www.w3.org/2000/svg" width={45} height={45} viewBox="0 0 40 40">
+                                                    <g fill="none" strokeMiterlimit={10}>
+                                                        <path fill="#ff52a1" stroke="#231f20" d="M.5 20a19.5 19.5 0 1 0 39 0a19.5 19.5 0 0 0-39 0Z" strokeWidth={1}></path>
+                                                        <path fill="#fff" stroke="#231f20" d="M30.08 25.41c-.16-.77-2.31-3.15-4.48-5.41c2.17-2.26 4.32-4.64 4.48-5.41c.46-.89-.63-2.11-1.59-3.08s-2.19-2-3.08-1.59c-.77.16-3.15 2.31-5.41 4.48c-2.26-2.17-4.64-4.32-5.41-4.48c-.89-.46-2.11.63-3.07 1.59s-2.06 2.19-1.6 3.08c.16.77 2.31 3.15 4.48 5.41c-2.17 2.26-4.32 4.64-4.48 5.41c-.46.89.63 2.11 1.59 3.08s2.19 2.05 3.08 1.59c.77-.16 3.15-2.31 5.41-4.48c2.26 2.17 4.64 4.32 5.41 4.48c.89.46 2.11-.63 3.08-1.59s2.05-2.19 1.59-3.08Z" strokeWidth={1}></path>
+                                                        <path stroke="#fff" strokeLinecap="round" d="M27.56 5a15.4 15.4 0 0 1 5.26 3.73" strokeWidth={1}></path>
+                                                    </g>
+                                                </svg>
                                                 Delete Request
                                             </span>
 
@@ -240,25 +290,24 @@ relative overflow-hidden
                         <div className="flex items-center gap-4">
 
                             {/* ICON */}
-                            <div className="w-12 h-12 flex items-center justify-center rounded-full bg-purple-600/20 border border-purple-500/40">
-                                <svg width="26" height="26" viewBox="0 0 24 24">
-                                    <path
-                                        fill="#a855f7"
-                                        d="M9 16.2l-3.5-3.5L4 14.2l5 5l11-11l-1.5-1.5z"
-                                    />
+                            <div className="w-[100px] h-[100px] flex items-center justify-center rounded-full bg-purple-600/20 border border-purple-500/40">
+                                <svg xmlns="http://www.w3.org/2000/svg" width={80} height={80} viewBox="0 0 80 80">
+                                    <g fill="none" fillRule="evenodd" clipRule="evenodd">
+                                        <path fill="#eb5757" d="M17.103 20.655a14 14 0 0 0 0 19.799l14.142 14.142l7.07 7.07a2 2 0 0 0 2.83 0l7.07-7.07l14.142-14.142a14 14 0 0 0-19.799-19.8l-2.137 2.138a.977.977 0 0 1-1.382 0L36.9 20.655a14 14 0 0 0-19.799 0" strokeWidth={2} stroke="#eb5757"></path>
+                                        <path fill="#f2c94c" d="M47.054 17.639a1 1 0 0 1-.111.375l-4.502 8.583a.274.274 0 0 0 .172.392l1.177.316l1.445.387l3.197.857a1 1 0 0 1 .52 1.594L34.834 47.618c-.243.302-.715.004-.549-.345l6.048-12.706a1 1 0 0 0-.644-1.395l-.611-.164l-1.353-.363l-4.711-1.262a1 1 0 0 1-.668-1.342l4.019-9.894q.273.246.535.507l2.137 2.138a.977.977 0 0 0 1.383 0l2.137-2.138c1.3-1.3 2.831-2.319 4.496-3.015" strokeWidth={2} stroke="#f2c94c"></path>
+                                    </g>
                                 </svg>
                             </div>
 
                             {/* TEXT */}
                             <div>
-                                <div className="text-lg font-semibold text-white">
-                                    Request Deleted
+                                <div className="text-4xl font-semibold text-white">
+                                    Request Deleted!
                                 </div>
-                                <div className="text-sm text-gray-400">
+                                <div className="text-xl text-gray-400">
                                     Request has been deleted.
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>

@@ -17,8 +17,8 @@ const Login = () => {
      default gmail = vineetsinghbitu@gmail.com
      default password = Vineet@1234
      */
-    const [gmail, setGmailId] = useState("vineetsinghk06@gmail.com");
-    const [password, setPassword] = useState("YashNew@1234");
+    const [gmail, setGmailId] = useState("");
+    const [password, setPassword] = useState("");
 
     const [showPassword, setShowPassword] = useState(false);
     const [newError, setNewError] = useState(false);
@@ -57,7 +57,7 @@ const Login = () => {
             dispatch(addUser(user));
             navigate("/app");
 
-            console.log(res.data);
+
             navigate("/app");
 
 
@@ -99,10 +99,10 @@ const Login = () => {
                             {demoAccouts.map((item) => (
                                 <ul key={item.adminID} className="group border rounded-xl border-white  h-[33.33%] p-4 flex justify-center items-start  bg-black hover:border-blue-400">
                                     <div className="flex flex-col justify-center items-start w-full">
-                                        <li className="flex gap-2 justify-center items-center"> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="none"><path fill="skyblue" d="M3 5v-.5a.5.5 0 0 0-.5.5zm18 0h.5a.5.5 0 0 0-.5-.5zM3 5.5h18v-1H3zM20.5 5v12h1V5zM19 18.5H5v1h14zM3.5 17V5h-1v12zM5 18.5A1.5 1.5 0 0 1 3.5 17h-1A2.5 2.5 0 0 0 5 19.5zM20.5 17a1.5 1.5 0 0 1-1.5 1.5v1a2.5 2.5 0 0 0 2.5-2.5z" /><path stroke="skyblue" stroke-linecap="round" stroke-linejoin="round" d="m3 5l9 9l9-9" stroke-width="1" /></g></svg> <span className="text-cyan-300">Email ID :</span> {item.Gmail}</li>
+                                        <li className="flex gap-2 justify-center items-center"> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="none"><path fill="skyblue" d="M3 5v-.5a.5.5 0 0 0-.5.5zm18 0h.5a.5.5 0 0 0-.5-.5zM3 5.5h18v-1H3zM20.5 5v12h1V5zM19 18.5H5v1h14zM3.5 17V5h-1v12zM5 18.5A1.5 1.5 0 0 1 3.5 17h-1A2.5 2.5 0 0 0 5 19.5zM20.5 17a1.5 1.5 0 0 1-1.5 1.5v1a2.5 2.5 0 0 0 2.5-2.5z" /><path stroke="skyblue" strokeLinecap="round" strokeLinejoin="round" d="m3 5l9 9l9-9" strokeWidth="1" /></g></svg> <span className="text-cyan-300">Email ID :</span> {item.Gmail}</li>
                                         <li className="flex gap-2 justify-center items-center"> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16"><path fill="skyblue" d="M13.35 16H2.65C1.74 16 1 15.26 1 14.35v-7.7C1 5.74 1.74 5 2.65 5h10.7c.91 0 1.65.74 1.65 1.65v7.69c0 .91-.74 1.65-1.65 1.65ZM2.65 6c-.36 0-.65.29-.65.65v7.69c0 .36.29.65.65.65h10.7c.36 0 .65-.29.65-.65V6.65c0-.36-.29-.65-.65-.65z" /><path fill="skyblue" d="M12.54 6H3.46V4.54C3.46 2.04 5.5 0 8 0s4.54 2.04 4.54 4.54zM4.46 5h7.08v-.46C11.54 2.59 9.95 1 8 1S4.46 2.59 4.46 4.54z" /><circle cx="12" cy="10.5" r="1" fill="skyblue" /><circle cx="8" cy="10.5" r="1" fill="skyblue" /><circle cx="4" cy="10.5" r="1" fill="skyblue" /></svg> <span className="text-cyan-300">Password : </span>{item.password}</li>
                                     </div>
-                                    <div className=" arrow h-10 w-10 border border-gray-500 rounded-full bg-gray-900 flex justify-center items-center group-hover:bg-gray-800 group-hover:rotate-45 transition-hover duration-[300ms]"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48"><path fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M34 24.008H6M22 12l12 12l-12 12m20-24v24" /></svg></div>
+                                    <div className=" arrow h-10 w-10 border border-gray-500 rounded-full bg-gray-900 flex justify-center items-center group-hover:bg-gray-800 group-hover:rotate-45 transition-hover duration-[300ms]"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48"><path fill="none" stroke="#ffffff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M34 24.008H6M22 12l12 12l-12 12m20-24v24" /></svg></div>
                                 </ul>
 
 
@@ -159,7 +159,7 @@ const Login = () => {
                                     {showPassword ?
                                         (< svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="gray" d="M2 5.27L3.28 4L20 20.72L18.73 22l-3.08-3.08c-1.15.38-2.37.58-3.65.58c-5 0-9.27-3.11-11-7.5c.69-1.76 1.79-3.31 3.19-4.54zM12 9a3 3 0 0 1 3 3a3 3 0 0 1-.17 1L11 9.17A3 3 0 0 1 12 9m0-4.5c5 0 9.27 3.11 11 7.5a11.8 11.8 0 0 1-4 5.19l-1.42-1.43A9.86 9.86 0 0 0 20.82 12A9.82 9.82 0 0 0 12 6.5c-1.09 0-2.16.18-3.16.5L7.3 5.47c1.44-.62 3.03-.97 4.7-.97M3.18 12A9.82 9.82 0 0 0 12 17.5c.69 0 1.37-.07 2-.21L11.72 15A3.064 3.064 0 0 1 9 12.28L5.6 8.87c-.99.85-1.82 1.91-2.42 3.13" /></svg>
                                         ) : (
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><g fill="none" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"><path d="M3.587 13.779c1.78 1.769 4.883 4.22 8.413 4.22s6.634-2.451 8.413-4.22c.47-.467.705-.7.854-1.159c.107-.327.107-.913 0-1.24c-.15-.458-.385-.692-.854-1.159C18.633 8.452 15.531 6 12 6c-3.53 0-6.634 2.452-8.413 4.221c-.47.467-.705.7-.854 1.159c-.107.327-.107.913 0 1.24c.15.458.384.692.854 1.159" /><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0-4 0" /></g></svg>)}
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><g fill="none" stroke="gray" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.4"><path d="M3.587 13.779c1.78 1.769 4.883 4.22 8.413 4.22s6.634-2.451 8.413-4.22c.47-.467.705-.7.854-1.159c.107-.327.107-.913 0-1.24c-.15-.458-.385-.692-.854-1.159C18.633 8.452 15.531 6 12 6c-3.53 0-6.634 2.452-8.413 4.221c-.47.467-.705.7-.854 1.159c-.107.327-.107.913 0 1.24c.15.458.384.692.854 1.159" /><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0-4 0" /></g></svg>)}
 
                                 </span>
 

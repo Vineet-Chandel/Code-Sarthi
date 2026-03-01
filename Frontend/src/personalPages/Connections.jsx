@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { BASE_URL } from "../Pages/auth/baseURL";
 import { addConnectionUser } from "../utils/connectionSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { MdDelete } from "react-icons/md";
+
 import { FaPeopleCarry } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 const Connections = () => {
@@ -52,19 +52,41 @@ const Connections = () => {
         }
 
     }
-    useEffect(() => {
-        deleteConnections()
-    }, [])
 
     return (
         <div className="w-full min-h-screen bg-black p-4 md:p-8">
             <div className="w-full/2 mx-auto">
-                <div className="text-center mb-24">
-                    <h1 className="text-9xl font-extrabold bg-gradient-to-b from-white to-blue-10 bg-clip-text text-transparent">
+
+                <div className="text-center mb-16 sm:mb-20 lg:mb-24 w-full flex flex-col items-center px-4">
+
+                    {/* Heading */}
+                    <h1 className="
+        text-4xl 
+        sm:text-6xl 
+        md:text-7xl 
+        lg:text-8xl 
+        xl:text-9xl
+        font-extrabold 
+        bg-gradient-to-b 
+        from-white 
+        to-blue-400 
+        bg-clip-text 
+        text-transparent
+        leading-tight
+    ">
                         Your Connections
                     </h1>
 
+
                 </div>
+
+
+
+
+
+
+
+
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
 
@@ -176,18 +198,27 @@ const Connections = () => {
                                     {/* Action buttons with tech style */}
                                     <div className="flex flex-wrap gap-3 pt-2">
 
-                                        <button className="relative group flex-1 min-w-[140px] bg-gradient-to-r from-gray-800/80 to-gray-900/80 text-gray-300 px-4 py-2.5 rounded-xl font-medium hover:from-gray-700 hover:to-gray-800 transition-all duration-300 active:scale-95 border border-gray-700/50 hover:border-gray-600/50 overflow-hidden">
-                                            <span className="relative z-10 flex items-center justify-center gap-2">
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                        <button className="relative group  flex-1 min-w-[140px] bg-gradient-to-r from-gray-800/80 to-gray-900/80 text-gray-300 px-4 py-2.5 rounded-xl font-medium hover:from-gray-700 hover:to-gray-800 transition-all duration-300 active:scale-95 border border-gray-700/50 hover:border-gray-600/50 overflow-hidden">
+                                            <span className="relative z-10 flex items-center justify-center gap-2 text-2xl">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width={45} height={45} viewBox="0 -0.5 41 41">
+                                                    <g fill="none" strokeMiterlimit={10}>
+                                                        <path fill="#ffe236" stroke="#231f20" d="M36 33.59c3-1.36 3.53-8.34 3.53-13.59S38.94 7.77 36 6.41c-1.48-1.36-9.4-1.73-16-1.73S5.52 5.05 4 6.41C1.06 7.77.5 14.75.5 20S1.06 32.23 4 33.59c1.49 1.36 9.41 1.73 16 1.73s14.49-.32 16-1.73Z" strokeWidth={1}></path>
+                                                        <path stroke="#231f20" strokeLinecap="round" d="M4.67 13c3.65 3.81 8.94 7.93 10.57 8.64a10.81 10.81 0 0 0 9.52 0c1.62-.64 6.91-4.79 10.56-8.64m-20.89 8.39l-6.96 6.97m18.1-6.97l6.97 6.97" strokeWidth={1}></path>
+                                                        <path stroke="#fff" strokeLinecap="round" d="M29.05 7.53a15.4 15.4 0 0 1 5.27.92" strokeWidth={1}></path>
+                                                    </g>
                                                 </svg>
                                                 Message
                                             </span>
                                         </button>
 
                                         <button className="relative group flex-1 min-w-[140px] bg-gradient-to-r from-purple-600/90 to-purple-700/90 text-white px-4 py-2.5 rounded-xl font-medium hover:from-purple-500 hover:to-purple-600 transition-all duration-300 active:scale-95  border border-purple-500/30 overflow-hidden" onClick={() => deleteConnections(item.connectionId)}>
-                                            <span className="relative z-10 flex items-center justify-center gap-2">
-                                                <MdDelete size={25} />
+                                            <span className="relative z-10 flex items-center text-2xl justify-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width={45} height={45} viewBox="0 0 24 24">
+                                                    <g fill="none">
+                                                        <path fill="#ff808c" d="M12 20.708a8.708 8.708 0 1 0 0-17.416a8.708 8.708 0 0 0 0 17.416"></path>
+                                                        <path stroke="#000000" strokeLinecap="round" strokeLinejoin="round" d="M4.546 19.453L19.453 4.547M12 22.542c5.822 0 10.542-4.72 10.542-10.542S17.822 1.458 12 1.458S1.458 6.178 1.458 12S6.178 22.542 12 22.542" strokeWidth={1}></path>
+                                                    </g>
+                                                </svg>
                                                 Delete Connection
                                             </span>
                                         </button>

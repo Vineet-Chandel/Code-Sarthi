@@ -94,7 +94,7 @@ const Search = ({ height, displayType }) => {
                     height="45"
                     viewBox="0 0 24 24"
                 >
-                    <g fill="#0096ff" fill-opacity="0" stroke="#0096ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"> <path stroke-dasharray="22" d="M12 5c1.66 0 3 1.34 3 3c0 1.66 -1.34 3 -3 3c-1.66 0 -3 -1.34 -3 -3c0 -1.66 1.34 -3 3 -3Z"> <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.25s" values="22;0" /> <animate fill="freeze" attributeName="fill-opacity" begin="0.55s" dur="0.075s" to="0.3" /> </path> <path stroke-dasharray="38" stroke-dashoffset="38" d="M12 14c4 0 7 2 7 3v2h-14v-2c0 -1 3 -3 7 -3Z"> <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.25s" dur="0.25s" to="0" /> <animate fill="freeze" attributeName="fill-opacity" begin="0.55s" dur="0.075s" to="0.3" /> </path> </g>
+                    <g fill="#0096ff" fillOpacity="0" stroke="#0096ff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1"> <path strokeDasharray="22" d="M12 5c1.66 0 3 1.34 3 3c0 1.66 -1.34 3 -3 3c-1.66 0 -3 -1.34 -3 -3c0 -1.66 1.34 -3 3 -3Z"> <animate fill="freeze" attributeName="strokeDashoffset" dur="0.25s" values="22;0" /> <animate fill="freeze" attributeName="fillOpacity" begin="0.55s" dur="0.075s" to="0.3" /> </path> <path strokeDasharray="38" strokeDashoffset="38" d="M12 14c4 0 7 2 7 3v2h-14v-2c0 -1 3 -3 7 -3Z"> <animate fill="freeze" attributeName="strokeDashoffset" begin="0.25s" dur="0.25s" to="0" /> <animate fill="freeze" attributeName="fillOpacity" begin="0.55s" dur="0.075s" to="0.3" /> </path> </g>
                 </svg>
 
             </div>

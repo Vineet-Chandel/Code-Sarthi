@@ -1126,16 +1126,6 @@ const SettingContent = ({ activeSetting }) => {
 const Settings = () => {
     const [active, setActive] = useState(SETTINGS_ITEMS[0]);
     const [searchTerm, setSearchTerm] = useState("");
-    const [isHovering, setIsHovering] = useState(false);
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-    useEffect(() => {
-        const handleMouseMove = (e) => {
-            setMousePosition({ x: e.clientX, y: e.clientY });
-        };
-        window.addEventListener('mousemove', handleMouseMove);
-        return () => window.removeEventListener('mousemove', handleMouseMove);
-    }, []);
 
     const filteredSettings = useMemo(() =>
         SETTINGS_ITEMS.filter(item =>
