@@ -322,218 +322,197 @@ const ContentFirst = () => {
 
 
             <div className='relative top-10'>
-                <div className="w-[98%] m-10 border rounded-[150px] justify-self-center flex  items-center justify-between p-6
-            max-xl:px-4 
-            max-lg:px-2 
-            max-sm:px-0 
-            max-[850px]:flex-col
-           ">
-                    <div className="w-1/2 flex flex-col justify-center items-center text-left gap-4 p-11 
-                max-xl:px-7 
-                max-lg:px-3 
-                max-sm:px-0 
-                max-[850px]:w-full
-                max-[850px]:p-11
-                 max-[630px]:p-11
-                  ">
-                        <div className="
-  text-[24px]
-  sm:text-3xl
-  md:text-4xl
-  lg:text-5xl
-  xl:text-6xl
-  font-extrabold font-head HEAD2
-">
+                {/* CARD */}
+                <div className="w-[95%] mx-auto mt-5 border rounded-[60px] lg:rounded-[120px] 
+      flex flex-col lg:flex-row items-center justify-between 
+      px-6 py-10 lg:px-12">
+
+                    {/* LEFT CONTENT */}
+                    <div className="w-full lg:w-1/2 flex flex-col gap-6 text-center lg:text-left">
+
+                        <h2 className="
+        text-2xl 
+        sm:text-3xl 
+        md:text-4xl 
+        lg:text-5xl 
+        xl:text-6xl 
+        font-extrabold font-head HEAD2">
                             KEEP DEVELOPERS ENGAGED
+                        </h2>
+
+                        <div className="space-y-4 text-gray-300 pointer1">
+                            <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
+                                ✦ A unified interaction layer that seamlessly connects developers.
+                            </p>
+                            <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
+                                ✦ Bridges messaging, meetings, and collaboration.
+                            </p>
+                            <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
+                                ✦ Enables rich media communication.
+                            </p>
+                            <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
+                                ✦ Improves productivity by centralizing interactions.
+                            </p>
                         </div>
 
-                        <div className="w-full flex flex-col gap-4 pl-5 pointer1 text-gray-200">
-                            <div className=" text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
-                                ✦ A unified interaction layer that seamlessly connects developers, teams, and communities.
-                            </div>
-                            <div className=" text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
-                                ✦ Bridges messaging, meetings, and collaboration in one place.
-                            </div>
-                            <div className=" text-xl text-start transition-all duration-200 hover:text-green-400 hover:scale-105">
-                                ✦ Enables rich media communication (text, video, files, code).
-                            </div>
-                            <div className=" text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
-                                ✦ Improves productivity by keeping all interactions centralized.
-                            </div>
-                        </div>
-                        <div className='w-full flex items-center justify-start'>
-                            <div className='h-[40px]  font-bold text-sm relative top-5 border-transparent p-1 px-5 bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300 text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                                <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <g clipPath="url(#clip0_0_3844)">
-                                        <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                    </g>
-                                    <defs>
-                                        <clipPath id="clip0_0_3844">
-                                            <rect width="14" height="14" fill="white" />
-                                        </clipPath>
-                                    </defs>
-                                </svg>
-                                LEARN MORE</div>
+                        <div className="pt-4">
+                            <button className="
+          bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300
+          text-black font-semibold
+          px-6 py-2
+          rounded-full
+          flex items-center gap-2
+          hover:scale-105 transition">
+                                LEARN MORE
+                            </button>
                         </div>
                     </div>
 
-                    <div className="w-1/2  flex justify-end 
-               
-                max-[850px]:w-full
-              
-                max-[850px]:justify-center">
+                    {/* RIGHT VIDEO */}
+                    <div className="w-full lg:w-1/2 flex justify-center mt-10 lg:mt-0">
                         <video
-                            src={"/videos/feature-1.mp4"}
+                            src="/videos/feature-1.mp4"
                             autoPlay
                             loop
                             muted
                             playsInline
-                            preload="auto"
-                            className="  rounded-[150px] object-cover h-[600px] w-auto"
+                            className="
+          w-full 
+          max-w-[600px] 
+        
+          object-cover 
+          rounded-[40px] lg:rounded-[120px]"
                         />
                     </div>
-                </div>
-                <div className="w-[98%] m-10 border rounded-[150px] justify-self-center flex  items-center justify-between p-6
-            max-xl:px-4 
-            max-lg:px-2 
-            max-sm:px-0 
-            max-[850px]:flex-col
-           ">
-                    <div className="w-1/2 flex flex-col justify-center items-center text-left gap-4 p-11 
-                max-xl:px-7 
-                max-lg:px-3 
-                max-sm:px-0 
-                max-[850px]:w-full
-                max-[850px]:p-11
-                 max-[630px]:p-11
-                  ">
-                        <div className="
-  text-[24px]
-  sm:text-3xl
-  md:text-4xl
-  lg:text-5xl
-  xl:text-6xl
-  font-extrabold font-head HEAD3
-">
-                            Eliminates dependency on Project Manager
-                        </div>
 
-                        <div className="w-full flex flex-col gap-4 pl-5 pointer2 text-gray-200">
-                            <p className="text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
+                </div>
+                {/* CARD */}
+                <div className="w-[95%] mx-auto mt-5 border rounded-[60px] lg:rounded-[120px] 
+      flex flex-col lg:flex-row items-center justify-between 
+      px-6 py-10 lg:px-12">
+
+                    {/* LEFT CONTENT */}
+                    <div className="w-full lg:w-1/2 flex flex-col gap-6 text-center lg:text-left">
+
+                        <h2 className="
+        text-2xl 
+        sm:text-3xl 
+        md:text-4xl 
+        lg:text-5xl 
+        xl:text-6xl 
+        font-extrabold font-head HEAD3">
+                            Eliminates dependency on Project Manager|
+                        </h2>
+
+                        <div className="space-y-4 text-gray-300 pointer2">
+                            <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
                                 ✦ Combines scheduling, tracking, and accountability in one system
                             </p>
-                            <p className="text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
+                            <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
                                 ✦ Invite team members with role-based access
                             </p>
-                            <p className="text-xl text-start transition-all duration-200 hover:text-green-400 hover:scale-105">
+                            <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
                                 ✦ Supports flexible team sizes and structures
                             </p>
-                            <p className="text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
+                            <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
                                 ✦ Centralized interface for project leaders where leader track team productivity in real time
                             </p>
                         </div>
-                        <div className='w-full flex items-center justify-start'>
-                            <div className='h-[40px]  font-bold text-sm relative top-5 border-transparent p-1 px-5 bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300 text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                                <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <g clipPath="url(#clip0_0_3844)">
-                                        <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                    </g>
-                                    <defs>
-                                        <clipPath id="clip0_0_3844">
-                                            <rect width="14" height="14" fill="white" />
-                                        </clipPath>
-                                    </defs>
-                                </svg>
-                                LEARN MORE</div>
+
+                        <div className="pt-4">
+                            <button className="
+          bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300
+          text-black font-semibold
+          px-6 py-2
+          rounded-full
+          flex items-center gap-2
+          hover:scale-105 transition">
+                                LEARN MORE
+                            </button>
                         </div>
                     </div>
 
-                    <div className="w-1/2  flex justify-end 
-               
-                max-[850px]:w-full
-              
-                max-[850px]:justify-center">
+                    {/* RIGHT VIDEO */}
+                    <div className="w-full lg:w-1/2 flex justify-center mt-10 lg:mt-0">
                         <video
-                            src={"/videos/feature-2.mp4"}
+                            src="/videos/feature-2.mp4"
                             autoPlay
                             loop
                             muted
                             playsInline
-                            preload="auto"
-                            className="  rounded-[150px] object-cover h-[600px] w-full"
+                            className="
+          w-full 
+          max-w-[600px] 
+         
+          object-cover 
+          rounded-[40px] lg:rounded-[120px]"
                         />
                     </div>
-                </div>
-                <div className="w-[98%] m-10 border rounded-[150px] justify-self-center flex  items-center justify-between p-6
-            max-xl:px-4 
-            max-lg:px-2 
-            max-sm:px-0 
-            max-[850px]:flex-col
-           ">
-                    <div className="w-1/2 flex flex-col justify-center items-center text-left gap-4 p-11 
-                max-xl:px-7 
-                max-lg:px-3 
-                max-sm:px-0 
-                max-[850px]:w-full
-                max-[850px]:p-11
-                 max-[630px]:p-11
-                  ">
-                        <div className="
-  text-[24px]
-  sm:text-3xl
-  md:text-4xl
-  lg:text-5xl
-  xl:text-6xl
-  font-extrabold font-head HEAD4
-">
-                            TIME IS PRECIOUS
-                        </div>
 
-                        <div className="w-full flex flex-col gap-4 pl-5 pointer3 text-gray-200">
-                            <p className="text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
+                </div>
+                {/* CARD */}
+                <div className="w-[95%] mx-auto mt-5 border rounded-[60px] lg:rounded-[120px] 
+      flex flex-col lg:flex-row items-center justify-between 
+      px-6 py-10 lg:px-12">
+
+                    {/* LEFT CONTENT */}
+                    <div className="w-full lg:w-1/2 flex flex-col gap-6 text-center lg:text-left">
+
+                        <h2 className="
+        text-2xl 
+        sm:text-3xl 
+        md:text-4xl 
+        lg:text-5xl 
+        xl:text-6xl 
+        font-extrabold font-head HEAD4">
+                            TIME IS PRECIOUS
+                        </h2>
+
+                        <div className="space-y-4 text-gray-300 pointer3">
+                            <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
                                 ✦ Task-wise time tracking for each member and Logs time spent on specific tasks
                             </p>
-                            <p className="text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
+                            <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
                                 ✦ a personal dashboard for each developer where they can Track daily goals and Monitor individual productivity
                             </p>
-                            <p className="text-xl text-start transition-all duration-200 hover:text-green-400 hover:scale-105">
+                            <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
                                 ✦ Increases team transparency and accountability which reduces management overhead
                             </p>
-                            <p className="text-xl text-start  transition-all duration-200 hover:text-green-400 hover:scale-105">
+                            <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
                                 ✦ Faster issue identification and gives a centralized workspace for projects and teams
                             </p>
                         </div>
-                        <div className='w-full flex items-center justify-start'>
-                            <div className='h-[40px]  font-bold text-sm relative top-5 border-transparent p-1 px-5 bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300 text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                                <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <g clipPath="url(#clip0_0_3844)">
-                                        <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                    </g>
-                                    <defs>
-                                        <clipPath id="clip0_0_3844">
-                                            <rect width="14" height="14" fill="white" />
-                                        </clipPath>
-                                    </defs>
-                                </svg>
-                                LEARN MORE</div>
+
+                        <div className="pt-4">
+                            <button className="
+          bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300
+          text-black font-semibold
+          px-6 py-2
+          rounded-full
+          flex items-center gap-2
+          hover:scale-105 transition">
+                                LEARN MORE
+                            </button>
                         </div>
                     </div>
 
-                    <div className="w-1/2  flex justify-end 
-               
-                max-[850px]:w-full
-              
-                max-[850px]:justify-center">
+                    {/* RIGHT VIDEO */}
+                    <div className="w-full lg:w-1/2 flex justify-center mt-10 lg:mt-0">
                         <video
-                            src={"/videos/feature-3.mp4"}
+                            src="/videos/feature-3.mp4"
                             autoPlay
                             loop
                             muted
                             playsInline
-                            preload="auto"
-                            className="  rounded-[150px] object-cover h-[600px] w-full"
+                            className="
+          w-full 
+          max-w-[600px] 
+      
+          object-cover 
+          rounded-[40px] lg:rounded-[120px]"
                         />
                     </div>
+
                 </div>
             </div>
 
