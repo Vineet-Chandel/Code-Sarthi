@@ -15,13 +15,13 @@ const Signup = () => {
 
   // Form state
   const [formData, setFormData] = useState({
-    FirstName: '',
-    MiddleName: '',
-    LastName: '',
+    firstName: '',
+    middleName: '',
+    lastName: '',
     username: '',
     gender: '',
     age: '',
-    Gmail: '',
+    gmail: '',
     password: '',
     profession: '',
     college: '',
@@ -34,7 +34,7 @@ const Signup = () => {
     // ✅ 1. VALIDATION FIRST
     const newErrors = {};
     Object.keys(formData).forEach((key) => {
-      if (key !== "MiddleName" && !formData[key]) {
+      if (key !== "middleName" && !formData[key]) {
         console.error("This field is required");
       }
       if (!formData["termsAccepted"]) {
@@ -48,7 +48,7 @@ const Signup = () => {
       // ✅ 2. START LOADING
       setIsSubmitting(true);
       const res = await axios.post(
-        `${BASE_URL}/SignUpDB`,
+        `${BASE_URL}/auth/signup`,
         formData,
         { withCredentials: true }
       );
@@ -107,10 +107,10 @@ const Signup = () => {
 
 
   const generateUsername = () => {
-    const FirstName = formData.FirstName.toLowerCase();
-    const LastName = formData.LastName.toLowerCase();
+    const firstName = formData.firstName.toLowerCase();
+    const lastName = formData.lastName.toLowerCase();
     const randomNum = Math.floor(Math.random() * 1000);
-    const username = `${FirstName}_${LastName}${randomNum}`;
+    const username = `${firstName}_${lastName}${randomNum}`;
 
     setFormData(prev => ({ ...prev, username }));
     setErrors(prev => ({ ...prev, username: '' }));
@@ -155,7 +155,7 @@ const Signup = () => {
             {/* Name Fields */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2 ">
-                <label htmlFor="FirstName" className="text-md ml-3 block">
+                <label htmlFor="firstName" className="text-md ml-3 block">
                   First Name <span className="text-red-400 ml-1">*</span>
                 </label>
                 <div className={"flex items-center rounded-2xl px-4 py-3 border border-gray-600 transition-all duration-300  bg-black/50"}>
@@ -166,18 +166,18 @@ const Signup = () => {
                     </svg>
                   </span>
                   <input
-                    id="FirstName"
+                    id="firstName"
                     type="text"
                     placeholder="Vinay"
                     className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base"
-                    value={formData['FirstName']}
+                    value={formData['firstName']}
                     onChange={handleChange}
                     required={true}
                   />
                 </div>
               </div>
               <div className="space-y-2">
-                <label htmlFor="FirstName" className="text-md ml-3 block">
+                <label htmlFor="firstName" className="text-md ml-3 block">
                   Middle Name
                 </label>
                 <div className={"flex items-center rounded-2xl px-4 py-3 border border-gray-600 transition-all duration-300  bg-black/50"}>
@@ -188,18 +188,18 @@ const Signup = () => {
                     </svg>
                   </span>
                   <input
-                    id="MiddleName"
+                    id="middleName"
                     type="text"
                     placeholder="Singh"
                     className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base"
-                    value={formData['MiddleName']}
+                    value={formData['middleName']}
                     onChange={handleChange}
                     required={false}
                   />
                 </div>
               </div>
               <div className="space-y-2">
-                <label htmlFor="FirstName" className="text-md ml-3 block">
+                <label htmlFor="firstName" className="text-md ml-3 block">
                   Last Name <span className="text-red-400 ml-1">*</span>
                 </label>
                 <div className={"flex items-center rounded-2xl px-4 py-3 border border-gray-600 transition-all duration-300  bg-black/50"}>
@@ -210,11 +210,11 @@ const Signup = () => {
                     </svg>
                   </span>
                   <input
-                    id="LastName"
+                    id="lastName"
                     type="text"
                     placeholder="Chandel"
                     className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base"
-                    value={formData['LastName']}
+                    value={formData['lastName']}
                     onChange={handleChange}
                     required={true}
                   />
@@ -232,7 +232,7 @@ const Signup = () => {
                   type="button"
                   onClick={generateUsername}
                   className="text-sm text-blue-400 hover:text-blue-300 flex items-center gap-2 transition-colors"
-                  disabled={!formData.FirstName || !formData.LastName}
+                  disabled={!formData.firstName || !formData.lastName}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
@@ -325,7 +325,7 @@ const Signup = () => {
 
             {/* Email */}
             <div className="space-y-2">
-              <label htmlFor="Gmail" className="text-md ml-3 block">
+              <label htmlFor="gmail" className="text-md ml-3 block">
                 Email <span className="text-red-400 ml-1">*</span>
               </label>
               <div className={`flex items-center rounded-2xl px-4 py-3 border border-gray-600 transition-all duration-300  bg-black/50`}>
@@ -336,11 +336,11 @@ const Signup = () => {
                   </svg>
                 </span>
                 <input
-                  id="Gmail"
+                  id="gmail"
                   type="email"
                   placeholder="vinay@example.com"
                   className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-lg"
-                  value={formData.Gmail}
+                  value={formData.gmail}
                   onChange={handleChange}
                   required
                 />

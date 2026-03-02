@@ -9,7 +9,27 @@ const Nav = () => {
 
     const hoverTimeout = useRef(null);
     const dropdownRefs = useRef({});
+    const [openHam, setOpenHam] = useState(false)
+    const [openDropdownId, setOpenDropdownId] = useState(null);
 
+    const handleClickHamburger = () => {
+        if (openHam) {
+            setOpenHam(false);
+        } else {
+            setOpenHam(true)
+        }
+    }
+    const MainCTAbutton = ({ className = "" }) => {
+        return (
+            <button
+                onClick={() => navigate("/login")}
+                className={`bg-white text-black  px-4 py-2 rounded-xl font-bold
+                                   hover:scale-105 transition ${className}`}
+            >
+                Open CodeSarthi
+            </button>
+        )
+    }
 
     const navItems = [
         { id: "discover", label: "Discover", path: "/discover" },
@@ -149,12 +169,31 @@ const Nav = () => {
         });
     }, [hoveredItem]);
 
+    const hamRef = useRef(null);
 
+
+    useEffect(() => {
+        if (!hamRef.current) return;
+        if (openHam) {
+
+            gsap.fromTo(
+                hamRef.current,
+                { x: 400 },
+                { x: 0, duration: 0.4, ease: "power3.out" }
+            );
+        } else {
+            gsap.to(hamRef.current, {
+                x: 400,
+                duration: 0.3,
+                ease: "power3.in",
+            });
+        }
+    }, [openHam]);
     return (
-        <div className="relative">
+        <div className="relative ">
             {/* NAVBAR */}
             <div className="fixed top-5 z-30 w-full px-7 text-white">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center  justify-between">
 
                     {/* LOGO */}
                     <div
@@ -166,7 +205,7 @@ const Nav = () => {
                     </div>
 
                     {/* MENU */}
-                    <div className="flex gap-8 text-lg font-semibold">
+                    <div className="lg:flex hidden gap-4 lg:gap-6 2xl:gap-8  text-lg font-semibold">
                         {navItems.map((item) => (
                             <div
                                 key={item.id}
@@ -208,13 +247,63 @@ const Nav = () => {
                     </div>
 
                     {/* CTA */}
-                    <button
-                        onClick={() => navigate("/login")}
-                        className="bg-white text-black px-4 py-2 rounded-xl font-bold
-                                   hover:scale-105 transition"
-                    >
-                        Open CodeSarthi
-                    </button>
+                    <div className="flex justify-center items-center gap-3">
+
+                        <MainCTAbutton className="lg:flex hidden" />
+                        <div className="lg:hidden bg-white/30 p-1 border border-transparent rounded-lg" onClick={handleClickHamburger}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="currentColor" d="M2 8a1 1 0 0 1 1-1h18a1 1 0 1 1 0 2H3a1 1 0 0 1-1-1m0 4a1 1 0 0 1 1-1h18a1 1 0 1 1 0 2H3a1 1 0 0 1-1-1m1 3a1 1 0 1 0 0 2h12a1 1 0 1 0 0-2z"></path></svg>
+                        </div>
+
+                        {openHam && (
+                            <div ref={hamRef} className=" fixed inset-0 z-30 w-[350px] px-7 text-white bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300 h-screen justify-self-end rounded-l-[80px]">
+
+                                <div className="lg:hidden bg-gray-600/30 p-1 border border-gray-600 rounded-lg w-[40px] flex  justify-center items-center justify-self-end mt-10" onClick={handleClickHamburger}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#000000" d="m12 10.587l4.95-4.95l1.414 1.414l-4.95 4.95l4.95 4.95l-1.415 1.414l-4.95-4.95l-4.949 4.95l-1.414-1.415l4.95-4.95l-4.95-4.95L7.05 5.638z"></path></svg>
+                                </div>
+
+                                <div className="mt-10">
+                                    {navItems.map((items) => {
+                                        return (<ul key={items.id}>
+                                            <div>
+                                                <div className="flex justify-between flex-col    items-center  " onClick={() => setOpenDropdownId(openDropdownId === items.id ? null : items.id)}>
+                                                    <li className="text-black text-2xl mb-1 mt-5 " >{items.label}</li>
+
+
+                                                    {
+                                                        items.hasDropdown && (
+                                                            <div
+
+                                                            >
+                                                                <div
+                                                                    className={`transition-transform duration-300 ${openDropdownId === items.id ? "rotate-180" : ""
+                                                                        }`}
+                                                                >
+                                                                    <svg className="animate-bounce" width={24} height={24} viewBox="0 0 24 24">
+                                                                        <path fill="#000" d="m7 10l5 5l5-5z" />
+                                                                    </svg>
+                                                                </div>
+
+                                                                {openDropdownId === items.id && (<div className="text-black ">{items.dropdown}</div>)}
+                                                            </div>
+                                                        )
+                                                    }
+                                                </div>
+
+                                                <hr className="border border-gray-400" />
+
+                                            </div>
+
+                                        </ul>)
+                                    })}
+
+
+                                    <MainCTAbutton className="w-full mt-10 justify-center" />
+                                </div>
+
+                            </div>
+                        )}
+                    </div>
+
                 </div>
             </div>
 
@@ -223,12 +312,12 @@ const Nav = () => {
                 className={`fixed inset-0 z-20 bg-black/70 backdrop-blur-sm transition-all duration-300
                 ${hoveredItem ? "opacity-100" : "opacity-0 pointer-events-none"}`}
             />
+
+
         </div>
     );
 };
-
 /* ================= SUB COMPONENTS ================= */
-
 const Arrow = ({ active }) => (
     <svg
         className={`w-4 h-4 transition-transform duration-300 ease-out
@@ -239,7 +328,6 @@ const Arrow = ({ active }) => (
         <path d="M831.872 340.864L512 652.672L192.128 340.864a30.59 30.59 0 0 0-42.752 0a29.12 29.12 0 0 0 0 41.6L489.664 714.24a32 32 0 0 0 44.672 0l340.288-331.712a29.12 29.12 0 0 0 0-41.728a30.59 30.59 0 0 0-42.752 0z" />
     </svg>
 );
-
 const Dropdown = ({ title, items }) => {
     const navigate = useNavigate();
     return (
@@ -258,8 +346,18 @@ const Dropdown = ({ title, items }) => {
                     </li>
                 ))}
             </ul>
+
+
+
+
+
+
+
+
+
         </div>
     );
 };
+
 
 export default Nav;

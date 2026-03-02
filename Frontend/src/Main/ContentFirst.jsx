@@ -562,111 +562,95 @@ const ContentFirst = () => {
             <div className='w-full  flex flex-col justify-center items-center p-5 gap-5'>
 
 
-                {featuredData2.reduce((rows, item, index) => {
-                    if (index % 2 === 0) {
-                        rows.push([item, featuredData2[index + 1]]);
-                    }
-                    return rows;
-                }, []).map((item, index) => (
-                    <div key={index} className='w-full px-[100px] py-[30px] flex gap-[50px]'>
-                        <div className='w-1/2  border border-gray-700 rounded-[40px] flex flex-col gap-10'>
-                            <img src={item[0].img} alt="" className='w-full rounded-[40px]' />
-                            <div className="w-full flex flex-col justify-center items-center text-left gap-4 p-11 
-                max-xl:px-7 
-                max-lg:px-3 
-                max-sm:px-0 
-                max-[850px]:w-full
-                max-[850px]:p-11
-                 max-[630px]:p-11
-                  ">
-                                <div className="
-  text-6xl text-center HEAD7
-  font-extrabold font-head 
-">
-                                    {item[0].heading}
-                                </div>
+                {featuredData2
+                    .reduce((rows, item, index) => {
+                        if (index % 2 === 0) {
+                            rows.push([item, featuredData2[index + 1]]);
+                        }
+                        return rows;
+                    }, [])
+                    .map((row, index) => (
+                        <div
+                            key={index}
+                            className="w-full px-6 lg:px-20 py-10 flex flex-col lg:flex-row gap-10"
+                        >
+                            {row.map(
+                                (card, i) =>
+                                    card && (
+                                        <div
+                                            key={i}
+                                            className="w-full lg:w-1/2 border border-gray-700/60 
+              rounded-3xl overflow-hidden 
+              bg-[#111] hover:shadow-2xl hover:shadow-green-500/10
+              transition-all duration-500 group"
+                                        >
+                                            <img
+                                                src={card.img}
+                                                alt=""
+                                                className="w-full object-cover"
+                                            />
 
-                                <div className=" w-full flex flex-col gap-4 pl-5 pointer5 text-gray-200">
-                                    <div className=" text-xl text-center  transition-all duration-200 hover:text-green-400 hover:scale-105">
-                                        {item[0].tagLine1}
-                                    </div>
-                                    <div className=" text-xl text-center  transition-all duration-200 hover:text-green-400 hover:scale-105">
-                                        {item[0].tagLine2}
-                                    </div>
-                                    <div className=" text-xl text-center transition-all duration-200 hover:text-green-400 hover:scale-105">
-                                        {item[0].tagLine3}
-                                    </div>
-                                    <div className=" text-xl text-center  transition-all duration-200 hover:text-green-400 hover:scale-105">
-                                        {item[0].tagLine4}
-                                    </div>
-                                </div>
-                                <div className='w-full flex items-center justify-center font-general'>
-                                    <div className='h-[40px]  font-bold text-sm relative top-5 border-transparent p-1 px-5 bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300 text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                                        <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <g clipPath="url(#clip0_0_3844)">
-                                                <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_0_3844">
-                                                    <rect width="14" height="14" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                        LEARN MORE</div>
-                                </div>
-                            </div>
+                                            <div className="p-8 flex flex-col items-center gap-6 text-center">
+
+                                                {/* Heading */}
+                                                <h2
+                                                    className="
+                  text-3xl md:text-4xl xl:text-5xl 
+                  font-extrabold font-head 
+                  tracking-tight"
+                                                >
+                                                    {card.heading}
+                                                </h2>
+
+                                                {/* Taglines */}
+                                                <div className="flex flex-col gap-3 text-gray-300">
+                                                    {[card.tagLine1, card.tagLine2, card.tagLine3, card.tagLine4]
+                                                        .filter(Boolean)
+                                                        .map((tag, idx) => (
+                                                            <p
+                                                                key={idx}
+                                                                className="
+                        text-base md:text-lg 
+                        transition-all duration-300
+                        group-hover:text-green-400
+                        group-hover:scale-105"
+                                                            >
+                                                                {tag}
+                                                            </p>
+                                                        ))}
+                                                </div>
+
+                                                {/* Button */}
+                                                <button
+                                                    className="
+                  mt-4 px-6 py-2 
+                  bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300
+                  text-black font-semibold text-sm
+                  rounded-full
+                  flex items-center gap-2
+                  hover:scale-105
+                  transition-all duration-300"
+                                                >
+                                                    <svg
+                                                        className="rotate-45"
+                                                        width="14"
+                                                        height="14"
+                                                        viewBox="0 0 14 14"
+                                                        fill="none"
+                                                    >
+                                                        <path
+                                                            d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z"
+                                                            fill="black"
+                                                        />
+                                                    </svg>
+                                                    LEARN MORE
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )
+                            )}
                         </div>
-                        {item[1] && (
-                            <div className='w-1/2  border border-gray-700 rounded-[40px] flex flex-col gap-10'>
-                                <img src={item[1].img} alt="" className='w-full rounded-[40px]' />
-                                <div className="w-full flex flex-col justify-center items-center text-left gap-4 p-11 
-                max-xl:px-7 
-                max-lg:px-3 
-                max-sm:px-0 
-                max-[850px]:w-full
-                max-[850px]:p-11
-                 max-[630px]:p-11
-                  ">
-                                    <div className="
-  text-6xl text-center
-  font-extrabold font-head HEAD7
-">
-                                        {item[1].heading}
-                                    </div>
-
-                                    <div className="w-full flex flex-col gap-4 pl-5 pointer5 text-gray-200">
-                                        <div className=" text-xl text-center  transition-all duration-200 hover:text-green-400 hover:scale-105">
-                                            {item[1].tagLine1}
-                                        </div>
-                                        <div className=" text-xl text-center  transition-all duration-200 hover:text-green-400 hover:scale-105">
-                                            {item[1].tagLine2}
-                                        </div>
-                                        <div className=" text-xl text-center transition-all duration-200 hover:text-green-400 hover:scale-105">
-                                            {item[1].tagLine3}
-                                        </div>
-                                        <div className=" text-xl text-center  transition-all duration-200 hover:text-green-400 hover:scale-105">
-                                            {item[1].tagLine4}
-                                        </div>
-                                    </div>
-                                    <div className='w-full flex items-center justify-center  '>
-                                        <div className='h-[40px]  font-bold text-sm relative top-5 border-transparent p-1 px-5 bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300 text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <g clipPath="url(#clip0_0_3844)">
-                                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                                </g>
-                                                <defs>
-                                                    <clipPath id="clip0_0_3844">
-                                                        <rect width="14" height="14" fill="white" />
-                                                    </clipPath>
-                                                </defs>
-                                            </svg>
-                                            LEARN MORE</div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                ))}
+                    ))}
             </div>
 
 
