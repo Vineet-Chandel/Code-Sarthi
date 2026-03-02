@@ -192,7 +192,7 @@ const Nav = () => {
     return (
         <div className="relative ">
             {/* NAVBAR */}
-            <div className="fixed top-5 z-30 w-full px-7 text-white">
+            <div className="fixed top-5 z-30 w-full 2xl:px-7 xl:px-6 lg:px-4 px-2  w-screen text-white">
                 <div className="flex items-center  justify-between">
 
                     {/* LOGO */}
