@@ -1,21 +1,43 @@
-
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Mainhero from "./main-hero";
+import { useState, useEffect } from "react";
 import Nav from "./nav";
-import { useState } from "react";
 import Preloader from "./preloader";
 import Footer from "./Footer";
 import ContentFirst from "./ContentFirst";
 import ContentSecond from "./ContentSecond";
 import ContentThird from "./ContentThird";
+import Mainhero from "./main-hero";
+
 const Hero = () => {
-    const [loading, setLoading] = useState(true)
-    setInterval(() => {
-        setLoading(false);
-    }, 5000);
+    const [loading, setLoading] = useState(true);
+
+    // ✅ Run once
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 5000);
+
+        return () => clearTimeout(timer);
+    }, []);
+
+
+    useEffect(() => {
+        if (loading) {
+            document.body.style.overflow = "hidden";
+            document.documentElement.style.overflow = "hidden"; // mobile fix
+        } else {
+            document.body.style.overflow = "";
+            document.documentElement.style.overflow = "";
+        }
+
+        return () => {
+            document.body.style.overflow = "";
+            document.documentElement.style.overflow = "";
+        };
+    }, [loading]);
+
     return (
         <div>
-            {loading && <Preloader loading />}
+            {loading && <Preloader />}
             <Nav />
             <Mainhero />
             <ContentFirst />
@@ -23,8 +45,7 @@ const Hero = () => {
             <ContentThird />
             <Footer />
         </div>
-    )
-
+    );
 };
 
 export default Hero;
