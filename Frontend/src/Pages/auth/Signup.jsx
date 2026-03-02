@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../../utils/userSlice';
 import { BASE_URL } from "./baseURL";
-
+import { Link } from "react-router-dom";
+import Welcome from './Welcome';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ const Signup = () => {
 
   const [newError, setNewError] = useState(false);
   const [errorisOpen, errorsetIsOpen] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(false);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -35,14 +37,18 @@ const Signup = () => {
     const newErrors = {};
     Object.keys(formData).forEach((key) => {
       if (key !== "middleName" && !formData[key]) {
-        console.error("This field is required");
+        setErrors("All fields are required");
       }
       if (!formData["termsAccepted"]) {
-        console.error("Please accept terms and conditions");
+        setErrors("Please accept terms and conditions");
       }
+
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
+        return; // ❌ STOP SUBMISSION
+      }
+
     });
-
-
 
     try {
       // ✅ 2. START LOADING
@@ -56,8 +62,12 @@ const Signup = () => {
       // ✅ 3. SAVE USER
       dispatch(addUser(res.data)); // or res.data.user
 
+      setShowWelcome(true)
       // ✅ 4. NAVIGATE
-      navigate("/app");
+      setTimeout(() => {
+        setShowWelcome(false)
+        navigate("/app");
+      }, 4500);
 
     } catch (err) {
       setNewError(err.response.data || err.message);
@@ -74,7 +84,7 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [passwordMatch, setPasswordMatch] = useState(true);
+
 
 
 
@@ -122,9 +132,12 @@ const Signup = () => {
     if (passwordStrength === 3) return 'bg-yellow-500';
     return 'bg-green-500';
   };
-
+  if (showWelcome) {
+    return <Welcome />;
+  }
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[linear-gradient(135deg,#0c2461,#1e3799,#4a69bd)] p-4">
+
       <div className="w-full bg-black/30 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/10 flex flex-col md:flex-row gap-6 overflow-hidden hover:shadow-3xl transition-all duration-500">
 
         {/* LEFT - Signup Form */}
@@ -456,7 +469,7 @@ const Signup = () => {
               </div>
               <div className="space-y-2  w-[48.5%]">
                 <label htmlFor="profession" className="text-md ml-3 block">
-                  Professionaly what you are !  <span className="text-red-400 ml-1">*</span>
+                  Your Profession <span className="text-red-400 ml-1">*</span>
                 </label>
                 <div className={`flex items-center rounded-2xl px-4 py-3 border border-gray-600 transition-all duration-300  bg-black/50`}>
                   <span className="mr-3">
@@ -487,9 +500,12 @@ const Signup = () => {
             <div className="flex flex-col sm:flex-row justify-between items-center text-sm gap-3 px-2">
               <div className="text-gray-400">
                 Already have an account?{" "}
-                <a href="/login" className="text-blue-400 hover:text-blue-300 transition-colors font-medium underline hover:no-underline">
-                  Sign in
-                </a>
+                <Link
+                  to="/login"
+                  className="text-cyan-400 hover:text-cyan-300 transition-colors"
+                >
+                  Sign In
+                </Link>
               </div>
               <label className="flex items-center gap-2 text-sm text-gray-400">
                 <input
@@ -526,11 +542,18 @@ const Signup = () => {
               >
                 {isSubmitting ? (
                   <>
-                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    <svg xmlns="http://www.w3.org/2000/svg" width={32} height={32} viewBox="0 0 24 24">
+                      <g fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={0.7}>
+                        <path strokeDasharray={18} d="M12 3c4.97 0 9 4.03 9 9">
+                          <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="18;0"></animate>
+                          <animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform>
+                        </path>
+                        <path strokeDasharray={60} d="M12 3c4.97 0 9 4.03 9 9c0 4.97 -4.03 9 -9 9c-4.97 0 -9 -4.03 -9 -9c0 -4.97 4.03 -9 9 -9Z" opacity={0.3}>
+                          <animate fill="freeze" attributeName="stroke-dashoffset" dur="1.2s" values="60;0"></animate>
+                        </path>
+                      </g>
                     </svg>
-                    Creating Account...
+                    Setting up your workspace...
                   </>
                 ) : (
                   'Create Account'

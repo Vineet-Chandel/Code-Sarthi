@@ -266,6 +266,31 @@ const ContentFirst = () => {
 
     });
 
+    const featuredData1 = [{
+        id: 1,
+        heading: "KEEP DEVELOPERS ENGAGED",
+        tagLine1: "✦ Eliminating the friction of switching between fragmented apps by providing one seamless layer where messaging, meetings, and collaboration live together.",
+        tagLine2: "✦ Developers struggle to connect and build together in real-time — we enable personal chats, groups, communities, and AI-assisted interaction to keep everyone connected anytime, anywhere.",
+        tagLine3: "✦ Move beyond slow, disconnected feedback loops with a workspace that allows developers to connect, collaborate, and build together in real time from anywhere.",
+        video: "/videos/feature-1.mp4"
+    }, {
+        id: 2,
+        heading: "Eliminates dependency on Project Manager",
+        tagLine1: "✦ Many teams rely heavily on one person to manage tasks and coordination, creating bottlenecks — we enable self-managed, transparent project collaboration where teams can organize and lead themselves.",
+        tagLine2: "✦ In most teams, it’s hard to know who is doing what and how much progress is made — our system provides real-time tracking of tasks, time spent, and overall project progress for complete transparency.",
+        tagLine3: "✦ Developers often manage personal goals separately from team tasks — we combine individual task tracking and shared project dashboards into one structured workspace.",
+        tagLine4: "✦ Delays and blockers usually go unnoticed until it’s too late — our centralized interface lets project leaders monitor productivity, identify blockers early, and notify members instantly to keep projects on track.",
+        video: "/videos/feature-2.mp4"
+    }, {
+        id: 3,
+        heading: "TIME IS PRECIOUS",
+        tagLine1: "✦ Teams use separate apps for communication, task management, and time tracking — we bring chat, collaboration, project tracking, and productivity monitoring into one unified platform.",
+        tagLine2: "✦ In many teams, it’s unclear who is working on what and how much progress is made — we provide real-time task-wise tracking, time logs, and transparent project dashboards.",
+        tagLine3: "✦ Without proper tracking, delays and inefficiencies go unnoticed — our system ensures individual accountability with personal dashboards and measurable contributions.",
+        tagLine4: "✦ Issues and blockers are often discovered when it’s already critical — we offer a centralized workspace that highlights problems early and keeps teams aligned and on schedule.",
+        video: "/videos/feature-3.mp4"
+    }]
+
     const featuredData2 = [{
         img: "/img/dev.webp",
         heading: "DEVELOPERS TOOLKIT",
@@ -322,198 +347,73 @@ const ContentFirst = () => {
 
 
             <div className='relative top-10'>
-                {/* CARD */}
-                <div className="w-[95%] mx-auto mt-5 border rounded-[60px] lg:rounded-[120px] 
+                {featuredData1.map((items) => (
+                    <div key={items.id} className="w-[95%] mx-auto mt-5 border rounded-[60px] lg:rounded-[120px] 
       flex flex-col lg:flex-row items-center justify-between 
       px-6 py-10 lg:px-12">
 
-                    {/* LEFT CONTENT */}
-                    <div className="w-full lg:w-1/2 flex flex-col gap-6 text-center lg:text-left">
+                        {/* LEFT CONTENT */}
+                        <div className="w-full lg:w-1/2 flex flex-col gap-6 text-center lg:text-left">
 
-                        <h2 className="
+                            <h2 className="
         text-2xl 
         sm:text-3xl 
         md:text-4xl 
         lg:text-5xl 
         xl:text-6xl 
         font-extrabold font-head HEAD2">
-                            KEEP DEVELOPERS ENGAGED
-                        </h2>
+                                {items.heading}
+                            </h2>
 
-                        <div className="space-y-4 text-gray-300 pointer1">
-                            <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
-                                ✦ A unified interaction layer that seamlessly connects developers.
-                            </p>
-                            <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
-                                ✦ Bridges messaging, meetings, and collaboration.
-                            </p>
-                            <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
-                                ✦ Enables rich media communication.
-                            </p>
-                            <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
-                                ✦ Improves productivity by centralizing interactions.
-                            </p>
-                        </div>
+                            <div className="space-y-4 text-gray-300 pointer1">
+                                <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
+                                    {items.tagLine1}
+                                </p>
+                                <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
+                                    {items.tagLine2}
+                                </p>
+                                <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
+                                    {items.tagLine3}
+                                </p>
+                                <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
+                                    {items.tagLine4}
+                                </p>
+                            </div>
 
-                        <div className="pt-4">
-                            <button className="
+                            <div className="pt-4">
+                                <button className="
           bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300
           text-black font-semibold
           px-6 py-2
           rounded-full
           flex items-center gap-2
           hover:scale-105 transition">
-                                LEARN MORE
-                            </button>
+                                    LEARN MORE
+                                </button>
+                            </div>
                         </div>
-                    </div>
 
-                    {/* RIGHT VIDEO */}
-                    <div className="w-full lg:w-1/2 flex justify-center mt-10 lg:mt-0">
-                        <video
-                            src="/videos/feature-1.mp4"
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
-                            className="
+                        {/* RIGHT VIDEO */}
+                        <div className="w-full lg:w-1/2 flex justify-center mt-10 lg:mt-0">
+                            <video
+                                src={items.video}
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                                className="
           w-full 
           max-w-[600px] 
         
           object-cover 
           rounded-[40px] lg:rounded-[120px]"
-                        />
-                    </div>
-
-                </div>
-                {/* CARD */}
-                <div className="w-[95%] mx-auto mt-5 border rounded-[60px] lg:rounded-[120px] 
-      flex flex-col lg:flex-row items-center justify-between 
-      px-6 py-10 lg:px-12">
-
-                    {/* LEFT CONTENT */}
-                    <div className="w-full lg:w-1/2 flex flex-col gap-6 text-center lg:text-left">
-
-                        <h2 className="
-        text-2xl 
-        sm:text-3xl 
-        md:text-4xl 
-        lg:text-5xl 
-        xl:text-6xl 
-        font-extrabold font-head HEAD3">
-                            Eliminates dependency on Project Manager|
-                        </h2>
-
-                        <div className="space-y-4 text-gray-300 pointer2">
-                            <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
-                                ✦ Combines scheduling, tracking, and accountability in one system
-                            </p>
-                            <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
-                                ✦ Invite team members with role-based access
-                            </p>
-                            <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
-                                ✦ Supports flexible team sizes and structures
-                            </p>
-                            <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
-                                ✦ Centralized interface for project leaders where leader track team productivity in real time
-                            </p>
+                            />
                         </div>
 
-                        <div className="pt-4">
-                            <button className="
-          bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300
-          text-black font-semibold
-          px-6 py-2
-          rounded-full
-          flex items-center gap-2
-          hover:scale-105 transition">
-                                LEARN MORE
-                            </button>
-                        </div>
                     </div>
+                ))}
 
-                    {/* RIGHT VIDEO */}
-                    <div className="w-full lg:w-1/2 flex justify-center mt-10 lg:mt-0">
-                        <video
-                            src="/videos/feature-2.mp4"
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
-                            className="
-          w-full 
-          max-w-[600px] 
-         
-          object-cover 
-          rounded-[40px] lg:rounded-[120px]"
-                        />
-                    </div>
 
-                </div>
-                {/* CARD */}
-                <div className="w-[95%] mx-auto mt-5 border rounded-[60px] lg:rounded-[120px] 
-      flex flex-col lg:flex-row items-center justify-between 
-      px-6 py-10 lg:px-12">
-
-                    {/* LEFT CONTENT */}
-                    <div className="w-full lg:w-1/2 flex flex-col gap-6 text-center lg:text-left">
-
-                        <h2 className="
-        text-2xl 
-        sm:text-3xl 
-        md:text-4xl 
-        lg:text-5xl 
-        xl:text-6xl 
-        font-extrabold font-head HEAD4">
-                            TIME IS PRECIOUS
-                        </h2>
-
-                        <div className="space-y-4 text-gray-300 pointer3">
-                            <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
-                                ✦ Task-wise time tracking for each member and Logs time spent on specific tasks
-                            </p>
-                            <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
-                                ✦ a personal dashboard for each developer where they can Track daily goals and Monitor individual productivity
-                            </p>
-                            <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
-                                ✦ Increases team transparency and accountability which reduces management overhead
-                            </p>
-                            <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
-                                ✦ Faster issue identification and gives a centralized workspace for projects and teams
-                            </p>
-                        </div>
-
-                        <div className="pt-4">
-                            <button className="
-          bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300
-          text-black font-semibold
-          px-6 py-2
-          rounded-full
-          flex items-center gap-2
-          hover:scale-105 transition">
-                                LEARN MORE
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* RIGHT VIDEO */}
-                    <div className="w-full lg:w-1/2 flex justify-center mt-10 lg:mt-0">
-                        <video
-                            src="/videos/feature-3.mp4"
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
-                            className="
-          w-full 
-          max-w-[600px] 
-      
-          object-cover 
-          rounded-[40px] lg:rounded-[120px]"
-                        />
-                    </div>
-
-                </div>
             </div>
 
             <div className=" flex flex-col justify-center items-center w-full gap-6 mt-[100px] mb-[20px]">
