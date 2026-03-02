@@ -267,20 +267,20 @@ const ContentFirst = () => {
     });
 
     const featuredData2 = [{
-        img: "/public/img/dev.webp",
+        img: "/img/dev.webp",
         heading: "DEVELOPERS TOOLKIT",
         tagLine1: "✦ Functional components that reduce repetition and help you build faster with a clean, consistent structure.",
         tagLine2: "✦ All essentials in one place — AI prompts, smart color palettes, and powerful customization tools.",
         tagLine3: "✦ Add your own schema scripts anytime — try it now!",
     }, {
-        img: "/public/img/SCHEDULER.webp",
+        img: "/img/SCHEDULER.webp",
         heading: "SMART SCHEDULER",
         tagLine1: "✦ A smart scheduler which tracks your daily goals shows you the progress report daily",
         tagLine2: "✦ Automatically organizes your tasks with intelligent time-blocking and priority management",
         tagLine3: "✦ Plan projects, study sessions, meetings, or personal goals — all in one streamlined timeline",
 
     }, {
-        img: "/public/img/RESUME-GEN.webp",
+        img: "/img/RESUME-GEN.webp",
         heading: "RESUME GENERATOR",
         tagLine1: "✦ We work with recruiters to design resume templates that are approved by them.",
         tagLine2: "✦ One can create a full fleged resume within in 15 Minutes",
@@ -289,7 +289,7 @@ const ContentFirst = () => {
         tagLine5: "✦ Know when employers are interested in you and track your resume for every job.",
 
     }, {
-        img: "/public/img/team.webp",
+        img: "/img/team.webp",
         heading: "GLOBAL DEVELOPER COMMUNITY",
         tagLine1: "✦ Contact as well as collab with the developers all over the world",
         tagLine2: "✦ Share your skills ,experience on the various community at the same time learn from others",
