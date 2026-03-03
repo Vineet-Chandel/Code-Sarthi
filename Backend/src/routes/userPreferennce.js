@@ -98,6 +98,7 @@ userPreference.get("/user/blocked", userAuth, async (req, res) => {
                 if (!otherUser) return null;
 
                 return {
+                    blockId: row._id,
                     firstName: otherUser.firstName,
                     middleName: otherUser.middleName,
                     lastName: otherUser.lastName,

@@ -449,7 +449,8 @@ c27 14 67 39 90 55 22 16 44 29 48 29 5 0 16 -15 25 -32z m-2631 -13 l80 -26
             </div>
             {/* Right side - Profile button */}
             <div className="NavEnd relative flex justify-end gap-5 w-[30%] items-center ">
-                <Search height={45} displayType={"nav"} />
+                <div className="md:flex hidden"><Search height={45} displayType={"nav"} /></div>
+
                 <button
                     onClick={openProfile}
                     className="h-14 rounded-full overflow-hidden bg-gradient-to-br from-gray-400 to-gray-100 cursor-pointer transition-all duration-300 hover:shadow-[0_10px_25px_rgba(0,0,0,0.1)] hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-400 relative group"
@@ -471,7 +472,7 @@ c27 14 67 39 90 55 22 16 44 29 48 29 5 0 16 -15 25 -32z m-2631 -13 l80 -26
                         {/* Overlay */}
                         <div
                             ref={profileOverlayRef}
-                            className="absolute inset-0  bg-blue-300/15"
+                            className="absolute inset-0  "
                             onClick={handleProfileOverlayClick}
                         />
 

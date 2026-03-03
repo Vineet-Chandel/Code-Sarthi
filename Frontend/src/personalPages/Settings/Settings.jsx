@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { BASE_URL } from "../../Pages/auth/baseURL";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { addBlockedUsers } from "../../utils/blockedSlice";
+import { addBlockedUsers ,clearBlockedUser} from "../../utils/blockedSlice";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { TbPasswordFingerprint } from "react-icons/tb";
 import { MdAutorenew } from "react-icons/md";
@@ -352,7 +352,6 @@ const PasswordSecuritySettings = () => {
         setNewGmailId("")
         setNewUsername("")
     }
-
     // Verify Email
     const sendVerificationEmail = async () => {
         try {
@@ -569,15 +568,7 @@ const PasswordSecuritySettings = () => {
             className="space-y-6"
         >
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(0,255,255,0.08),transparent_60%)] pointer-events-none" />
-            <div className="
-relative
-bg-gradient-to-br from-[#0a0f1f]/80 to-[#06090f]/80
-p-6 rounded-3xl
-border border-cyan-400/20
-backdrop-blur-xl
-shadow-[0_0_40px_rgba(0,255,255,0.08)]
-overflow-hidden
-">
+            <div className=" relative bg-gradient-to-br from-[#0a0f1f]/80 to-[#06090f]/80 p-6 rounded-3xl border border-cyan-400/20 backdrop-blur-xl shadow-[0_0_40px_rgba(0,255,255,0.08)] overflow-hidden ">
 
                 <div className="mb-10">
                     <div className="flex items-center justify-between mb-8">
@@ -615,22 +606,10 @@ overflow-hidden
                 {editPrivate && (<div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex justify-center items-center " onClick={() => { setEditPrivateisOpen(false); setError("") }}>
 
                     {/* CARD */}
-                    <div className="
-w-[440px]
-rounded-3xl
-overflow-hidden
-bg-gradient-to-br from-[#0b0f1a] to-[#070a11]
-border border-cyan-400/20
-shadow-[0_0_60px_rgba(0,255,255,0.12)]
-backdrop-blur-2xl
-" onClick={(e) => e.stopPropagation()} >
+                    <div className=" w-[440px] rounded-3xl overflow-hidden bg-gradient-to-br from-[#0b0f1a] to-[#070a11] border border-cyan-400/20 shadow-[0_0_60px_rgba(0,255,255,0.12)] backdrop-blur-2xl " onClick={(e) => e.stopPropagation()} >
 
                         {/* HEADER */}
-                        <div className="
-flex items-center justify-center gap-3 px-6 py-5
-border-b border-cyan-400/10
-bg-gradient-to-r from-cyan-500/5 to-blue-500/5
-">
+                        <div className=" flex items-center justify-center gap-3 px-6 py-5 border-b border-cyan-400/10 bg-gradient-to-r from-cyan-500/5 to-blue-500/5 ">
                             <h2 className="text-xl font-semibold text-white">
                                 {allChanges.find(c => c.index === activeIndex)?.Tag}
                             </h2>
@@ -740,16 +719,7 @@ bg-gradient-to-r from-cyan-500/5 to-blue-500/5
                                     {isVerified2 && (!isVerified3) && (<div className=" flex flex-col gap-5">
                                         <input
                                             placeholder="Enter the new password"
-                                            className="
-w-full text-center py-3 px-4 rounded-xl
-bg-white/[0.03]
-border border-white/10
-focus:border-cyan-400/60
-focus:ring-2 focus:ring-cyan-500/20
-outline-none
-backdrop-blur-md
-transition-all duration-300
-"
+                                            className=" w-full text-center py-3 px-4 rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none backdrop-blur-md transition-all duration-300 "
                                             value={newPaass1}
                                             onChange={(e) => setNewPaass1(e.target.value.trim())} />
                                         <button
@@ -992,10 +962,7 @@ transition-all duration-300
         </motion.div >
     );
 };
-
-// Content mapping
-
-const SettingContent = ({ activeSetting }) => {
+const BlockSettings = () => {
     const user = useSelector(store => store.user);
     const blockedUsers = useSelector(
         store => store.blockedUsers?.users || []
@@ -1008,7 +975,7 @@ const SettingContent = ({ activeSetting }) => {
                 `${BASE_URL}/user/blocked`,
                 { withCredentials: true }
             )
-            dispatch(addBlockedUsers(res.data.data));
+            dispatch(clearBlockedUser(res.data.data));
 
         } catch (err) {
             console.error(err?.message || err);
@@ -1017,6 +984,34 @@ const SettingContent = ({ activeSetting }) => {
     useEffect(() => {
         blockedPeoples();
     }, []);
+    const HandleUnblock = async (blockId) => {
+        try {
+            const res = await axios.delete(
+                `${BASE_URL}/user/blocked/${blockId}`,
+                { withCredentials: true }
+            )
+            dispatch(removeBlockedUser(blockId));
+        } catch (err) {
+            console.error(err?.message || err);
+        }
+    }
+    return (<div className="space-y-2">
+        {blockedUsers.map((item) => (
+            <motion.div
+                key={item.connectionId}
+                className="flex items-center justify-between p-3 bg-black/20 border border-red-500/20 rounded-lg"
+                whileHover={{ scale: 1.02, borderColor: 'rgba(255,0,0,0.5)' }}
+            >
+                <span className="font-mono text-sm">{item.firstName} {item.middleName} {item.lastName}</span>
+                <button className="text-xs text-red-400 hover:text-red-300" onClick={() => HandleUnblock(item.blockId)}>UNBLOCK</button>
+            </motion.div>
+        ))}
+    </div>)
+}
+// Content mapping
+
+const SettingContent = ({ activeSetting }) => {
+
 
     const contentMap = {
         "Password and security": <PasswordSecuritySettings />,
@@ -1052,20 +1047,7 @@ const SettingContent = ({ activeSetting }) => {
                 </motion.div>
             </div>
         ),
-        "Blocked": (
-            <div className="space-y-2">
-                {blockedUsers.map((item) => (
-                    <motion.div
-                        key={item.connectionId}
-                        className="flex items-center justify-between p-3 bg-black/20 border border-red-500/20 rounded-lg"
-                        whileHover={{ scale: 1.02, borderColor: 'rgba(255,0,0,0.5)' }}
-                    >
-                        <span className="font-mono text-sm">{item.firstName} {item.middleName} {item.lastName}</span>
-                        <button className="text-xs text-red-400 hover:text-red-300">UNBLOCK</button>
-                    </motion.div>
-                ))}
-            </div>
-        ),
+        "Blocked": <BlockSettings />,
         "Account Status": (
             <div className="relative">
 
