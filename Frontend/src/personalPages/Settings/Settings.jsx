@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { BASE_URL } from "../../Pages/auth/baseURL";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { addBlockedUsers ,clearBlockedUser} from "../../utils/blockedSlice";
+import { addBlockedUsers, clearBlockedUser } from "../../utils/blockedSlice";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { TbPasswordFingerprint } from "react-icons/tb";
 import { MdAutorenew } from "react-icons/md";
@@ -975,7 +975,7 @@ const BlockSettings = () => {
                 `${BASE_URL}/user/blocked`,
                 { withCredentials: true }
             )
-            dispatch(clearBlockedUser(res.data.data));
+            dispatch(addBlockedUsers(res.data.data));
 
         } catch (err) {
             console.error(err?.message || err);
@@ -990,7 +990,7 @@ const BlockSettings = () => {
                 `${BASE_URL}/user/blocked/${blockId}`,
                 { withCredentials: true }
             )
-            dispatch(removeBlockedUser(blockId));
+            dispatch(clearBlockedUser(blockId));
         } catch (err) {
             console.error(err?.message || err);
         }
