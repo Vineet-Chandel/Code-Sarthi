@@ -113,8 +113,8 @@ authRouter.post("/auth/signin", async (req, res) => {
             res.cookie("token", token, {
                 // expires: new Date(Date.now() + 8 * 3600000),
                 httpOnly: true,          // JS can’t access it
-                secure: true,            // HTTPS only
-                sameSite: "strict",      // CSRF protection
+                secure: false,
+                sameSite: "lax",
                 maxAge: 8 * 60 * 60 * 1000
             });
             res.status(200).json({
