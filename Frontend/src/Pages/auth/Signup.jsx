@@ -22,7 +22,7 @@ const Signup = () => {
     lastName: '',
     username: '',
     gender: '',
-    age: '',
+    age: Number(age),
     gmail: '',
     password: '',
     profession: '',
