@@ -57,6 +57,7 @@ const Signup = () => {
         age: Number(formData.age),
         gmail: formData.gmail.toLowerCase()
       };
+
       const res = await axios.post(
         `${BASE_URL}/auth/signup`,
         payload,
@@ -102,22 +103,29 @@ const Signup = () => {
   };
 
   const handleChange = (e) => {
-    const { id, value } = e.target;
+    const { id, value, type, checked } = e.target;
+
     setFormData(prev => ({
       ...prev,
-      [id]: id === "age"
-        ? Number(value)
-        : id === "gmail"
-          ? value.toLowerCase()
-          : value
+      [id]:
+        type === "checkbox"
+          ? checked
+          : id === "age"
+            ? Number(value)
+            : id === "gmail"
+              ? value.toLowerCase().trim()
+              : value
     }));
 
-    // Clear error for this field when user starts typing
+    // Clear error when user types
     if (errors[id]) {
-      setErrors(prev => ({ ...prev, [id]: '' }));
+      setErrors(prev => ({
+        ...prev,
+        [id]: ""
+      }));
     }
 
-    if (id === 'password') {
+    if (id === "password") {
       validatePasswordStrength(value);
     }
   };
