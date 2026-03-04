@@ -288,9 +288,6 @@ const TechToggle = ({ enabled, onChange }) => (
             }`} />
     </motion.button>
 );
-
-
-
 // Main settings components with techy UI
 const PasswordSecuritySettings = () => {
 

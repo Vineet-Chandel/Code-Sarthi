@@ -24,6 +24,7 @@ const Body = () => {
             dispatch(addUser(response.data));
         } catch (error) {
             if (error.response?.status === 401) { // ✅ axios error fix
+                console.log(error.response?.data)
                 navigate("/login");
             } else {
                 console.error("Failed to fetch user data:", error);
