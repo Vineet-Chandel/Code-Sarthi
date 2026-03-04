@@ -59,9 +59,9 @@ authRouter.post("/auth/signup", async (req, res) => {
         const token = await savedUser.getJWT();
 
         res.cookie("token", token, {
-            httpOnly: true,        // JS can't access it
-            secure: true,          // HTTPS only (required in prod)
-            sameSite: "strict",    // CSRF protection
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax",
             expires: new Date(Date.now() + 8 * 3600000),
         });
 

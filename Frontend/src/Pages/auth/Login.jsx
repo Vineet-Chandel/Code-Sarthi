@@ -17,8 +17,8 @@ const Login = () => {
      default gmail = vineetsinghbitu@gmail.com
      default password = Vineet@1234
      */
-    const [gmail, setGmailId] = useState("");
-    const [password, setPassword] = useState("");
+    const [gmail, setGmailId] = useState("vineetsinghk06@gmail.com");
+    const [password, setPassword] = useState("Vineet@1234");
 
     const [showPassword, setShowPassword] = useState(false);
     const [newError, setNewError] = useState(false);
@@ -210,23 +210,54 @@ const Login = () => {
                         <div className="pt-4">
                             <button
                                 type="submit"
-                                className="w-full bg-gradient-to-r  from-blue-600 to-blue-700 text-white py-4 rounded-3xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 text-2xl font-semibold shadow-lg hover:shadow-xl"
-
+                                className="w-full 
+               bg-gradient-to-r from-blue-600 to-blue-700 
+               text-white 
+               py-3 sm:py-4 
+               rounded-2xl sm:rounded-3xl
+               hover:from-blue-700 hover:to-blue-800 
+               transition-all duration-300 
+               text-base sm:text-xl md:text-2xl 
+               font-semibold 
+               shadow-lg hover:shadow-xl"
                             >
-                                {isLoginStart && (<div className="flex justify-center items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width={32} height={32} viewBox="0 0 24 24">
-                                    <path fill="#fff" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity={0.3}></path>
-                                    <path fill="#fff" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z">
-                                        <animateTransform attributeName="transform" dur="1s" from="0 12 12" repeatCount="indefinite" to="360 12 12" type="rotate"></animateTransform>
-                                    </path>
-                                </svg>
-                                    <span>
-                                        Welcome to CodeSarthi — Let’s Build!
-                                    </span>
-                                </div>)}
+                                {isLoginStart ? (
+                                    <div className="flex justify-center items-center gap-2 sm:gap-3">
 
-                                {!isLoginStart && (<span>
-                                    Sign In
-                                </span>)}
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                fill="#fff"
+                                                d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z"
+                                                opacity={0.3}
+                                            />
+                                            <path
+                                                fill="#fff"
+                                                d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z"
+                                            >
+                                                <animateTransform
+                                                    attributeName="transform"
+                                                    dur="1s"
+                                                    from="0 12 12"
+                                                    repeatCount="indefinite"
+                                                    to="360 12 12"
+                                                    type="rotate"
+                                                />
+                                            </path>
+                                        </svg>
+
+                                        <span className="text-center">
+
+                                            Welcome to CodeSarthi — Let’s Build!
+
+                                        </span>
+                                    </div>
+                                ) : (
+                                    <span>Sign In</span>
+                                )}
                             </button>
                         </div>
                     </form>
