@@ -22,7 +22,7 @@ const Signup = () => {
     lastName: '',
     username: '',
     gender: '',
-    age: Number(age),
+    age: '',
     gmail: '',
     password: '',
     profession: '',
@@ -33,29 +33,33 @@ const Signup = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
 
-    // ✅ 1. VALIDATION FIRST
     const newErrors = {};
-    Object.keys(formData).forEach((key) => {
+
+    for (const key in formData) {
       if (key !== "middleName" && !formData[key]) {
-        setErrors("All fields are required");
+        newErrors[key] = "Required";
       }
-      if (!formData["termsAccepted"]) {
-        setErrors("Please accept terms and conditions");
-      }
+    }
 
-      if (Object.keys(newErrors).length > 0) {
-        setErrors(newErrors);
-        return; // ❌ STOP SUBMISSION
-      }
+    if (!formData.termsAccepted) {
+      newErrors.termsAccepted = "Accept terms";
+    }
 
-    });
-
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
     try {
       // ✅ 2. START LOADING
       setIsSubmitting(true);
+      const payload = {
+        ...formData,
+        age: Number(formData.age),
+        gmail: formData.gmail.toLowerCase()
+      };
       const res = await axios.post(
         `${BASE_URL}/auth/signup`,
-        formData,
+        payload,
         { withCredentials: true }
       );
 
@@ -70,7 +74,7 @@ const Signup = () => {
       }, 4500);
 
     } catch (err) {
-      setNewError(err.response.data || err.message);
+      setNewError(err?.response?.data?.message || err.message);
       errorsetIsOpen(true);
     } finally {
       // ✅ 5. ALWAYS RESET LOADING 
@@ -101,7 +105,11 @@ const Signup = () => {
     const { id, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [id]: value
+      [id]: id === "age"
+        ? Number(value)
+        : id === "gmail"
+          ? value.toLowerCase()
+          : value
     }));
 
     // Clear error for this field when user starts typing
