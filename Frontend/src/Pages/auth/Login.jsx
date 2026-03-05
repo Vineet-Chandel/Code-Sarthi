@@ -60,15 +60,18 @@ const Login = () => {
             localStorage.setItem("user", JSON.stringify(res.data));
             dispatch(addUser(user));
 
-            setIsLoginStart(false)
+            setIsLoginStart(false);
             setShowWelcome(true)
             setTimeout(() => {
+                setIsLoginStart(false)
                 setShowWelcome(false)
                 navigate("/app");
             }, 4500);
 
-        } catch (err) {
-            setNewError(err.response?.data?.message || "Login failed. Please try again.");
+        } catch (error) {
+            setIsLoginStart(false);
+            const message = error.response?.data?.message || "Something went wrong";
+            setNewError(message);
             errorsetIsOpen(true);
         }
     };
@@ -210,50 +213,33 @@ const Login = () => {
                         <div className="pt-4">
                             <button
                                 type="submit"
-                                className="w-full 
-               bg-gradient-to-r from-blue-600 to-blue-700 
-               text-white 
-               py-3 sm:py-4 
-               rounded-2xl sm:rounded-3xl
-               hover:from-blue-700 hover:to-blue-800 
-               transition-all duration-300 
-               text-base sm:text-xl md:text-2xl 
-               font-semibold 
-               shadow-lg hover:shadow-xl"
+                                disabled={isLoginStart}
+                                className={`w-full  bg-gradient-to-r from-blue-600 to-blue-700  text-white  py-3 sm:py-4  rounded-2xl sm:rounded-3xl transition-all duration-300  text-base sm:text-xl md:text-2xl  font-semibold  shadow-lg hover:shadow-xl ${isLoginStart ? "opacity-70 cursor-not-allowed" : "hover:from-blue-700 hover:to-blue-800"}
+    `}
                             >
                                 {isLoginStart ? (
-                                    <div className="flex justify-center items-center gap-2 sm:gap-3">
+                                    <div className="flex justify-center items-center gap-2 sm:gap-3 px-2 md:px-3">
 
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
-                                            className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8"
+                                            className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 animate-spin"
                                             viewBox="0 0 24 24"
                                         >
                                             <path
                                                 fill="#fff"
-                                                d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z"
-                                                opacity={0.3}
+                                                d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Z"
+                                                opacity={0.25}
                                             />
                                             <path
                                                 fill="#fff"
-                                                d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z"
-                                            >
-                                                <animateTransform
-                                                    attributeName="transform"
-                                                    dur="1s"
-                                                    from="0 12 12"
-                                                    repeatCount="indefinite"
-                                                    to="360 12 12"
-                                                    type="rotate"
-                                                />
-                                            </path>
+                                                d="M12 2a10 10 0 0 1 10 10h-4a6 6 0 0 0-6-6V2z"
+                                            />
                                         </svg>
 
-                                        <span className="text-center">
-
+                                        <span className="text-center text-sm md:text-base lg:text-xl xl:text-2xl ">
                                             Welcome to CodeSarthi — Let’s Build!
-
                                         </span>
+
                                     </div>
                                 ) : (
                                     <span>Sign In</span>

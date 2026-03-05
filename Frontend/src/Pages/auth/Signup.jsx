@@ -556,21 +556,30 @@ const Signup = () => {
                 disabled={isSubmitting}
                 className={`w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-2xl transition-all duration-300 text-lg font-semibold shadow-lg flex items-center justify-center gap-3 ${isSubmitting ? 'opacity-75 cursor-not-allowed' : 'hover:from-blue-700 hover:to-blue-800 hover:shadow-xl'} `}
               >
-                {isSubmitting ? (
-                  <>
-                    <svg xmlns="http://www.w3.org/2000/svg" width={32} height={32} viewBox="0 0 24 24">
-                      <g fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={0.7}>
-                        <path strokeDasharray={18} d="M12 3c4.97 0 9 4.03 9 9">
-                          <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="18;0"></animate>
-                          <animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform>
-                        </path>
-                        <path strokeDasharray={60} d="M12 3c4.97 0 9 4.03 9 9c0 4.97 -4.03 9 -9 9c-4.97 0 -9 -4.03 -9 -9c0 -4.97 4.03 -9 9 -9Z" opacity={0.3}>
-                          <animate fill="freeze" attributeName="stroke-dashoffset" dur="1.2s" values="60;0"></animate>
-                        </path>
-                      </g>
+                {true ? (
+                  <div className="flex justify-center items-center gap-2 sm:gap-3 px-2 md:px-3">
+
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 animate-spin"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="#fff"
+                        d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Z"
+                        opacity={0.25}
+                      />
+                      <path
+                        fill="#fff"
+                        d="M12 2a10 10 0 0 1 10 10h-4a6 6 0 0 0-6-6V2z"
+                      />
                     </svg>
-                    Setting up your workspace...
-                  </>
+
+                    <span className="text-center text-sm md:text-base lg:text-xl xl:text-2xl ">
+                      Setting up your workspace...
+                    </span>
+
+                  </div>
                 ) : (
                   'Create Account'
                 )}

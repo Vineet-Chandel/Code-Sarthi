@@ -7,7 +7,6 @@ import {
     Pages,
     NextPages,
     MarketPlace,
-    AboutPlace,
     ProfilePlace,
     SettingPlace,
     ByePlace
@@ -337,26 +336,7 @@ c27 14 67 39 90 55 22 16 44 29 48 29 5 0 16 -15 25 -32z m-2631 -13 l80 -26
                                     ))}
 
                                 </nav>
-                                <nav className="p-1 space-y-1 border-b pb-5  mb-5 border-gray-200">
-                                    {AboutPlace.map((item, index) => (
-                                        <button
-                                            key={item.id}
-                                            onClick={() => { setActivePage(item.name); closeSidebar(); navigate(`/app/${item.path}`) }}
-                                            className={`flex items-center gap-3 py-1 px-4 w-full text-left rounded-lg transition-all duration-200  ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
-                                            style={{ animationDelay: `${index * 0.05}s` }}
-                                        >
-                                            <span className={`w-1 h-6 rounded-md transition-all duration-200 ${activePage === item.name ? "bg-orange-500" : "bg-transparent "} `}></span>
 
-                                            <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold" : "font-normal"}`}>
-                                                {item.icon}
-                                            </span>
-                                            <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold" : "font-normal"}`}>
-                                                {item.name}
-                                            </span>
-                                        </button>
-                                    ))}
-
-                                </nav>
 
                                 {/* Footer section */}
                                 <div className=" bottom-0 left-0 right-0 p-3">

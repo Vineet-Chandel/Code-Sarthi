@@ -11,6 +11,41 @@ body {
 
 }
 
+/* ===== GLASS SYSTEM ===== */
+
+.glass-sidebar {
+    @apply backdrop-blur-2xl bg-black/40 border-r border-white/10;
+}
+
+.glass-panel {
+    @apply backdrop-blur-2xl bg-black/40 border border-white/10 rounded-3xl;
+}
+
+.glass-input {
+    @apply bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20 transition-all text-sm font-mono placeholder:text-gray-600 backdrop-blur-sm;
+}
+
+/* ===== SETTINGS BUTTON ===== */
+
+.settings-btn {
+    @apply w-full relative px-4 py-3.5 rounded-2xl transition-all duration-500 border border-transparent hover:bg-white/[0.03] hover:border-white/10 cursor-pointer overflow-hidden;
+}
+
+.settings-btn-active {
+    @apply border-cyan-400/50;
+    box-shadow:
+        0 0 20px rgba(0, 255, 255, 0.1),
+        inset 0 0 20px rgba(0, 255, 255, 0.05);
+}
+
+.settings-title {
+    @apply text-2xl lg:text-3xl font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent font-mono;
+}
+
+.settings-section-title {
+    @apply text-xs uppercase tracking-wider text-gray-500 font-mono block;
+}
+
 @layer base {
     @font-face {
         font-family: "circular-web";
