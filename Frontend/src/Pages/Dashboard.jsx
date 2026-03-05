@@ -61,7 +61,7 @@ const Dashboard = () => {
 
                         <div className="flex justify-center items-center gap-3 text-gray-400 text-lg">
                             <span>@{user.username}</span>
-                            {icon}
+                            <span onClick={() => navigate("/settings")}>{icon}</span>
                         </div>
                     </div>
 
