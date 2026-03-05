@@ -5,12 +5,14 @@ import { addConnectionUser } from "../utils/connectionSlice";
 import { BASE_URL } from "../Pages/auth/baseURL";
 import { FaUniversity } from "react-icons/fa";
 import { BsPersonWorkspace } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 import { IoBarChart } from "react-icons/io5";
 const Dashboard = () => {
     let icon;
     const user = useSelector(store => store.user.user.DATA);
     const connections = useSelector(state => state.connections || []);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const connectionUser = async () => {
         try {
             const response = await axios.get(
@@ -61,7 +63,7 @@ const Dashboard = () => {
 
                         <div className="flex justify-center items-center gap-3 text-gray-400 text-lg">
                             <span>@{user.username}</span>
-                            <span onClick={() => navigate("/settings")}>{icon}</span>
+                            <span onClick={() => navigate("/settings")} className="cursor-pointer">{icon}</span>
                         </div>
                     </div>
 
