@@ -317,25 +317,25 @@ const PasswordSecuritySettings = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="space-y-6"
+            className="space-y-4 sm:space-y-6"
         >
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(0,255,255,0.08),transparent_60%)] pointer-events-none" />
-            <div className=" relative bg-gradient-to-br from-[#0a0f1f]/80 to-[#06090f]/80 p-6 rounded-3xl border border-cyan-400/20 backdrop-blur-xl shadow-[0_0_40px_rgba(0,255,255,0.08)] overflow-hidden ">
+            <div className=" relative bg-gradient-to-br from-[#0a0f1f]/80 to-[#06090f]/80 p-4 sm:p-6 rounded-3xl border border-cyan-400/20 backdrop-blur-xl shadow-[0_0_40px_rgba(0,255,255,0.08)] overflow-hidden ">
 
-                <div className="mb-10">
+                <div className="mb-6 sm:mb-10">
                     <div className="flex items-center justify-between mb-8">
-                        <span className="text-cyan-400 font-mono text-2xl font-extrabold flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 24 24">
+                        <span className="text-cyan-400 font-mono text-lg sm:text-xl md:text-2xl font-extrabold flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" className='w-8 h-8 sm:w-10 sm:h-10' viewBox="0 0 24 24">
                             <path fill="#00afff" d="M2 12c0-3.771 0-5.657 1.172-6.828S6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172S22 8.229 22 12s0 5.657-1.172 6.828S17.771 20 14 20h-4c-3.771 0-5.657 0-6.828-1.172S2 15.771 2 12" opacity="0.3" />
                             <path fill="#00afff" d="M12.75 10a.75.75 0 0 0-1.5 0v.701l-.607-.35a.75.75 0 1 0-.75 1.298l.607.35l-.607.351a.75.75 0 1 0 .75 1.3l.607-.351V14a.75.75 0 1 0 1.5 0v-.7l.607.35a.75.75 0 0 0 .75-1.3L13.5 12l.607-.35a.75.75 0 0 0-.75-1.3l-.607.35zm-6.017-.75a.75.75 0 0 1 .75.75v.7l.606-.35a.75.75 0 0 1 .75 1.3l-.607.35l.607.35a.75.75 0 1 1-.75 1.3l-.606-.35v.7a.75.75 0 0 1-1.5 0v-.701l-.608.35a.75.75 0 0 1-.75-1.298L5.232 12l-.607-.35a.75.75 0 1 1 .75-1.3l.608.351V10a.75.75 0 0 1 .75-.75m11.285.75a.75.75 0 0 0-1.5 0v.701l-.607-.35a.75.75 0 1 0-.75 1.298l.607.35l-.607.351a.75.75 0 0 0 .75 1.3l.607-.351V14a.75.75 0 0 0 1.5 0v-.7l.607.35a.75.75 0 0 0 .75-1.3l-.607-.35l.607-.35a.75.75 0 1 0-.75-1.3l-.607.35z" />
                         </svg> Change Credentials</span>
                     </div>
 
                     {allChanges.map((items) => (
-                        <div key={items.index} className="flex flex-col justify-center  ml-11 ">
+                        <div key={items.index} className="flex flex-col justify-center ml-0 sm:ml-11 ">
                             <span onClick={() => { setEditPrivateisOpen(true); setActiveIndex(items.index); closEveryTHING() }} className="text-cyan-400 ">
-                                <div className="flex items-center mb-7 bg-cyan-500/10 rounded-xl px-4 py-3 cursor-pointer ">
+                                <div className="flex items-center justify-between gap-3 mb-5 sm:mb-7 flex-wrap bg-cyan-500/10 rounded-xl px-4 py-3 cursor-pointer ">
 
-                                    <div className=" group  font-mono text-2xl flex items-center gap-3 font-extrabold px-4 py-3 hover:border-cyan-400/30 transition-all duration-300
+                                    <div className=" group  font-mono text-lg sm:text-xl md:text-2xl flex items-center gap-3 font-extrabold px-4 py-3 hover:border-cyan-400/30 transition-all duration-300
 ">
                                         {items.svg} {items.Tag}<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24">
                                             <path fill="#5ff4fc" d="M8 19V5l11 7z" />
@@ -355,13 +355,13 @@ const PasswordSecuritySettings = () => {
                 </div>
 
 
-                {editPrivate && (<div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex justify-center items-center " onClick={() => { setEditPrivateisOpen(false); setError("") }}>
+                {editPrivate && (<div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex justify-center items-center p-4 overflow-y-auto" onClick={() => { setEditPrivateisOpen(false); setError("") }}>
 
                     {/* CARD */}
-                    <div className=" w-[440px] rounded-3xl overflow-hidden bg-gradient-to-br from-[#0b0f1a] to-[#070a11] border border-cyan-400/20 shadow-[0_0_60px_rgba(0,255,255,0.12)] backdrop-blur-2xl " onClick={(e) => e.stopPropagation()} >
+                    <div className="w-full max-w-[440px] rounded-3xl overflow-hidden bg-gradient-to-br from-[#0b0f1a] to-[#070a11] border border-cyan-400/20 shadow-[0_0_60px_rgba(0,255,255,0.12)] backdrop-blur-2xl" onClick={(e) => e.stopPropagation()} >
 
                         {/* HEADER */}
-                        <div className=" flex items-center justify-center gap-3 px-6 py-5 border-b border-cyan-400/10 bg-gradient-to-r from-cyan-500/5 to-blue-500/5 ">
+                        <div className=" flex items-center justify-center gap-3 px-4 sm:px-6 py-4 sm:py-5 border-b border-cyan-400/10 bg-gradient-to-r from-cyan-500/5 to-blue-500/5 ">
                             <h2 className="text-xl font-semibold text-white">
                                 {allChanges.find(c => c.index === activeIndex)?.Tag}
                             </h2>
@@ -382,7 +382,7 @@ const PasswordSecuritySettings = () => {
                             {activeChange?.index === 1 && ((!user.isVerified && (
                                 <div>
                                     {!otpSentEmail && (
-                                        <button className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-400/40 shadow-[0_0_18px_rgba(0,255,255,0.2)] transition-all duration-300 flex justify-center items-center gap-4" onClick={sendVerificationEmail}>
+                                        <button className="w-full py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-400/40 shadow-[0_0_18px_rgba(0,255,255,0.2)] transition-all duration-300 flex justify-center items-center gap-4" onClick={sendVerificationEmail}>
                                             Send Verification OTP {isSending && (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                                                 <path fill="#efeded" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity="0.25" />
                                                 <path fill="#efeded" d="M10.72,19.9a8,8,0,0,1-6.5-9.79A7.77,7.77,0,0,1,10.4,4.16a8,8,0,0,1,9.49,6.52A1.54,1.54,0,0,0,21.38,12h.13a1.37,1.37,0,0,0,1.38-1.54,11,11,0,1,0-12.7,12.39A1.54,1.54,0,0,0,12,21.34h0A1.47,1.47,0,0,0,10.72,19.9Z">
@@ -395,12 +395,12 @@ const PasswordSecuritySettings = () => {
                                         <div className=" flex flex-col gap-5">
                                             <input
                                                 placeholder="Enter the OTP sent by ASTRA"
-                                                className=" w-full text-center py-3 px-4 rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none backdrop-blur-md transition-all duration-300"
+                                                className=" w-full text-center py-2.5 sm:py-3 px-4 text-sm sm:text-base rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none backdrop-blur-md transition-all duration-300"
                                                 type="number"
                                                 value={newOTP}
                                                 onChange={(e) => setOTP(e.target.value.trim())} />
                                             <button
-                                                className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-400/40 shadow-[0_0_18px_rgba(0,255,255,0.2)] transition-all duration-300"
+                                                className="w-full py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-400/40 shadow-[0_0_18px_rgba(0,255,255,0.2)] transition-all duration-300"
                                                 onClick={verifyOTP}
                                             >
                                                 Verify OTP
@@ -410,9 +410,9 @@ const PasswordSecuritySettings = () => {
                                     {isVerified && (
                                         <div className="w-full flex flex-col justify-center items-center ">
                                             < div >
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24"><path fill="#44f53d" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd" /><path fill="#44f53d" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#44f53d" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="w-24 h-24 sm:w-32 sm:h-32" viewBox="0 0 24 24"><path fill="#44f53d" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd" /><path fill="#44f53d" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#44f53d" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
                                             </div>
-                                            <h2 className="text-4xl font-semibold text-white">
+                                            <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white">
                                                 Email Verified
                                             </h2>
                                         </div>
@@ -433,7 +433,7 @@ const PasswordSecuritySettings = () => {
                                     < div >
                                         <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24"><path fill="#44f53d" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd" /><path fill="#44f53d" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#44f53d" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
                                     </div>
-                                    <h2 className="text-2xl font-semibold text-white">
+                                    <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-white">
                                         Email Already Verified !
                                     </h2>
                                 </div>
@@ -444,7 +444,7 @@ const PasswordSecuritySettings = () => {
                                 <>
 
                                     {!otpSentForgot && (
-                                        <button className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-400/40 shadow-[0_0_ 18px_rgba(0,255,255,0.2)]transition-all duration-300 flex justify-center items-center gap-4" onClick={sendForgotPassEmail}>
+                                        <button className="w-full py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-400/40 shadow-[0_0_ 18px_rgba(0,255,255,0.2)]transition-all duration-300 flex justify-center items-center gap-4" onClick={sendForgotPassEmail}>
                                             Send Verification OTP {isSending && (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                                                 <path fill="#efeded" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity="0.25" />
                                                 <path fill="#efeded" d="M10.72,19.9a8,8,0,0,1-6.5-9.79A7.77,7.77,0,0,1,10.4,4.16a8,8,0,0,1,9.49,6.52A1.54,1.54,0,0,0,21.38,12h.13a1.37,1.37,0,0,0,1.38-1.54,11,11,0,1,0-12.7,12.39A1.54,1.54,0,0,0,12,21.34h0A1.47,1.47,0,0,0,10.72,19.9Z">
@@ -457,11 +457,11 @@ const PasswordSecuritySettings = () => {
                                         <div className=" flex flex-col gap-5">
                                             <input
                                                 placeholder="Enter the OTP sent by ASTRA"
-                                                className=" w-full text-center py-3 px-4 rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none backdrop-blur-md transition-all duration-300 " type="number"
+                                                className=" w-full text-center py-2.5 sm:py-3 px-4 text-sm sm:text-base rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none backdrop-blur-md transition-all duration-300 " type="number"
                                                 value={newOTP}
                                                 onChange={(e) => setOTP(e.target.value.trim())} />
                                             <button
-                                                className="w-full py-3 rounded-xl bg-cyan-500/20 border border-cyan-500/30"
+                                                className="w-full py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-cyan-500/20 border border-cyan-500/30"
                                                 onClick={verifyForgotPassOTP}
                                             >
                                                 Verify OTP
@@ -471,11 +471,11 @@ const PasswordSecuritySettings = () => {
                                     {isVerified2 && (!isVerified3) && (<div className=" flex flex-col gap-5">
                                         <input
                                             placeholder="Enter the new password"
-                                            className=" w-full text-center py-3 px-4 rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none backdrop-blur-md transition-all duration-300 "
+                                            className=" w-full text-center py-2.5 sm:py-3 px-4 text-sm sm:text-base rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none backdrop-blur-md transition-all duration-300 "
                                             value={newPaass1}
                                             onChange={(e) => setNewPaass1(e.target.value.trim())} />
                                         <button
-                                            className="w-full py-3 rounded-xl bg-cyan-500/20 border border-cyan-500/30"
+                                            className="w-full py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-cyan-500/20 border border-cyan-500/30"
                                             onClick={newForgotPassChange}
                                         >
                                             Confirm New Password
@@ -496,7 +496,7 @@ const PasswordSecuritySettings = () => {
                                             < div >
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24"><path fill="#44f53d" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd" /><path fill="#44f53d" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#44f53d" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
                                             </div>
-                                            <h2 className="text-2xl font-semibold text-white">
+                                            <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-white">
                                                 Password has been changed
                                             </h2>
                                         </div>
@@ -512,7 +512,7 @@ const PasswordSecuritySettings = () => {
                                     {show && (<>
                                         <input
                                             placeholder="Old Password"
-                                            className=" w-full text-center py-3 px-4 rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none backdrop-blur-md transition-all duration-300"
+                                            className=" w-full text-center py-2.5 sm:py-3 px-4 text-sm sm:text-base rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none backdrop-blur-md transition-all duration-300"
                                             type="number"
                                             value={oldPass}
                                             onChange={(e) => setOldPass(e.target.value.trim())}
@@ -520,13 +520,13 @@ const PasswordSecuritySettings = () => {
 
                                         <input
                                             placeholder="New Password"
-                                            className=" w-full text-center py-3 px-4 rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none backdrop-blur-md transition-all duration-300
+                                            className=" w-full text-center py-2.5 sm:py-3 px-4 text-sm sm:text-base rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none backdrop-blur-md transition-all duration-300
 "
                                             value={newPaass2}
                                             onChange={(e) => setNewPaass2(e.target.value.trim())}
                                         />
                                         <button
-                                            className="w-full py-3 rounded-xl bg-cyan-500/20 border border-cyan-500/30"
+                                            className="w-full py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-cyan-500/20 border border-cyan-500/30"
                                             onClick={newRenewPassChange}
 
                                         >
@@ -549,7 +549,7 @@ const PasswordSecuritySettings = () => {
                                             < div >
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24"><path fill="#44f53d" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd" /><path fill="#44f53d" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#44f53d" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
                                             </div>
-                                            <h2 className="text-2xl font-semibold text-white">
+                                            <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-white">
                                                 Password has been changed
                                             </h2>
                                         </div>
@@ -561,7 +561,7 @@ const PasswordSecuritySettings = () => {
                                 <div>
                                     {!otpSentEmail1 && (
 
-                                        <button className="w-full py-3 rounded-xl bg-cyan-500/20 border border-cyan-500/30 flex justify-center items-center gap-4" onClick={sendVerificationEmailForGmailChange}>
+                                        <button className="w-full py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-cyan-500/20 border border-cyan-500/30 flex justify-center items-center gap-4" onClick={sendVerificationEmailForGmailChange}>
                                             Send Verification OTP {isSending1 && (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                                                 <path fill="#efeded" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity="0.25" />
                                                 <path fill="#efeded" d="M10.72,19.9a8,8,0,0,1-6.5-9.79A7.77,7.77,0,0,1,10.4,4.16a8,8,0,0,1,9.49,6.52A1.54,1.54,0,0,0,21.38,12h.13a1.37,1.37,0,0,0,1.38-1.54,11,11,0,1,0-12.7,12.39A1.54,1.54,0,0,0,12,21.34h0A1.47,1.47,0,0,0,10.72,19.9Z">
@@ -574,19 +574,19 @@ const PasswordSecuritySettings = () => {
                                         <div className=" flex flex-col gap-5">
                                             <input
                                                 placeholder="Enter the OTP sent by ASTRA"
-                                                className=" w-full text-center py-3 px-4 rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none backdrop-blur-md transition-all duration-300 "
+                                                className=" w-full text-center py-2.5 sm:py-3 px-4 text-sm sm:text-base rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none backdrop-blur-md transition-all duration-300 "
                                                 type="number"
                                                 value={newOTP}
                                                 onChange={(e) => setOTP(e.target.value.trim())} />
                                             <input
                                                 placeholder="Hey NOVA here ! Enter new GmailID"
-                                                className=" w-full text-center py-3 px-4 rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none backdrop-blur-md transition-all duration-300
+                                                className=" w-full text-center py-2.5 sm:py-3 px-4 text-sm sm:text-base rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none backdrop-blur-md transition-all duration-300
 "
                                                 value={newGmail}
                                                 onChange={(e) => setNewGmailId(e.target.value.trim())} />
 
                                             <button
-                                                className="w-full py-3 rounded-xl bg-cyan-500/20 border border-cyan-500/30 flex justify-center items-center gap-3"
+                                                className="w-full py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-cyan-500/20 border border-cyan-500/30 flex justify-center items-center gap-3"
                                                 onClick={patchiandOtpForGmailChange}
                                             >
                                                 SAVE {isUpdating && (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
@@ -628,7 +628,7 @@ const PasswordSecuritySettings = () => {
                                 <div>
                                     {!otpSentEmail1 && (
 
-                                        <button className="w-full py-3 rounded-xl bg-cyan-500/20 border border-cyan-500/30 flex justify-center items-center gap-4" onClick={sendVerificationEmailForGmailChange}>
+                                        <button className="w-full py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-cyan-500/20 border border-cyan-500/30 flex justify-center items-center gap-4" onClick={sendVerificationEmailForGmailChange}>
                                             Send Verification OTP {isSending1 && (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                                                 <path fill="#efeded" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity="0.25" />
                                                 <path fill="#efeded" d="M10.72,19.9a8,8,0,0,1-6.5-9.79A7.77,7.77,0,0,1,10.4,4.16a8,8,0,0,1,9.49,6.52A1.54,1.54,0,0,0,21.38,12h.13a1.37,1.37,0,0,0,1.38-1.54,11,11,0,1,0-12.7,12.39A1.54,1.54,0,0,0,12,21.34h0A1.47,1.47,0,0,0,10.72,19.9Z">
@@ -641,14 +641,14 @@ const PasswordSecuritySettings = () => {
                                         <div className=" flex flex-col gap-5">
                                             <input
                                                 placeholder="Enter the OTP sent by ASTRA"
-                                                className=" w-full text-center py-3 px-4 rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none backdrop-blur-md transition-all duration-300 "
+                                                className=" w-full text-center py-2.5 sm:py-3 px-4 text-sm sm:text-base rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none backdrop-blur-md transition-all duration-300 "
                                                 value={newOTP}
                                                 type="number"
                                                 onChange={(e) => setOTP(e.target.value.trim())} />
                                             <input
                                                 placeholder="Hey NOVA here ! Enter new Username"
                                                 className="
-w-full text-center py-3 px-4 rounded-xl
+w-full text-center py-2.5 sm:py-3 px-4 text-sm sm:text-base rounded-xl
 bg-white/[0.03]
 border border-white/10
 focus:border-cyan-400/60
@@ -660,7 +660,7 @@ transition-all duration-300
                                                 value={newUsername}
                                                 onChange={(e) => setNewUsername(e.target.value.trim())} />
                                             <button
-                                                className="w-full py-3 rounded-xl bg-cyan-500/20 border border-cyan-500/30 flex justify-center items-center gap-3"
+                                                className="w-full py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-cyan-500/20 border border-cyan-500/30 flex justify-center items-center gap-3"
                                                 onClick={patchiandOtpForUsernameChange}
                                             >
                                                 SAVE {isUpdating && (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
@@ -699,7 +699,7 @@ transition-all duration-300
 
                         {/* FOOTER */}
                         <div className="border-t border-white/10">
-                            <button className="w-full py-3 text-gray-400 hover:text-white transition" onClick={() => { setEditPrivateisOpen(false); setError(""); closEveryTHING() }}>
+                            <button className="w-full py-2.5 sm:py-3 text-sm sm:text-base text-gray-400 hover:text-white transition" onClick={() => { setEditPrivateisOpen(false); setError(""); closEveryTHING() }}>
                                 Cancel
                             </button>
                         </div>
