@@ -138,11 +138,11 @@ const NavBar = () => {
     return (
 
 
-        <div className="navbar bg-gray-100 shadow-sm flex items-center justify-between rounded-b-3xl px-4">
+        <div className="navbar bg-gray-100 shadow-sm flex items-center justify-between rounded-b-2xl sm:rounded-b-3xl px-3 sm:px-4 lg:px-6 py-1.5 sm:py-2">
             {/* Left side - Menu button */}
             <div className="NavStart flex justify-center items-center gap-2.5">
                 <button
-                    className="Nav_svg border border-gray-400 p-[5px] h-[32px] w-[32px] rounded cursor-pointer hover:bg-gray-200 transition-colors duration-200"
+                    className="Nav_svg border border-gray-400 p-[5px] h-8 w-8 sm:h-9 sm:w-9 rounded cursor-pointer hover:bg-gray-200 transition-colors duration-200"
                     onClick={openSidebar}
                     aria-label="Open navigation menu"
                 >
@@ -168,7 +168,7 @@ const NavBar = () => {
                             {/* Sidebar */}
                             <div
                                 ref={sidebarRef}
-                                className="absolute left-0 top-0 h-full w-80 bg-white/80 backdrop-blur-lg shadow-xl z-50 rounded-r-xl"
+                                className="absolute left-0 top-0 h-full w-[85%] sm:w-72 lg:w-80 bg-white/80 backdrop-blur-lg shadow-xl z-50 rounded-r-xl"
                                 role="dialog"
                                 aria-modal="true"
                                 aria-label="Navigation menu"
@@ -179,8 +179,8 @@ const NavBar = () => {
                                         <div className="flex items-center gap-2">
 
 
-                                            <svg version="1.0" xmlns="http://www.w3.org/2000/svg" className="border rounded-full border-transparent"
-                                                width="45" height="45" viewBox="0 0 711.000000 711.000000"
+                                            <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+                                                className="w-8 h-8 sm:w-10 sm:h-10 border rounded-full border-transparent" viewBox="0 0 711.000000 711.000000"
                                                 preserveAspectRatio="xMidYMid meet">
 
                                                 <g transform="translate(0.000000,711.000000) scale(0.100000,-0.100000)"
@@ -241,10 +241,10 @@ c27 14 67 39 90 55 22 16 44 29 48 29 5 0 16 -15 25 -32z m-2631 -13 l80 -26
                                                 </g>
                                             </svg>
 
-                                            <span className="text-2xl font-bold text-gray-800">CodeSarthi</span>
+                                            <span className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800">CodeSarthi</span>
                                         </div>
 
-                                        <p className="pl-14 text-sm text-gray-800 mt-[-10px]">Empowering Dev Workflows</p>
+                                        <p className="pl-14 text-xs sm:text-xs sm:text-sm text-gray-800 mt-[-10px]">Empowering Dev Workflows</p>
                                     </div>
 
                                     <button
@@ -277,7 +277,7 @@ c27 14 67 39 90 55 22 16 44 29 48 29 5 0 16 -15 25 -32z m-2631 -13 l80 -26
                                             onClick={() => {
                                                 setActivePage(item.name); closeSidebar(); navigate(`/app/${item.path}`)
                                             }}
-                                            className={`flex items-center gap-3 py-1 px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
+                                            className={`flex items-center gap-3 py-2 px-3 sm:px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
                                             style={{ animationDelay: `${index * 0.05}s` }}
                                         >
 
@@ -298,7 +298,7 @@ c27 14 67 39 90 55 22 16 44 29 48 29 5 0 16 -15 25 -32z m-2631 -13 l80 -26
                                         <button
                                             key={item.id}
                                             onClick={() => { setActivePage(item.name); closeSidebar(); navigate(`/app/${item.path}`) }}
-                                            className={`flex items-center gap-3 py-1 px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
+                                            className={`flex items-center gap-3 py-2 px-3 sm:px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
                                             style={{ animationDelay: `${index * 0.05}s` }}
                                         >
 
@@ -319,7 +319,7 @@ c27 14 67 39 90 55 22 16 44 29 48 29 5 0 16 -15 25 -32z m-2631 -13 l80 -26
                                         <button
                                             key={item.id}
                                             onClick={() => { setActivePage(item.name); closeSidebar(); navigate(`/app/${item.name}`) }}
-                                            className={`flex items-center gap-3 py-1 px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
+                                            className={`flex items-center gap-3 py-2 px-3 sm:px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
                                             style={{ animationDelay: `${index * 0.05}s` }}
 
                                         >
@@ -340,7 +340,7 @@ c27 14 67 39 90 55 22 16 44 29 48 29 5 0 16 -15 25 -32z m-2631 -13 l80 -26
 
                                 {/* Footer section */}
                                 <div className=" bottom-0 left-0 right-0 p-3">
-                                    <div className="text-center text-gray-500 text-sm">
+                                    <div className="text-center text-gray-500 text-xs sm:text-sm">
                                         <p>© {new Date().getFullYear()} CodeSarthi™ — All rights reserved.</p>
                                         <p className="mt-1">Dhanyavaad 🌸</p>
                                     </div>
@@ -352,7 +352,7 @@ c27 14 67 39 90 55 22 16 44 29 48 29 5 0 16 -15 25 -32z m-2631 -13 l80 -26
 
 
                 <div className="logo flex justify-center items-center gap-4">
-                    <button onClick={() => { navigate("/app"), setActivePage("Dashboard") }} className="h-[50px] w-[50px] rounded-full overflow-hidden bg-gradient-to-br from-gray-400 to-gray-100 cursor-pointer transition-all duration-300 hover:shadow-[0_10px_25px_rgba(0,0,0,0.1)] hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-400 flex justify-center items-center">
+                    <button onClick={() => { navigate("/app"), setActivePage("Dashboard") }} className="h-9 w-9 sm:h-11 sm:w-11 lg:h-[50px] lg:w-[50px] rounded-full overflow-hidden bg-gradient-to-br from-gray-400 to-gray-100 cursor-pointer transition-all duration-300 hover:shadow-[0_10px_25px_rgba(0,0,0,0.1)] hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-400 flex justify-center items-center">
 
 
 
@@ -459,7 +459,7 @@ c27 14 67 39 90 55 22 16 44 29 48 29 5 0 16 -15 25 -32z m-2631 -13 l80 -26
                         {/* Profile sidebar */}
                         <div
                             ref={profileRef}
-                            className="absolute right-0 top-0  w-80 bg-white shadow-xl rounded-xl z-50"
+                            className="absolute right-0 top-0  w-[85%] sm:w-72 lg:w-80 bg-white shadow-xl rounded-xl z-50"
                             role="dialog"
                             aria-modal="true"
                             aria-label="Profile menu"
@@ -476,7 +476,7 @@ c27 14 67 39 90 55 22 16 44 29 48 29 5 0 16 -15 25 -32z m-2631 -13 l80 -26
                                     </div>
                                     <div>
                                         <h3 className="text-lg font-semibold text-gray-800">{user.firstName} {user.lastName}</h3>
-                                        <p className="text-sm text-gray-500">{user.gmail}</p>
+                                        <p className="text-xs sm:text-sm text-gray-500">{user.gmail}</p>
                                     </div>
                                 </div>
                                 <button
@@ -496,7 +496,7 @@ c27 14 67 39 90 55 22 16 44 29 48 29 5 0 16 -15 25 -32z m-2631 -13 l80 -26
                                     <button
                                         key={item.id}
                                         onClick={() => { setActivePage(item.name); closeProfile(); navigate(`/app/${item.path}`) }}
-                                        className={`flex items-center gap-3 py-1 px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
+                                        className={`flex items-center gap-3 py-2 px-3 sm:px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
                                         style={{ animationDelay: `${index * 0.05}s` }}
                                     >
 
@@ -516,7 +516,7 @@ c27 14 67 39 90 55 22 16 44 29 48 29 5 0 16 -15 25 -32z m-2631 -13 l80 -26
                                     <button
                                         key={item.id}
                                         onClick={() => { setActivePage(item.name); closeProfile(); navigate(`/app/${item.path}`) }}
-                                        className={`flex items-center gap-3 py-1 px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
+                                        className={`flex items-center gap-3 py-2 px-3 sm:px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
                                         style={{ animationDelay: `${index * 0.05}s` }}
                                     >
 
@@ -537,7 +537,7 @@ c27 14 67 39 90 55 22 16 44 29 48 29 5 0 16 -15 25 -32z m-2631 -13 l80 -26
                                     <button
                                         key={item.id}
                                         onClick={() => { setActivePage(item.name); closeProfile(); handelLogout(); navigate(`/login`) }}
-                                        className={`flex items-center gap-3 py-1 px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
+                                        className={`flex items-center gap-3 py-2 px-3 sm:px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
                                         style={{ animationDelay: `${index * 0.05}s` }}
 
                                     >

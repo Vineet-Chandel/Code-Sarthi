@@ -72,14 +72,14 @@ export const NextPages = [
 
     },
     {
-        id: 2,
+        id: 3,
         name: "Code Collab",
         icon: <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="none" stroke="#0f0f0f" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"><path d="M20 22v-5c0-1.885 0-2.828-.586-3.414S17.886 13 16 13l-4 9l-4-9c-1.886 0-2.828 0-3.414.586S4 15.115 4 17v5" /><path d="m12 15l-.5 4l.5 1.5l.5-1.5zm0 0l-1-2h2zm3.5-8.5v-1a3.5 3.5 0 0 0-7 0v1a3.5 3.5 0 1 0 7 0" /></g></svg>,
         path: "/management"
 
     },
     {
-        id: 3,
+        id: 4,
         name: "Scheduler",
         icon: <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="#0f0f0f" d="M12 14a1 1 0 1 0-1-1a1 1 0 0 0 1 1m5 0a1 1 0 1 0-1-1a1 1 0 0 0 1 1m-5 4a1 1 0 1 0-1-1a1 1 0 0 0 1 1m5 0a1 1 0 1 0-1-1a1 1 0 0 0 1 1M7 14a1 1 0 1 0-1-1a1 1 0 0 0 1 1M19 4h-1V3a1 1 0 0 0-2 0v1H8V3a1 1 0 0 0-2 0v1H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3m1 15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-9h16Zm0-11H4V7a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1ZM7 18a1 1 0 1 0-1-1a1 1 0 0 0 1 1" /></svg>,
         path: "/scheduler"
@@ -108,29 +108,7 @@ export const MarketPlace = [
 
 
 ];
-export const AboutPlace = [
-    {
-        id: 1,
-        name: "Contact Us",
-        icon: <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="none"><path d="M21 22c-3.8 0-7.338-1.115-10.307-3.036a19.1 19.1 0 0 1-5.657-5.657A18.9 18.9 0 0 1 2 3h6.778L9.97 8.372l-2.024 2.024a15.07 15.07 0 0 0 5.657 5.657l2.024-2.025L21 15.223z" /><path stroke="#0f0f0f" strokeWidth="2" d="M21 22c-3.8 0-7.338-1.115-10.307-3.036a19.1 19.1 0 0 1-5.657-5.657A18.9 18.9 0 0 1 2 3h6.778L9.97 8.372l-2.024 2.024a15.07 15.07 0 0 0 5.657 5.657l2.024-2.025L21 15.223z" /></g></svg>,
-        path: "/contactUs"
-    },
-    {
-        id: 2,
-        name: "About Us",
-        icon: <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="#0f0f0f" d="M11 9h2V7h-2m1 13c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m0-18A10 10 0 0 0 2 12a10 10 0 0 0 10 10a10 10 0 0 0 10-10A10 10 0 0 0 12 2m-1 15h2v-6h-2z" /></svg>,
-        path: "/aboutUs"
 
-    },
-    {
-        id: 3,
-        name: "Privacy Policy",
-        icon: <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 48 48"><path fill="none" stroke="#0f0f0f" strokeLinecap="round" strokeLinejoin="round" d="M18.28 22.309c0 2.686-.199 4.576.2 5.77c.596 1.79 3.381 2.387 4.177 0c.398-1.294.2-3.383.2-5.77m1.989-3.88c0 2.38-1.9 4.323-4.278 4.377a4.377 4.377 0 1 1 4.377-4.377zm7.958 18.503l5.47-6.267m-8.952 2.885l3.482 3.481m10.047-2.984a8.953 8.953 0 1 1-17.906 0a8.953 8.953 0 0 1 17.906 0M25.54 37.53l-2.983 1.79l-2.09.697l-1.89-.697l-4.575-2.884l-3.98-2.686c-.696-.697-1.492-1.492-1.989-3.582L5.149 11.467c0-1.393.697-1.99 1.492-2.387L18.58 5.497L20.568 5l2.189.597l11.937 3.482c.995.397 1.591.994 1.293 2.387l-2.09 13.43" strokeWidth="2" /></svg>,
-        path: "/privacypolicy"
-    },
-
-
-];
 export const ProfilePlace = [
     {
         id: 1,
@@ -188,7 +166,7 @@ export const SettingPlace = [
         path: "/appearence"
     },
     {
-        id: 3,
+        id: 4,
         name: "Accessibility",
         icon: <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16"><path fill="#0f0f0f" fillRule="evenodd" d="M13.434 4.187a.874.874 0 0 1-.67 1.04l-2.718.587a1 1 0 0 0-.79.977v.88a8 8 0 0 0 .507 2.8l1.624 4.349a.874.874 0 1 1-1.638.611l-1.554-4.16a.5.5 0 0 0-.937 0l-1.554 4.16a.874.874 0 0 1-1.638-.611l1.625-4.35a8 8 0 0 0 .506-2.8v-.879a1 1 0 0 0-.789-.977L2.69 5.226a.874.874 0 0 1 .37-1.709l3.822.826a4 4 0 0 0 1.69 0l3.822-.826a.874.874 0 0 1 1.04.67M7.684 0a1.749 1.749 0 1 1 0 3.497a1.749 1.749 0 0 1 0-3.497" /></svg>,
         path: "/accessibility"

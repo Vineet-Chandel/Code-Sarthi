@@ -102,10 +102,11 @@ export const Support = [
         name: "Help Center",
         globalSVG: (<svg xmlns="http://www.w3.org/2000/svg" width={25} height={25} viewBox="0 0 24 24">
             <path fill="#0096ff" d="M12.838 17.638q.362-.363.362-.888t-.362-.888t-.888-.362t-.887.363t-.363.887t.363.888t.887.362t.888-.363M11.05 14.15h1.85q0-.825.188-1.3t1.062-1.3q.65-.65 1.025-1.238T15.55 8.9q0-1.4-1.025-2.15T12.1 6q-1.425 0-2.312.75T8.55 8.55l1.65.65q.125-.45.563-.975T12.1 7.7q.8 0 1.2.438t.4.962q0 .5-.3.938t-.75.812q-1.1.975-1.35 1.475t-.25 1.825M12 22q-2.075 0-3.9-.787t-3.175-2.138T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"></path>
-        </svg>)
+        </svg>),
+        path: "/help-center",
     }, {
         id: 2,
-        name: "Privacy & Policy",
+        name: "Privacy Center",
         globalSVG: (<svg xmlns="http://www.w3.org/2000/svg" width={25} height={25} viewBox="0 0 24 24">
             <g fill="none" stroke="#0096ff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1}>
                 <path d="M16.61 17.66L15.5 22l2.5-1l2.5 1l-1-4.401M21 15a3 3 0 1 1-6 0a3 3 0 0 1 6 0"></path>
@@ -117,7 +118,16 @@ export const Support = [
         name: "About Us",
         globalSVG: (<svg xmlns="http://www.w3.org/2000/svg" width={25} height={25} viewBox="0 0 24 24">
             <path fill="#0096ff" d="M13 9h-2V7h2m0 10h-2v-6h2m-1-9A10 10 0 0 0 2 12a10 10 0 0 0 10 10a10 10 0 0 0 10-10A10 10 0 0 0 12 2"></path>
-        </svg>)
+        </svg>),
+        paths: "/"
+    },
+    {
+        id: 4,
+        name: "Submit a Request",
+        globalSVG: (<svg xmlns="http://www.w3.org/2000/svg" width={25} height={25} viewBox="0 0 24 24">
+            <path fill="#0096ff" d="M13 9h-2V7h2m0 10h-2v-6h2m-1-9A10 10 0 0 0 2 12a10 10 0 0 0 10 10a10 10 0 0 0 10-10A10 10 0 0 0 12 2"></path>
+        </svg>),
+        path: "/submit-a-request"
     },
 ];
 export const LogoutPart = [

@@ -8,18 +8,26 @@ import ProtectedRoute from "./ProtectedRoute";
 
 /* ===== MAIN PUBLIC PAGES ===== */
 
-import Safety from "./Main/PagesMain/Safety";
-import Blogs from "./Main/PagesMain/Blogs";
-import Support from "./Main/PagesMain/Support";
-import Tutorials from "./Main/PagesMain/Tutorials";
+import Safety from "./Main/PagesMain/Main-Category/Safety";
+import Blogs from "./Main/PagesMain/Main-Category/Blogs";
+import Support from "./Main/PagesMain/Main-Category/Support";
+import Developers from "./Main/PagesMain/Main-Category/Developers";
+import Discover from "./Main/PagesMain/Main-Category/Discover";
 
-/* ===== CATEGORIES ===== */
-import Community from "./Main/PagesMain/category/Community";
-import Engineering from "./Main/PagesMain/category/Engineering";
-import NewUpdates from "./Main/PagesMain/category/NewUpdates";
-import Product from "./Main/PagesMain/category/Products";
-import Privacy from "./Main/PagesMain/category/Privacy";
-import UseCodeSarthi from "./Main/PagesMain/category/UseCodeSarthi";
+
+
+
+
+/* =====Sub - CATEGORIES ===== */
+import Community from "./Main/PagesMain/Sub-Category/Blog-Category/Community";
+import Engineering from "./Main/PagesMain/Sub-Category/Blog-Category/Engineering";
+import NewUpdates from "./Main/PagesMain/Sub-Category/Blog-Category/NewUpdates";
+import Product from "./Main/PagesMain/Sub-Category/Blog-Category/Products";
+import PolicyAndSafety from "./Main/PagesMain/Sub-Category/Blog-Category/PrivacyCenter"
+import UseCodeSarthi from "./Main/PagesMain/Sub-Category/Blog-Category/UseCodeSarthi";
+import HelpCenter from "./Main/PagesMain/Sub-Category/Support-Category/HelpCenter";
+import PrivacyCenter from "./Main/PagesMain/Sub-Category/Blog-Category/PrivacyCenter";
+
 
 /* ===== AUTH ===== */
 import Login from "./Pages/auth/Login";
@@ -38,17 +46,12 @@ import Scheduler from "./Pages/Scheduler";
 import Study from "./Pages/Study";
 import Assignment from "./Pages/Assignment";
 import Notes from "./Pages/Notes";
-import ContactUs from "./Pages/Contact-Us";
-import AboutUs from "./Pages/About-Us";
-import PrivacyPolicy from "./Pages/Privacy-Policy";
 import EditProfile from "./personalPages/editProfile";
 import Connections from "./personalPages/Connections";
 import Collab from "./Pages/Collab";
-import Developers from "./Main/PagesMain/Developers";
 import HTML from "./Pages/Toolkit/Htmlw";
 import Toolkit from "./Pages/Toolkit/Toolkitw";
-import Discover from "./Main/PagesMain/Discover";
-import Policy from "./Main/PagesMain/category/Policy";
+
 import Settings from "./personalPages/Settings/Settings";
 import RequestedUser from "./personalPages/RequestedUser";
 import ReceivedRequests from "./personalPages/ReceivedRequests";
@@ -61,22 +64,23 @@ const App = () => {
 
           {/* 🌐 PUBLIC ROUTES */}
           <Route path="/" element={<Hero />} />
-
           <Route path="/discover" element={<Discover />} />
           <Route path="/developers" element={<Developers />} />
           <Route path="/safety" element={<Safety />} />
           <Route path="/blogs" element={<Blogs />} />
           <Route path="/support" element={<Support />} />
-          <Route path="/tutorials" element={<Tutorials />} />
+          <Route path="/help-center" element={<HelpCenter />} />
+          <Route path="/privacy-center" element={<PrivacyCenter />} />
+
 
           {/* Categories */}
           <Route path="/community" element={<Community />} />
           <Route path="/engineering" element={<Engineering />} />
           <Route path="/new-updates" element={<NewUpdates />} />
           <Route path="/product" element={<Product />} />
-          <Route path="/privacy-center" element={<Privacy />} />
+          <Route path="/policy-and-safety" element={<PolicyAndSafety />} />
           <Route path="/how-to-use" element={<UseCodeSarthi />} />
-          <Route path="/policy-hub" element={<Policy />} />
+
 
           {/* 🔐 AUTH */}
           <Route path="/login" element={<Login />} />
@@ -99,9 +103,9 @@ const App = () => {
               <Route path="study" element={<Study />} />
               <Route path="assignment" element={<Assignment />} />
               <Route path="notes" element={<Notes />} />
-              <Route path="contactUs" element={<ContactUs />} />
-              <Route path="aboutUs" element={<AboutUs />} />
-              <Route path="privacypolicy" element={<PrivacyPolicy />} />
+
+
+
               <Route path="editProfile" element={<EditProfile />} />
               <Route path="connections" element={<Connections />} />
               <Route path="settings" element={<Settings />} />

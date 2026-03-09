@@ -1,5 +1,5 @@
-import { useState, useEffect, useMemo } from "react";
-import { motion, AnimatePresence, useScroll } from "framer-motion";
+import { useState, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { UserSettings, AppSettings, ActivitySettings, LogoutPart, Support } from "./SettingsNavigation";
 import PasswordSecuritySettings from "./UserSettings/PassAndSecurity";
 import BlockSettings from "./UserSettings/BlockSettings";
@@ -15,41 +15,40 @@ import ActivityPrivacy from "./ActivitySettings/ActivityPrivacy";
 import HelpCenter from "./Support/HelpCenter";
 import PrivacyAndPolicy from "./Support/PrivacyAndPolicy";
 import AboutUs from "./Support/AboutUs";
-
+import axios from "axios";
 import ContentAndSocial from "./UserSettings/ContentAndSocial";
-
-
-
+import { useDispatch } from "react-redux";
+import { BASE_URL } from "../../Pages/auth/baseURL";
+import { removeUser } from "../../utils/userSlice";
+import { useNavigate } from "react-router-dom";
 
 // Content mapping
+const contentMap = {
+    //user settings
+    "Password & Security": <PasswordSecuritySettings />,
+    "Account Privacy": <AccountAndPrivacy />,
+    "Blocked Connections": <BlockSettings />,
+    "Family Center": <FamilyCenter />,
+    "Notifications": <Notifications />,
+    "Data & Privacy": <DataAndPrivacy />,
+    "Content & Social": <ContentAndSocial />,
 
+    //app settings
+    "Appearance": <Appearance />,
+    "Accessibility": <Accessibility />,
+    "Voice & Video": <VoiceAndVideo />,
+    "Chats": <Chats />,
+
+    //activity settings
+    "Activity Privacy": <ActivityPrivacy />,
+
+    //support
+    "Help Center": <HelpCenter />,
+    "Privacy & Policy": <PrivacyAndPolicy />,
+    "About Us": <AboutUs />
+
+};
 const SettingContent = ({ activeSetting }) => {
-    const contentMap = {
-        //user settings
-        "Password & Security": <PasswordSecuritySettings />,
-        "Account Privacy": <AccountAndPrivacy />,
-        "Blocked Connections": <BlockSettings />,
-        "Family Center": <FamilyCenter />,
-        "Notifications": <Notifications />,
-        "Data & Privacy": <DataAndPrivacy />,
-        "Content & Social": <ContentAndSocial />,
-
-        //app settings
-        "Appearance": <Appearance />,
-        "Accessibility": <Accessibility />,
-        "Voice & Video": <VoiceAndVideo />,
-        "Chats": <Chats />,
-
-        //activity settings
-        "Activity Privacy": <ActivityPrivacy />,
-
-        //support
-        "Help Center": <HelpCenter />,
-        "Privacy & Policy": <PrivacyAndPolicy />,
-        "About Us": <AboutUs />
-
-    };
-
     return contentMap[activeSetting] || (
         <p className="text-gray-400 font-mono">
             <span className="text-cyan-400">{`> ${activeSetting}`}</span> panel is loading...
@@ -59,9 +58,12 @@ const SettingContent = ({ activeSetting }) => {
 
 // Main Component
 const Settings = () => {
+    const dispatch = useDispatch();
+    const [isSignOuting, setIsSignOuting] = useState(false);
     const [active, setActive] = useState(UserSettings[0].name);
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
+    const navigate = useNavigate();
     const filteredUserSettings = useMemo(() => {
         return UserSettings.filter(item =>
             item.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -87,6 +89,22 @@ const Settings = () => {
             item.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
     }, [searchTerm, Support]);
+
+    const handleLogout = async () => {
+
+        try {
+            setIsSignOuting(true);
+            await axios.post(`${BASE_URL}/auth/signout`, {}, { withCredentials: true });
+            dispatch(removeUser());
+
+        }
+        catch (err) {
+            console.error("Logout failed:", err);
+        } finally {
+            setIsSignOuting(false);
+            window.location.href = "/login";
+        }
+    }
 
     return (
         <div className="bg-[#0a0a0f] min-h-screen flex text-white relative overflow-hidden">
@@ -163,7 +181,7 @@ left-0 top-0"
                             <span className="text-xs sm:text-sm uppercase tracking-wider text-gray-400 mt-4 mb-2 font-mono">User Settings</span>
                             {filteredUserSettings.map((item, index) => (
                                 <motion.div
-                                    key={item.id}
+                                    key={item.name}
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: index * 0.05 }}
@@ -209,7 +227,7 @@ left-0 top-0"
                             <span className="text-xs sm:text-sm uppercase tracking-wider text-gray-400 mt-4 mb-2 font-mono">App Settings</span>
                             {filteredAppSettings.map((item, index) => (
                                 <motion.div
-                                    key={item.id}
+                                    key={item.name}
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: index * 0.05 }}
@@ -248,7 +266,7 @@ left-0 top-0"
                             <span className="text-xs sm:text-sm uppercase tracking-wider text-gray-400 mt-4 mb-2 font-mono">Activity Settings</span>
                             {filteredActivitySettings.map((item, index) => (
                                 <motion.div
-                                    key={item.id}
+                                    key={item.name}
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: index * 0.05 }}
@@ -287,7 +305,7 @@ left-0 top-0"
                             <span className="text-xs sm:text-sm uppercase tracking-wider text-gray-400 mt-4 mb-2 font-mono">Necessity</span>
                             {filteredSupport.map((item, index) => (
                                 <motion.div
-                                    key={item.id}
+                                    key={item.name}
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: index * 0.05 }}
@@ -297,13 +315,9 @@ left-0 top-0"
                                         aria-selected={active === item.name}
                                         aria-controls={`setting-panel-${item.name}`}
                                         id={`tab-${item.name}`}
-                                        onClick={() => setActive(item.name)}
+                                        onClick={() => navigate(`${item.path}`)}
                                         className={`w-full relative px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl cursor-pointer
-                  transition-all duration-300 group overflow-hidden
-                  ${active === item.name
-                                                ? "bg-gradient-to-r from-cyan-500/20 to-blue-600/20 border-2 border-cyan-400/50 shadow-[0_0_20px_rgba(0,255,255,0.2)]"
-                                                : "hover:bg-white/5 border border-transparent"
-                                            }`}
+                  transition-all duration-300 group overflow-hidden`}
                                     >
 
 
@@ -325,7 +339,7 @@ left-0 top-0"
                             ))}
                             {filteredLogoutPart.map((item, index) => (
                                 <motion.div
-                                    key={item.id}
+                                    key={item.name}
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: index * 0.05 }}
@@ -335,7 +349,7 @@ left-0 top-0"
                                         aria-selected={active === item.name}
                                         aria-controls={`setting-panel-${item.name}`}
                                         id={`tab-${item.name}`}
-                                        onClick={() => setActive(item.name)}
+                                        onClick={() => handleLogout()}
                                         className={`w-full relative px-3 sm:px-4 py-2.5 sm:py-3 mt-5  rounded-xl cursor-pointer
                   transition-all duration-300 group overflow-hidden
                   ${active === item.name
@@ -347,7 +361,7 @@ left-0 top-0"
 
                                         <span className="relative z-10 font-mono text-xl tracking-wide flex items-center gap-3 text-red-500">
                                             <span className="text-cyan-400 text-lg">{item.globalSVG}</span>
-                                            {item.name}
+                                            {item.name} {isSignOuting && (<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="currentColor" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity={0.5}></path><path fill="currentColor" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z"><animateTransform attributeName="transform" dur="1s" from="0 12 12" repeatCount="indefinite" to="360 12 12" type="rotate"></animateTransform></path></svg>)}
                                             {active === item.name && (
                                                 <motion.span
                                                     className="ml-auto text-cyan-400"

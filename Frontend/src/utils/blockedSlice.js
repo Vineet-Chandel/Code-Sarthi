@@ -13,9 +13,11 @@ const blockedSlice = createSlice({
             state.users = action.payload;
 
         },
-        clearBlockedUser: (state) => {
-            state.users = [];
-        },
+        clearBlockedUser: (state, action) => {
+            state.users = state.users.filter(
+                user => user.blockId !== action.payload
+            );
+        }
     },
 });
 
