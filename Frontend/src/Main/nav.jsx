@@ -46,6 +46,7 @@ const Nav = () => {
                     items={[
                         "Community",
                         "New Updates",
+                        "Smart Scheduler - Lakshya",
                         "Resume Generator",
                         "Engineering and Developers",
                         "How to use CodeSarthi",
@@ -190,7 +191,7 @@ const Nav = () => {
         }
     }, [openHam]);
     return (
-        <div className="relative ">
+        <div className="relative w-full">
             {/* NAVBAR */}
             <div className="fixed top-5 z-30 w-full 2xl:px-7 xl:px-6 lg:px-4 px-2  w-screen text-white">
                 <div className="flex items-center  justify-between">

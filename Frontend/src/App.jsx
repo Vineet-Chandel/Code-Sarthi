@@ -55,6 +55,7 @@ import Toolkit from "./Pages/Toolkit/Toolkitw";
 import Settings from "./personalPages/Settings/Settings";
 import RequestedUser from "./personalPages/RequestedUser";
 import ReceivedRequests from "./personalPages/ReceivedRequests";
+import SmartSchedulerLakshya from "./Main/PagesMain/Sub-Category/Blog-Category/SmartSchedulerLakshya";
 
 const App = () => {
   return (
@@ -71,6 +72,7 @@ const App = () => {
           <Route path="/support" element={<Support />} />
           <Route path="/help-center" element={<HelpCenter />} />
           <Route path="/privacy-center" element={<PrivacyCenter />} />
+          <Route path="/smart-scheduler---lakshya" element={<SmartSchedulerLakshya />} />
 
 
           {/* Categories */}

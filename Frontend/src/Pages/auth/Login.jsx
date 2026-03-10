@@ -214,8 +214,7 @@ const Login = () => {
                             <button
                                 type="submit"
                                 disabled={isLoginStart}
-                                className={`w-full  bg-gradient-to-r from-blue-600 to-blue-700  text-white  py-3 sm:py-4  rounded-2xl sm:rounded-3xl transition-all duration-300  text-base sm:text-xl md:text-2xl  font-semibold  shadow-lg hover:shadow-xl ${isLoginStart ? "opacity-70 cursor-not-allowed" : "hover:from-blue-700 hover:to-blue-800"}
-    `}
+                                className={`w-full  bg-gradient-to-r from-blue-600 to-blue-700  text-white  py-3 sm:py-4  rounded-2xl sm:rounded-3xl transition-all duration-300  text-base sm:text-xl md:text-2xl  font-semibold  shadow-lg hover:shadow-xl ${isLoginStart ? "opacity-70 cursor-not-allowed" : "hover:from-blue-700 hover:to-blue-800"}`}
                             >
                                 {isLoginStart ? (
                                     <div className="flex justify-center items-center gap-2 sm:gap-3 px-2 md:px-3">
