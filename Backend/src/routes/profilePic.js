@@ -1,7 +1,7 @@
 const express = require("express");
 const profilePic = express.Router();
 const { userAuth } = require("../middlewares/userAuth");
-const uploadFile = require("../middlewares/multer");
+const uploadFile = require("../middlewares/multerProfile");
 const getDataUrl = require("../utils/buffer");
 const User = require("../models/user");
 const cloudinary = require("cloudinary").v2;

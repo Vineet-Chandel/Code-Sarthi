@@ -40,9 +40,57 @@ const Body = () => {
 
     if (isLoading) {
         return (
-            <div className="h-screen w-screen bg-black flex justify-center flex-col items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><circle cx={4} cy={12} r={3} fill="currentColor"><animate id="SVGKiXXedfO" attributeName="cy" begin="0;SVGgLulOGrw.end+0.25s" calcMode="spline" dur="0.6s" keySplines=".33,.66,.66,1;.33,0,.66,.33" values="12;6;12"></animate></circle><circle cx={12} cy={12} r={3} fill="currentColor"><animate attributeName="cy" begin="SVGKiXXedfO.begin+0.1s" calcMode="spline" dur="0.6s" keySplines=".33,.66,.66,1;.33,0,.66,.33" values="12;6;12"></animate></circle><circle cx={20} cy={12} r={3} fill="currentColor"><animate id="SVGgLulOGrw" attributeName="cy" begin="SVGKiXXedfO.begin+0.2s" calcMode="spline" dur="0.6s" keySplines=".33,.66,.66,1;.33,0,.66,.33" values="12;6;12"></animate></circle></svg>
-                <div className="text-4xl text-white font-extrabold ">Setting up things for you!</div>
+            <div className="min-h-screen w-full bg-black flex flex-col items-center justify-center px-4 text-center">
+
+                {/* Loader */}
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 text-white"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                >
+                    <circle cx={4} cy={12} r={3}>
+                        <animate
+                            id="dot1"
+                            attributeName="cy"
+                            begin="0;dot3.end+0.25s"
+                            calcMode="spline"
+                            dur="0.6s"
+                            keySplines=".33,.66,.66,1;.33,0,.66,.33"
+                            values="12;6;12"
+                        />
+                    </circle>
+
+                    <circle cx={12} cy={12} r={3}>
+                        <animate
+                            attributeName="cy"
+                            begin="dot1.begin+0.1s"
+                            calcMode="spline"
+                            dur="0.6s"
+                            keySplines=".33,.66,.66,1;.33,0,.66,.33"
+                            values="12;6;12"
+                        />
+                    </circle>
+
+                    <circle cx={20} cy={12} r={3}>
+                        <animate
+                            id="dot3"
+                            attributeName="cy"
+                            begin="dot1.begin+0.2s"
+                            calcMode="spline"
+                            dur="0.6s"
+                            keySplines=".33,.66,.66,1;.33,0,.66,.33"
+                            values="12;6;12"
+                        />
+                    </circle>
+                </svg>
+
+                {/* Text */}
+                <div className="mt-6 text-white font-extrabold 
+                    text-xl sm:text-2xl md:text-3xl lg:text-4xl">
+                    Setting up things for you!
+                </div>
+
             </div>
         );
     }

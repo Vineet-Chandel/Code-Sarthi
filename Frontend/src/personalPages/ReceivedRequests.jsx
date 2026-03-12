@@ -331,7 +331,7 @@ relative overflow-hidden
             }
 
 
-            {(receivedConnectionsTotal == 0 || reqUser.length === 0) && (
+            {(receivedConnectionsTotal === 0 || receivedConnections.length === 0) && (
                 <div className="inset-0 flex items-center justify-center px-4">
 
                     <div className="relative w-full max-w-3xl p-10 rounded-3xl  bg-gradient-to-br from-[#0f172a]/90 to-[#020617]/90 backdrop-blur-2xl border border-purple-500/20 animate-[modalPop_0.3s_ease]">
@@ -347,6 +347,8 @@ relative overflow-hidden
                             </div>
 
                             {/* TEXT SECTION */}
+
+
                             <div className="text-center md:text-left">
                                 <h2 className="text-4xl font-bold text-white mb-4">
                                     No requests found

@@ -20,7 +20,7 @@ const MsgSchema = new mongoose.Schema({
     Content: {
         type: String,
     },
-    ImgOrVideo: {
+    ImgOrVideoUrl: {
         type: String,
     },
     ContentType: {

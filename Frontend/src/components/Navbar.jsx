@@ -142,7 +142,7 @@ const NavBar = () => {
             {/* Left side - Menu button */}
             <div className="NavStart flex justify-center items-center gap-2.5">
                 <button
-                    className="Nav_svg border border-gray-400 p-[5px] h-8 w-8 sm:h-9 sm:w-9 rounded cursor-pointer hover:bg-gray-200 transition-colors duration-200"
+                    className="Nav_svg border border-gray-400 p-[5px] h-8 w-8 sm:h-9 sm:w-9 rounded cursor-pointer hover:bg-gray-200 transition-colors duration-200 flex justify-center items-center"
                     onClick={openSidebar}
                     aria-label="Open navigation menu"
                 >
