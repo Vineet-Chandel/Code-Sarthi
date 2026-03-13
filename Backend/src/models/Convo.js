@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
-const { ref } = require('process');
+
 
 
 const ConvoSchema = new mongoose.Schema({
   Participants: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'connections'
+    ref: "Users",
+    required: true
   }],
   LastMsg: {
     type: mongoose.Schema.Types.ObjectId,
@@ -13,8 +14,11 @@ const ConvoSchema = new mongoose.Schema({
   },
   unReadCount: {
     type: Number,
-    default: 0
+    default: 0,
+  },
+  lastMsgAt: {
+    type: Date
   }
-}, { Timestamp: true })
+}, { timestamps: true })
 
 module.exports = mongoose.model("Convo", ConvoSchema, "Convo");

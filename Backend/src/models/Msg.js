@@ -1,23 +1,24 @@
 const mongoose = require('mongoose');
-const { type } = require('os');
+
 
 const MsgSchema = new mongoose.Schema({
-    Convo: [{
+    conversation: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Convo'
-    }],
-    Sender: {
+        ref: "Convo",
+        required: true
+    },
+    sender: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        require: true
+        ref: 'Users',
+        required: true
 
     },
-    Receiver: {
+    receiver: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        require: true,
+        ref: 'Users',
+        required: true,
     },
-    Content: {
+    content: {
         type: String,
     },
     ImgOrVideoUrl: {
@@ -38,9 +39,21 @@ const MsgSchema = new mongoose.Schema({
     ],
     messageStatus: {
         type: String,
-        default: 'send'
-    }
+        enum: ["sent", "delivered", "seen"],
+        default: 'sent',
 
-}, { Timestamp: true });
+    },
+    deletedForEveryone: {
+        type: Boolean,
+        default: false
+    },
+    deletedFor: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Users",
+        required: true
+    }]
+}, { timestamps: true });
+
+MsgSchema.index({ conversation: 1, createdAt: -1 });
 
 module.exports = mongoose.model("Msg", MsgSchema, "Msg");

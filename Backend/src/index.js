@@ -21,6 +21,7 @@ const profileRouter = require("./routes/profRouter");
 const requestRouter = require("./routes/request");
 const userPreference = require("./routes/userPreferennce");
 const passwordManagment = require("./routes/passwordManagment");
+const chatRouter = require("./routes/chatController");
 const fileUpload = require("./routes/profilePic")
 const redis = require("./configs/redis")
 const cloudinary = require("cloudinary").v2;
@@ -37,6 +38,7 @@ app.use("/", requestRouter);
 app.use("/", userPreference);
 app.use("/", passwordManagment);
 app.use("/", fileUpload);
+app.use("/", chatRouter);
 
 
 const PORT = process.env.PORT || 8000;
