@@ -17,8 +17,8 @@ const Login = () => {
      default gmail = vineetsinghbitu@gmail.com
      default password = Vineet@1234
      */
-    const [gmail, setGmailId] = useState("vineetsinghbitu@gmail.com");
-    const [password, setPassword] = useState("Vineet@1234");
+    const [gmail, setGmailId] = useState("");
+    const [password, setPassword] = useState("");
 
     const [showPassword, setShowPassword] = useState(false);
     const [newError, setNewError] = useState(false);
