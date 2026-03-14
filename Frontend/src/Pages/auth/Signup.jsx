@@ -556,7 +556,7 @@ const Signup = () => {
                 disabled={isSubmitting}
                 className={`w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-2xl transition-all duration-300 text-lg font-semibold shadow-lg flex items-center justify-center gap-3 ${isSubmitting ? 'opacity-75 cursor-not-allowed' : 'hover:from-blue-700 hover:to-blue-800 hover:shadow-xl'} `}
               >
-                {true ? (
+                {isSubmitting ? (
                   <div className="flex justify-center items-center gap-2 sm:gap-3 px-2 md:px-3">
 
                     <svg
