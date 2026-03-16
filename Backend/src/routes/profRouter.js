@@ -22,7 +22,7 @@ profileRouter.get("/profile/me", userAuth, async (req, res) => {
         res.status(200).json({
             success: true,
             DATA: {
-                Delete: user._id,
+                _id: user._id,
                 firstName: user.firstName,
                 middleName: user.middleName,
                 lastName: user.lastName,

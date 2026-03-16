@@ -4,8 +4,11 @@ const CodeSarthi = require("./configs/Database");
 const app = express();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const initialSocket = require("./Socket/socketService")
+const http = require("http");
+const server = http.createServer(app);
 
-
+const io = initialSocket(server);
 app.use(express.json());
 app.use(cookieParser());
 app.use(
@@ -15,6 +18,12 @@ app.use(
         credentials: true
     })
 );
+
+app.use((req, res, next) => {
+    req.io = io;
+    req.socketUserMap = io.socketUserMap;
+    next();
+})
 
 const authRouter = require("./routes/authentication");
 const profileRouter = require("./routes/profRouter");
@@ -42,14 +51,21 @@ app.use("/", chatRouter);
 
 
 const PORT = process.env.PORT || 8000;
+
 (async () => {
     try {
         await CodeSarthi();
         console.log("✅ Database connected successfully");
-        app.listen(PORT, () => { console.log(`🚀 Server running at http://localhost:${PORT}`); });
 
-        await redis.connect(); // 🔥 VERY IMPORTANT
+        await redis.connect();
+        console.log("✅ Redis connected successfully");
+
+        server.listen(PORT, () => {
+            console.log(`🚀 Server running at http://localhost:${PORT}`);
+        });
+
     } catch (error) {
-        console.error("❌ Database connection failed:", error.message); process.exit(1);
+        console.error("❌ Startup failed:", error.message);
+        process.exit(1);
     }
 })();

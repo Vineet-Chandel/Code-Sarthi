@@ -3,12 +3,140 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../Pages/auth/baseURL";
 import { addConnectionUser } from "../utils/connectionSlice";
+import { addChatsUser } from "../utils/chatUserSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { io } from "socket.io-client";
 const Discussions = () => {
+    const socketRef = useRef(null);
+    const user = useSelector(store => store.user.user.DATA);
     const connections = useSelector(state => state.connections.users || []);
+    const chatsUsers = useSelector(state => state.chats.users || []);
+    const [messages, setMessages] = useState([]);
+    const [messageText, setMessageText] = useState("");
+    const [typingUser, setTypingUser] = useState(false);
+    const currentUserId = user?._id;
+    const bottomRef = useRef(null);
+    useEffect(() => {
+
+        socketRef.current = io(BASE_URL, {
+            withCredentials: true
+        });
+        if (!currentUserId) return;
+        socketRef.current.on("connect", () => {
+            console.log("Socket Connected:", socketRef.current.id);
+
+            if (currentUserId) {
+                socketRef.current.emit("userConnected", currentUserId);
+            }
+        });
+
+        socketRef.current.on("user_typing", (data) => {
+            setTypingUser(data.isTyping);
+        });
+
+        socketRef.current.on("receiveMessage", (message) => {
+
+            setMessages(prev => {
+
+                const exists = prev.some(m => m._id === message._id);
+                if (exists) return prev;
+
+                return [...prev, message];
+            });
+
+        });
+        return () => {
+            socketRef.current.disconnect();
+        };
+
+    }, [currentUserId]);
+
+
+    useEffect(() => {
+        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
+
+    const sendMessage = async () => {
+
+        if (!messageText.trim()) return;
+
+        try {
+
+            const res = await axios.post(
+                `${BASE_URL}/send-message`,
+                {
+                    receiverId: chatingUserId,
+                    content: messageText
+                },
+                { withCredentials: true }
+            );
+
+            const message = res.data.populatedMessage;
+
+            setMessages(prev => [...prev, message]);
+
+            socketRef.current.emit("sendMessage", message);
+
+            setMessageText("");
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    };
+
+    const loadMessages = async (conversationId) => {
+
+        try {
+
+            const res = await axios.post(
+                `${BASE_URL}/get-message/${conversationId}`,
+                {},
+                { withCredentials: true }
+            );
+
+            const msgs = res.data.messages;
+
+
+            setMessages(msgs);
+
+
+
+
+            const messageIds = msgs
+                .filter(m => m.receiver._id === currentUserId)
+                .map(m => m._id);
+
+            if (messageIds.length) {
+                await axios.post(
+                    `${BASE_URL}/mark-read`,
+                    { messageIds },
+                    { withCredentials: true }
+                );
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    };
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault(); // prevents newline
+            sendMessage();
+        }
+    };
+
+    const handleTyping = () => {
+
+        socketRef.current.emit("typing_start", {
+            conversationId: chatingUserId,
+            receiverId: chatingUserId
+        });
+
+    };
 
     const [profileOpen, setIsProfileOpen] = useState(false);
-
     //activation of the chat
     const [chatActive, setchatActive] = useState(false);
     const [chatingUserId, setChatingUserId] = useState("");
@@ -18,7 +146,6 @@ const Discussions = () => {
     const [chatingLastName, setChatingLastName] = useState("");
     const [chatingGmail, setChatingGmail] = useState("");
     const [chatingPhotoUrl, setChatingPhotoUrl] = useState("");
-
     //for switching between the teams and connections
     const [section, setSection] = useState(1);
 
@@ -35,6 +162,40 @@ const Discussions = () => {
         setSelectedUserID(null);
     }
     const dispatch = useDispatch();
+
+
+    //fetching the connections 
+    const chats = async () => {
+        try {
+            const response = await axios.get(
+                `${BASE_URL}/chats`,
+                { withCredentials: true }
+            );
+            dispatch(addChatsUser(response.data.data));
+
+
+        } catch (err) {
+            console.error(err?.message || err);
+        }
+    };
+    useEffect(() => {
+        chats();
+    }, []);
+
+    const convo = async () => {
+        try {
+            const response = await axios.get(
+                `${BASE_URL}/chats`,
+                { withCredentials: true }
+            );
+            dispatch(addChatsUser(response.data.data));
+        } catch (err) {
+            console.error(err?.message || err);
+        }
+    };
+    useEffect(() => {
+        chats();
+    }, []);
 
     //fetching the connections 
     const connectionUser = async () => {
@@ -59,13 +220,16 @@ const Discussions = () => {
     return (
 
 
-        <div className="w-screen flex bg-black text-white">
+        <div className="w-screen h-[calc(100vh-50px)] flex bg-black text-white">
 
             {/* LEFT SIDEBAR */}
-            <div className="w-[400px] h-screen border-r border-zinc-800 flex flex-col p-5 gap-6">
+            <div className=" w-[380px] border-r border-zinc-800 flex flex-col px-5 py-6 gap-6 bg-gradient-to-b from-zinc-950 to-zinc-900 backdrop-blur-xl ">
 
                 {/* SEARCH BAR */}
-                <div className="flex items-center gap-3 bg-zinc-900 border border-zinc-700 px-4 py-3 rounded-2xl focus-within:border-blue-500 transition " onClick={() => focusInput()}>
+                <div
+                    onClick={focusInput}
+                    className=" flex items-center gap-3 bg-zinc-900/80 border border-zinc-800 px-4 py-3 rounded-2xl backdrop-blur-md hover:border-blue-500 focus-within:border-blue-500 transition-all duration-200 shadow-sm "
+                >
 
                     <svg xmlns="http://www.w3.org/2000/svg" width={22} height={22} viewBox="0 0 24 24">
                         <path fill="#9ca3af" d="M10.5 2a8.5 8.5 0 1 0 5.262 15.176l3.652 3.652a1 1 0 0 0 1.414-1.414l-3.652-3.652A8.5 8.5 0 0 0 10.5 2" />
@@ -115,51 +279,105 @@ const Discussions = () => {
                 </div>
 
                 {/* LIST AREA */}
-                <div className="flex-1 overflow-y-auto text-gray-400 text-sm">
-                    {connections.map((item) => (
+                <div className="flex-1 overflow-y-auto text-gray-400 text-sm pr-1 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent">
+                    {chatsUsers.map((item) => (
                         <li
 
-                            className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-zinc-800 cursor-pointer transition"
+                            className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-zinc-800/70 transition-all duration-200 cursor-pointer"
                             onClick={() => {
+
+                                setMessages([]);
                                 setchatActive(true);
-                                setChatingPhotoUrl(item.photoUrl);
-                                setChatingUserId(item._id);
-                                setChatingFirstName(item.FirstName);
-                                setChatingLastName(item.LastName);
+                                setChatingPhotoUrl(item.otherUser?.photoUrl?.url);
+                                setChatingUserId(item.otherUser?._id);
+                                setChatingFirstName(item.otherUser?.firstName);
+                                setChatingLastName(item.otherUser?.lastName);
+                                setChatingUsername(item.otherUser?.username);
+                                setChatingGmail(item.otherUser?.gmail);
+                                setChatingMiddleName(item.otherUser?.middleName);
+                                loadMessages(item.chatId);
+
                             }}
                         >
                             <img
-                                src={item.photoUrl}
+                                src={item.otherUser?.photoUrl?.url}
                                 alt="profile"
-                                className="w-10 h-10 rounded-full object-cover"
+                                className="w-[50px] h-[50px] rounded-full object-cover"
                             />
+                            <div className="flex justify-between w-full items-center">
+                                <div className="flex flex-col">
+                                    <span className="text-white text-xl font-medium">
+                                        {item.otherUser?.firstName} {item.otherUser?.lastName}
+                                    </span>
+                                    <span className="text-gray-400 text-sm pl-1">
+                                        {item.lastMsg && (<span>{item.lastMsg}</span>)}
+                                        {!item.lastMsg && (<span>Hey! let's collab</span>)}
+                                    </span>
+                                </div>
 
-                            <div className="flex flex-col">
-                                <span className="text-white text-sm font-medium">
-                                    {item.FirstName} {item.LastName}
-                                </span>
-                                <span className="text-gray-400 text-xs">
-                                    Click to start chat
-                                </span>
+                                {item.unReadCount != 0 && (<div className="h-6 w-6 rounded-full bg-blue-500/90 text-white flex justify-center items-center" >
+                                    {item.unReadCount}
+                                </div>)}
                             </div>
                         </li>
 
                     ))}
-                </div>
+                    <div className="text-white text-2xl mt-4 ml-1 flex gap-2  items-center">Start Collabing! <svg xmlns="http://www.w3.org/2000/svg" width={25} height={25} viewBox="0 0 24 24">
+                        <path fill="none" stroke="#f7f7f7" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 12h2.5M20 12l-6-6m6 6l-6 6m6-6H9.5"></path>
+                    </svg></div>
+                    {chatsUsers.map((chats) =>
+                        connections.map((item) =>
+                            chats.otherUser?._id !== item.userId ? (
+                                <li
+                                    key={item.otherUser?._id}
+                                    className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-zinc-800 cursor-pointer transition"
+                                    onClick={() => {
+                                        setMessages([]);
+                                        setchatActive(true);
+                                        setChatingPhotoUrl(item.photoUrl);
+                                        setChatingUserId(item._id);
+                                        setChatingFirstName(item.FirstName);
+                                        setChatingLastName(item.LastName);
+                                        setChatingUsername(item.username);
+                                        setChatingGmail(item.gmail);
+                                        setChatingMiddleName(item.MiddleName);
+                                    }}
+                                >
+                                    <img
+                                        src={item.photoUrl}
+                                        alt="profile"
+                                        className="w-[50px] h-[50px] rounded-full object-cover"
+                                    />
 
+                                    <div className="flex flex-col">
+                                        <span className="text-white text-xl font-medium">
+                                            {item.FirstName} {item.LastName}
+                                        </span>
+
+                                        <span className="text-gray-400 text-sm pl-1">
+                                            {!item.lastMsg && <span>Hey! let's collab</span>}
+                                        </span>
+                                    </div>
+
+
+                                </li>
+                            ) : null
+                        )
+                    )}
+                </div>
             </div>
 
             {/* RIGHT CHAT AREA */}
             <div className="flex-1 p-6">
 
-                <div className="w-full h-full border border-zinc-800 rounded-3xl bg-zinc-900/50 backdrop-blur-md flex  justify-center text-gray-500">
+                <div className=" w-full h-full border border-zinc-800 rounded-3xl bg-gradient-to-b from-zinc-900/80 to-zinc-950 backdrop-blur-xl shadow-2xl flex flex-col overflow-hidden ">
 
                     {!chatActive && < span > Select a conversation to start chatting</span>}
                     {chatActive && (
                         <div className="flex flex-col w-full h-full">
 
                             {/* TOP HEADER */}
-                            <div className="w-full border-b border-zinc-800 h-[80px] flex items-center justify-between px-6">
+                            <div className=" w-full border-b border-zinc-800 h-[78px] flex items-center justify-between px-6 bg-zinc-900/70 backdrop-blur ">
 
                                 <div className="flex items-center gap-3">
                                     <img
@@ -190,49 +408,74 @@ const Discussions = () => {
                             </div>
 
 
-                            {/* MESSAGE AREA */}
-                            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+                            <div className="flex-1 overflow-y-auto p-6 space-y-4 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent">
 
-                                {/* received message */}
-                                <div className="flex items-start gap-3">
-                                    <img
-                                        src={chatingPhotoUrl}
-                                        className="w-8 h-8 rounded-full"
-                                    />
+                                {messages.map((msg) => (
 
-                                    <div className="bg-zinc-800 px-4 py-2 rounded-2xl max-w-[300px] text-sm">
-                                        Hello 👋
-                                    </div>
-                                </div>
+                                    msg.sender._id === currentUserId ? (
 
+                                        <div
+                                            key={msg._id}
+                                            className="flex justify-end items-end gap-2 animate-fadeIn"
+                                        >
 
-                                {/* sent message */}
-                                <div className="flex justify-end">
-                                    <div className="bg-blue-600 px-4 py-2 rounded-2xl max-w-[300px] text-sm">
-                                        Hi! How are you?
-                                    </div>
-                                </div>
+                                            <div className=" bg-blue-600 px-4 py-2 rounded-2xl rounded-br-sm max-w-[360px] text-sm text-white shadow-lg break-words ">
+                                                {msg.content}
+                                            </div>
+
+                                        </div>
+
+                                    ) : (
+
+                                        <div
+                                            key={msg._id}
+                                            className="flex items-end gap-3 animate-fadeIn"
+                                        >
+
+                                            <img
+                                                src={msg.sender?.photoUrl?.url}
+                                                className="w-8 h-8 rounded-full object-cover shadow"
+                                            />
+
+                                            <div className="bg-zinc-800 px-4 py-2 rounded-2xl rounded-bl-sm max-w-[320px] text-sm text-white shadow-md break-words">
+                                                {msg.content}
+                                            </div>
+
+                                        </div>
+
+                                    )
+
+                                ))}
+
+                                <div ref={bottomRef}></div>
 
                             </div>
-
 
                             {/* TYPING AREA */}
                             <div className="border-t border-zinc-800 p-4 flex items-center gap-3">
 
                                 {/* EMOJI BUTTON */}
                                 <button className="hover:bg-zinc-800 p-2 rounded-lg transition">
-                                    😊
+                                    <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 16 16">
+                                        <path fill="#f7f7f7" d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16M2.31 5.243A1 1 0 0 1 3.28 4H6a1 1 0 0 1 1 1v.116A4.2 4.2 0 0 1 8 5c.35 0 .69.04 1 .116V5a1 1 0 0 1 1-1h2.72a1 1 0 0 1 .97 1.243l-.311 1.242A2 2 0 0 1 11.439 8H11a2 2 0 0 1-1.994-1.839A3 3 0 0 0 8 6c-.393 0-.74.064-1.006.161A2 2 0 0 1 5 8h-.438a2 2 0 0 1-1.94-1.515zM4.969 9.75A3.5 3.5 0 0 0 8 11.5a3.5 3.5 0 0 0 3.032-1.75a.5.5 0 1 1 .866.5A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1-3.898-2.25a.5.5 0 0 1 .866-.5z"></path>
+                                    </svg>
                                 </button>
 
                                 {/* INPUT */}
                                 <input
+                                    value={messageText}
+                                    onChange={(e) => { setMessageText(e.target.value); handleTyping(); }}
+                                    onKeyDown={handleKeyDown}
                                     type="text"
                                     placeholder="Type a message..."
-                                    className="flex-1 bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 outline-none focus:border-blue-500"
+                                    className="flex-1 text-white bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2.5 outline-none focus:border-blue-500 text-sm transition"
                                 />
 
                                 {/* SEND BUTTON */}
-                                <button className="bg-blue-600 hover:bg-blue-500 px-5 py-2 rounded-xl transition">
+                                <button
+                                    onClick={sendMessage}
+                                    className="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-xl text-white text-sm font-medium transition active:scale-95"
+                                >
                                     Send
                                 </button>
 

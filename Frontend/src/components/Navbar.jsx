@@ -138,7 +138,7 @@ const NavBar = () => {
     return (
 
 
-        <div className="navbar bg-gray-100 shadow-sm flex items-center justify-between rounded-b-2xl sm:rounded-b-3xl px-3 sm:px-4 lg:px-6 py-1.5 sm:py-2">
+        <div className="navbar h-[50px] bg-gray-100 shadow-sm flex items-center justify-between rounded-b-2xl sm:rounded-b-3xl px-3 sm:px-4 lg:px-6 py-1.5 sm:py-2">
             {/* Left side - Menu button */}
             <div className="NavStart flex justify-center items-center gap-2.5">
                 <button

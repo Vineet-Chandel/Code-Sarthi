@@ -5,8 +5,60 @@ const uploadToCloud = require("./convoImgVideo");
 const express = require("express");
 const chatRouter = express.Router();
 const { userAuth } = require("../middlewares/userAuth");
+const User = require("../models/user");
+const { connection } = require("mongoose");
 
+chatRouter.get("/chats", userAuth, async (req, res) => {
+    try {
+        const userId = req.user._id;
 
+        const chats = await Convo.find({
+            Participants: userId
+        });
+
+        if (!chats || chats.length === 0) {
+            return res.status(200).json({
+                success: true,
+                total: 0,
+                data: []
+            });
+        }
+        const formattedChats = await Promise.all(
+            chats.map(async (chat) => {
+
+                const otherUserId = chat.Participants.find(
+                    id => id.toString() !== userId.toString()
+                );
+
+                const credentials = await User.findById(otherUserId);
+
+                const lastMsg = chat.LastMsg;
+
+                const findLastMsg = await Msg.findById({ _id: lastMsg });
+                return {
+                    chatId: chat._id,
+                    otherUser: credentials,
+                    lastMsg: findLastMsg.content,
+                    unReadCount: chat.unReadCount
+                };
+            })
+        );
+
+        res.status(200).json({
+            success: true,
+            total: chats.length,
+            data: formattedChats
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        });
+    }
+});
 
 // this API will Send a message to another user
 chatRouter.post("/send-message", userAuth, upload.single("file"), async (req, res) => {
@@ -123,6 +175,19 @@ chatRouter.post("/send-message", userAuth, upload.single("file"), async (req, re
         const populatedMessage = await Msg.findById(message._id)
             .populate("sender", "username photoUrl")
             .populate("receiver", "username photoUrl");
+
+
+
+        //Emit socket event for realtime
+        if (req.io && req.socketUserMap) {
+            const receiverSocketId = req.socketUserMap.get(receiverId);
+
+            if (receiverSocketId) {
+                req.io.to(receiverSocketId).emit("receive_message", populatedMessage);
+                message.messageStatus = "delivered";
+                await message.save();
+            }
+        }
         res.status(200).json({
             success: true,
             populatedMessage,
@@ -240,6 +305,21 @@ chatRouter.post("/mark-read", userAuth, async (req, res) => {
             { $set: { messageStatus: "read" } }
         )
 
+        if (req.io && req.socketUserMap) {
+            for (const message of messages) {
+                const senderSocketId = req.socketUserMap.get(message.sender.toString());
+
+                if (senderSocketId) {
+                    const updatedMessage = {
+                        _id: message._id,
+                        messageStatus: "read",
+                    };
+
+                    req.io.to(senderSocketId).emit("message_read", updatedMessage);
+                    await message.save();
+                }
+            }
+        }
         res.status(200).json({
             success: true,
             message: "Message Mark as read", message

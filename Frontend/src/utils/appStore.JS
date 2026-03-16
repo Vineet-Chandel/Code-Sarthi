@@ -5,6 +5,7 @@ import connectionReducer from "./connectionSlice";
 import blocksReducer from "./blockedSlice";
 import RequestedUser from "./requestedUserSlice";
 import ReceivedRequests from "./receivedConnection";
+import chatsReducer from "./chatUserSlice"
 
 const appStore = configureStore({
     reducer: {
@@ -13,7 +14,8 @@ const appStore = configureStore({
         connections: connectionReducer,
         blockedUsers: blocksReducer,
         requestedUser: RequestedUser,
-        receivedConnection: ReceivedRequests
+        receivedConnection: ReceivedRequests,
+        chats: chatsReducer,
     },
     devTools: {
         trace: true,
