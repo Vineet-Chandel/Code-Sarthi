@@ -230,7 +230,7 @@ const Discussions = () => {
                 `${BASE_URL}/chats`,
                 { withCredentials: true }
             );
-            dispatch(addChatsUser(response.data.data));
+            dispatch(addChatsUser(response?.data?.data || []));
 
 
         } catch (err) {

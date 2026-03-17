@@ -11,10 +11,8 @@ const chatSlice = createSlice({
     reducers: {
 
         addChatsUser: (state, action) => {
-
-            state.users = action.payload;
-            state.total = action.payload.length
-
+            state.users = action.payload || [];
+            state.total = state.users.length;
         },
         clearChats: (state) => {
             state.users = [];
