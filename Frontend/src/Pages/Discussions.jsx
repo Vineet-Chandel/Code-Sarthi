@@ -8,14 +8,72 @@ import { useDispatch, useSelector } from "react-redux";
 import { io } from "socket.io-client";
 const Discussions = () => {
     const socketRef = useRef(null);
+
     const user = useSelector(store => store.user.user.DATA);
     const connections = useSelector(state => state.connections.users || []);
     const chatsUsers = useSelector(state => state.chats.users || []);
+
+
+
+
     const [messages, setMessages] = useState([]);
     const [messageText, setMessageText] = useState("");
     const [typingUser, setTypingUser] = useState(false);
-    const currentUserId = user?._id;
+
+    const [profileOpen, setIsProfileOpen] = useState(false);
+    //activation of the chat
+    const [chatActive, setchatActive] = useState(false);
+    const [chatingUserId, setChatingUserId] = useState("");
+    const [chatingUsername, setChatingUsername] = useState("");
+    const [chatingFirstName, setChatingFirstName] = useState("");
+    const [chatingMiddleName, setChatingMiddleName] = useState("");
+    const [chatingLastName, setChatingLastName] = useState("");
+    const [chatingGmail, setChatingGmail] = useState("");
+    const [chatingPhotoUrl, setChatingPhotoUrl] = useState("");
+
+    //for switching between the teams and connections
+    const [section, setSection] = useState(1);
+
+
+    //onclicking outer box focusing in the input box
+    const inputRef = useRef(null);
+    const focusInput = () => {
+        inputRef.current.focus();
+    }
+
+    // onsending the message it goes to down 
     const bottomRef = useRef(null);
+    const [scrollDown, setScrollDown] = useState(false);
+    const chatRef = useRef(null);
+    const prevScrollTop = useRef(0);
+    useEffect(() => {
+        const container = chatRef.current;
+        if (!container) return;
+        const handleScroll = () => {
+            const currentScrollTop = container.scrollTop;
+
+            if (currentScrollTop < prevScrollTop.current) {
+                setScrollDown(true); // scrolling up
+            } else {
+                setScrollDown(false); // scrolling down
+            }
+
+            prevScrollTop.current = currentScrollTop;
+        };
+        container.addEventListener("scroll", handleScroll);
+        return () => container.removeEventListener("scroll", handleScroll);
+    }, []);
+    useEffect(() => {
+        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+        setScrollDown(false);
+    }, [messages, scrollDown]);
+
+
+
+
+
+    const currentUserId = user?._id;
+
     useEffect(() => {
 
         socketRef.current = io(BASE_URL, {
@@ -52,39 +110,59 @@ const Discussions = () => {
     }, [currentUserId]);
 
 
-    useEffect(() => {
-        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [messages]);
 
     const sendMessage = async () => {
-
         if (!messageText.trim()) return;
 
-        try {
+        const tempId = Date.now(); // temporary unique id
 
+        const tempMessage = {
+            _id: tempId,
+            content: messageText,
+            sender: { _id: currentUserId },
+            receiver: { _id: chatingUserId },
+            createdAt: new Date(),
+            status: "sending" // 👈 important
+        };
+
+        // 🚀 Show instantly
+        setMessages(prev => [...prev, tempMessage]);
+
+        setMessageText("");
+
+        try {
             const res = await axios.post(
                 `${BASE_URL}/send-message`,
                 {
                     receiverId: chatingUserId,
-                    content: messageText
+                    content: tempMessage.content
                 },
                 { withCredentials: true }
             );
 
-            const message = res.data.populatedMessage;
+            const realMessage = res.data.populatedMessage;
 
-            setMessages(prev => [...prev, message]);
+            // 🔄 Replace temp message with real one
+            setMessages(prev =>
+                prev.map(msg =>
+                    msg._id === tempId
+                        ? { ...realMessage, status: "sent" }
+                        : msg
+                )
+            );
 
-            socketRef.current.emit("sendMessage", message);
-
-            setMessageText("");
+            socketRef.current.emit("sendMessage", realMessage);
 
         } catch (error) {
-            console.log(error);
+            setMessages(prev =>
+                prev.map(msg =>
+                    msg._id === tempId
+                        ? { ...msg, status: "failed" }
+                        : msg
+                )
+            );
         }
-
     };
-
     const loadMessages = async (conversationId) => {
 
         try {
@@ -98,10 +176,7 @@ const Discussions = () => {
             const msgs = res.data.messages;
 
 
-            setMessages(msgs);
-
-
-
+            setMessages(msgs.map(m => ({ ...m, status: "sent" })));
 
             const messageIds = msgs
                 .filter(m => m.receiver._id === currentUserId)
@@ -120,6 +195,8 @@ const Discussions = () => {
         }
 
     };
+
+    //to sent the msg on clicking enter
     const handleKeyDown = (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault(); // prevents newline
@@ -136,25 +213,7 @@ const Discussions = () => {
 
     };
 
-    const [profileOpen, setIsProfileOpen] = useState(false);
-    //activation of the chat
-    const [chatActive, setchatActive] = useState(false);
-    const [chatingUserId, setChatingUserId] = useState("");
-    const [chatingUsername, setChatingUsername] = useState("");
-    const [chatingFirstName, setChatingFirstName] = useState("");
-    const [chatingMiddleName, setChatingMiddleName] = useState("");
-    const [chatingLastName, setChatingLastName] = useState("");
-    const [chatingGmail, setChatingGmail] = useState("");
-    const [chatingPhotoUrl, setChatingPhotoUrl] = useState("");
-    //for switching between the teams and connections
-    const [section, setSection] = useState(1);
 
-
-    //onclicking outer box focusing in the input box
-    const inputRef = useRef(null);
-    const focusInput = () => {
-        inputRef.current.focus();
-    }
 
 
     const makeReset = () => {
@@ -178,9 +237,7 @@ const Discussions = () => {
             console.error(err?.message || err);
         }
     };
-    useEffect(() => {
-        chats();
-    }, []);
+
 
     const convo = async () => {
         try {
@@ -368,7 +425,9 @@ const Discussions = () => {
             </div>
 
             {/* RIGHT CHAT AREA */}
-            <div className="flex-1 p-6">
+            <div
+                ref={chatRef}
+                className="flex-1 p-6">
 
                 <div className=" w-full h-full border border-zinc-800 rounded-3xl bg-gradient-to-b from-zinc-900/80 to-zinc-950 backdrop-blur-xl shadow-2xl flex flex-col overflow-hidden ">
 
@@ -377,7 +436,9 @@ const Discussions = () => {
                         <div className="flex flex-col w-full h-full">
 
                             {/* TOP HEADER */}
-                            <div className=" w-full border-b border-zinc-800 h-[78px] flex items-center justify-between px-6 bg-zinc-900/70 backdrop-blur ">
+                            <div className="sticky top-0 z-10 w-full border-b border-zinc-800 
+                flex items-center justify-between px-6 py-3
+                bg-zinc-900/70 backdrop-blur ">
 
                                 <div className="flex items-center gap-3">
                                     <img
@@ -408,49 +469,62 @@ const Discussions = () => {
                             </div>
 
 
-                            <div className="flex-1 overflow-y-auto p-6 space-y-4 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent">
 
-                                {messages.map((msg) => (
+                            <div className="relative flex flex-col overflow-y-auto p-4 space-y-3 bg-[#0b141a] scrollbar-thin scrollbar-thumb-zinc-700">
 
-                                    msg.sender._id === currentUserId ? (
+                                {messages.map((msg, index) => {
+                                    const isMe = msg.sender._id === currentUserId;
 
-                                        <div
-                                            key={msg._id}
-                                            className="flex justify-end items-end gap-2 animate-fadeIn"
-                                        >
+                                    return isMe ? (
+                                        // ✅ MY MESSAGE
+                                        <div key={msg._id} className="flex justify-end animate-fadeIn">
+                                            <div className="bg-[#005c4b] flex gap-1 w-fit max-w-[75%] text-white px-4 py-2 
+                  rounded-2xl rounded-br-md text-lg shadow-md">
 
-                                            <div className=" bg-blue-600 px-4 py-2 rounded-2xl rounded-br-sm max-w-[360px] text-sm text-white shadow-lg break-words ">
-                                                {msg.content}
+                                                <div className="break-all whitespace-pre-wrap">
+                                                    {msg.content}
+                                                </div>
+
+                                                <div className="flex justify-end mt-1 h-full pt-2 items-end text-xs opacity-80">
+                                                    {msg.status === "sending" && <span><svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24"><path fill="none" stroke="#ffffff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="m5 14l3.5 3.5L19 6.5"></path></svg></span>}
+                                                    {msg.status === "sent" && <span><svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24"><path fill="none" stroke="#ffffff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.5 13.833L6 17.5l1.024-1.073M16.5 6.5l-6.063 6.352m-2.937.981L11 17.5l10.5-11"></path></svg></span>}
+                                                    {msg.status === "failed" && <span><svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 16 16"><g fill="none"><path fill="url(#SVG46elwcsk)" d="M2 8a6 6 0 1 1 12 0A6 6 0 0 1 2 8"></path><path fill="url(#SVGQMDY1c6m)" d="M8 10a.75.75 0 1 0 0 1.5a.75.75 0 0 0 0-1.5m0-5.5a.5.5 0 0 0-.492.41L7.5 5v3.5l.008.09a.5.5 0 0 0 .984 0L8.5 8.5V5l-.008-.09A.5.5 0 0 0 8 4.5"></path><defs><linearGradient id="SVG46elwcsk" x1={3.875} x2={11.75} y1={0.125} y2={15.125} gradientUnits="userSpaceOnUse"><stop stopColor="#ffcd0f"></stop><stop offset={1} stopColor="#fe8401"></stop></linearGradient><linearGradient id="SVGQMDY1c6m" x1={6} x2={9.213} y1={4.5} y2={11.844} gradientUnits="userSpaceOnUse"><stop stopColor="#4a4a4a"></stop><stop offset={1} stopColor="#212121"></stop></linearGradient></defs></g></svg></span>}
+                                                </div>
                                             </div>
-
                                         </div>
-
                                     ) : (
-
-                                        <div
-                                            key={msg._id}
-                                            className="flex items-end gap-3 animate-fadeIn"
-                                        >
+                                        // ✅ OTHER USER MESSAGE
+                                        <div key={msg._id} className="flex items-end gap-2 animate-fadeIn">
 
                                             <img
                                                 src={msg.sender?.photoUrl?.url}
-                                                className="w-8 h-8 rounded-full object-cover shadow"
+                                                className="w-8 h-8 rounded-full object-cover"
                                             />
 
-                                            <div className="bg-zinc-800 px-4 py-2 rounded-2xl rounded-bl-sm max-w-[320px] text-sm text-white shadow-md break-words">
-                                                {msg.content}
+                                            <div className="bg-[#202c33] w-fit max-w-[75%] text-white px-4 py-2 
+                  rounded-2xl rounded-bl-md text-lg shadow-sm">
+
+                                                <div className="break-all whitespace-pre-wrap">
+                                                    {msg.content}
+                                                </div>
                                             </div>
-
                                         </div>
+                                    );
+                                })}
 
-                                    )
-
-                                ))}
+                                {/* 🔽 Scroll to bottom button */}
+                                <div
+                                    onClick={() => bottomRef.current?.scrollIntoView({ behavior: "smooth" })}
+                                    className={`fixed bottom-6 right-6 transition-all duration-300 ${scrollDown ? "opacity-100 scale-100" : "opacity-0 scale-75 pointer-events-none"
+                                        }`}
+                                >
+                                    <div className="bg-[#202c33] p-2 rounded-full shadow-lg hover:bg-[#2a3942] cursor-pointer">
+                                        ⬇️
+                                    </div>
+                                </div>
 
                                 <div ref={bottomRef}></div>
-
                             </div>
-
                             {/* TYPING AREA */}
                             <div className="border-t border-zinc-800 p-4 flex items-center gap-3">
 

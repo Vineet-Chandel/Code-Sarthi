@@ -340,10 +340,16 @@ c27 14 67 39 90 55 22 16 44 29 48 29 5 0 16 -15 25 -32z m-2631 -13 l80 -26
 
                                 {/* Footer section */}
                                 <div className=" bottom-0 left-0 right-0 p-3">
-                                    <div className="text-center text-gray-500 text-xs sm:text-sm">
-                                        <p>© {new Date().getFullYear()} CodeSarthi™ — All rights reserved.</p>
-                                        <p className="mt-1">Dhanyavaad 🌸</p>
-                                    </div>
+                                    <span className="text-rotate text-3xl text-black ">
+                                        <span className="justify-items-center">
+                                            <span>COLLAB</span>
+                                            <span>CODE</span>
+                                            <span>DEVELOP</span>
+                                            <span>DEPLOY</span>
+                                            <span>SCALE</span>
+                                            <span>CodeSarthi</span>
+                                        </span>
+                                    </span>
                                 </div>
                             </div>
                         </div>
