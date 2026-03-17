@@ -88,9 +88,9 @@ const Discussions = () => {
             }
         });
 
-        socketRef.current.on("user_typing", (data) => {
-            setTypingUser(data.isTyping);
-        });
+        // socketRef.current.on("user_typing", (data) => {
+        //     setTypingUser(data.isTyping);
+        // });
 
         socketRef.current.on("receiveMessage", (message) => {
 
@@ -182,13 +182,13 @@ const Discussions = () => {
                 .filter(m => m.receiver._id === currentUserId)
                 .map(m => m._id);
 
-            if (messageIds.length) {
-                await axios.post(
-                    `${BASE_URL}/mark-read`,
-                    { messageIds },
-                    { withCredentials: true }
-                );
-            }
+            // if (messageIds.length) {
+            //     await axios.post(
+            //         `${BASE_URL}/mark-read`,
+            //         { messageIds },
+            //         { withCredentials: true }
+            //     );
+            // }
 
         } catch (error) {
             console.log(error);
@@ -204,14 +204,14 @@ const Discussions = () => {
         }
     };
 
-    const handleTyping = () => {
+    // const handleTyping = () => {
 
-        socketRef.current.emit("typing_start", {
-            conversationId: chatingUserId,
-            receiverId: chatingUserId
-        });
+    //     socketRef.current.emit("typing_start", {
+    //         conversationId: chatingUserId,
+    //         receiverId: chatingUserId
+    //     });
 
-    };
+    // };
 
 
 
@@ -538,7 +538,7 @@ const Discussions = () => {
                                 {/* INPUT */}
                                 <input
                                     value={messageText}
-                                    onChange={(e) => { setMessageText(e.target.value); handleTyping(); }}
+                                    onChange={(e) => { setMessageText(e.target.value); }}
                                     onKeyDown={handleKeyDown}
                                     type="text"
                                     placeholder="Type a message..."
