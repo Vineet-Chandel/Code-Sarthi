@@ -9,9 +9,9 @@ import { io } from "socket.io-client";
 const Discussions = () => {
     const socketRef = useRef(null);
 
-    const user = useSelector(store => store.user.user.DATA);
-    const connections = useSelector(state => state.connections.users || []);
-    const chatsUsers = useSelector(state => state.chats.users || []);
+    const chatsUsers = useSelector(state => state.chats?.users || []);
+    const connections = useSelector(state => state.connections?.users || []);
+    const user = useSelector(state => state.user?.DATA);
 
 
 
