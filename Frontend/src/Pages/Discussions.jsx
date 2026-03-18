@@ -9,9 +9,9 @@ import { io } from "socket.io-client";
 const Discussions = () => {
     const socketRef = useRef(null);
 
-    const chatsUsers = useSelector(state => state.chats?.users || []);
+    const chatsUsers = useSelector(state => state.chats.users || []);
     const connections = useSelector(state => state.connections?.users || []);
-    const user = useSelector(state => state.user.user.DATA);
+    const user = useSelector(state => state.user?.user?.DATA);
 
     const currentUserId = user._id;
 
@@ -116,6 +116,11 @@ const Discussions = () => {
 
         const tempId = Date.now(); // temporary unique id
 
+        console.log(currentUserId);
+        console.log(user._id);
+        console.log(connections.userId);
+
+
         const tempMessage = {
             _id: tempId,
             content: messageText,
@@ -132,6 +137,7 @@ const Discussions = () => {
 
         try {
             const res = await axios.post(
+
                 `${BASE_URL}/send-message`,
                 {
                     receiverId: chatingUserId,
