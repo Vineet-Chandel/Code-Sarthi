@@ -9,13 +9,6 @@ import { io } from "socket.io-client";
 const Discussions = () => {
     const socketRef = useRef(null);
     const dispatch = useDispatch();
-
-    const chatsUsers = useSelector(state => {
-        console.log("STATE:", state);
-        return state?.chats?.user.user ?? [];
-    });
-
-
     const convo = async () => {
         try {
             const response = await axios.get(
@@ -30,9 +23,13 @@ const Discussions = () => {
     useEffect(() => {
         convo();
     }, []);
+
     const connections = useSelector(state => state.connections?.users || []);
     const user = useSelector(state => state.user?.user?.DATA);
-
+    const chatsUsers = useSelector(state => {
+        console.log("STATE:", state);
+        return state?.chats?.user.user ?? [];
+    });
     const currentUserId = user._id;
 
 
