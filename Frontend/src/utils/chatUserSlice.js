@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    users: [],
+    chats: [],
     total: 0
 };
 
@@ -15,7 +15,7 @@ const chatSlice = createSlice({
             state.total = state.chats.length;
         },
         clearChats: (state) => {
-            state.users = [];
+            state.chats = [];
             state.total = 0;
         },
     },
