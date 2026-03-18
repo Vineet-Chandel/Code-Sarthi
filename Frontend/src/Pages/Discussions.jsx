@@ -10,8 +10,8 @@ const Discussions = () => {
     const socketRef = useRef(null);
 
     const chatsUsers = useSelector(state => {
-        console.log("STATE:", state);
-        return state?.chats?.users ?? [];
+        console.log("STATE:", state.user.user);
+        return state?.chats?.user.user ?? [];
     });
     const connections = useSelector(state => state.connections?.users || []);
     const user = useSelector(state => state.user?.user?.DATA);
