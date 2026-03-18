@@ -13,12 +13,16 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
     cors({
-        // origin: process.env.AT_FRONT,
-        origin: process.env.AT_SYSTEM_API,
+        origin: process.env.AT_FRONT,
+        // origin: process.env.AT_SYSTEM_API,
         credentials: true
     })
 );
 
+app.use((req, res, next) => {
+    console.log("Cookies:", req.cookies);
+    next();
+});
 app.use((req, res, next) => {
     req.io = io;
     req.socketUserMap = io.socketUserMap;

@@ -206,23 +206,43 @@ chatRouter.post("/send-message", userAuth, upload.single("file"), async (req, re
 //Fetch all chats of a user
 chatRouter.post("/get-convo", userAuth, async (req, res) => {
     const userId = req.user._id;
+
     try {
-
-        // Find conversations where user is participant
-        let conversation = await Convo.find({
+        let conversations = await Convo.find({
             Participants: userId,
-        }).populate({
-            path: "LastMsg",    //Show preview of last message
-            populate: {
-                path: "sender receiver",
-                select: "username photoUrl"
+        })
+            .populate({
+                path: "LastMsg",
+                populate: {
+                    path: "sender receiver",
+                    select: "username photoUrl firstName lastName gmail college profession gender age"
+                }
+            })
+            .sort({ updatedAt: -1 });
 
+        // Add front user to each conversation
+        const updatedConversations = conversations.map(convo => {
+            let atFrontUser = null;
+
+            if (convo.LastMsg) {
+                if (convo.LastMsg.sender?._id.toString() === userId.toString()) {
+                    atFrontUser = convo.LastMsg.receiver;
+                } else {
+                    atFrontUser = convo.LastMsg.sender;
+                }
             }
-        }).sort({ updatedAt: -1 });
+
+            return {
+                ...convo.toObject(),
+                atFrontUser
+            };
+        });
+
         res.status(200).json({
             success: true,
             message: "Conversations fetched successfully",
-            conversation
+            conversation: updatedConversations,
+
         });
 
     } catch (error) {
@@ -231,7 +251,7 @@ chatRouter.post("/get-convo", userAuth, async (req, res) => {
             message: error.message,
         });
     }
-})
+});
 //Load chat messages
 chatRouter.post("/get-message/:conversationId", userAuth, async (req, res) => {
     const { conversationId } = req.params;
@@ -276,7 +296,12 @@ chatRouter.post("/get-message/:conversationId", userAuth, async (req, res) => {
 
 
         // updated the read count to the zero
-        conversation.unReadCount = 0;
+        if (receiver == userId) {
+            conversation.unReadCount = 0;
+        }
+
+
+
         await conversation.save();
         res.status(200).json({
             success: true,

@@ -1,25 +1,30 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    chats: [],
-    total: 0
+    users: [],              // chat list (sidebar)
 };
 
 const chatSlice = createSlice({
     name: "chats",
     initialState,
     reducers: {
+        // ✅ set all chat users
+        setChatUsers: (state, action) => {
+            state.users = action.payload;
+        },
 
-        addChatsUser: (state, action) => {
-            state.chats = action.payload || [];
-            state.total = state.chats.length;
-        },
+
+        // ❌ optional: clear messages (when logout etc.)
         clearChats: (state) => {
-            state.chats = [];
-            state.total = 0;
-        },
-    },
+            state.users = [];
+
+        }
+    }
 });
 
-export const { addChatsUser, clearChats } = chatSlice.actions;
+export const {
+    setChatUsers,
+    clearChats
+} = chatSlice.actions;
+
 export default chatSlice.reducer;
