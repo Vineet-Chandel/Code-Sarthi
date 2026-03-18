@@ -11,9 +11,9 @@ const Discussions = () => {
 
     const chatsUsers = useSelector(state => state.chats?.users || []);
     const connections = useSelector(state => state.connections?.users || []);
-    const user = useSelector(state => state.user?.DATA);
+    const user = useSelector(state => state.user.user.DATA);
 
-
+    const currentUserId = user._id;
 
 
     const [messages, setMessages] = useState([]);
@@ -72,7 +72,7 @@ const Discussions = () => {
 
 
 
-    const currentUserId = user?._id;
+
 
     useEffect(() => {
 
