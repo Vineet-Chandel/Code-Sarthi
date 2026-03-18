@@ -8,11 +8,28 @@ import { useDispatch, useSelector } from "react-redux";
 import { io } from "socket.io-client";
 const Discussions = () => {
     const socketRef = useRef(null);
+    const dispatch = useDispatch();
 
     const chatsUsers = useSelector(state => {
         console.log("STATE:", state);
         return state?.chats?.user.user ?? [];
     });
+
+
+    const convo = async () => {
+        try {
+            const response = await axios.get(
+                `${BASE_URL}/chats`,
+                { withCredentials: true }
+            );
+            dispatch(addChatsUser(response.data.data));
+        } catch (err) {
+            console.error(err?.message || err);
+        }
+    };
+    useEffect(() => {
+        convo();
+    }, []);
     const connections = useSelector(state => state.connections?.users || []);
     const user = useSelector(state => state.user?.user?.DATA);
 
@@ -70,13 +87,6 @@ const Discussions = () => {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" });
         setScrollDown(false);
     }, [messages, scrollDown]);
-
-
-
-
-
-
-
     useEffect(() => {
 
         socketRef.current = io(BASE_URL, {
@@ -111,9 +121,6 @@ const Discussions = () => {
         };
 
     }, [currentUserId]);
-
-
-
     const sendMessage = async () => {
         if (!messageText.trim()) return;
 
@@ -204,7 +211,6 @@ const Discussions = () => {
         }
 
     };
-
     //to sent the msg on clicking enter
     const handleKeyDown = (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
@@ -212,14 +218,11 @@ const Discussions = () => {
             sendMessage();
         }
     };
-
     // const handleTyping = () => {
-
     //     socketRef.current.emit("typing_start", {
     //         conversationId: chatingUserId,
     //         receiverId: chatingUserId
     //     });
-
     // };
 
 
@@ -228,7 +231,7 @@ const Discussions = () => {
         setIsProfileOpen(false);
         setSelectedUserID(null);
     }
-    const dispatch = useDispatch();
+
 
 
     //fetching the connections 
@@ -247,20 +250,7 @@ const Discussions = () => {
     };
 
 
-    const convo = async () => {
-        try {
-            const response = await axios.get(
-                `${BASE_URL}/chats`,
-                { withCredentials: true }
-            );
-            dispatch(addChatsUser(response.data.data));
-        } catch (err) {
-            console.error(err?.message || err);
-        }
-    };
-    useEffect(() => {
-        chats();
-    }, []);
+
 
     //fetching the connections 
     const connectionUser = async () => {
