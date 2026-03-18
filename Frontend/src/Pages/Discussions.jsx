@@ -9,7 +9,10 @@ import { io } from "socket.io-client";
 const Discussions = () => {
     const socketRef = useRef(null);
 
-    const chatsUsers = useSelector(state => state.chats.users || []);
+    const chatsUsers = useSelector(state => {
+        console.log("STATE:", state.chats);
+        return state?.chats?.users ?? [];
+    });
     const connections = useSelector(state => state.connections?.users || []);
     const user = useSelector(state => state.user?.user?.DATA);
 
@@ -221,7 +224,6 @@ const Discussions = () => {
 
 
 
-
     const makeReset = () => {
         setIsProfileOpen(false);
         setSelectedUserID(null);
@@ -427,6 +429,10 @@ const Discussions = () => {
                             ) : null
                         )
                     )}
+
+
+
+
                 </div>
             </div>
 
