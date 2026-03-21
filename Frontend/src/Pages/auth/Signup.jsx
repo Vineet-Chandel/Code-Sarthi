@@ -618,10 +618,6 @@ const Signup = () => {
         {/* RIGHT - Content Panel */}
         <div className="w-full md:w-[50%] p-6">
           <div className="w-full h-full bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white rounded-2xl p-8 md:p-12 relative overflow-hidden group">
-            {/* Animated Background Elements */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/20 rounded-full -translate-y-16 translate-x-16 group-hover:scale-125 transition-transform duration-1000" />
-            <div className="absolute bottom-0 left-0 w-40 h-40 bg-purple-500/20 rounded-full translate-y-20 -translate-x-20 group-hover:scale-125 transition-transform duration-1000 delay-300" />
-            <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-cyan-500/10 rounded-full -translate-x-1/2 -translate-y-1/2 group-hover:scale-150 transition-transform duration-1000 delay-150" />
 
             <div className="relative z-10 space-y-8">
               <div className="space-y-4">
@@ -631,7 +627,7 @@ const Signup = () => {
                 <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300 leading-tight animate-gradient">
                   About CodeSarthi
                 </h1>
-                <span className="text-7xl md:text-8xl opacity-20 block animate-bounce">"</span>
+
               </div>
 
               <div className="space-y-6">
@@ -683,20 +679,7 @@ const Signup = () => {
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 backdrop-blur-sm rounded-3xl p-6 md:p-8 border border-white/10 mt-16">
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-                All efforts go to the,<br />
-                <span className="text-blue-300">Team Axonic !!</span>
-              </h2>
-              <p className="text-gray-300 text-lg">
-                <b>Built in India, for the world.</b>   <br />
-                Our team works relentlessly to deliver a fast, reliable platform —
-                empowering developers, strengthening India’s tech ecosystem, and proving that world-class innovation proudly comes from India.
 
-              </p>
-
-
-            </div>
           </div>
         </div>
 

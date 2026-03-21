@@ -36,7 +36,7 @@ const Login = () => {
     const togglePassword = () => {
         setShowPassword(prev => !prev);
     }
-
+    
     const ToggleDiv = () => {
         setIsOpen(prev => !prev);
     }

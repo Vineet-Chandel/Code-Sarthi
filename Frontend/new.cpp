@@ -1,15 +1,24 @@
-#include <iostream>
-using namespace std;
-int main()
-{
-    int age;
-    cout << "Enter your age :";
-    cin >> age;
-    cout << "Your age is " << age << "years old." << endl;
+#include <stdio.h>
+#include <stdlib.h>
 
-    int n;
-    cout << "Enter the size : ";
-    cin >> n;
-    int arr[n];
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+int main(){
+    struct Node* head = NULL, *temp, *newNode;
+    int i,n;
+    printf("Enter the number of nodes:");
+    scanf("%d", &n);
+    //creating linked list
+    for (i=0;i<=n;i++){
+        newNode=(struct Node*)malloc(sizeof(struct Node));
+        printf("Enter the value of the % ");
+        
+    }
+
+
     return 0;
 }

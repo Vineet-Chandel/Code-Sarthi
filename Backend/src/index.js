@@ -19,10 +19,7 @@ app.use(
     })
 );
 
-app.use((req, res, next) => {
-    console.log("Cookies:", req.cookies);
-    next();
-});
+
 app.use((req, res, next) => {
     req.io = io;
     req.socketUserMap = io.socketUserMap;

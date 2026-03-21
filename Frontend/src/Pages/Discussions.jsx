@@ -5,21 +5,100 @@ import { BASE_URL } from "../Pages/auth/baseURL";
 import { addConnectionUser } from "../utils/connectionSlice";
 import { setChatUsers } from "../utils/chatUserSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { useMemo } from "react";
 import { io } from "socket.io-client";
+import {
+    smileys_people,
+    animals_nature,
+    food_drink,
+    activity,
+    travel_places,
+    objects,
+    symbols,
+    flags
+} from "./CollectionEmojieData";
+
+
+const emojis = {
+    smileys_people,
+    animals_nature,
+    food_drink,
+    activity,
+    travel_places,
+    objects,
+    symbols,
+    flags
+};
 const Discussions = () => {
     //using the dispatch 
     const dispatch = useDispatch();
     const socketRef = useRef(null);
-
+    const pickerRef = useRef(null);
     const connections = useSelector(state => state.connections?.users || []);
     const user = useSelector(state => state.user?.user?.DATA);
+    const [messages, setMessages] = useState([]);
+    const [messageText, setMessageText] = useState("");
+    const [profileOpen, setIsProfileOpen] = useState(false);
+    //activation of the chat
+    const [chatActive, setchatActive] = useState(false);
+    const [chatingUserId, setChatingUserId] = useState("");
+    const [chatingUsername, setChatingUsername] = useState("");
+    const [chatingFirstName, setChatingFirstName] = useState("");
+    const [chatingMiddleName, setChatingMiddleName] = useState("");
+    const [chatingLastName, setChatingLastName] = useState("");
+    const [chatingGmail, setChatingGmail] = useState("");
+    const [chatingPhotoUrl, setChatingPhotoUrl] = useState("");
+    const [activeEmojiFeild, setActiveEmojiFeild] = useState("smileys_people");
+    const [activeEFeild, setActiveEFeild] = useState("Smileys & Peoples")
+    //for switching between the teams and connections
+    const [section, setSection] = useState(1);
 
     //chats 
     const chatMessages = useSelector(
         state => state?.chats?.users || []
-
     );
-    const currentUserId = user._id;
+    //connections user 
+    const connectionUser = async () => {
+        try {
+            const response = await axios.get(
+                `${BASE_URL}/user/connections`,
+                { withCredentials: true }
+            );
+            dispatch(addConnectionUser(response.data.data));
+
+
+        } catch (err) {
+            console.error(err?.message || err);
+        }
+    };
+
+    useEffect(() => {
+        connectionUser();
+    }, []);
+    //filtered connection list 
+    const connectionList = useMemo(() => {
+        return connections.filter(
+            conn => !chatMessages.some(chat => chat.atFrontUser?._id === conn.userId)
+        );
+    }, [connections, chatMessages]);
+
+
+    //handeling the emojis tabs
+    const handleEmojiClick = (emoji) => {
+        setMessageText((prev) => prev + emoji);
+    };
+    useEffect(() => {
+        function handleClickOutside(e) {
+            if (pickerRef.current && !pickerRef.current.contains(e.target)) {
+                setShowPicker(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+
+    const currentUserId = user?._id;
     //chats api
     const convo = async () => {
         try {
@@ -36,7 +115,7 @@ const Discussions = () => {
     };
     useEffect(() => {
         convo();
-    }, []);
+    }, [messages]);
 
 
     //onclicking outer box focusing in the input box
@@ -48,23 +127,7 @@ const Discussions = () => {
 
 
 
-    const [messages, setMessages] = useState([]);
-    const [messageText, setMessageText] = useState("");
-    const [typingUser, setTypingUser] = useState(false);
 
-    const [profileOpen, setIsProfileOpen] = useState(false);
-    //activation of the chat
-    const [chatActive, setchatActive] = useState(false);
-    const [chatingUserId, setChatingUserId] = useState("");
-    const [chatingUsername, setChatingUsername] = useState("");
-    const [chatingFirstName, setChatingFirstName] = useState("");
-    const [chatingMiddleName, setChatingMiddleName] = useState("");
-    const [chatingLastName, setChatingLastName] = useState("");
-    const [chatingGmail, setChatingGmail] = useState("");
-    const [chatingPhotoUrl, setChatingPhotoUrl] = useState("");
-
-    //for switching between the teams and connections
-    const [section, setSection] = useState(1);
 
 
 
@@ -287,15 +350,15 @@ const Discussions = () => {
 
 
     return (
-        <div className="w-screen h-[calc(100vh-50px)] flex bg-[#0A0A0F] text-white font-sans antialiased">
+        <div className="w-screen h-[calc(100vh-50px)] flex bg-gradient-to-br from-[#0a0a0f] via-[#0c0c14] to-[#080810] text-white font-sans antialiased overflow-hidden">
             {/* LEFT SIDEBAR - Premium Glass Morphism */}
-            <div className="w-[400px] flex-shrink-0 border-r border-white/5 flex flex-col px-4 py-6 gap-5 bg-[#0B0B10] backdrop-blur-md relative overflow-hidden">
+            <div className="w-[320px] md:w-[360px] lg:w-[400px] flex-shrink-0 border-r border-white/5 flex flex-col px-3 md:px-4 py-5 gap-5 bg-white/[0.03] backdrop-blur-2xl relative overflow-hidden shadow-2xl">
 
                 <div className="relative z-10">
                     {/* SEARCH BAR - Premium */}
                     <div
                         onClick={focusInput}
-                        className="group flex items-center gap-3 bg-white/5 border border-white/10 px-4 py-3.5 rounded-2xl backdrop-blur-md hover:border-blue-500/50 focus-within:border-blue-500 transition-all duration-300 shadow-lg shadow-black/50"
+                        className="group flex items-center gap-3 bg-white/[0.04] border border-white/10 px-4 py-3 rounded-2xl backdrop-blur-xl hover:border-blue-500/40 focus-within:border-blue-500/60 transition-all duration-300 shadow-inner"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" className="opacity-50 group-focus-within:opacity-100 transition-opacity">
                             <path fill="currentColor" d="M10.5 2a8.5 8.5 0 1 0 5.262 15.176l3.652 3.652a1 1 0 0 0 1.414-1.414l-3.652-3.652A8.5 8.5 0 0 0 10.5 2" />
@@ -316,9 +379,9 @@ const Discussions = () => {
                     </div>
 
                     {/* SECTION TOGGLE - Premium Segmented Control */}
-                    <div className="mt-6 p-1 bg-white/5 rounded-2xl border border-white/10">
+                    <div className="mt-5 p-1 bg-white/[0.04] rounded-2xl border border-white/10 backdrop-blur-xl">
                         <div className="flex relative">
-                            <div className={`absolute top-0 h-full w-1/2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl transition-transform duration-300 shadow-lg  `}></div>
+                            <div className={`absolute top-0 h-full w-1/2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl transition-transform duration-300 shadow-md ${section === 2 ? "translate-x-full" : ""}`}></div>
                             <button
                                 onClick={() => setSection(1)}
                                 className={`flex-1 py-2.5 text-sm font-medium rounded-xl transition-all duration-300 relative z-10 ${section === 1 ? 'text-white' : 'text-white/60 hover:text-white/80'}`}
@@ -339,7 +402,7 @@ const Discussions = () => {
                         {chatMessages.map((item, index) => (
                             <div
                                 key={index}
-                                className="group relative flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-all duration-300 cursor-pointer border border-transparent hover:border-white/10"
+                                className="group relative flex items-center gap-3 p-3 rounded-xl hover:bg-white/[0.06] transition-all duration-300 cursor-pointer border border-transparent hover:border-white/10 hover:shadow-md"
                                 onClick={() => {
                                     setMessages([]);
                                     setchatActive(true);
@@ -350,7 +413,7 @@ const Discussions = () => {
                                     setChatingUsername(item.atFrontUser?.username);
                                     setChatingGmail(item.atFrontUser?.gmail);
                                     setChatingMiddleName(item.atFrontUser?.middleName);
-                                    loadMessages(item.LastMsg.conversation);
+                                    loadMessages(item.LastMsg?.conversation);
                                 }}
                             >
                                 {/* Online indicator */}
@@ -358,7 +421,7 @@ const Discussions = () => {
                                     <img
                                         src={item.atFrontUser?.photoUrl?.url}
                                         alt="profile"
-                                        className="w-14 h-14 rounded-full object-cover ring-2 ring-white/10 group-hover:ring-blue-500/50 transition-all duration-300"
+                                        className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-white/10 group-hover:ring-blue-500/40 transition-all duration-300"
                                     />
                                     <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-[#0A0A0F]"></div>
                                 </div>
@@ -395,6 +458,46 @@ const Discussions = () => {
                                 </svg>
                             </div>
                         </div>
+
+
+                        {
+                            connectionList.map((item) =>
+                                <li
+                                    key={item.userId}
+                                    className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-zinc-800 cursor-pointer transition"
+                                    onClick={() => {
+                                        setMessages([]);
+                                        setchatActive(true);
+                                        setChatingPhotoUrl(item.photoUrl);
+                                        setChatingUserId(item.userId);
+                                        setChatingFirstName(item.FirstName);
+                                        setChatingLastName(item.LastName);
+                                        setChatingUsername(item.username);
+                                        setChatingGmail(item.gmail);
+                                        setChatingMiddleName(item.MiddleName);
+                                    }}
+                                >
+                                    <img
+                                        src={item.photoUrl}
+                                        alt="profile"
+                                        className="w-[50px] h-[50px] rounded-full object-cover"
+                                    />
+
+                                    <div className="flex flex-col">
+                                        <span className="text-white text-xl font-medium">
+                                            {item.FirstName} {item.LastName}
+                                        </span>
+
+                                        <span className="text-gray-400 text-sm pl-1">
+                                            {!item.lastMsg && <span>Hey! let's collab</span>}
+                                        </span>
+                                    </div>
+
+
+                                </li>
+
+                            )
+                        }
                     </div>
                 </div>
             </div>
@@ -457,7 +560,7 @@ const Discussions = () => {
                                         // MY MESSAGE - Premium
                                         <div key={msg._id} className="flex justify-end animate-fadeIn">
                                             <div className="relative max-w-[70%] group">
-                                                <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white px-5 py-3 rounded-2xl rounded-br-md shadow-lg ">
+                                                <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white px-4 md:px-5 py-2.5 md:py-3 rounded-2xl rounded-br-md shadow-lg shadow-blue-500/10">
                                                     <div className="break-words whitespace-pre-wrap text-[15px] leading-relaxed pr-8">
                                                         {msg.content}
                                                     </div>
@@ -523,15 +626,87 @@ const Discussions = () => {
                             </div>
 
                             {/* TYPING AREA - Premium */}
-                            <div className="border-t border-white/10 p-4 bg-[#0C0C14]/80 backdrop-blur-xl">
-                                <div className="flex items-center gap-3">
-                                    {/* EMOJI BUTTON */}
-                                    <button className="p-2.5 hover:bg-white/5 rounded-xl transition-all duration-300 text-white/60 hover:text-white/90">
+                            <div className="relative z-10 w-[640px] bg-black h-[500px] rounded-3xl border border-gray-700">
+                                <div className="w-full border-b h-[50px] rounded-t-3xl">
+
+                                    {/* Tabs */}
+                                    <div className="flex gap-2 item-center h-full  justify-center">
+                                        <button className="w-[12.5%] h-full flex items-center  justify-center" onClick={() => { setActiveEmojiFeild("smileys_people"); setActiveEFeild("Smileys & Peoples"); }}>
+                                            <div className="flex flex-col items-center">
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="w-[40%] h-[40%]" viewBox="0 0 24 24"><g fill="none"><path fill="#ffef5e" d="M12 23c6.075 0 11-4.925 11-11S18.075 1 12 1S1 5.925 1 12s4.925 11 11 11" /><path fill="#fff9bf" d="M12 4.826a11.8 11.8 0 0 1 10.994 7.517c0-.114.006-.228.006-.343a11 11 0 1 0-21.994.343A11.8 11.8 0 0 1 12 4.826" /><path stroke="#191919" strokeLinecap="round" strokeLinejoin="round" d="M14.39 9.505a2.256 2.256 0 0 0 3.827 0m-8.609 0a2.256 2.256 0 0 1-3.826 0m.478 5.843a6.218 6.218 0 0 0 11.479 0" strokeWidth="1" /><path stroke="#191919" strokeLinecap="round" strokeLinejoin="round" d="M12 23c6.075 0 11-4.925 11-11S18.075 1 12 1S1 5.925 1 12s4.925 11 11 11" strokeWidth="1" /></g></svg>
+                                                {activeEmojiFeild === "smileys_people" && (<div className="w-[20%] mt-1 h-1 rounded-3xl bg-white/70" ></div>)}
+                                            </div>
+                                        </button>
+                                        <button className="w-[12.5%] h-full flex items-center  justify-center" onClick={() => { setActiveEmojiFeild("animals_nature"); setActiveEFeild("Animals & Nature"); }}>
+                                            <div className="flex flex-col items-center">
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="w-[40%] h-[40%]" viewBox="0 0 16 16"><g fill="none"><path fill="url(#SVGkglt4bPE)" d="M8 7a5 5 0 0 0-5 5c0 1.298 1.212 2 2.285 2h5.43C11.788 14 13 13.298 13 12a5 5 0 0 0-5-5" /><path fill="url(#SVGVlWkwbUw)" d="M8.5 3.875C8.5 2.938 9.138 2 10.125 2s1.625.938 1.625 1.875s-.638 1.875-1.625 1.875S8.5 4.812 8.5 3.875m-6.125.375C1.388 4.25.75 5.188.75 6.125S1.388 8 2.375 8S4 7.062 4 6.125S3.362 4.25 2.375 4.25m11.25 0c-.987 0-1.625.938-1.625 1.875S12.638 8 13.625 8s1.625-.938 1.625-1.875s-.638-1.875-1.625-1.875M5.875 2c-.987 0-1.625.938-1.625 1.875S4.888 5.75 5.875 5.75S7.5 4.812 7.5 3.875S6.862 2 5.875 2" /><defs><radialGradient id="SVGVlWkwbUw" cx="0" cy="0" r="1" gradientTransform="matrix(0 -7.71429 11.6 0 8.403 8.429)" gradientUnits="userSpaceOnUse"><stop stopColor="#eb4824" /><stop offset="1" stopColor="#ff921f" /></radialGradient><linearGradient id="SVGkglt4bPE" x1="5.378" x2="8.294" y1="7.931" y2="14.583" gradientUnits="userSpaceOnUse"><stop offset=".125" stopColor="#ff921f" /><stop offset="1" stopColor="#eb4824" /></linearGradient></defs></g></svg>
+                                                {activeEmojiFeild === "animals_nature" && (<div className="w-[20%] mt-1 h-1 rounded-3xl bg-white/70" ></div>)}
+                                            </div>
+                                        </button>
+                                        <button className="w-[12.5%] h-full flex items-center  justify-center" onClick={() => { setActiveEmojiFeild("food_drink"); setActiveEFeild("Foods & Drinks"); }}>
+                                            <div className="flex flex-col items-center">
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="w-[40%] h-[40%]" viewBox="0 0 16 16"><g fill="none"><path fill="url(#SVGjZsZrbsg)" d="M13.5 1A4.5 4.5 0 0 0 9 5.5V7a1 1 0 0 0 1 1h.944l-.02.191c-.046.452-.109 1.062-.172 1.7c-.123 1.255-.252 2.663-.252 3.109a2 2 0 1 0 4 0c0-.446-.129-1.854-.252-3.11a304 304 0 0 0-.23-2.24L14 7.473V1.5a.5.5 0 0 0-.5-.5" /><path fill="url(#SVGWHu4Ndaz)" d="M6.723 1.054a.5.5 0 0 1 .265.335C7.006 1.468 7.5 3.582 7.5 5c0 .95-.442 1.797-1.13 2.346c-.25.2-.37.418-.37.6v.486q0 .035.004.066c.034.248.157 1.169.272 2.124c.113.937.224 1.959.224 2.378a2 2 0 1 1-4 0c0-.42.111-1.44.224-2.378c.115-.955.238-1.876.272-2.124L3 8.432v-.486c0-.182-.12-.4-.37-.6A3 3 0 0 1 1.5 5c0-1.413.49-3.516.512-3.61A.505.505 0 0 1 2.505 1c.28 0 .507.227.507.507v2.998A.495.495 0 1 0 4 4.5v-3a.5.5 0 0 1 1 0v3.026a.495.495 0 0 0 .99-.021v-3c0-.279.226-.505.506-.505c.022 0 .12 0 .227.054" /><defs><linearGradient id="SVGjZsZrbsg" x1="8.154" x2="21.198" y1="1.875" y2="6.749" gradientUnits="userSpaceOnUse"><stop stopColor="#6ce0ff" /><stop offset="1" stopColor="#0067bf" /></linearGradient><linearGradient id="SVGWHu4Ndaz" x1=".577" x2="14.483" y1="1.875" y2="7.543" gradientUnits="userSpaceOnUse"><stop stopColor="#6ce0ff" /><stop offset="1" stopColor="#0067bf" /></linearGradient></defs></g></svg>
+                                                {activeEmojiFeild === "food_drink" && (<div className="w-[20%] mt-1 h-1 rounded-3xl bg-white/70" ></div>)}
+                                            </div>
+                                        </button>
+                                        <button className="w-[12.5%] h-full flex items-center  justify-center" onClick={() => { setActiveEmojiFeild("activity"); setActiveEFeild("Activity"); }}>
+                                            <div className="flex flex-col items-center">
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="w-[40%] h-[40%]" viewBox="0 0 24 24"><g fill="none"><path fill="#fff" d="M12 .751L4.046 4.046L.751 12l3.295 7.954L12 23.249l7.954-3.295L23.249 12l-3.295-7.954z" /><path fill="#bbd8ff" d="m8.924 17.113l-1.912-6.26l5.001-3.644l5.002 3.645l-1.91 6.259zM8.805 2.075l3.208 1.37l3.195-1.364L12 .75zM22.979 12.65l-2.876-3.309l.361-4.085L23.249 12zm-2.225 5.374l-3.74.861l-1.812 3.037l4.752-1.968zM1.021 12.65l2.876-3.309l-.361-4.085L.75 12zm2.225 5.374l3.74.861l1.812 3.037l-4.752-1.968z" /><path stroke="#092f63" strokeLinecap="round" strokeLinejoin="round" d="M12 .751L4.046 4.046L.751 12l3.295 7.954L12 23.249l7.954-3.295L23.249 12l-3.295-7.954z" strokeWidth="1" /><path stroke="#092f63" strokeLinecap="round" strokeLinejoin="round" d="m8.924 17.113l-1.912-6.26l5.001-3.644l5.002 3.645l-1.91 6.259zM3.557 5.225l.364 4.118l-2.891 3.329m2.214 5.348l3.769.868l1.823 3.05m11.918-3.914l-3.74.861l-1.812 3.037l4.752-1.968zM12.013 7.209V3.445l3.195-1.365l4.746 1.966l.51 1.21l-.36 4.085l-3.09 1.512zm3.092 9.904l1.91 1.772m-8.091-1.772l-1.911 1.774M3.921 9.343l3.09 1.51" strokeWidth="1" /><path stroke="#092f63" strokeLinecap="round" strokeLinejoin="round" d="m8.805 2.075l3.208 1.37l3.195-1.364L12 .75zM22.979 12.65l-2.876-3.309l.361-4.085L23.249 12z" strokeWidth="1" /></g></svg>
+                                                {activeEmojiFeild === "activity" && (<div className="w-[20%] mt-1 h-1 rounded-3xl bg-white/70" ></div>)}
+                                            </div>
+                                        </button>
+                                        <button className="w-[12.5%] h-full flex items-center  justify-center" onClick={() => { setActiveEmojiFeild("travel_places"); setActiveEFeild("Travel & Places"); }}>
+                                            <div className="flex flex-col items-center">
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="w-[40%] h-[40%]" viewBox="0 0 24 24"><g fill="none"><path fill="#ff808c" d="M4.826 9.13h14.348A3.826 3.826 0 0 1 23 12.957v4.782a.957.957 0 0 1-.957.957H1.957A.956.956 0 0 1 1 17.739v-4.783A3.826 3.826 0 0 1 4.826 9.13" /><path fill="#ffbfc5" d="M22.88 12a3.826 3.826 0 0 0-3.706-2.87H4.827A3.826 3.826 0 0 0 1.12 12z" /><path fill="#ffef5e" d="M2.914 13.913h2.87L5.305 12H1.122a4 4 0 0 0-.117.78a2.15 2.15 0 0 0 1.91 1.133M18.696 12l-.478 1.913h2.87A2.16 2.16 0 0 0 23 12.778a4 4 0 0 0-.12-.778z" /><path fill="#66e1ff" d="m4.348 9.13l.69-4.14A1.91 1.91 0 0 1 6.93 3.392h10.146a1.91 1.91 0 0 1 1.886 1.599l.69 4.14z" /><path fill="#c2f3ff" d="M15.348 3.391H6.93a1.91 1.91 0 0 0-1.889 1.6l-.693 4.14h5.26z" /><path stroke="#191919" strokeLinecap="round" strokeLinejoin="round" d="M4.826 9.13h14.348A3.826 3.826 0 0 1 23 12.957v4.782a.957.957 0 0 1-.957.957H1.957A.956.956 0 0 1 1 17.739v-4.783A3.826 3.826 0 0 1 4.826 9.13m-.478 0l.69-4.14a1.91 1.91 0 0 1 1.886-1.6h10.15a1.91 1.91 0 0 1 1.887 1.599l.69 4.14" strokeWidth="1" /><path fill="#ff808c" stroke="#191919" strokeLinecap="round" strokeLinejoin="round" d="m19.652 9.13l1.435-1.913h1.435a.48.48 0 0 1 .478.479v.956a.48.48 0 0 1-.478.478zm-15.304 0L2.913 7.217H1.478A.48.48 0 0 0 1 7.696v.956a.48.48 0 0 0 .478.478z" strokeWidth="1" /><path fill="#808080" stroke="#191919" strokeLinecap="round" strokeLinejoin="round" d="M5.782 18.696v.956a.956.956 0 0 1-.956.957H2.913a.957.957 0 0 1-.957-.957v-.956zm16.262 0v.956a.956.956 0 0 1-.957.957h-1.913a.957.957 0 0 1-.956-.957v-.956z" strokeWidth="1" /><path stroke="#191919" strokeLinecap="round" strokeLinejoin="round" d="M22.88 12h-4.184l-.478 1.913h2.87A2.16 2.16 0 0 0 23 12.78M1.12 12h4.184l.479 1.913h-2.87A2.15 2.15 0 0 1 1 12.78" strokeWidth="1" /><path fill="#808080" stroke="#191919" strokeLinecap="round" strokeLinejoin="round" d="m18.218 13.913l-1.953.78a3 3 0 0 1-.923.177H8.174a2.4 2.4 0 0 1-.907-.215l-1.484-.742L5.305 12h13.391z" strokeWidth="1" /><path fill="#b2b2b2" stroke="#191919" strokeLinecap="round" strokeLinejoin="round" d="m5.305 18.696l.956-1.913H17.74l.956 1.913z" strokeWidth="1" /><path stroke="#191919" strokeLinecap="round" strokeLinejoin="round" d="M17.74 16.783h3.347m-18.174 0h3.348" strokeWidth="1" /></g></svg>
+                                                {activeEmojiFeild === "travel_places" && (<div className="w-[20%] mt-1 h-1 rounded-3xl bg-white/70" ></div>)}
+                                            </div>
+                                        </button>
+                                        <button className="w-[12.5%] h-full flex items-center  justify-center" onClick={() => { setActiveEmojiFeild("objects"); setActiveEFeild("Objects"); }}>
+                                            <div className="flex flex-col items-center">
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="w-[40%] h-[40%]" viewBox="0 0 28 28"><g fill="none"><path fill="url(#SVGeFf7wcDq)" d="M15.525 25.992c1.208-.09 2.23-.927 2.506-2.083l1.448-6.05a.3.3 0 0 1 .088-.149C21.84 15.613 23 13.265 23 10.7C23 5.896 18.97 2 14 2s-9 3.895-9 8.7c0 2.565 1.162 4.913 3.435 7.01q.066.061.088.15l1.444 6.047l.057.201C10.386 25.226 11.46 26 12.689 26h2.621z" /><path fill="url(#SVG3u1kdbnT)" d="M15.525 25.992c1.208-.09 2.23-.927 2.506-2.083l1.448-6.05a.3.3 0 0 1 .088-.149C21.84 15.613 23 13.265 23 10.7C23 5.896 18.97 2 14 2s-9 3.895-9 8.7c0 2.565 1.162 4.913 3.435 7.01q.066.061.088.15l1.444 6.047l.057.201C10.386 25.226 11.46 26 12.689 26h2.621z" /><path fill="url(#SVGEF9bvdXB)" fillOpacity="0.2" d="M15.525 25.992c1.208-.09 2.23-.927 2.506-2.083l1.448-6.05a.3.3 0 0 1 .088-.149C21.84 15.613 23 13.265 23 10.7C23 5.896 18.97 2 14 2s-9 3.895-9 8.7c0 2.565 1.162 4.913 3.435 7.01q.066.061.088.15l1.444 6.047l.057.201C10.386 25.226 11.46 26 12.689 26h2.621z" /><path fill="url(#SVGthJLqccG)" fillOpacity="0.2" d="M15.525 25.992c1.208-.09 2.23-.927 2.506-2.083l1.448-6.05a.3.3 0 0 1 .088-.149C21.84 15.613 23 13.265 23 10.7C23 5.896 18.97 2 14 2s-9 3.895-9 8.7c0 2.565 1.162 4.913 3.435 7.01q.066.061.088.15l1.444 6.047l.057.201C10.386 25.226 11.46 26 12.689 26h2.621z" /><path fill="url(#SVGEDEatbIo)" fillOpacity="0.2" d="M15.525 25.992c1.208-.09 2.23-.927 2.506-2.083l1.448-6.05a.3.3 0 0 1 .088-.149C21.84 15.613 23 13.265 23 10.7C23 5.896 18.97 2 14 2s-9 3.895-9 8.7c0 2.565 1.162 4.913 3.435 7.01q.066.061.088.15l1.444 6.047l.057.201C10.386 25.226 11.46 26 12.689 26h2.621z" /><path fill="url(#SVGTyyduXEa)" fillOpacity="0.2" d="M15.525 25.992c1.208-.09 2.23-.927 2.506-2.083l1.448-6.05a.3.3 0 0 1 .088-.149C21.84 15.613 23 13.265 23 10.7C23 5.896 18.97 2 14 2s-9 3.895-9 8.7c0 2.565 1.162 4.913 3.435 7.01q.066.061.088.15l1.444 6.047l.057.201C10.386 25.226 11.46 26 12.689 26h2.621z" /><rect width="1.865" height="10.138" x="13.066" y="11.599" fill="url(#SVGTkdKVc1J)" rx=".932" /><rect width="1.865" height="3.599" x="13.066" y="6.798" fill="url(#SVGysatlGtA)" rx=".932" /><path fill="url(#SVGQIt36cLl)" d="M8.736 10.782a.932.932 0 0 1 1.318-1.319l1.227 1.226a.932.932 0 1 1-1.32 1.32z" /><path fill="url(#SVGa8Do9doS)" d="M19.266 10.782a.933.933 0 0 0-1.319-1.319l-1.226 1.226a.932.932 0 1 0 1.319 1.32z" /><path fill="url(#SVGIcBP9bHE)" d="M9.606 22.397h8.787l.431-1.801H9.176z" /><defs><linearGradient id="SVG3u1kdbnT" x1="14" x2="14" y1="2" y2="26" gradientUnits="userSpaceOnUse"><stop offset=".792" stopColor="#d34719" fillOpacity="0" /><stop offset=".835" stopColor="#d34719" /><stop offset="1" stopColor="#d34719" fillOpacity="0" /></linearGradient><linearGradient id="SVGTkdKVc1J" x1="13.998" x2="13.998" y1="11.599" y2="21.743" gradientUnits="userSpaceOnUse"><stop stopColor="#fff2be" /><stop offset=".437" stopColor="#ffd638" /></linearGradient><linearGradient id="SVGysatlGtA" x1="13.066" x2="14.931" y1="8.598" y2="8.598" gradientUnits="userSpaceOnUse"><stop stopColor="#fff2be" /><stop offset="1" stopColor="#ffd638" /></linearGradient><linearGradient id="SVGQIt36cLl" x1="9.384" x2="10.638" y1="11.378" y2="10.124" gradientUnits="userSpaceOnUse"><stop stopColor="#fff2be" /><stop offset="1" stopColor="#ffd638" /></linearGradient><linearGradient id="SVGa8Do9doS" x1="17.316" x2="18.56" y1="10.171" y2="11.416" gradientUnits="userSpaceOnUse"><stop stopColor="#fff2be" /><stop offset="1" stopColor="#ffd638" /></linearGradient><linearGradient id="SVGIcBP9bHE" x1="13.215" x2="14.347" y1="20.596" y2="23.595" gradientUnits="userSpaceOnUse"><stop stopColor="#ffc7a3" /><stop offset="1" stopColor="#ff9c70" /></linearGradient><radialGradient id="SVGeFf7wcDq" cx="0" cy="0" r="1" gradientTransform="rotate(73.984 1.108 7.487)scale(21.4494 32.65)" gradientUnits="userSpaceOnUse"><stop stopColor="#ffe06b" /><stop offset=".376" stopColor="#ffa43d" /><stop offset="1" stopColor="#e67505" /></radialGradient><radialGradient id="SVGEF9bvdXB" cx="0" cy="0" r="1" gradientTransform="rotate(46.818 -8.363 17.31)scale(2.38769 1.90901)" gradientUnits="userSpaceOnUse"><stop offset=".165" stopColor="#741c06" /><stop offset=".854" stopColor="#741c06" fillOpacity="0" /></radialGradient><radialGradient id="SVGthJLqccG" cx="0" cy="0" r="1" gradientTransform="matrix(0 3.00822 -2.25616 0 14 8.93)" gradientUnits="userSpaceOnUse"><stop offset=".165" stopColor="#741c06" /><stop offset=".854" stopColor="#741c06" fillOpacity="0" /></radialGradient><radialGradient id="SVGEDEatbIo" cx="0" cy="0" r="1" gradientTransform="rotate(133.802 6.55 9.575)scale(2.8674 2.15055)" gradientUnits="userSpaceOnUse"><stop offset=".165" stopColor="#741c06" /><stop offset=".854" stopColor="#741c06" fillOpacity="0" /></radialGradient><radialGradient id="SVGTyyduXEa" cx="0" cy="0" r="1" gradientTransform="matrix(-2.29826 0 0 -6.61925 14 16.058)" gradientUnits="userSpaceOnUse"><stop offset=".165" stopColor="#741c06" /><stop offset=".777" stopColor="#741c06" fillOpacity="0" /></radialGradient></defs></g></svg>
+                                                {activeEmojiFeild === "objects" && (<div className="w-[20%] mt-1 h-1 rounded-3xl bg-white/70" ></div>)}
+                                            </div>
+                                        </button>
+                                        <button className="w-[12.5%] h-full flex items-center  justify-center" onClick={() => { setActiveEmojiFeild("symbols"); setActiveEFeild("Symbols"); }}>
+                                            <div className="flex flex-col items-center">
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="w-[40%] h-[40%]" viewBox="0 0 48 48"><g fill="none"><path fill="url(#SVG1hh7icZR)" d="M21.263 10.178a10.77 10.77 0 0 0-12.575-.296c-5.65 3.866-6.308 11.953-1.357 16.681l15.806 15.092a1.25 1.25 0 0 0 1.726 0l15.803-15.091c4.952-4.728 4.293-12.816-1.358-16.681a10.77 10.77 0 0 0-12.577.298L24 12.246z" /><defs><linearGradient id="SVG1hh7icZR" x1="-4.752" x2="15.69" y1="-1.713" y2="42.43" gradientUnits="userSpaceOnUse"><stop stopColor="#f97dbd" /><stop offset="1" stopColor="#d7257d" /></linearGradient></defs></g></svg>
+                                                {activeEmojiFeild === "symbols" && (<div className="w-[20%] mt-1 h-1 rounded-3xl bg-white/70" ></div>)}
+                                            </div>
+                                        </button>
+                                        <button className="w-[12.5%] h-full flex items-center  justify-center" onClick={() => { setActiveEmojiFeild("flags"); setActiveEFeild("Flags"); }}>
+                                            <div className="flex flex-col items-center">
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="w-[40%] h-[40%]" viewBox="0 0 32 32"><g fill="none"><path fill="url(#SVGjc3ufb1q)" d="M6 29a1 1 0 0 1-1-1v-9h2v9a1 1 0 0 1-1 1" /><path fill="url(#SVGDiak0brK)" d="M5 4.5A1.5 1.5 0 0 1 6.5 3H28a1 1 0 0 1 .8 1.6L23.25 12l5.55 7.4A1 1 0 0 1 28 21H6.5A1.5 1.5 0 0 1 5 19.5z" /><defs><linearGradient id="SVGjc3ufb1q" x1="7" x2="6.235" y1="32.214" y2="19.363" gradientUnits="userSpaceOnUse"><stop stopColor="#889096" /><stop offset="1" stopColor="#63686e" /></linearGradient><linearGradient id="SVGDiak0brK" x1="-.25" x2="9.688" y1="-2.143" y2="22.178" gradientUnits="userSpaceOnUse"><stop stopColor="#f97dbd" /><stop offset="1" stopColor="#d7257d" /></linearGradient></defs></g></svg>
+                                                {activeEmojiFeild === "flags" && (<div className="w-[20%] mt-1 h-1 rounded-3xl bg-white/70" ></div>)}
+                                            </div>
+                                        </button>
+                                    </div>
+
+                                    <h2 className="text-white text-xl font-extrabold text-gray-800 m-3">{activeEFeild}</h2>
+
+                                    {/* Emoji Grid */}
+                                    <div className="grid grid-cols-10 gap-2  h-[380px] overflow-y-auto pr-2 custom-scrollbar">
+                                        {emojis[activeEmojiFeild].map((emoji, index) => (
+                                            <button
+                                                key={`${emoji}-${index}`}
+                                                onClick={() => handleEmojiClick(emoji)}
+                                                className="text-xl m-1 scale-[1.8]  transition"
+                                            >
+                                                {emoji}
+                                            </button>
+                                        ))}
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div className="border-t border-white/10 p-3 md:p-4 bg-white/[0.03] backdrop-blur-2xl">
+
+                                <div className="flex items-center gap-3 ">
+
+                                    <button className="p-2.5 hover:bg-white/5 rounded-xl transition-all duration-300 text-white/60 hover:text-white/90" onClick={() => setShowPicker((prev) => !prev)}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 16 16">
                                             <path fill="currentColor" d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16M2.31 5.243A1 1 0 0 1 3.28 4H6a1 1 0 0 1 1 1v.116A4.2 4.2 0 0 1 8 5c.35 0 .69.04 1 .116V5a1 1 0 0 1 1-1h2.72a1 1 0 0 1 .97 1.243l-.311 1.242A2 2 0 0 1 11.439 8H11a2 2 0 0 1-1.994-1.839A3 3 0 0 0 8 6c-.393 0-.74.064-1.006.161A2 2 0 0 1 5 8h-.438a2 2 0 0 1-1.94-1.515zM4.969 9.75A3.5 3.5 0 0 0 8 11.5a3.5 3.5 0 0 0 3.032-1.75a.5.5 0 1 1 .866.5A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1-3.898-2.25a.5.5 0 0 1 .866-.5z" />
                                         </svg>
                                     </button>
-
                                     {/* INPUT */}
                                     <div className="flex-1 relative">
                                         <input
@@ -540,7 +715,7 @@ const Discussions = () => {
                                             onKeyDown={handleKeyDown}
                                             type="text"
                                             placeholder="Type a message..."
-                                            className="w-full text-white bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-blue-500/50 text-sm transition-all placeholder-white/40 pr-24"
+                                            className="w-full text-white bg-white/[0.05] border border-white/10 rounded-xl px-4 py-2.5 md:py-3 outline-none focus:border-blue-500/50 text-xl transition-all placeholder-white/40 pr-24 backdrop-blur-md"
                                         />
                                         <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-white/20 font-mono">
                                             {messageText.length}/500
@@ -576,7 +751,7 @@ const Discussions = () => {
                     </svg>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 export default Discussions;

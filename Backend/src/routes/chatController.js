@@ -79,7 +79,8 @@ chatRouter.post("/send-message", userAuth, upload.single("file"), async (req, re
         if (!senderId || !receiverId) {
             return res.status(400).json({
                 success: false,
-                message: "Sender and Receiver are required"
+                message: "Sender and Receiver are required",
+                senderId, receiverId
             });
         }
 
@@ -296,9 +297,9 @@ chatRouter.post("/get-message/:conversationId", userAuth, async (req, res) => {
 
 
         // updated the read count to the zero
-        if (receiver == userId) {
-            conversation.unReadCount = 0;
-        }
+
+        conversation.unReadCount = 0;
+
 
 
 
