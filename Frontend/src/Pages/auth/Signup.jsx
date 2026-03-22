@@ -154,7 +154,7 @@ const Signup = () => {
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[linear-gradient(135deg,#0c2461,#1e3799,#4a69bd)] p-4">
 
-      <div className="w-full bg-black/30 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/10 flex flex-col md:flex-row gap-6 overflow-hidden hover:shadow-3xl transition-all duration-500">
+      <div className="w-full bg-black/30  rounded-3xl border border-white/10 flex flex-col md:flex-row gap-6 overflow-hidden  transition-all duration-500">
 
         {/* LEFT - Signup Form */}
         <div className="flex flex-col gap-8 p-8 md:p-12 w-full md:w-[50%] text-white">
@@ -576,7 +576,7 @@ const Signup = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-2xl transition-all duration-300 text-lg font-semibold shadow-lg flex items-center justify-center gap-3 ${isSubmitting ? 'opacity-75 cursor-not-allowed' : 'hover:from-blue-700 hover:to-blue-800 hover:shadow-xl'} `}
+                className={`w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-2xl transition-all duration-300 text-lg font-semibold  flex items-center justify-center gap-3 ${isSubmitting ? 'opacity-75 cursor-not-allowed' : 'hover:from-blue-700 hover:to-blue-800 '} `}
               >
                 {isSubmitting ? (
                   <div className="flex justify-center items-center gap-2 sm:gap-3 px-2 md:px-3">
@@ -618,6 +618,10 @@ const Signup = () => {
         {/* RIGHT - Content Panel */}
         <div className="w-full md:w-[50%] p-6">
           <div className="w-full h-full bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white rounded-2xl p-8 md:p-12 relative overflow-hidden group">
+            {/* Animated Background Elements */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/20 rounded-full -translate-y-16 translate-x-16 group-hover:scale-125 transition-transform duration-1000" />
+            <div className="absolute bottom-0 left-0 w-40 h-40 bg-purple-500/20 rounded-full translate-y-20 -translate-x-20 group-hover:scale-125 transition-transform duration-1000 delay-300" />
+            <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-cyan-500/10 rounded-full -translate-x-1/2 -translate-y-1/2 group-hover:scale-150 transition-transform duration-1000 delay-150" />
 
             <div className="relative z-10 space-y-8">
               <div className="space-y-4">
@@ -627,7 +631,7 @@ const Signup = () => {
                 <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300 leading-tight animate-gradient">
                   About CodeSarthi
                 </h1>
-
+                <span className="text-7xl md:text-8xl opacity-20 block animate-bounce">"</span>
               </div>
 
               <div className="space-y-6">
@@ -646,7 +650,7 @@ const Signup = () => {
                 ].map((feature, index) => (
                   <div
                     key={feature.title}
-                    className="bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 backdrop-blur-sm rounded-2xl p-4 border border-white/5 hover:border-white/20 transition-all duration-300 hover:scale-[1.02] cursor-pointer group/card"
+                    className="bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10  rounded-2xl p-4 border border-white/5 hover:border-white/20 transition-all duration-300 hover:scale-[1.02] cursor-pointer group/card"
                     style={{ animationDelay: `${index * 200}ms` }}
                   >
                     <div className="flex items-center gap-3">

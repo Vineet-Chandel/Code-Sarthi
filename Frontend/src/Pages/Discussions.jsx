@@ -97,6 +97,7 @@ const Discussions = () => {
             if (pickerRef.current && !pickerRef.current.contains(e.target)) {
                 setShowPicker(false);
                 setIsMsgOptionTabOpen(false);
+                setIsCopied(false);
             }
         }
         document.addEventListener("mousedown", handleClickOutside);
@@ -138,32 +139,43 @@ const Discussions = () => {
 
     const [deleteType, setDeleteType] = useState("");
     const [msgBY, setMsgBY] = useState("");
+    const [isCopied, setIsCopied] = useState(false);
+    const [msg, setMsg] = useState("");
+    const handleCopy = async (text) => {
+        try {
+            await navigator.clipboard.writeText(text);
+            console.log("Copied!");
+        } catch (err) {
+            console.error("Failed to copy", err);
+        }
+    };
+    const deleteMessage = async (deleteType, messageId) => {
+        try {
+            if (deleteType === "Everyone") {
+                await axios.delete(
+                    `${BASE_URL}/delete-for-everyone/${messageId}`,
+                    { withCredentials: true }
+                );
+            }
+            if (deleteType === "Me") {
+                await axios.delete(
+                    `${BASE_URL}/delete-for-me/${messageId}`,
+                    { withCredentials: true }
+                );
+            }
+        } catch (error) {
+            console.log(error?.data.message)
+        }
+    }
 
-
-
+    useEffect(() => {
+        deleteMessage(deleteType, messageId);
+    }, [deleteType])
 
     // // onsending the message it goes to down 
     const bottomRef = useRef(null);
     const [scrollDown, setScrollDown] = useState(false);
     const chatRef = useRef(null);
-    const prevScrollTop = useRef(0);
-    useEffect(() => {
-        const container = chatRef.current;
-        if (!container) return;
-        const handleScroll = () => {
-            const currentScrollTop = container.scrollTop;
-
-            if (currentScrollTop < prevScrollTop.current) {
-                setScrollDown(true); // scrolling up
-            } else {
-                setScrollDown(false); // scrolling down
-            }
-
-            prevScrollTop.current = currentScrollTop;
-        };
-        container.addEventListener("scroll", handleScroll);
-        return () => container.removeEventListener("scroll", handleScroll);
-    }, []);
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" });
         setScrollDown(false);
@@ -580,7 +592,7 @@ const Discussions = () => {
                                     return isMe ? (
                                         // MY MESSAGE - Premium
 
-                                        <div key={msg._id} className="flex justify-end animate-fadeIn">
+                                        <div key={msg._id} className="flex justify-end ">
                                             <div className="relative max-w-[70%] group">
 
                                                 <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white px-4 md:px-5 py-2.5 md:py-3 rounded-2xl rounded-br-md transition-all duration-300  hover:scale-[1.01]">
@@ -588,13 +600,13 @@ const Discussions = () => {
                                                     <div className="relative flex items-center gap-2">
 
                                                         {/* Message */}
-                                                        <div className="break-words">{msg.content}</div>
+                                                        <div className="break-words  break-all whitespace-pre-wrap">{msg.content}</div>
 
                                                         {/* Action Icon */}
                                                         <button
                                                             className=" opacity-0 group-hover:opacity-100 translate-x-3 group-hover:translate-x-0 scale-90 group-hover:scale-100 transition-all duration-200 ease-out p-1.5 rounded-lg hover:bg-white/10 active:scale-90 "
 
-                                                            onClick={() => { setIsMsgOptionTabOpen(true); setMessageId(`${msg._id}`); setMsgProfile(`${msg.sender?.photoUrl?.url}`); setMsgBY(`${user?.firstName} ${user?.lastName}`) }}
+                                                            onClick={() => { setIsMsgOptionTabOpen(true); setMessageId(`${msg._id}`); setMsg(`${msg.content}`); setMsgProfile(`${msg.sender?.photoUrl?.url}`); setMsgBY(`${user?.firstName} ${user?.lastName}`) }}
                                                         >
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                                                 className="text-white/50 hover:text-white transition cursor-pointer "
@@ -629,7 +641,7 @@ const Discussions = () => {
 
                                     ) : (
                                         // OTHER USER MESSAGE - Premium
-                                        <div key={msg._id} className="flex gap-3 items-end animate-fadeIn">
+                                        <div key={msg._id} className="flex gap-3 items-end ">
 
                                             <img
                                                 src={msg.sender?.photoUrl?.url}
@@ -647,10 +659,28 @@ const Discussions = () => {
     transition-all duration-300
     hover:bg-[#222230]">
 
-                                                    <div className="break-words whitespace-pre-wrap text-[15px] leading-relaxed">
-                                                        {msg.content}
-                                                    </div>
 
+                                                    <div className="relative flex items-center gap-2">
+
+                                                        {/* Message */}
+                                                        <div className="break-words break-all whitespace-pre-wrap text-[15px] ">
+                                                            {msg.content}
+                                                        </div>
+
+                                                        {/* Action Icon */}
+                                                        <button
+                                                            className=" opacity-0 group-hover:opacity-100 translate-x-3 group-hover:translate-x-0 scale-90 group-hover:scale-100 transition-all duration-200 ease-out p-1.5 rounded-lg hover:bg-white/10 active:scale-90 "
+
+                                                            onClick={() => { setIsMsgOptionTabOpen(true); setMessageId(`${msg._id}`); setMsg(`${msg.content}`); setMsgProfile(`${msg.sender?.photoUrl?.url}`); setMsgBY(`${user?.firstName} ${user?.lastName}`) }}
+                                                        >
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                                                className="text-white/50 hover:text-white transition cursor-pointer "
+                                                            >
+                                                                <path fill="#ffffff" d="M12 17a1.72 1.72 0 0 1-1.33-.64l-4.21-5.1a2.1 2.1 0 0 1-.26-2.21A1.76 1.76 0 0 1 7.79 8h8.42a1.76 1.76 0 0 1 1.59 1.05a2.1 2.1 0 0 1-.26 2.21l-4.21 5.1A1.72 1.72 0 0 1 12 17" />
+                                                            </svg>
+                                                        </button>
+
+                                                    </div>
                                                     <div className="text-left mt-1">
                                                         <span className="text-[10px] text-white/40">
                                                             {new Date(msg.createdAt).toLocaleTimeString([], {
@@ -685,7 +715,7 @@ const Discussions = () => {
 
 
                             {showPicker && (
-                                <div ref={pickerRef} className=" absolute bottom-20 left-4 z-50  w-[720px] h-[520px] bg-white/[0.04]  border border-white/10 rounded-3xl  p-4 flex flex-col overflow-hidden animate-fadeIn ">
+                                <div ref={pickerRef} className=" absolute bottom-20 left-4 z-50  w-[720px] h-[520px] bg-white/[0.04]  border border-white/10 rounded-3xl  p-4 flex flex-col overflow-hidden  ">
                                     <div className="w-full border-b h-[50px] rounded-t-3xl">
 
                                         {/* Tabs */}
@@ -767,11 +797,11 @@ hover:bg-white/10 active:scale-95`} onClick={() => { setActiveEmojiFeild("smiley
                                         <img src={msgProfile} alt="" className="w-[50px] rounded-full" />
                                     </div>
                                 </div>
-                                <div className="border border-gray-500 px-4 py-2 rounded-3xl hover:bg-gray-400/30" >Copy</div>
-                                <div className="border border-gray-500 px-4 py-2 rounded-3xl hover:bg-gray-400/30">React</div>
-                                <div className="border border-gray-500 px-4 py-2 rounded-3xl hover:bg-gray-400/30">Star</div>
-                                <div className="border border-gray-500 px-4 py-2 rounded-3xl hover:bg-gray-400/30">Delete For Everyone</div>
-                                <div className="border border-gray-500 px-4 py-2 rounded-3xl hover:bg-gray-400/30">Delete For Me</div>
+                                <div onClick={() => { setIsCopied(true); handleCopy(msg) }}>{isCopied ? (<div className="border border-gray-500 px-4 py-2 rounded-3xl  bg-green-700 flex items-center jutify-center gap-1"> <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 16 16"><polyline fill="none" stroke="#ffffff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} points="2.75 8.75 6.25 12.25 13.25 4.75"></polyline></svg> Copied</div>) : (<div className="border border-gray-500 px-4 py-2 rounded-3xl hover:bg-gray-400/30 flex items-center jutify-center gap-1"> <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24"><g fill="none"><path fill="currentColor" d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z" opacity={0.16}></path><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 3H4v13"></path><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z"></path></g></svg>Copy</div>)}</div>
+                                <div className="border border-gray-500 px-4 py-2 rounded-3xl hover:bg-gray-400/30 flex items-center jutify-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 16 16"><path fill="currentColor" d="M13 7a6 6 0 1 0-5.746 5.995A4.5 4.5 0 0 1 7.027 12H7a5 5 0 1 1 5-5v.027q.518.06.995.227Q13 7.128 13 7m-5.888 3.498q.127-.554.38-1.046q-.24.047-.492.048c-.74 0-1.405-.321-1.864-.833a.5.5 0 0 0-.745.666a3.5 3.5 0 0 0 2.72 1.165M6 6a.75.75 0 1 1-1.5 0A.75.75 0 0 1 6 6m2.75.75a.75.75 0 1 0 0-1.5a.75.75 0 0 0 0 1.5M15 11.5a3.5 3.5 0 1 1-7 0a3.5 3.5 0 0 1 7 0m-3-2a.5.5 0 0 0-1 0V11H9.5a.5.5 0 0 0 0 1H11v1.5a.5.5 0 0 0 1 0V12h1.5a.5.5 0 0 0 0-1H12z"></path></svg>React</div>
+                                <div className="border border-gray-500 px-4 py-2 rounded-3xl hover:bg-gray-400/30 flex items-center jutify-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24"><path fill="currentColor" d="M18.483 16.767A8.5 8.5 0 0 1 8.118 7.081a1 1 0 0 1-.113.097c-.28.213-.63.292-1.33.45l-.635.144c-2.46.557-3.69.835-3.983 1.776c-.292.94.546 1.921 2.223 3.882l.434.507c.476.557.715.836.822 1.18c.107.345.071.717-.001 1.46l-.066.677c-.253 2.617-.38 3.925.386 4.506s1.918.052 4.22-1.009l.597-.274c.654-.302.981-.452 1.328-.452s.674.15 1.329.452l.595.274c2.303 1.06 3.455 1.59 4.22 1.01c.767-.582.64-1.89.387-4.507z"></path><path fill="currentColor" d="m9.153 5.408l-.328.588c-.36.646-.54.969-.82 1.182q.06-.045.113-.097a8.5 8.5 0 0 0 10.366 9.686l-.02-.19c-.071-.743-.107-1.115 0-1.46c.107-.344.345-.623.822-1.18l.434-.507c1.677-1.96 2.515-2.941 2.222-3.882c-.292-.941-1.522-1.22-3.982-1.776l-.636-.144c-.699-.158-1.049-.237-1.33-.45c-.28-.213-.46-.536-.82-1.182l-.327-.588C13.58 3.136 12.947 2 12 2s-1.58 1.136-2.847 3.408" opacity={0.5}></path></svg>Star</div>
+                                <div className="border border-gray-500 px-4 py-2 rounded-3xl hover:bg-gray-400/30 flex items-center jutify-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth={1.5}><path d="m19.5 5.5l-.402 6.506M4.5 5.5l.605 10.025c.154 2.567.232 3.85.874 4.774c.317.456.726.842 1.2 1.131c.671.41 1.502.533 2.821.57"></path><path strokeLinejoin="round" d="m20 15l-7 7m7 0l-7-7"></path><path d="M3 5.5h18m-4.944 0l-.683-1.408c-.453-.936-.68-1.403-1.071-1.695a2 2 0 0 0-.275-.172C13.594 2 13.074 2 12.035 2c-1.066 0-1.599 0-2.04.234a2 2 0 0 0-.278.18c-.395.303-.616.788-1.058 1.757L8.053 5.5"></path></g></svg>Delete For Everyone</div>
+                                <div className="border border-gray-500 px-4 py-2 rounded-3xl hover:bg-gray-400/30 flex items-center jutify-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth={1.5} d="m19.5 5.5l-.62 10.025c-.158 2.561-.237 3.842-.88 4.763a4 4 0 0 1-1.2 1.128c-.957.584-2.24.584-4.806.584c-2.57 0-3.855 0-4.814-.585a4 4 0 0 1-1.2-1.13c-.642-.922-.72-2.205-.874-4.77L4.5 5.5M9 11.735h6m-4.5 3.919h3M3 5.5h18m-4.945 0l-.682-1.408c-.454-.936-.68-1.403-1.071-1.695a2 2 0 0 0-.275-.172C13.594 2 13.074 2 12.034 2c-1.065 0-1.598 0-2.039.234a2 2 0 0 0-.278.18c-.396.303-.617.788-1.059 1.757L8.053 5.5"></path></svg>Delete For Me</div>
                             </div>)}
 
                             <div className="border-t border-white/10 p-3 md:p-4 bg-white/[0.03] backdrop-blur-2xl">

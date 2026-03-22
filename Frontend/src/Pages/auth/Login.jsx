@@ -36,7 +36,7 @@ const Login = () => {
     const togglePassword = () => {
         setShowPassword(prev => !prev);
     }
-    
+
     const ToggleDiv = () => {
         setIsOpen(prev => !prev);
     }
@@ -93,7 +93,7 @@ const Login = () => {
     }
     return (
         <div className="min-h-screen w-full flex items-center justify-center bg-[linear-gradient(135deg,#0c2461,#1e3799,#4a69bd)] p-4">
-            <div className="w-full bg-black/30 backdrop-blur-sm rounded-2xl shadow-2xl flex flex-col md:flex-row gap-6 overflow-hidden">
+            <div className="w-full bg-black/30  rounded-2xl  flex flex-col md:flex-row gap-6 overflow-hidden">
 
                 {/* LEFT - Login Form */}
                 <div className="flex flex-col gap-6 p-5 md:p-12 w-full md:w-[50%] text-white">
@@ -214,7 +214,7 @@ const Login = () => {
                             <button
                                 type="submit"
                                 disabled={isLoginStart}
-                                className={`w-full  bg-gradient-to-r from-blue-600 to-blue-700  text-white  py-3 sm:py-4  rounded-2xl sm:rounded-3xl transition-all duration-300  text-base sm:text-xl md:text-2xl  font-semibold  shadow-lg hover:shadow-xl ${isLoginStart ? "opacity-70 cursor-not-allowed" : "hover:from-blue-700 hover:to-blue-800"}`}
+                                className={`w-full  bg-gradient-to-r from-blue-600 to-blue-700  text-white  py-3 sm:py-4  rounded-2xl sm:rounded-3xl transition-all duration-300  text-base sm:text-xl md:text-2xl  font-semibold  ${isLoginStart ? "opacity-70 cursor-not-allowed" : "hover:from-blue-700 hover:to-blue-800"}`}
                             >
                                 {isLoginStart ? (
                                     <div className="flex justify-center items-center gap-2 sm:gap-3 px-2 md:px-3">
@@ -247,7 +247,7 @@ const Login = () => {
                         </div>
                     </form>
 
-                    <div className="bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 backdrop-blur-sm rounded-3xl p-6 md:p-8 border border-white/10 mt-5">
+                    <div className="bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20  rounded-3xl p-6 md:p-8 border border-white/10 mt-5">
                         <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
                             All efforts go to the,<br />
                             <span className="text-blue-300">Team Axonic !!</span>
@@ -297,7 +297,7 @@ const Login = () => {
                                 ].map((feature, index) => (
                                     <div
                                         key={feature.title}
-                                        className="bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 backdrop-blur-sm rounded-2xl p-4 border border-white/5 hover:border-white/20 transition-all duration-300 hover:scale-[1.02] cursor-pointer group/card"
+                                        className="bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10  rounded-2xl p-4 border border-white/5 hover:border-white/20 transition-all duration-300 hover:scale-[1.02] cursor-pointer group/card"
                                         style={{ animationDelay: `${index * 200}ms` }}
                                     >
                                         <div className="flex items-center gap-3">
