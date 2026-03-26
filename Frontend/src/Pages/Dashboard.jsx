@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import { IoBarChart } from "react-icons/io5";
 import { setChatUsers } from "../utils/chat-user-slice";
 const Dashboard = () => {
+    const fullState = useSelector(state => state);
+    console.log("FULL STATE:", fullState);
     let icon;
     const user = useSelector(store => store.user.user.DATA);
     const connections = useSelector(state => state.connections || []);

@@ -19,10 +19,16 @@ const appStore = configureStore({
         requestedUser: RequestedUser,
         receivedConnection: ReceivedRequests,
         chats: chatsReducer,
+
     },
+
+
     // devTools: {
     //     trace: true,
     // },
+});
+console.log("STORE LOADED WITH CHATS:", {
+    chats: chatsReducer
 });
 
 export default appStore;
