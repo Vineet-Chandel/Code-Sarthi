@@ -59,12 +59,7 @@ const Discussions = () => {
     const [showPicker, setShowPicker] = useState(false);
 
     //chats 
-    const chatMessages = useSelector(state => {
-        console.log("state?.chats?.users", state?.chats?.users);
-        console.log("state?.chats", state?.chats);
-        console.log("state", state);
-        return state.chats?.users || [];
-    });
+    const chatMessages = useSelector(state => state.chats?.users || []);
     //connections user 
     const connectionUser = async () => {
         try {
@@ -121,7 +116,6 @@ const Discussions = () => {
 
             //chats dispatching
             dispatch(setChatUsers(response.data.conversation));
-            console.log(response.data.conversation);
         } catch (err) {
             console.error(err?.message || err);
         }

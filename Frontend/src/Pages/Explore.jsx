@@ -140,7 +140,7 @@ relative overflow-hidden
                     {feed.map((item, index) => (
                         <div
                             key={item._id}
-                            className=" relative group bg-[#030712]/70 backdrop-blur-3xl rounded-3xl border border-white/[0.08] shadow-[0_0_40px_rgba(59,130,246,0.06)] hover:shadow-[0_0_60px_rgba(168,85,247,0.15)] transition-all duration-500 hover:-translate-y-1 overflow-hidden before:absolute before:inset-0 before:rounded-3xl before:bg-gradient-to-br before:from-blue-500/[0.05] before:to-purple-500/[0.05] before:opacity-0 group-hover:before:opacity-100 before:transition-opacity">
+                            className=" relative group bg-[#030712]/70  rounded-3xl border border-white/[0.08]   transition-all duration-500 hover:-translate-y-1 overflow-hidden before:absolute before:inset-0 before:rounded-3xl before:bg-gradient-to-br before:from-blue-500/[0.05] before:to-purple-500/[0.05] before:opacity-0 group-hover:before:opacity-100 before:transition-opacity">
 
 
 
@@ -209,7 +209,7 @@ relative overflow-hidden
                                     </div>
 
                                     {/* About section */}
-                                    <div className=" rounded-xl p-4  bg-[#020617]/60 border border-white/[0.08] shadow-inner shadow-blue-500/[0.04] backdrop-blur-xl ">
+                                    <div className=" rounded-xl p-4  bg-[#020617]/60 border border-white/[0.08]">
                                         <div className="flex items-center gap-2 mb-2">
                                             <div className="w-1 h-4 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"></div>
                                             <h3 className="text-sm font-semibold text-gray-300">SYSTEM PROFILE</h3>
@@ -229,7 +229,7 @@ relative overflow-hidden
                                             {item.skills?.map((skill, idx) => (
                                                 <span
                                                     key={idx}
-                                                    className=" px-3 py-1.5 text-xs font-medium rounded-xl bg-white/[0.04] border border-white/10 text-gray-300 hover:border-blue-400/40 hover:text-blue-300 backdrop-blur-md  transition-all duration-300 group relative overflow-hidden "
+                                                    className=" px-3 py-1.5 text-xs font-medium rounded-xl bg-white/[0.04] border border-white/10 text-gray-300 hover:border-blue-400/40 hover:text-blue-300   transition-all duration-300 group relative overflow-hidden "
                                                 >
                                                     <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                                     <span className="relative">{skill}</span>
@@ -321,12 +321,11 @@ relative overflow-hidden
                 <div className="fixed inset-0 z-[999] flex items-center justify-center">
 
                     {/* BACKDROP */}
-                    <div className="absolute inset-0 bg-black/50 backdrop-blur-md"></div>
+                    <div className="absolute inset-0 bg-black/50 "></div>
 
                     {/* MODAL */}
                     <div className="relative px-8 py-6 rounded-3xl border border-white/10
-    bg-[#030712]/80 backdrop-blur-2xl
-    shadow-[0_0_60px_rgba(168,85,247,0.25)]
+    bg-[#030712]/80 
     animate-[modalPop_0.25s_ease]">
 
                         <div className="flex items-center gap-4">

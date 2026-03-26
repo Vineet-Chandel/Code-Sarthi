@@ -20,14 +20,7 @@ const appStore = configureStore({
         requestedUser: RequestedUser,
         receivedConnection: ReceivedRequests,
         chats: chatsReducer,
-
-    },
-
-
-    // devTools: {
-    //     trace: true,
-    // },
+    }
 });
-console.log("🔥 STORE FILE EXECUTED");
 
 export default appStore;
