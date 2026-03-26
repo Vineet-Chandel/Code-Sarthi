@@ -10,6 +10,7 @@ import RequestedUser from "./requestedUserSlice";
 import ReceivedRequests from "./receivedConnection";
 import chatsReducer from "./chat-user-slice";
 
+
 const appStore = configureStore({
     reducer: {
         user: userReducer,
@@ -27,8 +28,6 @@ const appStore = configureStore({
     //     trace: true,
     // },
 });
-console.log("STORE LOADED WITH CHATS:", {
-    chats: chatsReducer
-});
+console.log("🔥 STORE FILE EXECUTED");
 
 export default appStore;

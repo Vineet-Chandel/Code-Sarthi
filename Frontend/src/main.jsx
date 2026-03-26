@@ -4,7 +4,9 @@ import './index.css'
 import App from './App.jsx'
 import { Provider } from 'react-redux'   // ✅ ADD THIS
 import appStore from './utils/appStore.js'
+console.log("PROVIDER STORE:", appStore);
 createRoot(document.getElementById('root')).render(
+
   <Provider store={appStore}>
     <App />
   </Provider>
