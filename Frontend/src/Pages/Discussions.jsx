@@ -59,14 +59,12 @@ const Discussions = () => {
     const [showPicker, setShowPicker] = useState(false);
 
     //chats 
-    const chatMessages = useSelector(
-        state => {
-            state?.chats?.users;
-            console.log("state?.chats?.users", state?.chats?.users);
-            console.log("state?.chats", state?.chats);
-            console.log("state", state)
-        }
-    );
+    const chatMessages = useSelector(state => {
+        console.log("state?.chats?.users", state?.chats?.users);
+        console.log("state?.chats", state?.chats);
+        console.log("state", state);
+        return state.chats?.users || [];
+    });
     //connections user 
     const connectionUser = async () => {
         try {
@@ -87,7 +85,9 @@ const Discussions = () => {
     //filtered connection list 
     const connectionList = useMemo(() => {
         return connections.filter(
-            conn => !chatMessages.some(chat => chat.atFrontUser?._id === conn.userId)
+            conn => !chatMessages.some(
+                chat => chat.atFrontUser?._id === conn.userId
+            )
         );
     }, [connections, chatMessages]);
 
@@ -430,7 +430,7 @@ const Discussions = () => {
 
                     {/* LIST AREA - Premium Cards */}
                     <div className="mt-6 space-y-1 overflow-y-auto max-h-[calc(100vh-250px)] pr-2 custom-scrollbar">
-                        {chatMessages.map((item, index) => (
+                        {(chatMessages || []).map((item, index) => (
                             <div
                                 key={index}
                                 className="group relative flex items-center gap-3 p-3 rounded-xl hover:bg-white/[0.06] transition-all duration-300 cursor-pointer border border-transparent hover:border-white/10 "

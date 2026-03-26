@@ -20,9 +20,9 @@ const appStore = configureStore({
         receivedConnection: ReceivedRequests,
         chats: chatsReducer,
     },
-    devTools: {
-        trace: true,
-    },
+    // devTools: {
+    //     trace: true,
+    // },
 });
 
 export default appStore;
