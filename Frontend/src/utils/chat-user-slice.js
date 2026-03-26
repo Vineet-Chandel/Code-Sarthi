@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     users: [],              // chat list (sidebar)
+    loading: false,
+    error: null
 };
 
 const chatSlice = createSlice({

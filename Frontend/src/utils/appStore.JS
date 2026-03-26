@@ -8,7 +8,7 @@ import connectionReducer from "./connectionSlice";
 import blocksReducer from "./blockedSlice";
 import RequestedUser from "./requestedUserSlice";
 import ReceivedRequests from "./receivedConnection";
-import chatsReducer from "./chatUserSlice"
+import chatsReducer from "./chat-user-slice";
 
 const appStore = configureStore({
     reducer: {

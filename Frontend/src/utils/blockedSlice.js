@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     users: [],
+    loading: false,
+    error: null
 };
 
 const blockedSlice = createSlice({
