@@ -31,11 +31,10 @@ const Explore = () => {
             );
 
             setShowRequestModal(true);
-
+            dispatch(removeFeedUser(ID));
             setTimeout(() => {
                 {
                     setShowRequestModal(false);
-                    dispatch(removeFeedUser(ID));
                 }
             }, 2200);
 
@@ -70,7 +69,7 @@ const Explore = () => {
     return (
         <div className="
 w-full min-h-screen
-bg-[radial-gradient(circle_at_top,#0a0f1f,black_70%)]
+bg-base-200
 p-4 md:p-10
 relative overflow-hidden
 ">
@@ -85,8 +84,8 @@ relative overflow-hidden
         xl:text-9xl
         font-extrabold 
         bg-gradient-to-b 
-        from-white 
-        to-blue-400 
+        from-[#ff8904] 
+        to-accent 
         bg-clip-text 
         text-transparent
         leading-tight
@@ -100,7 +99,7 @@ relative overflow-hidden
         sm:text-lg 
         md:text-xl 
         lg:text-2xl 
-        text-gray-400 
+        text-accent
         mt-6 
         max-w-xl 
         lg:max-w-3xl
@@ -129,10 +128,13 @@ relative overflow-hidden
         sm:text-3xl 
         md:text-4xl 
         lg:text-[3rem] 
-        text-gray-300 
+        text-accent
         font-extrabold
+        flex gap-1
     ">
-                    Suggested Developers for you
+                    <svg xmlns="http://www.w3.org/2000/svg" width={45} height={45} viewBox="0 0 24 24" className="transition-transform duration-500 ease-in-out hover:rotate-180">
+                        <path fill="#8c3f27" d="M10.565 2.075a3.33 3.33 0 0 1 2.87 0c.394.189.755.497 1.26.928l.079.066c.48.41.939.604 1.58.655l.102.008c.662.053 1.135.09 1.547.236a3.33 3.33 0 0 1 2.03 2.029c.145.412.182.885.235 1.547l.008.102c.051.641.246 1.1.655 1.58l.066.078c.431.506.74.867.928 1.261a3.33 3.33 0 0 1 0 2.87c-.189.394-.497.755-.928 1.26l-.066.079c-.418.49-.605.951-.655 1.58l-.008.102c-.053.662-.09 1.135-.236 1.547a3.33 3.33 0 0 1-2.029 2.03c-.412.145-.885.182-1.547.235l-.102.008c-.641.051-1.1.246-1.58.655l-.079.066c-.505.431-.866.74-1.26.928a3.33 3.33 0 0 1-2.87 0c-.394-.189-.755-.497-1.26-.928l-.079-.066a2.56 2.56 0 0 0-1.58-.655l-.102-.008c-.662-.053-1.135-.09-1.547-.236a3.33 3.33 0 0 1-2.03-2.029c-.145-.412-.182-.885-.235-1.547l-.008-.102a2.56 2.56 0 0 0-.655-1.58l-.066-.079c-.431-.505-.74-.866-.928-1.26a3.33 3.33 0 0 1 0-2.87c.189-.394.497-.755.928-1.26l.066-.079a2.56 2.56 0 0 0 .655-1.58l.008-.102c.053-.662.09-1.135.236-1.547a3.33 3.33 0 0 1 2.029-2.03c.412-.145.885-.182 1.547-.235l.102-.008a2.56 2.56 0 0 0 1.58-.655l.078-.066c.506-.431.867-.74 1.261-.928m3.232 6.12a.75.75 0 1 0-1.45-.39l-2.143 8a.75.75 0 0 0 1.449.39zm1.641.974a.75.75 0 1 0-1.06 1.06l.131.132c.527.526.867.869 1.085 1.155c.205.268.23.396.23.484s-.025.216-.23.484c-.218.286-.558.629-1.085 1.155l-.131.131a.75.75 0 1 0 1.06 1.06l.167-.166c.482-.48.895-.894 1.181-1.27c.307-.402.537-.846.537-1.394s-.23-.992-.537-1.394c-.286-.376-.7-.79-1.18-1.27zm-5.816 0a.75.75 0 0 0-1.06 0l-.167.167c-.481.48-.895.894-1.181 1.27c-.307.402-.537.846-.537 1.394s.23.992.537 1.394c.286.376.7.79 1.18 1.27l.168.167a.75.75 0 0 0 1.06-1.06l-.131-.132c-.527-.526-.867-.869-1.085-1.155c-.205-.268-.23-.396-.23-.484s.025-.216.23-.484c.218-.286.558-.629 1.085-1.155l.131-.131a.75.75 0 0 0 0-1.061"></path>
+                    </svg>    Suggested developers for you,
                 </div>
             </div>
             <div className="max-w-9xl mx-auto">
@@ -140,7 +142,7 @@ relative overflow-hidden
                     {feed.map((item, index) => (
                         <div
                             key={item._id}
-                            className=" relative group bg-[#030712]/70  rounded-3xl border border-white/[0.08]   transition-all duration-500 hover:-translate-y-1 overflow-hidden before:absolute before:inset-0 before:rounded-3xl before:bg-gradient-to-br before:from-blue-500/[0.05] before:to-purple-500/[0.05] before:opacity-0 group-hover:before:opacity-100 before:transition-opacity">
+                            className=" relative group bg-base-100  rounded-3xl border border-base-300 border-[3px]   transition-all duration-500 hover:-translate-y-1 overflow-hidden before:absolute before:inset-0 before:rounded-3xl before:bg-gradient-to-br before:from-blue-500/[0.05] before:to-purple-500/[0.05] before:opacity-0 group-hover:before:opacity-100 before:transition-opacity">
 
 
 
@@ -170,14 +172,19 @@ relative overflow-hidden
 
                                     {/* Tech stats */}
                                     <div className="grid grid-cols-2 gap-2 w-full">
-                                        <div className="text-center p-2 bg-gray-800/50 rounded-lg border border-gray-700/30">
-                                            <div className="text-xs text-gray-400">Age</div>
-                                            <div className="text-lg font-bold text-blue-400">{item.age}</div>
+                                        <div className="text-center p-2 bg-base-300 rounded-lg border border-secondary border-[2px]">
+                                            <div className="text-xs text-secondary">Age</div>
+                                            <div className="text-lg font-bold text-accent">{item.age}</div>
                                         </div>
-                                        <div className="text-center p-2 bg-gray-800/50 rounded-lg border border-gray-700/30">
-                                            <div className="text-xs text-gray-400">Gender</div>
-                                            <div className="text-lg font-bold text-purple-400">{item.gender}</div>
+                                        <div className="text-center p-2 bg-base-300 rounded-lg border border-secondary border-[2px]">
+                                            <div className="text-xs text-secondary">Gender</div>
+                                            <div className="text-lg font-bold text-accent">{item.gender}</div>
                                         </div>
+
+                                    </div>
+                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-base-300 rounded-full border border-secondary border-[2px]">
+                                        <div className="w-2 h-2 bg-green-700 rounded-full animate-pulse"></div>
+                                        <span className="text-md text-accent">{item.college}</span>
                                     </div>
                                 </div>
 
@@ -187,7 +194,7 @@ relative overflow-hidden
                                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
                                         <div>
                                             <div className="flex items-center gap-2">
-                                                <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-gray-200 to-gray-300 bg-clip-text text-transparent">
+                                                <h1 className="text-2xl font-bold bg-gradient-to-r from-accent to-secondary bg-clip-text text-transparent">
                                                     {item.firstName} {item.middleName} {item.lastName}
                                                 </h1>
                                                 {item.isVerified && (
@@ -195,47 +202,43 @@ relative overflow-hidden
                                                 )}
                                             </div>
                                             <div className="flex items-center gap-2 mt-1">
-                                                <code className="text-gray-400 text-sm font-mono">@{item.username}</code>
+                                                <code className="text-accent text-sm font-mono">@{item.username}</code>
                                                 <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
                                                 <span className="text-lg text-gray-500">{item.profession}</span>
                                             </div>
                                         </div>
 
-                                        {/* Connection status */}
-                                        <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-800/50 rounded-full border border-gray-700/30">
-                                            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                                            <span className="text-md text-gray-300">{item.college}</span>
-                                        </div>
+
                                     </div>
 
                                     {/* About section */}
-                                    <div className=" rounded-xl p-4  bg-[#020617]/60 border border-white/[0.08]">
+                                    <div className=" rounded-xl p-4  bg-base-300 border border-secondary border-[2px]">
                                         <div className="flex items-center gap-2 mb-2">
-                                            <div className="w-1 h-4 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"></div>
-                                            <h3 className="text-sm font-semibold text-gray-300">SYSTEM PROFILE</h3>
+                                            <div className="w-1 h-4 bg-secondary rounded-full"></div>
+                                            <h3 className="text-sm font-semibold text-secondary">About</h3>
                                         </div>
-                                        <p className="text-gray-400 text-sm leading-relaxed">{item.about || "No description available"}</p>
+                                        <p className="text-accent text-sm leading-relaxed">{item.about || "No description available"}</p>
                                     </div>
 
                                     {/* Skills section with tech tags */}
                                     <div>
-                                        <div className="flex items-center gap-2 mb-3">
-                                            <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                        <div className="flex items-center gap-1 mb-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 384 512">
+                                                <path fill="#5a2c01ff" d="M290.7 311L95 269.7L86.8 309l195.7 41zm51-87L188.2 95.7l-25.5 30.8l153.5 128.3zm-31.2 39.7L129.2 179l-16.7 36.5L293.7 300zM262 32l-32 24l119.3 160.3l32-24zm20.5 328h-200v39.7h200zm39.7 80H42.7V320h-40v160h359.5V320h-40z"></path>
                                             </svg>
-                                            <h3 className="text-sm font-semibold text-gray-300">TECH STACK</h3>
+                                            <h3 className="text-sm font-semibold text-secondary">TECH STACK</h3>
                                         </div>
-                                        <div className="flex flex-wrap gap-2">
+                                        <div className="flex flex-wrap gap-2 text-accent">
                                             {item.skills?.map((skill, idx) => (
                                                 <span
                                                     key={idx}
-                                                    className=" px-3 py-1.5 text-xs font-medium rounded-xl bg-white/[0.04] border border-white/10 text-gray-300 hover:border-blue-400/40 hover:text-blue-300   transition-all duration-300 group relative overflow-hidden "
+                                                    className=" px-3 py-1.5 text-xs font-medium rounded-xl bg-base-300 border border-white/10 text-gray-300  relative overflow-hidden border border-[2px] border-secondary"
                                                 >
-                                                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                                    <span className="relative">{skill}</span>
+                                                    <div className="absolute inset-0 "></div>
+                                                    <span className="relative text-accent">{skill}</span>
                                                 </span>
                                             )) || (
-                                                    <span className="px-3 py-1.5 text-xs text-gray-500 bg-gray-900/50 rounded-lg border border-gray-700/30">
+                                                    <span className="px-3 py-1.5 text-xs text-accent bg-gray-900/50 rounded-lg border border-gray-700/30">
                                                         No skills configured
                                                     </span>
                                                 )}
@@ -245,21 +248,10 @@ relative overflow-hidden
                                     {/* Action buttons with tech style */}
                                     <div className="flex flex-wrap gap-3 pt-2">
 
-                                        <button className="relative group flex-1 min-w-[140px] bg-gradient-to-r from-gray-800/80 to-gray-900/80 text-gray-300 px-4 py-2.5 rounded-xl font-medium hover:from-gray-700 hover:to-gray-800 transition-all duration-300 active:scale-95 border border-gray-700/50 hover:border-gray-600/50 overflow-hidden">
-                                            <span className="relative z-10 flex items-center justify-center gap-2 text-2xl">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width={40} height={40} viewBox="0 -0.5 41 41">
-                                                    <g fill="none" strokeMiterlimit={10}>
-                                                        <path fill="#ffe236" stroke="#231f20" d="M36 33.59c3-1.36 3.53-8.34 3.53-13.59S38.94 7.77 36 6.41c-1.48-1.36-9.4-1.73-16-1.73S5.52 5.05 4 6.41C1.06 7.77.5 14.75.5 20S1.06 32.23 4 33.59c1.49 1.36 9.41 1.73 16 1.73s14.49-.32 16-1.73Z" strokeWidth={1}></path>
-                                                        <path stroke="#231f20" strokeLinecap="round" d="M4.67 13c3.65 3.81 8.94 7.93 10.57 8.64a10.81 10.81 0 0 0 9.52 0c1.62-.64 6.91-4.79 10.56-8.64m-20.89 8.39l-6.96 6.97m18.1-6.97l6.97 6.97" strokeWidth={1}></path>
-                                                        <path stroke="#fff" strokeLinecap="round" d="M29.05 7.53a15.4 15.4 0 0 1 5.27.92" strokeWidth={1}></path>
-                                                    </g>
-                                                </svg>
-                                                Message
-                                            </span>
-                                        </button>
+
 
                                         <button disabled={actionId === item._id}
-                                            className={`${actionId === item._id ? "opacity-70 cursor-not-allowed" : ""}relative group flex-1 min-w-[140px] bg-gradient-to-r from-purple-600/90 to-purple-700/90 text-white px-4 py-2.5 rounded-xl font-medium hover:from-purple-500 hover:to-purple-600 transition-all duration-300 active:scale-95  border border-purple-500/30 overflow-hidden`} onClick={() => sendRequest(item.username, item._id)}>
+                                            className={`${actionId === item._id ? "opacity-70 cursor-not-allowed" : ""}relative group flex-1 min-w-[140px] bg-base-300 border border-[2px] border-secondary text-white px-4 py-2.5 rounded-xl font-medium hover:from-purple-500 hover:to-purple-600 transition-all duration-300 active:scale-95  border border-purple-500/30 overflow-hidden`} onClick={() => sendRequest(item.username, item._id)}>
                                             <span className="relative z-10 flex items-center justify-center gap-3 text-2xl">
 
                                                 {actionId === item._id && (<svg xmlns="http://www.w3.org/2000/svg" width={32} height={32} viewBox="0 0 24 24">
@@ -271,22 +263,10 @@ relative overflow-hidden
 
 
                                                 <div className="flex justify-center items-center gap-4">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width={55} height={55} viewBox="0 0 40 40">
-                                                        <g fill="none">
-                                                            <path fill="#ffe236" stroke="#231f20" strokeMiterlimit={10} d="M1.334 23.595c.109.153.309.238.589.252c.28.013.633-.046 1.04-.174a8 8 0 0 0 1.333-.573c.473-.25.957-.551 1.424-.885a13 13 0 0 0 1.296-1.062c.39-.367.72-.733.973-1.077c.252-.344.422-.66.5-.929c.078-.268.061-.485-.048-.638c-.11-.153-.31-.238-.589-.252c-.28-.013-.633.046-1.04.174c-.408.129-.86.323-1.334.573c-.473.25-.956.551-1.423.885a13 13 0 0 0-1.297 1.062a8 8 0 0 0-.972 1.077c-.253.344-.423.66-.5.929s-.062.486.048.638Zm-.618-7.167c.221.308.679.428 1.272.333c.594-.095 1.276-.397 1.895-.84s1.124-.99 1.406-1.522c.282-.531.316-1.003.095-1.311c-.22-.309-.678-.429-1.272-.333s-1.275.397-1.894.84s-1.125.99-1.406 1.522c-.282.53-.316 1.003-.096 1.311Zm1.82 14.64c.11.152.328.224.644.212s.723-.11 1.197-.287a11.5 11.5 0 0 0 1.568-.74a18 18 0 0 0 1.7-1.084c.562-.402 1.097-.83 1.574-1.26s.888-.853 1.208-1.245s.543-.746.657-1.04c.114-.296.116-.526.007-.679c-.11-.153-.328-.225-.644-.212s-.723.11-1.197.286a11.6 11.6 0 0 0-1.569.741c-.56.313-1.138.681-1.7 1.083s-1.096.83-1.573 1.26c-.478.43-.888.853-1.208 1.246c-.32.392-.543.746-.657 1.04s-.116.526-.007.679Z" strokeWidth={1}></path>
-                                                            <path fill="#48eeff" stroke="#231f20" strokeMiterlimit={10} d="M37.65 17.44c-.89-.69-5.63-1.2-9.56-1.2s-8.68.51-9.57 1.2c-1.78.69-1.85 4.24-1.85 6.91s.07 7.12 1.85 7.81c.51.4 2.28.73 4.44 1l-.39 2.69c-.76.19-1.14.43-1.14 1.16s.34 1 1.11 1.12c.26 0 10.72.06 11.09 0c.74-.13 1.11-.44 1.11-1.12s-.38-1-1.14-1.16l-.39-2.69c2.16-.22 3.93-.55 4.44-1c1.78-.69 1.85-5.14 1.85-7.81s-.07-6.22-1.85-6.91Z" strokeWidth={1}></path>
-                                                            <path fill="#fff" stroke="#231f20" strokeMiterlimit={10} d="M35.26 29.67c1.33-.49 1.39-3 1.39-4.87s-.06-4.38-1.39-4.86c-.67-.49-4.23-.85-7.17-.85s-6.51.36-7.18.85c-1.33.48-1.39 3-1.39 4.86s.06 4.38 1.39 4.87c.67.48 4.23.84 7.18.84s6.5-.36 7.17-.84Z" strokeWidth={1}></path>
-                                                            <path stroke="#231f20" strokeLinecap="round" strokeMiterlimit={10} d="M24.94 35.5a13.4 13.4 0 0 1 3.15-.23c1.052-.048 2.106.03 3.14.23" strokeWidth={1}></path>
-                                                            <path stroke="#fff" strokeLinecap="round" strokeMiterlimit={10} d="M35.6 18.3c1.6.52 1.8.79 2.3 2.7" strokeWidth={1}></path>
-                                                            <path fill="#ff52a1" stroke="#231f20" strokeMiterlimit={10} d="M27.67 2c-1 .12-5.68 1.06-9.5 2c-1.17.28-7.81 2-10.08 3.73c-1.58 1.21-.92 2.21.25 3.11L13 14.39c-.4 3.59-.37 5.84.87 6.46s2.9-.8 4.43-2.39l1.93 1.48c1.17.89 2.44 1.4 4 .22c.09-.07 2.15-1.18 4.88-7.74a82 82 0 0 0 2.79-7.71c.5-2.49-1.03-3.11-4.23-2.71Z" strokeWidth={1}></path>
-                                                            <path fill="#48eeff" d="M16.67 12.6a84 84 0 0 1 9-6Z"></path>
-                                                            <path stroke="#231f20" strokeLinecap="round" strokeMiterlimit={10} d="M16.67 12.6a84 84 0 0 1 9-6" strokeWidth={1}></path>
-                                                            <path fill="#48eeff" d="M18.25 18.46c-.85-.72-1.11-1-1.11-1Z"></path>
-                                                            <path stroke="#231f20" strokeLinecap="round" strokeMiterlimit={10} d="M18.25 18.46c-.85-.72-1.11-1-1.11-1" strokeWidth={1}></path>
-                                                            <path stroke="#fff" strokeLinecap="round" strokeMiterlimit={10} d="M11.83 8.4a16.6 16.6 0 0 1 3.9-1.53" strokeWidth={1}></path>
-                                                        </g>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 32 32">
+                                                        <path fill="#914a08ff" d="M25 22.142V9c0-2.206-1.794-4-4-4h-4.172l2.586-2.586L18 1l-5 5l5 5l1.414-1.414L16.828 7H21c1.103 0 2 .898 2 2v13.142c-1.72.447-3 2-3 3.858c0 2.206 1.794 4 4 4s4-1.794 4-4c0-1.858-1.28-3.41-3-3.858M24 28c-1.103 0-2-.897-2-2s.897-2 2-2s2 .898 2 2s-.897 2-2 2M4 6c0 1.858 1.28 3.41 3 3.858v12.284c-1.72.447-3 2-3 3.858c0 2.206 1.794 4 4 4s4-1.794 4-4c0-1.859-1.28-3.41-3-3.858V9.858c1.72-.447 3-2 3-3.858c0-2.206-1.794-4-4-4S4 3.794 4 6m6 20c0 1.103-.897 2-2 2s-2-.897-2-2s.897-2 2-2s2 .898 2 2m0-20c0 1.103-.897 2-2 2s-2-.897-2-2s.897-2 2-2s2 .897 2 2"></path>
                                                     </svg>
-                                                    <h1>  Send Request</h1>
+                                                    <h1 className="text-accent">  Send Request</h1>
                                                 </div>
                                             </span>
                                         </button>
@@ -304,37 +284,42 @@ relative overflow-hidden
                 <div className="flex justify-center mt-10">
                     <button
                         onClick={() => setPage(prev => prev + 1)}
-                        className="relative group bg-gradient-to-r from-gray-900 to-gray-950 text-gray-300 px-8 py-3.5 rounded-xl font-medium hover:text-white transition-all duration-300 border border-gray-700/50 hover:border-blue-500/50 overflow-hidden"
+                        className="relative group bg-base-300 text-accent px-8 py-3.5 rounded-xl font-medium hover:text-secondary transition-all duration-300 border border-secondary border-[2px] overflow-hidden"
                     >
                         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         <span className="relative z-10 flex items-center gap-3">
-                            <svg className="w-5 h-5 group-hover:animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 24 24">
+                                <g fill="none">
+                                    <path fill="#a45204ff" fillOpacity={0.25} d="M6 14h.675c.581 0 .872 0 1.104.134a1 1 0 0 1 .164.118c.2.178.292.453.476 1.005l.125.376c.22.66.33.99.592 1.178c.262.189.61.189 1.306.189h3.117c.695 0 1.043 0 1.305-.189s.372-.518.592-1.178l.125-.376c.184-.552.276-.827.476-1.005a1 1 0 0 1 .164-.118c.232-.134.523-.134 1.104-.134H18c.932 0 1.398 0 1.765-.152a2 2 0 0 0 1.083-1.083C21 12.398 21 11.932 21 11v6c0 1.886 0 2.828-.586 3.414S18.886 21 17 21H7c-1.886 0-2.828 0-3.414-.586S3 18.886 3 17v-6c0 .932 0 1.398.152 1.765a2 2 0 0 0 1.083 1.083C4.602 14 5.068 14 6 14"></path>
+                                    <path stroke="#4d2704ff" strokeWidth={1.2} d="M3 11c0 .932 0 1.398.152 1.765a2 2 0 0 0 1.083 1.083C4.602 14 5.068 14 6 14h.675c.581 0 .872 0 1.104.134a1 1 0 0 1 .164.118c.2.178.292.453.476 1.005l.125.376c.22.66.33.99.592 1.178c.262.189.61.189 1.306.189h3.117c.695 0 1.043 0 1.305-.189s.372-.518.592-1.178l.125-.376c.184-.552.276-.827.476-1.005a1 1 0 0 1 .164-.118c.232-.134.523-.134 1.104-.134H18c.932 0 1.398 0 1.765-.152a2 2 0 0 0 1.083-1.083C21 12.398 21 11.932 21 11M8 9l4 3m0 0l4-3m-4 3V2"></path>
+                                    <path stroke="#4d2704ff" strokeWidth={1.2} d="M16 5h1c1.886 0 2.828 0 3.414.586S21 7.114 21 9v8c0 1.886 0 2.828-.586 3.414S18.886 21 17 21H7c-1.886 0-2.828 0-3.414-.586S3 18.886 3 17V9c0-1.886 0-2.828.586-3.414S5.114 5 7 5h1"></path>
+                                </g>
                             </svg>
                             LOAD MORE PROFILES
                         </span>
-                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-base-300 via-secondary to-base-300 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
                     </button>
                 </div>
             </div >
+
             {showRequestModal && (
                 <div className="fixed inset-0 z-[999] flex items-center justify-center">
 
                     {/* BACKDROP */}
-                    <div className="absolute inset-0 bg-black/50 "></div>
+                    <div className="absolute inset-0 bg-black/50" onClick={() => setShowRequestModal(false)}></div>
 
                     {/* MODAL */}
-                    <div className="relative px-8 py-6 rounded-3xl border border-white/10
-    bg-[#030712]/80 
+                    <div className="relative px-8 py-6 rounded-3xl border border-secondary border-[3px]
+    bg-base-200
     animate-[modalPop_0.25s_ease]">
 
                         <div className="flex items-center gap-4">
 
                             {/* ICON */}
-                            <div className="w-[130px] h-[130px] flex items-center justify-center rounded-full bg-purple-600/20 border border-purple-500/40">
+                            <div className="w-[130px] h-[130px] flex items-center justify-center rounded-full bg-base-100 border border-secondary border-[3px]">
                                 <svg xmlns="http://www.w3.org/2000/svg" width={80} height={80} viewBox="0 0 40 40">
                                     <g fill="none" strokeMiterlimit={10}>
-                                        <path fill="#48eeff" stroke="#231f20" d="M37 4.24c-1.89-1.44-4.45-2.38-7 0c-1.52 1-5.67 5-10.22 11c-1.19 1.58-2.32 3.08-3.35 4.49c-3.74-2.84-6.69-4.85-7.91-5c-2.07-.8-4.31 1.45-5.75 3.34S-.32 22.63 1 24.4c.47 1.14 3.13 3.53 6.87 6.38c4.49 3.41 7.73 6 9.63 6.24c2.91 1.13 5-2.31 13.37-13.36c4.55-6 7.45-11 8-12.69c1.56-3.08-.03-5.29-1.87-6.73Z" strokeWidth={1}></path>
+                                        <path fill="#ffb667" stroke="#231f20" d="M37 4.24c-1.89-1.44-4.45-2.38-7 0c-1.52 1-5.67 5-10.22 11c-1.19 1.58-2.32 3.08-3.35 4.49c-3.74-2.84-6.69-4.85-7.91-5c-2.07-.8-4.31 1.45-5.75 3.34S-.32 22.63 1 24.4c.47 1.14 3.13 3.53 6.87 6.38c4.49 3.41 7.73 6 9.63 6.24c2.91 1.13 5-2.31 13.37-13.36c4.55-6 7.45-11 8-12.69c1.56-3.08-.03-5.29-1.87-6.73Z" strokeWidth={1}></path>
                                         <path stroke="#fff" strokeLinecap="round" d="M28.56 8.89c1.64-1.84 3.16-3.58 4.55-3.73" strokeWidth={1}></path>
                                     </g>
                                 </svg>
@@ -342,10 +327,10 @@ relative overflow-hidden
 
                             {/* TEXT */}
                             <div>
-                                <div className="text-4xl font-semibold text-white">
+                                <div className="text-4xl font-semibold text-secondary">
                                     Request Sent!
                                 </div>
-                                <div className="text-xl text-gray-400">
+                                <div className="text-xl text-accent">
                                     Your collaboration request has been delivered.
                                 </div>
                             </div>

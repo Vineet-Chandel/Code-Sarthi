@@ -524,6 +524,8 @@ const Discussions = () => {
                             )
                         }
                     </div>
+
+
                 </div>
             </div>
 
@@ -539,8 +541,8 @@ const Discussions = () => {
                                         <path fill="white" d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2z" />
                                     </svg>
                                 </div>
-                                <h3 className="text-xl font-light text-white/60">Select a conversation to start chatting</h3>
-                                <p className="text-sm text-white/40 mt-2">Choose from your existing connections</p>
+                                <h3 className="text-3xl font-light text-white/60">Select a conversation to start chatting</h3>
+                                <p className="text-xl text-white/40 mt-2">Choose from your existing connections</p>
                             </div>
                         </div>
                     ) : isLoadingChats ? (
@@ -576,7 +578,7 @@ const Discussions = () => {
                                 </div>
 
                                 {/* 3 DOT MENU - Premium */}
-                                <button className="p-2 hover:bg-white/5 rounded-xl transition-all duration-300 group">
+                                <button className="p-2 hover:bg-white/5 rounded-xl transition-all duration-300 group focus:outline-none focus:ring-0">
                                     <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" className="opacity-60 group-hover:opacity-100">
                                         <circle cx="12" cy="5" r="2" fill="white" />
                                         <circle cx="12" cy="12" r="2" fill="white" />

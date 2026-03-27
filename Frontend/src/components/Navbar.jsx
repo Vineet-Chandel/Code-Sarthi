@@ -138,22 +138,10 @@ const NavBar = () => {
     return (
 
 
-        <div className="navbar h-[50px] bg-gray-100  flex items-center justify-between rounded-b-2xl sm:rounded-b-3xl px-3 sm:px-4 lg:px-6 py-1.5 sm:py-2">
+        <div data-theme="caramellatte" className="navbar h-[70px] bg-success  flex items-center justify-between rounded-b-2xl sm:rounded-b-3xl px-3 sm:px-4 lg:px-6 py-1.5 sm:py-2">
             {/* Left side - Menu button */}
             <div className="NavStart flex justify-center items-center gap-2.5">
-                <button
-                    className="Nav_svg border border-gray-400 p-[5px] h-8 w-8 sm:h-9 sm:w-9 rounded cursor-pointer hover:bg-gray-200 transition-colors duration-200 flex justify-center items-center"
-                    onClick={openSidebar}
-                    aria-label="Open navigation menu"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 48 48">
-                        <g fill="none" stroke="#000" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2">
-                            <path d="M7.94971 11.9497H39.9497" />
-                            <path d="M7.94971 23.9497H39.9497" />
-                            <path d="M7.94971 35.9497H39.9497" />
-                        </g>
-                    </svg>
-                </button>
+
                 {/* Main sidebar modal */}
                 {
                     showSidebar && (
@@ -299,24 +287,44 @@ const NavBar = () => {
                 }
 
 
-                <div className="logo flex justify-center items-center gap-1">
-                    <button onClick={() => { navigate("/app"), setActivePage("Dashboard") }} className="  hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-400 flex justify-center items-center">
+                <div className="logo flex justify-center items-center  border px-3 py-1 rounded-xl border-base-300 border-[3px] bg-base-100 " >
 
+                    <button
+                        className="Nav_svg border border-secondary p-[5px] h-8 w-8 sm:h-9 sm:w-9 rounded cursor-pointer hover:bg-gray-200 transition-colors duration-200 flex justify-center items-center"
+                        onClick={openSidebar}
+                        aria-label="Open navigation menu"
 
-
-                        <img src="../public/img/mainLogo.png" alt="" className="w-[50px] border rounded-full border-transparent" />
-
-
+                    >
+                        <div className="group cursor-pointer w-fit">
+                            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
+                                <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}>
+                                    <path strokeDasharray={12} d="M3 9l3 3l-3 3">
+                                        <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.2s" values="12;0"></animate>
+                                    </path>
+                                    <path strokeDasharray={16} strokeDashoffset={16} d="M5 5h14">
+                                        <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.2s" dur="0.3s" to={0}></animate>
+                                    </path>
+                                    <path strokeDasharray={12} strokeDashoffset={12} d="M10 12h9">
+                                        <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.5s" dur="0.2s" to={0}></animate>
+                                    </path>
+                                    <path strokeDasharray={16} strokeDashoffset={16} d="M5 19h14">
+                                        <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.7s" dur="0.3s" to={0}></animate>
+                                    </path>
+                                </g>
+                            </svg>
+                        </div>
                     </button>
-
-
-                    <div className="name font-semibold text-3xl text-black">
+                    <svg xmlns="http://www.w3.org/2000/svg" width={40} height={40} className="text-secondary " viewBox="0 0 12 24"><defs><path id="SVG1pzpbdYY" fill="currentColor" d="m7.588 12.43l-1.061 1.06L.748 7.713a.996.996 0 0 1 0-1.413L6.527.52l1.06 1.06l-5.424 5.425z"></path></defs><use fillRule="evenodd" href="#SVG1pzpbdYY" transform="rotate(-180 5.02 9.505)"></use></svg>
+                    <div className="name font-semibold text-3xl ml-[-8px] text-secondary">
                         {activePage}
                     </div>
                 </div>
+
+
+
             </div >
             {/* Right side - Profile button */}
-            < div className="NavEnd relative flex justify-end gap-5 w-[30%] items-center " >
+            < div className="NavEnd relative flex justify-end w-[30%] items-center " >
                 <div className="md:flex hidden"><Search height={45} displayType={"nav"} /></div>
 
                 <button
@@ -324,7 +332,7 @@ const NavBar = () => {
                     className="h-14 rounded-full overflow-hidden bg-gradient-to-br from-gray-400 to-gray-100 cursor-pointer transition-all duration-300  hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-400 relative group"
                     aria-label="Open profile menu"
                 >
-                    <div className="h-full w-full rounded-full overflow-hidden border border-white/50">
+                    <div className="h-full w-full rounded-full overflow-hidden border border-secondary border-[3px]">
                         <img
                             src={user.photoUrl.url}
                             alt="Profile"

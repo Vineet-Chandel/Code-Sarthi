@@ -45,12 +45,12 @@ const Dashboard = () => {
         icon = <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24"><path fill="#f53d5a" d="M14.5 2.5c0 1.5-1.5 6-1.5 6h-2S9.5 4 9.5 2.5a2.5 2.5 0 0 1 5 0M12 10c-1.1 0-2 .9-2 2s.9 2 2 2s2-.9 2-2s-.9-2-2-2m4.08-4.89c.18-.75.33-1.47.39-2.06A10 10 0 0 1 22 12c0 5.52-4.48 10-10 10S2 17.52 2 12c0-3.92 2.25-7.31 5.53-8.95c.07.59.21 1.32.39 2.06A8.03 8.03 0 0 0 4 12c0 4.42 3.58 8 8 8s8-3.58 8-8c0-2.93-1.58-5.49-3.92-6.89M18 12c0 3.31-2.69 6-6 6s-6-2.69-6-6c0-2 .98-3.77 2.48-4.86c.23.81.65 2.07.65 2.07C8.43 9.93 8 10.92 8 12c0 2.21 1.79 4 4 4s4-1.79 4-4c0-1.08-.43-2.07-1.13-2.79c0 0 .41-1.22.65-2.07A6 6 0 0 1 18 12" /></svg>
     }
     return (
-        <div className="min-h-screen bg-gradient-to-br from-black via-gray-950 to-black text-white px-6 py-10">
+        <div data-theme="caramellatte" className="min-h-screen bg-base-200  p-10 px-6 py-10">
 
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10">
 
                 {/* LEFT PROFILE CARD */}
-                <div className="lg:col-span-1 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-xl">
+                <div className="lg:col-span-1 bg-base-100  border border-[3px] border-base-300 rounded-3xl p-8">
 
                     {/* Profile Image */}
                     <div className="flex justify-center">
@@ -65,40 +65,40 @@ const Dashboard = () => {
 
                     {/* Name */}
                     <div className="text-center mt-6 space-y-2">
-                        <h1 className="text-3xl font-bold tracking-wide">
+                        <h1 className="text-3xl font-bold tracking-wide text-secondary">
                             {user.firstName} {user.middleName} {user.lastName}
                         </h1>
 
-                        <div className="flex justify-center items-center gap-3 text-gray-400 text-lg">
+                        <div className="flex justify-center items-center gap-2 text-accent text-lg">
                             <span>@{user.username}</span>
                             <span onClick={() => navigate("/app/settings")} className="cursor-pointer">{icon}</span>
                         </div>
                     </div>
 
                     {/* About */}
-                    <div className="mt-8 bg-black/40 border border-gray-800 p-5 rounded-2xl">
-                        <h3 className="text-xl font-semibold mb-3 text-gray-200">
+                    <div className="mt-8 bg-base-200 border border-base-300 p-5 rounded-2xl">
+                        <h3 className="text-xl font-semibold mb-3 text-secondary">
                             About
                         </h3>
-                        <p className="text-gray-400 leading-relaxed">
+                        <p className="text-accent leading-relaxed">
                             {user.about}
                         </p>
                     </div>
 
                     {/* Info List */}
-                    <div className="mt-6 space-y-4 text-gray-300">
+                    <div className="mt-6 space-y-1 ">
 
                         <div className="flex items-center gap-3 bg-white/5 p-3 rounded-xl">
-                            <span className="text-lg font-medium flex justify-center items-center gap-3"><FaUniversity color="cyan" />{user.college}</span>
+                            <span className="text-lg font-medium flex justify-center items-center gap-3"><FaUniversity color="#370a00" />{user.college}</span>
                         </div>
 
                         <div className="flex items-center gap-3 bg-white/5 p-3 rounded-xl">
-                            <span className="text-lg font-medium flex justify-center items-center gap-3"><BsPersonWorkspace color="cyan" />{user.profession}</span>
+                            <span className="text-lg font-medium flex justify-center items-center gap-3"><BsPersonWorkspace color="#370a00" />{user.profession}</span>
                         </div>
 
                         <div className="flex items-center gap-3 bg-white/5 p-3 rounded-xl">
                             <span className="text-lg font-medium flex justify-center items-center gap-3">
-                                <IoBarChart color="cyan" />   {user.skills?.join(", ")}
+                                <IoBarChart color="#370a00" />   {user.skills?.join(", ")}
                             </span>
                         </div>
 
@@ -114,30 +114,30 @@ const Dashboard = () => {
 
                         <div className="bg-gradient-to-br from-green-500/10 to-green-600/10 border border-green-500/20 rounded-2xl p-6 hover:scale-105 transition">
                             <h3 className="text-3xl font-bold">12</h3>
-                            <p className="text-gray-400 mt-2">Projects</p>
+                            <p className="text-secondary mt-2">Projects</p>
                         </div>
 
                         <div className="bg-gradient-to-br from-blue-500/10 to-blue-600/10 border border-blue-500/20 rounded-2xl p-6 hover:scale-105 transition">
                             <h3 className="text-3xl font-bold">{connections.total}</h3>
-                            <p className="text-gray-400 mt-2">Connections</p>
+                            <p className="text-secondary mt-2">Connections</p>
                         </div>
 
                         <div className="bg-gradient-to-br from-purple-500/10 to-purple-600/10 border border-purple-500/20 rounded-2xl p-6 hover:scale-105 transition">
                             <h3 className="text-3xl font-bold">3</h3>
-                            <p className="text-gray-400 mt-2">Notifications</p>
+                            <p className="text-secondary mt-2">Notifications</p>
                         </div>
 
                     </div>
 
 
                     {/* Projects Section */}
-                    <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-xl">
-                        <h2 className="text-2xl font-bold mb-6">Projects</h2>
+                    <div className="bg-base-100 backdrop-blur-xl border border-base-300 border-[3px] rounded-3xl p-8 shadow-xl">
+                        <h2 className="text-2xl font-bold mb-6 text-secondary">Projects</h2>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="bg-black/40 p-5 rounded-xl hover:bg-black/60 transition">
-                                <h4 className="text-lg font-semibold">Project Name</h4>
-                                <p className="text-gray-400 text-sm mt-2">
+                            <div className="bg-base-200  border border-base-300 border-[1px] p-5 rounded-xl  transition">
+                                <h4 className="text-lg font-semibold text-secondary">Project Name</h4>
+                                <p className="text-accent text-sm mt-2">
                                     Short description of project.
                                 </p>
                             </div>
@@ -146,17 +146,17 @@ const Dashboard = () => {
 
 
                     {/* Notifications Section */}
-                    <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-xl">
-                        <h2 className="text-2xl font-bold mb-6">Notifications</h2>
+                    <div className="bg-base-100 backdrop-blur-xl border border-base-300 border-[3px] rounded-3xl p-8 shadow-xl">
+                        <h2 className="text-2xl text-secondary font-bold mb-6">Notifications</h2>
 
                         <div className="space-y-4">
-                            <div className="bg-black/40 p-4 rounded-xl">
+                            <div className=" text-secondary border border-base-300 border-[1px] bg-base-200 p-4 rounded-xl">
                                 Incoming Requests
                             </div>
-                            <div className="bg-black/40 p-4 rounded-xl">
+                            <div className=" text-secondary border border-base-300 border-[1px] bg-base-200 p-4 rounded-xl">
                                 Reminders
                             </div>
-                            <div className="bg-black/40 p-4 rounded-xl">
+                            <div className="text-secondary border border-base-300 border-[1px] bg-base-200 p-4 rounded-xl">
                                 Deadline Alerts
                             </div>
                         </div>

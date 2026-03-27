@@ -27,9 +27,12 @@ const Search = ({ height, displayType }) => {
             setData(res.data.data)
             setShowCard(true)
             setIsSearching(false)
+            setNewError("");
         } catch (err) {
             setIsSearching(false)
-
+            if (err.response?.data?.message === "Use /profile/me for your own profile") {
+                setNewError("Why you searching yourself ? ")
+            }
             setNewError(err.response?.data?.message || "User not found");
         }
 
@@ -47,29 +50,24 @@ const Search = ({ height, displayType }) => {
         return () => clearTimeout(timer);
     }, [username]);
     return (
-        <div className='w-[90%] flex flex-col gap-y-10'>
+        <div className='w-[90%] flex flex-col gap-y-1 '>
             <div className="relative">
 
+
                 {/* LEFT ICON */}
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="absolute left-3 top-1/2 -translate-y-1/2"
-                    width="30"
-                    height="30"
-                    viewBox="0 0 80 80"
-                >
+                <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 80 80" className="absolute left-3 top-1/2 -translate-y-1/2">
                     <g fill="none">
-                        <path fill="#f2994a" d="M65.368 67.848a2 2 0 0 0 2.828-2.829zm-9.634-15.29a2 2 0 0 0-2.828 2.828zm12.462 12.461L55.734 52.557l-2.828 2.829l12.462 12.462z" />
-                        <path fill="#56ccf2" stroke="#2f80ed" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M13.578 30.724a24.249 24.249 0 1 1 46.844 12.552a24.249 24.249 0 0 1-46.844-12.552" />
+                        <path fill="#8c3f27" d="M65.368 67.848a2 2 0 0 0 2.828-2.829zm-9.634-15.29a2 2 0 0 0-2.828 2.828zm12.462 12.461L55.734 52.557l-2.828 2.829l12.462 12.462z"></path>
+                        <path fill="#ff9d33" stroke="#370a00" strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M13.578 30.724a24.249 24.249 0 1 1 46.844 12.552a24.249 24.249 0 0 1-46.844-12.552"></path>
                     </g>
                 </svg>
 
                 {/* INPUT */}
                 <input
                     type="text"
-                    placeholder="Search Developers"
+                    placeholder="Search Developers.."
                     style={{ height: `${height}px` }}
-                    className="w-full text-gray-200 rounded-xl pl-14 pr-14 bg-black/90 border border-white/10 outline-none focus:border-green-400 transition-all"
+                    className="w-full text-secondary placeholder:text-neutral rounded-xl bg-base-100 pl-14 pr-14 border border-base-300 border-[3px] outline-none focus:border-accent transition-all"
                     value={username}
                     onChange={(e) => setUserName(e.target.value.trimStart())}
                 />
@@ -86,15 +84,10 @@ const Search = ({ height, displayType }) => {
                     </div>
                 )}
 
+
                 {/* RIGHT ICON */}
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-                    width="45"
-                    height="45"
-                    viewBox="0 0 24 24"
-                >
-                    <g fill="#0096ff" fillOpacity="0" stroke="#0096ff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1"> <path strokeDasharray="22" d="M12 5c1.66 0 3 1.34 3 3c0 1.66 -1.34 3 -3 3c-1.66 0 -3 -1.34 -3 -3c0 -1.66 1.34 -3 3 -3Z"> <animate fill="freeze" attributeName="strokeDashoffset" dur="0.25s" values="22;0" /> <animate fill="freeze" attributeName="fillOpacity" begin="0.55s" dur="0.075s" to="0.3" /> </path> <path strokeDasharray="38" strokeDashoffset="38" d="M12 14c4 0 7 2 7 3v2h-14v-2c0 -1 3 -3 7 -3Z"> <animate fill="freeze" attributeName="strokeDashoffset" begin="0.25s" dur="0.25s" to="0" /> <animate fill="freeze" attributeName="fillOpacity" begin="0.55s" dur="0.075s" to="0.3" /> </path> </g>
+                <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 48 48" className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer">
+                    <path fill="#ff9d33" stroke="#8c3f27" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M24 20a7 7 0 1 0 0-14a7 7 0 0 0 0 14M6 40.8V42h36v-1.2c0-4.48 0-6.72-.872-8.432a8 8 0 0 0-3.496-3.496C35.92 28 33.68 28 29.2 28H18.8c-4.48 0-6.72 0-8.432.872a8 8 0 0 0-3.496 3.496C6 34.08 6 36.32 6 40.8"></path>
                 </svg>
 
             </div>
@@ -224,6 +217,7 @@ const Search = ({ height, displayType }) => {
                     <div className="h-1 bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
                 </div>
             )}
+            {username == "" && (() => setShowCard(false))}
             {newError && (
                 <div
                     className={`${displayType === "nav"
@@ -231,25 +225,20 @@ const Search = ({ height, displayType }) => {
                         : "relative"
                         } flex justify-center`}
                 >
-                    <div className="flex items-center rounded-2xl px-4 py-3 border border-red-600 bg-red-500/70 w-[50%] transition-all duration-300">
-                        <span className="mr-3">
+                    <div className="flex items-center rounded-2xl px-4 py-3 border border-secondary bg-error w-[50%] transition-all duration-300">
+                        <span className="mr-3" onClick={() => setNewError("")}>
                             <svg width="24" height="24" viewBox="0 0 24 24">
                                 <path
-                                    fill="#ffffff"
+                                    fill="#801518"
                                     d="M12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m0-18C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2m2.59 6L12 10.59L9.41 8L8 9.41L10.59 12L8 14.59L9.41 16L12 13.41L14.59 16L16 14.59L13.41 12L16 9.41z"
                                 />
                             </svg>
                         </span>
 
-                        <div className="text-white ml-2">{newError}</div>
+                        <div className="text-error-content ml-2">{newError}</div>
                     </div>
                 </div>
             )}
-
-
-
-
-
         </div>
     )
 }

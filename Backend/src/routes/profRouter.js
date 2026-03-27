@@ -1288,7 +1288,7 @@ profileRouter.post("/profile/others", userAuth, async (req, res) => {
         if (trimmedUsername === loggedInUser.username?.toLowerCase()) {
             return res.status(400).json({
                 success: false,
-                message: "Use /profile/me for your own profile"
+                message: "It's your profile only!"
             });
         }
 

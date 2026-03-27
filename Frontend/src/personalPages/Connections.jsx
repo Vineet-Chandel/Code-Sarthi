@@ -54,7 +54,7 @@ const Connections = () => {
     }
 
     return (
-        <div className="w-full min-h-screen bg-black p-4 md:p-8">
+        <div className="w-full min-h-screen bg-base-200 p-4 md:p-8">
             <div className="w-full/2 mx-auto">
 
                 <div className="text-center mb-16 sm:mb-20 lg:mb-24 w-full flex flex-col items-center px-4">
@@ -67,9 +67,9 @@ const Connections = () => {
         lg:text-8xl 
         xl:text-9xl
         font-extrabold 
-        bg-gradient-to-b 
-        from-white 
-        to-blue-400 
+         bg-gradient-to-b 
+        from-[#ff8904] 
+        to-accent 
         bg-clip-text 
         text-transparent
         leading-tight
@@ -93,7 +93,7 @@ const Connections = () => {
                     {connectionsARR.map((item, index) => (
                         <div
                             key={item._id}
-                            className=" relative group bg-[#030712]/70  rounded-3xl border border-white/[0.08] transition-all duration-500 hover:-translate-y-1 overflow-hidden before:absolute before:inset-0 before:rounded-3xl before:bg-gradient-to-br before:from-blue-500/[0.05] before:to-purple-500/[0.05] before:opacity-0 group-hover:before:opacity-100 before:transition-opacity">
+                            className=" relative group bg-base-100   rounded-3xl border border-base-300 border-[3px] transition-all duration-500 hover:-translate-y-1 overflow-hidden before:absolute before:inset-0 before:rounded-3xl before:bg-gradient-to-br before:from-blue-500/[0.05] before:to-purple-500/[0.05] before:opacity-0 group-hover:before:opacity-100 before:transition-opacity">
 
 
 
@@ -123,14 +123,18 @@ const Connections = () => {
 
                                     {/* Tech stats */}
                                     <div className="grid grid-cols-2 gap-2 w-full">
-                                        <div className="text-center p-2 bg-gray-800/50 rounded-lg border border-gray-700/30">
-                                            <div className="text-xs text-gray-400">Age</div>
-                                            <div className="text-lg font-bold text-blue-400">{item.age}</div>
+                                        <div className="text-center p-2 bg-base-300 rounded-lg border border-secondary border-[3px]">
+                                            <div className="text-xs text-secondary">Age</div>
+                                            <div className="text-lg font-bold text-accent">{item.age}</div>
                                         </div>
-                                        <div className="text-center p-2 bg-gray-800/50 rounded-lg border border-gray-700/30">
-                                            <div className="text-xs text-gray-400">Gender</div>
-                                            <div className="text-lg font-bold text-purple-400">{item.gender}</div>
+                                        <div className="text-center p-2 bg-base-300 rounded-lg border border-secondary border-[3px]">
+                                            <div className="text-xs text-secondary">Gender</div>
+                                            <div className="text-lg font-bold text-accent">{item.gender}</div>
                                         </div>
+                                    </div>
+                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-base-300 rounded-full border border-secondary border-[3px]">
+                                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                                        <span className="text-md text-accent">{item.college}</span>
                                     </div>
                                 </div>
 
@@ -140,7 +144,7 @@ const Connections = () => {
                                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
                                         <div>
                                             <div className="flex items-center gap-2">
-                                                <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-gray-200 to-gray-300 bg-clip-text text-transparent">
+                                                <h1 className="text-2xl font-bold bg-gradient-to-r from-accent to-secondary bg-clip-text text-transparent">
                                                     {item.FirstName} {item.MiddleName} {item.LastName}
                                                 </h1>
                                                 {item.isVerified && (
@@ -148,44 +152,41 @@ const Connections = () => {
                                                 )}
                                             </div>
                                             <div className="flex items-center gap-2 mt-1">
-                                                <code className="text-gray-400 text-sm font-mono">@{item.username}</code>
+                                                <code className="text-accent text-sm font-mono">@{item.username}</code>
                                                 <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
                                                 <span className="text-lg text-gray-500">{item.profession}</span>
                                             </div>
                                         </div>
 
                                         {/* Connection status */}
-                                        <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-800/50 rounded-full border border-gray-700/30">
-                                            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                                            <span className="text-md text-gray-300">{item.college}</span>
-                                        </div>
+
                                     </div>
 
                                     {/* About section */}
-                                    <div className=" rounded-xl p-4  bg-[#020617]/60 border border-white/[0.08] ">
+                                    <div className=" rounded-xl p-4  bg-base-300 border border-secondary border-[3px] ">
                                         <div className="flex items-center gap-2 mb-2">
-                                            <div className="w-1 h-4 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"></div>
-                                            <h3 className="text-sm font-semibold text-gray-300">SYSTEM PROFILE</h3>
+                                            <div className="w-1 h-4 bg-secondary rounded-full"></div>
+                                            <h3 className="text-sm font-semibold text-secondary">ABOUT</h3>
                                         </div>
-                                        <p className="text-gray-400 text-sm leading-relaxed">{item.about || "No description available"}</p>
+                                        <p className="text-accent text-sm leading-relaxed">{item.about || "No description available"}</p>
                                     </div>
 
                                     {/* Skills section with tech tags */}
                                     <div>
-                                        <div className="flex items-center gap-2 mb-3">
-                                            <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                        <div className="flex items-center gap-1 mb-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 384 512">
+                                                <path fill="#5a2c01ff" d="M290.7 311L95 269.7L86.8 309l195.7 41zm51-87L188.2 95.7l-25.5 30.8l153.5 128.3zm-31.2 39.7L129.2 179l-16.7 36.5L293.7 300zM262 32l-32 24l119.3 160.3l32-24zm20.5 328h-200v39.7h200zm39.7 80H42.7V320h-40v160h359.5V320h-40z"></path>
                                             </svg>
-                                            <h3 className="text-sm font-semibold text-gray-300">TECH STACK</h3>
+                                            <h3 className="text-sm font-semibold text-secondary">TECH STACK</h3>
                                         </div>
-                                        <div className="flex flex-wrap gap-2">
+                                        <div className="flex flex-wrap gap-2 text-accent">
                                             {item.skills?.map((skill, idx) => (
                                                 <span
                                                     key={idx}
-                                                    className=" px-3 py-1.5 text-xs font-medium rounded-xl bg-white/[0.04] border border-white/10 text-gray-300 hover:border-blue-400/40 hover:text-blue-300  transition-all duration-300 group relative overflow-hidden "
+                                                    className=" px-3 py-1.5 text-xs font-medium rounded-xl bg-base-300 border border-white/10 text-gray-300  border border-secondary border-[2px] transition-all duration-300 group relative overflow-hidden "
                                                 >
-                                                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                                    <span className="relative">{skill}</span>
+                                                    <div className="absolute inset-0 bg-accent/10 "></div>
+                                                    <span className="relative text-accent">{skill}</span>
                                                 </span>
                                             )) || (
                                                     <span className="px-3 py-1.5 text-xs text-gray-500 bg-gray-900/50 rounded-lg border border-gray-700/30">

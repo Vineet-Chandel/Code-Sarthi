@@ -96,7 +96,7 @@ const Body = () => {
     }
 
     return (
-        <div>
+        <div data-theme="caramellatte" className="bg-base-200">
             <NavBar />
             <Outlet />
         </div>
