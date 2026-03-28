@@ -14,6 +14,8 @@ const Connections = () => {
 
     const dispatch = useDispatch();
     const [showRequestModal, setShowRequestModal] = useState(false);
+    const [ontapDelete, setOntapDelete] = useState(false);
+    const [idSelectedToDelte, setIdSelectedToDelte] = useState(null);
     const connectionUser = async () => {
         try {
             const response = await axios.get(
@@ -74,7 +76,7 @@ const Connections = () => {
         text-transparent
         leading-tight
     ">
-                        Your Connections
+                        Connections
                     </h1>
 
 
@@ -197,30 +199,26 @@ const Connections = () => {
                                     </div>
 
                                     {/* Action buttons with tech style */}
-                                    <div className="flex flex-wrap gap-3 pt-2">
+                                    <div className="flex gap-3 w-full pt-2">
 
-                                        <button className="relative group  flex-1 min-w-[140px] bg-gradient-to-r from-gray-800/80 to-gray-900/80 text-gray-300 px-4 py-2.5 rounded-xl font-medium hover:from-gray-700 hover:to-gray-800 transition-all duration-300 active:scale-95 border border-gray-700/50 hover:border-gray-600/50 overflow-hidden">
-                                            <span className="relative z-10 flex items-center justify-center gap-2 text-2xl">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width={45} height={45} viewBox="0 -0.5 41 41">
-                                                    <g fill="none" strokeMiterlimit={10}>
-                                                        <path fill="#ffe236" stroke="#231f20" d="M36 33.59c3-1.36 3.53-8.34 3.53-13.59S38.94 7.77 36 6.41c-1.48-1.36-9.4-1.73-16-1.73S5.52 5.05 4 6.41C1.06 7.77.5 14.75.5 20S1.06 32.23 4 33.59c1.49 1.36 9.41 1.73 16 1.73s14.49-.32 16-1.73Z" strokeWidth={1}></path>
-                                                        <path stroke="#231f20" strokeLinecap="round" d="M4.67 13c3.65 3.81 8.94 7.93 10.57 8.64a10.81 10.81 0 0 0 9.52 0c1.62-.64 6.91-4.79 10.56-8.64m-20.89 8.39l-6.96 6.97m18.1-6.97l6.97 6.97" strokeWidth={1}></path>
-                                                        <path stroke="#fff" strokeLinecap="round" d="M29.05 7.53a15.4 15.4 0 0 1 5.27.92" strokeWidth={1}></path>
+                                        <button className="relative group  flex justify-center w-full bg-base-300  text-gray-300 px-4 py-2.5 rounded-xl font-medium hover:bg-base-200 transition-all duration-300 active:scale-95 border border-secondary border-[2px] overflow-hidden">
+                                            <span className="relative z-10 flex items-center justify-center gap-2 text-xl text-accent">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width={45} height={45} viewBox="0 0 24 24">
+                                                    <g fill="none">
+                                                        <rect width={16} height={12} x={4} y={6} stroke="#bf630b" rx={2} strokeWidth={1}></rect>
+                                                        <path fill="#bf630b" d="M11.106 12.553L4 9v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-7.106 3.553a2 2 0 0 1-1.788 0"></path>
                                                     </g>
                                                 </svg>
                                                 Message
                                             </span>
                                         </button>
 
-                                        <button className="relative group flex-1 min-w-[140px] bg-gradient-to-r from-purple-600/90 to-purple-700/90 text-white px-4 py-2.5 rounded-xl font-medium hover:from-purple-500 hover:to-purple-600 transition-all duration-300 active:scale-95  border border-purple-500/30 overflow-hidden" onClick={() => deleteConnections(item.connectionId)}>
-                                            <span className="relative z-10 flex items-center text-2xl justify-center gap-2">
+                                        <button className="relative group flex justify-center bg-base-300  text-gray-300 px-4 py-2.5 rounded-xl font-medium hover:bg-base-200 transition-all duration-300 active:scale-95 border border-secondary border-[2px] overflow-hidden" onClick={() => { setOntapDelete(true); setIdSelectedToDelte(item.connectionId) }}>
+                                            <span className="relative z-10 flex items-center text-xl justify-center gap-2 text-accent">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width={45} height={45} viewBox="0 0 24 24">
-                                                    <g fill="none">
-                                                        <path fill="#ff808c" d="M12 20.708a8.708 8.708 0 1 0 0-17.416a8.708 8.708 0 0 0 0 17.416"></path>
-                                                        <path stroke="#000000" strokeLinecap="round" strokeLinejoin="round" d="M4.546 19.453L19.453 4.547M12 22.542c5.822 0 10.542-4.72 10.542-10.542S17.822 1.458 12 1.458S1.458 6.178 1.458 12S6.178 22.542 12 22.542" strokeWidth={1}></path>
-                                                    </g>
+                                                    <path fill="#bf630b" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z"></path>
                                                 </svg>
-                                                Delete Connection
+
                                             </span>
                                         </button>
                                     </div>
@@ -234,6 +232,7 @@ const Connections = () => {
                 </div>
 
 
+
             </div>
             {showRequestModal && (
                 <div className="fixed inset-0 z-[999] flex items-center justify-center">
@@ -242,18 +241,15 @@ const Connections = () => {
                     <div className="absolute inset-0 bg-black/50 "></div>
 
                     {/* MODAL */}
-                    <div className="relative px-8 py-6 rounded-3xl border border-white/10
-    bg-[#030712]/80 
-
-    animate-[modalPop_0.25s_ease]">
+                    <div className="relative px-8 py-6 rounded-3xl border bg-base-100 border-secondary border-[2px] animate-[modalPop_0.25s_ease]">
 
                         <div className="flex items-center gap-4">
 
                             {/* ICON */}
-                            <div className="w-12 h-12 flex items-center justify-center rounded-full bg-purple-600/20 border border-purple-500/40">
+                            <div className="w-12 h-12 flex items-center justify-center rounded-full bg-base-300 border border-secondary border-[2px]">
                                 <svg width="26" height="26" viewBox="0 0 24 24">
                                     <path
-                                        fill="#a855f7"
+                                        fill="#bf630b"
                                         d="M9 16.2l-3.5-3.5L4 14.2l5 5l11-11l-1.5-1.5z"
                                     />
                                 </svg>
@@ -261,10 +257,10 @@ const Connections = () => {
 
                             {/* TEXT */}
                             <div>
-                                <div className="text-lg font-semibold text-white">
+                                <div className="text-lg font-semibold text-accent">
                                     Connection Deleted
                                 </div>
-                                <div className="text-sm text-gray-400">
+                                <div className="text-sm text-gray-800">
                                     Connection has been deleted.
                                 </div>
                             </div>
@@ -274,13 +270,49 @@ const Connections = () => {
                 </div>
             )}
 
+            {ontapDelete && (
+                <div className="fixed inset-0 z-[999] flex items-center justify-center">
+
+                    {/* BACKDROP */}
+                    <div className="absolute inset-0 bg-black/50 "></div>
+
+                    {/* MODAL */}
+                    <div className="relative px-8 py-6 rounded-3xl border border-secondary border-[2px] bg-base-100 
+
+    animate-[modalPop_0.25s_ease]">
+
+                        <div className="flex items-center gap-4">
+
+
+
+                            {/* TEXT */}
+                            <div>
+                                <div className="text-2xl font-semibold text-accent">
+                                    Do you want to delete this connection?
+                                </div>
+                                <div className="text-xl text-gray-700">
+                                    It will lead to lose all the messages and contacts between you and the user.
+                                </div>
+                                <button className="relative group flex w-full mt-5 justify-center bg-base-300  text-gray-300 px-4 py-2.5 rounded-xl font-medium hover:bg-base-200 transition-all duration-300 active:scale-95 border border-secondary border-[2px] overflow-hidden" onClick={() => { deleteConnections(idSelectedToDelte); setOntapDelete(false); setIdSelectedToDelte(null); setShowRequestModal(true); setTimeout(() => { setShowRequestModal(false) }, 2200) }}>
+                                    <span className="relative z-10 flex items-center text-xl justify-center gap-2 text-accent">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width={45} height={45} viewBox="0 0 24 24">
+                                            <path fill="#bf630b" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z"></path>
+                                        </svg>
+                                        Delete Connection
+                                    </span>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {connections.total == 0 && (
                 <div className="  inset-0 flex items-center justify-center px-4">
 
                     <div className="relative w-full max-w-3xl p-10 rounded-3xl 
-                bg-gradient-to-br from-[#0f172a]/90 to-[#020617]/90
- border border-purple-500/20
+              bg-base-100 border border-secondary border-[2px]
             
                 animate-[modalPop_0.3s_ease]">
 
@@ -288,19 +320,19 @@ const Connections = () => {
 
                             {/* ICON */}
                             <div className="w-36 h-36 flex items-center justify-center 
-                        rounded-full bg-purple-600/10 
-                        border border-purple-500/40
+                        rounded-full bg-base-300
+                        border border-secondary border-[2px]
                     ">
-                                <FaPeopleCarry className="text-purple-400" size={60} />
+                                <FaPeopleCarry className="text-accent" size={60} />
                             </div>
 
                             {/* TEXT SECTION */}
                             <div className="text-center md:text-left">
-                                <h2 className="text-4xl font-bold text-white mb-4">
+                                <h2 className="text-4xl font-bold text-accent mb-4">
                                     No Connections Found
                                 </h2>
 
-                                <p className="text-lg text-gray-400 mb-6 max-w-md">
+                                <p className="text-lg text-gray-800 mb-6 max-w-md">
                                     Discover and connect with developers from around the world.
                                     Start exploring new profiles today.
                                 </p>
@@ -310,12 +342,14 @@ const Connections = () => {
                                 <button
                                     onClick={() => navigate("/app/explore")}
                                     className="px-6 py-3 rounded-xl 
-                                bg-gradient-to-r from-purple-500 to-pink-500
+                                bg-base-300 border border-secondary border-[2px]
                                 hover:scale-105 
                                 transition-all duration-300
-                                text-white font-semibold"
+                                text-accent font-semibold flex gap-3 items-center justify-center"
                                 >
-                                    Explore Developers
+                                    <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 512 512">
+                                        <path fill="#a9580cff" fillRule="evenodd" d="m380.656 106.622l-35.01 23.344l37.117 92.733l42.309-12.418zm-71.28 47.49L97.67 295.272l4.928 9.857l239.035-70.334zm90.3-111.445l83.57 194.995l-157.166 46.221l63.256 168.168l-39.95 14.982l-64.351-171.075l-28.928 8.49l-59.662 162.6l-39.217-16.808l47.999-130.816l-124.824 36.721l-37.736-75.472z"></path>
+                                    </svg>   Explore Developers
                                 </button>
                             </div>
 

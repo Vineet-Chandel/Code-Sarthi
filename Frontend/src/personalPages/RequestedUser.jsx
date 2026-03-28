@@ -68,7 +68,7 @@ const RequestedUser = () => {
     return (
         <div className="
 w-full min-h-screen
-bg-[radial-gradient(circle_at_top,#0a0f1f,black_70%)]
+bg-base-200
 p-4 md:p-10
 relative overflow-hidden
 ">
@@ -86,8 +86,8 @@ relative overflow-hidden
         xl:text-9xl
         font-extrabold 
         bg-gradient-to-b 
-        from-white 
-        to-blue-400 
+        from-[#ff8904] 
+        to-accent 
         bg-clip-text 
         text-transparent
         leading-tight
@@ -101,7 +101,7 @@ relative overflow-hidden
         sm:text-lg 
         md:text-xl 
         lg:text-2xl 
-        text-gray-400 
+        text-gray-800 
         mt-6 
         max-w-xl 
         lg:max-w-3xl
@@ -126,7 +126,7 @@ relative overflow-hidden
                     {reqUser.map((item, index) => (
                         <div
                             key={item._id}
-                            className=" relative group bg-[#030712]/70  rounded-3xl border border-white/[0.08] transition-all duration-500 hover:-translate-y-1 overflow-hidden before:absolute before:inset-0 before:rounded-3xl before:bg-gradient-to-br before:from-blue-500/[0.05] before:to-purple-500/[0.05] before:opacity-0 group-hover:before:opacity-100 before:transition-opacity">
+                            className=" relative group bg-base-100  rounded-3xl border border-secondary border-[2px] transition-all duration-500 hover:-translate-y-1 overflow-hidden before:absolute before:inset-0 before:rounded-3xl before:bg-gradient-to-br before:from-blue-500/[0.05] before:to-purple-500/[0.05] before:opacity-0 group-hover:before:opacity-100 before:transition-opacity">
 
 
 
@@ -156,15 +156,22 @@ relative overflow-hidden
 
                                     {/* Tech stats */}
                                     <div className="grid grid-cols-2 gap-2 w-full">
-                                        <div className="text-center p-2 bg-gray-800/50 rounded-lg border border-gray-700/30">
-                                            <div className="text-xs text-gray-400">Age</div>
-                                            <div className="text-lg font-bold text-blue-400">{item.age}</div>
+                                        <div className="text-center p-2 bg-base-300 border border-[2px] border-secondary rounded-lg">
+                                            <div className="text-xs text-secondary">Age</div>
+                                            <div className="text-lg font-bold text-accent">{item.age}</div>
                                         </div>
-                                        <div className="text-center p-2 bg-gray-800/50 rounded-lg border border-gray-700/30">
-                                            <div className="text-xs text-gray-400">Gender</div>
-                                            <div className="text-lg font-bold text-purple-400">{item.gender}</div>
+                                        <div className="text-center p-2 bg-base-300 border border-[2px] border-secondary rounded-lg">
+                                            <div className="text-xs text-secondary">Gender</div>
+                                            <div className="text-lg font-bold text-accent">{item.gender}</div>
                                         </div>
                                     </div>
+
+                                    {/* Connection status */}
+                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-base-300 border border-[2px] border-secondary rounded-full">
+                                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                                        <span className="text-md text-accent">{item.college}</span>
+                                    </div>
+
                                 </div>
 
                                 {/* Right Content Section */}
@@ -173,7 +180,7 @@ relative overflow-hidden
                                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
                                         <div>
                                             <div className="flex items-center gap-2">
-                                                <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-gray-200 to-gray-300 bg-clip-text text-transparent">
+                                                <h1 className="text-2xl font-bold bg-gradient-to-r from-accent to-secondary bg-clip-text text-transparent">
                                                     {item.firstName} {item.middleName} {item.lastName}
                                                 </h1>
                                                 {item.isVerified && (
@@ -181,43 +188,38 @@ relative overflow-hidden
                                                 )}
                                             </div>
                                             <div className="flex items-center gap-2 mt-1">
-                                                <code className="text-gray-400 text-sm font-mono">@{item.username}</code>
+                                                <code className="text-accent text-sm font-mono">@{item.username}</code>
                                                 <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
                                                 <span className="text-lg text-gray-500">{item.profession}</span>
                                             </div>
                                         </div>
 
-                                        {/* Connection status */}
-                                        <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-800/50 rounded-full border border-gray-700/30">
-                                            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                                            <span className="text-md text-gray-300">{item.college}</span>
-                                        </div>
                                     </div>
 
                                     {/* About section */}
-                                    <div className=" rounded-xl p-4  bg-[#020617]/60 border border-white/[0.08] ">
+                                    <div className=" rounded-xl p-4  bg-base-300 border border-secondary border-[2px] ">
                                         <div className="flex items-center gap-2 mb-2">
-                                            <div className="w-1 h-4 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"></div>
-                                            <h3 className="text-sm font-semibold text-gray-300">SYSTEM PROFILE</h3>
+                                            <div className="w-1 h-4 bg-secondary rounded-full"></div>
+                                            <h3 className="text-sm font-semibold text-secondary">ABOUT</h3>
                                         </div>
-                                        <p className="text-gray-400 text-sm leading-relaxed">{item.about || "No description available"}</p>
+                                        <p className="text-accent text-sm leading-relaxed">{item.about || "No description available"}</p>
                                     </div>
 
                                     {/* Skills section with tech tags */}
                                     <div>
-                                        <div className="flex items-center gap-2 mb-3">
-                                            <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                        <div className="flex items-center gap-1 mb-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 384 512">
+                                                <path fill="#5a2c01ff" d="M290.7 311L95 269.7L86.8 309l195.7 41zm51-87L188.2 95.7l-25.5 30.8l153.5 128.3zm-31.2 39.7L129.2 179l-16.7 36.5L293.7 300zM262 32l-32 24l119.3 160.3l32-24zm20.5 328h-200v39.7h200zm39.7 80H42.7V320h-40v160h359.5V320h-40z"></path>
                                             </svg>
-                                            <h3 className="text-sm font-semibold text-gray-300">TECH STACK</h3>
+                                            <h3 className="text-sm font-semibold text-accent">TECH STACK</h3>
                                         </div>
                                         <div className="flex flex-wrap gap-2">
                                             {item.skills?.map((skill, idx) => (
                                                 <span
                                                     key={idx}
-                                                    className=" px-3 py-1.5 text-xs font-medium rounded-xl bg-white/[0.04] border border-white/10 text-gray-300 hover:border-blue-400/40 hover:text-blue-300   transition-all duration-300 group relative overflow-hidden "
+                                                    className=" px-3 py-1.5 text-xs font-medium rounded-xl  text-accent  border-[2px] border-secondary relative overflow-hidden "
                                                 >
-                                                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                                    <div className="absolute inset-0 bg-base-300 border  "></div>
                                                     <span className="relative">{skill}</span>
                                                 </span>
                                             )) || (
@@ -231,30 +233,19 @@ relative overflow-hidden
                                     {/* Action buttons with tech style */}
                                     <div className="flex flex-wrap gap-3 pt-2">
 
-                                        <button className="relative group flex-1 min-w-[140px] bg-gradient-to-r from-gray-800/80 to-gray-900/80 text-gray-300 px-4 py-2.5 rounded-xl font-medium hover:from-gray-700 hover:to-gray-800 transition-all duration-300 active:scale-95 border border-gray-700/50 hover:border-gray-600/50 overflow-hidden">
-                                            <span className="relative z-10 flex items-center justify-center gap-2 text-2xl">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width={40} height={40} viewBox="0 -0.5 41 41">
-                                                    <g fill="none" strokeMiterlimit={10}>
-                                                        <path fill="#ffe236" stroke="#231f20" d="M36 33.59c3-1.36 3.53-8.34 3.53-13.59S38.94 7.77 36 6.41c-1.48-1.36-9.4-1.73-16-1.73S5.52 5.05 4 6.41C1.06 7.77.5 14.75.5 20S1.06 32.23 4 33.59c1.49 1.36 9.41 1.73 16 1.73s14.49-.32 16-1.73Z" strokeWidth={1}></path>
-                                                        <path stroke="#231f20" strokeLinecap="round" d="M4.67 13c3.65 3.81 8.94 7.93 10.57 8.64a10.81 10.81 0 0 0 9.52 0c1.62-.64 6.91-4.79 10.56-8.64m-20.89 8.39l-6.96 6.97m18.1-6.97l6.97 6.97" strokeWidth={1}></path>
-                                                        <path stroke="#fff" strokeLinecap="round" d="M29.05 7.53a15.4 15.4 0 0 1 5.27.92" strokeWidth={1}></path>
-                                                    </g>
-                                                </svg>
-                                                Message
-                                            </span>
-                                        </button>
 
-                                        <button className="relative group flex-1 min-w-[140px] bg-gradient-to-r from-purple-600/90 to-purple-700/90 text-white px-4 py-2.5 rounded-xl font-medium hover:from-purple-500 hover:to-purple-600 transition-all duration-300 active:scale-95  border border-purple-500/30 overflow-hidden" onClick={() => deleteRequest(item._id)}>
+
+                                        <button className="relative group flex-1 min-w-[140px] bg-base-300 text-accent px-4 py-2.5 rounded-xl font-medium hover:from-purple-500 hover:to-purple-600 transition-all duration-300 active:scale-95  border border-secondary border-[2px] overflow-hidden" onClick={() => deleteRequest(item._id)}>
 
                                             <span className="relative z-10 flex items-center justify-center gap-2 text-2xl">
                                                 {deletingId === item._id && (<svg xmlns="http://www.w3.org/2000/svg" width={32} height={32} viewBox="0 0 24 24">
-                                                    <path fill="#efeded" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity={0.3}></path>
-                                                    <path fill="#efeded" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z">
+                                                    <path fill="#5a2c01ff" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity={0.3}></path>
+                                                    <path fill="#5a2c01ff" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z">
                                                         <animateTransform attributeName="transform" dur="1s" from="0 12 12" repeatCount="indefinite" to="360 12 12" type="rotate"></animateTransform>
                                                     </path>
                                                 </svg>)}  <svg xmlns="http://www.w3.org/2000/svg" width={45} height={45} viewBox="0 0 40 40">
                                                     <g fill="none" strokeMiterlimit={10}>
-                                                        <path fill="#ff52a1" stroke="#231f20" d="M.5 20a19.5 19.5 0 1 0 39 0a19.5 19.5 0 0 0-39 0Z" strokeWidth={1}></path>
+                                                        <path fill="#5a2c01ff" stroke="#231f20" d="M.5 20a19.5 19.5 0 1 0 39 0a19.5 19.5 0 0 0-39 0Z" strokeWidth={1}></path>
                                                         <path fill="#fff" stroke="#231f20" d="M30.08 25.41c-.16-.77-2.31-3.15-4.48-5.41c2.17-2.26 4.32-4.64 4.48-5.41c.46-.89-.63-2.11-1.59-3.08s-2.19-2-3.08-1.59c-.77.16-3.15 2.31-5.41 4.48c-2.26-2.17-4.64-4.32-5.41-4.48c-.89-.46-2.11.63-3.07 1.59s-2.06 2.19-1.6 3.08c.16.77 2.31 3.15 4.48 5.41c-2.17 2.26-4.32 4.64-4.48 5.41c-.46.89.63 2.11 1.59 3.08s2.19 2.05 3.08 1.59c.77-.16 3.15-2.31 5.41-4.48c2.26 2.17 4.64 4.32 5.41 4.48c.89.46 2.11-.63 3.08-1.59s2.05-2.19 1.59-3.08Z" strokeWidth={1}></path>
                                                         <path stroke="#fff" strokeLinecap="round" d="M27.56 5a15.4 15.4 0 0 1 5.26 3.73" strokeWidth={1}></path>
                                                     </g>
@@ -275,21 +266,22 @@ relative overflow-hidden
 
 
             </div>
+
             {showRequestModal && (
                 <div className="fixed inset-0 z-[999] flex items-center justify-center">
 
                     {/* BACKDROP */}
-                    <div className="absolute inset-0 bg-black/50 "></div>
+                    <div className="absolute inset-0 bg-black/50" onClick={() => setShowRequestModal(false)}></div>
 
                     {/* MODAL */}
-                    <div className="relative px-8 py-6 rounded-3xl border border-white/10
-    bg-[#030712]/80 
+                    <div className="relative px-8 py-6 rounded-3xl border border-secondary border-[3px]
+    bg-base-100 
     animate-[modalPop_0.25s_ease]">
 
                         <div className="flex items-center gap-4">
 
                             {/* ICON */}
-                            <div className="w-[100px] h-[100px] flex items-center justify-center rounded-full bg-purple-600/20 border border-purple-500/40">
+                            <div className="w-[100px] h-[100px] flex items-center justify-center rounded-full bg-base-300 border border-secondary border-[3px]">
                                 <svg xmlns="http://www.w3.org/2000/svg" width={80} height={80} viewBox="0 0 80 80">
                                     <g fill="none" fillRule="evenodd" clipRule="evenodd">
                                         <path fill="#eb5757" d="M17.103 20.655a14 14 0 0 0 0 19.799l14.142 14.142l7.07 7.07a2 2 0 0 0 2.83 0l7.07-7.07l14.142-14.142a14 14 0 0 0-19.799-19.8l-2.137 2.138a.977.977 0 0 1-1.382 0L36.9 20.655a14 14 0 0 0-19.799 0" strokeWidth={2} stroke="#eb5757"></path>
@@ -300,10 +292,10 @@ relative overflow-hidden
 
                             {/* TEXT */}
                             <div>
-                                <div className="text-4xl font-semibold text-white">
+                                <div className="text-4xl font-semibold text-secondary">
                                     Request Deleted!
                                 </div>
-                                <div className="text-xl text-gray-400">
+                                <div className="text-xl text-accent">
                                     Request has been deleted.
                                 </div>
                             </div>
@@ -315,25 +307,25 @@ relative overflow-hidden
             {(reqUserTotal == 0 || reqUser.length === 0) && (
                 <div className="inset-0 flex items-center justify-center px-4">
 
-                    <div className="relative w-full max-w-3xl p-10 rounded-3xl  bg-gradient-to-br from-[#0f172a]/90 to-[#020617]/90  border border-purple-500/20 animate-[modalPop_0.3s_ease]">
+                    <div className="relative w-full max-w-3xl p-10 rounded-3xl  bg-base-100 border border-secondary border-[3px] animate-[modalPop_0.3s_ease]">
 
                         <div className="flex flex-col md:flex-row items-center gap-8">
 
                             {/* ICON */}
                             <div className="w-36 h-36 flex items-center justify-center 
-                                        rounded-full bg-purple-600/10 
-                                        border border-purple-500/40
+                                        rounded-full bg-base-300
+                                        border border-secondary border-[3px]
                                     ">
-                                <FaPeopleCarry className="text-purple-400" size={60} />
+                                <FaPeopleCarry className="text-secondary" size={60} />
                             </div>
 
                             {/* TEXT SECTION */}
                             <div className="text-center md:text-left">
-                                <h2 className="text-4xl font-bold text-white mb-4">
-                                    No request found
+                                <h2 className="text-4xl font-bold text-secondary mb-4">
+                                    No request found!
                                 </h2>
 
-                                <p className="text-lg text-gray-400 mb-6 max-w-md">
+                                <p className="text-lg text-accent mb-6 max-w-md">
                                     Discover and connect with developers from around the world.
                                     Start exploring new profiles today.
                                 </p>
@@ -343,12 +335,14 @@ relative overflow-hidden
                                 <button
                                     onClick={() => navigate("/app/explore")}
                                     className="px-6 py-3 rounded-xl 
-                                                bg-gradient-to-r from-purple-500 to-pink-500
-                                                hover:scale-105 
-                                                transition-all duration-300
-                                                text-white font-semibold"
+                                bg-base-300 border border-secondary border-[2px]
+                                hover:scale-105 
+                                transition-all duration-300
+                                text-accent font-semibold flex gap-3 items-center justify-center"
                                 >
-                                    Explore Developers
+                                    <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 512 512">
+                                        <path fill="#a9580cff" fillRule="evenodd" d="m380.656 106.622l-35.01 23.344l37.117 92.733l42.309-12.418zm-71.28 47.49L97.67 295.272l4.928 9.857l239.035-70.334zm90.3-111.445l83.57 194.995l-157.166 46.221l63.256 168.168l-39.95 14.982l-64.351-171.075l-28.928 8.49l-59.662 162.6l-39.217-16.808l47.999-130.816l-124.824 36.721l-37.736-75.472z"></path>
+                                    </svg>   Explore Developers
                                 </button>
                             </div>
 

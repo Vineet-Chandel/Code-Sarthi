@@ -232,7 +232,7 @@ relative overflow-hidden
                                             {item.skills?.map((skill, idx) => (
                                                 <span
                                                     key={idx}
-                                                    className=" px-3 py-1.5 text-xs font-medium rounded-xl bg-base-300 border border-white/10 text-gray-300  relative overflow-hidden border border-[2px] border-secondary"
+                                                    className=" px-3 py-1.5 text-xs font-medium rounded-xl bg-base-300 border border-secondary text-gray-300  relative overflow-hidden border border-[2px] border-secondary"
                                                 >
                                                     <div className="absolute inset-0 "></div>
                                                     <span className="relative text-accent">{skill}</span>

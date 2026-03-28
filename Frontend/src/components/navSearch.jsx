@@ -30,15 +30,15 @@ const Search = ({ height, displayType }) => {
             setNewError("");
         } catch (err) {
             setIsSearching(false)
-            if (err.response?.data?.message === "Use /profile/me for your own profile") {
-                setNewError("Why you searching yourself ? ")
-            }
+            setShowCard(false);
             setNewError(err.response?.data?.message || "User not found");
         }
 
     }
     useEffect(() => {
+
         if (!username.trim()) {
+            setShowCard(false);
             setData(null);
             return;
         }
@@ -217,7 +217,7 @@ const Search = ({ height, displayType }) => {
                     <div className="h-1 bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
                 </div>
             )}
-            {username == "" && (() => setShowCard(false))}
+
             {newError && (
                 <div
                     className={`${displayType === "nav"
