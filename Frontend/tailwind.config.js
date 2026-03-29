@@ -24,6 +24,7 @@ module.exports = {
         "robert-regular": ["robert-regular", "sans-serif"],
         "Logo": ["Logo", "sans-serif"],
         "head": ["head", "sans-serif"],
+        "poppins": ["Poppins", "sans-serif"],
       },
       colors: {
         blue: {
