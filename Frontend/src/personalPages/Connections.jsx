@@ -1,23 +1,27 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../Pages/auth/baseURL";
-import { addConnectionUser } from "../utils/connectionSlice";
+import { addConnectionUser, removeConnectionUser } from "../utils/connectionSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 import { FaPeopleCarry } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 const Connections = () => {
-    const connections = useSelector(state => state.connections || []);
-    const connectionsARR = useSelector(state => state.connections.users || []);
-    const user = useSelector(store => store.user);
+
+    const connectionsARR = useSelector(state => state.connections?.users || []);
+
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
     const [showRequestModal, setShowRequestModal] = useState(false);
     const [ontapDelete, setOntapDelete] = useState(false);
     const [idSelectedToDelte, setIdSelectedToDelte] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [deleting, setDeleting] = useState(false);
     const connectionUser = async () => {
+
         try {
+            setLoading(true);
             const response = await axios.get(
                 `${BASE_URL}/user/connections`,
                 { withCredentials: true }
@@ -27,23 +31,23 @@ const Connections = () => {
 
         } catch (err) {
             console.error(err?.message || err);
+        } finally {
+            setLoading(false);
         }
     };
-    useEffect(() => {
-        connectionUser();
-    }, []);
+
 
     const deleteConnections = async (idtodelte) => {
 
         try {
+            setDeleting(true);
             await axios.delete(
                 `${BASE_URL}/user/connections/${idtodelte}`,
                 { withCredentials: true }
             );
-            // remove instantly from UI
             dispatch(
-                addConnectionUser(
-                    connectionsARR.filter(item => item.connectionId !== connectionId)
+                removeConnectionUser(
+                    connectionsARR.filter(item => item.connectionId !== idtodelte)
                 )
             );
 
@@ -51,10 +55,15 @@ const Connections = () => {
             setTimeout(() => setShowRequestModal(false), 2200);
         } catch (err) {
             console.log(err?.message || "not send");
+        } finally {
+
+            setDeleting(false);
         }
 
     }
-
+    useEffect(() => {
+        connectionUser();
+    }, [dispatch]);
     return (
         <div className="w-full min-h-screen bg-base-200 p-4 md:p-8">
             <div className="w-full/2 mx-auto">
@@ -94,7 +103,7 @@ const Connections = () => {
 
                     {connectionsARR.map((item, index) => (
                         <div
-                            key={item._id}
+                            key={item.connectionId}
                             className=" relative group bg-base-100   rounded-3xl border border-base-300 border-[3px] transition-all duration-500 hover:-translate-y-1 overflow-hidden before:absolute before:inset-0 before:rounded-3xl before:bg-gradient-to-br before:from-blue-500/[0.05] before:to-purple-500/[0.05] before:opacity-0 group-hover:before:opacity-100 before:transition-opacity">
 
 
@@ -229,6 +238,14 @@ const Connections = () => {
                             <div className="h-1 bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
                         </div>
                     ))}
+
+
+
+                    {loading && (
+                        <div className="flex items-center justify-center py-12 w-screen">
+                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent"></div>
+                        </div>
+                    )}
                 </div>
 
 
@@ -293,12 +310,12 @@ const Connections = () => {
                                 <div className="text-xl text-gray-700">
                                     It will lead to lose all the messages and contacts between you and the user.
                                 </div>
-                                <button className="relative group flex w-full mt-5 justify-center bg-base-300  text-gray-300 px-4 py-2.5 rounded-xl font-medium hover:bg-base-200 transition-all duration-300 active:scale-95 border border-secondary border-[2px] overflow-hidden" onClick={() => { deleteConnections(idSelectedToDelte); setOntapDelete(false); setIdSelectedToDelte(null); setShowRequestModal(true); setTimeout(() => { setShowRequestModal(false) }, 2200) }}>
+                                <button disabled={deleting} className="relative group flex w-full mt-5 justify-center bg-base-300  text-gray-300 px-4 py-2.5 rounded-xl font-medium hover:bg-base-200 transition-all duration-300 active:scale-95 border border-secondary border-[2px] overflow-hidden" onClick={() => { deleteConnections(idSelectedToDelte); setOntapDelete(false); setIdSelectedToDelte(null); }}>
                                     <span className="relative z-10 flex items-center text-xl justify-center gap-2 text-accent">
                                         <svg xmlns="http://www.w3.org/2000/svg" width={45} height={45} viewBox="0 0 24 24">
                                             <path fill="#bf630b" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z"></path>
                                         </svg>
-                                        Delete Connection
+                                        {deleting ? "Deleting..." : "Delete Connection"}
                                     </span>
                                 </button>
                             </div>
@@ -308,7 +325,7 @@ const Connections = () => {
                 </div>
             )}
 
-            {connections.total == 0 && (
+            {!loading && connectionsARR.length == 0 && (
                 <div className="  inset-0 flex items-center justify-center px-4">
 
                     <div className="relative w-full max-w-3xl p-10 rounded-3xl 

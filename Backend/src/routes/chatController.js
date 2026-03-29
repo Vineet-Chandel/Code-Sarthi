@@ -216,7 +216,7 @@ chatRouter.post("/get-convo", userAuth, async (req, res) => {
                 path: "LastMsg",
                 populate: {
                     path: "sender receiver",
-                    select: "username photoUrl firstName lastName gmail college profession gender age"
+                    select: "username photoUrl firstName lastName gmail college profession gender age isVerified skills college profession about"
                 }
             })
             .sort({ updatedAt: -1 });

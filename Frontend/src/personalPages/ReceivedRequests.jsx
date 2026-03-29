@@ -293,7 +293,7 @@ relative overflow-hidden
                 <div className="fixed inset-0 z-[999] flex items-center justify-center">
 
                     {/* BACKDROP */}
-                    <div className="absolute inset-0 bg-black/50 "></div>
+                    <div className="absolute inset-0 bg-black/50 " onClick={() => setShowRequestModal1(false)}></div>
 
                     {/* MODAL */}
                     <div className="relative px-8 py-6 rounded-3xl border border-secondary bg-base-100 border-[3px]
@@ -340,7 +340,7 @@ relative overflow-hidden
                 <div className="fixed inset-0 z-[999] flex items-center justify-center">
 
                     {/* BACKDROP */}
-                    <div className="absolute inset-0 bg-black/50 "></div>
+                    <div className="absolute inset-0 bg-black/50" onClick={() => setShowRequestModal2(false)}></div>
 
                     {/* MODAL */}
                     <div className="relative px-8 py-6 rounded-3xl border border-secondary bg-base-100 border-[3px]
