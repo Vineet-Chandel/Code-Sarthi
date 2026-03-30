@@ -36,6 +36,14 @@ const Dashboard = () => {
 
 
 
+    const handleCopy = async (text) => {
+        try {
+            await navigator.clipboard.writeText(text);
+
+        } catch (err) {
+            console.error("Failed to copy", err);
+        }
+    };
 
 
 
@@ -54,7 +62,7 @@ const Dashboard = () => {
 
                     {/* Profile Image */}
                     <div className="flex justify-center">
-                        <div className="h-56 w-56 rounded-full overflow-hidden border-4 border-green-500/40 shadow-lg hover:scale-105 transition duration-300">
+                        <div className="h-56 w-56 rounded-full overflow-hidden border-4 border-secondary hover:scale-105 transition duration-300">
                             <img
                                 src={user.photoUrl?.url || "/default-avatar.png"}
                                 alt="Profile"
@@ -71,6 +79,7 @@ const Dashboard = () => {
 
                         <div className="flex justify-center items-center gap-2 text-accent text-lg">
                             <span>@{user.username}</span>
+                            <span onClick={() => handleCopy(user.username)} className="cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="none"><path fill="currentColor" d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z" opacity={0.16}></path><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 3H4v13"></path><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z"></path></g></svg></span>
                             <span onClick={() => navigate("/app/settings")} className="cursor-pointer">{icon}</span>
                         </div>
                     </div>
