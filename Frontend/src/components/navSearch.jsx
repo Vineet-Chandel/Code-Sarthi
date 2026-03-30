@@ -13,6 +13,26 @@ const Search = ({ height, displayType }) => {
     const [showcard, setShowCard] = useState(false);
     const [isSearching, setIsSearching] = useState(false);
     const [newError, setNewError] = useState("");
+    const [actionId, setActionId] = useState(null);
+    const sendRequest = async (username, ID) => {
+
+        try {
+
+            setActionId(ID);
+
+            const response = await axios.post(
+                `${BASE_URL}/request/send/${username}`, {},
+                { withCredentials: true }
+            );
+
+            setShowRequestModal(true);
+        } catch (err) {
+            console.log(err?.message || "not send");
+        } finally {
+            setActionId(null);
+        }
+
+    }
 
 
     const searchHandeler = async (e) => {
@@ -96,12 +116,7 @@ const Search = ({ height, displayType }) => {
                     className={`${displayType === "nav"
                         ? "absolute right-0 top-full mt-3 w-[700px] z-50"
                         : "relative"
-                        } group bg-[#030712]/70 backdrop-blur-3xl rounded-3xl border border-white/[0.08]
-    shadow-[0_0_40px_rgba(59,130,246,0.06)] hover:shadow-[0_0_60px_rgba(168,85,247,0.15)]
-    transition-all duration-500 hover:-translate-y-1 overflow-hidden
-    before:absolute before:inset-0 before:rounded-3xl before:bg-gradient-to-br
-    before:from-blue-500/[0.05] before:to-purple-500/[0.05]
-    before:opacity-0 group-hover:before:opacity-100 before:transition-opacity`}
+                        } group bg-base-300  rounded-3xl border border-secondary border-[3px]`}
                 >
                     <div className="relative p-6 flex flex-col md:flex-row gap-6">
 
@@ -110,20 +125,24 @@ const Search = ({ height, displayType }) => {
                             <div className="relative w-28 h-28 rounded-2xl border border-blue-500/20 overflow-hidden">
                                 <img
                                     src={data?.photoUrl?.url}
-                                    className="w-full h-full object-cover rounded-2xl group-hover:scale-110 transition-transform duration-700"
+                                    className="  border border-secondary border-[2px] w-full h-full object-cover rounded-2xl group-hover:scale-110 transition-transform duration-700"
                                 />
                             </div>
 
                             {/* STATS */}
                             <div className="grid grid-cols-2 gap-2 w-full">
-                                <div className="text-center p-2 bg-gray-800/50 rounded-lg border border-gray-700/30">
-                                    <div className="text-xs text-gray-400">Age</div>
-                                    <div className="text-lg font-bold text-blue-400">{data?.age}</div>
+                                <div className="text-center p-2 bg-base-100 rounded-lg border border-secondary border-[2px]">
+                                    <div className="text-xs text-secondary">Age</div>
+                                    <div className="text-lg font-bold text-accent">{data?.age}</div>
                                 </div>
-                                <div className="text-center p-2 bg-gray-800/50 rounded-lg border border-gray-700/30">
-                                    <div className="text-xs text-gray-400">Gender</div>
-                                    <div className="text-lg font-bold text-purple-400">{data?.gender}</div>
+                                <div className="text-center p-2 bg-base-100 rounded-lg border border-secondary border-[2px]">
+                                    <div className="text-xs text-secondary">Gender</div>
+                                    <div className="text-lg font-bold text-accent">{data?.gender}</div>
                                 </div>
+                            </div>
+                            <div className="flex items-center gap-2 px-3 py-1.5 bg-base-100 rounded-full border border-secondary border-[2px]">
+                                <div className="w-2 h-2 bg-green-700 rounded-full animate-pulse"></div>
+                                <span className="text-md text-secondary">{data?.college}</span>
                             </div>
                         </div>
 
@@ -134,7 +153,7 @@ const Search = ({ height, displayType }) => {
                             <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
                                 <div>
                                     <div className="flex items-center gap-2">
-                                        <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-gray-200 to-gray-300 bg-clip-text text-transparent">
+                                        <h1 className="text-2xl font-bold bg-gradient-to-r from-accent to-secondary bg-clip-text text-transparent">
                                             {data?.firstName} {data?.middleName} {data?.lastName}
                                         </h1>
                                         {data?.isVerified && (
@@ -143,11 +162,11 @@ const Search = ({ height, displayType }) => {
                                     </div>
 
                                     <div className="flex items-center gap-2 mt-1">
-                                        <code className="text-gray-400 text-sm font-mono">
+                                        <code className="text-accent text-sm font-mono">
                                             @{data?.username}
                                         </code>
                                         <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
-                                        <span className="text-lg text-gray-500">{data?.profession}</span>
+                                        <span className="text-lg text-gray-900">{data?.profession}</span>
                                     </div>
                                 </div>
 
@@ -156,7 +175,7 @@ const Search = ({ height, displayType }) => {
                                     <button
                                         type="button"
                                         className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full transition-colors duration-200 hover:bg-white/10"
-                                        onClick={() => setShowCard(false)}
+                                        onClick={() => { setShowCard(false); setShowRequestModal(false) }}
                                         aria-label="Close profile menu"
                                     >
                                         <svg width="20" height="20" viewBox="0 0 16 16">
@@ -167,19 +186,16 @@ const Search = ({ height, displayType }) => {
                                         </svg>
                                     </button>
 
-                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-800/50 rounded-full border border-gray-700/30">
-                                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                                        <span className="text-md text-gray-300">{data?.college}</span>
-                                    </div>
+
                                 </div>
                             </div>
 
                             {/* ABOUT */}
-                            <div className="rounded-xl p-4 bg-[#020617]/60 border border-white/[0.08] shadow-inner backdrop-blur-xl">
-                                <h3 className="text-sm font-semibold text-gray-300 mb-2">
-                                    SYSTEM PROFILE
+                            <div className="rounded-xl p-4 bg-base-100 border border-secondary border-[2px] shadow-inner backdrop-blur-xl">
+                                <h3 className="text-sm font-semibold text-secondary mb-2">
+                                    ABOUT
                                 </h3>
-                                <p className="text-gray-400 text-sm">
+                                <p className="text-accent text-sm">
                                     {data?.about || "No description available"}
                                 </p>
                             </div>
@@ -207,8 +223,25 @@ const Search = ({ height, displayType }) => {
                                 <button className="flex-1 min-w-[140px] bg-gray-800 text-gray-300 px-4 py-2.5 rounded-xl">
                                     Message
                                 </button>
-                                <button className="flex-1 min-w-[140px] bg-purple-600 text-white px-4 py-2.5 rounded-xl">
-                                    Send Request
+                                <button disabled={actionId === data?._id}
+                                    className={`${actionId === data?._id ? "opacity-70 cursor-not-allowed" : ""}relative group flex-1 min-w-[140px] bg-base-300 border border-[2px] border-secondary text-white px-4 py-2.5 rounded-xl font-medium hover:from-purple-500 hover:to-purple-600 transition-all duration-300 active:scale-95  border border-purple-500/30 overflow-hidden`} onClick={() => sendRequest(data?.username, data?._id)}>
+                                    <span className="relative z-10 flex items-center justify-center gap-3 text-2xl">
+
+                                        {actionId === data?._id && (<svg xmlns="http://www.w3.org/2000/svg" width={32} height={32} viewBox="0 0 24 24">
+                                            <path fill="#914a08ff" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity={0.3}></path>
+                                            <path fill="#914a08ff" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z">
+                                                <animateTransform attributeName="transform" dur="1s" from="0 12 12" repeatCount="indefinite" to="360 12 12" type="rotate"></animateTransform>
+                                            </path>
+                                        </svg>)}
+
+
+                                        <div className="flex justify-center items-center gap-4">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 32 32">
+                                                <path fill="#914a08ff" d="M25 22.142V9c0-2.206-1.794-4-4-4h-4.172l2.586-2.586L18 1l-5 5l5 5l1.414-1.414L16.828 7H21c1.103 0 2 .898 2 2v13.142c-1.72.447-3 2-3 3.858c0 2.206 1.794 4 4 4s4-1.794 4-4c0-1.858-1.28-3.41-3-3.858M24 28c-1.103 0-2-.897-2-2s.897-2 2-2s2 .898 2 2s-.897 2-2 2M4 6c0 1.858 1.28 3.41 3 3.858v12.284c-1.72.447-3 2-3 3.858c0 2.206 1.794 4 4 4s4-1.794 4-4c0-1.859-1.28-3.41-3-3.858V9.858c1.72-.447 3-2 3-3.858c0-2.206-1.794-4-4-4S4 3.794 4 6m6 20c0 1.103-.897 2-2 2s-2-.897-2-2s.897-2 2-2s2 .898 2 2m0-20c0 1.103-.897 2-2 2s-2-.897-2-2s.897-2 2-2s2 .897 2 2"></path>
+                                            </svg>
+                                            <h1 className="text-accent">  Send Request</h1>
+                                        </div>
+                                    </span>
                                 </button>
                             </div>
                         </div>
