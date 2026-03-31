@@ -47,7 +47,7 @@ const Connections = () => {
             );
             dispatch(
                 removeConnectionUser(
-                    connectionsARR.filter(item => item.connectionId !== idtodelte)
+                    connectionsARR.filter(item => item.userId !== idtodelte)
                 )
             );
 
