@@ -47,6 +47,8 @@ passRoute.patch("/auth/reset-password", userAuth, async (req, res) => {
 
         const passwordHash = await bcrypt.hash(newPassword, 10);
         targetUser.password = passwordHash;
+
+        targetUser.dateOfPasswordChange = Date.now();
         await targetUser.save();
         res.status(200).json({
             success: true,
@@ -334,6 +336,7 @@ passRoute.patch("/auth/forgot-password/:token1", async (req, res) => {
 
         const passwordHash = await bcrypt.hash(newPassword, 10);
         user.password = passwordHash;
+        user.dateOfPasswordChange = Date.now();
         await user.save();
         await redis.del(passChangeSessionKey);
 

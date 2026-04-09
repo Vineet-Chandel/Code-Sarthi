@@ -101,7 +101,10 @@ const userSchema = new Schema(
             type: String,
             required: true,
         },
-
+        dateOfPasswordChange: {
+            type: Date,
+            default: null
+        }
     },
     {
         timestamps: true,

@@ -81,6 +81,7 @@ authRouter.post("/auth/signup", async (req, res) => {
                 profession: user.profession,
                 gmail: user.gmail,
                 isVerified: user.isVerified,
+                dateOfPasswordChange: user.dateOfPasswordChange
             }
         });
     } catch (err) {
@@ -133,6 +134,7 @@ authRouter.post("/auth/signin", async (req, res) => {
                     profession: user.profession,
                     gmail: user.gmail,
                     isVerified: user.isVerified,
+                    dateOfPasswordChange: user.dateOfPasswordChange
                 }
             });
         } else {

@@ -35,6 +35,7 @@ profileRouter.get("/profile/me", userAuth, async (req, res) => {
                 skills: user.skills,
                 profession: user.profession,
                 gmail: user.gmail,
+                dateOfPasswordChange: user.dateOfPasswordChange,
                 isVerified: user.isVerified,
             }
 

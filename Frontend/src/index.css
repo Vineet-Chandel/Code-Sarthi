@@ -114,9 +114,6 @@ body {
     --depth: 1;
     --noise: 1;
 }
-
-
-
 [data-theme="foreverbreaker"] {
     --color-base-100: oklch(97% 0.014 254.604);
     --color-base-200: oklch(93% 0.032 255.585);
