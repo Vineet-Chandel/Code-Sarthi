@@ -42,7 +42,7 @@ cloudinary.config({
 });
 
 
-app.use("/", authRouter);
+app.use("/api", authRouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);
 app.use("/", userPreference);
