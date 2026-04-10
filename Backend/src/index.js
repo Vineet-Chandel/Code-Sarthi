@@ -43,11 +43,11 @@ cloudinary.config({
 
 
 app.use("/api", authRouter);
-app.use("/", profileRouter);
-app.use("/", requestRouter);
-app.use("/", userPreference);
-app.use("/", passwordManagment);
-app.use("/", fileUpload);
+app.use("/api", profileRouter);
+app.use("/api", requestRouter);
+app.use("/api", userPreference);
+app.use("/api", passwordManagment);
+app.use("/api", fileUpload);
 app.use("/", chatRouter);
 
 
