@@ -177,12 +177,7 @@ const Settings = () => {
                                 <span className="text-xs sm:text-sm uppercase tracking-wider text-secondary mt-4 mb-2 ">User Settings</span>
                             )}
                             {filteredUserSettings.map((item, index) => (
-                                <motion.div
-                                    key={item.name}
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: index * 0.05 }}
-                                >
+                                <div>
 
                                     <div>
                                         {/* <span className={`w-1 h-6 rounded-md transition-all duration-200 ${active === item.name ? "bg-blue-700" : "bg-transparent "} `}></span> */}
@@ -206,29 +201,24 @@ const Settings = () => {
                                                 <span className="text-accent text-lg">{item.globalSVG}</span>
                                                 {item.name}
                                                 {active === item.name && (
-                                                    <motion.span
-                                                        className="ml-auto text-accent"
-                                                        initial={{ scale: 0 }}
-                                                        animate={{ scale: 1 }}
+                                                    <span
+
                                                     >
                                                         ▶
-                                                    </motion.span>
+                                                    </span>
                                                 )}
                                             </span>
                                         </button>
                                     </div>
-                                </motion.div>
+                                </div>
 
 
                             ))}
                             {!searchTerm && (<span className="text-xs sm:text-sm uppercase tracking-wider text-secondary mt-4 mb-2 text-accent">App Settings</span>)}
 
                             {filteredAppSettings.map((item, index) => (
-                                <motion.div
-                                    key={item.name}
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: index * 0.05 }}
+                                <div
+
                                 >
                                     <button
                                         role="tab"
@@ -249,27 +239,23 @@ const Settings = () => {
                                             <span className="text-accent text-lg">{item.globalSVG}</span>
                                             {item.name}
                                             {active === item.name && (
-                                                <motion.span
+                                                <span
                                                     className="ml-auto text-accent"
-                                                    initial={{ scale: 0 }}
-                                                    animate={{ scale: 1 }}
+
                                                 >
                                                     ▶
-                                                </motion.span>
+                                                </span>
                                             )}
                                         </span>
                                     </button>
-                                </motion.div>
+                                </div>
                             ))}
                             {!searchTerm && (
                                 <span className="text-xs sm:text-sm uppercase tracking-wider text-secondary mt-4 mb-2 ">Activity Settings</span>
                             )}
                             {filteredActivitySettings.map((item, index) => (
-                                <motion.div
-                                    key={item.name}
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: index * 0.05 }}
+                                <div
+
                                 >
                                     <button
                                         role="tab"
@@ -300,17 +286,14 @@ const Settings = () => {
                                             )}
                                         </span>
                                     </button>
-                                </motion.div>
+                                </div>
                             ))}
                             {!searchTerm && (
                                 <span className="text-xs sm:text-sm uppercase tracking-wider text-secondary mt-4 mb-2 ">Necessity</span>
                             )}
                             {filteredSupport.map((item, index) => (
-                                <motion.div
-                                    key={item.name}
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: index * 0.05 }}
+                                <div
+
                                 >
                                     <button
                                         role="tab"
@@ -337,15 +320,12 @@ const Settings = () => {
                                             )}
                                         </span>
                                     </button>
-                                </motion.div>
+                                </div>
                             ))}
 
                             {filteredLogoutPart.map((item, index) => (
-                                <motion.div
-                                    key={item.name}
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: index * 0.05 }}
+                                <div
+
                                 >
                                     <button
                                         role="tab"
@@ -366,17 +346,16 @@ const Settings = () => {
                                             <span className="text-accent text-lg">{item.globalSVG}</span>
                                             {item.name} {isSignOuting && (<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity={0.5}></path><path fill="currentColor" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z"><animateTransform attributeName="transform" dur="1s" from="0 12 12" repeatCount="indefinite" to="360 12 12" type="rotate"></animateTransform></path></svg>)}
                                             {active === item.name && (
-                                                <motion.span
+                                                <span
                                                     className="ml-auto text-accent"
-                                                    initial={{ scale: 0 }}
-                                                    animate={{ scale: 1 }}
+
                                                 >
                                                     ▶
-                                                </motion.span>
+                                                </span>
                                             )}
                                         </span>
                                     </button>
-                                </motion.div>
+                                </div>
                             ))}
                         </div>
 
@@ -386,12 +365,9 @@ const Settings = () => {
                 )}
             </AnimatePresence>
             {/* RIGHT PANEL */}
-            <motion.div
+            <div
                 className="flex-1 py-2 sm:py-4 lg:py-4 px-2 sm:px-4 lg:px-8    "
 
-                initial={{ x: 100, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
             >
                 <div className="flex gap-2 items-center mb-3" >
                     <div className="bg-base-200 w-14 h-14 rounded-xl flex gap-2 items-center justify-center ">
@@ -407,7 +383,7 @@ const Settings = () => {
                     <div className="h-full w-full flex items-center" onClick={() => setIsOpen(false)}>
                         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold bg-gradient-to-r 
                 from-neutral to-secondary bg-clip-text text-transparent 
-                flex items-center gap-2 border ">
+                flex items-center gap-2  ">
                             {/* <span className="text-accent">{settingIcons[active]?.localSVG}</span> */}
                             {active}
                         </h1>
@@ -421,21 +397,18 @@ const Settings = () => {
 
 
                     <AnimatePresence mode="wait">
-                        <motion.div
+                        <div
                             key={active}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            transition={{ duration: 0.3 }}
+
                         >
 
 
                             <SettingContent activeSetting={active} />
-                        </motion.div>
+                        </div>
                     </AnimatePresence>
 
                 </div>
-            </motion.div>
+            </div>
 
             {/* Add global styles for animations */}
             <style jsx global>{`

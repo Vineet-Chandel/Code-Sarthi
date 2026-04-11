@@ -5,7 +5,10 @@ export default defineConfig({
   plugins: [react()],
   preview: {
     allowedHosts: [
-      "code-sarthi-main-frontend.onrender.com"
+      "www.codesarthi.in",
+      "codesarthi.in",
+      "https://codesarthi.in",
+      "https://www.codesarthi.in"
     ]
   }
 })

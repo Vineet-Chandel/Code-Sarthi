@@ -8,7 +8,7 @@ import { BASE_URL } from "../../../Pages/auth/baseURL";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-import { motion } from "framer-motion";
+
 
 const allChanges = [
     {
@@ -104,6 +104,7 @@ const PasswordSecuritySettings = () => {
         setNewGmailId("")
         setNewUsername("")
     }
+    const [showNewPass1, setShowNewPass1] = useState(false);
     // Verify Email
     const sendVerificationEmail = async () => {
         try {
@@ -137,10 +138,11 @@ const PasswordSecuritySettings = () => {
                 { withCredentials: true });
             setOTP("")
             setIsVerified(true);
-            setIsSending(false);
             window.location.reload();
         } catch (err) {
             setError(err?.response?.data?.message || "OTP verification failed");
+        } finally {
+            setIsSending(false);
         }
     }
     const sendForgotPassEmail = async () => {
@@ -175,6 +177,7 @@ const PasswordSecuritySettings = () => {
     }
     const verifyForgotPassOTP = async () => {
         try {
+            setIsSending(true);
             if (!newOTP.trim()) {
                 setError("Enter OTP first");
                 return;
@@ -200,11 +203,13 @@ const PasswordSecuritySettings = () => {
             setIsVerified2(true);
         } catch (err) {
             setError(err?.response?.data?.message || "OTP verification failed");
+        } finally {
+            setIsSending(false);
         }
     }
     const newForgotPassChange = async () => {
         try {
-            if (isSending) return;
+            setIsSending(true);
             setError("")
 
             if (!newPaass1.trim()) {
@@ -224,6 +229,8 @@ const PasswordSecuritySettings = () => {
 
         } catch (err) {
             setError(err?.response?.data?.message || "OTP verification failed");
+        } finally {
+            setIsSending(false);
         }
     }
     const newRenewPassChange = async () => {
@@ -260,6 +267,7 @@ const PasswordSecuritySettings = () => {
                 { withCredentials: true }
             );
             setOtpSentEmail1(true);
+
         } catch (err) {
             setError(err?.response?.data?.message || "Sending OTP failed");
         } finally {
@@ -316,12 +324,7 @@ const PasswordSecuritySettings = () => {
     }
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="space-y-4 sm:space-y-6"
-        >
+        <div>
 
             <div className=" relative bg-base-100 p-4 sm:p-6 rounded-3xl border border-secondary border-[2px]  overflow-hidden ">
 
@@ -395,33 +398,26 @@ const PasswordSecuritySettings = () => {
                             {activeChange?.index === 1 && ((!user.isVerified && (
                                 <div>
                                     {!otpSentEmail && (
-                                        <button className="w-full py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-secondary transition-all duration-300 flex justify-center items-center gap-4 text-accent" onClick={sendVerificationEmail}>
-                                            Send Verification OTP {isSending && (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-                                                <path fill="#9f2d00" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity="0.25" />
-                                                <path fill="#9f2d00" d="M10.72,19.9a8,8,0,0,1-6.5-9.79A7.77,7.77,0,0,1,10.4,4.16a8,8,0,0,1,9.49,6.52A1.54,1.54,0,0,0,21.38,12h.13a1.37,1.37,0,0,0,1.38-1.54,11,11,0,1,0-12.7,12.39A1.54,1.54,0,0,0,12,21.34h0A1.47,1.47,0,0,0,10.72,19.9Z">
-                                                    <animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" />
-                                                </path>
-                                            </svg>)}
+                                        <button className="w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-secondary transition-all duration-300 flex justify-center items-center gap-4 text-accent" onClick={sendVerificationEmail}>
+                                            {isSending ? (
+                                                <div className='flex gap-3 justify-center items-center'><p>Sending Verification OTP</p>   <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#9f2d00" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg>
+                                                </div>) : (<div className='flex gap-1 justify-center items-center'><p>Send Verification OTP</p>   <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><g fill="none" stroke="#9f2d00" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}><path d="M7.51 14.353V6.096c0-.821.609-1.59 1.432-1.59s1.577.653 1.577 1.474v4.281m0 0l-.009 1.176m.009-1.176c.562-2.117 3.152-1.305 2.994.356c-.003.03 0 .738 0 .738m0 0v1.14m0-1.14c.283-1.91 3.422-1.963 3.022.95m0 0l-.023.688m.023-.688c.469-2.01 3.035-1.577 2.967.276v3.687c-.003 1.576-.311 2.33-1.125 3.279c-.16.186-.316.379-.432.595c-.428.793-.232 1.01-.303 1.85M7.51 10.414c-1.32 1.194-2.209 2.284-2.475 2.61c-.89 1.351-.663 2.237.601 4.04c.941 1.34 1.806 2.304 1.872 2.38c.673.76.614 1.263.614 2.558"></path><path d="M13.034 6c0-2.21-1.795-4-4.01-4a4.005 4.005 0 0 0-4.008 4"></path></g></svg></div>)}
                                         </button>
                                     )}
                                     {!isVerified && (otpSentEmail && (
                                         <div className=" flex flex-col gap-5">
                                             <input
                                                 placeholder="Enter the OTP sent by ASTRA"
-                                                className=" w-full text-center py-2.5 sm:py-3 px-4 text-sm sm:text-base rounded-xl bg-base-100 border border-accent focus:border-secondary outline-none transition-all duration-300 placeholder:text-neutral text-secondary"
+                                                className="focus:placeholder:text-secondary-content w-full text-center py-2.5 sm:py-3 px-4 text-sm sm:text-base rounded-xl bg-base-100 border border-accent focus:border-secondary outline-none transition-all duration-300 placeholder:text-neutral text-secondary"
                                                 type="number"
                                                 value={newOTP}
                                                 onChange={(e) => setOTP(e.target.value.trim())} />
                                             <button
-                                                className="flex justify-center items-center gap-2 w-full py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-accent focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition-all duration-300 text-secondary"
+                                                className="flex justify-center items-center gap-2 w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-accent focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition-all duration-300 text-secondary"
                                                 onClick={verifyOTP}
                                             >
-                                                Verify OTP {isSending && (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-                                                    <path fill="#9f2d00" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity="0.25" />
-                                                    <path fill="#9f2d00" d="M10.72,19.9a8,8,0,0,1-6.5-9.79A7.77,7.77,0,0,1,10.4,4.16a8,8,0,0,1,9.49,6.52A1.54,1.54,0,0,0,21.38,12h.13a1.37,1.37,0,0,0,1.38-1.54,11,11,0,1,0-12.7,12.39A1.54,1.54,0,0,0,12,21.34h0A1.47,1.47,0,0,0,10.72,19.9Z">
-                                                        <animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" />
-                                                    </path>
-                                                </svg>)}
+                                                {isSending ? (<><span className="text-accent flex gap-2 justify-center items-center">Verifying  OTP</span><svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#9f2d00" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg></>) :
+                                                    (<><span className="text-accent flex gap-2 justify-center items-center">Verify OTP <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><g fill="none" stroke="#9f2d00" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}><path d="M7.51 14.353V6.096c0-.821.609-1.59 1.432-1.59s1.577.653 1.577 1.474v4.281m0 0l-.009 1.176m.009-1.176c.562-2.117 3.152-1.305 2.994.356c-.003.03 0 .738 0 .738m0 0v1.14m0-1.14c.283-1.91 3.422-1.963 3.022.95m0 0l-.023.688m.023-.688c.469-2.01 3.035-1.577 2.967.276v3.687c-.003 1.576-.311 2.33-1.125 3.279c-.16.186-.316.379-.432.595c-.428.793-.232 1.01-.303 1.85M7.51 10.414c-1.32 1.194-2.209 2.284-2.475 2.61c-.89 1.351-.663 2.237.601 4.04c.941 1.34 1.806 2.304 1.872 2.38c.673.76.614 1.263.614 2.558"></path><path d="M13.034 6c0-2.21-1.795-4-4.01-4a4.005 4.005 0 0 0-4.008 4"></path></g></svg></span></>)}
                                             </button>
                                         </div>
                                     ))}
@@ -462,41 +458,59 @@ const PasswordSecuritySettings = () => {
                                 <>
 
                                     {!otpSentForgot && (
-                                        <button className="w-full py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-secondary transition-all duration-300 flex justify-center items-center gap-4" onClick={sendForgotPassEmail}>
-                                            Send Verification OTP {isSending && (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-                                                <path fill="#efeded" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity="0.25" />
-                                                <path fill="#efeded" d="M10.72,19.9a8,8,0,0,1-6.5-9.79A7.77,7.77,0,0,1,10.4,4.16a8,8,0,0,1,9.49,6.52A1.54,1.54,0,0,0,21.38,12h.13a1.37,1.37,0,0,0,1.38-1.54,11,11,0,1,0-12.7,12.39A1.54,1.54,0,0,0,12,21.34h0A1.47,1.47,0,0,0,10.72,19.9Z">
-                                                    <animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" />
-                                                </path>
-                                            </svg>)}
+                                        <button className="text-secondary w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-secondary transition-all duration-300 flex justify-center items-center gap-4" onClick={sendForgotPassEmail}>
+                                            {isSending ? (<div className="flex gap-2 justify-center items-center text-accent"> Sending Verification OTP<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#9f2d00" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg></div>) : (<div className="flex gap-2 justify-center items-center text-accent">
+                                                Send Verification OTP <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><g fill="none" stroke="#9f2d00" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}><path d="M7.51 14.353V6.096c0-.821.609-1.59 1.432-1.59s1.577.653 1.577 1.474v4.281m0 0l-.009 1.176m.009-1.176c.562-2.117 3.152-1.305 2.994.356c-.003.03 0 .738 0 .738m0 0v1.14m0-1.14c.283-1.91 3.422-1.963 3.022.95m0 0l-.023.688m.023-.688c.469-2.01 3.035-1.577 2.967.276v3.687c-.003 1.576-.311 2.33-1.125 3.279c-.16.186-.316.379-.432.595c-.428.793-.232 1.01-.303 1.85M7.51 10.414c-1.32 1.194-2.209 2.284-2.475 2.61c-.89 1.351-.663 2.237.601 4.04c.941 1.34 1.806 2.304 1.872 2.38c.673.76.614 1.263.614 2.558"></path><path d="M13.034 6c0-2.21-1.795-4-4.01-4a4.005 4.005 0 0 0-4.008 4"></path></g></svg></div>
+                                            )}
                                         </button>
                                     )}
                                     {!isVerified2 && (otpSentForgot && (
                                         <div className=" flex flex-col gap-5">
                                             <input
                                                 placeholder="Enter the OTP sent by ASTRA"
-                                                className=" w-full text-center py-2.5 sm:py-3 px-4 text-sm sm:text-base rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none transition-all duration-300 " type="number"
+                                                className="focus:placeholder:text-secondary-content w-full text-center py-2.5 sm:py-3 px-4 text-sm sm:text-base rounded-xl bg-base-100 border border-accent outline-none focus:placeholder:text-secondary-content placeholder:text-neutral text-secondary" type="number"
                                                 value={newOTP}
                                                 onChange={(e) => setOTP(e.target.value.trim())} />
                                             <button
-                                                className="w-full py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-cyan-500/20 border border-cyan-500/30"
+                                                className="flex justify-center items-center gap-2 w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-accent focus:border-secondary outline-none transition-all duration-300 text-secondary"
                                                 onClick={verifyForgotPassOTP}
                                             >
-                                                Verify OTP
+                                                {isSending ? (
+                                                    <span className="text-accent flex gap-2 justify-center items-center">Verifying  OTP<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#9f2d00" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg></span>
+                                                ) : (<span className="text-accent flex gap-2 justify-center items-center">Verify OTP <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><g fill="none" stroke="#9f2d00" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}><path d="M7.51 14.353V6.096c0-.821.609-1.59 1.432-1.59s1.577.653 1.577 1.474v4.281m0 0l-.009 1.176m.009-1.176c.562-2.117 3.152-1.305 2.994.356c-.003.03 0 .738 0 .738m0 0v1.14m0-1.14c.283-1.91 3.422-1.963 3.022.95m0 0l-.023.688m.023-.688c.469-2.01 3.035-1.577 2.967.276v3.687c-.003 1.576-.311 2.33-1.125 3.279c-.16.186-.316.379-.432.595c-.428.793-.232 1.01-.303 1.85M7.51 10.414c-1.32 1.194-2.209 2.284-2.475 2.61c-.89 1.351-.663 2.237.601 4.04c.941 1.34 1.806 2.304 1.872 2.38c.673.76.614 1.263.614 2.558"></path><path d="M13.034 6c0-2.21-1.795-4-4.01-4a4.005 4.005 0 0 0-4.008 4"></path></g></svg></span>
+                                                )}
+
                                             </button>
                                         </div>
                                     ))}
                                     {isVerified2 && (!isVerified3) && (<div className=" flex flex-col gap-5">
-                                        <input
-                                            placeholder="Enter the new password"
-                                            className=" w-full text-center py-2.5 sm:py-3 px-4 text-sm sm:text-base rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none transition-all duration-300 "
-                                            value={newPaass1}
-                                            onChange={(e) => setNewPaass1(e.target.value.trim())} />
+                                        <div className="relative w-full">
+
+                                            <input
+                                                placeholder="Enter the new password"
+                                                className="focus:placeholder:text-secondary-content w-full text-center py-2.5 sm:py-3 px-4 pr-12 text-sm sm:text-base rounded-xl bg-base-100 border border-accent outline-none placeholder:text-neutral text-secondary"
+                                                type={showNewPass1 ? "text" : "password"}
+                                                value={newPaass1}
+                                                onChange={(e) => setNewPaass1(e.target.value.trim())}
+                                            />
+
+                                            <div
+                                                onClick={() => setShowNewPass1(prev => !prev)}
+                                                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+                                            >
+                                                {showNewPass1 ? (
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" fillRule="evenodd" d="m18.67 16.973l2.755 2.755l-.849.848L3.85 3.85L4.697 3l2.855 2.855C8.932 5.303 10.432 5 12 5c4.808 0 8.972 2.848 11 7a12.65 12.65 0 0 1-4.33 4.973M8.486 6.79l1.664 1.664a4 4 0 0 1 5.398 5.398l2.255 2.255c1.574-1 2.904-2.403 3.845-4.106C19.686 8.45 16.034 6.2 12 6.2a10.8 10.8 0 0 0-3.514.59m6.152 6.152a2.8 2.8 0 0 0-3.579-3.579zm1.81 5.204c-1.38.552-2.88.855-4.448.855c-4.808 0-8.972-2.848-11-7a12.65 12.65 0 0 1 4.33-4.973l.867.867A11.36 11.36 0 0 0 2.352 12c1.962 3.55 5.614 5.8 9.648 5.8a10.8 10.8 0 0 0 3.514-.59l.934.935zM8.453 10.15l.909.91a2.8 2.8 0 0 0 3.579 3.579l.91.908a4 4 0 0 1-5.398-5.398z"></path></svg>
+                                                ) : (
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" fillRule="evenodd" d="M12 17.8c4.034 0 7.686-2.25 9.648-5.8C19.686 8.45 16.034 6.2 12 6.2S4.314 8.45 2.352 12c1.962 3.55 5.614 5.8 9.648 5.8M12 5c4.808 0 8.972 2.848 11 7c-2.028 4.152-6.192 7-11 7s-8.972-2.848-11-7c2.028-4.152 6.192-7 11-7m0 9.8a2.8 2.8 0 1 0 0-5.6a2.8 2.8 0 0 0 0 5.6m0 1.2a4 4 0 1 1 0-8a4 4 0 0 1 0 8"></path></svg>
+                                                )}
+                                            </div>
+
+                                        </div>
                                         <button
-                                            className="w-full py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-cyan-500/20 border border-cyan-500/30"
-                                            onClick={newForgotPassChange}
+                                            className="flex justify-center items-center gap-2 w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-accent focus:border-secondary outline-none transition-all duration-300 text-secondary"
+                                            onClick={() => { newForgotPassChange(); setShowNewPass1(prev => !prev); }}
                                         >
-                                            Confirm New Password
+                                            {isSending ? (<div><span className="text-accent flex gap-2 justify-center items-center">Setting up your account <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#9f2d00" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg></span></div>) : "Confirm New Password"}
                                         </button>
                                     </div>)}
                                     {errrorInVerification && (<div className="space-y-2 mt-5">
@@ -512,9 +526,9 @@ const PasswordSecuritySettings = () => {
                                     {isVerified3 && (
                                         <div className="w-full flex flex-col justify-center items-center ">
                                             < div >
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24"><path fill="#44f53d" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd" /><path fill="#44f53d" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#44f53d" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24"><path fill="#9f2d00" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd" /><path fill="#9f2d00" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#9f2d00" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
                                             </div>
-                                            <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-white">
+                                            <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-secondary">
                                                 Password has been changed
                                             </h2>
                                         </div>
@@ -530,7 +544,7 @@ const PasswordSecuritySettings = () => {
                                     {show && (<>
                                         <input
                                             placeholder="Old Password"
-                                            className=" w-full text-center py-2.5 sm:py-3 px-4 text-sm sm:text-base rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none transition-all duration-300"
+                                            className="focus:placeholder:text-secondary-content w-full text-center py-2.5 sm:py-3 px-4 pr-12 text-sm sm:text-base rounded-xl bg-base-100 border border-accent outline-none placeholder:text-neutral text-secondary"
 
                                             value={oldPass}
                                             onChange={(e) => setOldPass(e.target.value.trim())}
@@ -538,13 +552,12 @@ const PasswordSecuritySettings = () => {
 
                                         <input
                                             placeholder="New Password"
-                                            className=" w-full text-center py-2.5 sm:py-3 px-4 text-sm sm:text-base rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none transition-all duration-300
-"
+                                            className="focus:placeholder:text-secondary-content w-full text-center py-2.5 sm:py-3 px-4 pr-12 text-sm sm:text-base rounded-xl bg-base-100 border border-accent outline-none placeholder:text-neutral text-secondary"
                                             value={newPaass2}
                                             onChange={(e) => setNewPaass2(e.target.value.trim())}
                                         />
                                         <button
-                                            className="w-full py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-cyan-500/20 border border-cyan-500/30"
+                                            className="flex justify-center items-center gap-2 w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-accent focus:border-secondary outline-none transition-all duration-300 text-secondary"
                                             onClick={newRenewPassChange}
 
                                         >
@@ -565,7 +578,7 @@ const PasswordSecuritySettings = () => {
                                     {isVerified4 && (
                                         <div className="w-full flex flex-col justify-center items-center ">
                                             < div >
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24"><path fill="#44f53d" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd" /><path fill="#44f53d" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#44f53d" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24"><path fill="#9f2d00" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd" /><path fill="#9f2d00" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#9f2d00" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
                                             </div>
                                             <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-white">
                                                 Password has been changed
@@ -579,20 +592,17 @@ const PasswordSecuritySettings = () => {
                                 <div>
                                     {!otpSentEmail1 && (
 
-                                        <button className="w-full py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-cyan-500/20 border border-cyan-500/30 flex justify-center items-center gap-4" onClick={sendVerificationEmailForGmailChange}>
-                                            Send Verification OTP {isSending1 && (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-                                                <path fill="#efeded" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity="0.25" />
-                                                <path fill="#efeded" d="M10.72,19.9a8,8,0,0,1-6.5-9.79A7.77,7.77,0,0,1,10.4,4.16a8,8,0,0,1,9.49,6.52A1.54,1.54,0,0,0,21.38,12h.13a1.37,1.37,0,0,0,1.38-1.54,11,11,0,1,0-12.7,12.39A1.54,1.54,0,0,0,12,21.34h0A1.47,1.47,0,0,0,10.72,19.9Z">
-                                                    <animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" />
-                                                </path>
-                                            </svg>)}
+                                        <button className="text-secondary w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-secondary transition-all duration-300 flex justify-center items-center gap-4" onClick={sendVerificationEmailForGmailChange}>
+                                            {isSending1 ? (<div className="flex gap-2 justify-center items-center text-accent"> Sending Verification OTP<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#9f2d00" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg></div>) : (<div className="flex gap-2 justify-center items-center text-accent">
+                                                Send Verification OTP <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><g fill="none" stroke="#9f2d00" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}><path d="M7.51 14.353V6.096c0-.821.609-1.59 1.432-1.59s1.577.653 1.577 1.474v4.281m0 0l-.009 1.176m.009-1.176c.562-2.117 3.152-1.305 2.994.356c-.003.03 0 .738 0 .738m0 0v1.14m0-1.14c.283-1.91 3.422-1.963 3.022.95m0 0l-.023.688m.023-.688c.469-2.01 3.035-1.577 2.967.276v3.687c-.003 1.576-.311 2.33-1.125 3.279c-.16.186-.316.379-.432.595c-.428.793-.232 1.01-.303 1.85M7.51 10.414c-1.32 1.194-2.209 2.284-2.475 2.61c-.89 1.351-.663 2.237.601 4.04c.941 1.34 1.806 2.304 1.872 2.38c.673.76.614 1.263.614 2.558"></path><path d="M13.034 6c0-2.21-1.795-4-4.01-4a4.005 4.005 0 0 0-4.008 4"></path></g></svg></div>
+                                            )}
                                         </button>
                                     )}
-                                    {!isVerified5 && (otpSentEmail1 && (
+                                    {(otpSentEmail1 && (
                                         <div className=" flex flex-col gap-5">
                                             <input
                                                 placeholder="Enter the OTP sent by ASTRA"
-                                                className=" w-full text-center py-2.5 sm:py-3 px-4 text-sm sm:text-base rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none  transition-all duration-300 "
+                                                className="focus:placeholder:text-secondary-content w-full text-center py-2.5 sm:py-3 px-4 text-sm sm:text-base rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none  transition-all duration-300 "
                                                 type="number"
                                                 value={newOTP}
                                                 onChange={(e) => setOTP(e.target.value.trim())} />
@@ -610,7 +620,7 @@ const PasswordSecuritySettings = () => {
                                                 SAVE {isUpdating && (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                                                     <path fill="#efeded" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity="0.25" />
                                                     <path fill="#efeded" d="M10.72,19.9a8,8,0,0,1-6.5-9.79A7.77,7.77,0,0,1,10.4,4.16a8,8,0,0,1,9.49,6.52A1.54,1.54,0,0,0,21.38,12h.13a1.37,1.37,0,0,0,1.38-1.54,11,11,0,1,0-12.7,12.39A1.54,1.54,0,0,0,12,21.34h0A1.47,1.47,0,0,0,10.72,19.9Z">
-                                                        <animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" />
+
                                                     </path>
                                                 </svg>)}
                                             </button>
@@ -631,7 +641,7 @@ const PasswordSecuritySettings = () => {
                                     {show1 && (
                                         <div className="w-full flex flex-col justify-center items-center ">
                                             < div >
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24"><path fill="#44f53d" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd" /><path fill="#44f53d" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#44f53d" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24"><path fill="#9f2d00" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd" /><path fill="#9f2d00" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#9f2d00" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
                                             </div>
                                             <h2 className="text-4xl font-semibold text-white">
                                                 GmailID Updated
@@ -643,38 +653,26 @@ const PasswordSecuritySettings = () => {
                             )}
                             {activeChange?.index === 5 && (
 
-                                <div>
-                                    {!otpSentEmail1 && (
+                                <div>{!otpSentEmail1 && (
 
-                                        <button className="w-full py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-cyan-500/20 border border-cyan-500/30 flex justify-center items-center gap-4" onClick={sendVerificationEmailForGmailChange}>
-                                            Send Verification OTP {isSending1 && (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-                                                <path fill="#efeded" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity="0.25" />
-                                                <path fill="#efeded" d="M10.72,19.9a8,8,0,0,1-6.5-9.79A7.77,7.77,0,0,1,10.4,4.16a8,8,0,0,1,9.49,6.52A1.54,1.54,0,0,0,21.38,12h.13a1.37,1.37,0,0,0,1.38-1.54,11,11,0,1,0-12.7,12.39A1.54,1.54,0,0,0,12,21.34h0A1.47,1.47,0,0,0,10.72,19.9Z">
-                                                    <animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" />
-                                                </path>
-                                            </svg>)}
-                                        </button>
-                                    )}
-                                    {!isVerified6 && (otpSentEmail1 && (
+                                    <button className="text-secondary w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-secondary transition-all duration-300 flex justify-center items-center gap-4" onClick={sendVerificationEmailForGmailChange}>
+                                        {isSending1 ? (<div className="flex gap-2 justify-center items-center text-accent"> Sending Verification OTP<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#9f2d00" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg></div>) : (<div className="flex gap-2 justify-center items-center text-accent">
+                                            Send Verification OTP <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><g fill="none" stroke="#9f2d00" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}><path d="M7.51 14.353V6.096c0-.821.609-1.59 1.432-1.59s1.577.653 1.577 1.474v4.281m0 0l-.009 1.176m.009-1.176c.562-2.117 3.152-1.305 2.994.356c-.003.03 0 .738 0 .738m0 0v1.14m0-1.14c.283-1.91 3.422-1.963 3.022.95m0 0l-.023.688m.023-.688c.469-2.01 3.035-1.577 2.967.276v3.687c-.003 1.576-.311 2.33-1.125 3.279c-.16.186-.316.379-.432.595c-.428.793-.232 1.01-.303 1.85M7.51 10.414c-1.32 1.194-2.209 2.284-2.475 2.61c-.89 1.351-.663 2.237.601 4.04c.941 1.34 1.806 2.304 1.872 2.38c.673.76.614 1.263.614 2.558"></path><path d="M13.034 6c0-2.21-1.795-4-4.01-4a4.005 4.005 0 0 0-4.008 4"></path></g></svg></div>
+                                        )}
+                                    </button>
+                                )}
+                                    {otpSentEmail1 && (
                                         <div className=" flex flex-col gap-5">
                                             <input
                                                 placeholder="Enter the OTP sent by ASTRA"
-                                                className=" w-full text-center py-2.5 sm:py-3 px-4 text-sm sm:text-base rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none  transition-all duration-300 "
+                                                className="focus:placeholder:text-secondary-content w-full text-center py-2.5 sm:py-3 px-4 text-sm sm:text-base rounded-xl bg-white/[0.03] border border-white/10 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-500/20 outline-none  transition-all duration-300 "
                                                 value={newOTP}
                                                 type="number"
                                                 onChange={(e) => setOTP(e.target.value.trim())} />
                                             <input
                                                 placeholder="Hey NOVA here ! Enter new Username"
-                                                className="
-w-full text-center py-2.5 sm:py-3 px-4 text-sm sm:text-base rounded-xl
-bg-white/[0.03]
-border border-white/10
-focus:border-cyan-400/60
-focus:ring-2 focus:ring-cyan-500/20
-outline-none
 
-transition-all duration-300
-"
+                                                className="focus:placeholder:text-secondary-content w-full text-center py-2.5 sm:py-3 px-4 pr-12 text-sm sm:text-base rounded-xl bg-base-100 border border-accent outline-none placeholder:text-neutral text-secondary"
                                                 value={newUsername}
                                                 onChange={(e) => setNewUsername(e.target.value.trim())} />
                                             <button
@@ -684,7 +682,7 @@ transition-all duration-300
                                                 SAVE {isUpdating && (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                                                     <path fill="#efeded" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity="0.25" />
                                                     <path fill="#efeded" d="M10.72,19.9a8,8,0,0,1-6.5-9.79A7.77,7.77,0,0,1,10.4,4.16a8,8,0,0,1,9.49,6.52A1.54,1.54,0,0,0,21.38,12h.13a1.37,1.37,0,0,0,1.38-1.54,11,11,0,1,0-12.7,12.39A1.54,1.54,0,0,0,12,21.34h0A1.47,1.47,0,0,0,10.72,19.9Z">
-                                                        <animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" />
+
                                                     </path>
                                                 </svg>)}
                                             </button>
@@ -699,11 +697,11 @@ transition-all duration-300
                                                 </div>
                                             </div>)}
                                         </div>
-                                    ))}
+                                    )}
                                     {show2 && (
                                         <div className="w-full flex flex-col justify-center items-center ">
                                             < div >
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24"><path fill="#44f53d" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd" /><path fill="#44f53d" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#44f53d" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24"><path fill="#9f2d00" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd" /><path fill="#9f2d00" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#9f2d00" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
                                             </div>
                                             <h2 className="text-4xl font-semibold text-white">
                                                 Username Updated
@@ -729,7 +727,7 @@ transition-all duration-300
 
 
             </div >
-        </motion.div >
+        </div >
     );
 };
 

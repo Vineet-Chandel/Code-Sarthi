@@ -13,8 +13,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
     cors({
-        // origin: process.env.AT_FRONT,
-        origin: process.env.AT_SYSTEM_API,
+        origin: process.env.AT_FRONT,
+        // origin: process.env.AT_SYSTEM_API,
         credentials: true
     })
 );
@@ -50,6 +50,14 @@ app.use("/api", passwordManagment);
 app.use("/api", fileUpload);
 app.use("/", chatRouter);
 
+
+// app.use("/", authRouter);
+// app.use("/", profileRouter);
+// app.use("/", requestRouter);
+// app.use("/", userPreference);
+// app.use("/", passwordManagment);
+// app.use("/", fileUpload);
+// app.use("/", chatRouter);
 
 const PORT = process.env.PORT || 8000;
 
