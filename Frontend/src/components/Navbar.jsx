@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import {
     Pages,
     NextPages,
-    MarketPlace,
     ProfilePlace,
     SettingPlace,
     ByePlace
@@ -245,27 +244,7 @@ const NavBar = () => {
                                     ))}
 
                                 </nav>
-                                <nav className="p-1 space-y-1 border-b mb-5 pb-5 border-gray-200">
-                                    {MarketPlace.map((item, index) => (
-                                        <button
-                                            key={item.id}
-                                            onClick={() => { setActivePage(item.name); closeSidebar(); navigate(`/app/${item.name}`) }}
-                                            className={`group relative flex items-center gap-3 py-2.5 px-4 w-full text-left   ${activePage === item.name ? "bg-gradient-to-r from-blue-600/20 to-cyan-500/10 rounded-l-xl text-black " : "text-black hover:text-black hover:bg-white/5 rounded-l-xl"}`}
 
-                                        >
-
-                                            <span className={`w-1 h-6 rounded-md transition-all duration-200 ${activePage === item.name ? "bg-green-500" : "bg-transparent "} `}></span>
-
-                                            <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold" : "font-normal"}`}>
-                                                {item.icon}
-                                            </span>
-                                            <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold" : "font-normal"}`}>
-                                                {item.name}
-                                            </span>
-                                        </button>
-                                    ))}
-
-                                </nav>
 
 
                                 {/* Footer section */}

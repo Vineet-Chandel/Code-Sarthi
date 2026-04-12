@@ -180,7 +180,7 @@ const Search = ({ height, displayType }) => {
                             <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
                                 <div>
                                     <div className="flex items-center gap-2">
-                                        <h1 className="text-2xl font-bold bg-gradient-to-r from-accent to-secondary bg-clip-text text-transparent">
+                                        <h1 className="text-2xl text-start font-bold bg-gradient-to-r from-accent to-secondary bg-clip-text text-transparent">
                                             {data?.firstName} {data?.middleName} {data?.lastName}
                                         </h1>
                                         {data?.isVerified && (
@@ -219,8 +219,8 @@ const Search = ({ height, displayType }) => {
 
                             {/* ABOUT */}
                             <div className="rounded-xl p-4 bg-base-100 border border-secondary border-[2px] shadow-inner backdrop-blur-xl">
-                                <h3 className="text-sm font-semibold text-secondary mb-2">
-                                    ABOUT
+                                <h3 className="text-sm text-start font-semibold text-secondary mb-2">
+                                    ABOUT :
                                 </h3>
                                 <p className="text-accent text-sm">
                                     {data?.about || "No description available"}
@@ -254,17 +254,7 @@ const Search = ({ height, displayType }) => {
 
                             {/* BUTTONS */}
                             <div className="flex flex-col gap-3 pt-2 w-full">
-                                <button className="relative group  flex justify-center bg-base-300  text-gray-300 px-4 py-2.5 rounded-xl font-medium hover:bg-base-200 transition-all duration-300 active:scale-95 border border-secondary border-[2px] overflow-hidden">
-                                    <span className="relative z-10 flex items-center justify-center gap-2 text-xl text-accent">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width={45} height={45} viewBox="0 0 24 24">
-                                            <g fill="none">
-                                                <rect width={16} height={12} x={4} y={6} stroke="#bf630b" rx={2} strokeWidth={1}></rect>
-                                                <path fill="#bf630b" d="M11.106 12.553L4 9v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-7.106 3.553a2 2 0 0 1-1.788 0"></path>
-                                            </g>
-                                        </svg>
-                                        Message
-                                    </span>
-                                </button>
+
 
                                 {data?._id && !connectionsARR.some(item => item.userId === data._id) && (
                                     <button disabled={actionId === data?._id}

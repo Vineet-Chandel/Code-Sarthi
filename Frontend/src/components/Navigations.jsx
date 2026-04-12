@@ -85,29 +85,7 @@ export const NextPages = [
         path: "/scheduler"
     },
 ];
-export const MarketPlace = [
-    {
-        id: 1,
-        name: "Study",
-        icon: <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="none" stroke="#0f0f0f" strokeLinejoin="round" strokeWidth="1.5"><path strokeLinecap="round" d="M22 12H2m18 5h-4c-1.886 0-2.828 0-3.414-.586S12 14.886 12 13v-1m-8 0v10m16-10v10" /><path d="M15.04 2.599a1.94 1.94 0 0 0-2.648 0c-.414.393-.572.845-.115 1.28l1.416 1.348c.456.434.929.29 1.347-.108a1.72 1.72 0 0 0 0-2.52Zm0 0c.496-.326 1.053-.781 1.672-.523c.29.122.49.419.889 1.013l1.498 2.233c.565.842.847 1.263.894 1.74c.047.476-.148.94-.539 1.865L18.158 12" /><path strokeLinecap="round" d="M4 12V7.5C4 6.373 4.45 6 5.5 6S7 6.373 7 7.5V12m0 0V7.5C7 6.373 7.45 6 8.5 6s1.5.373 1.5 1.5V12" /></g></svg>,
-        path: "/study"
-    },
-    {
-        id: 2,
-        name: "Assignment",
-        icon: <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="none"><path fill="#0f0f0f" fillOpacity="0.16" d="M16 5.2a.8.8 0 0 1-.8.8H8.8a.8.8 0 0 1-.8-.8V3h8z" /><path stroke="#0f0f0f" strokeLinecap="round" strokeLinejoin="round" strokeMiterlimit="10" strokeWidth="1.5" d="M7 14h10M7 11h10M7 17h6M10 3a2 2 0 1 1 4 0M5.4 3h13.2A2.4 2.4 0 0 1 21 5.4v15.2a2.4 2.4 0 0 1-2.4 2.4H5.4A2.4 2.4 0 0 1 3 20.6V5.4A2.4 2.4 0 0 1 5.4 3M16 5.2a.8.8 0 0 1-.8.8H8.8a.8.8 0 0 1-.8-.8V3h8z" /></g></svg>,
-        path: "/assignment"
 
-    },
-    {
-        id: 3,
-        name: "Notes",
-        icon: <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="#0f0f0f" d="M16 14H8a1 1 0 0 0 0 2h8a1 1 0 0 0 0-2m0-4h-6a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2m4-6h-3V3a1 1 0 0 0-2 0v1h-2V3a1 1 0 0 0-2 0v1H9V3a1 1 0 0 0-2 0v1H4a1 1 0 0 0-1 1v14a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3V5a1 1 0 0 0-1-1m-1 15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6h2v1a1 1 0 0 0 2 0V6h2v1a1 1 0 0 0 2 0V6h2v1a1 1 0 0 0 2 0V6h2Z" /></svg>,
-        path: "/notes"
-    },
-
-
-];
 
 export const ProfilePlace = [
     {

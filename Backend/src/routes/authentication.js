@@ -159,7 +159,7 @@ authRouter.post("/auth/signout", async (req, res) => {
 authRouter.get("/auth/verify-email", userAuth, async (req, res) => {
     try {
         /* ----------------  USER MAIL  ---------------- */
-        const { gmail: userGmail, isVerified } = req.user;
+        const { gmail: userGmail, isVerified, firstName, lastName } = req.user;
 
         if (isVerified) {
             return res.status(400).json({
@@ -201,36 +201,35 @@ authRouter.get("/auth/verify-email", userAuth, async (req, res) => {
         await sendMail({
             gmail: userGmail,
             subject: "Your Verification Code",
-            html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
+            html: `<body style="margin:0; padding:0; background-color:#f0f2ff; font-family:Arial,Helvetica,sans-serif;">
 
-    <!-- Preheader -->
+    <!-- Preheader (hidden preview text) -->
     <div
-        style="display:none; font-size:1px; color:#ffffff; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden;">
-        Verify your email for CodeSarthi. Your verification code is {{OTP}}.
+        style="display:none;font-size:1px;color:#f0f2ff;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">
+        Your CodeSarthi verification code is {{OTP}} — expires in 2 minutes.
     </div>
 
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:30px 20px;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:32px 16px;">
         <tr>
             <td align="center">
+                <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                    style="max-width:520px; border-radius:16px; overflow:hidden; border:1px solid #dde0f5; box-shadow:0 8px 40px rgba(79,70,229,0.08);">
 
-                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:500px;">
-
-                    <!-- LOGO -->
+                    <!-- ===== HEADER ===== -->
                     <tr>
-                        <td align="center" style="padding-bottom:30px;">
-                            <table cellpadding="0" cellspacing="0" border="0"
-                                style="background:#000000; border-radius:20px;">
+                        <td style="background:#1a1a2e; padding:28px 32px; text-align:center;">
+                            <table align="center" cellpadding="0" cellspacing="0" border="0">
                                 <tr>
-                                    <td style="padding:12px 24px;">
+                                    <td style="background:#0d0d1a; border-radius:14px; padding:10px 20px;">
                                         <table cellpadding="0" cellspacing="0" border="0">
                                             <tr>
-                                                <td>
-                                                    <img src="https://res.cloudinary.com/dj0ivep44/image/upload/v1770692070/WhatsApp_Image_2026-02-08_at_09.56.39_jrys9v.jpg"
-                                                        alt="CodeSarthi Logo" width="60" height="60"
-                                                        style="border-radius:20px; display:block;">
+                                                <td
+                                                    style="background:#667eea; border-radius:8px; width:36px; height:36px; text-align:center; vertical-align:middle;">
+                                                    <span
+                                                        style="font-size:16px; font-weight:700; color:#ffffff; line-height:36px; display:block;">CS</span>
                                                 </td>
                                                 <td
-                                                    style="padding-left:10px; font-size:24px; font-weight:700; color:#ffffff;">
+                                                    style="padding-left:10px; font-size:20px; font-weight:700; color:#ffffff; letter-spacing:0.3px;">
                                                     CodeSarthi
                                                 </td>
                                             </tr>
@@ -238,110 +237,207 @@ authRouter.get("/auth/verify-email", userAuth, async (req, res) => {
                                     </td>
                                 </tr>
                             </table>
+                            <p style="margin:14px 0 0; color:#9b9fc4; font-size:13px; letter-spacing:0.4px;">EMAIL
+                                VERIFICATION</p>
                         </td>
                     </tr>
 
-                    <!-- CARD -->
+                    <!-- ===== BODY ===== -->
                     <tr>
-                        <td style="
-              background:#ffffff;
-              background:linear-gradient(145deg,#ffffff 0%,#f8f9ff 100%);
-              border-radius:16px;
-              border:1px solid #e0e4ff;
-              padding:40px 32px;
-              text-align:center;
-              box-shadow:0 8px 30px rgba(102,126,234,0.1);
-            ">
+                        <td style="background:#ffffff; padding:36px 32px;">
 
-                            <h1 style="margin:0 0 16px 0; font-size:28px; color:#2d3748;">
-                                Verify Your Email Address
+                            <!-- Greeting -->
+                            <h1 style="margin:0 0 6px; font-size:22px; font-weight:700; color:#1a1a2e;">
+                                Verify your email address
                             </h1>
-
-                            <p style="margin:0 0 8px 0; font-size:16px; color:#4a5568;">
-                                Hello there! 👋
+                            <p style="margin:0 0 24px; font-size:14px; color:#7a7fa8; line-height:1.6;">
+                                Hello, <strong style="color:#2d3060;">${firstName} ${lastName}</strong> 👋 — We received a request
+                                to verify your identity. Please use the code below to complete the process.
                             </p>
 
-                            <p style="margin:0 0 24px 0; font-size:15px; color:#718096; line-height:1.6;">
-                                Thank you for joining CodeSarthi! Use the verification code below to complete your
-                                registration.
+                            <!-- Info: Email -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="background:#f7f8ff; border:1px solid #e4e6f8; border-radius:10px; margin-bottom:10px;">
+                                <tr>
+                                    <td style="padding:12px 16px;">
+                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                            <tr>
+                                                <td style="width:32px;">
+                                                    <div
+                                                        style="width:32px; height:32px; background:#eef0ff; border-radius:8px; text-align:center; line-height:32px; font-size:15px;">
+                                                        👤</div>
+                                                </td>
+                                                <td style="padding-left:10px;">
+                                                    <p
+                                                        style="margin:0 0 2px; font-size:11px; color:#9b9fc4; text-transform:uppercase; letter-spacing:0.6px;">
+                                                        Registered as</p>
+                                                    <p
+                                                        style="margin:0; font-size:13px; color:#2d3060; font-weight:600;">
+                                                        ${userGmail}</p>
+                                                </td>
+
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- Info: Time -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="background:#f7f8ff; border:1px solid #e4e6f8; border-radius:10px; margin-bottom:24px;">
+                                <tr>
+                                    <td style="padding:12px 16px;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td style="width:32px;">
+                                                    <div
+                                                        style="width:32px; height:32px; background:#fff7ed; border-radius:8px; text-align:center; line-height:32px; font-size:15px;">
+                                                        🕐</div>
+                                                </td>
+                                                <td style="padding-left:10px;">
+                                                    <p
+                                                        style="margin:0 0 2px; font-size:11px; color:#9b9fc4; text-transform:uppercase; letter-spacing:0.6px;">
+                                                        Requested at</p>
+                                                    <p
+                                                        style="margin:0; font-size:13px; color:#2d3060; font-weight:600;">
+                                                        ${new Date().toLocaleString([], {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit"
+            })} IST</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Divider -->
+                            <hr style="border:none; height:1px; background:#eef0fb; margin:0 0 24px;">
+
+                            <!-- OTP Label -->
+                            <p
+                                style="margin:0 0 14px; font-size:12px; color:#9b9fc4; text-transform:uppercase; letter-spacing:0.8px; text-align:center;">
+                                Your one-time verification code
                             </p>
 
-                            <!-- OTP BOX -->
+                            <!-- OTP Box -->
                             <table align="center" cellpadding="0" cellspacing="0" border="0"
-                                style="margin-bottom:16px;">
+                                style="margin-bottom:10px; width:100%;">
                                 <tr>
-                                    <td style="
-                    background:#667eea;
-                    background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
-                    padding:24px;
-                    border-radius:12px;
-                    text-align:center;
-                    min-width:260px;
-                  ">
-                                        <div style="
-                      font-size:36px;
-                      font-weight:700;
-                      letter-spacing:4px;
-                      font-family:'Courier New', monospace;
-                      color:#ffffff;
-                    ">
-                                           ${otp}
-                                        </div>
+                                    <td
+                                        style="background:linear-gradient(135deg,#4f46e5 0%,#7c3aed 100%); border-radius:14px; padding:28px 24px; text-align:center;">
+                                        <table align="center" cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <!-- Each OTP digit rendered in its own cell -->
+                                             ${otp.split("").map(digit => `
+<td style="padding:0 4px;">
+  <div style="
+    background:rgba(255,255,255,0.25);
+    border:1px solid rgba(255,255,255,0.4);
+    border-radius:12px;
+    width:44px;
+    height:44px;
+    text-align:center;
+    line-height:44px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+  ">
+    <span style="
+      font-size:20px;
+      font-weight:700;
+      color:#ffffff;
+    ">
+      ${digit}
+    </span>
+  </div>
+</td>
+`).join("")}
+                                            </tr>
+                                        </table>
+                                        <p style="margin:12px 0 0; font-size:13px; color:rgba(255,255,255,0.75);">Enter
+                                            this code on the verification page</p>
                                     </td>
                                 </tr>
                             </table>
 
-                            <p style="margin:0 0 24px 0; font-size:14px; color:#e53e3e; font-weight:600;">
-                                This code expires in <strong>2 minutes</strong>
+                            <!-- Expiry -->
+                            <p
+                                style="margin:0 0 24px; font-size:13px; color:#ef4444; font-weight:600; text-align:center;">
+                                ● &nbsp;This code expires in <strong>2 minutes</strong>
                             </p>
 
-                            <hr style="border:none; height:1px; background:#e2e8f0; margin:0 0 24px 0;">
-
-                            <!-- SECURITY -->
-                            <table align="center" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:8px;">
+                            <!-- Security Notice -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="background:#fffbeb; border:1px solid #fde68a; border-radius:10px; margin-bottom:20px;">
                                 <tr>
-
-                                    <td style="padding-left:8px; font-size:13px; color:#a0aec0;">
-                                        🔒 <strong>Security Tip:</strong> Never share this code with anyone.
+                                    <td style="padding:14px 16px;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td style="font-size:18px; vertical-align:top; padding-right:12px;">🔒
+                                                </td>
+                                                <td style="font-size:13px; color:#78350f; line-height:1.5;">
+                                                    <strong>Security notice:</strong> CodeSarthi will never ask for this
+                                                    code via phone, chat, or email. Never share it with anyone — not
+                                                    even our team.
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </td>
                                 </tr>
                             </table>
 
-                            <p style="margin:0; font-size:13px; color:#a0aec0; line-height:1.5;">
-                                If you didn’t request this email, please ignore it or
-                                <a href="#" style="color:#667eea; text-decoration:none; font-weight:600;">
-                                    contact support
-                                </a>.
+                            <!-- Ignore notice -->
+                            <p style="margin:0; font-size:13px; color:#9b9fc4; text-align:center; line-height:1.6;">
+                                Didn't request this? You can safely ignore this email, or
+                                <a href="mailto:support@codesarthi.com"
+                                    style="color:#4f46e5; font-weight:600; text-decoration:none;">contact our support
+                                    team</a>
+                                if something seems wrong.
                             </p>
 
                         </td>
                     </tr>
 
-                    <!-- FOOTER -->
+                    <!-- ===== FOOTER ===== -->
                     <tr>
-                        <td align="center" style="padding-top:32px;">
-                            <p style="margin:0 0 16px 0; font-size:14px; color:#718096;">
-                                Need help?
-                                <a href="#" style="color:#667eea; text-decoration:none;">
-                                    Contact our support team
-                                </a>
-                            </p>
-
-                            <p style="margin:0; font-size:12px; color:#a0aec0; line-height:1.5;">
-                                © 2024 CodeSarthi. All rights reserved.<br>
-                                Kanpur, Uttar Pradesh, India
+                        <td
+                            style="background:#f7f8ff; border-top:1px solid #eef0fb; padding:24px 32px; text-align:center;">
+                            <table align="center" cellpadding="0" cellspacing="0" border="0"
+                                style="margin-bottom:14px;">
+                                <tr>
+                                    <td style="padding:0 12px;">
+                                        <a href="https://codesarthi.com/help"
+                                            style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Help
+                                            Center</a>
+                                    </td>
+                                    <td style="font-size:13px; color:#dde0f5;">|</td>
+                                    <td style="padding:0 12px;">
+                                        <a href="https://codesarthi.com/privacy"
+                                            style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Privacy
+                                            Policy</a>
+                                    </td>
+                                    <td style="font-size:13px; color:#dde0f5;">|</td>
+                                    <td style="padding:0 12px;">
+                                        <a href="mailto:support@codesarthi.com"
+                                            style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Contact
+                                            Support</a>
+                                    </td>
+                                </tr>
+                            </table>
+                            <p style="margin:0; font-size:12px; color:#b0b4d4; line-height:1.6;">
+                                © 2026 CodeSarthi &nbsp;·&nbsp; Kanpur, Uttar Pradesh, India<br>
+                                This is an automated message. Please do not reply directly to this email.
                             </p>
                         </td>
                     </tr>
 
                 </table>
-
             </td>
         </tr>
     </table>
 
-</body>
-`,
+</body>`,
         });
         res.status(200).json({
             success: true,
@@ -364,6 +460,9 @@ authRouter.post("/auth/verify-email", userAuth, async (req, res) => {
         const { toVerifyotp } = req.body;
         /* ----------------  USER MAIL  ---------------- */
         const userGmail = targetUser.gmail;
+        const firstName = targetUser.firstName;
+        const lastName = targetUser.lastName;
+        const username = targetUser.username;
         if (!userGmail) {
             return res.status(400).json({
                 success: false,
@@ -393,6 +492,342 @@ authRouter.post("/auth/verify-email", userAuth, async (req, res) => {
                     await targetUser.save();
                 }
                 await redis.del(otpKey);
+                await sendMail({
+                    gmail: userGmail,
+                    subject: "Your Email Verification Status",
+                    html: `<body style="margin:0; padding:0; background-color:#f0f2ff; font-family:Arial,Helvetica,sans-serif;">
+
+    <!-- Preheader -->
+    <div
+        style="display:none;font-size:1px;color:#f0f2ff;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">
+        Your CodeSarthi email has been verified successfully. Welcome aboard!
+    </div>
+
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:32px 16px;">
+        <tr>
+            <td align="center">
+                <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                    style="max-width:520px; border-radius:16px; overflow:hidden; border:1px solid #dde0f5; box-shadow:0 8px 40px rgba(79,70,229,0.08);">
+
+                    <!-- ===== HEADER ===== -->
+                    <tr>
+                        <td style="background:#1a1a2e; padding:28px 32px; text-align:center;">
+                            <table align="center" cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+                                    <td style="background:#0d0d1a; border-radius:14px; padding:10px 20px;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="background:#667eea; border-radius:8px; width:36px; height:36px; text-align:center; vertical-align:middle;">
+                                                    <span
+                                                        style="font-size:16px; font-weight:700; color:#ffffff; line-height:36px; display:block;">CS</span>
+                                                </td>
+                                                <td
+                                                    style="padding-left:10px; font-size:20px; font-weight:700; color:#ffffff; letter-spacing:0.3px;">
+                                                    CodeSarthi
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            <p style="margin:14px 0 0; color:#9b9fc4; font-size:13px; letter-spacing:0.4px;">ACCOUNT
+                                VERIFICATION</p>
+                        </td>
+                    </tr>
+
+                    <!-- ===== SUCCESS BANNER ===== -->
+                    <tr>
+                        <td style="background:#0f6e56; padding:32px 32px 28px; text-align:center;">
+
+                            <!-- Check circle -->
+                            <table align="center" cellpadding="0" cellspacing="0" border="0"
+                                style="margin-bottom:16px;">
+                                <tr>
+                                    <td
+                                        style="width:72px; height:72px; border-radius:50%; background:rgba(255,255,255,0.15); border:2px solid rgba(255,255,255,0.35); text-align:center; vertical-align:middle;">
+                                        <table align="center" cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="width:52px; height:52px; border-radius:50%; background:#1d9e75; text-align:center; vertical-align:middle;">
+                                                    <!-- Checkmark as table cell trick for email clients -->
+                                                    <span
+                                                        style="font-size:26px; color:#ffffff; line-height:52px; display:block;">&#10003;</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <h1 style="margin:0 0 6px; font-size:22px; font-weight:700; color:#ffffff;">
+                                Email verified successfully!
+                            </h1>
+                            <p style="margin:0; font-size:14px; color:rgba(255,255,255,0.75);">
+                                Your account is now active and ready to use
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- ===== BODY ===== -->
+                    <tr>
+                        <td style="background:#ffffff; padding:32px 32px;">
+
+                            <!-- Greeting -->
+                            <p style="margin:0 0 20px; font-size:15px; color:#2d3060; line-height:1.6;">
+                                Welcome to CodeSarthi, <strong style="color:#1a1a2e;">${firstName} ${lastName}</strong>
+                                🎉<br>
+                                Your email address has been confirmed and your account is fully set up. Here's a summary
+                                of what was verified.
+                            </p>
+
+                            <!-- Info: Email -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="background:#f7f8ff; border:1px solid #e4e6f8; border-radius:10px; margin-bottom:10px;">
+                                <tr>
+                                    <td style="padding:12px 16px;">
+                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                            <tr>
+                                                <td style="width:32px;">
+                                                    <div
+                                                        style="width:32px; height:32px; background:#eef0ff; border-radius:8px; text-align:center; line-height:32px; font-size:15px;">
+                                                        👤</div>
+                                                </td>
+                                                <td style="padding-left:10px;">
+                                                    <p
+                                                        style="margin:0 0 2px; font-size:11px; color:#9b9fc4; text-transform:uppercase; letter-spacing:0.6px;">
+                                                        Verified account</p>
+                                                    <p
+                                                        style="margin:0; font-size:13px; color:#2d3060; font-weight:600;">
+                                                        ${userGmail}</p>
+                                                </td>
+                                                <td align="right">
+                                                    <span
+                                                        style="display:inline-block; background:#e1f5ee; color:#085041; font-size:11px; font-weight:600; border-radius:20px; padding:3px 10px; letter-spacing:0.3px;">Verified</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+
+
+                            <!-- Info: Time -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="background:#f7f8ff; border:1px solid #e4e6f8; border-radius:10px; margin-bottom:10px;">
+                                <tr>
+                                    <td style="padding:12px 16px;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td style="width:32px;">
+                                                    <div
+                                                        style="width:32px; height:32px; background:#fff7ed; border-radius:8px; text-align:center; line-height:32px; font-size:15px;">
+                                                        🕐</div>
+                                                </td>
+                                                <td style="padding-left:10px;">
+                                                    <p
+                                                        style="margin:0 0 2px; font-size:11px; color:#9b9fc4; text-transform:uppercase; letter-spacing:0.6px;">
+                                                        Verified at</p>
+                                                    <p
+                                                        style="margin:0; font-size:13px; color:#2d3060; font-weight:600;">
+                                                        ${new Date().toLocaleString([], {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    })} IST</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Info: Account ID -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="background:#f7f8ff; border:1px solid #e4e6f8; border-radius:10px; margin-bottom:24px;">
+                                <tr>
+                                    <td style="padding:12px 16px;">
+                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                            <tr>
+                                                <td style="width:32px;">
+                                                    <div
+                                                        style="width:32px; height:32px; background:#eef0ff; border-radius:8px; text-align:center; line-height:32px; font-size:15px;">
+                                                        🆔</div>
+                                                </td>
+                                                <td style="padding-left:10px;">
+                                                    <p
+                                                        style="margin:0 0 2px; font-size:11px; color:#9b9fc4; text-transform:uppercase; letter-spacing:0.6px;">
+                                                        Account Username</p>
+                                                    <p
+                                                        style="margin:0; font-size:13px; color:#2d3060; font-weight:600; font-family:'Courier New',monospace;">
+                                                        ${username}</p>
+                                                </td>
+                                                <td align="right">
+                                                    <span
+                                                        style="display:inline-block; background:#eef0ff; color:#4f46e5; font-size:11px; font-weight:600; border-radius:20px; padding:3px 10px; letter-spacing:0.3px;">Active</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Divider -->
+                            <hr style="border:none; height:1px; background:#eef0fb; margin:0 0 24px;">
+
+                            <!-- Next Steps -->
+                            <p
+                                style="margin:0 0 14px; font-size:12px; color:#9b9fc4; text-transform:uppercase; letter-spacing:0.8px;">
+                                What's next for you</p>
+
+                            <!-- Step 1 -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
+                                <tr>
+                                    <td style="width:28px; vertical-align:top; padding-top:1px;">
+                                        <div
+                                            style="width:28px; height:28px; border-radius:50%; background:#4f46e5; text-align:center; line-height:28px; font-size:13px; font-weight:700; color:#ffffff;">
+                                            1</div>
+                                    </td>
+                                    <td style="padding-left:14px;">
+                                        <p style="margin:0 0 2px; font-size:14px; font-weight:700; color:#1a1a2e;">
+                                            Complete your profile</p>
+                                        <p style="margin:0; font-size:13px; color:#7a7fa8; line-height:1.5;">Add your
+                                            skills, bio, and a profile photo to get personalised recommendations.</p>
+                                    </td>
+                                </tr>
+                            </table>
+
+
+
+                            <!-- Step 2 -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
+                                <tr>
+                                    <td style="width:28px; vertical-align:top; padding-top:1px;">
+                                        <div
+                                            style="width:28px; height:28px; border-radius:50%; background:#4f46e5; text-align:center; line-height:28px; font-size:13px; font-weight:700; color:#ffffff;">
+                                            2</div>
+                                    </td>
+                                    <td style="padding-left:14px;">
+                                        <p style="margin:0 0 2px; font-size:14px; font-weight:700; color:#1a1a2e;">Join
+                                            the community</p>
+                                        <p style="margin:0; font-size:13px; color:#7a7fa8; line-height:1.5;">Connect
+                                            with fellow developers, join discussions, and start your new coding journey
+                                            with CodeSarthi.</p>
+                                    </td>
+                                </tr>
+                            </table>
+
+
+                            <!-- Step 3 -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
+                                <tr>
+                                    <td style="width:28px; vertical-align:top; padding-top:1px;">
+                                        <div
+                                            style="width:28px; height:28px; border-radius:50%; background:#4f46e5; text-align:center; line-height:28px; font-size:13px; font-weight:700; color:#ffffff;">
+                                            3</div>
+                                    </td>
+                                    <td style="padding-left:14px;">
+                                        <p style="margin:0 0 2px; font-size:14px; font-weight:700; color:#1a1a2e;">
+                                            Explore Shastra AI</p>
+                                        <p style="margin:0; font-size:13px; color:#7a7fa8; line-height:1.5;">Explore the
+                                            exciting features of Shastra AI and enhance your coding experience. Now you
+                                            can also create the AI automated resume builder.</p>
+                                    </td>
+                                </tr>
+                            </table>
+
+
+
+                            <!-- CTA Button -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+                                    <td align="center">
+                                        <a href="https://www.codesarthi.in/app/dashboard"
+                                            style="display:inline-block; background:linear-gradient(135deg,#4f46e5 0%,#7c3aed 100%); color:#ffffff; text-decoration:none; border-radius:12px; padding:16px 40px; font-size:15px; font-weight:700; letter-spacing:0.3px;">
+                                            Go to your dashboard &rarr;
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Security warning -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="background:#fffbeb; border:1px solid #fde68a; border-radius:10px; margin-top:20px;">
+                                <tr>
+                                    <td style="padding:14px 16px;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="font-size:18px; vertical-align:top; padding-right:12px; padding-top:1px;">
+                                                    🔒</td>
+                                                <td style="font-size:13px; color:#78350f; line-height:1.5;">
+                                                    <strong>Didn't verify this?</strong> If you didn't perform this
+                                                    action, your account may be at risk. Please
+                                                    <a href="{{RESET_PASSWORD_URL}}"
+                                                        style="color:#4f46e5; font-weight:600; text-decoration:none;">reset
+                                                        your password immediately</a>
+                                                    and contact our support team.
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Support email -->
+                            <p
+                                style="margin:20px 0 0; font-size:13px; color:#9b9fc4; text-align:center; line-height:1.6;">
+                                Questions? Reach us at
+                                <a href="mailto:support@codesarthi.com"
+                                    style="color:#4f46e5; font-weight:600; text-decoration:none;">codesarthi.help@gmail.com</a>
+                            </p>
+
+                        </td>
+                    </tr>
+
+                    <!-- ===== FOOTER ===== -->
+                    <tr>
+                        <td
+                            style="background:#f7f8ff; border-top:1px solid #eef0fb; padding:24px 32px; text-align:center;">
+                            <table align="center" cellpadding="0" cellspacing="0" border="0"
+                                style="margin-bottom:14px;">
+                                <tr>
+                                    <td style="padding:0 12px;">
+                                        <a href="https://codesarthi.com/help"
+                                            style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Help
+                                            Center</a>
+                                    </td>
+                                    <td style="font-size:13px; color:#dde0f5;">|</td>
+                                    <td style="padding:0 12px;">
+                                        <a href="https://codesarthi.com/privacy"
+                                            style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Privacy
+                                            Policy</a>
+                                    </td>
+                                    <td style="font-size:13px; color:#dde0f5;">|</td>
+                                    <td style="padding:0 12px;">
+                                        <a href="mailto:support@codesarthi.com"
+                                            style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Contact
+                                            Support</a>
+                                    </td>
+                                </tr>
+                            </table>
+                            <p style="margin:0; font-size:12px; color:#b0b4d4; line-height:1.6;">
+                                © 2026 CodeSarthi &nbsp;·&nbsp; Kanpur, Uttar Pradesh, India<br>
+                                This is an automated message. Please do not reply directly to this email.
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+
+</body>`,
+                });
                 res.status(200).json({
                     success: true,
                     message: "Email verified"
