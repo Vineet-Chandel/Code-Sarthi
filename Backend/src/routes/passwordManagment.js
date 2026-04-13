@@ -4,9 +4,14 @@ const { userAuth } = require("../middlewares/userAuth");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const validator = require("validator");
-const sendMail = require("../configs/sendMail");
+
 const redis = require("../configs/redis");
 const crypto = require("crypto")
+
+
+const { Resend } = require('resend');
+
+const resend = new Resend("re_AgE7BCRT_JQiKrPvbDLJyFYRNBtUf3X2Q");
 
 //CHANGING PASSWORD API WHEN USER REMEMBERED THE PASS + LOGINED
 passRoute.patch("/auth/reset-password", userAuth, async (req, res) => {
@@ -51,8 +56,9 @@ passRoute.patch("/auth/reset-password", userAuth, async (req, res) => {
         targetUser.dateOfPasswordChange = Date.now();
         await targetUser.save();
 
-        await sendMail({
-            gmail: gmail,
+        const { data, error } = await resend.emails.send({
+            from: 'CodeSarthi <nova@codesarthi.in>',
+            to: [gmail],
             subject: "Security Alert",
             html: `<body style="margin:0; padding:0; background-color:#f0f2ff; font-family:Arial,Helvetica,sans-serif;">
 
@@ -391,9 +397,6 @@ passRoute.patch("/auth/reset-password", userAuth, async (req, res) => {
         });
     }
 });
-
-
-
 //through gmail or username
 passRoute.post("/auth/forgot-password", async (req, res) => {
     try {
@@ -440,9 +443,11 @@ passRoute.post("/auth/forgot-password", async (req, res) => {
             EX: 300
         });
         /* ---------------- SEND EMAIL ---------------- */
-        await sendMail({
-            gmail: user.gmail,
-            subject: "CodeSarthi Verification Code",
+
+        const { data, error } = await resend.emails.send({
+            from: 'CodeSarthi <nova@codesarthi.in>',
+            to: [user.gmail],
+            subject: "Your Verification code",
             html: `<body style="margin:0; padding:0; background-color:#f0f2ff; font-family:Arial,Helvetica,sans-serif;">
 
     <!-- Preheader -->
@@ -744,7 +749,6 @@ passRoute.post("/auth/forgot-password", async (req, res) => {
 
 </body>`,
         });
-
         return res.json({
             success: true,
             message: "OTP sent successfully",
@@ -838,8 +842,12 @@ passRoute.patch("/auth/forgot-password/:token1", async (req, res) => {
         await user.save();
         await redis.del(passChangeSessionKey);
 
-        await sendMail({
-            gmail: user.gmail,
+
+
+
+        const { data, error } = await resend.emails.send({
+            from: 'CodeSarthi <nova@codesarthi.in>',
+            to: [user.gmail],
             subject: "Security Alert",
             html: `<body style="margin:0; padding:0; background-color:#f0f2ff; font-family:Arial,Helvetica,sans-serif;">
 
@@ -1167,6 +1175,7 @@ passRoute.patch("/auth/forgot-password/:token1", async (req, res) => {
 
 </body>`,
         });
+
         res.status(200).json({
             success: true,
             message: "Password changed successfully"

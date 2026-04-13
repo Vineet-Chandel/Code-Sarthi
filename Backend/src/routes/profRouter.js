@@ -5,9 +5,14 @@ const bcrypt = require("bcryptjs");
 const { userAuth } = require("../middlewares/userAuth");
 const { validateEditProfileData } = require("../utils/validation");
 const validator = require("validator");
-const sendMail = require("../configs/sendMail");
+
 const redis = require("../configs/redis");
 const crypto = require("crypto");
+
+const { Resend } = require('resend');
+
+const resend = new Resend("re_AgE7BCRT_JQiKrPvbDLJyFYRNBtUf3X2Q");
+
 
 profileRouter.get("/profile/me", userAuth, async (req, res) => {
     try {
@@ -107,8 +112,10 @@ profileRouter.get("/profile/update-identity", userAuth, async (req, res) => {
 
 
         /* ----------------  SENDING GMAIL  ---------------- */
-        await sendMail({
-            gmail: gmailID,
+
+        const { data, error } = await resend.emails.send({
+            from: 'CodeSarthi <nova@codesarthi.in>',
+            to: [gmailID],
             subject: "CodeSarthi Verification Code",
             html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:30px 20px;">
@@ -242,7 +249,6 @@ We received a request to acess you CodeSarthi Account ${user.gmail} through your
 </body>
 `,
         });
-
         res.status(200).json({
             success: true,
             message: "OTP sent successfully",
@@ -337,8 +343,11 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
                         if (!user.isVerified) {
                             user.isVerified = true;
                         }
-                        await sendMail({
-                            gmail: oldGmail,
+
+
+                        const { data1, error2 } = await resend.emails.send({
+                            from: 'CodeSarthi <nova@codesarthi.in>',
+                            to: [oldGmail],
                             subject: "Security Alert",
                             html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
     
@@ -442,10 +451,13 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
     </body>
     `,
                         });
+
                         user.gmail = newGmail;
                         await user.save();
-                        await sendMail({
-                            gmail: newGmail,
+
+                        const { data, error } = await resend.emails.send({
+                            from: 'CodeSarthi <nova@codesarthi.in>',
+                            to: [newGmail],
                             subject: "CodeSarthi Account was recovered sucessfully",
                             html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:30px 20px;">
@@ -557,8 +569,9 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
                         if (!user.isVerified) {
                             user.isVerified = true;
                         }
-                        await sendMail({
-                            gmail: user.gmail,
+                        const { data, error } = await resend.emails.send({
+                            from: 'CodeSarthi <nova@codesarthi.in>',
+                            to: [user.gmail],
                             subject: "Security Alert",
                             html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
     
@@ -666,8 +679,10 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
                         await user.save();
                     }
                 } else if (newGmail && newUsername) {
-                    await sendMail({
-                        gmail: oldGmail,
+
+                    const { data2, error2 } = await resend.emails.send({
+                        from: 'CodeSarthi <nova@codesarthi.in>',
+                        to: [oldGmail],
                         subject: "Security Alert",
                         html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
     
@@ -775,8 +790,14 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
     </body>
     `,
                     });
-                    await sendMail({
-                        gmail: newGmail,
+
+
+
+
+
+                    const { data, error } = await resend.emails.send({
+                        from: 'CodeSarthi <nova@codesarthi.in>',
+                        to: [newGmail],
                         subject: "CodeSarthi Account was recovered sucessfully",
                         html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:30px 20px;">
@@ -883,6 +904,7 @@ Account of the CodeSarthi ${oldGmail} is been switched to this email !!
 </body>
 `,
                     });
+
                     if (!user.isVerified) {
                         user.isVerified = true;
                     }
@@ -951,8 +973,11 @@ profileRouter.post("/profile/me/delete", userAuth, async (req, res) => {
 
 
         /* ----------------  SENDING GMAIL  ---------------- */
-        await sendMail({
-            gmail: user.gmail,
+
+
+        const { data1, error2 } = await resend.emails.send({
+            from: 'CodeSarthi <nova@codesarthi.in>',
+            to: [user.gmail],
             subject: "CodeSarthi Verification Code",
             html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:30px 20px;">
@@ -1142,8 +1167,12 @@ profileRouter.delete("/profile/me/delete", userAuth, async (req, res) => {
                     secure: process.env.NODE_ENV === "production",
                     sameSite: "strict"
                 });
-                await sendMail({
-                    gmail: deletedUserGmail,
+
+
+
+                const { data, error } = await resend.emails.send({
+                    from: 'CodeSarthi <nova@codesarthi.in>',
+                    to: [deletedUserGmail],
                     subject: `GoodBye ${deletedUserName}`,
                     html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:30px 20px;">

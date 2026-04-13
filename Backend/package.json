@@ -26,6 +26,7 @@
     "nodemailer": "^8.0.1",
     "nodemon": "^3.1.11",
     "redis": "^5.10.0",
+    "resend": "^6.10.0",
     "socket.io": "^4.8.3",
     "validator": "^13.15.26"
   }
