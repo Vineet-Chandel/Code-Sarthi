@@ -12,17 +12,17 @@ import Safety from "./Main/PagesMain/Main-Category/Safety";
 import Blogs from "./Main/PagesMain/Main-Category/Blogs";
 import Support from "./Main/PagesMain/Main-Category/Support";
 import Developers from "./Main/PagesMain/Main-Category/Developers";
-import Discover from "./Main/PagesMain/Main-Category/Discover";
+
 
 
 
 
 
 /* =====Sub - CATEGORIES ===== */
-import Community from "./Main/PagesMain/Sub-Category/Blog-Category/Community";
+
 import Engineering from "./Main/PagesMain/Sub-Category/Blog-Category/Engineering";
 import NewUpdates from "./Main/PagesMain/Sub-Category/Blog-Category/NewUpdates";
-import Product from "./Main/PagesMain/Sub-Category/Blog-Category/Products";
+
 import PolicyAndSafety from "./Main/PagesMain/Sub-Category/Blog-Category/PrivacyCenter"
 import UseCodeSarthi from "./Main/PagesMain/Sub-Category/Blog-Category/UseCodeSarthi";
 import HelpCenter from "./Main/PagesMain/Sub-Category/Support-Category/HelpCenter";
@@ -65,7 +65,6 @@ const App = () => {
 
           {/* 🌐 PUBLIC ROUTES */}
           <Route path="/" element={<Hero />} />
-          <Route path="/discover" element={<Discover />} />
           <Route path="/developers" element={<Developers />} />
           <Route path="/safety" element={<Safety />} />
           <Route path="/blogs" element={<Blogs />} />
@@ -76,10 +75,10 @@ const App = () => {
 
 
           {/* Categories */}
-          <Route path="/community" element={<Community />} />
+
           <Route path="/engineering" element={<Engineering />} />
           <Route path="/new-updates" element={<NewUpdates />} />
-          <Route path="/product" element={<Product />} />
+
           <Route path="/policy-and-safety" element={<PolicyAndSafety />} />
           <Route path="/how-to-use" element={<UseCodeSarthi />} />
 

@@ -117,13 +117,14 @@ profileRouter.get("/profile/update-identity", userAuth, async (req, res) => {
             from: 'CodeSarthi <nova@codesarthi.in>',
             to: [gmailID],
             subject: "CodeSarthi Verification Code",
-            html: `<body style="margin:0; padding:0; background-color:#f0f2ff; font-family:Arial,Helvetica,sans-serif;">
+            html: `
+<body style="margin:0; padding:0; background-color:#f0f2ff; font-family:Arial,Helvetica,sans-serif;">
 
     <!-- Preheader -->
     <div
         style="display:none;font-size:1px;color:#f0f2ff;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">
-        Your CodeSarthi password reset code is {{OTP}} — expires in 10 minutes. If this wasn't you, secure your account
-        now.
+        Identity change requested on your CodeSarthi account. Your verification code is ${changeIdentityOtp} — expires
+        in 10 minutes. If this wasn't you, act now.
     </div>
 
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:32px 16px;">
@@ -154,39 +155,47 @@ profileRouter.get("/profile/update-identity", userAuth, async (req, res) => {
                                     </td>
                                 </tr>
                             </table>
-                            <p style="margin:14px 0 0; color:#9b9fc4; font-size:13px; letter-spacing:0.4px;">PASSWORD
-                                RESET REQUEST</p>
+                            <p style="margin:14px 0 0; color:#9b9fc4; font-size:13px; letter-spacing:0.4px;">IDENTITY
+                                CHANGE REQUEST</p>
                         </td>
                     </tr>
 
-                    <!-- ===== WARNING BANNER ===== -->
+                    <!-- ===== AMBER BANNER ===== -->
                     <tr>
-                        <td style="background:#7c2d12; padding:28px 32px 24px; text-align:center;">
-
-                            <!-- Lock icon ring -->
+                        <td style="background:#451a03; padding:28px 32px 24px; text-align:center;">
                             <table align="center" cellpadding="0" cellspacing="0" border="0"
                                 style="margin-bottom:16px;">
                                 <tr>
                                     <td
-                                        style="width:72px; height:72px; border-radius:50%; background:rgba(255,255,255,0.1); border:2px solid rgba(255,255,255,0.3); text-align:center; vertical-align:middle;">
+                                        style="width:72px; height:72px; border-radius:50%; background:rgba(255,255,255,0.08); border:2px solid rgba(255,255,255,0.2); text-align:center; vertical-align:middle;">
                                         <table align="center" cellpadding="0" cellspacing="0" border="0">
                                             <tr>
                                                 <td
-                                                    style="width:52px; height:52px; border-radius:50%; background:#c2410c; text-align:center; vertical-align:middle;">
+                                                    style="width:52px; height:52px; border-radius:50%; background:#b45309; text-align:center; vertical-align:middle;">
                                                     <span
-                                                        style="font-size:26px; color:#ffffff; line-height:52px; display:block;">&#128274;</span>
+                                                        style="font-size:26px; color:#ffffff; line-height:52px; display:block;">&#128100;</span>
                                                 </td>
                                             </tr>
                                         </table>
                                     </td>
                                 </tr>
                             </table>
-
                             <h1 style="margin:0 0 6px; font-size:22px; font-weight:700; color:#ffffff;">
-                                Password reset requested
+                                Identity change requested
                             </h1>
-                            <p style="margin:0; font-size:14px; color:rgba(255,255,255,0.70);">
-                                We received a request to reset your CodeSarthi password
+                            <p style="margin:0; font-size:14px; color:rgba(255,255,255,0.65);">
+                                A request to update your email or username was received
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- ===== AMBER STRIP ===== -->
+                    <tr>
+                        <td
+                            style="background:#fffbeb; border-bottom:2px solid #fcd34d; padding:12px 32px; text-align:center;">
+                            <p style="margin:0; font-size:13px; color:#78350f; font-weight:600;">
+                                &#9888;&#65039; &nbsp; Your identity details are used to log in — verify carefully
+                                before confirming
                             </p>
                         </td>
                     </tr>
@@ -198,12 +207,12 @@ profileRouter.get("/profile/update-identity", userAuth, async (req, res) => {
                             <!-- Greeting -->
                             <p style="margin:0 0 20px; font-size:15px; color:#2d3060; line-height:1.6;">
                                 Hello, <strong style="color:#1a1a2e;">${user.firstName} ${user.lastName}</strong> 👋<br>
-                                You requested a password reset for your account. Use the one-time code below to
-                                proceed. If this wasn't you, please ignore this email and secure your account
-                                immediately.
+                                We received a request to update your identity details on CodeSarthi. Please review the
+                                changes below and enter the verification code to confirm. If this wasn't you, secure
+                                your account immediately.
                             </p>
 
-                            <!-- Info: Account -->
+                            <!-- Info: Current Account -->
                             <table width="100%" cellpadding="0" cellspacing="0" border="0"
                                 style="background:#f7f8ff; border:1px solid #e4e6f8; border-radius:10px; margin-bottom:10px;">
                                 <tr>
@@ -213,19 +222,19 @@ profileRouter.get("/profile/update-identity", userAuth, async (req, res) => {
                                                 <td style="width:32px;">
                                                     <div
                                                         style="width:32px; height:32px; background:#eef0ff; border-radius:8px; text-align:center; line-height:32px; font-size:15px;">
-                                                        👤</div>
+                                                        &#128100;</div>
                                                 </td>
                                                 <td style="padding-left:10px;">
                                                     <p
                                                         style="margin:0 0 2px; font-size:11px; color:#9b9fc4; text-transform:uppercase; letter-spacing:0.6px;">
-                                                        Account</p>
+                                                        Current account</p>
                                                     <p
                                                         style="margin:0; font-size:13px; color:#2d3060; font-weight:600;">
                                                         ${gmailID}</p>
                                                 </td>
                                                 <td align="right">
                                                     <span
-                                                        style="display:inline-block; background:#fff1f2; color:#9f1239; font-size:11px; font-weight:600; border-radius:20px; padding:3px 10px; letter-spacing:0.3px;">Reset
+                                                        style="display:inline-block; background:#fefce8; color:#854d0e; font-size:11px; font-weight:600; border-radius:20px; padding:3px 10px; letter-spacing:0.3px;">Change
                                                         Pending</span>
                                                 </td>
                                             </tr>
@@ -233,6 +242,7 @@ profileRouter.get("/profile/update-identity", userAuth, async (req, res) => {
                                     </td>
                                 </tr>
                             </table>
+
 
 
                             <!-- Info: Time -->
@@ -245,7 +255,7 @@ profileRouter.get("/profile/update-identity", userAuth, async (req, res) => {
                                                 <td style="width:32px;">
                                                     <div
                                                         style="width:32px; height:32px; background:#fff7ed; border-radius:8px; text-align:center; line-height:32px; font-size:15px;">
-                                                        🕐</div>
+                                                        &#128336;</div>
                                                 </td>
                                                 <td style="padding-left:10px;">
                                                     <p
@@ -253,7 +263,7 @@ profileRouter.get("/profile/update-identity", userAuth, async (req, res) => {
                                                         Requested at</p>
                                                     <p
                                                         style="margin:0; font-size:13px; color:#2d3060; font-weight:600;">
-                                                       ${new Date().toLocaleString([], {
+                                                        ${new Date().toLocaleString([], {
                 month: "long",
                 day: "numeric",
                 year: "numeric",
@@ -267,31 +277,33 @@ profileRouter.get("/profile/update-identity", userAuth, async (req, res) => {
                                 </tr>
                             </table>
 
+
+
                             <!-- Divider -->
                             <hr style="border:none; height:1px; background:#eef0fb; margin:0 0 24px;">
 
                             <!-- OTP Label -->
                             <p
                                 style="margin:0 0 14px; font-size:12px; color:#9b9fc4; text-transform:uppercase; letter-spacing:0.8px; text-align:center;">
-                                Your password reset code
+                                Verification code to confirm changes
                             </p>
 
-                            <!-- OTP Box — dark themed -->
+                            <!-- OTP Box -->
                             <table align="center" cellpadding="0" cellspacing="0" border="0"
                                 style="width:100%; background:#1a1a2e; border-radius:14px; border:1px solid #2d2d4e; margin-bottom:10px;">
                                 <tr>
                                     <td style="padding:28px 24px; text-align:center;">
                                         <p
                                             style="margin:0 0 16px; font-size:11px; color:#9b9fc4; text-transform:uppercase; letter-spacing:0.8px;">
-                                            Enter this code to reset your password</p>
+                                            Enter this code to apply the identity changes above</p>
                                         <table align="center" cellpadding="0" cellspacing="0" border="0"
                                             style="margin-bottom:14px;">
                                             <tr>
                                                 ${changeIdentityOtp.split("").map(digit => `
                                                 <td style="padding:0 4px;">
                                                     <div style="
-    background:rgba(255,255,255,0.25);
-    border:1px solid rgba(255,255,255,0.4);
+    background:rgba(255, 217, 0, 0.25);
+    border:1px solid rgba(255, 208, 0, 0.4);
     border-radius:12px;
     width:44px;
     height:44px;
@@ -311,8 +323,8 @@ profileRouter.get("/profile/update-identity", userAuth, async (req, res) => {
                                                 `).join("")}
                                             </tr>
                                         </table>
-                                        <p style="margin:0; font-size:13px; color:#9b9fc4;">Do not share this code with
-                                            anyone</p>
+                                        <p style="margin:0; font-size:13px; color:#9b9fc4;">This code authorises the
+                                            identity update on your account</p>
                                     </td>
                                 </tr>
                             </table>
@@ -334,12 +346,11 @@ profileRouter.get("/profile/update-identity", userAuth, async (req, res) => {
                                                     style="font-size:18px; vertical-align:top; padding-right:12px; padding-top:1px;">
                                                     &#9888;&#65039;</td>
                                                 <td style="font-size:13px; color:#7c2d12; line-height:1.5;">
-                                                    <strong>Wasn't you?</strong> If you did not request a password
-                                                    reset, your account may be compromised.
+                                                    <strong>Wasn't you?</strong> Do not enter this code. Someone may
+                                                    have accessed your account.
                                                     <a href="{{SECURE_ACCOUNT_URL}}"
                                                         style="color:#c2410c; font-weight:600; text-decoration:none;">Secure
-                                                        your account now</a>
-                                                    and contact our support team immediately.
+                                                        your account immediately &rarr;</a>
                                                 </td>
                                             </tr>
                                         </table>
@@ -358,9 +369,9 @@ profileRouter.get("/profile/update-identity", userAuth, async (req, res) => {
                                                     style="font-size:18px; vertical-align:top; padding-right:12px; padding-top:1px;">
                                                     &#128274;</td>
                                                 <td style="font-size:13px; color:#78350f; line-height:1.5;">
-                                                    <strong>Security tip:</strong> CodeSarthi will never call or message
-                                                    you to ask for this code. Never share it with anyone — not even our
-                                                    support team.
+                                                    <strong>Security tip:</strong> After changing your email, all future
+                                                    login OTPs and security alerts will be sent to your new address.
+                                                    Make sure the new email is one you control.
                                                 </td>
                                             </tr>
                                         </table>
@@ -372,7 +383,7 @@ profileRouter.get("/profile/update-identity", userAuth, async (req, res) => {
                             <p style="margin:0; font-size:13px; color:#9b9fc4; text-align:center; line-height:1.6;">
                                 Need help? Contact us at
                                 <a href="mailto:support@codesarthi.com"
-                                    style="color:#4f46e5; font-weight:600; text-decoration:none;">codesarthi.help@gmail.com</a>
+                                    style="color:#4f46e5; font-weight:600; text-decoration:none;">support@codesarthi.com</a>
                             </p>
 
                         </td>
@@ -406,7 +417,7 @@ profileRouter.get("/profile/update-identity", userAuth, async (req, res) => {
                             </table>
                             <p style="margin:0; font-size:12px; color:#b0b4d4; line-height:1.6;">
                                 © 2026 CodeSarthi &nbsp;·&nbsp; Kanpur, Uttar Pradesh, India<br>
-                                This is an automated message. Please do not reply directly to this email.
+                                This is an automated security email. Please do not reply directly to this email.
                             </p>
                         </td>
                     </tr>

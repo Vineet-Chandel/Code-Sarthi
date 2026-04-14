@@ -350,17 +350,17 @@ const ContentFirst = () => {
                 {featuredData1.map((items) => (
                     <div key={items.id} className="w-[95%] mx-auto mt-5 border rounded-[60px] lg:rounded-[120px] 
       flex flex-col lg:flex-row items-center justify-between 
-      px-6 py-10 lg:px-12">
+       p-10 ">
 
                         {/* LEFT CONTENT */}
-                        <div className="w-full lg:w-1/2 flex flex-col gap-6 text-center lg:text-left">
+                        <div className="w-full lg:w-[40%]  flex flex-col gap-6 text-center lg:text-left ml-3">
 
                             <h2 className="
         text-2xl 
         sm:text-3xl 
         md:text-4xl 
-        lg:text-5xl 
-        xl:text-6xl 
+        lg:text-4xl 
+        xl:text-5xl 
         font-extrabold font-head HEAD2">
                                 {items.heading}
                             </h2>
@@ -380,21 +380,11 @@ const ContentFirst = () => {
                                 </p>
                             </div>
 
-                            <div className="pt-4">
-                                <button className="
-          bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300
-          text-black font-semibold
-          px-6 py-2
-          rounded-full
-          flex items-center gap-2
-          hover:scale-105 transition">
-                                    LEARN MORE
-                                </button>
-                            </div>
+
                         </div>
 
                         {/* RIGHT VIDEO */}
-                        <div className="w-full lg:w-1/2 flex justify-center mt-10 lg:mt-0">
+                        <div className="w-full lg:w-[60%] flex justify-center mt-10 lg:mt-0  ml-8">
                             <video
                                 src={items.video}
                                 autoPlay
@@ -402,9 +392,7 @@ const ContentFirst = () => {
                                 muted
                                 playsInline
                                 className="
-          w-full 
-          max-w-[600px] 
-        
+          w-full  
           object-cover 
           rounded-[40px] lg:rounded-[120px]"
                             />

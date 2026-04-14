@@ -83,9 +83,27 @@ const Dashboard = () => {
                             <span onClick={() => navigate("/app/settings")} className="cursor-pointer">{icon}</span>
                         </div>
                     </div>
+                    <div className="text-gray-800 w-full text-sm pl-1 flex justify-between px-3 pl-3 items-center gap-1  mt-2 bg-base-300  border border-secondary border-[2px] py-2 rounded-2xl">
+                        <div className="flex justify-center items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 16 16">
+                                <path fill="#bf630b" d="M4 3a2 2 0 0 0-2 2v.201l6 3.231l6-3.23V5a2 2 0 0 0-2-2zm10 3.337L8.237 9.44a.5.5 0 0 1-.474 0L2 6.337V11a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2z"></path>
+                            </svg>   {user.gmail}
+                        </div>
+                        <div>
+                            <div onClick={() => handleCopy(user.gmail)}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24">
+                                    <g fill="none">
+                                        <path fill="#bf630b" d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z" opacity={0.16}></path>
+                                        <path stroke="#bf630b" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 3H4v13"></path>
+                                        <path stroke="#bf630b" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z"></path>
+                                    </g>
+                                </svg>
+                            </div>
+                        </div>
 
+                    </div>
                     {/* About */}
-                    <div className="mt-8 bg-base-200 border border-base-300 p-5 rounded-2xl">
+                    <div className="mt-2 bg-base-200 border border-base-300 p-5 rounded-2xl">
                         <h3 className="text-xl font-semibold mb-3 text-secondary">
                             About
                         </h3>
@@ -94,23 +112,33 @@ const Dashboard = () => {
                         </p>
                     </div>
 
-                    {/* Info List */}
-                    <div className="mt-6 space-y-1 ">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-1 mt-3">
 
-                        <div className="flex items-center gap-3 bg-white/5 p-3 rounded-xl">
+                        <div className="bg-base-200 border border-secondary rounded-2xl p-3 flex-col justify-center  items-center hover:scale-105 transition">
+                            <h3 className="text-3xl font-bold">{connections.total}</h3>
+                            <p className="text-secondary text-sm mt-2">Connections</p>
+                        </div>
+                        <div className="bg-base-200 border border-secondary rounded-2xl p-3 flex-col justify-center  items-center hover:scale-105 transition">
+                            <h3 className="text-3xl font-bold">12</h3>
+                            <p className="text-secondary text-sm mt-2">Completed Projects</p>
+                        </div>
+                        <div className="bg-base-200 border border-secondary rounded-2xl p-3 flex-col justify-center  items-center hover:scale-105 transition">
+                            <h3 className="text-3xl font-bold">3</h3>
+                            <p className="text-secondary text-sm mt-2">Ongoing Projects</p>
+                        </div>
+
+                    </div>
+
+
+                    {/* Info List */}
+                    <div className="mt-2  flex justify-between items-center">
+                        <div className="flex items-center gap-3 bg-white/5 p-3 rounded-xl flex justify-between items-center">
                             <span className="text-lg font-medium flex justify-center items-center gap-3"><FaUniversity color="#370a00" />{user.college}</span>
                         </div>
 
-                        <div className="flex items-center gap-3 bg-white/5 p-3 rounded-xl">
+                        <div className="flex items-center gap-3 bg-white/5 p-3 rounded-xl flex justify-between items-center">
                             <span className="text-lg font-medium flex justify-center items-center gap-3"><BsPersonWorkspace color="#370a00" />{user.profession}</span>
                         </div>
-
-                        <div className="flex items-center gap-3 bg-white/5 p-3 rounded-xl">
-                            <span className="text-lg font-medium flex justify-center items-center gap-3">
-                                <IoBarChart color="#370a00" />   {user.skills?.join(", ")}
-                            </span>
-                        </div>
-
                     </div>
                 </div>
 
@@ -119,57 +147,16 @@ const Dashboard = () => {
                 <div className="lg:col-span-2 space-y-8">
 
                     {/* Stats Cards */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
 
-                        <div className="bg-gradient-to-br from-green-500/10 to-green-600/10 border border-green-500/20 rounded-2xl p-6 hover:scale-105 transition">
-                            <h3 className="text-3xl font-bold">12</h3>
-                            <p className="text-secondary mt-2">Projects</p>
-                        </div>
-
-                        <div className="bg-gradient-to-br from-blue-500/10 to-blue-600/10 border border-blue-500/20 rounded-2xl p-6 hover:scale-105 transition">
-                            <h3 className="text-3xl font-bold">{connections.total}</h3>
-                            <p className="text-secondary mt-2">Connections</p>
-                        </div>
-
-                        <div className="bg-gradient-to-br from-purple-500/10 to-purple-600/10 border border-purple-500/20 rounded-2xl p-6 hover:scale-105 transition">
-                            <h3 className="text-3xl font-bold">3</h3>
-                            <p className="text-secondary mt-2">Notifications</p>
-                        </div>
-
-                    </div>
 
 
                     {/* Projects Section */}
-                    <div className="bg-base-100 backdrop-blur-xl border border-base-300 border-[3px] rounded-3xl p-8 shadow-xl">
-                        <h2 className="text-2xl font-bold mb-6 text-secondary">Projects</h2>
+                    <div className="h-full bg-base-100 backdrop-blur-xl border border-base-300 border-[3px] rounded-3xl p-8 shadow-xl">
+                        <h2 className="text-2xl font-bold mb-6 text-secondary">RESUME</h2>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="bg-base-200  border border-base-300 border-[1px] p-5 rounded-xl  transition">
-                                <h4 className="text-lg font-semibold text-secondary">Project Name</h4>
-                                <p className="text-accent text-sm mt-2">
-                                    Short description of project.
-                                </p>
-                            </div>
-                        </div>
                     </div>
 
 
-                    {/* Notifications Section */}
-                    <div className="bg-base-100 backdrop-blur-xl border border-base-300 border-[3px] rounded-3xl p-8 shadow-xl">
-                        <h2 className="text-2xl text-secondary font-bold mb-6">Notifications</h2>
-
-                        <div className="space-y-4">
-                            <div className=" text-secondary border border-base-300 border-[1px] bg-base-200 p-4 rounded-xl">
-                                Incoming Requests
-                            </div>
-                            <div className=" text-secondary border border-base-300 border-[1px] bg-base-200 p-4 rounded-xl">
-                                Reminders
-                            </div>
-                            <div className="text-secondary border border-base-300 border-[1px] bg-base-200 p-4 rounded-xl">
-                                Deadline Alerts
-                            </div>
-                        </div>
-                    </div>
 
                 </div>
             </div>

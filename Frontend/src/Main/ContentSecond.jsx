@@ -36,7 +36,7 @@ const ContentSecond = () => {
         max-lg:px-6 max-sm:px-4 gap-10
       "
         >
-            <div className=" HEAD1 text-5xl font-extrabold font-head text-center
+            <div className=" HEAD1 text-5xl font-extrabold font-head text-center text-white
                  max-xl:text-4xl 
                 max-lg:text-3xl 
                 max-md:text-2xl 
@@ -53,11 +53,11 @@ const ContentSecond = () => {
                 {cards.map((card, index) => (
                     <div
                         key={index}
-                        className="group rounded-[70px] bg-gray-800/80 backdrop-blur-sm 
+                        className="group rounded-[70px] bg-gray-800/80
             flex flex-col items-center p-4 min-h-[420px]
             border border-white/5
             transition-all duration-500
-            hover:-translate-y-3 hover:shadow-[0_20px_80px_rgba(0,0,0,0.6)]
+            hover:-translate-y-3 
             max-sm:rounded-[40px]"
                     >
                         <img
@@ -67,15 +67,15 @@ const ContentSecond = () => {
                             alt={card.title}
                         />
 
-                        <div className="text-white font-head font-extrabold text-center text-5xl mt-6 tracking-wide">
+                        <div className="text-white text-white font-head font-extrabold text-center text-5xl mt-6 tracking-wide">
                             {card.title}
                         </div>
 
-                        <div className="text-sm text-neutral-400 text-center mt-1">
+                        <div className="text-sm text-white text-neutral-400 text-center mt-1">
                             {card.subtitle}
                         </div>
 
-                        <div className="text-lg text-center text-neutral-200 mt-4 leading-snug">
+                        <div className="text-lg  text-center text-gray-400 mt-4 leading-snug">
                             {card.quote}
                         </div>
                     </div>

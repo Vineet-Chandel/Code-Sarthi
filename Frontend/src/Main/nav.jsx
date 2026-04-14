@@ -32,7 +32,7 @@ const Nav = () => {
     }
 
     const navItems = [
-        { id: "discover", label: "Discover", path: "/discover" },
+
 
         {
             id: "blogs",
@@ -44,14 +44,10 @@ const Nav = () => {
                 <Dropdown
                     title="Blog Documentation"
                     items={[
-                        "Community",
+
                         "New Updates",
-                        "Smart Scheduler - Lakshya",
-                        "Resume Generator",
                         "Engineering and Developers",
                         "How to use CodeSarthi",
-                        "Policy & Safety",
-                        "Product & Features",
                     ]}
                 />
             ),
@@ -67,10 +63,9 @@ const Nav = () => {
                 <Dropdown
                     title="Featured"
                     items={[
-                        "Developer Home",
+
                         "Developer Toolkit",
                         "Global Developers Community",
-                        "Developers Newsletters",
                         "Developers Help Center",
                     ]}
                 />
@@ -89,16 +84,14 @@ const Nav = () => {
                         items={[
                             "Family Center",
                             "Safety Library",
-                            "Safety News",
                             "Teen Charter",
-                            "Policy & Safety",
+
                         ]}
                     />
                     <Dropdown
                         title="Hub"
                         items={[
-                            "Policy Hub",
-                            "Privacy Center",
+                            "Privacy & Policy Hub",
                             "Transparency Hub",
                             "Wellbeing Hub",
                         ]}
@@ -236,7 +229,6 @@ const Nav = () => {
                                         }
                                         className={`absolute left-1/2 top-[3.8rem] 
                                         -translate-x-1/2 rounded-3xl bg-white text-black
-                                        shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)]
                                         ${item.isSmall ? "w-[320px]" : "w-[620px]"}
                                         p-5`}
                                     >
@@ -310,7 +302,7 @@ const Nav = () => {
 
             {/* OVERLAY */}
             <div
-                className={`fixed inset-0 z-20 bg-black/70 backdrop-blur-sm transition-all duration-300
+                className={`fixed inset-0 z-20 bg-black/70  transition-all duration-300
                 ${hoveredItem ? "opacity-100" : "opacity-0 pointer-events-none"}`}
             />
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-
+import { useNavigate } from "react-router-dom";
 
 const Mainhero = () => {
     const [videoMainNum, setVideoMainNum] = useState(1);
@@ -9,7 +9,7 @@ const Mainhero = () => {
     const [isclicked, setClicking] = useState(false);
 
 
-
+    const navigate = useNavigate();
     const videoHandler = () => {
         setVideoMainNum(prev => (prev === 4 ? 1 : prev + 1));
         setVideoShortNum(prev => (prev === 4 ? 1 : prev + 1));
@@ -48,7 +48,7 @@ const Mainhero = () => {
                 muted
                 playsInline
                 preload="auto"
-                className="newVideo absolute inset-0 w-full h-full object-cover"
+                className="newVideo absolute inset-0 w-full h-full object-cover rounded-b-[100px]"
             />
 
             {/* Center container */}
@@ -62,7 +62,7 @@ const Mainhero = () => {
                         toolkits, blogs, and much more.
                     </div>
 
-                    <div className='h-[40px]  font-bold text-sm relative top-5 border-transparent p-1 px-5 bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300 text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
+                    <div className='h-[40px]  font-bold text-sm relative top-5 border-transparent p-1 px-5 bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300 text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1 cursor-pointer' onClick={() => navigate("/login")} >
                         <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g clipPath="url(#clip0_0_3844)">
                                 <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
@@ -73,7 +73,7 @@ const Mainhero = () => {
                                 </clipPath>
                             </defs>
                         </svg>
-                        WATCH TRAILER</div>
+                        Get Started !</div>
                 </div>
 
 
@@ -104,7 +104,7 @@ const Mainhero = () => {
                     />
                 </div>
 
-                <div className="w-screen h-auto flex  flex-col justify-end items-end relative right-5 max-xl:right-4 max-lg:right-3 max-md:right-2 max-sm:right-1">
+                <div className="w-screen h-auto flex  flex-col justify-end items-end relative right-5 max-xl:right-4 max-lg:right-3 max-md:right-2 max-sm:right-1 py-10 px-5">
 
                     <div className="
                 text-white 
