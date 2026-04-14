@@ -111,7 +111,7 @@ const Search = ({ height, displayType }) => {
                 {/* INPUT */}
                 <input
                     type="text"
-                    placeholder="Search Developers.."
+                    placeholder="Username without @"
                     style={{ height: `${height}px` }}
                     className="w-full text-secondary placeholder:text-neutral rounded-xl bg-base-100 pl-14 pr-14 border border-base-300 border-[3px] outline-none focus:border-accent transition-all"
                     value={username}

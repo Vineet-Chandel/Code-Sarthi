@@ -9,7 +9,7 @@ const redis = require("../configs/redis");
 const crypto = require("crypto")
 const { Resend } = require('resend');
 
-const resend = new Resend("re_AgE7BCRT_JQiKrPvbDLJyFYRNBtUf3X2Q");
+const resend = new Resend(String(process.env.RESEND_API_KEY));
 
 
 //signUp
