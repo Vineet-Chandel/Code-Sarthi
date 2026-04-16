@@ -12,6 +12,7 @@ chatRouter.get("/chats", userAuth, async (req, res) => {
     try {
         const userId = req.user._id;
 
+        // all the chats of the user
         const chats = await Convo.find({
             Participants: userId
         });
@@ -26,14 +27,15 @@ chatRouter.get("/chats", userAuth, async (req, res) => {
         const formattedChats = await Promise.all(
             chats.map(async (chat) => {
 
+                //find other user
                 const otherUserId = chat.Participants.find(
                     id => id.toString() !== userId.toString()
                 );
-
-                const credentials = await User.findById(otherUserId);
+                //get other user credentials
+                const credentials = await User.findById(otherUserId).select("firstName lastName photoUrl isVerified gmail username age gender about college skills profession");
 
                 const lastMsg = chat.LastMsg;
-
+                //get last message
                 const findLastMsg = await Msg.findById({ _id: lastMsg });
                 return {
                     chatId: chat._id,
@@ -51,8 +53,6 @@ chatRouter.get("/chats", userAuth, async (req, res) => {
         });
 
     } catch (error) {
-        console.error(error);
-
         res.status(500).json({
             success: false,
             message: "Internal server error"
@@ -63,6 +63,7 @@ chatRouter.get("/chats", userAuth, async (req, res) => {
 // this API will Send a message to another user
 chatRouter.post("/send-message", userAuth, upload.single("file"), async (req, res) => {
     try {
+
         //Get sender (यह logged-in user है।)
         const senderId = req.user._id;
 
@@ -73,8 +74,6 @@ chatRouter.post("/send-message", userAuth, upload.single("file"), async (req, re
             content
         } = req.body;
         const file = req.file;
-
-        const messageStatus = "sent";
         //senderId , receiverId ----> dono hi ka hona essential hai 
         if (!senderId || !receiverId) {
             return res.status(400).json({
@@ -83,7 +82,7 @@ chatRouter.post("/send-message", userAuth, upload.single("file"), async (req, re
                 senderId, receiverId
             });
         }
-
+        const messageStatus = "sent";
         // sort karne ka reason taki duplicate convo na bane
         // to prevent this -- if the convo is in between [A,B]
         // A-B conversation 1

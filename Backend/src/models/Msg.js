@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 
 const MsgSchema = new mongoose.Schema({
-    conversation: {
+    conversationId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Convo",
         required: true
@@ -54,6 +54,6 @@ const MsgSchema = new mongoose.Schema({
     }]
 }, { timestamps: true });
 
-MsgSchema.index({ conversation: 1, createdAt: -1 });
+MsgSchema.index({ conversationId: 1, createdAt: -1 });
 
 module.exports = mongoose.model("Msg", MsgSchema, "Msg");

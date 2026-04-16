@@ -7,24 +7,19 @@ const cookieParser = require("cookie-parser");
 const initialSocket = require("./Socket/socketService")
 const http = require("http");
 const server = http.createServer(app);
+const socket = require("./Socket/socket")
 
-const io = initialSocket(server);
 app.use(express.json());
 app.use(cookieParser());
 app.use(
     cors({
-        // origin: process.env.AT_FRONT,
-        origin: process.env.AT_SYSTEM_API,
+        origin: process.env.AT_FRONT,
+        // origin: process.env.AT_SYSTEM_API,
         credentials: true
     })
 );
 
 
-app.use((req, res, next) => {
-    req.io = io;
-    req.socketUserMap = io.socketUserMap;
-    next();
-})
 
 const authRouter = require("./routes/authentication");
 const profileRouter = require("./routes/profRouter");
@@ -42,22 +37,22 @@ cloudinary.config({
 });
 
 
-app.use("/api", authRouter);
-app.use("/api", profileRouter);
-app.use("/api", requestRouter);
-app.use("/api", userPreference);
-app.use("/api", passwordManagment);
-app.use("/api", fileUpload);
-app.use("/", chatRouter);
-
-
-// app.use("/", authRouter);
-// app.use("/", profileRouter);
-// app.use("/", requestRouter);
-// app.use("/", userPreference);
-// app.use("/", passwordManagment);
-// app.use("/", fileUpload);
+// app.use("/api", authRouter);
+// app.use("/api", profileRouter);
+// app.use("/api", requestRouter);
+// app.use("/api", userPreference);
+// app.use("/api", passwordManagment);
+// app.use("/api", fileUpload);
 // app.use("/", chatRouter);
+
+
+app.use("/", authRouter);
+app.use("/", profileRouter);
+app.use("/", requestRouter);
+app.use("/", userPreference);
+app.use("/", passwordManagment);
+app.use("/", fileUpload);
+app.use("/", chatRouter);
 
 const PORT = process.env.PORT || 8000;
 

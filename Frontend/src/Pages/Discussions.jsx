@@ -42,6 +42,8 @@ const Discussions = () => {
     const [messages, setMessages] = useState([]);
     const [messageText, setMessageText] = useState("");
     const [profileOpen, setIsProfileOpen] = useState(false);
+
+
     //activation of the chat
     const [chatActive, setchatActive] = useState(false);
     const [chatingUserId, setChatingUserId] = useState("");
@@ -62,6 +64,10 @@ const Discussions = () => {
 
 
 
+    const [search, setSearch] = useState("");
+
+
+
 
     //for switching between the teams and connections
     const [section, setSection] = useState(1);
@@ -71,6 +77,8 @@ const Discussions = () => {
     //chats 
     const chatMessages = useSelector(state => state.chats?.users || []);
     //connections user 
+
+
     const connectionUser = async () => {
         try {
             const response = await axios.get(
@@ -96,6 +104,14 @@ const Discussions = () => {
         );
     }, [connections, chatMessages]);
 
+
+    const filteredChats = useMemo(() => {
+        return chatMessages.filter(user =>
+            user.atFrontUser?.firstName
+                ?.toLowerCase()
+                .includes(search.toLowerCase())
+        );
+    }, [search, chatMessages]);
 
 
     //handeling the emojis tabs
@@ -418,6 +434,8 @@ const Discussions = () => {
                                 type="text"
                                 placeholder="Search conversations..."
                                 className="flex-1 bg-transparent outline-none text-sm placeholder-accent text-secondary"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
                             />
 
                             <div className="w-10 h-10 rounded-full bg-base-300 border border-secondary flex items-center justify-center ">
@@ -450,10 +468,10 @@ const Discussions = () => {
                         <div className="mt-6 space-y-1 overflow-y-auto max-h-[calc(100vh-250px)] pr-2 custom-scrollbar">
 
                             <div className="mb-5">
-                                {(chatMessages || []).map((item, index) => (
+                                {(filteredChats || []).map((item, index) => (
                                     <div
                                         key={index}
-                                        className="group relative flex items-center gap-3 p-3 rounded-xl bg-base-100 hover:bg-base-300 transition-all duration-300 cursor-pointer border border-transparent hover:border-secondary  "
+                                        className="group relative flex items-center gap-3 mb-1 p-3 rounded-xl bg-base-100 hover:bg-base-300 transition-all duration-300 cursor-pointer border-2  hover:border-secondary border-base-300  "
                                         onClick={() => {
                                             setMessages([]);
                                             setchatActive(true);
@@ -474,25 +492,35 @@ const Discussions = () => {
                                     >
                                         {/* Online indicator */}
                                         <div className="relative">
-                                            <img
+
+                                            {item.atFrontUser?.photoUrl?.url ? (<img
                                                 src={item.atFrontUser?.photoUrl?.url}
                                                 alt="profile"
                                                 className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300"
                                             />
+                                            ) : (
+                                                <img
+                                                    src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776259172/Pinterest_Pin_di5dy8.jpg"
+                                                    alt="profile"
+                                                    className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300"
+                                                />
+                                            )}
+
                                             <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-[#0A0A0F]"></div>
                                         </div>
 
                                         <div className="flex-1 min-w-0">
                                             <div className="flex justify-between items-center">
                                                 <h3 className="text-accent font-semibold truncate">
-                                                    {item.atFrontUser?.firstName} {item.atFrontUser?.lastName}
+                                                    {item.atFrontUser?.firstName || "CodeSarthi"} {item.atFrontUser?.lastName || "User"}
                                                 </h3>
                                                 <span className="text-xs text-accent">
                                                     {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                 </span>
                                             </div>
                                             <p className="text-sm text-gray-900 truncate mt-0.5">
-                                                {item.LastMsg?.content || "Hey! let's collab"}
+                                                {item.atFrontUser?._id ? (item.LastMsg?.content || "Hey! let's collab") : ("")}
+
                                             </p>
                                         </div>
 
@@ -521,7 +549,7 @@ const Discussions = () => {
                                 {connectionList.map((item) =>
                                     <li
                                         key={item.userId}
-                                        className="group relative flex items-center gap-3 p-3 rounded-xl bg-base-100 hover:bg-base-300 transition-all duration-300 cursor-pointer border border-transparent hover:border-secondary  "
+                                        className="group relative flex items-center gap-3 mb-1 border border-base-300 p-3 rounded-xl bg-base-100 hover:bg-base-300 transition-all duration-300 cursor-pointer hover:border-secondary  "
                                         onClick={() => {
                                             setMessages([]);
                                             setchatActive(true);
@@ -558,8 +586,7 @@ const Discussions = () => {
 
                                     </li>
 
-                                )
-                                }
+                                )}
                             </div>
 
                         </div>
@@ -580,14 +607,22 @@ const Discussions = () => {
                         </div>
                         <div className="w-full  flex flex-col ">
                             <div className="w-full flex justify-center mt-5">
-                                <img src={chatingPhotoUrl} alt="profile" className="w-[150px] h-[150px] rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300" />
+
+                                {chatingPhotoUrl ? (<img src={chatingPhotoUrl} alt="profile" className="w-[150px] h-[150px] rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300" />
+                                ) : (
+                                    <img src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776259172/Pinterest_Pin_di5dy8.jpg" alt="profile" className="w-[150px] h-[150px] rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300" />
+                                )}
                             </div>
                             <div className="flex flex-col items-center">
-                                <span className="text-accent text-5xl font-extrabold mt-3" >
-                                    {chatingFirstName} {chatingMiddleName} {chatingLastName}
+                                <span className="text-accent text-4xl font-extrabold mt-3" >
+                                    {chatingFirstName ? (
+                                        <>{chatingFirstName} {chatingMiddleName} {chatingLastName} </>
+                                    ) : (
+                                        <>CodeSarthi User</>
+                                    )}
                                 </span>
                                 <span className="text-gray-800 text-sm pl-1 flex justify-center items-center gap-1">
-                                    <div onClick={() => handleCopy(chatingUsername)}>
+                                    {chatingUserId && (<div onClick={() => handleCopy(chatingUsername)}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24">
                                             <g fill="none">
                                                 <path fill="#bf630b" d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z" opacity={0.16}></path>
@@ -595,12 +630,16 @@ const Discussions = () => {
                                                 <path stroke="#bf630b" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z"></path>
                                             </g>
                                         </svg>
-                                    </div>
-                                    {chatingUsername} {chatingIsVerified ? (
+                                    </div>)}
+
+                                    {chatingUserId && (chatingUsername)}
+
+                                    {chatingUserId && (chatingIsVerified ? (
                                         <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24"><path fill="#44f53d" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd" /><path fill="#44f53d" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#44f53d" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
                                     ) : (
                                         <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24"><path fill="#f53d5a" d="M14.5 2.5c0 1.5-1.5 6-1.5 6h-2S9.5 4 9.5 2.5a2.5 2.5 0 0 1 5 0M12 10c-1.1 0-2 .9-2 2s.9 2 2 2s2-.9 2-2s-.9-2-2-2m4.08-4.89c.18-.75.33-1.47.39-2.06A10 10 0 0 1 22 12c0 5.52-4.48 10-10 10S2 17.52 2 12c0-3.92 2.25-7.31 5.53-8.95c.07.59.21 1.32.39 2.06A8.03 8.03 0 0 0 4 12c0 4.42 3.58 8 8 8s8-3.58 8-8c0-2.93-1.58-5.49-3.92-6.89M18 12c0 3.31-2.69 6-6 6s-6-2.69-6-6c0-2 .98-3.77 2.48-4.86c.23.81.65 2.07.65 2.07C8.43 9.93 8 10.92 8 12c0 2.21 1.79 4 4 4s4-1.79 4-4c0-1.08-.43-2.07-1.13-2.79c0 0 .41-1.22.65-2.07A6 6 0 0 1 18 12" /></svg>
-                                    )}
+                                    ))}
+
                                 </span>
 
 
@@ -610,109 +649,117 @@ const Discussions = () => {
                             <div className="mt-6 ">
 
                                 <div className="flex items-center gap-3  px-5 py-1 rounded-xl">
-                                    <span className="text-lg text-accent font-medium flex justify-center items-center gap-3"><FaUniversity color="#370a00" />
-                                        {chatingCollege}
-                                    </span>
+                                    {chatingUserId && (
+                                        <span className="text-lg text-accent font-medium flex justify-center items-center gap-3"><FaUniversity color="#370a00" />
+                                            {chatingCollege}
+                                        </span>
+                                    )}
                                 </div>
 
                                 <div className="flex items-center gap-3 px-5 py-1 rounded-xl">
-                                    <span className="text-lg text-accent font-medium flex justify-center items-center gap-3"><BsPersonWorkspace color="#370a00" />
-                                        {chatingProfession}
-                                    </span>
+                                    {chatingUserId && (
+                                        <span className="text-lg text-accent font-medium flex justify-center items-center gap-3"><BsPersonWorkspace color="#370a00" />
+                                            {chatingProfession}
+                                        </span>
+                                    )}
                                 </div>
 
                                 <div className="flex items-center gap-3 px-5 py-1 rounded-xl">
-                                    <span className="text-lg text-accent font-medium flex justify-center items-center gap-3">
-                                        <IoBarChart color="#370a00" />
-                                        {chatingSkills?.join(", ")}
-                                    </span>
+                                    {chatingUserId && (
+                                        <span className="text-lg text-accent font-medium flex justify-center items-center gap-3">
+                                            <IoBarChart color="#370a00" />
+                                            {chatingSkills?.join(", ")}
+                                        </span>
+                                    )}
                                 </div>
                             </div>
                             {/* About */}
-                            <div className="mt-5 bg-base-100 border border-base-300 border-[3px] py-2 px-3 rounded-2xl m-3">
-                                <h3 className="text-xl font-semibold mb-1 text-secondary">
-                                    About
-                                </h3>
-                                <p className="text-accent leading-relaxed">
-                                    {chatingAbout}
-                                </p>
-                            </div>
-
-                            <div>
-
-                                <div className="text-gray-800 text-sm pl-1 flex justify-between px-3 pl-3 cursor-pointer items-center gap-1 bg-base-300  mx-10 border border-secondary border-[2px] py-2 rounded-2xl">
-                                    <div className="flex justify-center items-center gap-1 font-extrabold">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 32 32">
-                                            <path fill="#bf630b" d="M26 20h-6v-2h6zm4 8h-6v-2h6zm-2-4h-6v-2h6z"></path>
-                                            <path fill="#bf630b" d="M17.003 20a4.9 4.9 0 0 0-2.404-4.173L22 3l-1.73-1l-7.577 13.126a5.7 5.7 0 0 0-5.243 1.503C3.706 20.24 3.996 28.682 4.01 29.04a1 1 0 0 0 1 .96h14.991a1 1 0 0 0 .6-1.8c-3.54-2.656-3.598-8.146-3.598-8.2m-5.073-3.003A3.11 3.11 0 0 1 15.004 20c0 .038.002.208.017.469l-5.9-2.624a3.8 3.8 0 0 1 2.809-.848M15.45 28A5.2 5.2 0 0 1 14 25h-2a6.5 6.5 0 0 0 .968 3h-2.223A16.6 16.6 0 0 1 10 24H8a17.3 17.3 0 0 0 .665 4H6c.031-1.836.29-5.892 1.803-8.553l7.533 3.35A13 13 0 0 0 17.596 28Z"></path>
-                                        </svg> Clear chat
-                                    </div>
-                                    <div>
-
-                                    </div>
-
+                            {chatingUserId && (
+                                <div className="mt-5 bg-base-100 border border-base-300 border-[3px] py-2 px-3 rounded-2xl m-3">
+                                    <h3 className="text-xl font-semibold mb-1 text-secondary">
+                                        About
+                                    </h3>
+                                    <p className="text-accent leading-relaxed">
+                                        {chatingAbout}
+                                    </p>
                                 </div>
+                            )}
+                            {chatingUserId && (
+                                <div>
 
-                                <div className="text-gray-800 text-sm pl-1 flex justify-between px-3 pl-3 items-center gap-1  mt-2 bg-base-300 mx-10 border border-secondary border-[2px] py-2 rounded-2xl">
-                                    <div className="flex justify-center items-center gap-1">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 16 16">
-                                            <path fill="#bf630b" d="M4 3a2 2 0 0 0-2 2v.201l6 3.231l6-3.23V5a2 2 0 0 0-2-2zm10 3.337L8.237 9.44a.5.5 0 0 1-.474 0L2 6.337V11a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2z"></path>
-                                        </svg>   {chatingGmail}
-                                    </div>
-                                    <div>
-                                        <div onClick={() => handleCopy(chatingGmail)}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24">
-                                                <g fill="none">
-                                                    <path fill="#bf630b" d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z" opacity={0.16}></path>
-                                                    <path stroke="#bf630b" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 3H4v13"></path>
-                                                    <path stroke="#bf630b" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z"></path>
-                                                </g>
-                                            </svg>
+                                    <div className="text-gray-800 text-sm pl-1 flex justify-between px-3 pl-3 cursor-pointer items-center gap-1 bg-base-300  mx-10 border border-secondary border-[2px] py-2 rounded-2xl">
+                                        <div className="flex justify-center items-center gap-1 font-extrabold">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 32 32">
+                                                <path fill="#bf630b" d="M26 20h-6v-2h6zm4 8h-6v-2h6zm-2-4h-6v-2h6z"></path>
+                                                <path fill="#bf630b" d="M17.003 20a4.9 4.9 0 0 0-2.404-4.173L22 3l-1.73-1l-7.577 13.126a5.7 5.7 0 0 0-5.243 1.503C3.706 20.24 3.996 28.682 4.01 29.04a1 1 0 0 0 1 .96h14.991a1 1 0 0 0 .6-1.8c-3.54-2.656-3.598-8.146-3.598-8.2m-5.073-3.003A3.11 3.11 0 0 1 15.004 20c0 .038.002.208.017.469l-5.9-2.624a3.8 3.8 0 0 1 2.809-.848M15.45 28A5.2 5.2 0 0 1 14 25h-2a6.5 6.5 0 0 0 .968 3h-2.223A16.6 16.6 0 0 1 10 24H8a17.3 17.3 0 0 0 .665 4H6c.031-1.836.29-5.892 1.803-8.553l7.533 3.35A13 13 0 0 0 17.596 28Z"></path>
+                                            </svg> Clear chat
                                         </div>
+                                        <div>
+
+                                        </div>
+
                                     </div>
 
+                                    <div className="text-gray-800 text-sm pl-1 flex justify-between px-3 pl-3 items-center gap-1  mt-2 bg-base-300 mx-10 border border-secondary border-[2px] py-2 rounded-2xl">
+                                        <div className="flex justify-center items-center gap-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 16 16">
+                                                <path fill="#bf630b" d="M4 3a2 2 0 0 0-2 2v.201l6 3.231l6-3.23V5a2 2 0 0 0-2-2zm10 3.337L8.237 9.44a.5.5 0 0 1-.474 0L2 6.337V11a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2z"></path>
+                                            </svg>   {chatingGmail}
+                                        </div>
+                                        <div>
+                                            <div onClick={() => handleCopy(chatingGmail)}>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24">
+                                                    <g fill="none">
+                                                        <path fill="#bf630b" d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z" opacity={0.16}></path>
+                                                        <path stroke="#bf630b" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 3H4v13"></path>
+                                                        <path stroke="#bf630b" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z"></path>
+                                                    </g>
+                                                </svg>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div className="text-gray-800 text-sm pl-1 flex justify-between px-3 pl-3 items-center gap-1 bg-base-300 mx-10 mt-2 border border-secondary border-[2px] py-2 rounded-2xl cursor-pointer ">
+                                        <div className="flex justify-center items-center gap-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
+                                                <path fill="#bf630b" d="M12 2c5.5 0 10 4.5 10 10s-4.5 10-10 10S2 17.5 2 12S6.5 2 12 2m0 2c-1.9 0-3.6.6-4.9 1.7l11.2 11.2c1-1.4 1.7-3.1 1.7-4.9c0-4.4-3.6-8-8-8m4.9 14.3L5.7 7.1C4.6 8.4 4 10.1 4 12c0 4.4 3.6 8 8 8c1.9 0 3.6-.6 4.9-1.7"></path>
+                                            </svg> <span className="font-extrabold">Block</span>  <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 12 24">
+                                                <defs>
+                                                    <path id="SVG1pzpbdYY" fill="#bf630b" d="m7.588 12.43l-1.061 1.06L.748 7.713a.996.996 0 0 1 0-1.413L6.527.52l1.06 1.06l-5.424 5.425z"></path>
+                                                </defs>
+                                                <use fillRule="evenodd" href="#SVG1pzpbdYY" transform="rotate(-180 5.02 9.505)"></use>
+                                            </svg>{chatingUsername}
+                                        </div>
+                                        <div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div className="text-gray-800 text-sm pl-1 flex justify-between px-3 pl-3 items-center gap-1 bg-base-300 mx-10 my-2 border border-secondary border-[2px] py-2 rounded-2xl cursor-pointer ">
+                                        <div className="flex justify-center items-center gap-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
+                                                <g fill="none" fillRule="evenodd">
+                                                    <path d="m12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036q-.016-.004-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.016-.018m.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01z"></path>
+                                                    <path fill="#bf630b" d="M12 7a6 6 0 0 1 5.996 5.775L18 13v7h1a1 1 0 0 1 .117 1.993L19 22H5a1 1 0 0 1-.117-1.993L5 20h1v-7a6 6 0 0 1 6-6m-.857 4.986L9.652 14.47a1.01 1.01 0 0 0 .866 1.53h1.216l-.591.985a1 1 0 0 0 1.714 1.03l1.491-2.485a1.01 1.01 0 0 0-.866-1.53h-1.216l.591-.985a1 1 0 0 0-1.714-1.03ZM5.542 5.139l.094.083l.707.707a1 1 0 0 1-1.32 1.497l-.094-.083l-.707-.707a1 1 0 0 1 1.32-1.497m14.236.083a1 1 0 0 1 0 1.414l-.707.707a1 1 0 1 1-1.414-1.414l.707-.707a1 1 0 0 1 1.414 0M12 2a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1"></path>
+                                                </g>
+                                            </svg><span className="font-extrabold">Report</span>  <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 12 24">
+                                                <defs>
+                                                    <path id="SVG1pzpbdYY" fill="#bf630b" d="m7.588 12.43l-1.061 1.06L.748 7.713a.996.996 0 0 1 0-1.413L6.527.52l1.06 1.06l-5.424 5.425z"></path>
+                                                </defs>
+                                                <use fillRule="evenodd" href="#SVG1pzpbdYY" transform="rotate(-180 5.02 9.505)"></use>
+                                            </svg>{chatingUsername}
+                                        </div>
+                                        <div>
+
+                                        </div>
+
+                                    </div>
                                 </div>
-
-
-                                <div className="text-gray-800 text-sm pl-1 flex justify-between px-3 pl-3 items-center gap-1 bg-base-300 mx-10 mt-2 border border-secondary border-[2px] py-2 rounded-2xl cursor-pointer ">
-                                    <div className="flex justify-center items-center gap-1">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
-                                            <path fill="#bf630b" d="M12 2c5.5 0 10 4.5 10 10s-4.5 10-10 10S2 17.5 2 12S6.5 2 12 2m0 2c-1.9 0-3.6.6-4.9 1.7l11.2 11.2c1-1.4 1.7-3.1 1.7-4.9c0-4.4-3.6-8-8-8m4.9 14.3L5.7 7.1C4.6 8.4 4 10.1 4 12c0 4.4 3.6 8 8 8c1.9 0 3.6-.6 4.9-1.7"></path>
-                                        </svg> <span className="font-extrabold">Block</span>  <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 12 24">
-                                            <defs>
-                                                <path id="SVG1pzpbdYY" fill="#bf630b" d="m7.588 12.43l-1.061 1.06L.748 7.713a.996.996 0 0 1 0-1.413L6.527.52l1.06 1.06l-5.424 5.425z"></path>
-                                            </defs>
-                                            <use fillRule="evenodd" href="#SVG1pzpbdYY" transform="rotate(-180 5.02 9.505)"></use>
-                                        </svg>{chatingUsername}
-                                    </div>
-                                    <div>
-
-                                    </div>
-
-                                </div>
-
-
-                                <div className="text-gray-800 text-sm pl-1 flex justify-between px-3 pl-3 items-center gap-1 bg-base-300 mx-10 my-2 border border-secondary border-[2px] py-2 rounded-2xl cursor-pointer ">
-                                    <div className="flex justify-center items-center gap-1">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
-                                            <g fill="none" fillRule="evenodd">
-                                                <path d="m12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036q-.016-.004-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.016-.018m.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01z"></path>
-                                                <path fill="#bf630b" d="M12 7a6 6 0 0 1 5.996 5.775L18 13v7h1a1 1 0 0 1 .117 1.993L19 22H5a1 1 0 0 1-.117-1.993L5 20h1v-7a6 6 0 0 1 6-6m-.857 4.986L9.652 14.47a1.01 1.01 0 0 0 .866 1.53h1.216l-.591.985a1 1 0 0 0 1.714 1.03l1.491-2.485a1.01 1.01 0 0 0-.866-1.53h-1.216l.591-.985a1 1 0 0 0-1.714-1.03ZM5.542 5.139l.094.083l.707.707a1 1 0 0 1-1.32 1.497l-.094-.083l-.707-.707a1 1 0 0 1 1.32-1.497m14.236.083a1 1 0 0 1 0 1.414l-.707.707a1 1 0 1 1-1.414-1.414l.707-.707a1 1 0 0 1 1.414 0M12 2a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1"></path>
-                                            </g>
-                                        </svg><span className="font-extrabold">Report</span>  <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 12 24">
-                                            <defs>
-                                                <path id="SVG1pzpbdYY" fill="#bf630b" d="m7.588 12.43l-1.061 1.06L.748 7.713a.996.996 0 0 1 0-1.413L6.527.52l1.06 1.06l-5.424 5.425z"></path>
-                                            </defs>
-                                            <use fillRule="evenodd" href="#SVG1pzpbdYY" transform="rotate(-180 5.02 9.505)"></use>
-                                        </svg>{chatingUsername}
-                                    </div>
-                                    <div>
-
-                                    </div>
-
-                                </div>
-                            </div>
-
+                            )}
 
 
                         </div>
@@ -752,14 +799,22 @@ const Discussions = () => {
                             <div className="sticky top-0 z-20 w-full border-b border-secondary flex items-center justify-between px-6 py-2 bg-base-100 ">
                                 <div className="flex items-center gap-4">
                                     <div className="relative">
-                                        <img
-                                            src={chatingPhotoUrl}
-                                            className="w-12 h-12 rounded-full object-cover ring-2 ring-secondary"
-                                        />
+
+                                        {chatingPhotoUrl ? (
+                                            <img
+                                                src={chatingPhotoUrl}
+                                                className="w-12 h-12 rounded-full object-cover ring-2 ring-secondary"
+                                            />
+                                        ) : (
+                                            <img
+                                                src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776259172/Pinterest_Pin_di5dy8.jpg" alt="profile" className="w-12 h-12 rounded-full object-cover ring-2 ring-secondary"
+                                            />
+                                        )}
                                     </div>
                                     <div>
                                         <div className="text-secondary text-xl font-semibold">
-                                            {chatingFirstName} {chatingLastName}
+
+                                            {chatingUserId ? (chatingFirstName + " " + chatingLastName) : ("CodeSarthi User")}
                                         </div>
                                         <div className="flex items-center gap-1 mt-0.5">
                                             <div className="w-2 h-2 bg-green-600 rounded-full animate-pulse"></div>
@@ -781,7 +836,7 @@ const Discussions = () => {
                             {/* MESSAGES AREA - Premium Bubbles */}
                             <div className="flex-1 overflow-y-auto p-6 space-y-2 custom-scrollbar bg-base-100" >
                                 {messages.map((msg, index) => {
-                                    const isMe = msg.sender._id === currentUserId;
+                                    const isMe = msg?.sender?._id === currentUserId;
 
                                     return isMe ? (
                                         // MY MESSAGE - Premium
@@ -852,12 +907,21 @@ const Discussions = () => {
                                         <div key={msg._id} className="flex gap-3 items-end ">
 
                                             {!(msg.deletedFor?.includes(user._id)) && (
-                                                <img
-                                                    src={msg.sender?.photoUrl?.url}
-                                                    className="w-8 h-8 rounded-full object-cover 
-    ring-1 ring-secondary
-    transition-transform duration-200 hover:scale-110"
-                                                />
+                                                chatingUserId ? (
+                                                    <img
+                                                        src={msg.sender?.photoUrl?.url}
+                                                        className="w-8 h-8 rounded-full object-cover 
+            ring-1 ring-secondary
+            transition-transform duration-200 hover:scale-110"
+                                                    />
+                                                ) : (
+                                                    <img
+                                                        src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776259172/Pinterest_Pin_di5dy8.jpg"
+                                                        className="w-8 h-8 rounded-full object-cover 
+            ring-1 ring-secondary
+            transition-transform duration-200 hover:scale-110"
+                                                    />
+                                                )
                                             )}
                                             {!(msg.deletedFor?.includes(user._id)) && (
                                                 <div className="relative max-w-[70%] group">
@@ -1021,7 +1085,7 @@ hover:bg-white/10 active:scale-95`} onClick={() => { setActiveEmojiFeild("smiley
                                     {msgById === user._id && (
 
 
-                                        <div className="border border-base-300 border-[3px] bg-base-100 text-accent px-4 py-2 rounded-3xl hover:bg-gray-400/30 flex items-center jutify-center gap-1 cursor-pointer" onClick={() => { setDeleteType("Everyone") }}>
+                                        <button className="border border-base-300 border-[3px] bg-base-100 text-accent px-4 py-2 rounded-3xl hover:bg-gray-400/30 flex items-center jutify-center gap-1 cursor-pointer" onClick={() => { setDeleteType("Everyone"); }}>
 
                                             {/* bin */}
                                             {deleteEveryoneStatus === "toDelete" && (
@@ -1045,7 +1109,7 @@ hover:bg-white/10 active:scale-95`} onClick={() => { setActiveEmojiFeild("smiley
                                             )}
 
                                             Delete For Everyone
-                                        </div>
+                                        </button>
                                     )}
                                     <div className="border border-base-300 border-[3px] bg-base-100 text-accent px-4 py-2 rounded-3xl hover:bg-gray-400/30 flex items-center jutify-center gap-1 cursor-pointer" onClick={() => { setDeleteType("Me") }}>
                                         {/* bin */}

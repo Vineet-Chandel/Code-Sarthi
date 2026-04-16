@@ -69,22 +69,13 @@ authRouter.post("/auth/signup", async (req, res) => {
         });
 
         res.status(201).json({
-            DATA: {
-                identity: user._id,
+            success: true,
+            message: "User registered successfully",
+            data: {
+                id: user._id,
                 firstName: user.firstName,
-                middleName: user.middleName,
-                lastName: user.lastName,
                 username: user.username,
-                age: user.age,
-                gender: user.gender,
-                photoUrl: user.photoUrl,
-                about: user.about,
-                college: user.college,
-                skills: user.skills,
-                profession: user.profession,
-                gmail: user.gmail,
-                isVerified: user.isVerified,
-                dateOfPasswordChange: user.dateOfPasswordChange
+                gmail: user.gmail
             }
         });
     } catch (err) {
@@ -98,7 +89,7 @@ authRouter.post("/auth/signin", async (req, res) => {
         if (!gmail || !password) {
             return res.status(400).json({
                 success: false,
-                message: "Email and password are required"
+                message: "Credentials are required"
             });
         }
 
@@ -106,7 +97,7 @@ authRouter.post("/auth/signin", async (req, res) => {
         if (!user) {
             return res.status(401).json({
                 success: false,
-                message: "Invalid email or password"
+                message: "Invalid Credentials"
             });
         }
         const isPasswordValid = await user.validatePassword(password);
@@ -122,28 +113,19 @@ authRouter.post("/auth/signin", async (req, res) => {
                 maxAge: 8 * 60 * 60 * 1000
             });
             res.status(200).json({
-                DATA: {
-                    identity: user._id,
+                success: true,
+                message: "User logined successfully",
+                data: {
+                    id: user._id,
                     firstName: user.firstName,
-                    middleName: user.middleName,
-                    lastName: user.lastName,
                     username: user.username,
-                    age: user.age,
-                    gender: user.gender,
-                    photoUrl: user.photoUrl,
-                    about: user.about,
-                    college: user.college,
-                    skills: user.skills,
-                    profession: user.profession,
-                    gmail: user.gmail,
-                    isVerified: user.isVerified,
-                    dateOfPasswordChange: user.dateOfPasswordChange
+                    gmail: user.gmail
                 }
             });
         } else {
             return res.status(401).json({
                 success: false,
-                message: "Invalid email or password"
+                message: "Invalid Credentials"
             });
         }
     } catch (err) {
@@ -157,6 +139,10 @@ authRouter.post("/auth/signout", async (req, res) => {
     });
     res.send("Logout Successful!!");
 });
+
+
+
+
 //email verification
 //get otp
 authRouter.get("/auth/verify-email", userAuth, async (req, res) => {
@@ -492,7 +478,7 @@ authRouter.post("/auth/verify-email", userAuth, async (req, res) => {
             if (!storedOtpHash) {
                 return res.status(400).json({
                     success: false,
-                    message: "OTP expired"
+                    message: "Invalid OTP"
                 });
             }
             const isOtpValid = await bcrypt.compare(
@@ -854,7 +840,7 @@ authRouter.post("/auth/verify-email", userAuth, async (req, res) => {
             } else {
                 return res.status(400).json({
                     success: false,
-                    message: "Please Enter the valid otp"
+                    message: "Invalid OTP"
                 });
 
             }
