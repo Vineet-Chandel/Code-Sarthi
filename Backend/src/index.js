@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 const initialSocket = require("./Socket/socketService")
 const http = require("http");
 const server = http.createServer(app);
-const socket = require("./Socket/socket")
+
 
 app.use(express.json());
 app.use(cookieParser());

@@ -43,7 +43,6 @@ const Discussions = () => {
     const [messageText, setMessageText] = useState("");
     const [profileOpen, setIsProfileOpen] = useState(false);
 
-
     //activation of the chat
     const [chatActive, setchatActive] = useState(false);
     const [chatingUserId, setChatingUserId] = useState("");
@@ -465,133 +464,256 @@ const Discussions = () => {
                         </div>
 
                         {/* LIST AREA - Premium Cards */}
-                        <div className="mt-6 space-y-1 overflow-y-auto max-h-[calc(100vh-250px)] pr-2 custom-scrollbar">
 
-                            <div className="mb-5">
-                                {(filteredChats || []).map((item, index) => (
+                        {section == 1 && (
+                            <div className="mt-6 space-y-1 overflow-y-auto max-h-[calc(100vh-250px)] pr-2 custom-scrollbar">
+
+                                <div className="mb-5">
+                                    {(filteredChats || []).map((item, index) => (
+                                        <div
+                                            key={index}
+                                            className="group relative flex items-center gap-3 mb-1 p-3 rounded-xl bg-base-100 hover:bg-base-300 transition-all duration-300 cursor-pointer border-2  hover:border-secondary border-base-300  "
+                                            onClick={() => {
+                                                setMessages([]);
+                                                setchatActive(true);
+                                                setChatingPhotoUrl(item.atFrontUser?.photoUrl?.url);
+                                                setChatingUserId(item.atFrontUser?._id);
+                                                setChatingFirstName(item.atFrontUser?.firstName);
+                                                setChatingLastName(item.atFrontUser?.lastName);
+                                                setChatingUsername(item.atFrontUser?.username);
+                                                setChatingGmail(item.atFrontUser?.gmail);
+                                                setChatingMiddleName(item.atFrontUser?.middleName);
+                                                loadMessages(item.LastMsg?.conversation);
+                                                setChatingIsVerified(item.atFrontUser?.isVerified);
+                                                setChatingCollege(item.atFrontUser?.college);
+                                                setChatingProfession(item.atFrontUser?.profession);
+                                                setChatingSkills(item.atFrontUser?.skills);
+                                                setChatingAbout(item.atFrontUser?.about);
+                                            }}
+                                        >
+                                            {/* Online indicator */}
+                                            <div className="relative">
+
+                                                {item.atFrontUser?.photoUrl?.url ? (<img
+                                                    src={item.atFrontUser?.photoUrl?.url}
+                                                    alt="profile"
+                                                    className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300"
+                                                />
+                                                ) : (
+                                                    <img
+                                                        src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776259172/Pinterest_Pin_di5dy8.jpg"
+                                                        alt="profile"
+                                                        className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300"
+                                                    />
+                                                )}
+
+                                                <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-[#0A0A0F]"></div>
+                                            </div>
+
+                                            <div className="flex-1 min-w-0">
+                                                <div className="flex justify-between items-center">
+                                                    <h3 className="text-accent font-semibold truncate">
+                                                        {item.atFrontUser?.firstName || "CodeSarthi"} {item.atFrontUser?.lastName || "User"}
+                                                    </h3>
+                                                    <span className="text-xs text-accent">
+                                                        {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                    </span>
+                                                </div>
+                                                <p className="text-sm text-gray-900 truncate mt-0.5">
+                                                    {item.atFrontUser?._id ? (item.LastMsg?.content || "Hey! let's collab") : ("")}
+
+                                                </p>
+                                            </div>
+
+                                            {/* Unread badge - commented but styled */}
+                                            {(item.unReadCount != 0 && item.atFrontUser.username == user.username) && (
+                                                <div className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white text-xs flex items-center justify-center ">
+                                                    {item.unReadCount}
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+
+                                </div>
+
+                                {/* Start Collabing CTA */}
+                                <div className="mt-6 px-4 py-2 rounded-xl bg-base-300  border border-accent text-center group cursor-pointer ">
+                                    <div className="flex items-center justify-center gap-1 text-accent">
+                                        <span className="text-lg font-medium">Start New Collab</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" className="group-hover:translate-x-1 transition-transform">
+                                            <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 12h16m-6-6l6 6-6 6" />
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                <div className="mt-5">
+                                    {connectionList.map((item) =>
+                                        <li
+                                            key={item.userId}
+                                            className="group relative flex items-center gap-3 mb-1 border border-base-300 p-3 rounded-xl bg-base-100 hover:bg-base-300 transition-all duration-300 cursor-pointer hover:border-secondary  "
+                                            onClick={() => {
+                                                setMessages([]);
+                                                setchatActive(true);
+                                                setChatingPhotoUrl(item.photoUrl);
+                                                setChatingUserId(item.userId);
+                                                setChatingFirstName(item.FirstName);
+                                                setChatingLastName(item.LastName);
+                                                setChatingUsername(item.username);
+                                                setChatingGmail(item.gmail);
+                                                setChatingMiddleName(item.MiddleName);
+                                                setChatingIsVerified(item.atFrontUser?.isVerified);
+                                                setChatingCollege(item.atFrontUser?.college);
+                                                setChatingProfession(item.atFrontUser?.profession);
+                                                setChatingSkills(item.atFrontUser?.skills);
+                                                setChatingAbout(item.about);
+                                            }}
+                                        >
+                                            <img
+                                                src={item.photoUrl}
+                                                alt="profile"
+                                                className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300"
+                                            />
+
+                                            <div className="flex flex-col">
+                                                <span className="text-accent text-xl font-medium">
+                                                    {item.FirstName} {item.LastName}
+                                                </span>
+
+                                                <span className="text-gray-800 text-sm pl-1">
+                                                    {!item.lastMsg && <span>Hey! let's collab</span>}
+                                                </span>
+                                            </div>
+
+
+                                        </li>
+
+                                    )}
+                                </div>
+
+                            </div>
+                        )}
+                        {section == 2 && (
+                            <div className="mt-6 space-y-1 overflow-y-auto max-h-[calc(100vh-250px)] pr-2 custom-scrollbar">
+
+                                <div className="mb-5">
+
                                     <div
-                                        key={index}
+
                                         className="group relative flex items-center gap-3 mb-1 p-3 rounded-xl bg-base-100 hover:bg-base-300 transition-all duration-300 cursor-pointer border-2  hover:border-secondary border-base-300  "
                                         onClick={() => {
                                             setMessages([]);
                                             setchatActive(true);
-                                            setChatingPhotoUrl(item.atFrontUser?.photoUrl?.url);
-                                            setChatingUserId(item.atFrontUser?._id);
-                                            setChatingFirstName(item.atFrontUser?.firstName);
-                                            setChatingLastName(item.atFrontUser?.lastName);
-                                            setChatingUsername(item.atFrontUser?.username);
-                                            setChatingGmail(item.atFrontUser?.gmail);
-                                            setChatingMiddleName(item.atFrontUser?.middleName);
-                                            loadMessages(item.LastMsg?.conversation);
-                                            setChatingIsVerified(item.atFrontUser?.isVerified);
-                                            setChatingCollege(item.atFrontUser?.college);
-                                            setChatingProfession(item.atFrontUser?.profession);
-                                            setChatingSkills(item.atFrontUser?.skills);
-                                            setChatingAbout(item.atFrontUser?.about);
+                                            setChatingPhotoUrl("https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776357892/ASCII_Earth_is_a_Space_Station_dwdtcb.jpg");
+                                            setChatingFirstName("Global");
+                                            setChatingLastName("Community");
+                                            setChatingUserId("global");
+                                            setChatingUsername("gdc@codesarthi");
+                                            setChatingGmail("gdc@codesarthi.in");
+                                            setChatingMiddleName("Developers");
+                                            loadMessages("kuch bhii");
+                                            setChatingIsVerified(true);
+                                            setChatingCollege("Code Sarthi");
+                                            setChatingProfession("Developers");
+                                            setChatingAbout("Welcome to the Global Developers Community where the developers can connect with each other and share their knowledge and experience.");
                                         }}
                                     >
                                         {/* Online indicator */}
                                         <div className="relative">
 
-                                            {item.atFrontUser?.photoUrl?.url ? (<img
-                                                src={item.atFrontUser?.photoUrl?.url}
+                                            <img
+                                                src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776357892/ASCII_Earth_is_a_Space_Station_dwdtcb.jpg"
                                                 alt="profile"
-                                                className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300"
+                                                className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-1 ring-accent group-hover:ring-secondary transition-all duration-300"
                                             />
-                                            ) : (
-                                                <img
-                                                    src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776259172/Pinterest_Pin_di5dy8.jpg"
-                                                    alt="profile"
-                                                    className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300"
-                                                />
-                                            )}
 
-                                            <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-[#0A0A0F]"></div>
+
+
+
+
                                         </div>
 
                                         <div className="flex-1 min-w-0">
                                             <div className="flex justify-between items-center">
                                                 <h3 className="text-accent font-semibold truncate">
-                                                    {item.atFrontUser?.firstName || "CodeSarthi"} {item.atFrontUser?.lastName || "User"}
+                                                    Global Developers Community
                                                 </h3>
                                                 <span className="text-xs text-accent">
                                                     {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                 </span>
                                             </div>
                                             <p className="text-sm text-gray-900 truncate mt-0.5">
-                                                {item.atFrontUser?._id ? (item.LastMsg?.content || "Hey! let's collab") : ("")}
+                                                KUCH BHII
 
                                             </p>
                                         </div>
 
                                         {/* Unread badge - commented but styled */}
-                                        {(item.unReadCount != 0 && item.atFrontUser.username == user.username) && (
+                                        {/* {(item.unReadCount != 0 && item.atFrontUser.username == user.username) && (
                                             <div className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white text-xs flex items-center justify-center ">
-                                                {item.unReadCount}
+                                                2
                                             </div>
-                                        )}
+                                        )} */}
                                     </div>
-                                ))}
 
-                            </div>
 
-                            {/* Start Collabing CTA */}
-                            <div className="mt-6 px-4 py-2 rounded-xl bg-base-300  border border-accent text-center group cursor-pointer ">
-                                <div className="flex items-center justify-center gap-1 text-accent">
-                                    <span className="text-lg font-medium">Start New Collab</span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" className="group-hover:translate-x-1 transition-transform">
-                                        <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 12h16m-6-6l6 6-6 6" />
-                                    </svg>
                                 </div>
+
+                                {/* Start Collabing CTA
+                                <div className="mt-6 px-4 py-2 rounded-xl bg-base-300  border border-accent text-center group cursor-pointer ">
+                                    <div className="flex items-center justify-center gap-1 text-accent">
+                                        <span className="text-lg font-medium">Start New Collab</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" className="group-hover:translate-x-1 transition-transform">
+                                            <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 12h16m-6-6l6 6-6 6" />
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                <div className="mt-5">
+                                    {connectionList.map((item) =>
+                                        <li
+                                            key={item.userId}
+                                            className="group relative flex items-center gap-3 mb-1 border border-base-300 p-3 rounded-xl bg-base-100 hover:bg-base-300 transition-all duration-300 cursor-pointer hover:border-secondary  "
+                                            onClick={() => {
+                                                setMessages([]);
+                                                setchatActive(true);
+                                                setChatingPhotoUrl(item.photoUrl);
+                                                setChatingUserId(item.userId);
+                                                setChatingFirstName(item.FirstName);
+                                                setChatingLastName(item.LastName);
+                                                setChatingUsername(item.username);
+                                                setChatingGmail(item.gmail);
+                                                setChatingMiddleName(item.MiddleName);
+                                                setChatingIsVerified(item.atFrontUser?.isVerified);
+                                                setChatingCollege(item.atFrontUser?.college);
+                                                setChatingProfession(item.atFrontUser?.profession);
+                                                setChatingSkills(item.atFrontUser?.skills);
+                                                setChatingAbout(item.about);
+                                            }}
+                                        >
+                                            <img
+                                                src={item.photoUrl}
+                                                alt="profile"
+                                                className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300"
+                                            />
+
+                                            <div className="flex flex-col">
+                                                <span className="text-accent text-xl font-medium">
+                                                    {item.FirstName} {item.LastName}
+                                                </span>
+
+                                                <span className="text-gray-800 text-sm pl-1">
+                                                    {!item.lastMsg && <span>Hey! let's collab</span>}
+                                                </span>
+                                            </div>
+
+
+                                        </li>
+
+                                    )}
+                                </div> */}
+
                             </div>
-
-                            <div className="mt-5">
-                                {connectionList.map((item) =>
-                                    <li
-                                        key={item.userId}
-                                        className="group relative flex items-center gap-3 mb-1 border border-base-300 p-3 rounded-xl bg-base-100 hover:bg-base-300 transition-all duration-300 cursor-pointer hover:border-secondary  "
-                                        onClick={() => {
-                                            setMessages([]);
-                                            setchatActive(true);
-                                            setChatingPhotoUrl(item.photoUrl);
-                                            setChatingUserId(item.userId);
-                                            setChatingFirstName(item.FirstName);
-                                            setChatingLastName(item.LastName);
-                                            setChatingUsername(item.username);
-                                            setChatingGmail(item.gmail);
-                                            setChatingMiddleName(item.MiddleName);
-                                            setChatingIsVerified(item.atFrontUser?.isVerified);
-                                            setChatingCollege(item.atFrontUser?.college);
-                                            setChatingProfession(item.atFrontUser?.profession);
-                                            setChatingSkills(item.atFrontUser?.skills);
-                                            setChatingAbout(item.about);
-                                        }}
-                                    >
-                                        <img
-                                            src={item.photoUrl}
-                                            alt="profile"
-                                            className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300"
-                                        />
-
-                                        <div className="flex flex-col">
-                                            <span className="text-accent text-xl font-medium">
-                                                {item.FirstName} {item.LastName}
-                                            </span>
-
-                                            <span className="text-gray-800 text-sm pl-1">
-                                                {!item.lastMsg && <span>Hey! let's collab</span>}
-                                            </span>
-                                        </div>
-
-
-                                    </li>
-
-                                )}
-                            </div>
-
-                        </div>
-
-
+                        )}
                     </div>
                 )}
                 {profileOpen && (
@@ -814,12 +936,14 @@ const Discussions = () => {
                                     <div>
                                         <div className="text-secondary text-xl font-semibold">
 
-                                            {chatingUserId ? (chatingFirstName + " " + chatingLastName) : ("CodeSarthi User")}
+                                            {chatingUserId ? (chatingFirstName + " " + chatingMiddleName + " " + chatingLastName) : ("CodeSarthi User")}
                                         </div>
-                                        <div className="flex items-center gap-1 mt-0.5">
-                                            <div className="w-2 h-2 bg-green-600 rounded-full animate-pulse"></div>
-                                            <span className="text-xs text-green-600">Online</span>
-                                        </div>
+                                        {section != 2 && (
+                                            <div className="flex items-center gap-1 mt-0.5">
+                                                <div className="w-2 h-2 bg-green-600 rounded-full animate-pulse"></div>
+                                                <span className="text-xs text-green-600">Online</span>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 
