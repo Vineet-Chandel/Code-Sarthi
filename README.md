@@ -1,6 +1,6 @@
 # 🔐 Authentication API
 
-### 1  ➤ Sign Up
+## 1  ➤ Sign Up
 Creates a new user account and returns user data with authentication cookie.
 
 ```
@@ -51,7 +51,7 @@ POST /auth/signup
 
 ---
 
-### 2 ➤ Sign In
+## 2 ➤ Sign In
 login the existing user after authenticating them. 
 
 ```
@@ -91,7 +91,7 @@ POST /auth/signin
 
 
 
-### 3 ➤ Sign Out
+## 3 ➤ Sign Out
 Logs out the currently authenticated user by clearing the authentication cookie. 
 
 ```
@@ -133,7 +133,7 @@ Both endpoints require:
 
 ---
 
-# 📩 1. Send Verification OTP
+### 📩 1. Send Verification OTP
 
 ### ➤ Send Otp
 ```
@@ -179,7 +179,7 @@ No body required
 ```
 
 
-# 📩 1. To Verify OTP
+### 📩 1. To Verify OTP
 
 ### ➤ Verify Otp
 ```
