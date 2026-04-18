@@ -77,7 +77,7 @@ const PasswordSecuritySettings = () => {
     const [newPaass2, setNewPaass2] = useState("");
     const [token1, setToken1] = useState("");
     const [token2, setToken2] = useState("");
-    const [show, setShow] = useState(true);
+    const [show, setShow] = useState(false);
     const [show1, setShow1] = useState(false);
     const [show2, setShow2] = useState(false);
     const [newGmail, setNewGmailId] = useState("");
@@ -110,6 +110,7 @@ const PasswordSecuritySettings = () => {
         setShow2(false)
         setNewGmailId("")
         setNewUsername("")
+        setShow(false);
     }
     const [showNewPass1, setShowNewPass1] = useState(false);
     // Verify Email
@@ -310,11 +311,13 @@ const PasswordSecuritySettings = () => {
             setIsSending(false);
         }
     }
+
+
     const newRenewPassChange = async () => {
         try {
             if (isSending) return;
             setError("")
-
+            setIsSending(true)
             if (!newPaass2.trim()) {
                 setError("Enter new password first");
                 return;
@@ -331,8 +334,12 @@ const PasswordSecuritySettings = () => {
             setNewPaass2("");
             setShow(false);
             fetchUser();
+            setIsSending(false);
         } catch (err) {
             setError(err?.response?.data?.message || "OTP verification failed");
+        }
+        finally {
+            setIsSending(false);
         }
     }
 
@@ -577,7 +584,7 @@ const PasswordSecuritySettings = () => {
                             {activeChange?.index === 3 && (
                                 <>
 
-                                    {show && (<>
+                                    {!isVerified4 && (<div className='flex flex-col gap-3'>
                                         <input
                                             placeholder="Old Password"
                                             className="focus:placeholder:text-secondary-content w-full text-center py-2.5 sm:py-3 px-4 pr-12 text-sm sm:text-base rounded-xl bg-base-100 border border-accent outline-none placeholder:text-neutral text-secondary"
@@ -597,8 +604,14 @@ const PasswordSecuritySettings = () => {
                                             onClick={newRenewPassChange}
 
                                         >
-                                            Confirm New Password
-                                        </button></>)}
+
+
+                                            {isSending ? (
+                                                <div className='flex gap-3 justify-center items-center'><p>Confirming New Password</p>   <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#9f2d00" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg>
+                                                </div>) : (<div className='flex gap-1 justify-center items-center'><p> Confirm New Password</p>   <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><g fill="none" stroke="#9f2d00" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}><path d="M7.51 14.353V6.096c0-.821.609-1.59 1.432-1.59s1.577.653 1.577 1.474v4.281m0 0l-.009 1.176m.009-1.176c.562-2.117 3.152-1.305 2.994.356c-.003.03 0 .738 0 .738m0 0v1.14m0-1.14c.283-1.91 3.422-1.963 3.022.95m0 0l-.023.688m.023-.688c.469-2.01 3.035-1.577 2.967.276v3.687c-.003 1.576-.311 2.33-1.125 3.279c-.16.186-.316.379-.432.595c-.428.793-.232 1.01-.303 1.85M7.51 10.414c-1.32 1.194-2.209 2.284-2.475 2.61c-.89 1.351-.663 2.237.601 4.04c.941 1.34 1.806 2.304 1.872 2.38c.673.76.614 1.263.614 2.558"></path><path d="M13.034 6c0-2.21-1.795-4-4.01-4a4.005 4.005 0 0 0-4.008 4"></path></g></svg></div>)}
+
+                                        </button>
+                                    </div>)}
 
 
                                     {errrorInVerification && (<div className="space-y-2 mt-5">
@@ -626,7 +639,7 @@ const PasswordSecuritySettings = () => {
                             {/* ================= CHANGE EMAIL ================= */}
                             {activeChange?.index === 4 && (
                                 <div>
-                                    {!otpSentEmail1 && (
+                                    {(!otpSentEmail1 && !show1) && (
 
                                         <button className="text-secondary w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-secondary transition-all duration-300 flex justify-center items-center gap-4" onClick={sendVerificationEmailForGmailChange}>
                                             {isSending1 ? (<div className="flex gap-2 justify-center items-center text-accent"> Sending Verification OTP<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#9f2d00" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg></div>) : (<div className="flex gap-2 justify-center items-center text-accent">

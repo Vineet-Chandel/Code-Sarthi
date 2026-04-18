@@ -198,7 +198,7 @@ authRouter.get("/auth/verify-email", userAuth, async (req, res) => {
                 <!-- Preheader (hidden preview text) -->
                 <div
                     style="display:none;font-size:1px;color:#f0f2ff;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">
-                    Your CodeSarthi verification code is {{OTP}} — expires in 2 minutes.
+                    Your CodeSarthi verification code is ${otp} — expires in 2 minutes.
                 </div>
 
                 <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:32px 16px;">
@@ -382,7 +382,7 @@ authRouter.get("/auth/verify-email", userAuth, async (req, res) => {
                                         <!-- Ignore notice -->
                                         <p style="margin:0; font-size:13px; color:#9b9fc4; text-align:center; line-height:1.6;">
                                             Didn't request this? You can safely ignore this email, or
-                                            <a href="mailto:support@codesarthi.com"
+                                            <a href="mailto:codesarthi.help@gmail.com"
                                                 style="color:#4f46e5; font-weight:600; text-decoration:none;">contact our support
                                                 team</a>
                                             if something seems wrong.
@@ -399,19 +399,19 @@ authRouter.get("/auth/verify-email", userAuth, async (req, res) => {
                                             style="margin-bottom:14px;">
                                             <tr>
                                                 <td style="padding:0 12px;">
-                                                    <a href="https://codesarthi.com/help"
+                                                    <a href="https://www.codesarthi.in/help-center"
                                                         style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Help
                                                         Center</a>
                                                 </td>
                                                 <td style="font-size:13px; color:#dde0f5;">|</td>
                                                 <td style="padding:0 12px;">
-                                                    <a href="https://codesarthi.com/privacy"
+                                                    <a href="https://www.codesarthi.in/privacy-&-policy-hub"
                                                         style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Privacy
                                                         Policy</a>
                                                 </td>
                                                 <td style="font-size:13px; color:#dde0f5;">|</td>
                                                 <td style="padding:0 12px;">
-                                                    <a href="mailto:support@codesarthi.com"
+                                                    <a href="mailto:codesarthi.help@gmail.com"
                                                         style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Contact
                                                         Support</a>
                                                 </td>
@@ -785,7 +785,7 @@ authRouter.post("/auth/verify-email", userAuth, async (req, res) => {
                             <p
                                 style="margin:20px 0 0; font-size:13px; color:#9b9fc4; text-align:center; line-height:1.6;">
                                 Questions? Reach us at
-                                <a href="mailto:support@codesarthi.com"
+                                <a href="mailto:codesarthi.help@gmail.com"
                                     style="color:#4f46e5; font-weight:600; text-decoration:none;">codesarthi.help@gmail.com</a>
                             </p>
 
@@ -800,19 +800,19 @@ authRouter.post("/auth/verify-email", userAuth, async (req, res) => {
                                 style="margin-bottom:14px;">
                                 <tr>
                                     <td style="padding:0 12px;">
-                                        <a href="https://codesarthi.com/help"
+                                        <a href="https://www.codesarthi.in/help-center"
                                             style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Help
                                             Center</a>
                                     </td>
                                     <td style="font-size:13px; color:#dde0f5;">|</td>
                                     <td style="padding:0 12px;">
-                                        <a href="https://codesarthi.com/privacy"
+                                        <a href="https://www.codesarthi.in/privacy-&-policy-hub"
                                             style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Privacy
                                             Policy</a>
                                     </td>
                                     <td style="font-size:13px; color:#dde0f5;">|</td>
                                     <td style="padding:0 12px;">
-                                        <a href="mailto:support@codesarthi.com"
+                                        <a href="mailto:codesarthi.help@gmail.com"
                                             style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Contact
                                             Support</a>
                                     </td>

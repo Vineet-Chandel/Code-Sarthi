@@ -153,7 +153,7 @@ chatRouter.post("/send-message", userAuth, upload.single("file"), async (req, re
 
         //Store message in database
         const message = new Msg({
-            conversation: conversation._id,
+            conversationId: conversation._id,
             sender: senderId,
             receiver: receiverId,
             content,
@@ -256,64 +256,58 @@ chatRouter.post("/get-convo", userAuth, async (req, res) => {
 chatRouter.post("/get-message/:conversationId", userAuth, async (req, res) => {
     const { conversationId } = req.params;
     const userId = req.user._id;
+
     try {
         let conversation = await Convo.findById(conversationId);
 
-        // is the conversation exists or not
         if (!conversation) {
             return res.status(404).json({
                 success: false,
                 message: "Convo not found"
-            })
+            });
         }
-        //User must be part of conversation
+
         if (!conversation.Participants.some(
             p => p.toString() === userId.toString()
         )) {
             return res.status(403).json({
                 success: false,
-                message: "Not Authorized to view this convo"
-            })
-
+                message: "Not Authorized"
+            });
         }
 
-
-        //Msg.find({ conversation })
-        const messages = await Msg.find({ conversation: conversationId })
+        // ✅ FIXED
+        const messages = await Msg.find({ conversationId: conversationId })
             .populate("sender", "username photoUrl")
             .populate("receiver", "username photoUrl")
-            .sort({ createdAt: 1 }) //old → new
+            .sort({ createdAt: 1 });
 
-
+        // ✅ FIXED
         await Msg.updateMany(
             {
-                conversation: conversationId,
+                conversationId: conversationId,
                 receiver: userId,
-                messageStatus: { $in: ["send", "delivered"] }
+                messageStatus: { $in: ["sent", "delivered"] }
             },
-            { $set: { messageStatus: "read" } },
-        )
-
-
-        // updated the read count to the zero
+            { $set: { messageStatus: "read" } }
+        );
 
         conversation.unReadCount = 0;
-
-
-
-
         await conversation.save();
+
         res.status(200).json({
             success: true,
-            message: "Message Retrived", messages
-        })
+            message: "Messages Retrieved",
+            messages
+        });
+
     } catch (error) {
         res.status(500).json({
             success: false,
             message: error.message,
         });
     }
-})
+});
 //mannually marking as read
 chatRouter.post("/mark-read", userAuth, async (req, res) => {
     const { messageIds } = req.body;

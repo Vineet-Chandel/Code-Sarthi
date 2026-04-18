@@ -104,6 +104,10 @@ const userSchema = new Schema(
         dateOfPasswordChange: {
             type: Date,
             default: null
+        },
+        isAdmin: {
+            type: Boolean,
+            default: false
         }
     },
     {

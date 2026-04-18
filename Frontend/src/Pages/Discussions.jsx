@@ -9,7 +9,8 @@ import { FaUniversity } from "react-icons/fa";
 import { BsPersonWorkspace } from "react-icons/bs";
 import { IoBarChart } from "react-icons/io5";
 import { useMemo } from "react";
-import { io } from "socket.io-client";
+
+//emoji section
 import {
     smileys_people,
     animals_nature,
@@ -20,8 +21,6 @@ import {
     symbols,
     flags
 } from "./CollectionEmojieData";
-
-
 const emojis = {
     smileys_people,
     animals_nature,
@@ -32,10 +31,12 @@ const emojis = {
     symbols,
     flags
 };
+
+
 const Discussions = () => {
     //using the dispatch 
     const dispatch = useDispatch();
-    const socketRef = useRef(null);
+
     const pickerRef = useRef(null);
     const connections = useSelector(state => state.connections?.users || []);
     const user = useSelector(state => state.user?.user?.DATA);
@@ -60,24 +61,17 @@ const Discussions = () => {
     const [chatingProfession, setChatingProfession] = useState("");
     const [chatingSkills, setChatingSkills] = useState([]);
     const [chatingAbout, setChatingAbout] = useState("");
-
-
-
+    const currentUserId = user?._id;
     const [search, setSearch] = useState("");
-
-
-
-
     //for switching between the teams and connections
     const [section, setSection] = useState(1);
-
     const [showPicker, setShowPicker] = useState(false);
-
     //chats 
     const chatMessages = useSelector(state => state.chats?.users || []);
-    //connections user 
+    const [typingUsers, setTypingUsers] = useState(new Set());
 
 
+    //fetching the connections 
     const connectionUser = async () => {
         try {
             const response = await axios.get(
@@ -94,6 +88,7 @@ const Discussions = () => {
     useEffect(() => {
         connectionUser();
     }, []);
+
     //filtered connection list 
     const connectionList = useMemo(() => {
         return connections.filter(
@@ -103,7 +98,7 @@ const Discussions = () => {
         );
     }, [connections, chatMessages]);
 
-
+    //filtered chats list 
     const filteredChats = useMemo(() => {
         return chatMessages.filter(user =>
             user.atFrontUser?.firstName
@@ -131,8 +126,6 @@ const Discussions = () => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-
-    const currentUserId = user?._id;
     //chats api
     const convo = async () => {
         try {
@@ -151,7 +144,6 @@ const Discussions = () => {
         convo();
     }, [messages]);
 
-
     //onclicking outer box focusing in the input box
     //for the ui optimization
     const inputRef = useRef(null);
@@ -169,6 +161,8 @@ const Discussions = () => {
     const [isCopied, setIsCopied] = useState(false);
     const [msg, setMsg] = useState("");
     const [msgById, setMsgById] = useState("");
+
+    // function to copy the text on the clipboard
     const handleCopy = async (text) => {
         try {
             await navigator.clipboard.writeText(text);
@@ -178,7 +172,7 @@ const Discussions = () => {
         }
     };
 
-
+    //message deleting segment!
     const [deleteEveryoneStatus, setDeleteEveryoneStatus] = useState("toDelete");
     const [deleteMeStatus, setDeleteMeStatus] = useState("toDelete");
     const deleteMessage = async (deleteType, messageId) => {
@@ -203,12 +197,11 @@ const Discussions = () => {
             console.log(error?.data.message)
         }
     }
-
     useEffect(() => {
         deleteMessage(deleteType, messageId);
     }, [deleteType])
 
-    // // onsending the message it goes to down 
+    // onsending the message it goes to down 
     const bottomRef = useRef(null);
     const [scrollDown, setScrollDown] = useState(false);
     const chatRef = useRef(null);
@@ -217,50 +210,16 @@ const Discussions = () => {
         setScrollDown(false);
     }, [messages, scrollDown]);
 
-    // useEffect(() => {
-
-    //     socketRef.current = io(BASE_URL, {
-    //         withCredentials: true
-    //     });
-    //     if (!currentUserId) return;
-    //     socketRef.current.on("connect", () => {
-    //         console.log("Socket Connected:", socketRef.current.id);
-
-    //         if (currentUserId) {
-    //             socketRef.current.emit("userConnected", currentUserId);
-    //         }
-    //     });
-
-    //     // socketRef.current.on("user_typing", (data) => {
-    //     //     setTypingUser(data.isTyping);
-    //     // });
-
-    //     socketRef.current.on("receiveMessage", (message) => {
-
-    //         setMessages(prev => {
-
-    //             const exists = prev.some(m => m._id === message._id);
-    //             if (exists) return prev;
-
-    //             return [...prev, message];
-    //         });
-
-    //     });
-    //     return () => {
-    //         socketRef.current.disconnect();
-    //     };
-
-    // }, [currentUserId]);
+    const socketRef = useRef(null);
 
 
+    //function to send the message
     const sendMessage = async () => {
         if (!messageText.trim()) return;
 
         const tempId = Date.now(); // temporary unique id
 
-        console.log(currentUserId);
-        console.log(user._id);
-        console.log(connections.userId);
+
 
 
         const tempMessage = {
@@ -299,7 +258,12 @@ const Discussions = () => {
                 )
             );
 
-            socketRef.current.emit("sendMessage", realMessage);
+            socketRef.current.send(JSON.stringify({
+                type: "message",
+                senderId: currentUserId,
+                receiverId: chatingUserId,
+                text: tempMessage.content
+            }));
 
         } catch (error) {
             setMessages(prev =>
@@ -311,9 +275,12 @@ const Discussions = () => {
             );
         }
     };
+
+    //function to load the messages
     const loadMessages = async (conversationId) => {
 
         try {
+
             setIsLoadingChats(true)
             const res = await axios.post(
                 `${BASE_URL}/get-message/${conversationId}`,
@@ -322,7 +289,7 @@ const Discussions = () => {
             );
 
             const msgs = res.data.messages;
-            console.log(msgs);
+
 
             setMessages(msgs.map(m => ({ ...m, status: "sent" })));
 
@@ -362,50 +329,125 @@ const Discussions = () => {
     //     });
     // };
 
+    const [onlineUsers, setOnlineUsers] = useState(new Set());
 
 
-    // const makeReset = () => {
-    //     setIsProfileOpen(false);
-    //     setSelectedUserID(null);
-    // }
+    useEffect(() => {
+
+        if (!chatActive) return;
+
+        const socket = new WebSocket("ws://localhost:8080");
+        socketRef.current = socket;
+
+        socket.onopen = () => {
+            console.log("WebSocket connected");
+
+            socket.send(JSON.stringify({
+                type: "register",
+                userId: currentUserId
+            }));
+        };
+
+        socket.onmessage = (event) => {
+            const parsed = JSON.parse(event.data);
+
+            switch (parsed.type) {
+
+                case "message":
+                    setMessages(prev => [
+                        ...prev,
+                        {
+                            _id: crypto.randomUUID(),
+                            content: parsed.text,
+                            sender: { _id: parsed.senderId },
+                            createdAt: parsed.createdAt,
+                            status: "sent"
+                        }
+                    ]);
+                    break;
+
+                case "online":
+                    setOnlineUsers(prev => {
+                        const updated = new Set(prev);
+                        updated.add(parsed.userId);
+                        return updated;
+                    });
+
+                    break;
+
+                case "offline":
+                    setOnlineUsers(prev => {
+                        const updated = new Set(prev);
+                        updated.delete(parsed.userId);
+                        return updated;
+                    });
+                    break;
+
+                case "online-users":
+                    setOnlineUsers(new Set(parsed.users));
+                    break;
+
+                case "typing":
+                    setTypingUsers(prev => {
+                        const updated = new Set(prev);
+
+                        if (parsed.isTyping) {
+                            updated.add(parsed.senderId);
+                        } else {
+                            updated.delete(parsed.senderId);
+                        }
+
+                        return updated;
+                    });
+                    break;
+                default:
+                    console.log("Unknown event:", parsed);
+            }
+        };
+
+        socket.onclose = () => {
+            console.log("WebSocket disconnected");
+        };
+
+        socket.onerror = (err) => {
+            console.error("WebSocket error:", err);
+        };
+
+        return () => {
+            socket.close(); // 🔥 important
+        };
+
+    }, [chatActive, currentUserId]);
 
 
 
-    //fetching the connections 
-    // const chats = async () => {
-    //     try {
-    //         const response = await axios.get(
-    //             `${BASE_URL}/chats`,
-    //             { withCredentials: true }
-    //         );
-    //         dispatch(addChatsUser(response?.data?.data || []));
-
-
-    //     } catch (err) {
-    //         console.error(err?.message || err);
-    //     }
-    // };
 
 
 
+    const handleTyping = (value) => {
 
-    //fetching the connections 
-    // const connectionUser = async () => {
-    //     try {
-    //         const response = await axios.get(
-    //             `${BASE_URL}/user/connections`,
-    //             { withCredentials: true }
-    //         );
-    //         dispatch(addConnectionUser(response.data.data));
+        socketRef.current?.send(JSON.stringify({
+            type: "typing",
+            senderId: currentUserId,
+            receiverId: chatingUserId,
+            isTyping: true
+        }));
+
+        // stop typing after delay
+        clearTimeout(window.typingTimeout);
+
+        window.typingTimeout = setTimeout(() => {
+            socketRef.current?.send(JSON.stringify({
+                type: "typing",
+                senderId: currentUserId,
+                receiverId: chatingUserId,
+                isTyping: false
+            }));
+        }, 1000);
+    };
 
 
-    //     } catch (err) {
-    //         console.error(err?.message || err);
-    //     }
-    // };
-    // useEffect(() => {
-    //     connectionUser();
-    // }, []);
+
 
 
 
@@ -483,7 +525,7 @@ const Discussions = () => {
                                                 setChatingUsername(item.atFrontUser?.username);
                                                 setChatingGmail(item.atFrontUser?.gmail);
                                                 setChatingMiddleName(item.atFrontUser?.middleName);
-                                                loadMessages(item.LastMsg?.conversation);
+                                                loadMessages(item.LastMsg?.conversationId);
                                                 setChatingIsVerified(item.atFrontUser?.isVerified);
                                                 setChatingCollege(item.atFrontUser?.college);
                                                 setChatingProfession(item.atFrontUser?.profession);
@@ -507,7 +549,7 @@ const Discussions = () => {
                                                     />
                                                 )}
 
-                                                <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-[#0A0A0F]"></div>
+
                                             </div>
 
                                             <div className="flex-1 min-w-0">
@@ -915,7 +957,6 @@ const Discussions = () => {
 
                         </div >
                     ) : (
-
                         <div className="flex flex-col h-full relative">
                             {/* TOP HEADER - Premium */}
                             <div className="sticky top-0 z-20 w-full border-b border-secondary flex items-center justify-between px-6 py-2 bg-base-100 ">
@@ -936,13 +977,22 @@ const Discussions = () => {
                                     <div>
                                         <div className="text-secondary text-xl font-semibold">
 
-                                            {chatingUserId ? (chatingFirstName + " " + chatingMiddleName + " " + chatingLastName) : ("CodeSarthi User")}
+                                            {chatingUserId ? (chatingFirstName + " " + (chatingMiddleName ? chatingMiddleName : "") + " " + chatingLastName) : ("CodeSarthi User")}
                                         </div>
                                         {section != 2 && (
-                                            <div className="flex items-center gap-1 mt-0.5">
-                                                <div className="w-2 h-2 bg-green-600 rounded-full animate-pulse"></div>
-                                                <span className="text-xs text-green-600">Online</span>
-                                            </div>
+
+                                            onlineUsers.has(chatingUserId) ? (
+                                                <div className="flex items-center gap-1 mt-0.5">
+                                                    <div className="w-2 h-2 bg-green-600 rounded-full animate-pulse"></div>
+                                                    <span className="text-xs text-green-600">Online</span>
+                                                </div>
+                                            ) : (
+                                                <div className="flex items-center gap-1 mt-0.5">
+                                                    <div className="w-2 h-2 bg-red-600 rounded-full animate-pulse"></div>
+                                                    <span className="text-xs text-red-600">Offline</span>
+                                                </div>
+                                            )
+
                                         )}
                                     </div>
                                 </div>
@@ -958,18 +1008,17 @@ const Discussions = () => {
                             </div>
 
                             {/* MESSAGES AREA - Premium Bubbles */}
-                            <div className="flex-1 overflow-y-auto p-6 space-y-2 custom-scrollbar bg-base-100" >
+                            <div className="flex-1 overflow-y-auto p-6 space-y-2 custom-scrollbar bg-base-100 " style={{ backgroundImage: "url('/img/img.png')", backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}>
                                 {messages.map((msg, index) => {
                                     const isMe = msg?.sender?._id === currentUserId;
 
                                     return isMe ? (
                                         // MY MESSAGE - Premium
-
                                         <div key={msg._id} className="flex justify-end ">
                                             {!(msg.deletedFor?.includes(user._id)) && (
                                                 <div className="relative max-w-[70%] group">
 
-                                                    <div className="bg-base-300 text-accent px-4 md:px-5 py-2.5 md:py-3 rounded-2xl rounded-br-md transition-all duration-300  hover:scale-[1.01] font-bold">
+                                                    <div className="bg-base-100 text-accent px-4 md:px-5 py-2.5 md:py-3 rounded-2xl rounded-br-md transition-all duration-300  hover:scale-[1.01] font-bold">
 
                                                         <div className="relative flex items-center gap-2">
 
@@ -1023,30 +1072,11 @@ const Discussions = () => {
 
                                             )}
                                         </div>
-
-
                                     ) : (
                                         // OTHER USER MESSAGE - Premium
+                                        <div key={msg._id} className="flex gap-2 items-end ">
 
-                                        <div key={msg._id} className="flex gap-3 items-end ">
 
-                                            {!(msg.deletedFor?.includes(user._id)) && (
-                                                chatingUserId ? (
-                                                    <img
-                                                        src={msg.sender?.photoUrl?.url}
-                                                        className="w-8 h-8 rounded-full object-cover 
-            ring-1 ring-secondary
-            transition-transform duration-200 hover:scale-110"
-                                                    />
-                                                ) : (
-                                                    <img
-                                                        src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776259172/Pinterest_Pin_di5dy8.jpg"
-                                                        className="w-8 h-8 rounded-full object-cover 
-            ring-1 ring-secondary
-            transition-transform duration-200 hover:scale-110"
-                                                    />
-                                                )
-                                            )}
                                             {!(msg.deletedFor?.includes(user._id)) && (
                                                 <div className="relative max-w-[70%] group">
 
@@ -1103,14 +1133,15 @@ const Discussions = () => {
 
                                 {/* Typing indicator - optional */}
                                 <div className="flex gap-3">
-                                    <img src={chatingPhotoUrl} className="w-8 h-8 rounded-full object-cover opacity-0" />
-                                    <div className="bg-[#1A1A24] px-4 py-3 rounded-2xl rounded-bl-md">
-                                        <div className="flex gap-1">
-                                            <span className="w-2 h-2 bg-white/40 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                                            <span className="w-2 h-2 bg-white/40 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                                            <span className="w-2 h-2 bg-white/40 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                                    {true && (
+                                        <div className="bg-secondary px-4 py-3 rounded-2xl rounded-bl-md">
+                                            <div className="flex gap-1">
+                                                <span className="w-2 h-2 bg-secondary-content rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                                                <span className="w-2 h-2 bg-secondary-content rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                                                <span className="w-2 h-2 bg-secondary-content rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                                            </div>
                                         </div>
-                                    </div>
+                                    )}
                                 </div>
 
                                 <div ref={bottomRef}></div>
@@ -1277,7 +1308,7 @@ hover:bg-white/10 active:scale-95`} onClick={() => { setActiveEmojiFeild("smiley
                                     <div className="flex-1 mr-3 relative ">
                                         <input
                                             value={messageText}
-                                            onChange={(e) => setMessageText(e.target.value)}
+                                            onChange={(e) => { setMessageText(e.target.value); handleTyping(e.target.value); }}
                                             onKeyDown={handleKeyDown}
                                             type="text"
                                             placeholder="Type a message..."

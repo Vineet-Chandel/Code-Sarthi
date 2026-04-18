@@ -348,9 +348,9 @@ profileRouter.get("/profile/update-identity", userAuth, async (req, res) => {
                                                 <td style="font-size:13px; color:#7c2d12; line-height:1.5;">
                                                     <strong>Wasn't you?</strong> Do not enter this code. Someone may
                                                     have accessed your account.
-                                                    <a href="{{SECURE_ACCOUNT_URL}}"
+                                                    <span "
                                                         style="color:#c2410c; font-weight:600; text-decoration:none;">Secure
-                                                        your account immediately &rarr;</a>
+                                                        your account immediately </span>
                                                 </td>
                                             </tr>
                                         </table>
@@ -382,8 +382,8 @@ profileRouter.get("/profile/update-identity", userAuth, async (req, res) => {
                             <!-- Support -->
                             <p style="margin:0; font-size:13px; color:#9b9fc4; text-align:center; line-height:1.6;">
                                 Need help? Contact us at
-                                <a href="mailto:support@codesarthi.com"
-                                    style="color:#4f46e5; font-weight:600; text-decoration:none;">support@codesarthi.com</a>
+                                <a href="mailto:codesarthi.help@gmail.com"
+                                    style="color:#4f46e5; font-weight:600; text-decoration:none;">codesarthi.help@gmail.com</a>
                             </p>
 
                         </td>
@@ -397,19 +397,19 @@ profileRouter.get("/profile/update-identity", userAuth, async (req, res) => {
                                 style="margin-bottom:14px;">
                                 <tr>
                                     <td style="padding:0 12px;">
-                                        <a href="https://codesarthi.com/help"
+                                        <a href="https://www.codesarthi.in/help-center"
                                             style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Help
                                             Center</a>
                                     </td>
                                     <td style="font-size:13px; color:#dde0f5;">|</td>
                                     <td style="padding:0 12px;">
-                                        <a href="https://codesarthi.com/privacy"
+                                        <a href="https://www.codesarthi.in/privacy-&-policy-hub"
                                             style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Privacy
                                             Policy</a>
                                     </td>
                                     <td style="font-size:13px; color:#dde0f5;">|</td>
                                     <td style="padding:0 12px;">
-                                        <a href="mailto:support@codesarthi.com"
+                                        <a href="mailto:codesarthi.help@gmail.com"
                                             style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Contact
                                             Support</a>
                                     </td>
@@ -529,107 +529,335 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
                             from: 'CodeSarthi <nova@codesarthi.in>',
                             to: [oldGmail],
                             subject: "Security Alert",
-                            html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
-    
-        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:30px 20px;">
-            <tr>
-                <td align="center">
-    
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:500px;">
-    
-                        <!-- LOGO -->
-                        <tr>
-                            <td align="center" style="padding-bottom:30px;">
-                                <table cellpadding="0" cellspacing="0" border="0"
-                                    style="background:#000000; border-radius:20px;">
-                                    <tr>
-                                        <td style="padding:12px 24px;">
-                                            <table cellpadding="0" cellspacing="0" border="0">
-                                                <tr>
-                                                    <td>
-                                                        <img src="https://res.cloudinary.com/dj0ivep44/image/upload/v1770692070/WhatsApp_Image_2026-02-08_at_09.56.39_jrys9v.jpg"
-                                                            alt="CodeSarthi Logo" width="60" height="60"
-                                                            style="border-radius:20px; display:block;">
-                                                    </td>
-                                                    <td
-                                                        style="padding-left:10px; font-size:24px; font-weight:700; color:#ffffff;">
-                                                        CodeSarthi
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-    
-                        <!-- CARD -->
-                        <tr>
-                            <td style="
-                  background:#ffffff;
-                  background:linear-gradient(145deg,#ffffff 0%,#f8f9ff 100%);
-                  border-radius:16px;
-                  border:1px solid #e0e4ff;
-                  padding:40px 32px;
-                  text-align:center;
-                  box-shadow:0 8px 30px rgba(102,126,234,0.1);
-                ">
-    
-                                <h1 style="margin:0 0 16px 0; font-size:28px; color:#2d3748;">
-                                    Your Gmail was changed
-                                </h1>
-    
-                                
-    
-                                <p style="margin:0 0 24px 0; font-size:15px; color:#718096; line-height:1.6;">
-                                     The gmail for the CodeSarthi Account ${oldOnes} was changed to ${newChange}.
-                                </p>
-    
-                                <hr style="border:none; height:1px; background:#e2e8f0; margin:0 0 24px 0;">
-    
-                                <!-- SECURITY -->
-                                <table align="center" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:8px;">
-                                    <tr>
-    
-                                        <td style="padding-left:8px; font-size:13px; color:#a0aec0;">
-                                            🔒 <strong>Security Tip:</strong>Ingnore if you changed the gmail
-                                        </td>
-                                    </tr>
-                                </table>
-    
-                                <p style="margin:0; font-size:13px; color:#a0aec0; line-height:1.5;">
-                                    If you didn’t change the gmail you should change the password again by 
-                                    <a href="#" style="color:#667eea; text-decoration:none; font-weight:600;">
-                                        Forgot Password
-                                    </a>.
-                                </p>
-    
-                            </td>
-                        </tr>
-    
-                        <!-- FOOTER -->
-                        <tr>
-                            <td align="center" style="padding-top:32px;">
-                                <p style="margin:0 0 16px 0; font-size:14px; color:#718096;">
-                                   Sincerely yours,<br>
-                                   The CodeSarthi Team
-                                </p>
-    
-                                <p style="margin:0; font-size:12px; color:#a0aec0; line-height:1.5;">
-                                    © 2024 CodeSarthi. All rights reserved.<br>
-                                    Kanpur, Uttar Pradesh, India
-                                </p>
-                            </td>
-                        </tr>
-    
-                    </table>
-    
-                </td>
-            </tr>
-        </table>
-    
-    </body>
-    `,
+                            html: `<body style="margin:0; padding:0; background-color:#f0f2ff; font-family:Arial,Helvetica,sans-serif;">
+
+    <!-- Preheader -->
+    <div
+        style="display:none;font-size:1px;color:#f0f2ff;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">
+        Email change confirmation on your CodeSarthi account. If
+        this wasn't you, act now.
+    </div>
+
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:32px 16px;">
+        <tr>
+            <td align="center">
+                <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                    style="max-width:520px; border-radius:16px; overflow:hidden; border:1px solid #dde0f5; box-shadow:0 8px 40px rgba(79,70,229,0.08);">
+
+                    <!-- ===== HEADER ===== -->
+                    <tr>
+                        <td style="background:#1a1a2e; padding:28px 32px; text-align:center;">
+                            <table align="center" cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+                                    <td style="background:#0d0d1a; border-radius:14px; padding:10px 20px;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="background:#667eea; border-radius:8px; width:36px; height:36px; text-align:center; vertical-align:middle;">
+                                                    <span
+                                                        style="font-size:16px; font-weight:700; color:#ffffff; line-height:36px; display:block;">CS</span>
+                                                </td>
+                                                <td
+                                                    style="padding-left:10px; font-size:20px; font-weight:700; color:#ffffff; letter-spacing:0.3px;">
+                                                    CodeSarthi
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            <p style="margin:14px 0 0; color:#9b9fc4; font-size:13px; letter-spacing:0.4px;">EMAIL
+                                CHANGE CONFIRMATION</p>
+                        </td>
+                    </tr>
+
+                    <!-- ===== AMBER BANNER ===== -->
+                    <tr>
+                        <td style="background:#451a03; padding:28px 32px 24px; text-align:center;">
+                            <table align="center" cellpadding="0" cellspacing="0" border="0"
+                                style="margin-bottom:16px;">
+                                <tr>
+                                    <td
+                                        style="width:72px; height:72px; border-radius:50%; background:rgba(255,255,255,0.08); border:2px solid rgba(255,255,255,0.2); text-align:center; vertical-align:middle;">
+                                        <table align="center" cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="width:52px; height:52px; border-radius:50%; background:#b45309; text-align:center; vertical-align:middle;">
+                                                    <span
+                                                        style="font-size:26px; color:#ffffff; line-height:52px; display:block;">&#128231;</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            <h1 style="margin:0 0 6px; font-size:22px; font-weight:700; color:#ffffff;">
+                                Email address change confirmed
+                            </h1>
+                            <p style="margin:0; font-size:14px; color:rgba(255,255,255,0.65);">
+                                Your email address has been changed successfully
+                            </p>
+                        </td>
+                    </tr>
+
+
+                    <!-- ===== BODY ===== -->
+                    <tr>
+                        <td style="background:#ffffff; padding:32px 32px;">
+
+                            <!-- Greeting -->
+                            <p style="margin:0 0 20px; font-size:15px; color:#2d3060; line-height:1.6;">
+                                Hello, <strong style="color:#1a1a2e;">${user.firstName} ${user.lastName}</strong> 👋<br>
+                                A request was made to change the email address linked to your CodeSarthi account. Review
+                                the details carefully and use the gmail below to future login. If this wasn't
+                                you, secure your account immediately.
+                            </p>
+
+                            <!-- Info: Account Owner -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="background:#f7f8ff; border:1px solid #e4e6f8; border-radius:10px; margin-bottom:10px;">
+                                <tr>
+                                    <td style="padding:12px 16px;">
+                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                            <tr>
+                                                <td style="width:32px;">
+                                                    <div
+                                                        style="width:32px; height:32px; background:#eef0ff; border-radius:8px; text-align:center; line-height:32px; font-size:15px;">
+                                                        &#128100;</div>
+                                                </td>
+                                                <td style="padding-left:10px;">
+                                                    <p
+                                                        style="margin:0 0 2px; font-size:11px; color:#9b9fc4; text-transform:uppercase; letter-spacing:0.6px;">
+                                                        Account owner</p>
+                                                    <p
+                                                        style="margin:0; font-size:13px; color:#2d3060; font-weight:600;">
+                                                        ${user.firstName} ${user.lastName} &nbsp;·&nbsp; <span
+                                                            style="font-family:'Courier New',monospace;">${user.username}</span>
+                                                    </p>
+                                                </td>
+                                                <td align="right">
+                                                    <span
+                                                        style="display:inline-block; background:#fefce8; color:#854d0e; font-size:11px; font-weight:600; border-radius:20px; padding:3px 10px; letter-spacing:0.3px;">Old
+                                                        Gmail</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+
+
+                            <!-- Info: Time -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="background:#f7f8ff; border:1px solid #e4e6f8; border-radius:10px; margin-bottom:24px;">
+                                <tr>
+                                    <td style="padding:12px 16px;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td style="width:32px;">
+                                                    <div
+                                                        style="width:32px; height:32px; background:#fff7ed; border-radius:8px; text-align:center; line-height:32px; font-size:15px;">
+                                                        &#128336;</div>
+                                                </td>
+                                                <td style="padding-left:10px;">
+                                                    <p
+                                                        style="margin:0 0 2px; font-size:11px; color:#9b9fc4; text-transform:uppercase; letter-spacing:0.6px;">
+                                                        Requested at</p>
+                                                    <p
+                                                        style="margin:0; font-size:13px; color:#2d3060; font-weight:600;">
+                                                         ${new Date().toLocaleString([], {
+                                month: "long",
+                                day: "numeric",
+                                year: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit"
+                            })} IST</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Divider -->
+                            <hr style="border:none; height:1px; background:#eef0fb; margin:0 0 24px;">
+
+                            <!-- Change Summary Label -->
+                            <p
+                                style="margin:0 0 14px; font-size:12px; color:#9b9fc4; text-transform:uppercase; letter-spacing:0.8px;">
+                                Email address change summary
+                            </p>
+
+                            <!-- ===== OLD EMAIL CARD ===== -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="border-radius:12px; overflow:hidden; border:1px solid #fecaca;">
+                                <tr>
+                                    <td style="background:#fff5f5; padding:10px 16px; border-bottom:1px solid #fecaca;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="width:8px; height:8px; vertical-align:middle; padding-right:8px;">
+                                                    <div
+                                                        style="width:8px; height:8px; border-radius:50%; background:#ef4444;">
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    style="font-size:11px; font-weight:600; color:#991b1b; text-transform:uppercase; letter-spacing:0.8px;">
+                                                    Current email &nbsp;&mdash;&nbsp; removed
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background:#ffffff; padding:16px;">
+                                        <p
+                                            style="margin:0 0 6px; font-size:15px; font-weight:700; color:#7f1d1d; text-decoration:line-through; word-break:break-all;">
+                                            ${oldGmail}</p>
+                                        <p style="margin:0; font-size:12px; color:#9b9fc4; line-height:1.5;">This
+                                            address is no longer receive CodeSarthi notifications after the change was
+                                            confirmed.</p>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Arrow bridge -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:10px 0;">
+                                <tr>
+                                    <td align="center">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="background:#fef3c7; border:1px solid #fcd34d; border-radius:20px; padding:5px 14px;">
+                                                    <table cellpadding="0" cellspacing="0" border="0">
+                                                        <tr>
+                                                            <td
+                                                                style="font-size:14px; color:#92400e; padding-right:6px; vertical-align:middle;">
+                                                                &#8595;</td>
+                                                            <td
+                                                                style="font-size:12px; font-weight:600; color:#92400e; white-space:nowrap;">
+                                                                Changed to</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- ===== NEW EMAIL CARD ===== -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="border-radius:12px; overflow:hidden; border:1px solid #bbf7d0; margin-bottom:20px;">
+                                <tr>
+                                    <td style="background:#f0fdf4; padding:10px 16px; border-bottom:1px solid #bbf7d0;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="width:8px; height:8px; vertical-align:middle; padding-right:8px;">
+                                                    <div
+                                                        style="width:8px; height:8px; border-radius:50%; background:#22c55e;">
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    style="font-size:11px; font-weight:600; color:#14532d; text-transform:uppercase; letter-spacing:0.8px;">
+                                                    New email &nbsp;&mdash;&nbsp; being linked
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background:#ffffff; padding:16px;">
+                                        <p
+                                            style="margin:0 0 6px; font-size:15px; font-weight:700; color:#14532d; word-break:break-all;">
+                                            ${newGmail}</p>
+                                        <p style="margin:0; font-size:12px; color:#9b9fc4; line-height:1.5;">All future
+                                            login OTPs, security alerts and notifications will be sent here after the
+                                            change was confirmed.</p>
+                                    </td>
+                                </tr>
+                            </table>
+
+
+                            <!-- Divider -->
+                            <hr style="border:none; height:1px; background:#eef0fb; margin:0 0 24px;">
+
+
+                            <!-- Warning -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="background:#fff7ed; border:1px solid #fed7aa; border-radius:10px; margin-bottom:14px;">
+                                <tr>
+                                    <td style="padding:14px 16px;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="font-size:18px; vertical-align:top; padding-right:12px; padding-top:1px;">
+                                                    &#9888;&#65039;</td>
+                                                <td style="font-size:13px; color:#7c2d12; line-height:1.5;">
+                                                    <strong>Wasn't you?</strong>
+                                                    <a href="{{SECURE_ACCOUNT_URL}}"
+                                                        style="color:#c2410c; font-weight:600; text-decoration:none;">Secure
+                                                        your account immediately</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+
+
+                            <!-- Support -->
+                            <p style="margin:0; font-size:13px; color:#9b9fc4; text-align:center; line-height:1.6;">
+                                Need help? Contact us at
+                                <a href="mailto:codesarthi.help@gmail.com"
+                                    style="color:#4f46e5; font-weight:600; text-decoration:none;">codesarthi.help@gmail.com</a>
+                            </p>
+
+                        </td>
+                    </tr>
+
+                    <!-- ===== FOOTER ===== -->
+                    <tr>
+                        <td
+                            style="background:#f7f8ff; border-top:1px solid #eef0fb; padding:24px 32px; text-align:center;">
+                            <table align="center" cellpadding="0" cellspacing="0" border="0"
+                                style="margin-bottom:14px;">
+                                <tr>
+                                    <td style="padding:0 12px;">
+                                        <a href="https://www.codesarthi.in/help-center"
+                                            style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Help
+                                            Center</a>
+                                    </td>
+                                    <td style="font-size:13px; color:#dde0f5;">|</td>
+                                    <td style="padding:0 12px;">
+                                        <a href="https://www.codesarthi.in/privacy-&-policy-hub"
+                                            style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Privacy
+                                            Policy</a>
+                                    </td>
+                                    <td style="font-size:13px; color:#dde0f5;">|</td>
+                                    <td style="padding:0 12px;">
+                                        <a href="mailto:codesarthi.help@gmail.com"
+                                            style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Contact
+                                            Support</a>
+                                    </td>
+                                </tr>
+                            </table>
+                            <p style="margin:0; font-size:12px; color:#b0b4d4; line-height:1.6;">
+                                © 2026 CodeSarthi &nbsp;·&nbsp; Kanpur, Uttar Pradesh, India<br>
+                                This is an automated security email. Please do not reply directly to this email.
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+
+</body> `,
                         });
 
                         user.gmail = newGmail;
@@ -639,29 +867,36 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
                             from: 'CodeSarthi <nova@codesarthi.in>',
                             to: [newGmail],
                             subject: "CodeSarthi Account was recovered sucessfully",
-                            html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:30px 20px;">
+                            html: `<body style="margin:0; padding:0; background-color:#f0f2ff; font-family:Arial,Helvetica,sans-serif;">
+
+    <!-- Preheader -->
+    <div
+        style="display:none;font-size:1px;color:#f0f2ff;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">
+        Email change confirmation on your CodeSarthi account. If
+        this wasn't you, act now.
+    </div>
+
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:32px 16px;">
         <tr>
             <td align="center">
+                <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                    style="max-width:520px; border-radius:16px; overflow:hidden; border:1px solid #dde0f5; box-shadow:0 8px 40px rgba(79,70,229,0.08);">
 
-                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:500px;">
-
-                    <!-- LOGO -->
+                    <!-- ===== HEADER ===== -->
                     <tr>
-                        <td align="center" style="padding-bottom:30px;">
-                            <table cellpadding="0" cellspacing="0" border="0"
-                                style="background:#000000; border-radius:20px;">
+                        <td style="background:#1a1a2e; padding:28px 32px; text-align:center;">
+                            <table align="center" cellpadding="0" cellspacing="0" border="0">
                                 <tr>
-                                    <td style="padding:12px 24px;">
+                                    <td style="background:#0d0d1a; border-radius:14px; padding:10px 20px;">
                                         <table cellpadding="0" cellspacing="0" border="0">
                                             <tr>
-                                                <td>
-                                                    <img src="https://res.cloudinary.com/dj0ivep44/image/upload/v1770692070/WhatsApp_Image_2026-02-08_at_09.56.39_jrys9v.jpg"
-                                                        alt="CodeSarthi Logo" width="60" height="60"
-                                                        style="border-radius:20px; display:block;">
+                                                <td
+                                                    style="background:#667eea; border-radius:8px; width:36px; height:36px; text-align:center; vertical-align:middle;">
+                                                    <span
+                                                        style="font-size:16px; font-weight:700; color:#ffffff; line-height:36px; display:block;">CS</span>
                                                 </td>
                                                 <td
-                                                    style="padding-left:10px; font-size:24px; font-weight:700; color:#ffffff;">
+                                                    style="padding-left:10px; font-size:20px; font-weight:700; color:#ffffff; letter-spacing:0.3px;">
                                                     CodeSarthi
                                                 </td>
                                             </tr>
@@ -669,80 +904,297 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
                                     </td>
                                 </tr>
                             </table>
+                            <p style="margin:14px 0 0; color:#9b9fc4; font-size:13px; letter-spacing:0.4px;">ACCOUNT RECOVERED SUCESSFULLY</p>
                         </td>
                     </tr>
 
-                    <!-- CARD -->
+                    <!-- ===== AMBER BANNER ===== -->
                     <tr>
-                        <td style="
-              background:#ffffff;
-              background:linear-gradient(145deg,#ffffff 0%,#f8f9ff 100%);
-              border-radius:16px;
-              border:1px solid #e0e4ff;
-              padding:40px 32px;
-              text-align:center;
-              box-shadow:0 8px 30px rgba(102,126,234,0.1);
-            ">
-
-                            <h1 style="margin:0 0 16px 0; font-size:28px; color:#2d3748;">
-                                Account recovered sucessfully
+                        <td style="background:#451a03; padding:28px 32px 24px; text-align:center;">
+                            <table align="center" cellpadding="0" cellspacing="0" border="0"
+                                style="margin-bottom:16px;">
+                                <tr>
+                                    <td
+                                        style="width:72px; height:72px; border-radius:50%; background:rgba(255,255,255,0.08); border:2px solid rgba(255,255,255,0.2); text-align:center; vertical-align:middle;">
+                                        <table align="center" cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="width:52px; height:52px; border-radius:50%; background:#b45309; text-align:center; vertical-align:middle;">
+                                                    <span
+                                                        style="font-size:26px; color:#ffffff; line-height:52px; display:block;">&#128231;</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            <h1 style="margin:0 0 6px; font-size:22px; font-weight:700; color:#ffffff;">
+                                Email address change confirmed
                             </h1>
+                            <p style="margin:0; font-size:14px; color:rgba(255,255,255,0.65);">
+                                Your email address has been changed successfully
+                            </p>
+                        </td>
+                    </tr>
 
-                            
 
-                            <p style="margin:0 0 24px 0; font-size:15px; color:#718096; line-height:1.6;">
-                                 This mail is just to inform you that your gmail has been update just few seconds back from ${oldOnes} to ${newChange}
+                    <!-- ===== BODY ===== -->
+                    <tr>
+                        <td style="background:#ffffff; padding:32px 32px;">
+
+                            <!-- Greeting -->
+                            <p style="margin:0 0 20px; font-size:15px; color:#2d3060; line-height:1.6;">
+                                Hello, <strong style="color:#1a1a2e;">${user.firstName} ${user.lastName}</strong> 👋<br>
+                                A request was made to change the email address linked to your CodeSarthi account. Review
+                                the details carefully and use the gmail below to future login. If this wasn't
+                                you, secure your account immediately.
                             </p>
 
-                            <hr style="border:none; height:1px; background:#e2e8f0; margin:0 0 24px 0;">
-
-                            <!-- SECURITY -->
-                            <table align="center" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:8px;">
+                            <!-- Info: Account Owner -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="background:#f7f8ff; border:1px solid #e4e6f8; border-radius:10px; margin-bottom:10px;">
                                 <tr>
-
-                                    <td style="padding-left:8px; font-size:13px; color:#a0aec0;">
-                                        🔒 <strong>Security Tip:</strong>Ingnore if you changes the gmail
+                                    <td style="padding:12px 16px;">
+                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                            <tr>
+                                                <td style="width:32px;">
+                                                    <div
+                                                        style="width:32px; height:32px; background:#eef0ff; border-radius:8px; text-align:center; line-height:32px; font-size:15px;">
+                                                        &#128100;</div>
+                                                </td>
+                                                <td style="padding-left:10px;">
+                                                    <p
+                                                        style="margin:0 0 2px; font-size:11px; color:#9b9fc4; text-transform:uppercase; letter-spacing:0.6px;">
+                                                        Account owner</p>
+                                                    <p
+                                                        style="margin:0; font-size:13px; color:#2d3060; font-weight:600;">
+                                                        ${user.firstName} ${user.lastName} &nbsp;·&nbsp; <span
+                                                            style="font-family:'Courier New',monospace;">${user.username}</span>
+                                                    </p>
+                                                </td>
+                                                <td align="right">
+                                                    <span
+                                                        style="display:inline-block; background:#fefce8; color:#854d0e; font-size:11px; font-weight:600; border-radius:20px; padding:3px 10px; letter-spacing:0.3px;">Old
+                                                        Gmail</span>
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </td>
                                 </tr>
                             </table>
 
-                            <p style="margin:0; font-size:13px; color:#a0aec0; line-height:1.5;">
-                                If you didn’t change the gmail please change the password by either 
-                                <a href="#" style="color:#667eea; text-decoration:none; font-weight:600;">
-                                    Reset Password
-                                </a> or <a href="#" style="color:#667eea; text-decoration:none; font-weight:600;">
-                                    Forgot Password
-                                </a>.
+
+
+                            <!-- Info: Time -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="background:#f7f8ff; border:1px solid #e4e6f8; border-radius:10px; margin-bottom:24px;">
+                                <tr>
+                                    <td style="padding:12px 16px;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td style="width:32px;">
+                                                    <div
+                                                        style="width:32px; height:32px; background:#fff7ed; border-radius:8px; text-align:center; line-height:32px; font-size:15px;">
+                                                        &#128336;</div>
+                                                </td>
+                                                <td style="padding-left:10px;">
+                                                    <p
+                                                        style="margin:0 0 2px; font-size:11px; color:#9b9fc4; text-transform:uppercase; letter-spacing:0.6px;">
+                                                        Requested at</p>
+                                                    <p
+                                                        style="margin:0; font-size:13px; color:#2d3060; font-weight:600;">
+                                                         ${new Date().toLocaleString([], {
+                                month: "long",
+                                day: "numeric",
+                                year: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit"
+                            })} IST</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Divider -->
+                            <hr style="border:none; height:1px; background:#eef0fb; margin:0 0 24px;">
+
+                            <!-- Change Summary Label -->
+                            <p
+                                style="margin:0 0 14px; font-size:12px; color:#9b9fc4; text-transform:uppercase; letter-spacing:0.8px;">
+                                Email address change summary
+                            </p>
+
+                            <!-- ===== OLD EMAIL CARD ===== -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="border-radius:12px; overflow:hidden; border:1px solid #fecaca;">
+                                <tr>
+                                    <td style="background:#fff5f5; padding:10px 16px; border-bottom:1px solid #fecaca;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="width:8px; height:8px; vertical-align:middle; padding-right:8px;">
+                                                    <div
+                                                        style="width:8px; height:8px; border-radius:50%; background:#ef4444;">
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    style="font-size:11px; font-weight:600; color:#991b1b; text-transform:uppercase; letter-spacing:0.8px;">
+                                                    Current email &nbsp;&mdash;&nbsp; removed
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background:#ffffff; padding:16px;">
+                                        <p
+                                            style="margin:0 0 6px; font-size:15px; font-weight:700; color:#7f1d1d; text-decoration:line-through; word-break:break-all;">
+                                            ${oldGmail}</p>
+                                        <p style="margin:0; font-size:12px; color:#9b9fc4; line-height:1.5;">This
+                                            address is no longer receive CodeSarthi notifications after the change was
+                                            confirmed.</p>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Arrow bridge -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:10px 0;">
+                                <tr>
+                                    <td align="center">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="background:#fef3c7; border:1px solid #fcd34d; border-radius:20px; padding:5px 14px;">
+                                                    <table cellpadding="0" cellspacing="0" border="0">
+                                                        <tr>
+                                                            <td
+                                                                style="font-size:14px; color:#92400e; padding-right:6px; vertical-align:middle;">
+                                                                &#8595;</td>
+                                                            <td
+                                                                style="font-size:12px; font-weight:600; color:#92400e; white-space:nowrap;">
+                                                                Changed to</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- ===== NEW EMAIL CARD ===== -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="border-radius:12px; overflow:hidden; border:1px solid #bbf7d0; margin-bottom:20px;">
+                                <tr>
+                                    <td style="background:#f0fdf4; padding:10px 16px; border-bottom:1px solid #bbf7d0;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="width:8px; height:8px; vertical-align:middle; padding-right:8px;">
+                                                    <div
+                                                        style="width:8px; height:8px; border-radius:50%; background:#22c55e;">
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    style="font-size:11px; font-weight:600; color:#14532d; text-transform:uppercase; letter-spacing:0.8px;">
+                                                    New email &nbsp;&mdash;&nbsp; being linked
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background:#ffffff; padding:16px;">
+                                        <p
+                                            style="margin:0 0 6px; font-size:15px; font-weight:700; color:#14532d; word-break:break-all;">
+                                            ${newGmail}</p>
+                                        <p style="margin:0; font-size:12px; color:#9b9fc4; line-height:1.5;">All future
+                                            login OTPs, security alerts and notifications will be sent here after the
+                                            change was confirmed.</p>
+                                    </td>
+                                </tr>
+                            </table>
+
+
+                            <!-- Divider -->
+                            <hr style="border:none; height:1px; background:#eef0fb; margin:0 0 24px;">
+
+
+                            <!-- Warning -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="background:#fff7ed; border:1px solid #fed7aa; border-radius:10px; margin-bottom:14px;">
+                                <tr>
+                                    <td style="padding:14px 16px;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="font-size:18px; vertical-align:top; padding-right:12px; padding-top:1px;">
+                                                    &#9888;&#65039;</td>
+                                                <td style="font-size:13px; color:#7c2d12; line-height:1.5;">
+                                                    <strong>Wasn't you?</strong>
+                                                    <a href="{{SECURE_ACCOUNT_URL}}"
+                                                        style="color:#c2410c; font-weight:600; text-decoration:none;">Secure
+                                                        your account immediately</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+
+
+                            <!-- Support -->
+                            <p style="margin:0; font-size:13px; color:#9b9fc4; text-align:center; line-height:1.6;">
+                                Need help? Contact us at
+                                <a href="mailto:codesarthi.help@gmail.com"
+                                    style="color:#4f46e5; font-weight:600; text-decoration:none;">codesarthi.help@gmail.com</a>
                             </p>
 
                         </td>
                     </tr>
 
-                    <!-- FOOTER -->
+                    <!-- ===== FOOTER ===== -->
                     <tr>
-                        <td align="center" style="padding-top:32px;">
-                            <p style="margin:0 0 16px 0; font-size:14px; color:#718096;">
-                                Need help?
-                                <a href="#" style="color:#667eea; text-decoration:none;">
-                                    Contact our support team
-                                </a>
-                            </p>
-
-                            <p style="margin:0; font-size:12px; color:#a0aec0; line-height:1.5;">
-                                © 2024 CodeSarthi. All rights reserved.<br>
-                                Kanpur, Uttar Pradesh, India
+                        <td
+                            style="background:#f7f8ff; border-top:1px solid #eef0fb; padding:24px 32px; text-align:center;">
+                            <table align="center" cellpadding="0" cellspacing="0" border="0"
+                                style="margin-bottom:14px;">
+                                <tr>
+                                    <td style="padding:0 12px;">
+                                        <a href="https://www.codesarthi.in/help-center"
+                                            style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Help
+                                            Center</a>
+                                    </td>
+                                    <td style="font-size:13px; color:#dde0f5;">|</td>
+                                    <td style="padding:0 12px;">
+                                        <a href="https://www.codesarthi.in/privacy-&-policy-hub"
+                                            style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Privacy
+                                            Policy</a>
+                                    </td>
+                                    <td style="font-size:13px; color:#dde0f5;">|</td>
+                                    <td style="padding:0 12px;">
+                                        <a href="mailto:codesarthi.help@gmail.com"
+                                            style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Contact
+                                            Support</a>
+                                    </td>
+                                </tr>
+                            </table>
+                            <p style="margin:0; font-size:12px; color:#b0b4d4; line-height:1.6;">
+                                © 2026 CodeSarthi &nbsp;·&nbsp; Kanpur, Uttar Pradesh, India<br>
+                                This is an automated security email. Please do not reply directly to this email.
                             </p>
                         </td>
                     </tr>
 
                 </table>
-
             </td>
         </tr>
     </table>
 
-</body>
-`,
+</body> `,
                         });
                     }
                     if (newUsername) {

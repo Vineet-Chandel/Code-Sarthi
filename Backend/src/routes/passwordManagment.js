@@ -300,7 +300,7 @@ passRoute.patch("/auth/reset-password", userAuth, async (req, res) => {
                                                         Contact our support team</p>
                                                     <p
                                                         style="margin:0; font-size:13px; color:#7a7fa8; line-height:1.5;">
-                                                        Report the incident to support@codesarthi.com so we can freeze
+                                                        Report the incident to codesarthi.help@gmail.com so we can freeze
                                                         your account and investigate.</p>
                                                 </td>
                                             </tr>
@@ -354,19 +354,19 @@ passRoute.patch("/auth/reset-password", userAuth, async (req, res) => {
                                 style="margin-bottom:14px;">
                                 <tr>
                                     <td style="padding:0 12px;">
-                                        <a href="https://codesarthi.com/help"
+                                        <a href="https://www.codesarthi.in/help-center"
                                             style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Help
                                             Center</a>
                                     </td>
                                     <td style="font-size:13px; color:#dde0f5;">|</td>
                                     <td style="padding:0 12px;">
-                                        <a href="https://codesarthi.com/privacy"
+                                        <a href="https://www.codesarthi.in/privacy-policy"
                                             style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Privacy
                                             Policy</a>
                                     </td>
                                     <td style="font-size:13px; color:#dde0f5;">|</td>
                                     <td style="padding:0 12px;">
-                                        <a href="mailto:support@codesarthi.com"
+                                        <a href="mailto:codesarthi.help@gmail.com"
                                             style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Contact
                                             Support</a>
                                     </td>
@@ -400,7 +400,7 @@ passRoute.patch("/auth/reset-password", userAuth, async (req, res) => {
 //through gmail or username
 passRoute.post("/auth/forgot-password", async (req, res) => {
     try {
-        const { gmail, username, firstName, lastName } = req.body;
+        const { gmail, username, } = req.body;
         const identifier = gmail || username;
         if (!gmail && !username) {
             throw new Error("Please enter gmail or username");
@@ -453,7 +453,7 @@ passRoute.post("/auth/forgot-password", async (req, res) => {
     <!-- Preheader -->
     <div
         style="display:none;font-size:1px;color:#f0f2ff;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">
-        Your CodeSarthi password reset code is {{OTP}} — expires in 10 minutes. If this wasn't you, secure your account
+        Your CodeSarthi password reset code is ${passOtp} — expires in 10 minutes. If this wasn't you, secure your account
         now.
     </div>
 
@@ -528,7 +528,7 @@ passRoute.post("/auth/forgot-password", async (req, res) => {
 
                             <!-- Greeting -->
                             <p style="margin:0 0 20px; font-size:15px; color:#2d3060; line-height:1.6;">
-                                Hello, <strong style="color:#1a1a2e;">${firstName} ${lastName}</strong> 👋<br>
+                                Hello, <strong style="color:#1a1a2e;">${user.firstName} ${user.lastName}</strong> 👋<br>
                                 You requested a password reset for your account. Use the one-time code below to
                                 proceed. If this wasn't you, please ignore this email and secure your account
                                 immediately.
@@ -552,7 +552,7 @@ passRoute.post("/auth/forgot-password", async (req, res) => {
                                                         Account</p>
                                                     <p
                                                         style="margin:0; font-size:13px; color:#2d3060; font-weight:600;">
-                                                        ${gmail}</p>
+                                                        ${user.gmail}</p>
                                                 </td>
                                                 <td align="right">
                                                     <span
@@ -667,9 +667,9 @@ passRoute.post("/auth/forgot-password", async (req, res) => {
                                                 <td style="font-size:13px; color:#7c2d12; line-height:1.5;">
                                                     <strong>Wasn't you?</strong> If you did not request a password
                                                     reset, your account may be compromised.
-                                                    <a href="{{SECURE_ACCOUNT_URL}}"
+                                                    <span
                                                         style="color:#c2410c; font-weight:600; text-decoration:none;">Secure
-                                                        your account now</a>
+                                                        your account now</span>
                                                     and contact our support team immediately.
                                                 </td>
                                             </tr>
@@ -702,7 +702,7 @@ passRoute.post("/auth/forgot-password", async (req, res) => {
                             <!-- Support -->
                             <p style="margin:0; font-size:13px; color:#9b9fc4; text-align:center; line-height:1.6;">
                                 Need help? Contact us at
-                                <a href="mailto:support@codesarthi.com"
+                                <a href="mailto:codesarthi.help@gmail.com"
                                     style="color:#4f46e5; font-weight:600; text-decoration:none;">codesarthi.help@gmail.com</a>
                             </p>
 
@@ -717,19 +717,19 @@ passRoute.post("/auth/forgot-password", async (req, res) => {
                                 style="margin-bottom:14px;">
                                 <tr>
                                     <td style="padding:0 12px;">
-                                        <a href="https://codesarthi.com/help"
+                                        <a href="https://www.codesarthi.in/help-center"
                                             style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Help
                                             Center</a>
                                     </td>
                                     <td style="font-size:13px; color:#dde0f5;">|</td>
                                     <td style="padding:0 12px;">
-                                        <a href="https://codesarthi.com/privacy"
+                                        <a href="https://www.codesarthi.in/privacy-policy"
                                             style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Privacy
                                             Policy</a>
                                     </td>
                                     <td style="font-size:13px; color:#dde0f5;">|</td>
                                     <td style="padding:0 12px;">
-                                        <a href="mailto:support@codesarthi.com"
+                                        <a href="mailto:codesarthi.help@gmail.com"
                                             style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Contact
                                             Support</a>
                                     </td>
@@ -1089,7 +1089,7 @@ passRoute.patch("/auth/forgot-password/:token1", async (req, res) => {
                                                         Contact our support team</p>
                                                     <p
                                                         style="margin:0; font-size:13px; color:#7a7fa8; line-height:1.5;">
-                                                        Report the incident to support@codesarthi.com so we can freeze
+                                                        Report the incident to codesarthi.help@gmail.com so we can freeze
                                                         your account and investigate.</p>
                                                 </td>
                                             </tr>
@@ -1102,7 +1102,7 @@ passRoute.patch("/auth/forgot-password/:token1", async (req, res) => {
                             <table width="100%" cellpadding="0" cellspacing="0" border="0">
                                 <tr>
                                     <td align="center">
-                                        <a href="{{SECURE_ACCOUNT_URL}}"
+                                        <a href="https://www.codesarthi.in/forgot-password"
                                             style="display:inline-block; background:#b91c1c; color:#ffffff; text-decoration:none; border-radius:12px; padding:16px 32px; font-size:15px; font-weight:700; letter-spacing:0.3px; width:80%; text-align:center;">
                                             I didn't do this — Secure my account &rarr;
                                         </a>
@@ -1110,17 +1110,6 @@ passRoute.patch("/auth/forgot-password/:token1", async (req, res) => {
                                 </tr>
                             </table>
 
-                            <!-- Secondary CTA -->
-                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:10px;">
-                                <tr>
-                                    <td align="center">
-                                        <a href="{{ACTIVITY_URL}}"
-                                            style="display:inline-block; background:#f7f8ff; color:#4f46e5; text-decoration:none; border-radius:12px; padding:14px 32px; font-size:14px; font-weight:700; letter-spacing:0.3px; width:80%; text-align:center; border:1px solid #e4e6f8;">
-                                            Review account activity
-                                        </a>
-                                    </td>
-                                </tr>
-                            </table>
 
 
 
@@ -1128,7 +1117,7 @@ passRoute.patch("/auth/forgot-password/:token1", async (req, res) => {
                             <p
                                 style="margin:20px 0 0; font-size:13px; color:#9b9fc4; text-align:center; line-height:1.6;">
                                 Need help? Reach us at
-                                <a href="mailto:support@codesarthi.com"
+                                <a href="mailto:codesarthi.help@gmail.com"
                                     style="color:#4f46e5; font-weight:600; text-decoration:none;">codesarthi.help@gmail.com</a>
                             </p>
 
@@ -1143,19 +1132,19 @@ passRoute.patch("/auth/forgot-password/:token1", async (req, res) => {
                                 style="margin-bottom:14px;">
                                 <tr>
                                     <td style="padding:0 12px;">
-                                        <a href="https://codesarthi.com/help"
+                                        <a href="https://www.codesarthi.in/help-center"
                                             style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Help
                                             Center</a>
                                     </td>
                                     <td style="font-size:13px; color:#dde0f5;">|</td>
                                     <td style="padding:0 12px;">
-                                        <a href="https://codesarthi.com/privacy"
+                                        <a href="https://www.codesarthi.in/privacy-policy"
                                             style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Privacy
                                             Policy</a>
                                     </td>
                                     <td style="font-size:13px; color:#dde0f5;">|</td>
                                     <td style="padding:0 12px;">
-                                        <a href="mailto:support@codesarthi.com"
+                                        <a href="mailto:codesarthi.help@gmail.com"
                                             style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Contact
                                             Support</a>
                                     </td>
