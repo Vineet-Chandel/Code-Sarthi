@@ -458,6 +458,7 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
             throw new Error("Please re-login");
         }
         const oldGmail = user.gmail;
+        const oldUsername = user.username;
 
         if (!(newGmail && newUsername)) {
             if (newGmail) {
@@ -528,7 +529,7 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
                         const { data1, error2 } = await resend.emails.send({
                             from: 'CodeSarthi <nova@codesarthi.in>',
                             to: [oldGmail],
-                            subject: "Security Alert",
+                            subject: "Identity Change Alert",
                             html: `<body style="margin:0; padding:0; background-color:#f0f2ff; font-family:Arial,Helvetica,sans-serif;">
 
     <!-- Preheader -->
@@ -1204,108 +1205,420 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
                         const { data, error } = await resend.emails.send({
                             from: 'CodeSarthi <nova@codesarthi.in>',
                             to: [user.gmail],
-                            subject: "Security Alert",
-                            html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
-    
-        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:30px 20px;">
-            <tr>
-                <td align="center">
-    
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:500px;">
-    
-                        <!-- LOGO -->
-                        <tr>
-                            <td align="center" style="padding-bottom:30px;">
-                                <table cellpadding="0" cellspacing="0" border="0"
-                                    style="background:#000000; border-radius:20px;">
-                                    <tr>
-                                        <td style="padding:12px 24px;">
-                                            <table cellpadding="0" cellspacing="0" border="0">
-                                                <tr>
-                                                    <td>
-                                                        <img src="https://res.cloudinary.com/dj0ivep44/image/upload/v1770692070/WhatsApp_Image_2026-02-08_at_09.56.39_jrys9v.jpg"
-                                                            alt="CodeSarthi Logo" width="60" height="60"
-                                                            style="border-radius:20px; display:block;">
-                                                    </td>
-                                                    <td
-                                                        style="padding-left:10px; font-size:24px; font-weight:700; color:#ffffff;">
-                                                        CodeSarthi
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-    
-                        <!-- CARD -->
-                        <tr>
-                            <td style="
-                  background:#ffffff;
-                  background:linear-gradient(145deg,#ffffff 0%,#f8f9ff 100%);
-                  border-radius:16px;
-                  border:1px solid #e0e4ff;
-                  padding:40px 32px;
-                  text-align:center;
-                  box-shadow:0 8px 30px rgba(102,126,234,0.1);
-                ">
-    
-                                <h1 style="margin:0 0 16px 0; font-size:28px; color:#2d3748;">
-                                    Your Username was changed
-                                </h1>
-    
-                                
-    
-                                <p style="margin:0 0 24px 0; font-size:15px; color:#718096; line-height:1.6;">
-                                     The username for the CodeSarthi Account ${oldOnes} was changed to ${newChange}.
-                                </p>
-    
-                                <hr style="border:none; height:1px; background:#e2e8f0; margin:0 0 24px 0;">
-    
-                                <!-- SECURITY -->
-                                <table align="center" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:8px;">
-                                    <tr>
-    
-                                        <td style="padding-left:8px; font-size:13px; color:#a0aec0;">
-                                            🔒 <strong>Security Tip:</strong>Ingnore if you changed the username
-                                        </td>
-                                    </tr>
-                                </table>
-    
-                                <p style="margin:0; font-size:13px; color:#a0aec0; line-height:1.5;">
-                                    If you didn’t change the username you should change the password again by 
-                                    <a href="#" style="color:#667eea; text-decoration:none; font-weight:600;">
-                                        Forgot Password
-                                    </a>.
-                                </p>
-    
-                            </td>
-                        </tr>
-    
-                        <!-- FOOTER -->
-                        <tr>
-                            <td align="center" style="padding-top:32px;">
-                                <p style="margin:0 0 16px 0; font-size:14px; color:#718096;">
-                                   Sincerely yours,<br>
-                                   The CodeSarthi Team
-                                </p>
-    
-                                <p style="margin:0; font-size:12px; color:#a0aec0; line-height:1.5;">
-                                    © 2024 CodeSarthi. All rights reserved.<br>
-                                    Kanpur, Uttar Pradesh, India
-                                </p>
-                            </td>
-                        </tr>
-    
-                    </table>
-    
-                </td>
-            </tr>
-        </table>
-    
-    </body>
-    `,
+                            subject: "Identity Change Alert",
+                            html: `<body style="margin:0; padding:0; background-color:#f0f2ff; font-family:Arial,Helvetica,sans-serif;">
+
+    <!-- Preheader -->
+    <div
+        style="display:none;font-size:1px;color:#f0f2ff;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">
+        Username change confirmation on your CodeSarthi account.
+        If this wasn't you, act now.
+    </div>
+
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:32px 16px;">
+        <tr>
+            <td align="center">
+                <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                    style="max-width:520px; border-radius:16px; overflow:hidden; border:1px solid #dde0f5; box-shadow:0 8px 40px rgba(79,70,229,0.08);">
+
+                    <!-- ===== HEADER ===== -->
+                    <tr>
+                        <td style="background:#1a1a2e; padding:28px 32px; text-align:center;">
+                            <table align="center" cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+                                    <td style="background:#0d0d1a; border-radius:14px; padding:10px 20px;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="background:#667eea; border-radius:8px; width:36px; height:36px; text-align:center; vertical-align:middle;">
+                                                    <span
+                                                        style="font-size:16px; font-weight:700; color:#ffffff; line-height:36px; display:block;">CS</span>
+                                                </td>
+                                                <td
+                                                    style="padding-left:10px; font-size:20px; font-weight:700; color:#ffffff; letter-spacing:0.3px;">
+                                                    CodeSarthi
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            <p style="margin:14px 0 0; color:#9b9fc4; font-size:13px; letter-spacing:0.4px;">USERNAME
+                                CHANGE CONFIRMATION</p>
+                        </td>
+                    </tr>
+
+                    <!-- ===== INDIGO BANNER ===== -->
+                    <tr>
+                        <td style="background:#1e1b4b; padding:28px 32px 24px; text-align:center;">
+                            <table align="center" cellpadding="0" cellspacing="0" border="0"
+                                style="margin-bottom:16px;">
+                                <tr>
+                                    <td
+                                        style="width:72px; height:72px; border-radius:50%; background:rgba(255,255,255,0.08); border:2px solid rgba(255,255,255,0.2); text-align:center; vertical-align:middle;">
+                                        <table align="center" cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="width:52px; height:52px; border-radius:50%; background:#4338ca; text-align:center; vertical-align:middle;">
+                                                    <span
+                                                        style="font-size:26px; color:#ffffff; line-height:52px; display:block;">&#127991;&#65039;</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            <h1 style="margin:0 0 6px; font-size:22px; font-weight:700; color:#ffffff;">
+                                Username change confirmation
+                            </h1>
+                            <p style="margin:0; font-size:14px; color:rgba(255,255,255,0.65);">
+                                Your public identity on CodeSarthi was changed
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- ===== INDIGO STRIP ===== -->
+                    <tr>
+                        <td
+                            style="background:#eef2ff; border-bottom:2px solid #a5b4fc; padding:12px 32px; text-align:center;">
+                            <p style="margin:0; font-size:13px; color:#3730a3; font-weight:600;">
+                                &#9888;&#65039; &nbsp; Your username is visible to the entire CodeSarthi community —
+                                change it only when it needed
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- ===== BODY ===== -->
+                    <tr>
+                        <td style="background:#ffffff; padding:32px 32px;">
+
+                            <!-- Greeting -->
+                            <p style="margin:0 0 20px; font-size:15px; color:#2d3060; line-height:1.6;">
+                                Hello, <strong style="color:#1a1a2e;">${user.firstName} ${user.lastName}</strong> 👋<br>
+                                A request was made to change the username linked to your CodeSarthi account. Review the
+                                change carefully below and enter the verification code to confirm. If this wasn't you,
+                                secure your account immediately.
+                            </p>
+
+                            <!-- Info: Linked Account Email -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="background:#f7f8ff; border:1px solid #e4e6f8; border-radius:10px; margin-bottom:10px;">
+                                <tr>
+                                    <td style="padding:12px 16px;">
+                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                            <tr>
+                                                <td style="width:32px;">
+                                                    <div
+                                                        style="width:32px; height:32px; background:#eef0ff; border-radius:8px; text-align:center; line-height:32px; font-size:15px;">
+                                                        &#128231;</div>
+                                                </td>
+                                                <td style="padding-left:10px;">
+                                                    <p
+                                                        style="margin:0 0 2px; font-size:11px; color:#9b9fc4; text-transform:uppercase; letter-spacing:0.6px;">
+                                                        Linked account</p>
+                                                    <p
+                                                        style="margin:0; font-size:13px; color:#2d3060; font-weight:600;">
+                                                        ${user.gmail}</p>
+                                                </td>
+                                                <td align="right">
+                                                    <span
+                                                        style="display:inline-block; background:#eef2ff; color:#3730a3; font-size:11px; font-weight:600; border-radius:20px; padding:3px 10px; letter-spacing:0.3px;">Change Confirmed</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+
+
+                            <!-- Info: Time -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="background:#f7f8ff; border:1px solid #e4e6f8; border-radius:10px; margin-bottom:10px;">
+                                <tr>
+                                    <td style="padding:12px 16px;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td style="width:32px;">
+                                                    <div
+                                                        style="width:32px; height:32px; background:#fff7ed; border-radius:8px; text-align:center; line-height:32px; font-size:15px;">
+                                                        &#128336;</div>
+                                                </td>
+                                                <td style="padding-left:10px;">
+                                                    <p
+                                                        style="margin:0 0 2px; font-size:11px; color:#9b9fc4; text-transform:uppercase; letter-spacing:0.6px;">
+                                                        Requested at</p>
+                                                    <p
+                                                        style="margin:0; font-size:13px; color:#2d3060; font-weight:600;">
+                                                        ${new Date().toLocaleString([], {
+                                month: "long",
+                                day: "numeric",
+                                year: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit"
+                            })}  IST</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+
+
+                            <!-- Divider -->
+                            <hr style="border:none; height:1px; background:#eef0fb; margin:0 0 24px;">
+
+                            <!-- Change Summary Label -->
+                            <p
+                                style="margin:0 0 14px; font-size:12px; color:#9b9fc4; text-transform:uppercase; letter-spacing:0.8px;">
+                                Username change summary
+                            </p>
+
+                            <!-- ===== OLD USERNAME CARD ===== -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="border-radius:12px; overflow:hidden; border:1px solid #fecaca;">
+                                <tr>
+                                    <td style="background:#fff5f5; padding:10px 16px; border-bottom:1px solid #fecaca;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="width:8px; height:8px; vertical-align:middle; padding-right:8px; padding-top:2px;">
+                                                    <div
+                                                        style="width:8px; height:8px; border-radius:50%; background:#ef4444;">
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    style="font-size:11px; font-weight:600; color:#991b1b; text-transform:uppercase; letter-spacing:0.8px;">
+                                                    Current username &nbsp;&mdash;&nbsp; removed
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background:#ffffff; padding:20px 16px;">
+                                        <p
+                                            style="margin:0 0 6px; font-size:22px; font-weight:700; color:#9b9fc4; text-decoration:line-through; font-family:'Courier New',monospace; letter-spacing:1px; word-break:break-all;">
+                                            ${oldUsername}</p>
+                                        <p style="margin:0; font-size:12px; color:#9b9fc4; line-height:1.5;">This handle
+                                            will be released and may be claimed by another user after your change was
+                                            confirmed.</p>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Arrow bridge -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:10px 0;">
+                                <tr>
+                                    <td align="center">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="background:#eef2ff; border:1px solid #a5b4fc; border-radius:20px; padding:5px 14px;">
+                                                    <table cellpadding="0" cellspacing="0" border="0">
+                                                        <tr>
+                                                            <td
+                                                                style="padding-right:6px; vertical-align:middle; font-size:14px; color:#4338ca;">
+                                                                &#8595;</td>
+                                                            <td
+                                                                style="font-size:12px; font-weight:600; color:#3730a3; white-space:nowrap;">
+                                                                Changed to</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- ===== NEW USERNAME CARD ===== -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="border-radius:12px; overflow:hidden; border:1px solid #a5b4fc; margin-bottom:20px;">
+                                <tr>
+                                    <td style="background:#eef2ff; padding:10px 16px; border-bottom:1px solid #a5b4fc;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="width:8px; height:8px; vertical-align:middle; padding-right:8px; padding-top:2px;">
+                                                    <div
+                                                        style="width:8px; height:8px; border-radius:50%; background:#6366f1;">
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    style="font-size:11px; font-weight:600; color:#3730a3; text-transform:uppercase; letter-spacing:0.8px;">
+                                                    New username &nbsp;&mdash;&nbsp; newly linked
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background:#ffffff; padding:20px 16px;">
+                                        <p
+                                            style="margin:0 0 6px; font-size:22px; font-weight:700; color:#3730a3; font-family:'Courier New',monospace; letter-spacing:1px; word-break:break-all;">
+                                            ${newUsername}</p>
+                                        <p style="margin:0; font-size:12px; color:#9b9fc4; line-height:1.5;">This is
+                                            your new public handle across all CodeSarthi pages, posts, and community
+                                            interactions.</p>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- What this change affects -->
+                            <p
+                                style="margin:0 0 14px; font-size:12px; color:#9b9fc4; text-transform:uppercase; letter-spacing:0.8px;">
+                                What this change affects
+                            </p>
+
+
+
+                            <!-- Impact 2 -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="background:#f7f8ff; border:1px solid #e4e6f8; border-radius:10px; margin-bottom:8px;">
+                                <tr>
+                                    <td style="padding:13px 16px;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="width:8px; vertical-align:top; padding-top:5px; padding-right:12px;">
+                                                    <div
+                                                        style="width:8px; height:8px; border-radius:50%; background:#6366f1;">
+                                                    </div>
+                                                </td>
+                                                <td style="font-size:13px; color:#2d3060; line-height:1.5;">
+                                                    <strong>Community posts &amp; replies</strong> — your username will
+                                                    update on all existing posts and comments automatically
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Impact 3 -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="background:#f7f8ff; border:1px solid #e4e6f8; border-radius:10px; margin-bottom:24px;">
+                                <tr>
+                                    <td style="padding:13px 16px;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="width:8px; vertical-align:top; padding-top:5px; padding-right:12px;">
+                                                    <div
+                                                        style="width:8px; height:8px; border-radius:50%; background:#9ca3af;">
+                                                    </div>
+                                                </td>
+                                                <td style="font-size:13px; color:#2d3060; line-height:1.5;">
+                                                    <strong>Old handle released</strong> —
+                                                    <span
+                                                        style="font-family:'Courier New',monospace; font-size:12px;">${oldUsername}</span>
+                                                    will become available for others to claim after confirmation
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Divider -->
+                            <hr style="border:none; height:1px; background:#eef0fb; margin:0 0 24px;">
+
+
+                            <!-- Warning -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="background:#fff7ed; border:1px solid #fed7aa; border-radius:10px; margin-bottom:14px;">
+                                <tr>
+                                    <td style="padding:14px 16px;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="font-size:18px; vertical-align:top; padding-right:12px; padding-top:1px;">
+                                                    &#9888;&#65039;</td>
+                                                <td style="font-size:13px; color:#7c2d12; line-height:1.5;">
+                                                    <strong>Wasn't you?</strong> Your old
+                                                    username may be claimed by someone else if this goes through.
+                                                    <div style="color:#c2410c; font-weight:600; text-decoration:none;">
+                                                        Secure
+                                                        your account immediately</div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Heads up tip -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="background:#fffbeb; border:1px solid #fde68a; border-radius:10px; margin-bottom:20px;">
+                                <tr>
+                                    <td style="padding:14px 16px;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="font-size:18px; vertical-align:top; padding-right:12px; padding-top:1px;">
+                                                    &#128274;</td>
+                                                <td style="font-size:13px; color:#78350f; line-height:1.5;">
+                                                    <strong>Heads up:</strong> Usernames can only be changed once every
+                                                    30 days. Choose carefully — your old handle will be released
+                                                    publicly once the change is confirmed.
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Support -->
+                            <p style="margin:0; font-size:13px; color:#9b9fc4; text-align:center; line-height:1.6;">
+                                Need help? Contact us at
+                                <a href="mailto:codesarthi.help@gmail.com"
+                                    style="color:#4f46e5; font-weight:600; text-decoration:none;">codesarthi.help@gmail.com</a>
+                            </p>
+
+                        </td>
+                    </tr>
+
+                    <!-- ===== FOOTER ===== -->
+                    <tr>
+                        <td
+                            style="background:#f7f8ff; border-top:1px solid #eef0fb; padding:24px 32px; text-align:center;">
+                            <table align="center" cellpadding="0" cellspacing="0" border="0"
+                                style="margin-bottom:14px;">
+                                <tr>
+                                    <td style="padding:0 12px;">
+                                        <a href="https://www.codesarthi.in/help-center"
+                                            style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Help
+                                            Center</a>
+                                    </td>
+                                    <td style="font-size:13px; color:#dde0f5;">|</td>
+                                    <td style="padding:0 12px;">
+                                        <a href="https://www.codesarthi.in/privacy-&-policy-hub"
+                                            style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Privacy
+                                            Policy</a>
+                                    </td>
+                                    <td style="font-size:13px; color:#dde0f5;">|</td>
+                                    <td style="padding:0 12px;">
+                                        <a href="mailto:codesarthi.help@gmail.com"
+                                            style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Contact
+                                            Support</a>
+                                    </td>
+                                </tr>
+                            </table>
+                            <p style="margin:0; font-size:12px; color:#b0b4d4; line-height:1.6;">
+                                © 2026 CodeSarthi &nbsp;·&nbsp; Kanpur, Uttar Pradesh, India<br>
+                                This is an automated security email. Please do not reply directly to this email.
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+
+</body>`,
                         });
                         user.username = newUsername;
                         await user.save();
@@ -1316,111 +1629,414 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
                         from: 'CodeSarthi <nova@codesarthi.in>',
                         to: [oldGmail],
                         subject: "Security Alert",
-                        html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
-    
-        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:30px 20px;">
-            <tr>
-                <td align="center">
-    
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:500px;">
-    
-                        <!-- LOGO -->
-                        <tr>
-                            <td align="center" style="padding-bottom:30px;">
-                                <table cellpadding="0" cellspacing="0" border="0"
-                                    style="background:#000000; border-radius:20px;">
-                                    <tr>
-                                        <td style="padding:12px 24px;">
-                                            <table cellpadding="0" cellspacing="0" border="0">
-                                                <tr>
-                                                    <td>
-                                                        <img src="https://res.cloudinary.com/dj0ivep44/image/upload/v1770692070/WhatsApp_Image_2026-02-08_at_09.56.39_jrys9v.jpg"
-                                                            alt="CodeSarthi Logo" width="60" height="60"
-                                                            style="border-radius:20px; display:block;">
-                                                    </td>
-                                                    <td
-                                                        style="padding-left:10px; font-size:24px; font-weight:700; color:#ffffff;">
-                                                        CodeSarthi
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-    
-                        <!-- CARD -->
-                        <tr>
-                            <td style="
-                  background:#ffffff;
-                  background:linear-gradient(145deg,#ffffff 0%,#f8f9ff 100%);
-                  border-radius:16px;
-                  border:1px solid #e0e4ff;
-                  padding:40px 32px;
-                  text-align:center;
-                  box-shadow:0 8px 30px rgba(102,126,234,0.1);
-                ">
-    
-                                <h1 style="margin:0 0 16px 0; font-size:28px; color:#2d3748;">
-                                    Your Gmail & Username was changed
-                                </h1>
-    
-                                
-    
-                                <p style="margin:0 0 24px 0; font-size:15px; color:#718096; line-height:1.6;">
-                                     The gmail for the CodeSarthi Account ${oldGmail} was changed to ${newGmail} and 
-                                     username ${user.username} changed to ${newUsername}.
-                                </p>
-    
-                                <hr style="border:none; height:1px; background:#e2e8f0; margin:0 0 24px 0;">
-    
-                                <!-- SECURITY -->
-                                <table align="center" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:8px;">
-                                    <tr>
-    
-                                        <td style="padding-left:8px; font-size:13px; color:#a0aec0;">
-                                            🔒 <strong>Security Tip:</strong>Ingnore if you changed the gmail and username
-                                        </td>
-                                    </tr>
-                                </table>
-    
-                                <p style="margin:0; font-size:13px; color:#a0aec0; line-height:1.5;">
-                                    If you didn’t change the gmail and username you should change the password by 
-                                     <a href="#" style="color:#667eea; text-decoration:none; font-weight:600;">
-                                        Reset Password 
-                                    </a> or by 
-                                    <a href="#" style="color:#667eea; text-decoration:none; font-weight:600;">
-                                        Forgot Password
-                                    </a>.
-                                </p>
-    
-                            </td>
-                        </tr>
-    
-                        <!-- FOOTER -->
-                        <tr>
-                            <td align="center" style="padding-top:32px;">
-                                <p style="margin:0 0 16px 0; font-size:14px; color:#718096;">
-                                   Sincerely yours,<br>
-                                   The CodeSarthi Team
-                                </p>
-    
-                                <p style="margin:0; font-size:12px; color:#a0aec0; line-height:1.5;">
-                                    © 2024 CodeSarthi. All rights reserved.<br>
-                                    Kanpur, Uttar Pradesh, India
-                                </p>
-                            </td>
-                        </tr>
-    
-                    </table>
-    
-                </td>
-            </tr>
-        </table>
-    
-    </body>
-    `,
+                        html: `<body style="margin:0; padding:0; background-color:#f0f2ff; font-family:Arial,Helvetica,sans-serif;">
+
+    <!-- Preheader -->
+    <div
+        style="display:none;font-size:1px;color:#f0f2ff;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">
+        Username change confirmation on your CodeSarthi account.
+        If this wasn't you, act now.
+    </div>
+
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:32px 16px;">
+        <tr>
+            <td align="center">
+                <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                    style="max-width:520px; border-radius:16px; overflow:hidden; border:1px solid #dde0f5; box-shadow:0 8px 40px rgba(79,70,229,0.08);">
+
+                    <!-- ===== HEADER ===== -->
+                    <tr>
+                        <td style="background:#1a1a2e; padding:28px 32px; text-align:center;">
+                            <table align="center" cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+                                    <td style="background:#0d0d1a; border-radius:14px; padding:10px 20px;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="background:#667eea; border-radius:8px; width:36px; height:36px; text-align:center; vertical-align:middle;">
+                                                    <span
+                                                        style="font-size:16px; font-weight:700; color:#ffffff; line-height:36px; display:block;">CS</span>
+                                                </td>
+                                                <td
+                                                    style="padding-left:10px; font-size:20px; font-weight:700; color:#ffffff; letter-spacing:0.3px;">
+                                                    CodeSarthi
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            <p style="margin:14px 0 0; color:#9b9fc4; font-size:13px; letter-spacing:0.4px;">USERNAME
+                                CHANGE CONFIRMATION</p>
+                        </td>
+                    </tr>
+
+                    <!-- ===== INDIGO BANNER ===== -->
+                    <tr>
+                        <td style="background:#1e1b4b; padding:28px 32px 24px; text-align:center;">
+                            <table align="center" cellpadding="0" cellspacing="0" border="0"
+                                style="margin-bottom:16px;">
+                                <tr>
+                                    <td
+                                        style="width:72px; height:72px; border-radius:50%; background:rgba(255,255,255,0.08); border:2px solid rgba(255,255,255,0.2); text-align:center; vertical-align:middle;">
+                                        <table align="center" cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="width:52px; height:52px; border-radius:50%; background:#4338ca; text-align:center; vertical-align:middle;">
+                                                    <span
+                                                        style="font-size:26px; color:#ffffff; line-height:52px; display:block;">&#127991;&#65039;</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            <h1 style="margin:0 0 6px; font-size:22px; font-weight:700; color:#ffffff;">
+                                Username change confirmation
+                            </h1>
+                            <p style="margin:0; font-size:14px; color:rgba(255,255,255,0.65);">
+                                Your public identity on CodeSarthi was changed
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- ===== INDIGO STRIP ===== -->
+                    <tr>
+                        <td
+                            style="background:#eef2ff; border-bottom:2px solid #a5b4fc; padding:12px 32px; text-align:center;">
+                            <p style="margin:0; font-size:13px; color:#3730a3; font-weight:600;">
+                                &#9888;&#65039; &nbsp; Your username is visible to the entire CodeSarthi community —
+                                change it only when it needed
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- ===== BODY ===== -->
+                    <tr>
+                        <td style="background:#ffffff; padding:32px 32px;">
+
+                            <!-- Greeting -->
+                            <p style="margin:0 0 20px; font-size:15px; color:#2d3060; line-height:1.6;">
+                                Hello, <strong style="color:#1a1a2e;">{}</strong> 👋<br>
+                                A request was made to change the username linked to your CodeSarthi account. Review the
+                                change carefully below and enter the verification code to confirm. If this wasn't you,
+                                secure your account immediately.
+                            </p>
+
+                            <!-- Info: Linked Account Email -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="background:#f7f8ff; border:1px solid #e4e6f8; border-radius:10px; margin-bottom:10px;">
+                                <tr>
+                                    <td style="padding:12px 16px;">
+                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                            <tr>
+                                                <td style="width:32px;">
+                                                    <div
+                                                        style="width:32px; height:32px; background:#eef0ff; border-radius:8px; text-align:center; line-height:32px; font-size:15px;">
+                                                        &#128231;</div>
+                                                </td>
+                                                <td style="padding-left:10px;">
+                                                    <p
+                                                        style="margin:0 0 2px; font-size:11px; color:#9b9fc4; text-transform:uppercase; letter-spacing:0.6px;">
+                                                        Linked account</p>
+                                                    <p
+                                                        style="margin:0; font-size:13px; color:#2d3060; font-weight:600;">
+                                                        {{EMAIL}}</p>
+                                                </td>
+                                                <td align="right">
+                                                    <span
+                                                        style="display:inline-block; background:#eef2ff; color:#3730a3; font-size:11px; font-weight:600; border-radius:20px; padding:3px 10px; letter-spacing:0.3px;">Change
+                                                        Pending</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+
+
+                            <!-- Info: Time -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="background:#f7f8ff; border:1px solid #e4e6f8; border-radius:10px; margin-bottom:10px;">
+                                <tr>
+                                    <td style="padding:12px 16px;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td style="width:32px;">
+                                                    <div
+                                                        style="width:32px; height:32px; background:#fff7ed; border-radius:8px; text-align:center; line-height:32px; font-size:15px;">
+                                                        &#128336;</div>
+                                                </td>
+                                                <td style="padding-left:10px;">
+                                                    <p
+                                                        style="margin:0 0 2px; font-size:11px; color:#9b9fc4; text-transform:uppercase; letter-spacing:0.6px;">
+                                                        Requested at</p>
+                                                    <p
+                                                        style="margin:0; font-size:13px; color:#2d3060; font-weight:600;">
+                                                        {{DATETIME}} IST</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+
+
+                            <!-- Divider -->
+                            <hr style="border:none; height:1px; background:#eef0fb; margin:0 0 24px;">
+
+                            <!-- Change Summary Label -->
+                            <p
+                                style="margin:0 0 14px; font-size:12px; color:#9b9fc4; text-transform:uppercase; letter-spacing:0.8px;">
+                                Username change summary
+                            </p>
+
+                            <!-- ===== OLD USERNAME CARD ===== -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="border-radius:12px; overflow:hidden; border:1px solid #fecaca;">
+                                <tr>
+                                    <td style="background:#fff5f5; padding:10px 16px; border-bottom:1px solid #fecaca;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="width:8px; height:8px; vertical-align:middle; padding-right:8px; padding-top:2px;">
+                                                    <div
+                                                        style="width:8px; height:8px; border-radius:50%; background:#ef4444;">
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    style="font-size:11px; font-weight:600; color:#991b1b; text-transform:uppercase; letter-spacing:0.8px;">
+                                                    Current username &nbsp;&mdash;&nbsp; removed
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background:#ffffff; padding:20px 16px;">
+                                        <p
+                                            style="margin:0 0 6px; font-size:22px; font-weight:700; color:#9b9fc4; text-decoration:line-through; font-family:'Courier New',monospace; letter-spacing:1px; word-break:break-all;">
+                                            {{CURRENT_USERNAME}}</p>
+                                        <p style="margin:0; font-size:12px; color:#9b9fc4; line-height:1.5;">This handle
+                                            will be released and may be claimed by another user after your change was
+                                            confirmed.</p>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Arrow bridge -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:10px 0;">
+                                <tr>
+                                    <td align="center">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="background:#eef2ff; border:1px solid #a5b4fc; border-radius:20px; padding:5px 14px;">
+                                                    <table cellpadding="0" cellspacing="0" border="0">
+                                                        <tr>
+                                                            <td
+                                                                style="padding-right:6px; vertical-align:middle; font-size:14px; color:#4338ca;">
+                                                                &#8595;</td>
+                                                            <td
+                                                                style="font-size:12px; font-weight:600; color:#3730a3; white-space:nowrap;">
+                                                                Changed to</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- ===== NEW USERNAME CARD ===== -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="border-radius:12px; overflow:hidden; border:1px solid #a5b4fc; margin-bottom:20px;">
+                                <tr>
+                                    <td style="background:#eef2ff; padding:10px 16px; border-bottom:1px solid #a5b4fc;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="width:8px; height:8px; vertical-align:middle; padding-right:8px; padding-top:2px;">
+                                                    <div
+                                                        style="width:8px; height:8px; border-radius:50%; background:#6366f1;">
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    style="font-size:11px; font-weight:600; color:#3730a3; text-transform:uppercase; letter-spacing:0.8px;">
+                                                    New username &nbsp;&mdash;&nbsp; newly linked
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background:#ffffff; padding:20px 16px;">
+                                        <p
+                                            style="margin:0 0 6px; font-size:22px; font-weight:700; color:#3730a3; font-family:'Courier New',monospace; letter-spacing:1px; word-break:break-all;">
+                                            {{NEW_USERNAME}}</p>
+                                        <p style="margin:0; font-size:12px; color:#9b9fc4; line-height:1.5;">This is
+                                            your new public handle across all CodeSarthi pages, posts, and community
+                                            interactions.</p>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- What this change affects -->
+                            <p
+                                style="margin:0 0 14px; font-size:12px; color:#9b9fc4; text-transform:uppercase; letter-spacing:0.8px;">
+                                What this change affects
+                            </p>
+
+
+
+                            <!-- Impact 2 -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="background:#f7f8ff; border:1px solid #e4e6f8; border-radius:10px; margin-bottom:8px;">
+                                <tr>
+                                    <td style="padding:13px 16px;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="width:8px; vertical-align:top; padding-top:5px; padding-right:12px;">
+                                                    <div
+                                                        style="width:8px; height:8px; border-radius:50%; background:#6366f1;">
+                                                    </div>
+                                                </td>
+                                                <td style="font-size:13px; color:#2d3060; line-height:1.5;">
+                                                    <strong>Community posts &amp; replies</strong> — your username will
+                                                    update on all existing posts and comments automatically
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Impact 3 -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="background:#f7f8ff; border:1px solid #e4e6f8; border-radius:10px; margin-bottom:24px;">
+                                <tr>
+                                    <td style="padding:13px 16px;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="width:8px; vertical-align:top; padding-top:5px; padding-right:12px;">
+                                                    <div
+                                                        style="width:8px; height:8px; border-radius:50%; background:#9ca3af;">
+                                                    </div>
+                                                </td>
+                                                <td style="font-size:13px; color:#2d3060; line-height:1.5;">
+                                                    <strong>Old handle released</strong> —
+                                                    <span
+                                                        style="font-family:'Courier New',monospace; font-size:12px;">{{CURRENT_USERNAME}}</span>
+                                                    will become available for others to claim after confirmation
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Divider -->
+                            <hr style="border:none; height:1px; background:#eef0fb; margin:0 0 24px;">
+
+
+                            <!-- Warning -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="background:#fff7ed; border:1px solid #fed7aa; border-radius:10px; margin-bottom:14px;">
+                                <tr>
+                                    <td style="padding:14px 16px;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="font-size:18px; vertical-align:top; padding-right:12px; padding-top:1px;">
+                                                    &#9888;&#65039;</td>
+                                                <td style="font-size:13px; color:#7c2d12; line-height:1.5;">
+                                                    <strong>Wasn't you?</strong> Your old
+                                                    username may be claimed by someone else if this goes through.
+                                                    <div style="color:#c2410c; font-weight:600; text-decoration:none;">
+                                                        Secure
+                                                        your account immediately</div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Heads up tip -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="background:#fffbeb; border:1px solid #fde68a; border-radius:10px; margin-bottom:20px;">
+                                <tr>
+                                    <td style="padding:14px 16px;">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="font-size:18px; vertical-align:top; padding-right:12px; padding-top:1px;">
+                                                    &#128274;</td>
+                                                <td style="font-size:13px; color:#78350f; line-height:1.5;">
+                                                    <strong>Heads up:</strong> Usernames can only be changed once every
+                                                    30 days. Choose carefully — your old handle will be released
+                                                    publicly once the change is confirmed.
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Support -->
+                            <p style="margin:0; font-size:13px; color:#9b9fc4; text-align:center; line-height:1.6;">
+                                Need help? Contact us at
+                                <a href="mailto:codesarthi.help@gmail.com"
+                                    style="color:#4f46e5; font-weight:600; text-decoration:none;">codesarthi.help@gmail.com</a>
+                            </p>
+
+                        </td>
+                    </tr>
+
+                    <!-- ===== FOOTER ===== -->
+                    <tr>
+                        <td
+                            style="background:#f7f8ff; border-top:1px solid #eef0fb; padding:24px 32px; text-align:center;">
+                            <table align="center" cellpadding="0" cellspacing="0" border="0"
+                                style="margin-bottom:14px;">
+                                <tr>
+                                    <td style="padding:0 12px;">
+                                        <a href="https://www.codesarthi.in/help-center"
+                                            style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Help
+                                            Center</a>
+                                    </td>
+                                    <td style="font-size:13px; color:#dde0f5;">|</td>
+                                    <td style="padding:0 12px;">
+                                        <a href="https://www.codesarthi.in/privacy-&-policy-hub"
+                                            style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Privacy
+                                            Policy</a>
+                                    </td>
+                                    <td style="font-size:13px; color:#dde0f5;">|</td>
+                                    <td style="padding:0 12px;">
+                                        <a href="mailto:codesarthi.help@gmail.com"
+                                            style="font-size:13px; color:#4f46e5; font-weight:500; text-decoration:none;">Contact
+                                            Support</a>
+                                    </td>
+                                </tr>
+                            </table>
+                            <p style="margin:0; font-size:12px; color:#b0b4d4; line-height:1.6;">
+                                © 2026 CodeSarthi &nbsp;·&nbsp; Kanpur, Uttar Pradesh, India<br>
+                                This is an automated security email. Please do not reply directly to this email.
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+
+</body> `,
                     });
 
 
