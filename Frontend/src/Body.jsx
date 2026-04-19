@@ -4,7 +4,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "./utils/userSlice";
 import { useEffect, useState } from "react";
-import { BASE_URL } from "./Pages/auth/baseURL";
+import BASE_URL from "./Pages/auth/baseURL";
 import { useNavigate } from "react-router-dom";
 const Body = () => {
     const dispatch = useDispatch();

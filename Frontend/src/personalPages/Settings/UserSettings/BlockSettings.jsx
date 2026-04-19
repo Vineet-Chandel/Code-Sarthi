@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { addBlockedUsers, clearBlockedUser } from "../../../utils/blockedSlice";
-import { BASE_URL } from "../../../Pages/auth/baseURL";
+import BASE_URL from "../../../Pages/auth/baseURL";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";

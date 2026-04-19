@@ -4,7 +4,7 @@ import { TbPasswordFingerprint } from "react-icons/tb";
 import { MdMarkEmailUnread } from "react-icons/md";
 import { MdOutgoingMail } from "react-icons/md";
 import { FaUserTag } from "react-icons/fa";
-import { BASE_URL } from "../../../Pages/auth/baseURL";
+import BASE_URL from "../../../Pages/auth/baseURL";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";

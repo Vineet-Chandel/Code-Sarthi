@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { BASE_URL } from "../Pages/auth/baseURL";
+import BASE_URL from "../Pages/auth/baseURL";
 import { addConnectionUser, removeConnectionUser } from "../utils/connectionSlice";
 import { useDispatch, useSelector } from "react-redux";
 

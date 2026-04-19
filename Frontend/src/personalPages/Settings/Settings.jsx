@@ -18,7 +18,7 @@ import AboutUs from "./Support/AboutUs";
 import axios from "axios";
 import ContentAndSocial from "./UserSettings/ContentAndSocial";
 import { useDispatch } from "react-redux";
-import { BASE_URL } from "../../Pages/auth/baseURL";
+import BASE_URL from "../../Pages/auth/baseURL";
 import { removeUser } from "../../utils/userSlice";
 import { useNavigate } from "react-router-dom";
 

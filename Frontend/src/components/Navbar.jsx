@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { removeUser } from "../utils/userSlice";
 import axios from "axios";
-import { BASE_URL } from "../Pages/auth/baseURL";
+import BASE_URL from "../Pages/auth/baseURL";
 import Search from "./navSearch";
 
 const NavBar = () => {

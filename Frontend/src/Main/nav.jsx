@@ -109,7 +109,7 @@ const Nav = () => {
             dropdown: (
                 <Dropdown
                     title="Resources"
-                    items={["Help Center", "Feedback", "Submit a Request"]}
+                    items={["Help Center", "Feedback", "Submit a Request", "Review"]}
                 />
             ),
         },

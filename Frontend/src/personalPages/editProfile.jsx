@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { BASE_URL } from "../Pages/auth/baseURL";
+import BASE_URL from "../Pages/auth/baseURL";
 
 import { MdEdit } from "react-icons/md";
 
@@ -248,7 +248,7 @@ const EditProfile = () => {
                                                 id="firstName"
                                                 type="text"
                                                 placeholder={user.firstName}
-                                                className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base"
+                                                className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base text-secondary"
                                                 value={formData['firstName']}
                                                 onChange={handleChange}
 
@@ -270,7 +270,7 @@ const EditProfile = () => {
                                                 id="middleName"
                                                 type="text"
                                                 placeholder={user.middleName}
-                                                className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base"
+                                                className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base text-secondary"
                                                 value={formData['middleName']}
                                                 onChange={handleChange}
                                                 required={false}
@@ -292,7 +292,7 @@ const EditProfile = () => {
                                                 id="lastName"
                                                 type="text"
                                                 placeholder={user.lastName}
-                                                className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base"
+                                                className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base text-secondary"
                                                 value={formData['lastName']}
                                                 onChange={handleChange}
 
@@ -314,7 +314,7 @@ const EditProfile = () => {
                                             </span>
                                             <select
                                                 id="gender"
-                                                className="w-full outline-none text-gray-200 bg-transparent text-base appearance-none cursor-pointer"
+                                                className="w-full outline-none text-gray-200 bg-transparent text-base appearance-none cursor-pointer text-secondary"
                                                 value={formData.gender}
                                                 onChange={handleChange}
 
@@ -347,7 +347,7 @@ const EditProfile = () => {
                                                 min="10"
                                                 max="100"
                                                 placeholder={user.age}
-                                                className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                                className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none text-secondary"
                                                 value={formData.age}
                                                 onChange={handleChange}
 
@@ -372,7 +372,7 @@ const EditProfile = () => {
                                                 id="college"
                                                 type="text"
                                                 placeholder={user.college}
-                                                className="outline-none w-full text-gray-200 bg-transparent placeholder-gray-500 text-base"
+                                                className="outline-none w-full text-gray-200 bg-transparent placeholder-gray-500 text-base text-secondary"
                                                 value={formData.college}
                                                 onChange={handleChange}
 
@@ -400,7 +400,7 @@ const EditProfile = () => {
                                                 id="profession"
                                                 type="text"
                                                 placeholder={user.profession}
-                                                className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base"
+                                                className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base text-secondary"
                                                 value={formData.profession}
                                                 onChange={handleChange}
                                             />
@@ -426,7 +426,7 @@ const EditProfile = () => {
                                             <textarea
                                                 id="about"
                                                 placeholder={user.about}
-                                                className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base"
+                                                className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base text-secondary"
                                                 value={formData.about}
                                                 onChange={handleChange}
 
@@ -454,11 +454,11 @@ const EditProfile = () => {
                                     </div>
                                 </div>
                                 <div className="w-[100%] flex justify-center">
-                                    <button type="submit" className="group relative  w-[50%] p-4 mt-4 rounded-xl text-xl font-medium bg-gray-800/40 border-[2px] border-gray-700/50 hover:bg-gray-800/60 transition-all duration-300 overflow-hidden text-white">
+                                    <button type="submit" className="group relative w-[30%] py-3  mt-4 rounded-xl text-xl font-bold bg-[#370a0020] border-[2px] border-accent hover:border-secondary hover:bg-[#370a0040] transition-all duration-300 overflow-hidden text-secondary shadow-md hover:shadow-lg">
                                         Save Your Changes
-                                        <div className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-blue-500"></div>
-                                        <div className="absolute inset-x-0 bottom-0 h-[2px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-cyan-400"></div>
-                                        <div className="absolute inset-x-0 bottom-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px]  transition-all duration-300 bg-gradient-to-r from-transparent via-sky-400"></div>
+                                        <div className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-[#9f2d00]/70 to-transparent"></div>
+                                        <div className="absolute inset-x-0 bottom-0 h-[2px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-accent to-transparent"></div>
+                                        <div className="absolute inset-x-0 bottom-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] transition-all duration-300 bg-gradient-to-r from-transparent via-[#ffa43d] to-transparent"></div>
                                     </button>
                                 </div>
 

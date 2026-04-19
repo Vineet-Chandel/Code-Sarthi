@@ -27,8 +27,8 @@ import PolicyAndSafety from "./Main/PagesMain/Sub-Category/Blog-Category/Privacy
 import UseCodeSarthi from "./Main/PagesMain/Sub-Category/Blog-Category/UseCodeSarthi";
 import HelpCenter from "./Main/PagesMain/Sub-Category/Support-Category/HelpCenter";
 import PrivacyCenter from "./Main/PagesMain/Sub-Category/Blog-Category/PrivacyCenter";
-
-
+import Feedback from "./Main/PagesMain/Sub-Category/Support-Category/Feedback";
+import SubmitARequest from "./Main/PagesMain/Sub-Category/Support-Category/SubmitARequest";
 /* ===== AUTH ===== */
 import Login from "./Pages/auth/Login";
 import Signup from "./Pages/auth/Signup";
@@ -51,7 +51,7 @@ import Connections from "./personalPages/Connections";
 import Collab from "./Pages/Collab";
 import HTML from "./Pages/Toolkit/Htmlw";
 import Toolkit from "./Pages/Toolkit/Toolkitw";
-
+import Review from "./Main/PagesMain/Sub-Category/Support-Category/Review";
 import Settings from "./personalPages/Settings/Settings";
 import RequestedUser from "./personalPages/RequestedUser";
 import ReceivedRequests from "./personalPages/ReceivedRequests";
@@ -70,9 +70,11 @@ const App = () => {
           <Route path="/blogs" element={<Blogs />} />
           <Route path="/support" element={<Support />} />
           <Route path="/help-center" element={<HelpCenter />} />
+          <Route path="/feedback" element={<Feedback />} />
+          <Route path="/submit-a-request" element={<SubmitARequest />} />
           <Route path="/privacy-center" element={<PrivacyCenter />} />
           <Route path="/smart-scheduler---lakshya" element={<SmartSchedulerLakshya />} />
-
+          <Route path="/review" element={<Review />} />
 
           {/* Categories */}
 

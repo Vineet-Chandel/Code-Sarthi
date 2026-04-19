@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { BASE_URL } from "./auth/baseURL";
+import BASE_URL from "./auth/baseURL";
 import { addFeedUser } from "../utils/feedSlice";
 import { removeFeedUser } from "../utils/feedSlice";
 import { useDispatch, useSelector } from "react-redux";

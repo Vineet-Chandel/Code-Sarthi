@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { addConnectionUser } from "../utils/connectionSlice";
-import { BASE_URL } from "../Pages/auth/baseURL";
+import BASE_URL from "../Pages/auth/baseURL";
 import { FaUniversity } from "react-icons/fa";
 import { BsPersonWorkspace } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, } from 'react'
-import { BASE_URL } from "../Pages/auth/baseURL";
+import BASE_URL from "../Pages/auth/baseURL";
 import axios from "axios";
 import { AiOutlineLoading } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";

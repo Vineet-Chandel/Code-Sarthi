@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { BASE_URL } from "../Pages/auth/baseURL";
+import BASE_URL from "../Pages/auth/baseURL";
 import { addConnectionUser } from "../utils/connectionSlice";
 import { setChatUsers } from "../utils/chat-user-slice";
 import { useDispatch, useSelector } from "react-redux";
