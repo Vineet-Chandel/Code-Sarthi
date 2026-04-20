@@ -190,7 +190,7 @@ authRouter.get("/auth/verify-email", userAuth, async (req, res) => {
 
 
         const { data, error } = await resend.emails.send({
-            from: 'CodeSarthi <nova@codesarthi.in>',
+            from: 'CodeSarthi <codesarthi.axonic@gmail.com>',
             to: [userGmail],
             subject: "Your Verification Code",
             html: `<body style="margin:0; padding:0; background-color:#f0f2ff; font-family:Arial,Helvetica,sans-serif;">
@@ -496,7 +496,7 @@ authRouter.post("/auth/verify-email", userAuth, async (req, res) => {
 
 
                 const { data, error } = await resend.emails.send({
-                    from: 'CodeSarthi <nova@codesarthi.in>',
+                    from: 'CodeSarthi <codesarthi.axonic@gmail.com>',
                     to: [userGmail],
                     subject: "Your Email Verification Status",
                     html: `<body style="margin:0; padding:0; background-color:#f0f2ff; font-family:Arial,Helvetica,sans-serif;">

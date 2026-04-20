@@ -114,7 +114,7 @@ profileRouter.get("/profile/update-identity", userAuth, async (req, res) => {
         /* ----------------  SENDING GMAIL  ---------------- */
 
         const { data, error } = await resend.emails.send({
-            from: 'CodeSarthi <nova@codesarthi.in>',
+            from: 'CodeSarthi <codesarthi.axonic@gmail.com>',
             to: [gmailID],
             subject: "CodeSarthi Verification Code",
             html: `
@@ -527,7 +527,7 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
 
 
                         const { data1, error2 } = await resend.emails.send({
-                            from: 'CodeSarthi <nova@codesarthi.in>',
+                            from: 'CodeSarthi <codesarthi.axonic@gmail.com>',
                             to: [oldGmail],
                             subject: "Identity Change Alert",
                             html: `<body style="margin:0; padding:0; background-color:#f0f2ff; font-family:Arial,Helvetica,sans-serif;">
@@ -865,7 +865,7 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
                         await user.save();
 
                         const { data, error } = await resend.emails.send({
-                            from: 'CodeSarthi <nova@codesarthi.in>',
+                            from: 'CodeSarthi <codesarthi.axonic@gmail.com>',
                             to: [newGmail],
                             subject: "CodeSarthi Account was recovered sucessfully",
                             html: `<body style="margin:0; padding:0; background-color:#f0f2ff; font-family:Arial,Helvetica,sans-serif;">
@@ -1203,7 +1203,7 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
                             user.isVerified = true;
                         }
                         const { data, error } = await resend.emails.send({
-                            from: 'CodeSarthi <nova@codesarthi.in>',
+                            from: 'CodeSarthi <codesarthi.axonic@gmail.com>',
                             to: [user.gmail],
                             subject: "Identity Change Alert",
                             html: `<body style="margin:0; padding:0; background-color:#f0f2ff; font-family:Arial,Helvetica,sans-serif;">
@@ -1626,7 +1626,7 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
                 } else if (newGmail && newUsername) {
 
                     const { data2, error2 } = await resend.emails.send({
-                        from: 'CodeSarthi <nova@codesarthi.in>',
+                        from: 'CodeSarthi <codesarthi.axonic@gmail.com>',
                         to: [oldGmail],
                         subject: "Security Alert",
                         html: `<body style="margin:0; padding:0; background-color:#f0f2ff; font-family:Arial,Helvetica,sans-serif;">
@@ -2044,7 +2044,7 @@ profileRouter.patch("/profile/update-identity", userAuth, async (req, res) => {
 
 
                     const { data, error } = await resend.emails.send({
-                        from: 'CodeSarthi <nova@codesarthi.in>',
+                        from: 'CodeSarthi <codesarthi.axonic@gmail.com>',
                         to: [newGmail],
                         subject: "CodeSarthi Account was recovered sucessfully",
                         html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
@@ -2224,7 +2224,7 @@ profileRouter.post("/profile/me/delete", userAuth, async (req, res) => {
 
 
         const { data1, error2 } = await resend.emails.send({
-            from: 'CodeSarthi <nova@codesarthi.in>',
+            from: 'CodeSarthi <codesarthi.axonic@gmail.com>',
             to: [user.gmail],
             subject: "CodeSarthi Verification Code",
             html: `<body style="margin:0; padding:0; background-color:#f0f2ff; font-family:Arial,Helvetica,sans-serif;">
@@ -2677,7 +2677,7 @@ profileRouter.delete("/profile/me/delete", userAuth, async (req, res) => {
 
 
                 const { data, error } = await resend.emails.send({
-                    from: 'CodeSarthi <nova@codesarthi.in>',
+                    from: 'CodeSarthi <codesarthi.axonic@gmail.com>',
                     to: [deletedUserGmail],
                     subject: `GoodBye ${deletedUserName}`,
                     html: `<body style="margin:0; padding:0; background-color:#f5f7ff; font-family:Arial, Helvetica, sans-serif;">
