@@ -45,12 +45,12 @@ const reviewSchema = new mongoose.Schema({
     //Ratings 
 
 
-    msg: { type: Number, min: 1, max: 5, default: null },
-    ov: { type: Number, min: 1, max: 5, default: null },
-    res: { type: Number, min: 1, max: 5, default: null },
-    sch: { type: Number, min: 1, max: 5, default: null },
-    tws: { type: Number, min: 1, max: 5, default: null },
-    vid: { type: Number, min: 1, max: 5, default: null },
+    msg: { type: Number, min: 0, max: 5, default: null },
+    ov: { type: Number, min: 0, max: 5, default: null },
+    res: { type: Number, min: 0, max: 5, default: null },
+    sch: { type: Number, min: 0, max: 5, default: null },
+    tws: { type: Number, min: 0, max: 5, default: null },
+    vid: { type: Number, min: 0, max: 5, default: null },
     nps: { type: Number, min: 0, max: 10, default: null },
 
     // review
@@ -60,13 +60,13 @@ const reviewSchema = new mongoose.Schema({
         type: String,
         default: undefined,
         maxlength: 2048,
-        minlength: 40
+
     },
     better: {
         type: String,
         default: undefined,
         maxlength: 2048,
-        minlength: 40
+
     },
     replace: {
         type: String,

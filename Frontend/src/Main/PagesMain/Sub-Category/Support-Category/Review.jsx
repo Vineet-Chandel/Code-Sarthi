@@ -335,13 +335,13 @@ const UserReview = () => {
                 role: wholeData.role,
 
 
-                msg: wholeData.ratings.msg,
-                ov: wholeData.ratings.ov,
-                res: wholeData.ratings.res,
-                sch: wholeData.ratings.sch,
-                tws: wholeData.ratings.tws,
-                vid: wholeData.ratings.vid,
-                nps: wholeData.nps,
+                msg: parseInt(wholeData.ratings.msg),
+                ov: parseInt(wholeData.ratings.ov),
+                res: parseInt(wholeData.ratings.res),
+                sch: parseInt(wholeData.ratings.sch),
+                tws: parseInt(wholeData.ratings.tws),
+                vid: parseInt(wholeData.ratings.vid),
+                nps: parseInt(wholeData.nps),
 
                 best: wholeData.review.best,
                 better: wholeData.review.better,
