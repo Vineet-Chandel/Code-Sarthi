@@ -676,11 +676,11 @@ const Signup = () => {
                 </label>
                 <span>
                   I agree to the{" "}
-                  <a href="/terms" className="text-[#193ab7] hover:text-secondary transition-colors">
+                  <a href="/terms-and-conditions" className="text-[#193ab7] hover:text-secondary transition-colors">
                     Terms & Conditions
                   </a>{" "}
                   and{" "}
-                  <a href="/privacy-center" className="text-[#193ab7] hover:text-secondary transition-colors">
+                  <a href="/privacy-&-policy-hub" className="text-[#193ab7] hover:text-secondary transition-colors">
                     Privacy Policy
                   </a>.
                 </span>

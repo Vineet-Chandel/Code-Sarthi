@@ -57,6 +57,34 @@ authRouter.post("/auth/signup", async (req, res) => {
             college,
             profession,
         });
+        let rate = Math.floor(Math.random() * 100);
+        if (rate < 30) {
+            if (user.gender === "male") {
+                user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/v1776697410/Untitled_Design_720x720_q1fftf.png"
+            } else if (user.gender === "female") {
+                user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/v1776698378/Genshin_Impact_Pin_qleydy.jpg"
+            } else {
+                user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/v1776698539/Quick_Note_Pin_qky24p.jpg"
+            }
+        } else if (rate < 60 && rate > 30) {
+            if (user.gender === "male") {
+                user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/v1776697561/Quick_Saves_Pin_xsaxre.jpg"
+            } else if (user.gender === "female") {
+                user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/v1776698900/Pink_Girl_Pin_da3s6t.jpg"
+            } else {
+                user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/v1776698539/Quick_Note_Pin_qky24p.jpg"
+            }
+        } else if (rate < 100 && rate > 60) {
+            if (user.gender === "male") {
+                user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/v1776697603/Character_Ideas_Pin_sybp9c.jpg"
+            } else if (user.gender === "female") {
+                user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/v1776698959/Chibi_Pin_cadgdi.jpg"
+            } else {
+                user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/v1776698539/Quick_Note_Pin_qky24p.jpg"
+            }
+        } else {
+            user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/v1776698539/Quick_Note_Pin_qky24p.jpg"
+        }
 
         const savedUser = await user.save();
         const token = await savedUser.getJWT();
@@ -190,7 +218,7 @@ authRouter.get("/auth/verify-email", userAuth, async (req, res) => {
 
 
         const { data, error } = await resend.emails.send({
-            from: 'CodeSarthi <codesarthi.axonic@gmail.com>',
+            from: 'CodeSarthi <nova@codesarthi.in>',
             to: [userGmail],
             subject: "Your Verification Code",
             html: `<body style="margin:0; padding:0; background-color:#f0f2ff; font-family:Arial,Helvetica,sans-serif;">
@@ -496,7 +524,7 @@ authRouter.post("/auth/verify-email", userAuth, async (req, res) => {
 
 
                 const { data, error } = await resend.emails.send({
-                    from: 'CodeSarthi <codesarthi.axonic@gmail.com>',
+                    from: 'CodeSarthi <nova@codesarthi.in>',
                     to: [userGmail],
                     subject: "Your Email Verification Status",
                     html: `<body style="margin:0; padding:0; background-color:#f0f2ff; font-family:Arial,Helvetica,sans-serif;">

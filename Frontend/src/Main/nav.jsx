@@ -44,7 +44,7 @@ const Nav = () => {
                 <Dropdown
                     title="Blog Documentation"
                     items={[
-
+                        "Terms and Conditions",
                         "New Updates",
                         "Engineering and Developers",
                         "How to use CodeSarthi",

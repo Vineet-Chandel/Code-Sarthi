@@ -47,7 +47,18 @@ const STEP_LABELS = [
 
 // ─── REUSABLE UI COMPONENTS ──────────────────────────────────────────────────
 
-const inputClass = "w-full bg-white/[0.035] border border-white/10 rounded-xl px-[15px] py-[11px] text-[13px] text-white font-sans outline-none focus:border-blue-500/50 transition-colors resize-none";
+const inputClass = `
+w-full bg-white/5 backdrop-blur-sm 
+border border-white/10 rounded-xl 
+px-4 py-2.5 text-sm text-white 
+placeholder:text-white/30 
+outline-none transition-all duration-200
+
+focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 
+hover:border-white/20
+
+disabled:opacity-40 disabled:cursor-not-allowed
+`;
 
 function FG({ label, req, children }) {
     return (
@@ -103,7 +114,15 @@ function Step1({ data, onChange, role, onRole, onNext }) {
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-5">
                 {USER_ROLES.map(r => (
                     <button key={r.id} onClick={() => onRole(r.id)}
-                        className={`rounded-xl p-[13px_11px] cursor-pointer text-left transition-all duration-200 border ${role === r.id ? 'bg-blue-500/10 border-blue-500/40' : 'bg-white/[0.03] border-white/5'}`}>
+                        className={`
+rounded-xl p-4 text-left border
+transition-all duration-200
+
+${role === r.id
+                                ? 'bg-blue-500/15 border-blue-500/40 shadow-md shadow-blue-500/20 scale-[1.02]'
+                                : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20 hover:scale-[1.02]'
+                            }
+`}>
                         <span className="text-[18px] mb-[7px] block">{r.icon}</span>
                         <div className="text-[12px] font-medium text-white font-sans">{r.label}</div>
                         <div className="text-[10px] text-white/30 mt-0.5 font-sans leading-tight">{r.desc}</div>
@@ -261,34 +280,7 @@ const UserReview = () => {
     useEffect(() => { const t = setTimeout(() => setVisible(true), 80); return () => clearTimeout(t); }, []);
 
     const handleSubmit = () => {
-        console.log(`name: ${wholeData.profile.name}`)
-        console.log(`email: ${wholeData.profile.email}`)
-        console.log(`github: ${wholeData.profile.github}`)
-        console.log(`linkedin: ${wholeData.profile.linkedin}`)
-        console.log(`expLevel: ${wholeData.profile.expLevel}`)
-        console.log(`duration: ${wholeData.profile.duration}`)
 
-        console.log(`role: ${wholeData.role}`)
-
-
-        console.log(`msg: ${wholeData.ratings.msg}`)
-        console.log(`ov: ${wholeData.ratings.ov}`)
-        console.log(`res: ${wholeData.ratings.res}`)
-        console.log(`sch: ${wholeData.ratings.sch}`)
-        console.log(`tws: ${wholeData.ratings.tws}`)
-        console.log(`vid: ${wholeData.ratings.vid}`)
-        console.log(`nps: ${wholeData.nps}`)
-
-        console.log(`best: ${wholeData.review.best}`)
-        console.log(`better: ${wholeData.review.better}`)
-        console.log(`replace: ${wholeData.review.replace}`)
-        console.log(`reviewText: ${wholeData.review.reviewText}`)
-        console.log(`usedTags: ${wholeData.usedTags}`)
-
-        console.log(`attrName: ${wholeData.publish.attrName}`)
-        console.log(`discover: ${wholeData.publish.discover}`)
-        console.log(`extra: ${wholeData.publish.extra}`)
-        console.log(`pubAllow: ${wholeData.pubAllow}`)
         setRefId('RVW-' + Math.floor(100000 + Math.random() * 900000));
         setSubmitted(true);
     };
@@ -320,6 +312,7 @@ const UserReview = () => {
     const [doing, setDoing] = useState(false);
     const [err, setErr] = useState(false);
     const [errText, setErrText] = useState("");
+    const [submitReview, setSubmitReview] = useState(false);
     const revieew = async () => {
         try {
             setDoing(true);
@@ -367,19 +360,42 @@ const UserReview = () => {
                 setErr(false);
                 setErrText("");
                 resetForm();
-            }, 3000);
+            }, 5000);
         } finally {
             setDoing(false);
         }
     };
     useEffect(() => {
         revieew();
-    }, [submitted]);
-
+    }, [submitReview]);
     return (
         <div className="min-h-screen w-full bg-[#06060b] text-white relative overflow-x-hidden">
             <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+            {(err || errText) && (
+                <div className="bg-white h-[60px] min-w-[260px] max-w-[320px] 
+fixed top-4 right-2 
+rounded-l-2xl z-[100] 
+border-l-[10px] border-t-[3px] border-b-[3px] border-red-400 
+flex items-center px-2 shadow-md">
 
+                    <div className="bg-red-500/40 h-[40px] w-[40px] 
+  rounded-full text-red-600 text-xl 
+  flex items-center justify-center" onClick={() => {
+                            setErr(false);
+                            setErrText("");
+                            resetForm();
+                        }}>
+                        ✕
+                    </div>
+
+                    <div className="bg-red-500/30 h-[40px] flex-1 
+  rounded-xl ml-2 text-red-600 text-lg 
+  flex items-center justify-center font-semibold">
+                        ERROR
+                    </div>
+
+                </div>
+            )}
             {/* Ambient Lighting */}
             <div className="fixed top-[-180px] left-1/2 -translate-x-1/2 w-[860px] h-[520px] bg-[radial-gradient(ellipse_at_50%_50%,rgba(26,108,246,0.06)_0%,transparent_70%)] pointer-events-none z-0" />
 
@@ -429,7 +445,7 @@ const UserReview = () => {
                             {step === 1 && <Step1 data={profile} onChange={(k, v) => setProfile(p => ({ ...p, [k]: v }))} role={role} onRole={setRole} onNext={() => setStep(2)} />}
                             {step === 2 && <Step2 ratings={ratings} onRate={(k, v) => setRatings(p => ({ ...p, [k]: v }))} nps={nps} onNps={setNps} onBack={() => setStep(1)} onNext={() => setStep(3)} />}
                             {step === 3 && <Step3 data={review} onChange={(k, v) => setReview(p => ({ ...p, [k]: v }))} tags={usedTags} onToggleTag={(t) => setUsedTags(p => p.includes(t) ? p.filter(x => x !== t) : [...p, t])} onBack={() => setStep(2)} onNext={() => setStep(4)} />}
-                            {step === 4 && <Step4 data={publish} onChange={(k, v) => setPublish(p => ({ ...p, [k]: v }))} publishAllowed={pubAllow} onTogglePublish={() => setPubAllow(!pubAllow)} onBack={() => setStep(3)} onSubmit={handleSubmit} />}
+                            {step === 4 && <Step4 data={publish} onChange={(k, v) => setPublish(p => ({ ...p, [k]: v }))} publishAllowed={pubAllow} onTogglePublish={() => setPubAllow(!pubAllow)} onBack={() => setStep(3)} onSubmit={() => { handleSubmit(); setSubmitReview(true) }} />}
                         </>
                     ) : (
                         <div className="text-center py-16 px-5">

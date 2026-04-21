@@ -5,7 +5,7 @@ import appStore from "./utils/appStore";
 import Hero from "./Main/hero";
 import Body from "./Body";
 import ProtectedRoute from "./ProtectedRoute";
-
+import TermsAndConditions from "./Main/PagesMain/Sub-Category/Blog-Category/TermsAndConditions";
 /* ===== MAIN PUBLIC PAGES ===== */
 
 import Safety from "./Main/PagesMain/Main-Category/Safety";
@@ -56,7 +56,7 @@ import Settings from "./personalPages/Settings/Settings";
 import RequestedUser from "./personalPages/RequestedUser";
 import ReceivedRequests from "./personalPages/ReceivedRequests";
 import SmartSchedulerLakshya from "./Main/PagesMain/Sub-Category/Blog-Category/SmartSchedulerLakshya";
-
+import PrivacyPolicyHub from "./Main/PagesMain/Sub-Category/Safety-Category/Hub/PrivacyPolicyHub";
 const App = () => {
   return (
     <Provider store={appStore}>
@@ -75,7 +75,8 @@ const App = () => {
           <Route path="/privacy-center" element={<PrivacyCenter />} />
           <Route path="/smart-scheduler---lakshya" element={<SmartSchedulerLakshya />} />
           <Route path="/review" element={<Review />} />
-
+          <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+          <Route path="/privacy-&-policy-hub" element={<PrivacyPolicyHub />} />
           {/* Categories */}
 
           <Route path="/engineering" element={<Engineering />} />

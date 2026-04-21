@@ -162,16 +162,18 @@ const NavBar = () => {
                             >
                                 {/* Sidebar header */}
                                 <div className="flex justify-between items-center p-3 border-b mb-5 pb-5 relative top-3 border-gray-200">
-                                    <div className="top">
+                                    <div className="top flex gap-3">
                                         <div className="flex items-center gap-2">
 
 
-                                            <img src="../public/img/mainLogo.png" alt="" className="w-[40px] border rounded-full border-transparent" />
+                                            <img src="https://res.cloudinary.com/dggoaxqxl/image/upload/v1776693732/image_wxefat.png" alt="" className="w-[50px] border rounded-full border-transparent" />
 
-                                            <span className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800">CodeSarthi</span>
+
                                         </div>
-
-                                        <p className="pl-14 text-xs sm:text-xs sm:text-sm text-gray-800 mt-[-10px]">Empowering Dev Workflows</p>
+                                        <div className='flex flex-col items-start gap-2'>
+                                            <span className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800">CodeSarthi</span>
+                                            <p className=" text-xs sm:text-xs sm:text-sm text-gray-800 mt-[-10px]">Empowering Dev Workflows</p>
+                                        </div>
                                     </div>
 
                                     <button

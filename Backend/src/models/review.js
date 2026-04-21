@@ -34,11 +34,11 @@ const reviewSchema = new mongoose.Schema({
     },
     duration: {
         type: String,
-        enum: ['Less than a week', '1–4 weeks', '1–3 months', '3–6 months', '6+ months']
+        enum: ['Less than a week', '1–4 weeks', '1–3 months', '3–6 months', '6+ months', '']
     },
     role: {
         type: String,
-        enum: ['student', 'developer', 'founder', 'educator', 'jobseeker', 'teamlead']
+        enum: ['student', 'developer', 'founder', 'educator', 'jobseeker', 'teamlead', '']
     },
 
 
