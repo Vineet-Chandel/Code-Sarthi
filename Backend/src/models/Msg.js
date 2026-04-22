@@ -24,10 +24,7 @@ const MsgSchema = new mongoose.Schema({
     ImgOrVideoUrl: {
         type: String,
     },
-    ContentType: {
-        type: String,
-        enum: ['image', 'video', 'text']
-    },
+
     Reactions: [
         {
             user: {
@@ -37,6 +34,15 @@ const MsgSchema = new mongoose.Schema({
             emoji: String
         }
     ],
+    type: {
+        type: String,
+        enum: ["text", "code", 'image', 'video'],
+        default: "text"
+    },
+    language: {
+        type: String,
+        default: ""
+    },
     messageStatus: {
         type: String,
         enum: ["sent", "delivered", "seen"],

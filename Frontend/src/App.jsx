@@ -38,7 +38,7 @@ import Dashboard from "./Pages/Dashboard";
 import Discussions from "./Pages/Discussions";
 import Meeting from "./Pages/Meeting";
 import Explore from "./Pages/Explore";
-import Resume from "./Pages/Resume";
+import Resume from "../src/Pages/resume/Resume";
 import Shastra from "./Pages/Shastra";
 import Projects from "./Pages/Projects";
 import ProjectManager from "./Pages/Project-Manager";

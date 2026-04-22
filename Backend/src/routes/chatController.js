@@ -71,7 +71,9 @@ chatRouter.post("/send-message", userAuth, upload.single("file"), async (req, re
         const {
             //Get receiver (यह वह user है जिसे message भेजना है।)
             receiverId,
-            content
+            content,
+            type,
+            language
         } = req.body;
         const file = req.file;
         //senderId , receiverId ----> dono hi ka hona essential hai 
@@ -159,7 +161,9 @@ chatRouter.post("/send-message", userAuth, upload.single("file"), async (req, re
             content,
             contentType,
             ImgOrVideoUrl,
-            messageStatus
+            messageStatus,
+            type,
+            language
         })
 
         await message.save();
@@ -178,16 +182,7 @@ chatRouter.post("/send-message", userAuth, upload.single("file"), async (req, re
 
 
 
-        //Emit socket event for realtime
-        if (req.io && req.socketUserMap) {
-            const receiverSocketId = req.socketUserMap.get(receiverId);
 
-            if (receiverSocketId) {
-                req.io.to(receiverSocketId).emit("receive_message", populatedMessage);
-                message.messageStatus = "delivered";
-                await message.save();
-            }
-        }
         res.status(200).json({
             success: true,
             populatedMessage,

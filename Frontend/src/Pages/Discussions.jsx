@@ -10,6 +10,13 @@ import { BsPersonWorkspace } from "react-icons/bs";
 import { IoBarChart } from "react-icons/io5";
 import { useMemo } from "react";
 
+import prettier from "prettier/standalone";
+import parserBabel from "prettier/plugins/babel";
+import parserEstree from "prettier/plugins/estree";
+
+// code editor
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import Editor from "@monaco-editor/react";
 //emoji section
 import {
     smileys_people,
@@ -36,7 +43,7 @@ const emojis = {
 const Discussions = () => {
     //using the dispatch 
     const dispatch = useDispatch();
-
+    const editorRef = useRef(null);
     const pickerRef = useRef(null);
     const connections = useSelector(state => state.connections?.users || []);
     const user = useSelector(state => state.user?.user?.DATA);
@@ -152,6 +159,17 @@ const Discussions = () => {
     }
 
 
+
+    //to sent the msg on clicking enter
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault(); // prevents newline
+            sendMessage();
+        }
+    };
+
+
+
     const [isMsgOptionTabOpen, setIsMsgOptionTabOpen] = useState(false);
     const [messageId, setMessageId] = useState("");
     const [msgProfile, setMsgProfile] = useState("");
@@ -213,43 +231,93 @@ const Discussions = () => {
     const socketRef = useRef(null);
 
 
-    //function to send the message
-    const sendMessage = async () => {
-        if (!messageText.trim()) return;
 
-        const tempId = Date.now(); // temporary unique id
+    const add = [
+        {
+            id: 0, tag: 'default', title: 'Default', icon: (<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#764b1aff" d="M11.288 20.713Q11 20.425 11 20v-7H4q-.425 0-.712-.288T3 12t.288-.712T4 11h7V4q0-.425.288-.712T12 3t.713.288T13 4v7h7q.425 0 .713.288T21 12t-.288.713T20 13h-7v7q0 .425-.288.713T12 21t-.712-.288"></path></svg>)
+        },
+        { id: 1, tag: 'file', title: 'File', icon: (<svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 512 512"><path fill="currentColor" d="M16 420a28 28 0 0 0 28 28h424a28 28 0 0 0 28-28V208H16Zm480-296a28 28 0 0 0-28-28H212.84l-48-32H44a28 28 0 0 0-28 28v84h480Z"></path></svg>) },
+        { id: 2, tag: 'video', title: 'Video', icon: (<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 32 32"><path fill="currentColor" d="M21 26H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h17a2 2 0 0 1 2 2v4.06l5.42-3.87A1 1 0 0 1 30 9v14a1 1 0 0 1-1.58.81L23 19.94V24a2 2 0 0 1-2 2"></path></svg>) },
+        { id: 3, tag: 'image', title: 'Image', icon: (<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="currentColor" d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2m-1 9h-4v4h-2v-4H9V9h4V5h2v4h4z"></path></svg>) },
+        { id: 4, tag: 'code', title: 'Code', icon: (<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 20 20"><g fill="none"><path fill="url(#SVGTp1oAcAx)" d="M12.859 2.567a1 1 0 0 1 .574 1.292l-5 13a1 1 0 1 1-1.866-.718l5-13a1 1 0 0 1 1.292-.574"></path><path fill="url(#SVGTp1oAcAx)" d="M6.15 5.74a1 1 0 0 1 .11 1.41L3.816 10l2.442 2.85a1 1 0 0 1-1.518 1.3l-3-3.5a1 1 0 0 1 0-1.3l3-3.5a1 1 0 0 1 1.41-.11"></path><path fill="url(#SVGTp1oAcAx)" d="M13.74 7.15a1 1 0 0 1 1.52-1.3l3 3.5a1 1 0 0 1 0 1.3l-3 3.5a1 1 0 0 1-1.52-1.3L16.184 10z"></path><defs><linearGradient id="SVGTp1oAcAx" x1={2} x2={19} y1={1.5} y2={18} gradientUnits="userSpaceOnUse"><stop stopColor="#c76efb"></stop><stop offset={1} stopColor="#8b52f4"></stop></linearGradient></defs></g></svg>) },
+    ]
+
+    const [showMenu, setShowMenu] = useState(false);
+    const [showCodeEditor, setShowCodeEditor] = useState(false);
+    const [activeMenuTag, setActiveMenuTag] = useState(add[0].tag);
+    const activeItem = add.find(item => item.tag === activeMenuTag);
+    useEffect(() => {
+        console.log(activeItem);
+    }, [activeMenuTag]);
+    const formatWithMonaco = () => {
+        if (!editorRef.current) return;
+
+        try {
+            editorRef.current.getAction("editor.action.formatDocument")?.run();
+        } catch (e) {
+            console.log("Editor disposed, ignoring...");
+        }
+    };
 
 
 
+    const [clearCode, setClearCode] = useState(false);
+    const [code, setCode] = useState("");
+    const [language, setLanguage] = useState("javascript");
+    const [type, setType] = useState("text");
+    const formatCode = () => {
+        if (!editorRef.current) return;
+        editorRef.current.getAction("editor.action.formatDocument")?.run();
+    };
+    const sendMessage = async ({
+        type = "text",
+        content,
+        language = null
+    } = {}) => {
+
+        const finalContent = (content ?? messageText)?.trim();
+        if (!finalContent) return;
+
+        const tempId = Date.now();
 
         const tempMessage = {
             _id: tempId,
-            content: messageText,
+            type,
+            content: finalContent,
+            language,
             sender: { _id: currentUserId },
             receiver: { _id: chatingUserId },
             createdAt: new Date(),
-            status: "sending" // 👈 important
+            status: "sending"
         };
 
-        // 🚀 Show instantly
+        // 🚀 optimistic UI
         setMessages(prev => [...prev, tempMessage]);
 
-        setMessageText("");
+        // clear inputs
+        if (type === "text") setMessageText("");
+        if (type === "code") {
+            setCode("");
+            formatWithMonaco();
+            setShowCodeEditor(false);
+
+        }
 
         try {
             const res = await axios.post(
-
                 `${BASE_URL}/send-message`,
                 {
                     receiverId: chatingUserId,
-                    content: tempMessage.content
+                    content: finalContent,
+                    type,
+                    language
                 },
                 { withCredentials: true }
             );
 
             const realMessage = res.data.populatedMessage;
 
-            // 🔄 Replace temp message with real one
+            // replace temp
             setMessages(prev =>
                 prev.map(msg =>
                     msg._id === tempId
@@ -258,11 +326,14 @@ const Discussions = () => {
                 )
             );
 
+            // 🔥 FIX: send full metadata
             socketRef.current.send(JSON.stringify({
                 type: "message",
+                messageType: type,
+                language,
                 senderId: currentUserId,
                 receiverId: chatingUserId,
-                text: tempMessage.content
+                text: finalContent
             }));
 
         } catch (error) {
@@ -275,7 +346,6 @@ const Discussions = () => {
             );
         }
     };
-
     //function to load the messages
     const loadMessages = async (conversationId) => {
 
@@ -315,23 +385,10 @@ const Discussions = () => {
 
 
 
-    //to sent the msg on clicking enter
-    const handleKeyDown = (e) => {
-        if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault(); // prevents newline
-            sendMessage();
-        }
-    };
-    // const handleTyping = () => {
-    //     socketRef.current.emit("typing_start", {
-    //         conversationId: chatingUserId,
-    //         receiverId: chatingUserId
-    //     });
-    // };
+
+
 
     const [onlineUsers, setOnlineUsers] = useState(new Set());
-
-
     useEffect(() => {
 
         if (!chatActive) return;
@@ -354,16 +411,29 @@ const Discussions = () => {
             switch (parsed.type) {
 
                 case "message":
-                    setMessages(prev => [
-                        ...prev,
-                        {
-                            _id: crypto.randomUUID(),
-                            content: parsed.text,
-                            sender: { _id: parsed.senderId },
-                            createdAt: parsed.createdAt,
-                            status: "sent"
-                        }
-                    ]);
+                    setMessages(prev => {
+                        const exists = prev.some(
+                            m =>
+                                m.content === parsed.text &&
+                                m.sender._id === parsed.senderId &&
+                                m.status === "sending"
+                        );
+
+                        if (exists) return prev; // 🔥 prevent duplicate
+
+                        return [
+                            ...prev,
+                            {
+                                _id: crypto.randomUUID(),
+                                content: parsed.text,
+                                type: parsed.messageType || "text",
+                                language: parsed.language,
+                                sender: { _id: parsed.senderId },
+                                createdAt: parsed.createdAt,
+                                status: "sent"
+                            }
+                        ];
+                    });
                     break;
 
                 case "online":
@@ -418,12 +488,6 @@ const Discussions = () => {
         };
 
     }, [chatActive, currentUserId]);
-
-
-
-
-
-
     const handleTyping = (value) => {
 
         socketRef.current?.send(JSON.stringify({
@@ -451,16 +515,163 @@ const Discussions = () => {
 
 
 
+
+
     return (
-        <div className="w-screen h-[calc(100vh-50px)] flex bg-base-200 text-white font-sans antialiased overflow-hidden">
+        <div className="w-screen h-[calc(100vh-50px)] flex bg-base-200 text-white font-sans antialiased overflow-hidden" >
+            {showCodeEditor && (
+                <div
+                    className="fixed inset-0 bg-black/80  flex items-center justify-center z-[100]"
+                    onClick={() => { formatWithMonaco(); setShowCodeEditor(false); }}
+                >
+
+                    {/* MAIN CONTAINER */}
+                    <div
+                        className="bg-[#0f0f0f] w-[95%] max-w-[900px] rounded-2xl  border border-white/10 overflow-hidden"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+
+                        {/* HEADER */}
+                        <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-[#0d0d10]">
+
+                            <div className="flex items-center gap-3">
+                                <span className="text-white font-medium text-sm">Send Code</span>
+
+                                <span className="text-[10px] px-2 py-1 bg-white/10 rounded text-white/60">
+                                    {language.toUpperCase()}
+                                </span>
+                            </div>
+
+                            <div className="flex items-center gap-2">
+
+                                {/* LANGUAGE SELECT */}
+                                <select
+                                    value={language}
+                                    onChange={(e) => setLanguage(e.target.value)}
+                                    className="bg-black text-white text-sm px-2 py-1 rounded border border-white/10 outline-none"
+                                >
+                                    <option value="javascript">JavaScript</option>
+                                    <option value="typescript">TypeScript</option>
+                                    <option value="html">HTML</option>
+                                    <option value="css">CSS</option>
+                                    <option value="jsx">JSX</option>
+                                    <option value="cpp">C++</option>
+                                    <option value="java">Java</option>
+                                    <option value="c">C</option>
+                                    <option value="csharp">C#</option>
+                                    <option value="python">Python</option>
+                                    <option value="go">Go</option>
+                                    <option value="rust">Rust</option>
+                                    <option value="swift">Swift</option>
+                                    <option value="kotlin">Kotlin</option>
+                                    <option value="php">PHP</option>
+                                    <option value="ruby">Ruby</option>
+                                    <option value="scala">Scala</option>
+                                    <option value="shell">Shell</option>
+                                    <option value="sql">SQL</option>
+                                    <option value="xml">XML</option>
+                                    <option value="yaml">YAML</option>
+                                    <option value="json">JSON</option>
+                                    <option value="markdown">Markdown</option>
+                                    <option value="plaintext">Plain Text</option>
+                                </select>
+
+                                {/* CLEAR BUTTON */}
+                                <button
+                                    onClick={() => { setCode(""); setIsCopied(false); setLanguage("javascript"); setClearCode(true); setTimeout(() => setClearCode(false), 1500); }}
+                                    className="text-xs px-2 py-1 bg-red-500/10 hover:bg-red-500/20 rounded text-red-400"
+                                >
+                                    {clearCode ? "Cleared!" : "Clear"}
+                                </button>
+
+                                {/* CLOSE */}
+                                <button
+                                    onClick={() => { formatWithMonaco(); setShowCodeEditor(false) }}
+                                    className="text-white/60 hover:text-white text-lg px-2"
+                                >
+                                    ✕
+                                </button>
+
+                            </div>
+                        </div>
+
+                        {/* EDITOR */}
+                        <div className="h-[400px]">
+                            <Editor
+                                height="100%"
+                                theme="vs-dark"
+                                language={language}
+                                value={code}
+                                onChange={(val) => setCode(val || "")}
+                                onMount={(editor) => {
+                                    editorRef.current = editor;
+                                }}
+                                onUnmount={() => {
+                                    editorRef.current = null; // 🔥 VERY IMPORTANT
+                                }}
+                                options={{
+                                    fontSize: 14,
+                                    minimap: { enabled: false },
+                                    scrollBeyondLastLine: false,
+                                    wordWrap: "on",
+                                    automaticLayout: true,
+                                    wrappingIndent: "indent",
+                                }}
+                            />
+                        </div>
+
+                        {/* FOOTER */}
+                        <div className="flex items-center justify-between px-4 py-3 border-t border-white/10 bg-[#0d0d10]">
+
+                            {/* LEFT INFO */}
+                            <span className="text-xs text-white/40">
+                                {code.length} characters
+                            </span>
+
+                            {/* ACTIONS */}
+                            <div className="flex items-center gap-3">
+                                <button
+                                    onClick={() => formatCode()}
+                                >
+                                    Format
+                                </button>
+                                {/* COPY */}
+                                <button
+                                    onClick={() => { navigator.clipboard.writeText(code); setIsCopied(true); setTimeout(() => setIsCopied(false), 3000) }}
+                                    className={isCopied ? `text-xs px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded text-green-300` : `text-xs px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded text-white/70`}
+                                >
+                                    {isCopied ? "Copied!" : "Copy"}
+                                </button>
+
+                                {/* SEND */}
+                                <button
+                                    onClick={() => {
+                                        formatCode(); sendMessage({
+                                            type: "code",
+                                            content: code,
+                                            language: language
+                                        })
+                                    }}
+                                    className="px-4 py-2 border border-gray-300 hover:bg-gray-800/90  rounded-lg text-white text-sm font-medium flex items-center gap-2"
+                                >
+                                    Send
+                                    <span>➤</span>
+                                </button>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            )}
             {/* LEFT SIDEBAR - Premium Glass Morphism */}
-            <div className="w-[320px] md:w-[360px] lg:w-[400px] flex-shrink-0 border-r border-white/5 flex flex-col px-1 md:px-2 py-5 gap-5 bg-white/[0.03] backdrop-blur-2xl relative overflow-hidden ">
+            <div className="w-[320px] md:w-[360px] lg:w-[400px] flex-shrink-0 border-r border-white/5 flex flex-col px-1 md:px-2 py-5 gap-5 bg-white/[0.03]  relative overflow-hidden " onClick={() => { setShowMenu(false); setShowPicker(false) }}>
                 {!profileOpen && (
                     <div className="relative z-10">
                         {/* SEARCH BAR - Premium */}
                         <div
                             onClick={focusInput}
-                            className="group flex items-center gap-3 bg-base-100 border border-base-300 border-[3px] px-4 py-1 rounded-2xl backdrop-blur-xl hover:border-blue-500/40 focus-within:border-blue-500/60 transition-all duration-300 "
+                            className="group flex items-center gap-3 bg-base-100 border border-base-300 border-[3px] px-4 py-1 rounded-2xl  hover:border-blue-500/40 focus-within:border-blue-500/60 transition-all duration-300 "
                         >
                             {/*  */}
                             {/* LEFT ICON */}
@@ -487,7 +698,7 @@ const Discussions = () => {
                         </div>
 
                         {/* SECTION TOGGLE - Premium Segmented Control */}
-                        <div className="mt-5 p-1 bg-white/[0.04] rounded-2xl border border-secondary border-[3px] backdrop-blur-xl">
+                        <div className="mt-5 p-1 bg-white/[0.04] rounded-2xl border border-secondary border-[3px] ">
                             <div className="flex relative">
                                 <div className={`absolute top-0 h-full w-1/2 bg-base-300 border border-secondary border-[3px] rounded-xl transition-transform duration-300  ${section === 2 ? "translate-x-full" : ""}`}></div>
                                 <button
@@ -932,7 +1143,7 @@ const Discussions = () => {
             </div>
 
             {/* RIGHT CHAT AREA - Premium Design */}
-            <div ref={chatRef} className="flex-1 p-4">
+            <div ref={chatRef} className="flex-1 p-4" >
                 <div className="w-[calc(100vw-440px)]  h-[calc(100vh-80px)] rounded-3xl bg-base-100 border border-base-300 border-[3px] flex flex-col overflow-hidden  relative">
 
                     {!chatActive ? (
@@ -1008,7 +1219,7 @@ const Discussions = () => {
                             </div>
 
                             {/* MESSAGES AREA - Premium Bubbles */}
-                            <div className="flex-1 overflow-y-auto p-6 space-y-2 custom-scrollbar bg-base-100 " style={{ backgroundImage: "url('/img/img.png')", backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}>
+                            <div className="flex-1 overflow-y-auto p-6 space-y-2 custom-scrollbar bg-base-100 " style={{ backgroundImage: "url('/img/img.png')", backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }} onClick={() => { setShowMenu(false) }}>
                                 {messages.map((msg, index) => {
                                     const isMe = msg?.sender?._id === currentUserId;
 
@@ -1023,13 +1234,42 @@ const Discussions = () => {
                                                         <div className="relative flex items-center gap-2">
 
                                                             {/* Message */}
-                                                            <div className="break-words  break-all whitespace-pre-wrap">
-                                                                {msg.deletedForEveryone && <p className="text-md text-red-600 truncate mt-0.5 flex gap-1 items-center font-light italic">
+                                                            <div className="break-words  whitespace-pre-wrap">
+                                                                {msg.deletedForEveryone ? (<p className="text-md text-red-600 truncate mt-0.5 flex gap-1 items-center font-light italic">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
                                                                         <path fill="#ff4444ff" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z"></path>
                                                                     </svg>You deleted this message
-                                                                </p>}
-                                                                {!msg.deletedForEveryone && msg.content}
+                                                                </p>) : msg.type === "code" ? (<div className="bg-[#0d0d0d] rounded-lg border border-white/10 overflow-hidden max-w-full">
+
+                                                                    {/* HEADER */}
+                                                                    <div className="flex justify-between items-center px-3 py-1.5 bg-[#1a1a1a] text-xs text-white/60">
+                                                                        <span>{msg.language}</span>
+
+                                                                        <button
+                                                                            onClick={() => { navigator.clipboard.writeText(msg.content); setIsCopied(true); setTimeout(() => setIsCopied(false), 1500) }}
+                                                                            className={`hover:text-white ${isCopied ? "text-green-500" : ""}`}
+                                                                        >
+                                                                            {isCopied ? "Copied!" : "Copy"}
+                                                                        </button>
+                                                                    </div>
+
+                                                                    {/* CODE BODY */}
+                                                                    <div className="max-h-[400px] w-[500px] overflow-auto overflow-x-auto text-sm">
+                                                                        <SyntaxHighlighter
+                                                                            language={msg.language}
+                                                                            showLineNumbers
+                                                                            wrapLongLines
+                                                                        >
+                                                                            {msg.content}
+                                                                        </SyntaxHighlighter>
+                                                                    </div>
+
+                                                                </div>
+                                                                ) : (msg.content)
+                                                                }
+
+
+                                                                {/* {!msg.deletedForEveryone && msg.content} */}
 
 
                                                             </div>
@@ -1088,31 +1328,50 @@ const Discussions = () => {
                                                             {/* Message */}
 
 
-                                                            <div className="break-words break-all whitespace-pre-wrap text-[15px] font-bold">
+                                                            <div className="break-words whitespace-pre-wrap text-[15px] font-bold">
                                                                 {msg.deletedForEveryone && <p className="text-md flex items-center justify-center  gap-1  text-red-500 font-medium italic truncate mt-0.5">
                                                                     This message was deleted
                                                                     <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
                                                                         <path fill="#ff4444ff" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z"></path>
                                                                     </svg>
                                                                 </p>}
-                                                                {!msg.deletedForEveryone && msg.content}
+
                                                             </div>
 
 
                                                             {/* Action Icon */}
-                                                            {!msg.deletedForEveryone && (
-                                                                <button
-                                                                    className=" opacity-0 group-hover:opacity-100 translate-x-3 group-hover:translate-x-0 scale-90 group-hover:scale-100 transition-all duration-200 ease-out p-1.5 rounded-lg hover:bg-white/10 active:scale-90 "
+                                                            {msg.deletedForEveryone ? (<p className="text-md text-red-600 truncate mt-0.5 flex gap-1 items-center font-light italic">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
+                                                                    <path fill="#ff4444ff" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z"></path>
+                                                                </svg>You deleted this message
+                                                            </p>) : msg.type === "code" ? (<div className="bg-[#0d0d0d] rounded-lg border border-white/10 overflow-hidden max-w-full">
 
-                                                                    onClick={() => { setIsMsgOptionTabOpen(true); setMessageId(`${msg._id}`); setMsg(`${msg.content}`); setMsgProfile(`${msg.sender?.photoUrl?.url}`); setMsgBY(`${msg.sender?.username}`); setMsgById(`${msg.sender?._id}`) }}
-                                                                >
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                                                                        className="text-white/50 hover:text-white transition cursor-pointer "
+                                                                {/* HEADER */}
+                                                                <div className="flex justify-between items-center px-3 py-1.5 bg-[#1a1a1a] text-xs text-white/60">
+                                                                    <span>{msg.language}</span>
+
+                                                                    <button
+                                                                        onClick={() => { navigator.clipboard.writeText(msg.content); setIsCopied(true); setTimeout(() => setIsCopied(false), 1500) }}
+                                                                        className={`hover:text-white ${isCopied ? "text-green-500" : ""}`}
                                                                     >
-                                                                        <path fill="#764b1aff" d="M12 17a1.72 1.72 0 0 1-1.33-.64l-4.21-5.1a2.1 2.1 0 0 1-.26-2.21A1.76 1.76 0 0 1 7.79 8h8.42a1.76 1.76 0 0 1 1.59 1.05a2.1 2.1 0 0 1-.26 2.21l-4.21 5.1A1.72 1.72 0 0 1 12 17" />
-                                                                    </svg>
-                                                                </button>
-                                                            )}
+                                                                        {isCopied ? "Copied!" : "Copy"}
+                                                                    </button>
+                                                                </div>
+
+                                                                {/* CODE BODY */}
+                                                                <div className="max-h-[300px] overflow-auto text-sm">
+                                                                    <SyntaxHighlighter
+                                                                        language={msg.language}
+                                                                        showLineNumbers
+                                                                        wrapLongLines
+                                                                    >
+                                                                        {msg.content}
+                                                                    </SyntaxHighlighter>
+                                                                </div>
+
+                                                            </div>
+                                                            ) : (msg.content)
+                                                            }
                                                         </div>
                                                         <div className="text-left mt-1">
                                                             <span className="text-[10px] text-accent">
@@ -1293,13 +1552,39 @@ hover:bg-white/10 active:scale-95`} onClick={() => { setActiveEmojiFeild("smiley
                             )
                             }
 
-                            <div className="border-t border-white/10 p-1 md:p-2 ">
-
+                            <div className="border-t border-white/10 p-1 md:p-2  " >
                                 <div className="flex items-center gap-1 ">
-                                    <button className="p-2.5 hover:bg-base-300 rounded-xl transition-all duration-300 text-white/60 hover:text-white/90">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#764b1aff" d="M11.288 20.713Q11 20.425 11 20v-7H4q-.425 0-.712-.288T3 12t.288-.712T4 11h7V4q0-.425.288-.712T12 3t.713.288T13 4v7h7q.425 0 .713.288T21 12t-.288.713T20 13h-7v7q0 .425-.288.713T12 21t-.712-.288"></path></svg>
+
+                                    {showMenu && (
+                                        <div className="absolute bottom-14 left-2 w-[180px] bg-secondary rounded-xl  z-50 border border-white/10 overflow-hidden">
+                                            {add.map((item, index) => (
+
+                                                item.tag != 'default' && (
+                                                    < div className="px-4 py-2 hover:bg-white/10 cursor-pointer text-secondary-content"
+                                                        onClick={() => {
+                                                            formatWithMonaco();
+                                                            setShowCodeEditor(true);
+                                                            setShowMenu(false);
+                                                            setActiveMenuTag(item.tag);
+
+                                                        }}>
+                                                        <span className="text-secondary-content flex gap-2 items-center">{item.icon} {item.title}</span>
+                                                    </div>
+                                                )
+
+                                            ))}
+
+
+                                        </div>
+                                    )}
+
+                                    <button
+                                        onClick={() => setShowMenu(prev => !prev)}
+                                        className="p-1.5 hover:bg-base-300 rounded-xl transition-all duration-300 text-accent border-2 border-secondary"
+                                    >
+                                        {activeItem.icon}
                                     </button>
-                                    <button className="p-2.5 hover:bg-base-300 rounded-xl transition-all mr-3 duration-300 text-white/60 hover:text-white/90" onClick={() => setShowPicker((prev) => !prev)}>
+                                    <button className="p-2.5 hover:bg-base-300 rounded-xl transition-all mr-3 duration-300 text-white/60 hover:text-white/90" onClick={() => { setShowPicker((prev) => !prev); setShowMenu(false) }}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width={25} height={25} viewBox="0 0 16 16">
                                             <path fill="#764b1aff" d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16M2.31 5.243A1 1 0 0 1 3.28 4H6a1 1 0 0 1 1 1v.116A4.2 4.2 0 0 1 8 5c.35 0 .69.04 1 .116V5a1 1 0 0 1 1-1h2.72a1 1 0 0 1 .97 1.243l-.311 1.242A2 2 0 0 1 11.439 8H11a2 2 0 0 1-1.994-1.839A3 3 0 0 0 8 6c-.393 0-.74.064-1.006.161A2 2 0 0 1 5 8h-.438a2 2 0 0 1-1.94-1.515zM4.969 9.75A3.5 3.5 0 0 0 8 11.5a3.5 3.5 0 0 0 3.032-1.75a.5.5 0 1 1 .866.5A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1-3.898-2.25a.5.5 0 0 1 .866-.5z" />
                                         </svg>
@@ -1309,6 +1594,7 @@ hover:bg-white/10 active:scale-95`} onClick={() => { setActiveEmojiFeild("smiley
                                         <input
                                             value={messageText}
                                             onChange={(e) => { setMessageText(e.target.value); handleTyping(e.target.value); }}
+                                            onClick={() => { setShowMenu(false); setShowPicker(false) }}
                                             onKeyDown={handleKeyDown}
                                             type="text"
                                             placeholder="Type a message..."
@@ -1325,7 +1611,7 @@ placeholder-accent "
                                     </div>
                                     {/* SEND BUTTON - Premium */}
                                     <button
-                                        onClick={sendMessage}
+                                        onClick={() => { sendMessage(); setShowMenu(false); setShowPicker(false) }}
                                         className="bg-base-300 border border-secondary border-[2px ] mr-5 px-5 py-3 rounded-xl text-accent text-sm font-medium transition-all duration-300   flex items-center gap-2 group"
                                     >
                                         <span>Send</span>
