@@ -271,7 +271,7 @@ function SectionBlock({ sec }) {
                             borderRadius: '0 10px 10px 0',
                             padding: '16px 20px',
                         }}>
-                            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 600, color: 'rgba(26,108,246,0.7)', letterSpacing: '0.04em', marginBottom: '6px', textTransform: 'uppercase', fontSize: '11px' }}>
+                            <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, color: 'rgba(26,108,246,0.7)', letterSpacing: '0.04em', marginBottom: '6px', textTransform: 'uppercase', fontSize: '11px' }}>
                                 {item.heading}
                             </p>
                             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.8, margin: 0 }}>

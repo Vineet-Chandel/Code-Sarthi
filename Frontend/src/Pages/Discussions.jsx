@@ -50,7 +50,7 @@ const Discussions = () => {
     const [messages, setMessages] = useState([]);
     const [messageText, setMessageText] = useState("");
     const [profileOpen, setIsProfileOpen] = useState(false);
-
+    const [showCreateTab, setShowCreateTab] = useState(false);
     //activation of the chat
     const [chatActive, setchatActive] = useState(false);
     const [chatingUserId, setChatingUserId] = useState("");
@@ -689,14 +689,89 @@ const Discussions = () => {
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                             />
+                            <div>
+                                <div className="w-10 h-10 rounded-2xl bg-base-200 hover:bg-base-300 hover:border-secondary border border-accent flex items-center justify-center " onClick={() => setShowCreateTab(!showCreateTab)}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 512 512"><path fill="none" stroke="#371b02ff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={32} d="M384 224v184a40 40 0 0 1-40 40H104a40 40 0 0 1-40-40V168a40 40 0 0 1 40-40h167.48"></path><path fill="none" stroke="#371b02ff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={32} d="M459.94 53.25a16.06 16.06 0 0 0-23.22-.56L424.35 65a8 8 0 0 0 0 11.31l11.34 11.32a8 8 0 0 0 11.34 0l12.06-12c6.1-6.09 6.67-16.01.85-22.38M399.34 90L218.82 270.2a9 9 0 0 0-2.31 3.93L208.16 299a3.91 3.91 0 0 0 4.86 4.86l24.85-8.35a9 9 0 0 0 3.93-2.31L422 112.66a9 9 0 0 0 0-12.66l-9.95-10a9 9 0 0 0-12.71 0"></path></svg>
+                                </div>
 
-                            <div className="w-10 h-10 rounded-full bg-base-300 border border-secondary flex items-center justify-center ">
-                                <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 256 256">
-                                    <path fill="#bf630b" d="M232 64v128a16 16 0 0 1-16 16H83l-32.6 28.16l-.09.07A15.9 15.9 0 0 1 40 240a16.05 16.05 0 0 1-6.79-1.52A15.84 15.84 0 0 1 24 224V64a16 16 0 0 1 16-16h176a16 16 0 0 1 16 16"></path>
-                                </svg>
                             </div>
                         </div>
 
+                        {showCreateTab && (
+                            <div className="w-[320px] z-30 rounded-2xl bg-secondary border border-accent shadow-2xl absolute mt-2 right-0 overflow-hidden transition-all duration-200 ease-in-out">
+                                {/* Header */}
+                                <div className="px-4 py-3 border-b border-base-300 bg-secondary-content/30">
+                                    <h3 className="text-sm font-bold text-secondary-content flex items-center gap-2">
+                                        <span className="w-2 h-2 rounded-full bg-secondary-content animate-pulse"></span>
+                                        Quick Create
+                                    </h3>
+                                </div>
+
+                                <div className="p-2 flex flex-col gap-1">
+                                    {/* AI Section */}
+                                    <div className="px-2 pt-2 pb-1 text-[10px] uppercase font-bold text-base-content/50 tracking-wider">
+                                        Intelligence
+                                    </div>
+                                    <button className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-primary hover:text-secondary-content transition-colors group">
+                                        <div className="w-8 h-8 rounded-lg bg-base-100 flex items-center justify-center border border-base-300 group-hover:border-primary/30">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="#0f0f0f" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z" /></svg>
+                                        </div>
+                                        <div className="flex flex-col items-start ">
+                                            <span className="text-sm font-medium ">Connect AI Agent</span>
+                                            <span className="text-[10px] opacity-60">Deploy custom neural assistants</span>
+                                        </div>
+                                    </button>
+
+                                    {/* Collaboration Section */}
+                                    <div className="px-2 pt-2 pb-1 text-[10px] uppercase font-bold text-base-content/50 tracking-wider">
+                                        Collaboration
+                                    </div>
+                                    <button className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-primary hover:text-secondary-content transition-colors group">
+                                        <div className="w-8 h-8 rounded-lg bg-base-100 flex items-center justify-center border border-base-300 group-hover:border-secondary/30">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 48 48"><g fill="none"><path fill="url(#SVGJt7AAdxg)" d="M37.222 39.997a7 7 0 0 0 3.07-.818A7 7 0 0 0 44 33v-9.75a4.25 4.25 0 0 0-3.409-4.167A4.3 4.3 0 0 0 39.75 19h-5.5q-.433.001-.842.083A4.25 4.25 0 0 0 30 23.25V33c0 2.675 1.501 5 3.707 6.179a6.96 6.96 0 0 0 3.27.821H37q.111 0 .222-.004"></path><path fill="url(#SVG5GIxdeoi)" fillOpacity={0.25} d="M37.222 39.997a7 7 0 0 0 3.07-.818A7 7 0 0 0 44 33v-9.75a4.25 4.25 0 0 0-3.409-4.167A4.3 4.3 0 0 0 39.75 19h-5.5q-.433.001-.842.083A4.25 4.25 0 0 0 30 23.25V33c0 2.675 1.501 5 3.707 6.179a6.96 6.96 0 0 0 3.27.821H37q.111 0 .222-.004"></path><path fill="url(#SVGzsdx8dkW)" d="M11.222 39.997a7 7 0 0 0 3.07-.818A7 7 0 0 0 18 33v-9.75a4.25 4.25 0 0 0-3.409-4.167A4.3 4.3 0 0 0 13.75 19h-5.5q-.433.001-.842.083A4.25 4.25 0 0 0 4 23.25V33c0 2.675 1.501 5 3.707 6.179a6.96 6.96 0 0 0 3.27.821H11q.112 0 .222-.004"></path><path fill="url(#SVG4jxYpete)" fillOpacity={0.25} d="M11.222 39.997a7 7 0 0 0 3.07-.818A7 7 0 0 0 18 33v-9.75a4.25 4.25 0 0 0-3.409-4.167A4.3 4.3 0 0 0 13.75 19h-5.5q-.433.001-.842.083A4.25 4.25 0 0 0 4 23.25V33c0 2.675 1.501 5 3.707 6.179a6.96 6.96 0 0 0 3.27.821H11q.112 0 .222-.004"></path><path fill="url(#SVGLFOSlcNv)" d="M19.25 19A4.25 4.25 0 0 0 15 23.25V34a9 9 0 1 0 18 0V23.25A4.25 4.25 0 0 0 28.75 19z"></path><path fill="url(#SVG7WAmMdFt)" d="M19.25 19A4.25 4.25 0 0 0 15 23.25V34a9 9 0 1 0 18 0V23.25A4.25 4.25 0 0 0 28.75 19z"></path><path fill="url(#SVG604UPdmr)" d="M37 7a5 5 0 1 0 0 10a5 5 0 0 0 0-10"></path><path fill="url(#SVGDfOIBdeZ)" d="M11 7a5 5 0 1 0 0 10a5 5 0 0 0 0-10"></path><path fill="url(#SVGXiIdweKD)" d="M18 11a6 6 0 1 1 12 0a6 6 0 0 1-12 0"></path><defs><linearGradient id="SVGJt7AAdxg" x1={33.329} x2={45.202} y1={21.792} y2={34.43} gradientUnits="userSpaceOnUse"><stop offset={0.125} stopColor="#7a41dc"></stop><stop offset={1} stopColor="#5b2ab5"></stop></linearGradient><linearGradient id="SVGzsdx8dkW" x1={7.329} x2={19.202} y1={21.792} y2={34.43} gradientUnits="userSpaceOnUse"><stop offset={0.125} stopColor="#9c6cfe"></stop><stop offset={1} stopColor="#7a41dc"></stop></linearGradient><linearGradient id="SVGLFOSlcNv" x1={19.28} x2={32.658} y1={22.191} y2={38.211} gradientUnits="userSpaceOnUse"><stop offset={0.125} stopColor="#bd96ff"></stop><stop offset={1} stopColor="#9c6cfe"></stop></linearGradient><linearGradient id="SVG7WAmMdFt" x1={24} x2={44.557} y1={16.143} y2={44.95} gradientUnits="userSpaceOnUse"><stop stopColor="#885edb" stopOpacity={0}></stop><stop offset={1} stopColor="#e362f8"></stop></linearGradient><linearGradient id="SVG604UPdmr" x1={34.378} x2={39.474} y1={8.329} y2={16.467} gradientUnits="userSpaceOnUse"><stop offset={0.125} stopColor="#7a41dc"></stop><stop offset={1} stopColor="#5b2ab5"></stop></linearGradient><linearGradient id="SVGDfOIBdeZ" x1={8.378} x2={13.474} y1={8.329} y2={16.467} gradientUnits="userSpaceOnUse"><stop offset={0.125} stopColor="#9c6cfe"></stop><stop offset={1} stopColor="#7a41dc"></stop></linearGradient><linearGradient id="SVGXiIdweKD" x1={20.854} x2={26.969} y1={6.595} y2={16.36} gradientUnits="userSpaceOnUse"><stop offset={0.125} stopColor="#bd96ff"></stop><stop offset={1} stopColor="#9c6cfe"></stop></linearGradient><radialGradient id="SVG5GIxdeoi" cx={0} cy={0} r={1} gradientTransform="matrix(8.7001 -.00781 .01988 22.1392 27.8 29.008)" gradientUnits="userSpaceOnUse"><stop offset={0.433} stopColor="#3b148a"></stop><stop offset={1} stopColor="#3b148a" stopOpacity={0}></stop></radialGradient><radialGradient id="SVG4jxYpete" cx={0} cy={0} r={1} gradientTransform="rotate(180.041 11.273 14.5)scale(11.0348 28.0801)" gradientUnits="userSpaceOnUse"><stop offset={0.433} stopColor="#3b148a"></stop><stop offset={1} stopColor="#3b148a" stopOpacity={0}></stop></radialGradient></defs></g></svg>
+                                        </div>
+                                        <div className="flex flex-col items-start">
+                                            <span className="text-sm font-medium">New Team</span>
+                                            <span className="text-[10px] opacity-60">Organize members and permissions</span>
+                                        </div>
+                                    </button>
+
+                                    <button className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-primary hover:text-secondary-content transition-colors group">
+                                        <div className="w-8 h-8 rounded-lg bg-base-100 flex items-center justify-center border border-base-300 group-hover:border-secondary/30">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#874c04ff" d="M20 16a3 3 0 0 0-1.73.56l-2.45-1.45A3.7 3.7 0 0 0 16 14a4 4 0 0 0-3-3.86V7.82a3 3 0 1 0-2 0v2.32A4 4 0 0 0 8 14a3.7 3.7 0 0 0 .18 1.11l-2.45 1.45A3 3 0 0 0 4 16a3 3 0 1 0 3 3a3 3 0 0 0-.12-.8l2.3-1.37a4 4 0 0 0 5.64 0l2.3 1.37A3 3 0 1 0 20 16M4 20a1 1 0 1 1 1-1a1 1 0 0 1-1 1m8-16a1 1 0 1 1-1 1a1 1 0 0 1 1-1m0 12a2 2 0 1 1 2-2a2 2 0 0 1-2 2m8 4a1 1 0 1 1 1-1a1 1 0 0 1-1 1"></path></svg>
+                                        </div>
+                                        <div className="flex flex-col items-start">
+                                            <span className="text-sm font-medium">Create Channel</span>
+                                            <span className="text-[10px] opacity-60">Public or private discussions</span>
+                                        </div>
+                                    </button>
+
+                                    {/* Management Section */}
+                                    <div className="px-2 pt-2 pb-1 text-[10px] uppercase font-bold text-base-content/50 tracking-wider">
+                                        Work Management
+                                    </div>
+                                    <button className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-primary hover:text-secondary-content transition-colors group">
+                                        <div className="w-8 h-8 rounded-lg bg-base-100 flex items-center justify-center border border-base-300 group-hover:border-accent/30">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 16 16"><g fill="#874c04"><path d="M4 16s-1 0-1-1s1-4 5-4s5 3 5 4s-1 1-1 1zm4-5.95a2.5 2.5 0 1 0 0-5a2.5 2.5 0 0 0 0 5"></path><path d="M2 1a2 2 0 0 0-2 2v9.5A1.5 1.5 0 0 0 1.5 14h.653a5.4 5.4 0 0 1 1.066-2H1V3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v9h-2.219c.554.654.89 1.373 1.066 2h.653a1.5 1.5 0 0 0 1.5-1.5V3a2 2 0 0 0-2-2z"></path></g></svg>
+                                        </div>
+                                        <div className="flex flex-col items-start">
+                                            <span className="text-sm font-medium">Project Workspace</span>
+                                            <span className="text-[10px] opacity-60">Track milestones and goals</span>
+                                        </div>
+                                    </button>
+
+                                    <button className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-primary hover:text-secondary-content transition-colors group mb-1">
+                                        <div className="w-8 h-8 rounded-lg bg-base-100 flex items-center justify-center border border-base-300 group-hover:border-accent/30">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 16 16"><g fill="none"><path fill="url(#SVG29yRxspP)" d="M3 3.5A1.5 1.5 0 0 1 4.5 2h7A1.5 1.5 0 0 1 13 3.5v10a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 3 13.5z"></path><path fill="url(#SVGIvgUMeep)" fillOpacity={0.7} d="M3 3.5A1.5 1.5 0 0 1 4.5 2h7A1.5 1.5 0 0 1 13 3.5v10a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 3 13.5z"></path><path fill="url(#SVGzO9hHdNE)" fillOpacity={0.4} d="M3 3.5A1.5 1.5 0 0 1 4.5 2h7A1.5 1.5 0 0 1 13 3.5v10a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 3 13.5z"></path><path fill="url(#SVG9Kp5ubdQ)" d="M5 2.5A1.5 1.5 0 0 0 6.5 4h3a1.5 1.5 0 0 0 0-3h-3A1.5 1.5 0 0 0 5 2.5"></path><path fill="url(#SVGyNacneTZ)" fillOpacity={0.9} d="M10.854 7.854a.5.5 0 0 0-.708-.708L7.5 9.793L6.354 8.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z"></path><defs><linearGradient id="SVG29yRxspP" x1={3} x2={13.44} y1={3.3} y2={14.593} gradientUnits="userSpaceOnUse"><stop stopColor="#36dff1"></stop><stop offset={1} stopColor="#0094f0"></stop></linearGradient><linearGradient id="SVG9Kp5ubdQ" x1={8} x2={8} y1={1} y2={4} gradientUnits="userSpaceOnUse"><stop stopColor="#ffe06b"></stop><stop offset={1} stopColor="#fab500"></stop></linearGradient><linearGradient id="SVGyNacneTZ" x1={12.833} x2={6.283} y1={13.667} y2={4.063} gradientUnits="userSpaceOnUse"><stop stopColor="#9deaff"></stop><stop offset={1} stopColor="#fff"></stop></linearGradient><radialGradient id="SVGIvgUMeep" cx={0} cy={0} r={1} gradientTransform="matrix(0 4.16204 -4.27976 0 8 1.278)" gradientUnits="userSpaceOnUse"><stop stopColor="#0a1852"></stop><stop offset={1} stopColor="#0a1852" stopOpacity={0}></stop></radialGradient><radialGradient id="SVGzO9hHdNE" cx={0} cy={0} r={1} gradientTransform="matrix(0 2.02381 -4.04762 0 8 2.69)" gradientUnits="userSpaceOnUse"><stop stopColor="#0a1852"></stop><stop offset={1} stopColor="#0a1852" stopOpacity={0}></stop></radialGradient></defs></g></svg>
+                                        </div>
+                                        <div className="flex flex-col items-start">
+                                            <span className="text-sm font-medium">Assign Task</span>
+                                            <span className="text-[10px] opacity-60">Quickly add items to backlog</span>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                         {/* SECTION TOGGLE - Premium Segmented Control */}
                         <div className="mt-5 p-1 bg-white/[0.04] rounded-2xl border border-secondary border-[3px] ">
                             <div className="flex relative">
@@ -790,14 +865,17 @@ const Discussions = () => {
                                 </div>
 
                                 {/* Start Collabing CTA */}
-                                <div className="mt-6 px-4 py-2 rounded-xl bg-base-300  border border-accent text-center group cursor-pointer ">
-                                    <div className="flex items-center justify-center gap-1 text-accent">
-                                        <span className="text-lg font-medium">Start New Collab</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" className="group-hover:translate-x-1 transition-transform">
-                                            <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 12h16m-6-6l6 6-6 6" />
-                                        </svg>
+
+                                {connectionList.length > 0 && (
+                                    <div className="mt-6 px-4 py-2 rounded-xl bg-base-300  border border-accent text-center group cursor-pointer ">
+                                        <div className="flex items-center justify-center gap-1 text-accent">
+                                            <span className="text-lg font-medium">Start New Collab</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" className="group-hover:translate-x-1 transition-transform">
+                                                <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 12h16m-6-6l6 6-6 6" />
+                                            </svg>
+                                        </div>
                                     </div>
-                                </div>
+                                )}
 
                                 <div className="mt-5">
                                     {connectionList.map((item) =>
@@ -1408,7 +1486,7 @@ const Discussions = () => {
 
                             {/* TYPING AREA - Premium */}
                             {showPicker && (
-                                <div ref={pickerRef} className=" absolute bottom-20 left-4 z-50  w-[720px] h-[520px] bg-white/[0.04]  border border-white/10 rounded-3xl  p-4 flex flex-col overflow-hidden  ">
+                                <div ref={pickerRef} className=" absolute bottom-20 left-4 z-50  w-[720px] h-[520px] bg-secondary  border border-white/10 rounded-3xl  p-4 flex flex-col overflow-hidden  ">
                                     <div className="w-full border-b h-[50px] rounded-t-3xl">
 
                                         {/* Tabs */}
@@ -1557,22 +1635,44 @@ hover:bg-white/10 active:scale-95`} onClick={() => { setActiveEmojiFeild("smiley
 
                                     {showMenu && (
                                         <div className="absolute bottom-14 left-2 w-[180px] bg-secondary rounded-xl  z-50 border border-white/10 overflow-hidden">
-                                            {add.map((item, index) => (
+                                            {add.map((item, index) => {
+                                                if (item.tag === "default") return null;
 
-                                                item.tag != 'default' && (
-                                                    < div className="px-4 py-2 hover:bg-white/10 cursor-pointer text-secondary-content"
+                                                if (item.tag === "code") {
+                                                    return (
+                                                        <div
+                                                            key={item.tag + index}
+                                                            className="px-4 py-2 hover:bg-white/10 cursor-pointer text-secondary-content"
+                                                            onClick={() => {
+                                                                formatWithMonaco();
+                                                                setShowCodeEditor(true);
+                                                                setShowMenu(false);
+                                                                setActiveMenuTag(item.tag);
+                                                            }}
+                                                        >
+                                                            <span className="flex gap-2 items-center">
+                                                                {item.icon} {item.title}
+                                                            </span>
+                                                        </div>
+                                                    );
+                                                }
+
+                                                // all other tags
+                                                return (
+                                                    <div
+                                                        key={item.tag + index}
+                                                        className="px-4 py-2 hover:bg-white/10 cursor-pointer text-secondary-content"
                                                         onClick={() => {
-                                                            formatWithMonaco();
-                                                            setShowCodeEditor(true);
                                                             setShowMenu(false);
                                                             setActiveMenuTag(item.tag);
-
-                                                        }}>
-                                                        <span className="text-secondary-content flex gap-2 items-center">{item.icon} {item.title}</span>
+                                                        }}
+                                                    >
+                                                        <span className="flex gap-2 items-center">
+                                                            {item.icon} {item.title}
+                                                        </span>
                                                     </div>
-                                                )
-
-                                            ))}
+                                                );
+                                            })}
 
 
                                         </div>

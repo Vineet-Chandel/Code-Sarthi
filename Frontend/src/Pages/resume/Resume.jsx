@@ -1,10 +1,12 @@
-import { useSelector } from "react-redux";
+import React from 'react'
+import Landing from '../Resume/Landing'
+
 const Resume = () => {
-    const user = useSelector((store) => store.user);
     return (
-
-        <div>Resume {user.user.FirstName}</div>
-
+        <div>
+            <Landing />
+        </div>
     )
 }
-export default Resume;
+
+export default Resume

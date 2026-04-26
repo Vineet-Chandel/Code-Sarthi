@@ -37,7 +37,7 @@ const Nav = () => {
         {
             id: "blogs",
             label: "Blogs",
-            path: "/blogs",
+            path: "/terms-and-conditions",
             hasDropdown: true,
             isSmall: true,
             dropdown: (
@@ -75,7 +75,7 @@ const Nav = () => {
         {
             id: "safety",
             label: "Safety",
-            path: "/safety",
+            path: "/privacy-&-policy-hub",
             hasDropdown: true,
             dropdown: (
                 <div className="flex gap-4">
@@ -103,7 +103,7 @@ const Nav = () => {
         {
             id: "support",
             label: "Support",
-            path: "/support",
+            path: "/help-center",
             hasDropdown: true,
             isSmall: true,
             dropdown: (
