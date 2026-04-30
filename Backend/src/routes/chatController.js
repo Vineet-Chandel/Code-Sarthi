@@ -114,6 +114,10 @@ chatRouter.post("/send-message", userAuth, upload.single("file"), async (req, re
             conversation = new Convo({
                 Participants
             });
+            conversation.lastMsgAt = Date.now();
+            await conversation.save()
+        } else {
+            conversation.lastMsgAt = Date.now();
             await conversation.save()
         }
 

@@ -9,10 +9,9 @@ import { FaUniversity } from "react-icons/fa";
 import { BsPersonWorkspace } from "react-icons/bs";
 import { IoBarChart } from "react-icons/io5";
 import { useMemo } from "react";
-
-import prettier from "prettier/standalone";
-import parserBabel from "prettier/plugins/babel";
-import parserEstree from "prettier/plugins/estree";
+import debounce from "lodash.debounce";
+import { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 
 // code editor
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -76,8 +75,8 @@ const Discussions = () => {
     //chats 
     const chatMessages = useSelector(state => state.chats?.users || []);
     const [typingUsers, setTypingUsers] = useState(new Set());
-
-
+    const [globalLoading, setGlobalLoading] = useState(false);
+    const Navigate = useNavigate();
     //fetching the connections 
     const connectionUser = async () => {
         try {
@@ -98,6 +97,7 @@ const Discussions = () => {
 
     //filtered connection list 
     const connectionList = useMemo(() => {
+        setGlobalLoading(true);
         return connections.filter(
             conn => !chatMessages.some(
                 chat => chat.atFrontUser?._id === conn.userId
@@ -105,16 +105,20 @@ const Discussions = () => {
         );
     }, [connections, chatMessages]);
 
+
     //filtered chats list 
     const filteredChats = useMemo(() => {
+        setGlobalLoading(true);
         return chatMessages.filter(user =>
-            user.atFrontUser?.firstName
+            user?.atFrontUser?.firstName
                 ?.toLowerCase()
                 .includes(search.toLowerCase())
         );
     }, [search, chatMessages]);
 
-
+    useEffect(() => {
+        setGlobalLoading(false);
+    }, [connectionList, filteredChats]);
     //handeling the emojis tabs
     const handleEmojiClick = (emoji) => {
         setMessageText((prev) => prev + emoji);
@@ -385,7 +389,12 @@ const Discussions = () => {
 
 
 
-
+    const handleCodeChange = useCallback(
+        debounce((value) => {
+            setCode(value);
+        }, 300),
+        []
+    );
 
 
     const [onlineUsers, setOnlineUsers] = useState(new Set());
@@ -517,11 +526,57 @@ const Discussions = () => {
 
 
 
+
+    function formatRelativeDate(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffInSeconds = Math.floor((now - date) / 1000);
+        const diffInDays = diffInSeconds / 86400;
+
+        // 1. Within 24 hours
+        if (diffInDays < 1) {
+            return date.toLocaleTimeString('en-GB', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            });
+        }
+
+        // 2. Within a week (7 days)
+        if (diffInDays < 7) {
+            return date.toLocaleDateString('en-US', { weekday: 'long' });
+        }
+
+        // 3. More than a week but less than a month (~30 days)
+        if (diffInDays < 30) {
+            return date.toLocaleDateString('en-GB', {
+                day: 'numeric',
+                month: 'long'
+            });
+        }
+
+        // 4. More than a month
+        return date.toLocaleDateString('en-US', {
+            month: 'long',
+            year: 'numeric'
+        });
+    }
+
+
+    const [newGroupTabOpen, setNewGroupTabOpen] = useState(false);
+
+
+
+
+
+
+
+
     return (
         <div className="w-screen h-[calc(100vh-50px)] flex bg-base-200 text-white font-sans antialiased overflow-hidden" >
             {showCodeEditor && (
                 <div
-                    className="fixed inset-0 bg-black/80  flex items-center justify-center z-[100]"
+                    className="fixed inset-0 bg-black/60  flex items-center justify-center z-[100] p-4"
                     onClick={() => { formatWithMonaco(); setShowCodeEditor(false); }}
                 >
 
@@ -596,26 +651,37 @@ const Discussions = () => {
                         </div>
 
                         {/* EDITOR */}
-                        <div className="h-[400px]">
+                        <div className="h-[calc(100vh-220px)]">
                             <Editor
                                 height="100%"
                                 theme="vs-dark"
                                 language={language}
                                 value={code}
-                                onChange={(val) => setCode(val || "")}
+                                onChange={(val) => { handleCodeChange(val); }}
                                 onMount={(editor) => {
                                     editorRef.current = editor;
+                                    editor.focus();
                                 }}
                                 onUnmount={() => {
                                     editorRef.current = null; // 🔥 VERY IMPORTANT
                                 }}
                                 options={{
                                     fontSize: 14,
+                                    fontFamily: "'Fira Code', 'Cascadia Code', Consolas, monospace",
+                                    fontLigatures: true, // Enables fancy symbols if the font supports them
                                     minimap: { enabled: false },
                                     scrollBeyondLastLine: false,
                                     wordWrap: "on",
                                     automaticLayout: true,
-                                    wrappingIndent: "indent",
+                                    padding: { top: 16, bottom: 16 }, // Give the code some breathing room
+                                    cursorBlinking: "smooth",
+                                    cursorSmoothCaretAnimation: "on", // Smooth cursor movement
+                                    formatOnPaste: true,
+                                    formatOnType: true,
+                                    suggestOnTriggerCharacters: true,
+                                    acceptSuggestionOnEnter: "on",
+                                    fixedOverflowWidgets: true, // Prevents menus from being clipped
+                                    lineNumbersMinChars: 3, // Keeps the gutter slim
                                 }}
                             />
                         </div>
@@ -665,122 +731,147 @@ const Discussions = () => {
                 </div>
             )}
             {/* LEFT SIDEBAR - Premium Glass Morphism */}
-            <div className="w-[320px] md:w-[360px] lg:w-[400px] flex-shrink-0 border-r border-white/5 flex flex-col px-1 md:px-2 py-5 gap-5 bg-white/[0.03]  relative overflow-hidden " onClick={() => { setShowMenu(false); setShowPicker(false) }}>
-                {!profileOpen && (
+
+
+            <div className="w-full lg:w-[400px] flex-shrink-0 border-r border-white/5 flex flex-col px-1 md:px-2 py-5 gap-5 bg-white/[0.03]  relative overflow-hidden " onClick={() => { setShowMenu(false); setShowPicker(false) }}>
+                {!profileOpen && !newGroupTabOpen && (
                     <div className="relative z-10">
-                        {/* SEARCH BAR - Premium */}
-                        <div
-                            onClick={focusInput}
-                            className="group flex items-center gap-3 bg-base-100 border border-base-300 border-[3px] px-4 py-1 rounded-2xl  hover:border-blue-500/40 focus-within:border-blue-500/60 transition-all duration-300 "
-                        >
-                            {/*  */}
-                            {/* LEFT ICON */}
-                            <svg xmlns="http://www.w3.org/2000/svg" width={32} height={32} viewBox="0 0 80 80">
-                                <g fill="none">
-                                    <path fill="#8c3f27" d="M65.368 67.848a2 2 0 0 0 2.828-2.829zm-9.634-15.29a2 2 0 0 0-2.828 2.828zm12.462 12.461L55.734 52.557l-2.828 2.829l12.462 12.462z"></path>
-                                    <path fill="#ff9d33" stroke="#370a00" strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M13.578 30.724a24.249 24.249 0 1 1 46.844 12.552a24.249 24.249 0 0 1-46.844-12.552"></path>
-                                </g>
-                            </svg>
-                            <input
-                                ref={inputRef}
-                                type="text"
-                                placeholder="Search conversations..."
-                                className="flex-1 bg-transparent outline-none text-sm placeholder-accent text-secondary"
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                            />
+                        <div className="flex items-center justify-between gap-2 px-1 md:px-2 py-2">
                             <div>
-                                <div className="w-10 h-10 rounded-2xl bg-base-200 hover:bg-base-300 hover:border-secondary border border-accent flex items-center justify-center " onClick={() => setShowCreateTab(!showCreateTab)}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 512 512"><path fill="none" stroke="#371b02ff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={32} d="M384 224v184a40 40 0 0 1-40 40H104a40 40 0 0 1-40-40V168a40 40 0 0 1 40-40h167.48"></path><path fill="none" stroke="#371b02ff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={32} d="M459.94 53.25a16.06 16.06 0 0 0-23.22-.56L424.35 65a8 8 0 0 0 0 11.31l11.34 11.32a8 8 0 0 0 11.34 0l12.06-12c6.1-6.09 6.67-16.01.85-22.38M399.34 90L218.82 270.2a9 9 0 0 0-2.31 3.93L208.16 299a3.91 3.91 0 0 0 4.86 4.86l24.85-8.35a9 9 0 0 0 3.93-2.31L422 112.66a9 9 0 0 0 0-12.66l-9.95-10a9 9 0 0 0-12.71 0"></path></svg>
+                                <div className="w-10 h-10 rounded-2xl bg-base-200 hover:bg-base-300  flex items-center justify-center " onClick={() => setShowCreateTab(!showCreateTab)}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 24 24"><path fill="#884f06" fillRule="evenodd" d="M20.75 7a.75.75 0 0 1-.75.75H4a.75.75 0 0 1 0-1.5h16a.75.75 0 0 1 .75.75m0 5a.75.75 0 0 1-.75.75H4a.75.75 0 0 1 0-1.5h16a.75.75 0 0 1 .75.75m0 5a.75.75 0 0 1-.75.75H4a.75.75 0 0 1 0-1.5h16a.75.75 0 0 1 .75.75" clipRule="evenodd"></path></svg>
                                 </div>
 
                             </div>
+                            {/* SEARCH BAR - Premium */}
+                            <div
+                                onClick={focusInput}
+                                className="group w-full flex items-center gap-3 bg-base-100 border border-base-300 border-[3px] px-4 py-1 rounded-full  hover:border-blue-500/40 focus-within:border-blue-500/60 transition-all duration-300 "
+                            >
+                                {/*  */}
+                                {/* LEFT ICON */}
+
+                                {globalLoading ? (
+                                    <svg xmlns="http://www.w3.org/2000/svg" width={32} height={32} viewBox="0 0 24 24">
+                                        <g fill="none" stroke="#884f06" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.8}>
+                                            <path strokeDasharray={18} d="M12 3c4.97 0 9 4.03 9 9">
+                                                <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="18;0"></animate>
+                                                <animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform>
+                                            </path>
+                                            <path strokeDasharray={60} d="M12 3c4.97 0 9 4.03 9 9c0 4.97 -4.03 9 -9 9c-4.97 0 -9 -4.03 -9 -9c0 -4.97 4.03 -9 9 -9Z" opacity={0.3}>
+                                                <animate fill="freeze" attributeName="stroke-dashoffset" dur="1.2s" values="60;0"></animate>
+                                            </path>
+                                        </g>
+                                    </svg>
+                                ) : (
+                                    <svg xmlns="http://www.w3.org/2000/svg" width={32} height={32} viewBox="0 0 80 80">
+                                        <g fill="none">
+                                            <path fill="#8c3f27" d="M65.368 67.848a2 2 0 0 0 2.828-2.829zm-9.634-15.29a2 2 0 0 0-2.828 2.828zm12.462 12.461L55.734 52.557l-2.828 2.829l12.462 12.462z"></path>
+                                            <path fill="#ff9d33" stroke="#370a00" strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M13.578 30.724a24.249 24.249 0 1 1 46.844 12.552a24.249 24.249 0 0 1-46.844-12.552"></path>
+                                        </g>
+                                    </svg>
+                                )}
+
+                                <input
+                                    ref={inputRef}
+                                    type="text"
+                                    placeholder="Search conversations..."
+                                    className="flex-1 bg-transparent outline-none text-sm placeholder-accent text-secondary"
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                />
+
+                            </div>
+
                         </div>
 
-                        {showCreateTab && (
-                            <div className="w-[320px] z-30 rounded-2xl bg-secondary border border-accent shadow-2xl absolute mt-2 right-0 overflow-hidden transition-all duration-200 ease-in-out">
-                                {/* Header */}
-                                <div className="px-4 py-3 border-b border-base-300 bg-secondary-content/30">
-                                    <h3 className="text-sm font-bold text-secondary-content flex items-center gap-2">
-                                        <span className="w-2 h-2 rounded-full bg-secondary-content animate-pulse"></span>
-                                        Quick Create
-                                    </h3>
+
+                        {
+                            showCreateTab && (
+                                <div className="w-[320px] z-30 rounded-2xl bg-secondary border border-accent shadow-2xl absolute mt-2 left-4 overflow-hidden transition-all duration-200 ease-in-out">
+                                    {/* Header */}
+                                    <div className="px-4 py-3 border-b border-base-300 bg-secondary-content/30">
+                                        <h3 className="text-sm font-bold text-secondary-content flex items-center gap-2">
+                                            <span className="w-2 h-2 rounded-full bg-secondary-content animate-pulse"></span>
+                                            Quick Create
+                                        </h3>
+                                    </div>
+
+                                    <div className="p-2 flex flex-col gap-1">
+                                        {/* AI Section */}
+                                        <div className="px-2 pt-2 pb-1 text-[10px] uppercase font-bold text-base-content/50 tracking-wider">
+                                            Intelligence
+                                        </div>
+                                        <button className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-primary hover:text-secondary-content transition-colors group">
+                                            <div className="w-8 h-8 rounded-lg bg-base-100 flex items-center justify-center border border-base-300 group-hover:border-primary/30">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="#0f0f0f" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z" /></svg>
+                                            </div>
+                                            <div className="flex flex-col items-start " onClick={() => Navigate("/app/shastraAI")}>
+                                                <span className="text-sm font-medium ">Connect AI Agent</span>
+                                                <span className="text-[10px] opacity-60">Deploy custom neural assistants</span>
+                                            </div>
+                                        </button>
+
+                                        {/* Collaboration Section */}
+                                        <div className="px-2 pt-2 pb-1 text-[10px] uppercase font-bold text-base-content/50 tracking-wider">
+                                            Collaboration
+                                        </div>
+                                        <button className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-primary hover:text-secondary-content transition-colors group">
+                                            <div className="w-8 h-8 rounded-lg bg-base-100 flex items-center justify-center border border-base-300 group-hover:border-secondary/30">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 48 48"><g fill="none"><path fill="url(#SVGJt7AAdxg)" d="M37.222 39.997a7 7 0 0 0 3.07-.818A7 7 0 0 0 44 33v-9.75a4.25 4.25 0 0 0-3.409-4.167A4.3 4.3 0 0 0 39.75 19h-5.5q-.433.001-.842.083A4.25 4.25 0 0 0 30 23.25V33c0 2.675 1.501 5 3.707 6.179a6.96 6.96 0 0 0 3.27.821H37q.111 0 .222-.004"></path><path fill="url(#SVG5GIxdeoi)" fillOpacity={0.25} d="M37.222 39.997a7 7 0 0 0 3.07-.818A7 7 0 0 0 44 33v-9.75a4.25 4.25 0 0 0-3.409-4.167A4.3 4.3 0 0 0 39.75 19h-5.5q-.433.001-.842.083A4.25 4.25 0 0 0 30 23.25V33c0 2.675 1.501 5 3.707 6.179a6.96 6.96 0 0 0 3.27.821H37q.111 0 .222-.004"></path><path fill="url(#SVGzsdx8dkW)" d="M11.222 39.997a7 7 0 0 0 3.07-.818A7 7 0 0 0 18 33v-9.75a4.25 4.25 0 0 0-3.409-4.167A4.3 4.3 0 0 0 13.75 19h-5.5q-.433.001-.842.083A4.25 4.25 0 0 0 4 23.25V33c0 2.675 1.501 5 3.707 6.179a6.96 6.96 0 0 0 3.27.821H11q.112 0 .222-.004"></path><path fill="url(#SVG4jxYpete)" fillOpacity={0.25} d="M11.222 39.997a7 7 0 0 0 3.07-.818A7 7 0 0 0 18 33v-9.75a4.25 4.25 0 0 0-3.409-4.167A4.3 4.3 0 0 0 13.75 19h-5.5q-.433.001-.842.083A4.25 4.25 0 0 0 4 23.25V33c0 2.675 1.501 5 3.707 6.179a6.96 6.96 0 0 0 3.27.821H11q.112 0 .222-.004"></path><path fill="url(#SVGLFOSlcNv)" d="M19.25 19A4.25 4.25 0 0 0 15 23.25V34a9 9 0 1 0 18 0V23.25A4.25 4.25 0 0 0 28.75 19z"></path><path fill="url(#SVG7WAmMdFt)" d="M19.25 19A4.25 4.25 0 0 0 15 23.25V34a9 9 0 1 0 18 0V23.25A4.25 4.25 0 0 0 28.75 19z"></path><path fill="url(#SVG604UPdmr)" d="M37 7a5 5 0 1 0 0 10a5 5 0 0 0 0-10"></path><path fill="url(#SVGDfOIBdeZ)" d="M11 7a5 5 0 1 0 0 10a5 5 0 0 0 0-10"></path><path fill="url(#SVGXiIdweKD)" d="M18 11a6 6 0 1 1 12 0a6 6 0 0 1-12 0"></path><defs><linearGradient id="SVGJt7AAdxg" x1={33.329} x2={45.202} y1={21.792} y2={34.43} gradientUnits="userSpaceOnUse"><stop offset={0.125} stopColor="#7a41dc"></stop><stop offset={1} stopColor="#5b2ab5"></stop></linearGradient><linearGradient id="SVGzsdx8dkW" x1={7.329} x2={19.202} y1={21.792} y2={34.43} gradientUnits="userSpaceOnUse"><stop offset={0.125} stopColor="#9c6cfe"></stop><stop offset={1} stopColor="#7a41dc"></stop></linearGradient><linearGradient id="SVGLFOSlcNv" x1={19.28} x2={32.658} y1={22.191} y2={38.211} gradientUnits="userSpaceOnUse"><stop offset={0.125} stopColor="#bd96ff"></stop><stop offset={1} stopColor="#9c6cfe"></stop></linearGradient><linearGradient id="SVG7WAmMdFt" x1={24} x2={44.557} y1={16.143} y2={44.95} gradientUnits="userSpaceOnUse"><stop stopColor="#885edb" stopOpacity={0}></stop><stop offset={1} stopColor="#e362f8"></stop></linearGradient><linearGradient id="SVG604UPdmr" x1={34.378} x2={39.474} y1={8.329} y2={16.467} gradientUnits="userSpaceOnUse"><stop offset={0.125} stopColor="#7a41dc"></stop><stop offset={1} stopColor="#5b2ab5"></stop></linearGradient><linearGradient id="SVGDfOIBdeZ" x1={8.378} x2={13.474} y1={8.329} y2={16.467} gradientUnits="userSpaceOnUse"><stop offset={0.125} stopColor="#9c6cfe"></stop><stop offset={1} stopColor="#7a41dc"></stop></linearGradient><linearGradient id="SVGXiIdweKD" x1={20.854} x2={26.969} y1={6.595} y2={16.36} gradientUnits="userSpaceOnUse"><stop offset={0.125} stopColor="#bd96ff"></stop><stop offset={1} stopColor="#9c6cfe"></stop></linearGradient><radialGradient id="SVG5GIxdeoi" cx={0} cy={0} r={1} gradientTransform="matrix(8.7001 -.00781 .01988 22.1392 27.8 29.008)" gradientUnits="userSpaceOnUse"><stop offset={0.433} stopColor="#3b148a"></stop><stop offset={1} stopColor="#3b148a" stopOpacity={0}></stop></radialGradient><radialGradient id="SVG4jxYpete" cx={0} cy={0} r={1} gradientTransform="rotate(180.041 11.273 14.5)scale(11.0348 28.0801)" gradientUnits="userSpaceOnUse"><stop offset={0.433} stopColor="#3b148a"></stop><stop offset={1} stopColor="#3b148a" stopOpacity={0}></stop></radialGradient></defs></g></svg>
+                                            </div>
+                                            <div className="flex flex-col items-start" onClick={() => setNewGroupTabOpen(true)}>
+                                                <span className="text-sm font-medium">New Team</span>
+                                                <span className="text-[10px] opacity-60">Organize members and permissions</span>
+                                            </div>
+                                        </button>
+
+                                        <button className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-primary hover:text-secondary-content transition-colors group">
+                                            <div className="w-8 h-8 rounded-lg bg-base-100 flex items-center justify-center border border-base-300 group-hover:border-secondary/30">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#874c04ff" d="M20 16a3 3 0 0 0-1.73.56l-2.45-1.45A3.7 3.7 0 0 0 16 14a4 4 0 0 0-3-3.86V7.82a3 3 0 1 0-2 0v2.32A4 4 0 0 0 8 14a3.7 3.7 0 0 0 .18 1.11l-2.45 1.45A3 3 0 0 0 4 16a3 3 0 1 0 3 3a3 3 0 0 0-.12-.8l2.3-1.37a4 4 0 0 0 5.64 0l2.3 1.37A3 3 0 1 0 20 16M4 20a1 1 0 1 1 1-1a1 1 0 0 1-1 1m8-16a1 1 0 1 1-1 1a1 1 0 0 1 1-1m0 12a2 2 0 1 1 2-2a2 2 0 0 1-2 2m8 4a1 1 0 1 1 1-1a1 1 0 0 1-1 1"></path></svg>
+                                            </div>
+                                            <div className="flex flex-col items-start">
+                                                <span className="text-sm font-medium">Create Channel</span>
+                                                <span className="text-[10px] opacity-60">Public or private discussions</span>
+                                            </div>
+                                        </button>
+
+                                        {/* Management Section */}
+                                        <div className="px-2 pt-2 pb-1 text-[10px] uppercase font-bold text-base-content/50 tracking-wider">
+                                            Work Management
+                                        </div>
+                                        <button className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-primary hover:text-secondary-content transition-colors group">
+                                            <div className="w-8 h-8 rounded-lg bg-base-100 flex items-center justify-center border border-base-300 group-hover:border-accent/30">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 16 16"><g fill="#874c04"><path d="M4 16s-1 0-1-1s1-4 5-4s5 3 5 4s-1 1-1 1zm4-5.95a2.5 2.5 0 1 0 0-5a2.5 2.5 0 0 0 0 5"></path><path d="M2 1a2 2 0 0 0-2 2v9.5A1.5 1.5 0 0 0 1.5 14h.653a5.4 5.4 0 0 1 1.066-2H1V3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v9h-2.219c.554.654.89 1.373 1.066 2h.653a1.5 1.5 0 0 0 1.5-1.5V3a2 2 0 0 0-2-2z"></path></g></svg>
+                                            </div>
+                                            <div className="flex flex-col items-start">
+                                                <span className="text-sm font-medium">Project Workspace</span>
+                                                <span className="text-[10px] opacity-60">Track milestones and goals</span>
+                                            </div>
+                                        </button>
+
+                                        <button className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-primary hover:text-secondary-content transition-colors group mb-1">
+                                            <div className="w-8 h-8 rounded-lg bg-base-100 flex items-center justify-center border border-base-300 group-hover:border-accent/30">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 16 16"><g fill="none"><path fill="url(#SVG29yRxspP)" d="M3 3.5A1.5 1.5 0 0 1 4.5 2h7A1.5 1.5 0 0 1 13 3.5v10a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 3 13.5z"></path><path fill="url(#SVGIvgUMeep)" fillOpacity={0.7} d="M3 3.5A1.5 1.5 0 0 1 4.5 2h7A1.5 1.5 0 0 1 13 3.5v10a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 3 13.5z"></path><path fill="url(#SVGzO9hHdNE)" fillOpacity={0.4} d="M3 3.5A1.5 1.5 0 0 1 4.5 2h7A1.5 1.5 0 0 1 13 3.5v10a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 3 13.5z"></path><path fill="url(#SVG9Kp5ubdQ)" d="M5 2.5A1.5 1.5 0 0 0 6.5 4h3a1.5 1.5 0 0 0 0-3h-3A1.5 1.5 0 0 0 5 2.5"></path><path fill="url(#SVGyNacneTZ)" fillOpacity={0.9} d="M10.854 7.854a.5.5 0 0 0-.708-.708L7.5 9.793L6.354 8.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z"></path><defs><linearGradient id="SVG29yRxspP" x1={3} x2={13.44} y1={3.3} y2={14.593} gradientUnits="userSpaceOnUse"><stop stopColor="#36dff1"></stop><stop offset={1} stopColor="#0094f0"></stop></linearGradient><linearGradient id="SVG9Kp5ubdQ" x1={8} x2={8} y1={1} y2={4} gradientUnits="userSpaceOnUse"><stop stopColor="#ffe06b"></stop><stop offset={1} stopColor="#fab500"></stop></linearGradient><linearGradient id="SVGyNacneTZ" x1={12.833} x2={6.283} y1={13.667} y2={4.063} gradientUnits="userSpaceOnUse"><stop stopColor="#9deaff"></stop><stop offset={1} stopColor="#fff"></stop></linearGradient><radialGradient id="SVGIvgUMeep" cx={0} cy={0} r={1} gradientTransform="matrix(0 4.16204 -4.27976 0 8 1.278)" gradientUnits="userSpaceOnUse"><stop stopColor="#0a1852"></stop><stop offset={1} stopColor="#0a1852" stopOpacity={0}></stop></radialGradient><radialGradient id="SVGzO9hHdNE" cx={0} cy={0} r={1} gradientTransform="matrix(0 2.02381 -4.04762 0 8 2.69)" gradientUnits="userSpaceOnUse"><stop stopColor="#0a1852"></stop><stop offset={1} stopColor="#0a1852" stopOpacity={0}></stop></radialGradient></defs></g></svg>
+                                            </div>
+                                            <div className="flex flex-col items-start">
+                                                <span className="text-sm font-medium">Assign Task</span>
+                                                <span className="text-[10px] opacity-60">Quickly add items to backlog</span>
+                                            </div>
+                                        </button>
+                                    </div>
                                 </div>
-
-                                <div className="p-2 flex flex-col gap-1">
-                                    {/* AI Section */}
-                                    <div className="px-2 pt-2 pb-1 text-[10px] uppercase font-bold text-base-content/50 tracking-wider">
-                                        Intelligence
-                                    </div>
-                                    <button className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-primary hover:text-secondary-content transition-colors group">
-                                        <div className="w-8 h-8 rounded-lg bg-base-100 flex items-center justify-center border border-base-300 group-hover:border-primary/30">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="#0f0f0f" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z" /></svg>
-                                        </div>
-                                        <div className="flex flex-col items-start ">
-                                            <span className="text-sm font-medium ">Connect AI Agent</span>
-                                            <span className="text-[10px] opacity-60">Deploy custom neural assistants</span>
-                                        </div>
-                                    </button>
-
-                                    {/* Collaboration Section */}
-                                    <div className="px-2 pt-2 pb-1 text-[10px] uppercase font-bold text-base-content/50 tracking-wider">
-                                        Collaboration
-                                    </div>
-                                    <button className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-primary hover:text-secondary-content transition-colors group">
-                                        <div className="w-8 h-8 rounded-lg bg-base-100 flex items-center justify-center border border-base-300 group-hover:border-secondary/30">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 48 48"><g fill="none"><path fill="url(#SVGJt7AAdxg)" d="M37.222 39.997a7 7 0 0 0 3.07-.818A7 7 0 0 0 44 33v-9.75a4.25 4.25 0 0 0-3.409-4.167A4.3 4.3 0 0 0 39.75 19h-5.5q-.433.001-.842.083A4.25 4.25 0 0 0 30 23.25V33c0 2.675 1.501 5 3.707 6.179a6.96 6.96 0 0 0 3.27.821H37q.111 0 .222-.004"></path><path fill="url(#SVG5GIxdeoi)" fillOpacity={0.25} d="M37.222 39.997a7 7 0 0 0 3.07-.818A7 7 0 0 0 44 33v-9.75a4.25 4.25 0 0 0-3.409-4.167A4.3 4.3 0 0 0 39.75 19h-5.5q-.433.001-.842.083A4.25 4.25 0 0 0 30 23.25V33c0 2.675 1.501 5 3.707 6.179a6.96 6.96 0 0 0 3.27.821H37q.111 0 .222-.004"></path><path fill="url(#SVGzsdx8dkW)" d="M11.222 39.997a7 7 0 0 0 3.07-.818A7 7 0 0 0 18 33v-9.75a4.25 4.25 0 0 0-3.409-4.167A4.3 4.3 0 0 0 13.75 19h-5.5q-.433.001-.842.083A4.25 4.25 0 0 0 4 23.25V33c0 2.675 1.501 5 3.707 6.179a6.96 6.96 0 0 0 3.27.821H11q.112 0 .222-.004"></path><path fill="url(#SVG4jxYpete)" fillOpacity={0.25} d="M11.222 39.997a7 7 0 0 0 3.07-.818A7 7 0 0 0 18 33v-9.75a4.25 4.25 0 0 0-3.409-4.167A4.3 4.3 0 0 0 13.75 19h-5.5q-.433.001-.842.083A4.25 4.25 0 0 0 4 23.25V33c0 2.675 1.501 5 3.707 6.179a6.96 6.96 0 0 0 3.27.821H11q.112 0 .222-.004"></path><path fill="url(#SVGLFOSlcNv)" d="M19.25 19A4.25 4.25 0 0 0 15 23.25V34a9 9 0 1 0 18 0V23.25A4.25 4.25 0 0 0 28.75 19z"></path><path fill="url(#SVG7WAmMdFt)" d="M19.25 19A4.25 4.25 0 0 0 15 23.25V34a9 9 0 1 0 18 0V23.25A4.25 4.25 0 0 0 28.75 19z"></path><path fill="url(#SVG604UPdmr)" d="M37 7a5 5 0 1 0 0 10a5 5 0 0 0 0-10"></path><path fill="url(#SVGDfOIBdeZ)" d="M11 7a5 5 0 1 0 0 10a5 5 0 0 0 0-10"></path><path fill="url(#SVGXiIdweKD)" d="M18 11a6 6 0 1 1 12 0a6 6 0 0 1-12 0"></path><defs><linearGradient id="SVGJt7AAdxg" x1={33.329} x2={45.202} y1={21.792} y2={34.43} gradientUnits="userSpaceOnUse"><stop offset={0.125} stopColor="#7a41dc"></stop><stop offset={1} stopColor="#5b2ab5"></stop></linearGradient><linearGradient id="SVGzsdx8dkW" x1={7.329} x2={19.202} y1={21.792} y2={34.43} gradientUnits="userSpaceOnUse"><stop offset={0.125} stopColor="#9c6cfe"></stop><stop offset={1} stopColor="#7a41dc"></stop></linearGradient><linearGradient id="SVGLFOSlcNv" x1={19.28} x2={32.658} y1={22.191} y2={38.211} gradientUnits="userSpaceOnUse"><stop offset={0.125} stopColor="#bd96ff"></stop><stop offset={1} stopColor="#9c6cfe"></stop></linearGradient><linearGradient id="SVG7WAmMdFt" x1={24} x2={44.557} y1={16.143} y2={44.95} gradientUnits="userSpaceOnUse"><stop stopColor="#885edb" stopOpacity={0}></stop><stop offset={1} stopColor="#e362f8"></stop></linearGradient><linearGradient id="SVG604UPdmr" x1={34.378} x2={39.474} y1={8.329} y2={16.467} gradientUnits="userSpaceOnUse"><stop offset={0.125} stopColor="#7a41dc"></stop><stop offset={1} stopColor="#5b2ab5"></stop></linearGradient><linearGradient id="SVGDfOIBdeZ" x1={8.378} x2={13.474} y1={8.329} y2={16.467} gradientUnits="userSpaceOnUse"><stop offset={0.125} stopColor="#9c6cfe"></stop><stop offset={1} stopColor="#7a41dc"></stop></linearGradient><linearGradient id="SVGXiIdweKD" x1={20.854} x2={26.969} y1={6.595} y2={16.36} gradientUnits="userSpaceOnUse"><stop offset={0.125} stopColor="#bd96ff"></stop><stop offset={1} stopColor="#9c6cfe"></stop></linearGradient><radialGradient id="SVG5GIxdeoi" cx={0} cy={0} r={1} gradientTransform="matrix(8.7001 -.00781 .01988 22.1392 27.8 29.008)" gradientUnits="userSpaceOnUse"><stop offset={0.433} stopColor="#3b148a"></stop><stop offset={1} stopColor="#3b148a" stopOpacity={0}></stop></radialGradient><radialGradient id="SVG4jxYpete" cx={0} cy={0} r={1} gradientTransform="rotate(180.041 11.273 14.5)scale(11.0348 28.0801)" gradientUnits="userSpaceOnUse"><stop offset={0.433} stopColor="#3b148a"></stop><stop offset={1} stopColor="#3b148a" stopOpacity={0}></stop></radialGradient></defs></g></svg>
-                                        </div>
-                                        <div className="flex flex-col items-start">
-                                            <span className="text-sm font-medium">New Team</span>
-                                            <span className="text-[10px] opacity-60">Organize members and permissions</span>
-                                        </div>
-                                    </button>
-
-                                    <button className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-primary hover:text-secondary-content transition-colors group">
-                                        <div className="w-8 h-8 rounded-lg bg-base-100 flex items-center justify-center border border-base-300 group-hover:border-secondary/30">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#874c04ff" d="M20 16a3 3 0 0 0-1.73.56l-2.45-1.45A3.7 3.7 0 0 0 16 14a4 4 0 0 0-3-3.86V7.82a3 3 0 1 0-2 0v2.32A4 4 0 0 0 8 14a3.7 3.7 0 0 0 .18 1.11l-2.45 1.45A3 3 0 0 0 4 16a3 3 0 1 0 3 3a3 3 0 0 0-.12-.8l2.3-1.37a4 4 0 0 0 5.64 0l2.3 1.37A3 3 0 1 0 20 16M4 20a1 1 0 1 1 1-1a1 1 0 0 1-1 1m8-16a1 1 0 1 1-1 1a1 1 0 0 1 1-1m0 12a2 2 0 1 1 2-2a2 2 0 0 1-2 2m8 4a1 1 0 1 1 1-1a1 1 0 0 1-1 1"></path></svg>
-                                        </div>
-                                        <div className="flex flex-col items-start">
-                                            <span className="text-sm font-medium">Create Channel</span>
-                                            <span className="text-[10px] opacity-60">Public or private discussions</span>
-                                        </div>
-                                    </button>
-
-                                    {/* Management Section */}
-                                    <div className="px-2 pt-2 pb-1 text-[10px] uppercase font-bold text-base-content/50 tracking-wider">
-                                        Work Management
-                                    </div>
-                                    <button className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-primary hover:text-secondary-content transition-colors group">
-                                        <div className="w-8 h-8 rounded-lg bg-base-100 flex items-center justify-center border border-base-300 group-hover:border-accent/30">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 16 16"><g fill="#874c04"><path d="M4 16s-1 0-1-1s1-4 5-4s5 3 5 4s-1 1-1 1zm4-5.95a2.5 2.5 0 1 0 0-5a2.5 2.5 0 0 0 0 5"></path><path d="M2 1a2 2 0 0 0-2 2v9.5A1.5 1.5 0 0 0 1.5 14h.653a5.4 5.4 0 0 1 1.066-2H1V3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v9h-2.219c.554.654.89 1.373 1.066 2h.653a1.5 1.5 0 0 0 1.5-1.5V3a2 2 0 0 0-2-2z"></path></g></svg>
-                                        </div>
-                                        <div className="flex flex-col items-start">
-                                            <span className="text-sm font-medium">Project Workspace</span>
-                                            <span className="text-[10px] opacity-60">Track milestones and goals</span>
-                                        </div>
-                                    </button>
-
-                                    <button className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-primary hover:text-secondary-content transition-colors group mb-1">
-                                        <div className="w-8 h-8 rounded-lg bg-base-100 flex items-center justify-center border border-base-300 group-hover:border-accent/30">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 16 16"><g fill="none"><path fill="url(#SVG29yRxspP)" d="M3 3.5A1.5 1.5 0 0 1 4.5 2h7A1.5 1.5 0 0 1 13 3.5v10a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 3 13.5z"></path><path fill="url(#SVGIvgUMeep)" fillOpacity={0.7} d="M3 3.5A1.5 1.5 0 0 1 4.5 2h7A1.5 1.5 0 0 1 13 3.5v10a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 3 13.5z"></path><path fill="url(#SVGzO9hHdNE)" fillOpacity={0.4} d="M3 3.5A1.5 1.5 0 0 1 4.5 2h7A1.5 1.5 0 0 1 13 3.5v10a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 3 13.5z"></path><path fill="url(#SVG9Kp5ubdQ)" d="M5 2.5A1.5 1.5 0 0 0 6.5 4h3a1.5 1.5 0 0 0 0-3h-3A1.5 1.5 0 0 0 5 2.5"></path><path fill="url(#SVGyNacneTZ)" fillOpacity={0.9} d="M10.854 7.854a.5.5 0 0 0-.708-.708L7.5 9.793L6.354 8.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z"></path><defs><linearGradient id="SVG29yRxspP" x1={3} x2={13.44} y1={3.3} y2={14.593} gradientUnits="userSpaceOnUse"><stop stopColor="#36dff1"></stop><stop offset={1} stopColor="#0094f0"></stop></linearGradient><linearGradient id="SVG9Kp5ubdQ" x1={8} x2={8} y1={1} y2={4} gradientUnits="userSpaceOnUse"><stop stopColor="#ffe06b"></stop><stop offset={1} stopColor="#fab500"></stop></linearGradient><linearGradient id="SVGyNacneTZ" x1={12.833} x2={6.283} y1={13.667} y2={4.063} gradientUnits="userSpaceOnUse"><stop stopColor="#9deaff"></stop><stop offset={1} stopColor="#fff"></stop></linearGradient><radialGradient id="SVGIvgUMeep" cx={0} cy={0} r={1} gradientTransform="matrix(0 4.16204 -4.27976 0 8 1.278)" gradientUnits="userSpaceOnUse"><stop stopColor="#0a1852"></stop><stop offset={1} stopColor="#0a1852" stopOpacity={0}></stop></radialGradient><radialGradient id="SVGzO9hHdNE" cx={0} cy={0} r={1} gradientTransform="matrix(0 2.02381 -4.04762 0 8 2.69)" gradientUnits="userSpaceOnUse"><stop stopColor="#0a1852"></stop><stop offset={1} stopColor="#0a1852" stopOpacity={0}></stop></radialGradient></defs></g></svg>
-                                        </div>
-                                        <div className="flex flex-col items-start">
-                                            <span className="text-sm font-medium">Assign Task</span>
-                                            <span className="text-[10px] opacity-60">Quickly add items to backlog</span>
-                                        </div>
-                                    </button>
-                                </div>
-                            </div>
-                        )}
+                            )
+                        }
                         {/* SECTION TOGGLE - Premium Segmented Control */}
-                        <div className="mt-5 p-1 bg-white/[0.04] rounded-2xl border border-secondary border-[3px] ">
-                            <div className="flex relative">
-                                <div className={`absolute top-0 h-full w-1/2 bg-base-300 border border-secondary border-[3px] rounded-xl transition-transform duration-300  ${section === 2 ? "translate-x-full" : ""}`}></div>
+                        <div className="mt-5 w-full ">
+                            <div className="flex relative lg:w-full w-[80%] mx-auto border border-secondary border-[3px] rounded-2xl bg-white/[0.04] py-1 items-center">
+                                <div className={`absolute h-[96%]  w-1/2  bg-base-300 border border-secondary border-[3px] rounded-xl transition-transform duration-300  ${section === 2 ? "translate-x-full -left-1 " : "left-1"}`}></div>
                                 <button
                                     onClick={() => setSection(1)}
                                     className={`flex-1 py-2.5 text-sm font-medium rounded-xl transition-all duration-300 relative z-10 ${section === 1 ? 'text-secondary' : 'text-accent hover:text-accent'}`}
                                 >
-                                    Connections
+                                    Chats
                                 </button>
                                 <button
                                     onClick={() => setSection(2)}
@@ -793,47 +884,200 @@ const Discussions = () => {
 
                         {/* LIST AREA - Premium Cards */}
 
-                        {section == 1 && (
-                            <div className="mt-6 space-y-1 overflow-y-auto max-h-[calc(100vh-250px)] pr-2 custom-scrollbar">
+                        {
+                            section == 1 && (
+                                <div className="mt-6 space-y-1 overflow-y-auto max-h-[calc(100vh-250px)] pr-2 custom-scrollbar">
 
-                                <div className="mb-5">
-                                    {(filteredChats || []).map((item, index) => (
+                                    <div className="mb-5">
+                                        {(filteredChats || []).map((item, index) => (
+                                            <div
+                                                key={index}
+                                                className="group relative flex items-center gap-3 mb-1 p-3 rounded-xl bg-base-100 hover:bg-base-300 transition-all duration-300 cursor-pointer border-2  hover:border-secondary border-base-300  "
+                                                onClick={() => {
+                                                    setMessages([]);
+                                                    setchatActive(true);
+                                                    setChatingPhotoUrl(item.atFrontUser?.photoUrl?.url);
+                                                    setChatingUserId(item.atFrontUser?._id);
+                                                    setChatingFirstName(item.atFrontUser?.firstName);
+                                                    setChatingLastName(item.atFrontUser?.lastName);
+                                                    setChatingUsername(item.atFrontUser?.username);
+                                                    setChatingGmail(item.atFrontUser?.gmail);
+                                                    setChatingMiddleName(item.atFrontUser?.middleName);
+                                                    loadMessages(item.LastMsg?.conversationId);
+                                                    setChatingIsVerified(item.atFrontUser?.isVerified);
+                                                    setChatingCollege(item.atFrontUser?.college);
+                                                    setChatingProfession(item.atFrontUser?.profession);
+                                                    setChatingSkills(item.atFrontUser?.skills);
+                                                    setChatingAbout(item.atFrontUser?.about);
+                                                }}
+                                            >
+                                                {/* Online indicator */}
+                                                <div className="relative">
+
+                                                    {item.atFrontUser?.photoUrl?.url ? (<img
+                                                        src={item.atFrontUser?.photoUrl?.url}
+                                                        alt="profile"
+                                                        className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300"
+                                                    />
+                                                    ) : (
+                                                        <img
+                                                            src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776259172/Pinterest_Pin_di5dy8.jpg"
+                                                            alt="profile"
+                                                            className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300"
+                                                        />
+                                                    )}
+
+
+                                                </div>
+
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="flex justify-between items-center">
+                                                        <h3 className="text-accent font-semibold truncate">
+                                                            {item.atFrontUser?.firstName || "CodeSarthi"} {item.atFrontUser?.lastName || "User"}
+                                                        </h3>
+                                                        <span className="text-xs text-accent">
+                                                            {formatRelativeDate(item.lastMsgAt)}
+
+                                                        </span>
+                                                    </div>
+                                                    <p className="text-sm text-gray-900 truncate mt-0.5">
+
+
+
+                                                        {item.atFrontUser?._id ? (
+                                                            // Check the ID of the user in THIS row, not the one you are chatting with
+                                                            typingUsers.has(item.atFrontUser._id) ? (
+                                                                <div className="flex items-center space-x-1">
+                                                                    <div className="flex space-x-1">
+                                                                        <span className="w-1 h-1 bg-blue-600 rounded-full animate-bounce"></span>
+                                                                        <span className="w-1 h-1 bg-blue-600 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                                                                        <span className="w-1 h-1 bg-blue-600 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                                                                    </div>
+                                                                    <span className="text-xs text-blue-600">Typing...</span>
+                                                                </div>
+                                                            ) : onlineUsers.has(item.atFrontUser._id) ? (
+                                                                <div className="flex items-center space-x-1">
+                                                                    <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                                                                    <span className="text-xs text-gray-500">Online</span>
+                                                                </div>
+                                                            ) : (
+                                                                <span className="text-xs text-gray-400 truncate">
+                                                                    {item.LastMsg?.content || "Hey! let's collab"}
+                                                                </span>
+                                                            )
+                                                        ) : null}
+
+                                                    </p>
+                                                </div>
+
+                                                {/* Unread badge - commented but styled */}
+                                                {(item.unReadCount != 0 && item.atFrontUser.username == user.username) && (
+                                                    <div className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white text-xs flex items-center justify-center ">
+                                                        {item.unReadCount}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ))}
+
+                                    </div>
+
+                                    {/* Start Collabing CTA */}
+
+                                    {connectionList.length > 0 && (
+                                        <div className="mt-6 px-4 py-2 rounded-xl bg-base-300  border border-accent text-center group cursor-pointer ">
+                                            <div className="flex items-center justify-center gap-1 text-accent">
+                                                <span className="text-lg font-medium">Start New Collab</span>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" className="group-hover:translate-x-1 transition-transform">
+                                                    <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 12h16m-6-6l6 6-6 6" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <div className="mt-5">
+                                        {connectionList.map((item) =>
+                                            <li
+                                                key={item.userId}
+                                                className="group relative flex items-center gap-3 mb-1 border border-base-300 p-3 rounded-xl bg-base-100 hover:bg-base-300 transition-all duration-300 cursor-pointer hover:border-secondary  "
+                                                onClick={() => {
+                                                    setMessages([]);
+                                                    setchatActive(true);
+                                                    setChatingPhotoUrl(item.photoUrl);
+                                                    setChatingUserId(item.userId);
+                                                    setChatingFirstName(item.FirstName);
+                                                    setChatingLastName(item.LastName);
+                                                    setChatingUsername(item.username);
+                                                    setChatingGmail(item.gmail);
+                                                    setChatingMiddleName(item.MiddleName);
+                                                    setChatingIsVerified(item.atFrontUser?.isVerified);
+                                                    setChatingCollege(item.atFrontUser?.college);
+                                                    setChatingProfession(item.atFrontUser?.profession);
+                                                    setChatingSkills(item.atFrontUser?.skills);
+                                                    setChatingAbout(item.about);
+                                                }}
+                                            >
+                                                <img
+                                                    src={item.photoUrl}
+                                                    alt="profile"
+                                                    className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300"
+                                                />
+
+                                                <div className="flex flex-col">
+                                                    <span className="text-accent text-xl font-medium">
+                                                        {item.FirstName} {item.LastName}
+                                                    </span>
+
+                                                    <span className="text-gray-800 text-sm pl-1">
+                                                        {!item.lastMsg && <span>Hey! let's collab</span>}
+                                                    </span>
+                                                </div>
+
+
+                                            </li>
+
+                                        )}
+                                    </div>
+
+                                </div>
+                            )
+                        }
+                        {
+                            section == 2 && (
+                                <div className="mt-6 space-y-1 overflow-y-auto max-h-[calc(100vh-250px)] pr-2 custom-scrollbar">
+
+                                    <div className="mb-5">
+
                                         <div
-                                            key={index}
+
                                             className="group relative flex items-center gap-3 mb-1 p-3 rounded-xl bg-base-100 hover:bg-base-300 transition-all duration-300 cursor-pointer border-2  hover:border-secondary border-base-300  "
                                             onClick={() => {
                                                 setMessages([]);
                                                 setchatActive(true);
-                                                setChatingPhotoUrl(item.atFrontUser?.photoUrl?.url);
-                                                setChatingUserId(item.atFrontUser?._id);
-                                                setChatingFirstName(item.atFrontUser?.firstName);
-                                                setChatingLastName(item.atFrontUser?.lastName);
-                                                setChatingUsername(item.atFrontUser?.username);
-                                                setChatingGmail(item.atFrontUser?.gmail);
-                                                setChatingMiddleName(item.atFrontUser?.middleName);
-                                                loadMessages(item.LastMsg?.conversationId);
-                                                setChatingIsVerified(item.atFrontUser?.isVerified);
-                                                setChatingCollege(item.atFrontUser?.college);
-                                                setChatingProfession(item.atFrontUser?.profession);
-                                                setChatingSkills(item.atFrontUser?.skills);
-                                                setChatingAbout(item.atFrontUser?.about);
+                                                setChatingPhotoUrl("https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776357892/ASCII_Earth_is_a_Space_Station_dwdtcb.jpg");
+                                                setChatingFirstName("Global");
+                                                setChatingLastName("Community");
+                                                setChatingUserId("global");
+                                                setChatingUsername("gdc@codesarthi");
+                                                setChatingGmail("gdc@codesarthi.in");
+                                                setChatingMiddleName("Developers");
+                                                loadMessages("kuch bhii");
+                                                setChatingIsVerified(true);
+                                                setChatingCollege("Code Sarthi");
+                                                setChatingProfession("Developers");
+                                                setChatingAbout("Welcome to the Global Developers Community where the developers can connect with each other and share their knowledge and experience.");
                                             }}
                                         >
                                             {/* Online indicator */}
                                             <div className="relative">
 
-                                                {item.atFrontUser?.photoUrl?.url ? (<img
-                                                    src={item.atFrontUser?.photoUrl?.url}
+                                                <img
+                                                    src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776357892/ASCII_Earth_is_a_Space_Station_dwdtcb.jpg"
                                                     alt="profile"
-                                                    className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300"
+                                                    className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-1 ring-accent group-hover:ring-secondary transition-all duration-300"
                                                 />
-                                                ) : (
-                                                    <img
-                                                        src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776259172/Pinterest_Pin_di5dy8.jpg"
-                                                        alt="profile"
-                                                        className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300"
-                                                    />
-                                                )}
+
+
+
 
 
                                             </div>
@@ -841,213 +1085,37 @@ const Discussions = () => {
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex justify-between items-center">
                                                     <h3 className="text-accent font-semibold truncate">
-                                                        {item.atFrontUser?.firstName || "CodeSarthi"} {item.atFrontUser?.lastName || "User"}
+                                                        Global Developers Community
                                                     </h3>
                                                     <span className="text-xs text-accent">
                                                         {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                     </span>
                                                 </div>
                                                 <p className="text-sm text-gray-900 truncate mt-0.5">
-                                                    {item.atFrontUser?._id ? (item.LastMsg?.content || "Hey! let's collab") : ("")}
+                                                    KUCH BHII
 
                                                 </p>
                                             </div>
 
                                             {/* Unread badge - commented but styled */}
-                                            {(item.unReadCount != 0 && item.atFrontUser.username == user.username) && (
-                                                <div className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white text-xs flex items-center justify-center ">
-                                                    {item.unReadCount}
-                                                </div>
-                                            )}
-                                        </div>
-                                    ))}
-
-                                </div>
-
-                                {/* Start Collabing CTA */}
-
-                                {connectionList.length > 0 && (
-                                    <div className="mt-6 px-4 py-2 rounded-xl bg-base-300  border border-accent text-center group cursor-pointer ">
-                                        <div className="flex items-center justify-center gap-1 text-accent">
-                                            <span className="text-lg font-medium">Start New Collab</span>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" className="group-hover:translate-x-1 transition-transform">
-                                                <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 12h16m-6-6l6 6-6 6" />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                )}
-
-                                <div className="mt-5">
-                                    {connectionList.map((item) =>
-                                        <li
-                                            key={item.userId}
-                                            className="group relative flex items-center gap-3 mb-1 border border-base-300 p-3 rounded-xl bg-base-100 hover:bg-base-300 transition-all duration-300 cursor-pointer hover:border-secondary  "
-                                            onClick={() => {
-                                                setMessages([]);
-                                                setchatActive(true);
-                                                setChatingPhotoUrl(item.photoUrl);
-                                                setChatingUserId(item.userId);
-                                                setChatingFirstName(item.FirstName);
-                                                setChatingLastName(item.LastName);
-                                                setChatingUsername(item.username);
-                                                setChatingGmail(item.gmail);
-                                                setChatingMiddleName(item.MiddleName);
-                                                setChatingIsVerified(item.atFrontUser?.isVerified);
-                                                setChatingCollege(item.atFrontUser?.college);
-                                                setChatingProfession(item.atFrontUser?.profession);
-                                                setChatingSkills(item.atFrontUser?.skills);
-                                                setChatingAbout(item.about);
-                                            }}
-                                        >
-                                            <img
-                                                src={item.photoUrl}
-                                                alt="profile"
-                                                className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300"
-                                            />
-
-                                            <div className="flex flex-col">
-                                                <span className="text-accent text-xl font-medium">
-                                                    {item.FirstName} {item.LastName}
-                                                </span>
-
-                                                <span className="text-gray-800 text-sm pl-1">
-                                                    {!item.lastMsg && <span>Hey! let's collab</span>}
-                                                </span>
-                                            </div>
-
-
-                                        </li>
-
-                                    )}
-                                </div>
-
-                            </div>
-                        )}
-                        {section == 2 && (
-                            <div className="mt-6 space-y-1 overflow-y-auto max-h-[calc(100vh-250px)] pr-2 custom-scrollbar">
-
-                                <div className="mb-5">
-
-                                    <div
-
-                                        className="group relative flex items-center gap-3 mb-1 p-3 rounded-xl bg-base-100 hover:bg-base-300 transition-all duration-300 cursor-pointer border-2  hover:border-secondary border-base-300  "
-                                        onClick={() => {
-                                            setMessages([]);
-                                            setchatActive(true);
-                                            setChatingPhotoUrl("https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776357892/ASCII_Earth_is_a_Space_Station_dwdtcb.jpg");
-                                            setChatingFirstName("Global");
-                                            setChatingLastName("Community");
-                                            setChatingUserId("global");
-                                            setChatingUsername("gdc@codesarthi");
-                                            setChatingGmail("gdc@codesarthi.in");
-                                            setChatingMiddleName("Developers");
-                                            loadMessages("kuch bhii");
-                                            setChatingIsVerified(true);
-                                            setChatingCollege("Code Sarthi");
-                                            setChatingProfession("Developers");
-                                            setChatingAbout("Welcome to the Global Developers Community where the developers can connect with each other and share their knowledge and experience.");
-                                        }}
-                                    >
-                                        {/* Online indicator */}
-                                        <div className="relative">
-
-                                            <img
-                                                src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776357892/ASCII_Earth_is_a_Space_Station_dwdtcb.jpg"
-                                                alt="profile"
-                                                className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-1 ring-accent group-hover:ring-secondary transition-all duration-300"
-                                            />
-
-
-
-
-
-                                        </div>
-
-                                        <div className="flex-1 min-w-0">
-                                            <div className="flex justify-between items-center">
-                                                <h3 className="text-accent font-semibold truncate">
-                                                    Global Developers Community
-                                                </h3>
-                                                <span className="text-xs text-accent">
-                                                    {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                </span>
-                                            </div>
-                                            <p className="text-sm text-gray-900 truncate mt-0.5">
-                                                KUCH BHII
-
-                                            </p>
-                                        </div>
-
-                                        {/* Unread badge - commented but styled */}
-                                        {/* {(item.unReadCount != 0 && item.atFrontUser.username == user.username) && (
+                                            {/* {(item.unReadCount != 0 && item.atFrontUser.username == user.username) && (
                                             <div className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white text-xs flex items-center justify-center ">
                                                 2
                                             </div>
                                         )} */}
+                                        </div>
+
+
                                     </div>
 
 
+
                                 </div>
-
-                                {/* Start Collabing CTA
-                                <div className="mt-6 px-4 py-2 rounded-xl bg-base-300  border border-accent text-center group cursor-pointer ">
-                                    <div className="flex items-center justify-center gap-1 text-accent">
-                                        <span className="text-lg font-medium">Start New Collab</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" className="group-hover:translate-x-1 transition-transform">
-                                            <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 12h16m-6-6l6 6-6 6" />
-                                        </svg>
-                                    </div>
-                                </div>
-
-                                <div className="mt-5">
-                                    {connectionList.map((item) =>
-                                        <li
-                                            key={item.userId}
-                                            className="group relative flex items-center gap-3 mb-1 border border-base-300 p-3 rounded-xl bg-base-100 hover:bg-base-300 transition-all duration-300 cursor-pointer hover:border-secondary  "
-                                            onClick={() => {
-                                                setMessages([]);
-                                                setchatActive(true);
-                                                setChatingPhotoUrl(item.photoUrl);
-                                                setChatingUserId(item.userId);
-                                                setChatingFirstName(item.FirstName);
-                                                setChatingLastName(item.LastName);
-                                                setChatingUsername(item.username);
-                                                setChatingGmail(item.gmail);
-                                                setChatingMiddleName(item.MiddleName);
-                                                setChatingIsVerified(item.atFrontUser?.isVerified);
-                                                setChatingCollege(item.atFrontUser?.college);
-                                                setChatingProfession(item.atFrontUser?.profession);
-                                                setChatingSkills(item.atFrontUser?.skills);
-                                                setChatingAbout(item.about);
-                                            }}
-                                        >
-                                            <img
-                                                src={item.photoUrl}
-                                                alt="profile"
-                                                className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300"
-                                            />
-
-                                            <div className="flex flex-col">
-                                                <span className="text-accent text-xl font-medium">
-                                                    {item.FirstName} {item.LastName}
-                                                </span>
-
-                                                <span className="text-gray-800 text-sm pl-1">
-                                                    {!item.lastMsg && <span>Hey! let's collab</span>}
-                                                </span>
-                                            </div>
-
-
-                                        </li>
-
-                                    )}
-                                </div> */}
-
-                            </div>
-                        )}
-                    </div>
+                            )
+                        }
+                    </div >
                 )}
-                {profileOpen && (
+                {profileOpen && !newGroupTabOpen && (
                     <div className="w-full  h-[calc(100vh-80px)] rounded-3xl bg-base-100 border border-base-300 border-[3px] flex flex-col  items-center overflow-hidden  relative">
                         <div className="w-full absolute z-10 p-5 ">
 
@@ -1218,14 +1286,151 @@ const Discussions = () => {
                         </div>
                     </div>
                 )}
-            </div>
+                {newGroupTabOpen && (
+                    <div className="absolute">
+                        {(filteredChats || []).map((item, index) => (
+                            <div
+                                key={index}
+                                className="group relative flex items-center gap-3 mb-1 p-3 rounded-xl bg-base-100 hover:bg-base-300 transition-all duration-300 cursor-pointer border-2  hover:border-secondary border-base-300  "
+                                onClick={() => {
+                                    setMessages([]);
+                                    setchatActive(true);
+                                    setChatingPhotoUrl(item.atFrontUser?.photoUrl?.url);
+                                    setChatingUserId(item.atFrontUser?._id);
+                                    setChatingFirstName(item.atFrontUser?.firstName);
+                                    setChatingLastName(item.atFrontUser?.lastName);
+                                    setChatingUsername(item.atFrontUser?.username);
+                                    setChatingGmail(item.atFrontUser?.gmail);
+                                    setChatingMiddleName(item.atFrontUser?.middleName);
+                                    loadMessages(item.LastMsg?.conversationId);
+                                    setChatingIsVerified(item.atFrontUser?.isVerified);
+                                    setChatingCollege(item.atFrontUser?.college);
+                                    setChatingProfession(item.atFrontUser?.profession);
+                                    setChatingSkills(item.atFrontUser?.skills);
+                                    setChatingAbout(item.atFrontUser?.about);
+                                }}
+                            >
+                                {/* Online indicator */}
+                                <div className="relative">
+
+                                    {item.atFrontUser?.photoUrl?.url ? (<img
+                                        src={item.atFrontUser?.photoUrl?.url}
+                                        alt="profile"
+                                        className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300"
+                                    />
+                                    ) : (
+                                        <img
+                                            src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776259172/Pinterest_Pin_di5dy8.jpg"
+                                            alt="profile"
+                                            className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300"
+                                        />
+                                    )}
+
+
+                                </div>
+
+                                <div className="flex-1 min-w-0">
+                                    <div className="flex justify-between items-center">
+                                        <h3 className="text-accent font-semibold truncate">
+                                            {item.atFrontUser?.firstName || "CodeSarthi"} {item.atFrontUser?.lastName || "User"}
+                                        </h3>
+                                        <span className="text-xs text-accent">
+                                            {formatRelativeDate(item.lastMsgAt)}
+
+                                        </span>
+                                    </div>
+                                    <p className="text-sm text-gray-900 truncate mt-0.5">
+
+
+
+                                        {item.atFrontUser?._id ? (
+                                            // Check the ID of the user in THIS row, not the one you are chatting with
+                                            typingUsers.has(item.atFrontUser._id) ? (
+                                                <div className="flex items-center space-x-1">
+                                                    <div className="flex space-x-1">
+                                                        <span className="w-1 h-1 bg-blue-600 rounded-full animate-bounce"></span>
+                                                        <span className="w-1 h-1 bg-blue-600 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                                                        <span className="w-1 h-1 bg-blue-600 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                                                    </div>
+                                                    <span className="text-xs text-blue-600">Typing...</span>
+                                                </div>
+                                            ) : onlineUsers.has(item.atFrontUser._id) ? (
+                                                <div className="flex items-center space-x-1">
+                                                    <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                                                    <span className="text-xs text-gray-500">Online</span>
+                                                </div>
+                                            ) : (
+                                                <span className="text-xs text-gray-400 truncate">
+                                                    {item.LastMsg?.content || "Hey! let's collab"}
+                                                </span>
+                                            )
+                                        ) : null}
+
+                                    </p>
+                                </div>
+
+                                {/* Unread badge - commented but styled */}
+                                {(item.unReadCount != 0 && item.atFrontUser.username == user.username) && (
+                                    <div className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white text-xs flex items-center justify-center ">
+                                        {item.unReadCount}
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+
+                        {connectionList.map((item) =>
+                            <li
+                                key={item.userId}
+                                className="group relative flex items-center gap-3 mb-1 border border-base-300 p-3 rounded-xl bg-base-100 hover:bg-base-300 transition-all duration-300 cursor-pointer hover:border-secondary  "
+                                onClick={() => {
+                                    setMessages([]);
+                                    setchatActive(true);
+                                    setChatingPhotoUrl(item.photoUrl);
+                                    setChatingUserId(item.userId);
+                                    setChatingFirstName(item.FirstName);
+                                    setChatingLastName(item.LastName);
+                                    setChatingUsername(item.username);
+                                    setChatingGmail(item.gmail);
+                                    setChatingMiddleName(item.MiddleName);
+                                    setChatingIsVerified(item.atFrontUser?.isVerified);
+                                    setChatingCollege(item.atFrontUser?.college);
+                                    setChatingProfession(item.atFrontUser?.profession);
+                                    setChatingSkills(item.atFrontUser?.skills);
+                                    setChatingAbout(item.about);
+                                }}
+                            >
+                                <img
+                                    src={item.photoUrl}
+                                    alt="profile"
+                                    className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300"
+                                />
+
+                                <div className="flex flex-col">
+                                    <span className="text-accent text-xl font-medium">
+                                        {item.FirstName} {item.LastName}
+                                    </span>
+
+                                    <span className="text-gray-800 text-sm pl-1">
+                                        {!item.lastMsg && <span>Hey! let's collab</span>}
+                                    </span>
+                                </div>
+
+
+                            </li>
+
+                        )}
+
+                    </div>
+                )}
+            </div >
 
             {/* RIGHT CHAT AREA - Premium Design */}
-            <div ref={chatRef} className="flex-1 p-4" >
-                <div className="w-[calc(100vw-440px)]  h-[calc(100vh-80px)] rounded-3xl bg-base-100 border border-base-300 border-[3px] flex flex-col overflow-hidden  relative">
+            < div ref={chatRef} className="flex-1 p-1  lg:relative w-full lg:z-30 absolute  z-30 " >
 
-                    {!chatActive ? (
-                        <div className="flex-1 flex items-center justify-center">
+
+                {!chatActive ? (
+                    <div className="w-full  h-[calc(100vh-75px)] rounded-3xl bg-base-100 border border-base-300 border-[3px] flex flex-col overflow-hidden  relative hidden lg:flex">
+                        <div className="flex-1 flex items-center justify-center ">
                             <div className="text-center">
                                 <div className="w-[200px] h-[200px] mx-auto mb-4 rounded-full bg-base-300 border border-secondary border-[2px] flex items-center justify-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" width={100} height={100} viewBox="0 0 24 24" >
@@ -1236,7 +1441,9 @@ const Discussions = () => {
                                 <p className="text-xl text-accent mt-2">Choose from your existing connections</p>
                             </div>
                         </div>
-                    ) : isLoadingChats ? (
+                    </div>
+                ) : isLoadingChats ? (
+                    <div className="w-full  h-[calc(100vh-75px)] rounded-3xl bg-base-100 border border-base-300 border-[3px] flex flex-col overflow-hidden  relative">
                         <div className="w-full h-full flex flex-col justify-center items-center">
                             <h2 className="text-6xl md:text-8xl font-extrabold bg-gradient-to-b from-[#ff8904] to-accent bg-clip-text text-transparent">
                                 CodeSarthi
@@ -1245,49 +1452,63 @@ const Discussions = () => {
                                 <circle cx={4} cy={12} r={3} fill="#764b1aff"><animate id="SVGKiXXedfO" attributeName="cy" begin="0;SVGgLulOGrw.end+0.25s" calcMode="spline" dur="0.6s" keySplines=".33,.66,.66,1;.33,0,.66,.33" values="12;6;12"></animate></circle><circle cx={12} cy={12} r={3} fill="#764b1aff"><animate attributeName="cy" begin="SVGKiXXedfO.begin+0.1s" calcMode="spline" dur="0.6s" keySplines=".33,.66,.66,1;.33,0,.66,.33" values="12;6;12"></animate></circle><circle cx={20} cy={12} r={3} fill="#764b1aff"><animate id="SVGgLulOGrw" attributeName="cy" begin="SVGKiXXedfO.begin+0.2s" calcMode="spline" dur="0.6s" keySplines=".33,.66,.66,1;.33,0,.66,.33" values="12;6;12"></animate></circle></svg>
 
                         </div >
-                    ) : (
+                    </div>
+                ) : (
+                    <div className="w-full  h-[calc(100vh-75px)] rounded-3xl bg-base-100 border border-base-300 border-[3px] flex flex-col overflow-hidden  relative">
                         <div className="flex flex-col h-full relative">
                             {/* TOP HEADER - Premium */}
-                            <div className="sticky top-0 z-20 w-full border-b border-secondary flex items-center justify-between px-6 py-2 bg-base-100 ">
-                                <div className="flex items-center gap-4">
-                                    <div className="relative">
-
-                                        {chatingPhotoUrl ? (
-                                            <img
-                                                src={chatingPhotoUrl}
-                                                className="w-12 h-12 rounded-full object-cover ring-2 ring-secondary"
-                                            />
-                                        ) : (
-                                            <img
-                                                src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776259172/Pinterest_Pin_di5dy8.jpg" alt="profile" className="w-12 h-12 rounded-full object-cover ring-2 ring-secondary"
-                                            />
-                                        )}
+                            <div className="sticky top-0 z-20 w-full border-b border-secondary flex items-center justify-between px-2 py-2 bg-base-100 lg:px-6 ">
+                                <div className="flex gap-2">
+                                    <div onClick={() => { setchatActive(false) }} className="w-12 h-12 rounded-full object-cover bg-base-200 flex items-center justify-center lg:hidden" >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 512 512"><path fill="none" stroke="#884f06" strokeLinecap="round" strokeLinejoin="round" strokeWidth={48} d="M244 400L100 256l144-144M120 256h292"></path></svg>
                                     </div>
-                                    <div>
-                                        <div className="text-secondary text-xl font-semibold">
 
-                                            {chatingUserId ? (chatingFirstName + " " + (chatingMiddleName ? chatingMiddleName : "") + " " + chatingLastName) : ("CodeSarthi User")}
-                                        </div>
-                                        {section != 2 && (
 
-                                            onlineUsers.has(chatingUserId) ? (
-                                                <div className="flex items-center gap-1 mt-0.5">
-                                                    <div className="w-2 h-2 bg-green-600 rounded-full animate-pulse"></div>
-                                                    <span className="text-xs text-green-600">Online</span>
-                                                </div>
+                                    <div className="flex items-center  gap-4">
+                                        <div className="relative">
+
+                                            {chatingPhotoUrl ? (
+                                                <img
+                                                    src={chatingPhotoUrl}
+                                                    className="w-12 h-12 rounded-full object-cover ring-2 ring-secondary"
+                                                />
                                             ) : (
-                                                <div className="flex items-center gap-1 mt-0.5">
-                                                    <div className="w-2 h-2 bg-red-600 rounded-full animate-pulse"></div>
-                                                    <span className="text-xs text-red-600">Offline</span>
-                                                </div>
-                                            )
+                                                <img
+                                                    src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776259172/Pinterest_Pin_di5dy8.jpg" alt="profile" className="w-12 h-12 rounded-full object-cover ring-2 ring-secondary"
+                                                />
+                                            )}
+                                        </div>
+                                        <div>
+                                            <div className="text-secondary text-xl font-semibold">
 
-                                        )}
+                                                {chatingUserId ? (chatingFirstName + " " + (chatingMiddleName ? chatingMiddleName : "") + " " + chatingLastName) : ("CodeSarthi User")}
+                                            </div>
+                                            {section != 2 && (
+
+                                                onlineUsers.has(chatingUserId) ? typingUsers.has(chatingUserId) ? (
+                                                    <div className="flex items-center gap-1 mt-0.5">
+                                                        <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></div>
+                                                        <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></div>
+                                                        <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></div>
+                                                        <span className="text-xs text-blue-600">Typing</span>
+                                                    </div>
+                                                ) : (
+                                                    <div className="flex items-center gap-1 mt-0.5">
+                                                        <div className="w-2 h-2 bg-green-600 rounded-full animate-pulse"></div>
+                                                        <span className="text-xs text-green-600">Online</span>
+                                                    </div>
+                                                ) : (
+                                                    <div className="flex items-center gap-1 mt-0.5">
+                                                        <div className="w-2 h-2 bg-red-600 rounded-full animate-pulse"></div>
+                                                        <span className="text-xs text-red-600">Offline</span>
+                                                    </div>
+                                                )
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
-
                                 {/* 3 DOT MENU - Premium */}
-                                <button onClick={() => setIsProfileOpen(true)} className="p-2 hover:bg-base-300 rounded-xl transition-all duration-300 group focus:outline-none focus:ring-0">
+                                <button onClick={() => { setIsProfileOpen(true); }} className="p-2 hover:bg-base-300 rounded-xl transition-all duration-300 group focus:outline-none focus:ring-0 z-">
                                     <svg xmlns="http://www.w3.org/2000/svg" width={25} height={25} viewBox="0 0 24 24" >
                                         <circle cx="12" cy="5" r="3" fill="#764b1aff" />
                                         <circle cx="12" cy="12" r="3" fill="#764b1aff" />
@@ -1332,7 +1553,7 @@ const Discussions = () => {
                                                                     </div>
 
                                                                     {/* CODE BODY */}
-                                                                    <div className="max-h-[400px] w-[500px] overflow-auto overflow-x-auto text-sm">
+                                                                    <div className="max-h-[400px] w-[400px] lg:w-[350px] xl:w-[400px] 2xl:w-[500px]  overflow-auto overflow-x-auto text-sm">
                                                                         <SyntaxHighlighter
                                                                             language={msg.language}
                                                                             showLineNumbers
@@ -1343,7 +1564,7 @@ const Discussions = () => {
                                                                     </div>
 
                                                                 </div>
-                                                                ) : (msg.content)
+                                                                ) : (<div className="max-h-[400px] w-fit max-w-[400px] overflow-auto overflow-x-auto text-sm">{msg.content}</div>)
                                                                 }
 
 
@@ -1437,7 +1658,7 @@ const Discussions = () => {
                                                                 </div>
 
                                                                 {/* CODE BODY */}
-                                                                <div className="max-h-[300px] overflow-auto text-sm">
+                                                                <div className="max-h-[300px] w-[400px] lg:w-[350px] xl:w-[400px] 2xl:w-[500px]  overflow-auto overflow-x-auto text-sm overflow-auto text-sm">
                                                                     <SyntaxHighlighter
                                                                         language={msg.language}
                                                                         showLineNumbers
@@ -1468,18 +1689,7 @@ const Discussions = () => {
                                     );
                                 })}
 
-                                {/* Typing indicator - optional */}
-                                <div className="flex gap-3">
-                                    {typingUsers.has(chatingUserId) && (
-                                        <div className="bg-secondary px-4 py-3 rounded-2xl rounded-bl-md">
-                                            <div className="flex gap-1">
-                                                <span className="w-2 h-2 bg-secondary-content rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                                                <span className="w-2 h-2 bg-secondary-content rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                                                <span className="w-2 h-2 bg-secondary-content rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
+
 
                                 <div ref={bottomRef}></div>
                             </div>
@@ -1722,12 +1932,13 @@ placeholder-accent "
                                 </div>
                             </div>
                         </div>
-                    )}
-                </div >
+                    </div>
+                )}
             </div >
-
-
         </div >
+
+
+
     );
 }
 export default Discussions;

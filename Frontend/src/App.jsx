@@ -38,7 +38,9 @@ import Dashboard from "./Pages/Dashboard";
 import Discussions from "./Pages/Discussions";
 import Meeting from "./Pages/Meeting";
 import Explore from "./Pages/Explore";
-import Resume from "../src/Pages/resume/Resume";
+import Resume from "../src/Pages/resume/1/Resume";
+import Templates from "../src/Pages/resume/2/Templates";
+import BuildResume from "./Pages/Resume/2/BuildResume";
 import Shastra from "./Pages/Shastra";
 import Projects from "./Pages/Projects";
 import ProjectManager from "./Pages/Project-Manager";
@@ -100,6 +102,8 @@ const App = () => {
               <Route path="meeting" element={<Meeting />} />
               <Route path="explore" element={<Explore />} />
               <Route path="resume" element={<Resume />} />
+              <Route path="build-resume" element={<BuildResume />} />
+              <Route path="resume-templates" element={<Templates />} />
               <Route path="shastraAI" element={<Shastra />} />
               <Route path="projects" element={<Projects />} />
               <Route path="manager" element={<ProjectManager />} />
