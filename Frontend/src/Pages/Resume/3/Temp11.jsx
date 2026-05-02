@@ -7,7 +7,7 @@ const ResumeTemplate = ({ data }) => {
             {/* Header: Name and Contact Info */}
             <header className="text-center mb-6">
                 <h1 className="text-4xl font-bold tracking-tight uppercase mb-2">
-                    {data.name.split(' ')[0]} <span className="font-black">{data.name.split(' ')[1]}</span>
+                    {data.fname} <span className="font-black">{data.lname}</span>
                 </h1>
                 <div className="text-[13px] border-t border-b border-black py-2 mt-4 flex justify-center gap-4 flex-wrap">
                     <span>{data.location}</span>

@@ -44,7 +44,7 @@ const Top = () => {
         {
             id: "resume",
             label: "Resume",
-            path: "/builder/resume-builder",
+            path: "/app/how-resume",
             hasDropdown: true,
             dropdown: (
                 <div className="flex gap-0">
@@ -82,7 +82,7 @@ const Top = () => {
         {
             id: "cv",
             label: "CV",
-            path: "/builder/cv-builder",
+            path: "/app/how-cv",
             hasDropdown: true,
             dropdown: (
                 <div className="flex gap-4">
@@ -113,7 +113,7 @@ const Top = () => {
         {
             id: "cover-letter",
             label: "Cover letter",
-            path: "/builder/cover-letter-builder",
+            path: "/app/how-cover-letter",
             hasDropdown: true,
             dropdown: (
                 <div className="flex gap-4">
@@ -144,7 +144,7 @@ const Top = () => {
         {
             id: "analyser",
             label: "Analyser",
-            path: "/credentials-analyser",
+            path: "/app/credentials-analyser",
             hasDropdown: true,
             isSmall: true,
             dropdown: (

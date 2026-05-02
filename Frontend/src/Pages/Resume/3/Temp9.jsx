@@ -3,7 +3,7 @@ import { Mail, Phone, MapPin, Globe } from 'lucide-react';
 
 const AmanGuptaTimelineResume = ({ data }) => {
     const {
-        name, phone, email, portfolio, summaryTitle, summaryBody,
+        fname, lname, phone, email, portfolio, summaryTitle, summaryBody,
         skills, projects, education, languages
     } = data;
 
@@ -15,7 +15,7 @@ const AmanGuptaTimelineResume = ({ data }) => {
                 {/* Profile Image Circle */}
                 <div className="flex justify-center mb-10">
                     <div className="w-48 h-48 rounded-full border-[6px] border-white overflow-hidden bg-slate-400 flex items-center justify-center text-white text-6xl font-bold">
-                        {name.split(' ').map(n => n[0]).join('')}
+                        {fname[0]}{lname[0]}
                     </div>
                 </div>
 
@@ -77,7 +77,7 @@ const AmanGuptaTimelineResume = ({ data }) => {
             <main className="flex-1 bg-white">
                 {/* Black Header Banner */}
                 <div className="bg-[#1a1a1a] text-white p-12 pr-16 mt-16 relative">
-                    <h1 className="text-5xl font-bold tracking-widest uppercase mb-2">{name}</h1>
+                    <h1 className="text-5xl font-bold tracking-widest uppercase mb-2">{fname} {lname}</h1>
                     <p className="text-xl tracking-[0.2em] font-light uppercase text-slate-300">{summaryTitle}</p>
                 </div>
 

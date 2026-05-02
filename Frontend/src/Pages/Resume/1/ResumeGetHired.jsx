@@ -8,10 +8,10 @@ const ResumeGetHired = () => {
             <div className='w-[95%] h-full bg-base-100 rounded-xl '>
                 {/* Header Section */}
                 <div className="max-w-4xl mx-auto text-center mb-16">
-                    <h1 className="text-4xl md:text-6xl font-black tracking-tight text-slate-900 mb-4">
-                        Make a Resume That <span className="text-blue-600">Gets You Hired.</span>
+                    <h1 className="text-3xl md:text-5xl font-black tracking-tight text-slate-900 mb-4">
+                        Make a Resume That Gets You  <span className="text-blue-600">Hired</span>.
                     </h1>
-                    <p className="text-lg text-slate-600">Professional, AI-powered, and ready in minutes.</p>
+
                 </div>
 
                 {/* Steps Grid */}

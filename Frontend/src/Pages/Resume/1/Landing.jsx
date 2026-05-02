@@ -28,7 +28,7 @@ const Landing = () => {
                         </button>
                     </div>
                     <div className='mb-20'>
-                        <div className='text-start h-15 text-lg w-45 font-extrabold transition duration-200  rounded-3xl bg-primary p-5 text-primary-content flex  flex-col justify-cneter items-start  mt-10' >
+                        <div className='text-start h-15 text-lg w-[700px] font-extrabold transition duration-200  rounded-3xl bg-primary p-5 text-primary-content flex  flex-col justify-cneter items-start  mt-10' >
 
 
                             <div className="flex items-center w-full gap-1 text-4xl"><svg xmlns="http://www.w3.org/2000/svg" width={40} height={40} viewBox="0 0 24 24"><g fill="none"><path d="m5.5 13l4.5 4.5l11-11L16.5 2z"></path><path stroke="#fff" strokeWidth={0.8} d="M10 17.5L5.5 13m4.5 4.5l-2.414 2.414a2 2 0 0 1-1.414.586H2.5v-3.672a2 2 0 0 1 .586-1.414L5.5 12.999m4.5 4.5l11-11L16.5 2l-11 11M5 3l.332.668L6 4l-.668.332L5 5l-.332-.668L4 4l.668-.332zm7.75 17l.25.5l.5.25l-.5.25l-.25.5l-.25-.5l-.5-.25l.5-.25zm6.75-6l.622 1.378L21.5 16l-1.378.622L19.5 18l-.622-1.378L17.5 16l1.378-.622z"></path></g></svg> <span className='ml-3'> Let AI to do your work</span></div>
@@ -40,7 +40,7 @@ const Landing = () => {
                     </div>
                 </div>
 
-                <div className='w-[50%] mt-5  p-5'>
+                <div className='w-[45%] mt-5  p-5'>
                     <img className='w-full h-full object-contain' src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1777091782/Resume_Home_imatpu.webp" alt="ResumeHome.png" />
                     <div></div>
                 </div>

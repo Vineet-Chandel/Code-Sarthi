@@ -1074,9 +1074,9 @@ const Signup = () => {
 
                           <a
                             href='https://drive.google.com/file/d/1J8DmgZ6Mgl02RnkzLd7IMn955_Jrpk-m/view?usp=sharing'
-                            className="text-xs px-2.5 py-2 rounded-full border border-secondary bg-base-100 text-accent hover:bg-secondary hover:text-base-100 flex items-center justify-center gap-1"
+                            className="text-md px-5 py-2 rounded-2xl border-2 border-secondary bg-base-100 text-accent hover:bg-secondary hover:text-base-100 flex items-center justify-center gap-1"
                           >
-                            RESUME <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeMiterlimit={10} strokeWidth={1.5} d="m8 12l4 4m0 0l4-4m-4 4V4m7 13v.6c0 1.33-1.07 2.4-2.4 2.4H7.4C6.07 20 5 18.93 5 17.6V17"></path></svg>
+                            RESUME <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeMiterlimit={10} strokeWidth={1.5} d="m8 12l4 4m0 0l4-4m-4 4V4m7 13v.6c0 1.33-1.07 2.4-2.4 2.4H7.4C6.07 20 5 18.93 5 17.6V17"></path></svg>
                           </a>
 
                         </div>
@@ -1168,37 +1168,7 @@ const Signup = () => {
 
       </div >
 
-      {/* Add CSS for animations */}
-      < style jsx > {`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(5px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          25% { transform: translateX(-5px); }
-          75% { transform: translateX(5px); }
-        }
-        
-        @keyframes gradient {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
-        
-        .animate-fadeIn {
-          animation: fadeIn 0.3s ease-in-out;
-        }
-        
-        .shake {
-          animation: shake 0.3s ease-in-out;
-        }
-        
-        .animate-gradient {
-          background-size: 200% 200%;
-          animation: gradient 3s ease infinite;
-        }
-      `}</style >
+
     </div >
 
   );

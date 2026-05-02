@@ -5,9 +5,10 @@ import {
 } from 'lucide-react';
 
 const AmanGuptaDynamicResume = ({ data }) => {
+    if (!data) return null;
     // Destructuring the primary fields from resumeData1
     const {
-        name, phone, github, linkedin, portfolio, email,
+        fname, lname, phone, github, linkedin, portfolio, email,
         summaryTitle, summaryBody, experience, education,
         skills, projects, certifications, achievements, languages
     } = data;
@@ -19,7 +20,7 @@ const AmanGuptaDynamicResume = ({ data }) => {
             <header className="bg-slate-900 text-white p-12">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                     <div>
-                        <h1 className="text-5xl font-black tracking-tighter mb-2 uppercase">{name}</h1>
+                        <h1 className="text-5xl font-black tracking-tighter mb-2 uppercase">{fname} {lname}</h1>
                         <p className="text-xl font-light text-cyan-400 tracking-widest uppercase italic">
                             {summaryTitle}
                         </p>

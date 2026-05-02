@@ -42,22 +42,22 @@ const WhyWe = () => {
             <div className="w-[95%]  bg-base-100  p-8 md:p-16 shadow-sm">
                 {/* Header Section */}
                 <div className="max-w-4xl mx-auto text-center mb-20">
-                    <h2 className="text-4xl md:text-6xl font-black tracking-tight text-slate-900 mb-4">
-                        Why Use Our Online <span className="text-blue-600">Resume Builder.</span>
+                    <h2 className="text-3xl md:text-5xl font-black tracking-tight text-slate-900 mb-4">
+                        Why Choose <span className="text-blue-600">Our</span> Resume Builder?
                     </h2>
                 </div>
 
                 {/* Features List */}
-                <div className="space-y-24">
+                <div className="space-y-10">
                     {FEATURES.map((feature, index) => {
                         const isEven = index % 2 === 0;
                         return (
                             <div
                                 key={index}
-                                className={`flex flex-col md:flex-row items-center gap-12 ${isEven ? '' : 'md:flex-row-reverse'}`}
+                                className={`flex flex-col md:flex-row items-center gap-6 ${isEven ? '' : 'md:flex-row-reverse'}`}
                             >
                                 {/* Text Content */}
-                                <div className="w-full md:w-1/2 space-y-4">
+                                <div className="w-full md:w-1/2 ">
                                     <h3 className="text-4xl font-bold text-primary font-['DM_Sans'] leading-tight">
                                         {feature.title}
                                     </h3>

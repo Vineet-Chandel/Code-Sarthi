@@ -9,12 +9,12 @@ const DynamicResume = ({ data }) => {
                 <div className="w-36 h-36 rounded-full border-4 border-white overflow-hidden bg-slate-300 shrink-0">
                     {/* Placeholder for Profile Image */}
                     <div className="w-full h-full flex items-center justify-center text-slate-500 text-4xl font-bold">
-                        {data.name.split(' ').map(n => n[0]).join('')}
+                        {data.fname[0]}{data.lname[0]}
                     </div>
                 </div>
                 <div>
                     <h1 className="text-5xl font-bold tracking-tighter uppercase mb-2">
-                        {data.name}
+                        {data.fname} {data.lname}
                     </h1>
                     <p className="text-xl tracking-[0.2em] font-light uppercase text-slate-300">
                         {data.summaryTitle}

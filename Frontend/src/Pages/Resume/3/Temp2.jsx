@@ -3,7 +3,7 @@ import React from 'react';
 const AmanGuptaDynamicClassic = ({ data }) => {
     // Extracting all fields from the resumeData1 object
     const {
-        name, phone, github, linkedin, portfolio, email,
+        fname, lname, phone, github, linkedin, portfolio, email,
         summaryTitle, summaryBody, experience, education,
         skills, projects, certifications, achievements, languages
     } = data;
@@ -13,7 +13,7 @@ const AmanGuptaDynamicClassic = ({ data }) => {
 
             {/* Header: Dynamic Personal Branding */}
             <header className="text-center mb-6">
-                <h1 className="text-4xl font-bold tracking-tight uppercase mb-2">{name}</h1>
+                <h1 className="text-4xl font-bold tracking-tight uppercase mb-2">{fname} {lname}</h1>
                 <div className="text-[12px] border-t border-b border-black py-2 mt-4 flex justify-center gap-4 flex-wrap">
                     <span>{education[0]?.location || 'India'}</span>
                     <span>|</span>

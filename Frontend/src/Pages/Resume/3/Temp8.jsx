@@ -4,7 +4,7 @@ import { Mail, Phone, MapPin } from 'lucide-react';
 const AmanGuptaAcademicTemplate = ({ data }) => {
     // Destructuring for dynamic prop drilling
     const {
-        name, phone, email, summaryTitle, summaryBody,
+        fname, lname, phone, email, summaryTitle, summaryBody,
         experience, education, skills, projects, languages
     } = data;
 
@@ -14,7 +14,7 @@ const AmanGuptaAcademicTemplate = ({ data }) => {
             {/* Light Blue Header */}
             <header className="bg-[#e3effb] p-10 py-12">
                 <h1 className="text-4xl font-bold tracking-widest text-slate-800 uppercase">
-                    {name}
+                    {fname} {lname}
                 </h1>
             </header>
 

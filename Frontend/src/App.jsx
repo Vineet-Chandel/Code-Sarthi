@@ -38,8 +38,13 @@ import Dashboard from "./Pages/Dashboard";
 import Discussions from "./Pages/Discussions";
 import Meeting from "./Pages/Meeting";
 import Explore from "./Pages/Explore";
-import Resume from "../src/Pages/resume/1/Resume";
-import Templates from "../src/Pages/resume/2/Templates";
+import Resume from "./Pages/Resume/1/Resume";
+import Templates from "./Pages/Resume/2/Templates";
+import HeaderContent from "./Pages/Resume/2/StartHeader";
+import HowResume from "./Pages/Resume/4/HowResume";
+import HowCv from "./Pages/Resume/4/HowCv";
+import HowCoverLetter from "./Pages/Resume/4/HowCoverLetter";
+import CredentialsAnalyser from "./Pages/Resume/4/ConditionalAnlyz";
 import BuildResume from "./Pages/Resume/2/BuildResume";
 import Shastra from "./Pages/Shastra";
 import Projects from "./Pages/Projects";
@@ -103,7 +108,7 @@ const App = () => {
               <Route path="explore" element={<Explore />} />
               <Route path="resume" element={<Resume />} />
               <Route path="build-resume" element={<BuildResume />} />
-              <Route path="resume-templates" element={<Templates />} />
+              <Route path="build-resume/resume-templates" element={<Templates />} />
               <Route path="shastraAI" element={<Shastra />} />
               <Route path="projects" element={<Projects />} />
               <Route path="manager" element={<ProjectManager />} />
@@ -111,9 +116,11 @@ const App = () => {
               <Route path="study" element={<Study />} />
               <Route path="assignment" element={<Assignment />} />
               <Route path="notes" element={<Notes />} />
-
-
-
+              <Route path="how-resume" element={<HowResume />} />
+              <Route path="how-cv" element={<HowCv />} />
+              <Route path="how-cover-letter" element={<HowCoverLetter />} />
+              <Route path="credentials-analyser" element={<CredentialsAnalyser />} />
+              <Route path="build-resume/header-content" element={<HeaderContent />} />
               <Route path="editProfile" element={<EditProfile />} />
               <Route path="connections" element={<Connections />} />
               <Route path="settings" element={<Settings />} />

@@ -3,12 +3,12 @@ import { Mail, Phone, MapPin } from 'lucide-react';
 
 const AmanGuptaLayoutTemplate = ({ data }) => {
     const {
-        name, phone, email, summaryTitle, summaryBody,
+        fname, lname, phone, email, summaryTitle, summaryBody,
         experience, education, skills, projects, languages
     } = data;
 
     // Helper to get initials for the logo box
-    const initials = name.split(' ').map(n => n[0]).join('');
+    const initials = fname[0] + lname[0];
 
     return (
         <div className="max-w-[900px] mx-auto my-10 bg-white shadow-lg border border-gray-200 font-sans text-gray-800 flex overflow-hidden">
@@ -67,7 +67,7 @@ const AmanGuptaLayoutTemplate = ({ data }) => {
             <div className="flex-1 bg-white">
                 {/* Dark Header Banner */}
                 <div className="bg-red-900 p-10 pt-12">
-                    <h1 className="text-4xl font-bold tracking-wider text-white uppercase">{name}</h1>
+                    <h1 className="text-4xl font-bold tracking-wider text-white uppercase">{fname} {lname}</h1>
                 </div>
                 {/* Sub-banner Gray Strip */}
                 <div className="h-6 bg-neutral-800 w-full"></div>

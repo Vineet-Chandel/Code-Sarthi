@@ -3,7 +3,7 @@ import React from 'react';
 const AmanGuptaDynamicMinimalist = ({ data }) => {
     // Destructuring all relevant fields from the provided resumeData1 object
     const {
-        name, phone, github, linkedin, portfolio, email,
+        fname, lname, phone, github, linkedin, portfolio, email,
         summaryTitle, summaryBody, experience, education,
         skills, projects, certifications, achievements, languages
     } = data;
@@ -13,7 +13,7 @@ const AmanGuptaDynamicMinimalist = ({ data }) => {
             {/* Header Section: Dynamic Contact Info */}
             <header className="text-center mb-6">
                 <h1 className="text-5xl font-black uppercase tracking-tight mb-2">
-                    {name}
+                    {fname} {lname}
                 </h1>
                 <div className="flex justify-center items-center gap-2 text-sm font-medium text-slate-700 flex-wrap">
                     <span>{phone}</span>

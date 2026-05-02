@@ -4,7 +4,7 @@ import { Phone, MapPin, Globe, Mail } from 'lucide-react';
 const AmanGuptaDynamicTimeline = ({ data }) => {
     // Mapping the incoming data object for easy access
     const {
-        name, phone, github, linkedin, portfolio, email,
+        fname, lname, phone, github, linkedin, portfolio, email,
         summaryTitle, summaryBody, experience, education,
         skills, projects, certifications, achievements, languages
     } = data;
@@ -21,7 +21,7 @@ const AmanGuptaDynamicTimeline = ({ data }) => {
                         </span>
                     </div>
                     <div>
-                        <h1 className="text-4xl font-bold tracking-tight mb-1 uppercase">{name}</h1>
+                        <h1 className="text-4xl font-bold tracking-tight mb-1 uppercase">{fname} {lname}</h1>
                         <p className="text-lg text-slate-600 font-medium italic">{summaryTitle}</p>
                     </div>
                 </div>

@@ -13,7 +13,7 @@ const DynamicResumeTemplate = ({ data }) => {
                 <div className="flex justify-between items-start">
                     <div className="z-10">
                         <h1 className="text-6xl font-black leading-none tracking-tighter uppercase mb-4">
-                            {data.name.split(' ')[0]}<br />{data.name.split(' ')[1]}
+                            {data.fname}<br />{data.lname}
                         </h1>
                         <p className="text-2xl font-bold tracking-[0.2em] uppercase text-slate-700">
                             {data.summaryTitle}
@@ -22,7 +22,7 @@ const DynamicResumeTemplate = ({ data }) => {
                     <div className="w-64 h-64 bg-slate-400 overflow-hidden shadow-xl">
                         {/* Profile image placeholder - uses initials if no image */}
                         <div className="w-full h-full flex items-center justify-center bg-slate-300 text-slate-100 text-6xl font-bold">
-                            {data.name.split(' ').map(n => n[0]).join('')}
+                            {data.fname[0]}{data.lname[0]}
                         </div>
                     </div>
                 </div>

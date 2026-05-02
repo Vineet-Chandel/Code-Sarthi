@@ -2,7 +2,7 @@ import React from 'react';
 
 const AmanGuptaCleanTemplate = ({ data }) => {
     const {
-        name, phone, github, linkedin, portfolio, email,
+        fname, lname, phone, github, linkedin, portfolio, email,
         summaryTitle, summaryBody, experience, education,
         skills, projects, certifications, achievements, languages
     } = data;
@@ -16,7 +16,7 @@ const AmanGuptaCleanTemplate = ({ data }) => {
             {/* Header Section */}
             <header className="py-10 text-center border-b border-gray-200">
                 <h1 className="text-4xl font-bold tracking-[0.2em] uppercase text-gray-700 mb-4">
-                    {name}
+                    {fname} {lname}
                 </h1>
                 <div className="flex justify-center items-center gap-6 text-[12px] text-gray-500 font-medium">
                     <span>{education[0]?.location || 'India'}</span>
