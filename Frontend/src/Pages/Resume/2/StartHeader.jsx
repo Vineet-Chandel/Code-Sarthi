@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import Temp1 from "../3/Temp1";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import IntroEXP from "./IntroEXP";
+
 // ─── tiny hook ────────────────────────────────────────────────────────────────
 function useIntersectionObserver(options = {}) {
     const ref = useRef(null);
@@ -27,7 +28,7 @@ const InputField = ({ label, id, value, type = "text", placeholder, onChange }) 
     <div className="flex flex-col gap-1 w-full group">
         <label
             htmlFor={id}
-            className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 group-focus-within:text-violet-600 transition-colors ml-0.5"
+            className="text-[10px] font-semibold uppercase tracking-widest text-slate-900 group-focus-within:text-violet-600 transition-colors ml-0.5"
         >
             {label}
         </label>
@@ -49,7 +50,7 @@ const SocialField = ({ icon, id, value, placeholder, onChange }) => (
     <div className="flex items-center gap-3 bg-base-200 border border-slate-900 rounded-xl px-3.5 py-2.5
                   focus-within:border-violet-500 focus-within:ring-4 focus-within:ring-violet-500/10
                   focus-within:bg-white transition-all duration-200">
-        <div className="w-6 h-6 rounded-md flex items-center justify-center flex-shrink-0 overflow-hidden">
+        <div className="p-2 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden border border-secondary bg-base-100 ">
             {icon}
         </div>
         <input
@@ -79,8 +80,8 @@ const CheckItem = ({ done, label }) => (
 
 // ─── tip item ─────────────────────────────────────────────────────────────────
 const TipItem = ({ emoji, title, body }) => (
-    <div className="flex gap-3 py-3 border-b border-slate-100 last:border-none">
-        <div className="w-8 h-8 rounded-lg bg-violet-50 flex items-center justify-center flex-shrink-0 text-sm">
+    <div className="flex gap-3 py-3 bg-base-100 p-5 rounded-xl mb-2 border border-slate-700">
+        <div className="w-8 h-8 border border-slate-700 rounded-lg bg-base-100 flex items-center justify-center flex-shrink-0 text-sm">
             {emoji}
         </div>
         <p className="text-xs text-slate-500 leading-relaxed">
@@ -91,18 +92,20 @@ const TipItem = ({ emoji, title, body }) => (
 );
 
 // ─── main component ───────────────────────────────────────────────────────────
-const StartHeader = () => {
+const StartHeader = ({ data }) => {
+    const location = useLocation();
+    data = location.state?.resumeData || {};
     const [form, setForm] = useState({
-        fname: "Aman",
-        lname: "Gupta",
-        summaryTitle: "Full Stack Developer & UI Specialist",
-        email: "aman.dev@gmail.com",
-        phone: "+91 98765 43210",
-        location: "Kanpur, India",
-        pincode: "208001",
-        linkedin: "linkedin.com/in/aman-gupta",
-        github: "github.com/amangupta-dev",
-        portfolio: "aman-portfolio.dev",
+        fname: data?.fname || "",
+        lname: data?.lname || "",
+        summaryTitle: data?.summaryTitle || "",
+        email: data?.email || "",
+        phone: data?.phone || "",
+        location: data?.location || "",
+        pincode: data?.pincode || "",
+        linkedin: data?.linkedin || "",
+        github: data?.github || "",
+        portfolio: data?.portfolio || "",
 
     });
 
@@ -161,10 +164,10 @@ const StartHeader = () => {
 
     return (
         <div className="min-h-[calc(100vh-4rem)] w-screen flex items-start justify-center p-4 md:p-6 bg-base-100">
-            <div className="w-full bg-base-100 rounded-3xl shadow-2xl shadow-slate-200/80 border border-slate-100 overflow-hidden border border-slate-600" >
+            <div className="w-full bg-base-100 rounded-3xl border border-slate-700 overflow-hidden " >
 
                 {/* ── top bar ── */}
-                <div className="flex items-center justify-between px-5 py-3.5 bg-base-200 border-b border-slate-100">
+                <div className="flex items-center justify-between px-5 py-3.5 bg-base-200 border-b border-slate-700">
                     <span className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full bg-violet-100 text-violet-700">
                         Step 1 of 6
                     </span>
@@ -186,15 +189,14 @@ const StartHeader = () => {
 
                     <button
                         onClick={() => setSidebarOpen((p) => !p)}
-                        className={`flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-lg border transition-all duration-200
+                        className={`flex items-center gap-2 text-lg font-medium px-3 py-1.5 rounded-lg border transition-all duration-200
                         ${sidebarOpen
-                                ? "bg-violet-600 text-white border-violet-600"
-                                : "bg-white text-slate-500 border-slate-200 hover:border-violet-400 hover:text-violet-600"
+                                ? "bg-secondary text-secondary-content border-secondary-content"
+                                : "bg-base-100 text-secondary border-secondary "
                             }`}
                     >
-                        <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-                            <rect x="1" y="1" width="14" height="14" rx="3" stroke="currentColor" strokeWidth="1.5" />
-                            <path d="M10 1v14" stroke="currentColor" strokeWidth="1.5" />
+                        <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 16 16">
+                            <path fill="currentColor" d="M3.5 2A2.5 2.5 0 0 0 1 4.5v7A2.5 2.5 0 0 0 3.5 14h9a2.5 2.5 0 0 0 2.5-2.5v-7A2.5 2.5 0 0 0 12.5 2zM2 4.5A1.5 1.5 0 0 1 3.5 3h9A1.5 1.5 0 0 1 14 4.5v7a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 11.5zM3 5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1zm9 0H4v1h8zM8 9a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1zm4 0H9v2h3zM3.5 8a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zM3 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5"></path>
                         </svg>
                         {sidebarOpen ? "Hide" : "Preview"}
                     </button>
@@ -204,7 +206,7 @@ const StartHeader = () => {
                 <div className={`grid transition-all duration-500 ${sidebarOpen ? "lg:grid-cols-[1fr_500px]" : "grid-cols-1"}`}>
 
                     {/* ── LEFT: form ── */}
-                    <div className="p-6 md:p-10 border-r border-slate-100">
+                    <div className="p-6 md:p-10 border border-slate-700">
                         <div className="mb-7">
                             <h1 className="text-3xl md:text-4xl font-black tracking-tight text-slate-900 mb-2 leading-tight">
                                 Let's start with your{" "}
@@ -283,10 +285,10 @@ const StartHeader = () => {
                                 placeholder="linkedin.com/in/yourname"
                                 onChange={handleChange}
                                 icon={
-                                    <div className="w-6 h-6 rounded-md bg-[#0A66C2] flex items-center justify-center">
-                                        <svg width="11" height="11" viewBox="0 0 24 24" fill="white">
-                                            <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z" />
-                                            <circle cx="4" cy="4" r="2" />
+                                    <div className=" rounded-md bg-base-100 flex items-center justify-center">
+
+                                        <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
+                                            <path fill="#6f4604ff" d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93zM6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37z"></path>
                                         </svg>
                                     </div>
                                 }
@@ -297,9 +299,9 @@ const StartHeader = () => {
                                 placeholder="github.com/yourname"
                                 onChange={handleChange}
                                 icon={
-                                    <div className="w-6 h-6 rounded-md bg-[#24292E] flex items-center justify-center">
-                                        <svg width="11" height="11" viewBox="0 0 24 24" fill="white">
-                                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
+                                    <div className="w-6 h-6 rounded-md bg-base-100 flex items-center justify-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
+                                            <path fill="currentcolor" fillRule="evenodd" d="M11.999 1C5.926 1 1 5.925 1 12c0 4.86 3.152 8.983 7.523 10.437c.55.102.75-.238.75-.53c0-.26-.009-.952-.014-1.87c-3.06.664-3.706-1.475-3.706-1.475c-.5-1.27-1.221-1.61-1.221-1.61c-.999-.681.075-.668.075-.668c1.105.078 1.685 1.134 1.685 1.134c.981 1.68 2.575 1.195 3.202.914c.1-.71.384-1.195.698-1.47c-2.442-.278-5.01-1.222-5.01-5.437c0-1.2.428-2.183 1.132-2.952c-.114-.278-.491-1.397.108-2.91c0 0 .923-.297 3.025 1.127A10.5 10.5 0 0 1 12 6.32a10.5 10.5 0 0 1 2.754.37c2.1-1.424 3.022-1.128 3.022-1.128c.6 1.514.223 2.633.11 2.911c.705.769 1.13 1.751 1.13 2.952c0 4.226-2.572 5.156-5.022 5.428c.395.34.747 1.01.747 2.037c0 1.47-.014 2.657-.014 3.017c0 .295.199.637.756.53C19.851 20.979 23 16.859 23 12c0-6.075-4.926-11-11.001-11"></path>
                                         </svg>
                                     </div>
                                 }
@@ -310,10 +312,9 @@ const StartHeader = () => {
                                 placeholder="yourportfolio.dev"
                                 onChange={handleChange}
                                 icon={
-                                    <div className="w-6 h-6 rounded-md bg-violet-600 flex items-center justify-center">
-                                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
-                                            <circle cx="12" cy="12" r="10" />
-                                            <path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20" />
+                                    <div className="w-6 h-6 rounded-md bg-base-100 flex items-center justify-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
+                                            <path fill="currentcolor" d="M14.721 22.66c4.447-1.13 7.812-4.971 8.234-9.66h-4.981c-.186 3.547-1.356 6.847-3.253 9.66M22.955 11c-.422-4.69-3.79-8.532-8.238-9.662c1.898 2.814 3.07 6.114 3.257 9.662zM9.284 1.338C4.834 2.468 1.468 6.31 1.044 11h4.982c.187-3.548 1.359-6.848 3.258-9.662M1.045 13a11.01 11.01 0 0 0 8.234 9.66C7.382 19.847 6.212 16.547 6.026 13zM12 22.962C9.693 20.177 8.248 16.741 8.03 13h7.941c-.22 3.74-1.664 7.177-3.97 9.962M12 1.043c2.307 2.784 3.75 6.219 3.97 9.957H8.03C8.25 7.262 9.694 3.827 12 1.043"></path>
                                         </svg>
                                     </div>
                                 }
@@ -323,9 +324,9 @@ const StartHeader = () => {
 
                     {/* ── RIGHT: sidebar ── */}
                     {sidebarOpen && (
-                        <div className="flex flex-col bg-base-200 border-t lg:border-t-0 border-slate-900">
+                        <div className="flex flex-col bg-base-200 border-t-0 border-slate-700">
                             {/* tabs */}
-                            <div className="flex border-b border-slate-900">
+                            <div className="flex border-b border-slate-700">
                                 {["preview", "tips", "score"].map((tab) => (
                                     <button
                                         key={tab}
@@ -333,7 +334,7 @@ const StartHeader = () => {
                                         className={`flex-1 py-3.5 text-xs font-semibold capitalize transition-all duration-200 border-b-2
                                 ${activeTab === tab
                                                 ? "text-violet-600 border-violet-600 bg-white"
-                                                : "text-slate-400 border-transparent hover:text-slate-600"
+                                                : "text-slate-700 border-transparent hover:text-slate-600"
                                             }`}
                                     >
                                         {tab}
@@ -422,13 +423,37 @@ const StartHeader = () => {
 
                             {/* ── TIPS tab ── */}
                             {activeTab === "tips" && (
-                                <div className="p-4 overflow-y-auto">
-                                    <TipItem emoji="✉️" title="Professional email" body="Use name.work@gmail.com — avoid nicknames or random numbers." />
-                                    <TipItem emoji="☎️" title="Country code" body="Always include +91 (or your code) for international recruiters." />
-                                    <TipItem emoji="🏙️" title="City only" body="List city and country — a full street address wastes prime resume space." />
-                                    <TipItem emoji="🔗" title="LinkedIn URL" body="Customise your URL (linkedin.com/in/yourname) for a cleaner link." />
-                                    <TipItem emoji="📸" title="Photo" body="In India, a professional headshot is generally expected by recruiters." />
-                                    <TipItem emoji="💼" title="Portfolio" body="Link your portfolio or GitHub — it adds credibility for tech roles." />
+                                <div className="p-4 overflow-y-auto ">
+                                    <TipItem emoji={<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
+                                        <path fill="#6f4604ff" d="M12 13L2 6.76V6c0-1.11.89-2 2-2h16a2 2 0 0 1 2 2v.75zm10 5a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9.11l2 1.25V18h16v-7.64l2-1.25z"></path>
+                                    </svg>} title="Professional email" body="Use name.work@gmail.com — avoid nicknames or random numbers." />
+                                    <TipItem emoji={<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 48 48">
+                                        <g fill="none">
+                                            <rect width={38} height={38} x={5} y={5} stroke="#6f4604ff" strokeWidth={4} rx={3}></rect>
+                                            <path fill="#6f4604ff" stroke="#6f4604ff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M11 12h8v24h-8zm14 0h12v6H25z"></path>
+                                            <circle cx={25} cy={24} r={2} fill="#6f4604ff"></circle>
+                                            <circle cx={25} cy={30} r={2} fill="#6f4604ff"></circle>
+                                            <circle cx={25} cy={36} r={2} fill="#6f4604ff"></circle>
+                                            <circle cx={31} cy={24} r={2} fill="#6f4604ff"></circle>
+                                            <circle cx={31} cy={30} r={2} fill="#6f4604ff"></circle>
+                                            <circle cx={31} cy={36} r={2} fill="#6f4604ff"></circle>
+                                            <circle cx={37} cy={24} r={2} fill="#6f4604ff"></circle>
+                                            <circle cx={37} cy={30} r={2} fill="#6f4604ff"></circle>
+                                            <circle cx={37} cy={36} r={2} fill="#6f4604ff"></circle>
+                                        </g>
+                                    </svg>} title="Country code" body="Always include +91 (or your code) for international recruiters." />
+                                    <TipItem emoji={<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
+                                        <path fill="#6f4604ff" d="M12 2c-4.41 0-8 3.59-8 8c-.03 6.44 7.12 11.6 7.42 11.82c.17.12.38.19.58.19s.41-.06.58-.19c.3-.22 7.45-5.37 7.42-11.82c0-4.41-3.59-8-8-8m0 12c-2.21 0-4-1.79-4-4s1.79-4 4-4s4 1.79 4 4s-1.79 4-4 4"></path>
+                                    </svg>} title="City only" body="List city and country — a full street address wastes prime resume space." />
+                                    <TipItem emoji={<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
+                                        <path fill="#6f4604ff" d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93zM6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37z"></path>
+                                    </svg>} title="LinkedIn URL" body="Customise your URL (linkedin.com/in/yourname) for a cleaner link." />
+                                    <TipItem emoji={<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
+                                        <path fill="#6f4604ff" d="M8.813 11.612c.457-.38.918-.38 1.386.011l.108.098l4.986 4.986l.094.083a1 1 0 0 0 1.403-1.403l-.083-.094L15.415 14l.292-.293l.106-.095c.457-.38.918-.38 1.386.011l.108.098l4.674 4.675a4 4 0 0 1-3.775 3.599L18 22H6a4 4 0 0 1-3.98-3.603l6.687-6.69zM18 2a4 4 0 0 1 3.995 3.8L22 6v9.585l-3.293-3.292l-.15-.137c-1.256-1.095-2.85-1.097-4.096-.017l-.154.14l-.307.306l-2.293-2.292l-.15-.137c-1.256-1.095-2.85-1.097-4.096-.017l-.154.14L2 15.585V6a4 4 0 0 1 3.8-3.995L6 2zm-2.99 5l-.127.007a1 1 0 0 0 0 1.986L15 9l.127-.007a1 1 0 0 0 0-1.986z"></path>
+                                    </svg>} title="Photo" body="In India, a professional headshot is generally expected by recruiters." />
+                                    <TipItem emoji={<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 32 32">
+                                        <path fill="#6f4604ff" d="M28 10h-6V6a2 2 0 0 0-2-2h-8a2 2 0 0 0-2 2v4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h24a2 2 0 0 0 2-2V12a2 2 0 0 0-2-2M12 6h8v4h-8ZM4 26V12h24v14Z"></path>
+                                    </svg>} title="Portfolio" body="Link your portfolio or GitHub — it adds credibility for tech roles." />
                                 </div>
                             )}
 
@@ -473,23 +498,20 @@ const StartHeader = () => {
                 </div>
 
                 {/* ── footer ── */}
-                <div className="flex items-center justify-between px-6 md:px-10 py-4 bg-base-200 border-t border-slate-100">
-                    <button className="text-sm font-medium text-slate-400 hover:text-slate-700 px-4 py-2.5 rounded-xl
-                             border border-slate-200 hover:border-slate-300 bg-white transition-all duration-200">
-                        Save draft
-                    </button>
+                <div className="flex items-center justify-end px-6 md:px-10 py-4 bg-base-200 border-t border-slate-700">
+
                     <button
                         onClick={() => {
                             Navigate("/app/build-resume/intro-exp-page", {
                                 state: { resumeData }
                             });
                         }}
-                        className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl bg-violet-600 text-white
-                       hover:bg-violet-700 active:scale-95 transition-all duration-200 shadow-lg shadow-violet-200"
+                        className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl bg-base-300 text-secondary border-2 border-secondary
+                       hover:bg-secondary hover:text-secondary-content  hover:border-base-100 active:scale-95 transition-all duration-200 "
                     >
-                        Next: Summary
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        Next: Experience
+                        <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M2 5v14c0 .86 1.012 1.318 1.659.753l8-7a1 1 0 0 0 0-1.506l-8-7C3.012 3.682 2 4.141 2 5m11 0v14c0 .86 1.012 1.318 1.659.753l8-7a1 1 0 0 0 0-1.506l-8-7C14.012 3.682 13 4.141 13 5"></path>
                         </svg>
                     </button>
                 </div>

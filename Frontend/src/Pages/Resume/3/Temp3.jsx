@@ -102,9 +102,9 @@ const AmanGuptaDynamicTimeline = ({ data }) => {
                                 <h3 className="text-sm font-black uppercase tracking-wider text-slate-600">{exp.role} <span className="font-normal mx-2">@</span> {exp.company}</h3>
                                 <p className="text-[11px] font-bold text-slate-400 mb-2 uppercase tracking-tighter">{exp.duration} | {exp.location}</p>
                                 <ul className="text-[13px] list-disc ml-4 space-y-1 text-slate-500 leading-relaxed">
-                                    {exp.bullets.map((point, pIdx) => (
+                                    {/* {exp.bullets.map((point, pIdx) => (
                                         <li key={pIdx}>{point}</li>
-                                    ))}
+                                    ))} */}
                                 </ul>
                             </div>
                         ))}

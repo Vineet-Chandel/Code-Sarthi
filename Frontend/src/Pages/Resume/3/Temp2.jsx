@@ -66,6 +66,8 @@ const AmanGuptaDynamicClassic = ({ data }) => {
                             {exp.bullets.map((point, idx) => (
                                 <li key={idx}>{point}</li>
                             ))}
+
+
                         </ul>
                     </div>
                 ))}

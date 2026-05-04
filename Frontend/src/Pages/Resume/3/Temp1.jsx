@@ -84,7 +84,7 @@ const AmanGuptaDynamicResume = ({ data, scale = 1 }) => {
                                                         {exp.company} <span style={{ color: '#94a3b8', fontWeight: 400 }}>| {exp.location}</span>
                                                     </p>
                                                 </div>
-                                                <span style={{ fontSize: 12, fontWeight: 700, color: '#64748b', whiteSpace: 'nowrap' }}>{exp.startDate + " - " + exp.endDate || "Present"}</span>
+                                                <span style={{ fontSize: 12, fontWeight: 700, color: '#64748b', whiteSpace: 'nowrap' }}>{exp.startDate + " - " + (exp.currentlyWorking ? "Present" : exp.endDate)}</span>
                                             </div>
                                             <ul style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 6, fontSize: 13, color: '#475569' }}>
                                                 {(exp.bullets || ["No bullets added"]).map((pt, idx) => (

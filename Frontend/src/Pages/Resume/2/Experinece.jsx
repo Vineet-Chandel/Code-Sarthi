@@ -31,7 +31,7 @@ const InputField = ({ label, id, value, type = "text", placeholder, onChange }) 
     <div className="flex flex-col gap-1 w-full group">
         <label
             htmlFor={id}
-            className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 group-focus-within:text-violet-600 transition-colors ml-0.5"
+            className="text-[10px] font-semibold uppercase tracking-widest text-slate-700 group-focus-within:text-violet-600 transition-colors ml-0.5"
         >
             {label}
         </label>
@@ -82,7 +82,7 @@ const TipItem = ({ emoji, title, body }) => (
     </div>
 );
 
-const Experinece = ({ data }) => {
+const Experience = ({ data }) => {
     const location = useLocation();
     let resumeData = location.state?.resumeData || {};
 
@@ -143,8 +143,8 @@ const Experinece = ({ data }) => {
         );
     };
     const addExperience = () => {
-        setExperiences([
-            ...experiences,
+        setExperiences(prev => [
+            ...prev,
             {
                 role: "",
                 company: "",
@@ -165,8 +165,10 @@ const Experinece = ({ data }) => {
     const [selectedRole, setSelectedRole] = useState();
     const [selectedCompany, setSelectedCompany] = useState();
     const [selectedEmploymentType, setSelectedEmploymentType] = useState();
-    const [selectedExpIndex, setSelectedExpIndex] = useState(0);
+    const [selectedExpIndex, setSelectedExpIndex] = useState(null);
     const [points, setpoints] = useState([]);
+    const [inputFeildOpen, setInputFeildOpen] = useState(false);
+    const [bulletInput, setBulletInput] = useState("");
     const addToast = ({ type = "success", title, message }) => {
         const id = Date.now();
         setToasts((prev) => [...prev, { id, type, title, message }]);
@@ -255,7 +257,7 @@ const Experinece = ({ data }) => {
                 {/* ── body ── */}
                 <div className={`grid transition-all duration-500 ${sidebarOpen ? "lg:grid-cols-[1fr_500px]" : "grid-cols-1"}`}>
 
-                    {aiModalOpen && <div className='fixed w-screen h-screen bg-black/20 inset-0 z-30' onClick={() => { setAiModalOpen(false); setBullets([]), setpoints([]), setSelectedRole(""), setSelectedCompany(""), setSelectedEmploymentType(""), setSelectedExpIndex(-1) }}>
+                    {aiModalOpen && <div className='fixed w-screen h-screen bg-black/20 inset-0 z-30' onClick={() => { setAiModalOpen(false); setBullets([]), setpoints([]), setSelectedRole(""), setSelectedCompany(""), setSelectedEmploymentType(""), setSelectedExpIndex(null) }}>
 
 
                         <div className='w-full flex justify-center gap-5 p-5' >
@@ -352,7 +354,7 @@ const Experinece = ({ data }) => {
                                     setExperiences(prev =>
                                         prev.map((exp, i) =>
                                             i === selectedExpIndex
-                                                ? { ...exp, bullets: [...exp.bullets, ...points] }
+                                                ? { ...exp, bullets: [...new Set([...exp.bullets, ...points])] }
                                                 : exp
                                         )
                                     );
@@ -361,7 +363,7 @@ const Experinece = ({ data }) => {
                                     setSelectedRole("");
                                     setSelectedCompany("");
                                     setSelectedEmploymentType("");
-                                    setSelectedExpIndex(-1);
+                                    setSelectedExpIndex(null);
 
                                 }}>Finalise Your Points</button>
                             </div>
@@ -490,36 +492,114 @@ const Experinece = ({ data }) => {
 
                                 <div className='bg-white w-[100%] mt-10 mx-auto rounded-xl border-2 p-5' onClick={(e) => { e.stopPropagation() }}>
                                     <div className="overflow-y-auto h-fit">
-                                        <div className='mb-5'>
+                                        <div className='mb-5 flex items-center justify-between'>
                                             <h1 className="text-2xl font-bold text-slate-900 mb-2 leading-tight text-start  " >
                                                 Points Added : {experiences[index].bullets?.length}/10 <br />
                                             </h1>
-                                        </div>
-                                        {experiences[index].bullets?.length === 0 ? (<div className='flex flex-col justify-center items-center h-[700px] w-[80%] mx-auto gap-2'>
 
-                                            <h1 className="text-xl font-medium text-slate-900 mb-2 leading-tight text-center ">No bullet points added yet. Select suggestions from the panel on the right.</h1>
+                                            <div className='bg-primary p-3 rounded-full text-base-100 flex justify-center items-center cursor-pointer' onClick={() => {
+                                                setInputFeildOpen(!inputFeildOpen);
+                                                if (experiences[index].bullets?.length === 10) {
+                                                    addToast({
+                                                        type: "error",
+                                                        title: "Error",
+                                                        message: "You can only add 10 bullet points."
+                                                    });
+                                                    return;
+                                                }
+                                            }} ><svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 48 48">
+                                                    <path fill="currentColor" d="M32.206 6.025a6.907 6.907 0 1 1 9.768 9.767L39.77 18L30 8.23zM28.233 10L8.038 30.197a6 6 0 0 0-1.572 2.758L4.039 42.44a1.25 1.25 0 0 0 1.52 1.52l9.487-2.424a6 6 0 0 0 2.76-1.572l20.195-20.198z"></path>
+                                                </svg></div>
+                                        </div>
+
+                                        {inputFeildOpen && (
+                                            <div className="mt-3 animate-in fade-in slide-in-from-top-2 duration-300 ml-5 mb-10 flex">
+                                                <div className='flex flex-col w-[100%]'>
+                                                    <label className="block text-[15px] font-bold uppercase tracking-wider text-gray-700 mb-1 ml-1">
+                                                        Add Bullet Point
+                                                    </label>
+
+                                                    <input
+                                                        type="text"
+                                                        autoFocus
+                                                        value={bulletInput}
+                                                        placeholder="e.g. Led a team of 5 developers..."
+                                                        onChange={(e) => setBulletInput(e.target.value)}
+                                                        className="w-[90%] rounded-xl border border-slate-900 bg-white px-4 py-2.5 text-sm 
+            text-gray-700 shadow-sm transition-all placeholder:text-gray-700
+            focus:border-secondary focus:ring-2 focus:ring-secondary focus:outline-none"
+                                                    />
+                                                </div>
+
+                                                <button
+                                                    className="bg-secondary border border-secondary hover:bg-base-100 text-base-100 hover:text-secondary px-3 py-2 rounded-xl mt-3 flex justify-center items-center gap-2 hover:scale-105 transition-all duration-300 ease-in-out group"
+                                                    onClick={() => {
+                                                        if (!bulletInput.trim()) return;
+
+                                                        setExperiences(prev => {
+                                                            if (!prev[index]) return prev;
+                                                            if (prev[index].bullets.includes(bulletInput)) return prev;
+
+                                                            return prev.map((exp, i) =>
+                                                                i === index
+                                                                    ? { ...exp, bullets: [...exp.bullets, bulletInput] }
+                                                                    : exp
+                                                            );
+                                                        });
+
+                                                        setBulletInput(""); // clear input after add
+                                                    }}
+                                                >
+                                                    ADD
+                                                </button>
+                                            </div>
+                                        )}
+                                        {(!inputFeildOpen && experiences[index].bullets?.length === 0) ? (<div className='flex flex-col justify-center items-center  w-[80%] mx-auto gap-2'>
+
+                                            <h1 className="text-xl font-medium text-slate-900 mb-2 leading-tight text-center ">No bullet points yet. Don’t waste time thinking — let AI craft powerful, recruiter-ready points for you in seconds.</h1>
 
                                         </div>) : experiences[index].bullets?.map((point, bulletIndex) => (
                                             <div key={bulletIndex + point} className='bg-base-300 p-3 rounded-2xl flex mb-3 cursor-pointer hover:border hover:border-secondary transition-all ' >
                                                 <div className="flex gap-5 w-full items-center">
-                                                    <div className='rounded-full border-2 border-secondary p-2 h-fit flex justify-center items-center bg-base-100'
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            setExperiences(prev =>
-                                                                prev.map((exp, i) =>
-                                                                    i === index
-                                                                        ? {
-                                                                            ...exp,
-                                                                            bullets: exp.bullets.filter((_, j) => j !== index)
-                                                                        }
-                                                                        : exp
-                                                                )
-                                                            );
-                                                        }}
-                                                    >
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
-                                                            <path fill="#884f06" d="M16 9v10H8V9zm-1.5-6h-5l-1 1H5v2h14V4h-3.5zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2z"></path>
-                                                        </svg>
+                                                    <div className='flex gap-2'>
+                                                        <div className='rounded-full border-2 border-secondary p-2 h-fit flex justify-center items-center bg-base-100'
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setExperiences(prev =>
+                                                                    prev.map((exp, i) =>
+                                                                        i === index
+                                                                            ? {
+                                                                                ...exp,
+                                                                                bullets: exp.bullets.filter((_, j) => j !== bulletIndex)
+                                                                            }
+                                                                            : exp
+                                                                    )
+                                                                );
+                                                            }}
+                                                        >
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
+                                                                <path fill="#884f06" d="M16 9v10H8V9zm-1.5-6h-5l-1 1H5v2h14V4h-3.5zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2z"></path>
+                                                            </svg>
+                                                        </div>
+                                                        <div className='rounded-full border-2 border-secondary p-2 h-fit flex justify-center items-center bg-base-100'
+                                                            onClick={(e) => {
+                                                                e.stopPropagation(); setInputFeildOpen(true); setBulletInput(point);
+                                                                setExperiences(prev =>
+                                                                    prev.map((exp, i) =>
+                                                                        i === index
+                                                                            ? {
+                                                                                ...exp,
+                                                                                bullets: exp.bullets.filter((_, j) => j !== bulletIndex)
+                                                                            }
+                                                                            : exp
+                                                                    )
+                                                                );
+                                                            }}
+                                                        >
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 48 48">
+                                                                <path fill="currentColor" d="M32.206 6.025a6.907 6.907 0 1 1 9.768 9.767L39.77 18L30 8.23zM28.233 10L8.038 30.197a6 6 0 0 0-1.572 2.758L4.039 42.44a1.25 1.25 0 0 0 1.52 1.52l9.487-2.424a6 6 0 0 0 2.76-1.572l20.195-20.198z"></path>
+                                                            </svg>
+                                                        </div>
                                                     </div>
                                                     <div className='bg-base-100 p-4 rounded-2xl w-full'>{point}</div>
                                                 </div>
@@ -642,7 +722,7 @@ const Experinece = ({ data }) => {
 
 
 
-                                    <p className="text-[10px] text-slate-400 text-center">Live preview updates as you type</p>
+
                                 </div>
                             )}
 
@@ -673,7 +753,7 @@ const Experinece = ({ data }) => {
                     <button
                         onClick={() => {
                             Navigate("/app/build-resume/education", {
-                                state: { resumeData: updatedResumeData }
+                                state: { resumeData: resumeData }
                             });
                         }}
                         className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl bg-violet-600 text-white
@@ -690,4 +770,4 @@ const Experinece = ({ data }) => {
     )
 }
 
-export default Experinece
+export default Experience;

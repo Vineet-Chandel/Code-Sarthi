@@ -40,7 +40,11 @@ const WorkExperienceStep = () => {
                 </div>
 
                 <div className="flex items-center justify-between mt-16">
-                    <button className="flex items-center gap-2 text-blue-600 font-bold hover:underline">
+                    <button className="flex items-center gap-2 text-blue-600 font-bold hover:underline" onClick={() => {
+                        navigate("/app/build-resume/header-content", {
+                            state: { resumeData }
+                        });
+                    }}>
                         <ArrowLeft size={20} />
                         Back
                     </button>
