@@ -83,7 +83,7 @@ const AmanGuptaAcademicTemplate = ({ data }) => {
                                 <div className="flex-1">
                                     <p className="text-[14px] font-bold italic">{exp.role}, {exp.company}, {exp.location}</p>
                                     <ul className="mt-2 list-disc ml-5 space-y-1 text-[13px] text-slate-600">
-                                        {exp.points.map((point, pIdx) => (
+                                        {exp.bullets.map((point, pIdx) => (
                                             <li key={pIdx}>{point}</li>
                                         ))}
                                     </ul>

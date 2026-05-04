@@ -1,7 +1,10 @@
 import React from 'react';
 import { Layout, Sparkles, Download, CheckCircle2 } from 'lucide-react'; // Optional: icon library
+import { useNavigate } from 'react-router-dom';
 
 const ResumeGetHired = () => {
+    const Navigate = useNavigate();
+
     return (
         <div className='w-full  bg-base-200  font-sans flex justify-center items-center'>
 
@@ -59,7 +62,7 @@ const ResumeGetHired = () => {
 
                 {/* CTA Section */}
                 <div className='mt-20 flex flex-col items-center gap-6 mb-20'>
-                    <button className='px-10 py-5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xl rounded-full transition-all hover:-translate-y-1 active:scale-95'>
+                    <button className='px-10 py-5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xl rounded-full transition-all hover:-translate-y-1 active:scale-95' onClick={() => "/app/build-resume"}>
                         Create my resume now
                     </button>
 

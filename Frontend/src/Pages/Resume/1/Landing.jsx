@@ -3,17 +3,25 @@ import { useNavigate } from 'react-router-dom'
 const Landing = () => {
     const Navigate = useNavigate()
     return (
-        <div className=' w-screen px-10 flex' >
+        <div className=' w-screen px-10  ' >
             <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+
             <div className='flex rounded-t-xl bg-base-100'>
                 <div className='w-[50%] mt-5   pl-10 pt-10 '>
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-6"
+                        style={{ background: "rgba(104, 241, 99, 0.18)", color: "#2e6212ff", border: "1px solid rgba(99, 241, 118, 0.3)" }}>
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#2e6212ff] animate-pulse inline-block" />
+                        {50}+ Premium Templates · ATS-Friendly
+                    </div>
+
                     <h1 style={{ fontFamily: "'Syne',sans-serif", fontSize: 'clamp(60px,6vw,80px)', fontWeight: 800, color: '#000000ff', lineHeight: 1.0, letterSpacing: '-0.03em', marginBottom: '16px' }}>
                         AI Resume<br /><span style={{ color: '#1a6cf6' }}>Builder & Analyser</span>
                     </h1>
 
 
 
-                    <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '20px', maxWidth: '520px' }} className='bg-success text-success-content rounded-xl p-5'>
+                    <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '20px', maxWidth: '620px' }} className=' text-slate-700'>
                         ''  Create a standout resume in minutes with our AI-powered builder.
                         Use professional templates, add optimized content in one click,
                         and apply with confidence from any device. Millions trust it—because it works. ''

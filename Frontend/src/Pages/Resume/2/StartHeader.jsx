@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import Temp1 from "../3/Temp1";
-
+import { useNavigate } from "react-router-dom";
+import IntroEXP from "./IntroEXP";
 // ─── tiny hook ────────────────────────────────────────────────────────────────
 function useIntersectionObserver(options = {}) {
     const ref = useRef(null);
@@ -36,16 +37,16 @@ const InputField = ({ label, id, value, type = "text", placeholder, onChange }) 
             value={value}
             placeholder={placeholder}
             onChange={(e) => onChange(id, e.target.value)}
-            className="w-full bg-base-200 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 outline-none
+            className="w-full bg-base-200 border border-slate-900 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 outline-none
                  focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 focus:bg-white
-                 transition-all duration-200 font-medium placeholder:text-slate-300"
+                 transition-all duration-200 font-medium placeholder:text-slate-400"
         />
     </div>
 );
 
 // ─── social link row ──────────────────────────────────────────────────────────
 const SocialField = ({ icon, id, value, placeholder, onChange }) => (
-    <div className="flex items-center gap-3 bg-base-200 border border-slate-200 rounded-xl px-3.5 py-2.5
+    <div className="flex items-center gap-3 bg-base-200 border border-slate-900 rounded-xl px-3.5 py-2.5
                   focus-within:border-violet-500 focus-within:ring-4 focus-within:ring-violet-500/10
                   focus-within:bg-white transition-all duration-200">
         <div className="w-6 h-6 rounded-md flex items-center justify-center flex-shrink-0 overflow-hidden">
@@ -94,14 +95,15 @@ const StartHeader = () => {
     const [form, setForm] = useState({
         fname: "Aman",
         lname: "Gupta",
+        summaryTitle: "Full Stack Developer & UI Specialist",
         email: "aman.dev@gmail.com",
         phone: "+91 98765 43210",
         location: "Kanpur, India",
         pincode: "208001",
-        country: "India",
         linkedin: "linkedin.com/in/aman-gupta",
         github: "github.com/amangupta-dev",
         portfolio: "aman-portfolio.dev",
+
     });
 
     const [activeTab, setActiveTab] = useState("preview"); // preview | tips | score
@@ -126,6 +128,7 @@ const StartHeader = () => {
     const score = Math.round((checks.filter((c) => c.done).length / checks.length) * 100);
 
     const resumeData = {
+        //header
         fname: form.fname,
         lname: form.lname,
         phone: form.phone,
@@ -133,27 +136,28 @@ const StartHeader = () => {
         linkedin: `https://${form.linkedin}`,
         portfolio: form.portfolio,
         email: form.email,
-        summaryTitle: "Full Stack Developer & UI Specialist",
-        summaryBody:
-            "Passionate about crafting high-performance web applications using the MERN stack. Expert in translating complex requirements into elegant, scalable code.",
-        degree: "Bachelor of Technology",
-        major: "Computer Science and Engineering",
-        institution: "Pranveer Singh Institute of Technology",
+        summaryTitle: form.summaryTitle,
         location: form.location,
-        gradDate: "2027",
-        skills: {
-            frontend: "React.js, Next.js, TypeScript, Tailwind CSS",
-            backend: "Node.js, Express.js, GraphQL",
-            database: "PostgreSQL, MongoDB, Redis",
-            tools: "Docker, Git, Vercel, Figma",
-        },
+        pincode: form.pincode,
+
+        summaryBody: "",
+        degree: "",
+        major: "",
+        institution: "",
+
+        gradDate: "",
+        skills: [],
         projects: [],
         experience: [],
         education: [],
         certifications: [],
         achievements: [],
-        languages: ["English (Fluent)", "Hindi (Native)"],
+        languages: [],
     };
+    const Navigate = useNavigate();
+    const [isVisible] = useIntersectionObserver();
+    const [hovered, setHovered] = useState(false);
+
 
     return (
         <div className="min-h-[calc(100vh-4rem)] w-screen flex items-start justify-center p-4 md:p-6 bg-base-100">
@@ -197,7 +201,7 @@ const StartHeader = () => {
                 </div>
 
                 {/* ── body ── */}
-                <div className={`grid transition-all duration-500 ${sidebarOpen ? "lg:grid-cols-[1fr_340px]" : "grid-cols-1"}`}>
+                <div className={`grid transition-all duration-500 ${sidebarOpen ? "lg:grid-cols-[1fr_500px]" : "grid-cols-1"}`}>
 
                     {/* ── LEFT: form ── */}
                     <div className="p-6 md:p-10 border-r border-slate-100">
@@ -248,26 +252,24 @@ const StartHeader = () => {
 
                             {/* name fields inline */}
                             <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                                <InputField label="First Name" id="fname" value={form.fname} placeholder="Aman" onChange={handleChange} />
-                                <InputField label="Last Name" id="lname" value={form.lname} placeholder="Gupta" onChange={handleChange} />
+                                <InputField className="text-black" label="First Name" id="fname" value={form.fname} placeholder="Aman" onChange={handleChange} />
+                                <InputField className="text-black" label="Last Name" id="lname" value={form.lname} placeholder="Gupta" onChange={handleChange} />
                             </div>
                         </div>
 
                         {/* contact fields */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                            <InputField label="Email Address" id="email" type="email" value={form.email} placeholder="you@example.com" onChange={handleChange} />
-                            <InputField label="Phone Number" id="phone" value={form.phone} placeholder="+91 ..." onChange={handleChange} />
+                            <InputField className="text-black" label="Email Address" id="email" type="email" value={form.email} placeholder="you@example.com" onChange={handleChange} />
+                            <InputField className="text-black" label="Phone Number" id="phone" value={form.phone} placeholder="+91 ..." onChange={handleChange} />
                         </div>
 
                         <div className="mb-4">
-                            <InputField label="City & Country" id="location" value={form.location} placeholder="Kanpur, India" onChange={handleChange} />
+                            <InputField className="text-black" label="Summary Title" id="summaryTitle" value={form.summaryTitle} placeholder="Software Engineer" onChange={handleChange} />
                         </div>
 
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
-                            <InputField label="Pincode" id="pincode" value={form.pincode} placeholder="208001" onChange={handleChange} />
-                            <div className="sm:col-span-2">
-                                <InputField label="Country" id="country" value={form.country} placeholder="India" onChange={handleChange} />
-                            </div>
+                            <InputField className="text-black" label="City & Country" id="location" value={form.location} placeholder="Kanpur, India" onChange={handleChange} />
+                            <InputField className="text-black" label="Pincode" id="pincode" value={form.pincode} placeholder="208001" onChange={handleChange} />
                         </div>
 
                         {/* social links */}
@@ -321,9 +323,9 @@ const StartHeader = () => {
 
                     {/* ── RIGHT: sidebar ── */}
                     {sidebarOpen && (
-                        <div className="flex flex-col bg-base-200 border-t lg:border-t-0 border-slate-100">
+                        <div className="flex flex-col bg-base-200 border-t lg:border-t-0 border-slate-900">
                             {/* tabs */}
-                            <div className="flex border-b border-slate-100">
+                            <div className="flex border-b border-slate-900">
                                 {["preview", "tips", "score"].map((tab) => (
                                     <button
                                         key={tab}
@@ -341,67 +343,80 @@ const StartHeader = () => {
 
                             {/* ── PREVIEW tab ── */}
                             {activeTab === "preview" && (
-                                <div className="p-4 flex flex-col gap-4 overflow-y-auto">
-                                    {/* mini preview card */}
+
+                                <div>
                                     <div
                                         ref={cardRef}
-                                        className="rounded-2xl overflow-hidden border border-slate-200 bg-white cursor-pointer
-                               hover:border-violet-400 transition-all duration-300"
+                                        className="group relative flex flex-col rounded-2xl overflow-hidden cursor-pointer"
                                         style={{
-                                            opacity: isCardVisible ? 1 : 0,
-                                            transform: isCardVisible ? "translateY(0)" : "translateY(20px)",
-                                            transition: "opacity 0.5s ease, transform 0.5s ease",
+                                            opacity: isVisible ? 1 : 0,
+                                            transform: isVisible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.97)",
+                                            background: "#fff",
                                         }}
-                                        onMouseEnter={() => setHoveringCard(true)}
-                                        onMouseLeave={() => setHoveringCard(false)}
+
                                     >
-
-
-
-                                        {/* template preview zoom */}
+                                        {/* Badge */}
                                         <div
-                                            className="relative w-full bg-base-200 overflow-hidden"
-                                            style={{ aspectRatio: "1/1.41" }}
+                                            className="absolute top-3 left-3 z-10 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest text-white"
+                                            style={{ background: "#000000", letterSpacing: "0.12em" }}
                                         >
+                                            {/* {item.tag} */} tag of the temp
+                                        </div>
+
+
+
+                                        {/* Preview Area */}
+                                        <div className="relative w-full overflow-hidden bg-slate-50" style={{ aspectRatio: "1/1.41" }}>
                                             <div
-                                                className="absolute top-0 left-0 w-[900px] origin-top-left pointer-events-none select-none"
+                                                className="absolute top-0 left-0 w-[900px] origin-top-left pointer-events-none select-none scale-[1.05] lg:scale-[0.56]"
                                                 style={{
-                                                    transform: hoveringCard ? "scale(0.46)" : "scale(0.41)",
-                                                    transition: "transform 0.4s cubic-bezier(.4,0,.2,1)",
+
+                                                    transition: "transform 0.5s cubic-bezier(.4,0,.2,1)",
                                                 }}
                                             >
                                                 <Temp1 data={resumeData} />
                                             </div>
 
-                                            {/* hover overlay */}
+                                            {/* Hover CTA overlay */}
                                             <div
-                                                className="absolute inset-0 flex items-center justify-center"
+                                                className="absolute inset-0 flex flex-col items-center justify-center gap-3"
                                                 style={{
-                                                    background: "rgba(0,0,0,0.35)",
-                                                    opacity: hoveringCard ? 1 : 0,
+                                                    background: `linear-gradient(160deg, ${"#000000"}22 0%, ${"#000000"}55 100%)`,
+
+                                                    opacity: hovered ? 1 : 0,
                                                     transition: "opacity 0.3s ease",
                                                 }}
                                             >
-                                                <span className="px-5 py-2 bg-slate-900 text-white text-xs font-bold rounded-xl">
-                                                    Full Preview
-                                                </span>
+
+
                                             </div>
                                         </div>
 
-                                        {/* card footer */}
-                                        <div className="flex items-center justify-between px-4 py-3 bg-white border-t border-slate-100">
+                                        {/* Footer */}
+                                        <div className="px-4 py-3 bg-white flex justify-between items-center gap-2">
                                             <div>
-                                                <p className="text-xs font-bold text-slate-800">Modern Professional</p>
-                                                <p className="text-[10px] text-slate-400 mt-0.5">Template #1</p>
+                                                {/* <h3 className="font-bold text-slate-800 text-sm truncate">{item.name}</h3>
+                                                <p className="text-[10px] text-slate-400 font-medium mt-0.5">Template #{item.id}</p> */}
                                             </div>
-                                            <span className="text-[9px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-700
-                                       border border-emerald-200 px-2 py-1 rounded-lg">
+                                            <span className="shrink-0 text-[9px] bg-emerald-50 text-emerald-600 border border-emerald-200 px-2 py-1 rounded-lg uppercase font-black tracking-wider">
                                                 ATS
                                             </span>
                                         </div>
+
+                                        {/* Bottom accent bar */}
+                                        <div
+                                            className="h-0.5 w-full"
+                                            style={{
+                                                background: `linear-gradient(90deg, ${"#000000"}, transparent)`,
+                                                opacity: hovered ? 1 : 0,
+                                                transition: "opacity 0.3s",
+                                            }}
+                                        />
                                     </div>
 
-                                    <p className="text-[10px] text-slate-400 text-center">Live preview updates as you type</p>
+
+
+
                                 </div>
                             )}
 
@@ -464,6 +479,11 @@ const StartHeader = () => {
                         Save draft
                     </button>
                     <button
+                        onClick={() => {
+                            Navigate("/app/build-resume/intro-exp-page", {
+                                state: { resumeData }
+                            });
+                        }}
                         className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl bg-violet-600 text-white
                        hover:bg-violet-700 active:scale-95 transition-all duration-200 shadow-lg shadow-violet-200"
                     >
@@ -474,7 +494,7 @@ const StartHeader = () => {
                     </button>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

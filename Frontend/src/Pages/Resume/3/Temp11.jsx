@@ -67,7 +67,7 @@ const ResumeTemplate = ({ data }) => {
                             <span>{exp.location}</span>
                         </div>
                         <ul className="list-disc ml-6 text-[13px] space-y-1">
-                            {exp.points.map((point, pIdx) => (
+                            {exp.bullets.map((point, pIdx) => (
                                 <li key={pIdx}>{point}</li>
                             ))}
                         </ul>

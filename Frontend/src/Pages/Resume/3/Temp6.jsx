@@ -76,7 +76,7 @@ const AmanGuptaCleanTemplate = ({ data }) => {
                                     </div>
                                     <p className="text-[12px] font-bold text-gray-500 italic mb-3">{exp.company} - {exp.location}</p>
                                     <ul className="list-disc ml-4 space-y-2 text-[13px] text-gray-600">
-                                        {exp.points.map((point, pIdx) => (
+                                        {exp.bullets.map((point, pIdx) => (
                                             <li key={pIdx}>{point}</li>
                                         ))}
                                     </ul>

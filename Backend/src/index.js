@@ -31,6 +31,7 @@ const fileUpload = require("./routes/profilePic")
 const redis = require("./configs/redis")
 const cloudinary = require("cloudinary").v2;
 const reviewRouter = require("./routes/review");
+const aiWorkRouter = require("./routes/aiWork");
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
     api_key: process.env.CLOUD_KEY,
@@ -57,6 +58,7 @@ app.use("/", fileUpload);
 app.use("/", chatRouter);
 app.use("/", feedbackRouter);
 app.use("/", reviewRouter);
+app.use("/", aiWorkRouter);
 const PORT = process.env.PORT || 8000;
 
 (async () => {

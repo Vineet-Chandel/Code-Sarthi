@@ -63,7 +63,7 @@ const AmanGuptaDynamicClassic = ({ data }) => {
                         </div>
                         <p className="italic text-[12px] text-gray-600 mb-1">{exp.location}</p>
                         <ul className="list-disc ml-6 text-[13px] space-y-1">
-                            {exp.points.map((point, idx) => (
+                            {exp.bullets.map((point, idx) => (
                                 <li key={idx}>{point}</li>
                             ))}
                         </ul>

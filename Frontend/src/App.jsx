@@ -40,7 +40,7 @@ import Meeting from "./Pages/Meeting";
 import Explore from "./Pages/Explore";
 import Resume from "./Pages/Resume/1/Resume";
 import Templates from "./Pages/Resume/2/Templates";
-import HeaderContent from "./Pages/Resume/2/StartHeader";
+import HeaderContent from "./Pages/Resume/2/StartHeader"
 import HowResume from "./Pages/Resume/4/HowResume";
 import HowCv from "./Pages/Resume/4/HowCv";
 import HowCoverLetter from "./Pages/Resume/4/HowCoverLetter";
@@ -64,6 +64,8 @@ import RequestedUser from "./personalPages/RequestedUser";
 import ReceivedRequests from "./personalPages/ReceivedRequests";
 import SmartSchedulerLakshya from "./Main/PagesMain/Sub-Category/Blog-Category/SmartSchedulerLakshya";
 import PrivacyPolicyHub from "./Main/PagesMain/Sub-Category/Safety-Category/Hub/PrivacyPolicyHub";
+import IntroEXP from "./Pages/Resume/2/IntroEXP";
+import Experience from "./Pages/Resume/2/Experinece";
 const App = () => {
   return (
     <Provider store={appStore}>
@@ -121,6 +123,8 @@ const App = () => {
               <Route path="how-cover-letter" element={<HowCoverLetter />} />
               <Route path="credentials-analyser" element={<CredentialsAnalyser />} />
               <Route path="build-resume/header-content" element={<HeaderContent />} />
+              <Route path="build-resume/intro-exp-page" element={<IntroEXP />} />
+              <Route path="build-resume/experience-content" element={<Experience />} />
               <Route path="editProfile" element={<EditProfile />} />
               <Route path="connections" element={<Connections />} />
               <Route path="settings" element={<Settings />} />

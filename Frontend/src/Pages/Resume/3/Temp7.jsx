@@ -120,7 +120,7 @@ const AmanGuptaLayoutTemplate = ({ data }) => {
                                     <h3 className="text-[13px] font-black text-gray-800 uppercase tracking-wide">{exp.role}</h3>
                                     <p className="text-[11px] italic text-gray-500 mb-3">{exp.company} | {exp.duration}</p>
                                     <ul className="list-disc ml-4 space-y-2 text-[12px] text-gray-600">
-                                        {exp.points.map((point, pIdx) => (
+                                        {exp.bullets.map((point, pIdx) => (
                                             <li key={pIdx}>{point}</li>
                                         ))}
                                     </ul>

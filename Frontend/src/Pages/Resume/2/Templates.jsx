@@ -33,7 +33,8 @@ const resumeData1 = {
     degree: "Bachelor of Technology",
     major: "Computer Science and Engineering",
     institution: "Pranveer Singh Institute of Technology",
-    location: "Kanpur",
+    location: "Kanpur,India",
+    pincode: "208024",
     gradDate: "2027",
     skills: {
         frontend: "React.js, Next.js, TypeScript, Tailwind CSS, Framer Motion",
@@ -74,11 +75,14 @@ const resumeData1 = {
     ],
     experience: [
         {
-            role: "Frontend Developer Intern",
+            role: "Frontend Developer",
             company: "XYZ Tech",
             location: "Remote",
-            duration: "May 2025 - July 2025",
-            points: ["Built responsive UI using React", "Improved performance by 30%"],
+            startDate: "2025",
+            endDate: "2027",
+            currentlyWorking: false,
+            employmentType: "Internship",
+            bullets: ["Built responsive UI using React", "Improved performance by 30%"],
         },
     ],
     education: [
