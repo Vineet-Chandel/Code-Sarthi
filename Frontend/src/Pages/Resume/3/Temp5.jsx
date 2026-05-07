@@ -1,6 +1,6 @@
 import React from 'react';
 import { Phone, MapPin, Mail, Globe } from 'lucide-react';
-
+import { CheckCircle } from 'lucide-react';
 const DynamicResume = ({ data }) => {
     return (
         <div className="max-w-4xl mx-auto bg-white shadow-2xl font-sans text-slate-800">
@@ -51,15 +51,33 @@ const DynamicResume = ({ data }) => {
                         <h2 className="text-xl font-bold uppercase tracking-widest border-b-2 border-slate-900 pb-1 mb-6">
                             Education
                         </h2>
+
+
                         <div className="space-y-6">
                             {data.education.map((edu, index) => (
-                                <div key={index}>
-                                    <p className="font-bold uppercase text-xs">{edu.institution}</p>
-                                    <p className="text-sm">{edu.degree}</p>
-                                    <p className="text-sm text-slate-500">{edu.startDate}-{edu.endDate}</p>
+                                <div key={index} className="mb-6">
+                                    <div className="flex justify-between items-start mb-1">
+                                        <div>
+                                            <p className="font-bold text-slate-700 uppercase text-sm tracking-wide">{edu.institution}</p>
+                                            <p className="italic text-slate-500 text-sm">{edu.degree}</p>
+                                        </div>
+                                        <p className="text-slate-500 text-sm font-medium">{edu.startDate} - {edu.endDate}</p>
+                                    </div>
+
+                                    {edu.bullets && (
+                                        <ul className="space-y-1.5 ml-1">
+                                            {(edu.bullets || []).map((b, idx) => (
+                                                <li key={idx} style={{ display: 'flex', gap: 6, fontSize: 12, color: '#475569', alignItems: 'flex-start' }}>
+                                                    <CheckCircle size={13} color="#06b6d4" style={{ flexShrink: 0, marginTop: 2 }} />
+                                                    <span dangerouslySetInnerHTML={{ __html: b }} />
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
                                 </div>
                             ))}
                         </div>
+
                     </section>
 
                     {/* Skills */}

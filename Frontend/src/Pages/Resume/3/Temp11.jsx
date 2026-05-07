@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { CheckCircle } from 'lucide-react';
 const ResumeTemplate = ({ data }) => {
     return (
         <div className="max-w-[850px] mx-auto my-10 p-12 bg-white shadow-sm border border-gray-200 font-serif text-[#111]">
@@ -112,12 +112,25 @@ const ResumeTemplate = ({ data }) => {
                         <p className="text-[12px] mt-1 font-medium text-gray-600">
                             {edu.cgpa ? `CGPA: ${edu.cgpa}` : `Percentage: ${edu.percentage}`}
                         </p>
+
+                        {
+                            edu.bullets && (
+                                <ul className="space-y-1.5 ml-1">
+                                    {(edu.bullets || []).map((b, idx) => (
+                                        <li key={idx} style={{ display: 'flex', gap: 6, fontSize: 12, color: '#475569', alignItems: 'flex-start' }}>
+                                            <CheckCircle size={13} color="#06b6d4" style={{ flexShrink: 0, marginTop: 2 }} />
+                                            <span dangerouslySetInnerHTML={{ __html: b }} />
+                                        </li>
+                                    ))}
+                                </ul>
+                            )
+                        }
                     </div>
                 ))}
             </section>
 
             {/* Languages Section */}
-            <section className="mb-6">
+            < section className="mb-6" >
                 <h2 className="text-center font-bold uppercase text-sm border-b border-gray-300 mb-3 py-1 bg-gray-50">
                     Languages
                 </h2>
@@ -135,10 +148,10 @@ const ResumeTemplate = ({ data }) => {
                         </div>
                     ))}
                 </div>
-            </section>
+            </section >
 
             {/* Achievements / Interests Section */}
-            <section>
+            < section >
                 <h2 className="text-center font-bold uppercase text-sm border-b border-gray-300 mb-3 py-1 bg-gray-50">
                     Achievements and Certifications
                 </h2>
@@ -154,9 +167,9 @@ const ResumeTemplate = ({ data }) => {
                         ))}
                     </ul>
                 </div>
-            </section>
+            </section >
 
-        </div>
+        </div >
     );
 };
 

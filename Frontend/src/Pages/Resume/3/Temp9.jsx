@@ -1,6 +1,6 @@
 import React from 'react';
 import { Mail, Phone, MapPin, Globe } from 'lucide-react';
-
+import { CheckCircle } from 'lucide-react';
 const AmanGuptaTimelineResume = ({ data }) => {
     const {
         fname, lname, phone, email, portfolio, summaryTitle, summaryBody,
@@ -36,6 +36,19 @@ const AmanGuptaTimelineResume = ({ data }) => {
                                 <p className="font-bold text-[14px] leading-tight">{edu.degree}</p>
                                 <p className="text-[13px] italic">{edu.institution}</p>
                                 <p className="text-[12px] font-medium">{edu.startDate} - {edu.endDate}</p>
+
+                                {
+                                    edu.bullets && (
+                                        <ul className="space-y-1.5 ml-1">
+                                            {(edu.bullets || []).map((b, idx) => (
+                                                <li key={idx} style={{ display: 'flex', gap: 6, fontSize: 12, color: '#475569', alignItems: 'flex-start' }}>
+                                                    <CheckCircle size={13} color="#06b6d4" style={{ flexShrink: 0, marginTop: 2 }} />
+                                                    <span dangerouslySetInnerHTML={{ __html: b }} />
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )
+                                }
                             </div>
                         ))}
                     </div>

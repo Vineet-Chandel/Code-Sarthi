@@ -94,8 +94,8 @@ const resumeData1 = {
             startDate: "2023",
             endDate: "2027",
             cgpa: "8.7/10",
-            coursework: ["Data Structures & Algorithms", "Operating Systems", "DBMS", "Computer Networks"],
-            achievements: ["Top 10% of the batch", "Active member of coding club"],
+            bullets: ["Data Structures & Algorithms", "Operating Systems", "DBMS", "Computer Networks"],
+
         },
         {
             degree: "Class XII (Senior Secondary)",
@@ -105,7 +105,7 @@ const resumeData1 = {
             startDate: "2021",
             endDate: "2023",
             percentage: "92%",
-            achievements: ["School topper in Mathematics"],
+
         },
     ],
     certifications: ["AWS Certified Cloud Practitioner", "Meta Frontend Developer Certification"],

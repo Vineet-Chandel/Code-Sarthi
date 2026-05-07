@@ -1,4 +1,5 @@
 import React from 'react';
+import { CheckCircle } from 'lucide-react';
 
 const AmanGuptaDynamicClassic = ({ data }) => {
     // Extracting all fields from the resumeData1 object
@@ -63,9 +64,9 @@ const AmanGuptaDynamicClassic = ({ data }) => {
                         </div>
                         <p className="italic text-[12px] text-gray-600 mb-1">{exp.location}</p>
                         <ul className="list-disc ml-6 text-[13px] space-y-1">
-                            {exp.bullets.map((point, idx) => (
+                            {/* {exp.bullets.map((point, idx) => (
                                 <li key={idx}>{point}</li>
-                            ))}
+                            ))} */}
 
 
                         </ul>
@@ -117,9 +118,14 @@ const AmanGuptaDynamicClassic = ({ data }) => {
                             {edu.cgpa && <span>Current CGPA: {edu.cgpa}</span>}
                             {edu.percentage && <span>Score: {edu.percentage}</span>}
                         </div>
-                        {edu.coursework && (
+                        {edu.bullets && (
                             <p className="text-[11px] text-gray-500 mt-1">
-                                <strong>Core Coursework:</strong> {edu.coursework.join(', ')}
+                                {(edu.bullets || []).map((b, idx) => (
+                                    <div key={idx} style={{ display: 'flex', gap: 6, fontSize: 12, color: '#475569', alignItems: 'flex-start' }}>
+                                        <CheckCircle size={13} color="#06b6d4" style={{ flexShrink: 0, marginTop: 2 }} />
+                                        <span dangerouslySetInnerHTML={{ __html: b }} />
+                                    </div>
+                                ))}
                             </p>
                         )}
                     </div>

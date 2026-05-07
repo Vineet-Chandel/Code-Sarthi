@@ -28,7 +28,7 @@ const InputField = ({ label, id, value, type = "text", placeholder, onChange }) 
     <div className="flex flex-col gap-1 w-full group">
         <label
             htmlFor={id}
-            className="text-[10px] font-semibold uppercase tracking-widest text-slate-900 group-focus-within:text-violet-600 transition-colors ml-0.5"
+            className="text-[10px] font-semibold uppercase tracking-widest text-slate-700 group-focus-within:text-secondary transition-colors ml-0.5"
         >
             {label}
         </label>
@@ -39,8 +39,8 @@ const InputField = ({ label, id, value, type = "text", placeholder, onChange }) 
             placeholder={placeholder}
             onChange={(e) => onChange(id, e.target.value)}
             className="w-full bg-base-200 border border-slate-900 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 outline-none
-                 focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 focus:bg-white
-                 transition-all duration-200 font-medium placeholder:text-slate-400"
+                 focus:border-secondary focus:ring-4 focus:ring-accent focus:bg-white
+                 transition-all duration-200 font-medium placeholder:text-slate-500"
         />
     </div>
 );
@@ -58,7 +58,7 @@ const SocialField = ({ icon, id, value, placeholder, onChange }) => (
             placeholder={placeholder}
             onChange={(e) => onChange(id, e.target.value)}
             className="flex-1 bg-transparent border-none outline-none text-[13px] font-medium text-slate-700
-                 placeholder:text-slate-300"
+                 placeholder:text-slate-500"
         />
     </div>
 );
@@ -168,7 +168,7 @@ const StartHeader = ({ data }) => {
 
                 {/* ── top bar ── */}
                 <div className="flex items-center justify-between px-5 py-3.5 bg-base-200 border-b border-slate-700">
-                    <span className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full bg-violet-100 text-violet-700">
+                    <span className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full bg-base-100 text-secondary">
                         Step 1 of 6
                     </span>
 
@@ -178,10 +178,10 @@ const StartHeader = ({ data }) => {
                             <div
                                 key={i}
                                 className={`rounded-full transition-all duration-300 ${i === 0
-                                    ? "w-2 h-2 bg-emerald-500"
+                                    ? "w-2 h-2 bg-secondary"
                                     : i === 1
-                                        ? "w-5 h-2 bg-violet-600"
-                                        : "w-2 h-2 bg-slate-200"
+                                        ? "w-5 h-2 bg-primary"
+                                        : "w-2 h-2 bg-neutral"
                                     }`}
                             />
                         ))}
@@ -210,7 +210,7 @@ const StartHeader = ({ data }) => {
                         <div className="mb-7">
                             <h1 className="text-3xl md:text-4xl font-black tracking-tight text-slate-900 mb-2 leading-tight">
                                 Let's start with your{" "}
-                                <span className="text-violet-600">header</span>.
+                                <span className="text-accent">header</span>.
                             </h1>
                             <p className="text-sm text-slate-500 leading-relaxed max-w-xl">
                                 The first thing recruiters see. Keep your contact details sharp and up-to-date.
@@ -326,14 +326,14 @@ const StartHeader = ({ data }) => {
                     {sidebarOpen && (
                         <div className="flex flex-col bg-base-200 border-t-0 border-slate-700">
                             {/* tabs */}
-                            <div className="flex border-b border-slate-700">
+                            <div className="flex border-b border-slate-900">
                                 {["preview", "tips", "score"].map((tab) => (
                                     <button
                                         key={tab}
                                         onClick={() => setActiveTab(tab)}
-                                        className={`flex-1 py-3.5 text-xs font-semibold capitalize transition-all duration-200 border-b-2
+                                        className={`flex-1 py-3.5 text-lg font-semibold capitalize transition-all duration-200 border-b-2
                                 ${activeTab === tab
-                                                ? "text-violet-600 border-violet-600 bg-white"
+                                                ? "text-secondary border-secondary bg-base-100"
                                                 : "text-slate-700 border-transparent hover:text-slate-600"
                                             }`}
                                     >
@@ -347,7 +347,7 @@ const StartHeader = ({ data }) => {
 
                                 <div>
                                     <div
-                                        ref={cardRef}
+
                                         className="group relative flex flex-col rounded-2xl overflow-hidden cursor-pointer"
                                         style={{
                                             opacity: isVisible ? 1 : 0,

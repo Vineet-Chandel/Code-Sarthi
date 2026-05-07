@@ -5,6 +5,8 @@ import ResumeGetHired from './ResumeGetHired';
 import WhyWe from './WhyWe';
 import Example from './Example';
 import Choose from './Choose';
+import HowToCreate from './HowToCreate';
+import Block from './Block';
 
 
 
@@ -14,6 +16,8 @@ const Resume = () => {
             <Top />
             <Landing />
             <ResumeGetHired />
+            <HowToCreate />
+            <Block />
             <Choose />
             <WhyWe />
             <Example />

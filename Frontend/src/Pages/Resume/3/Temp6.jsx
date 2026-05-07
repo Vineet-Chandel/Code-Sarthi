@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { CheckCircle } from 'lucide-react';
 const AmanGuptaCleanTemplate = ({ data }) => {
     const {
         fname, lname, phone, github, linkedin, portfolio, email,
@@ -149,6 +149,20 @@ const AmanGuptaCleanTemplate = ({ data }) => {
                                             CGPA: {edu.cgpa}
                                         </p>
                                     )}
+
+
+                                    {
+                                        edu.bullets && (
+                                            <ul className="space-y-1.5 ml-1">
+                                                {(edu.bullets || []).map((b, idx) => (
+                                                    <li key={idx} style={{ display: 'flex', gap: 6, fontSize: 12, color: '#475569', alignItems: 'flex-start' }}>
+                                                        <CheckCircle size={13} color="#06b6d4" style={{ flexShrink: 0, marginTop: 2 }} />
+                                                        <span dangerouslySetInnerHTML={{ __html: b }} />
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        )
+                                    }
                                 </div>
                             ))}
                         </div>

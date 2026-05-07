@@ -1,5 +1,6 @@
 import React from 'react';
 import { Mail, Phone, MapPin } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 
 const AmanGuptaAcademicTemplate = ({ data }) => {
     // Destructuring for dynamic prop drilling
@@ -105,6 +106,14 @@ const AmanGuptaAcademicTemplate = ({ data }) => {
                                     <span className="font-bold uppercase">{edu.institution}</span>, {edu.location}
                                 </p>
                                 {edu.cgpa && <p className="text-[13px] font-bold mt-1">CGPA: {edu.cgpa}</p>}
+                                <ul className="mt-2 list-disc ml-5 space-y-1 text-[13px] text-slate-600">
+                                    {(edu.bullets || []).map((b, idx) => (
+                                        <div key={idx} style={{ display: 'flex', gap: 6, fontSize: 12, color: '#475569', alignItems: 'flex-start' }}>
+                                            <CheckCircle size={13} color="#06b6d4" style={{ flexShrink: 0, marginTop: 2 }} />
+                                            <span dangerouslySetInnerHTML={{ __html: b }} />
+                                        </div>
+                                    ))}
+                                </ul>
                             </div>
                         </div>
                     ))}

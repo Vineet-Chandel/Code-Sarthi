@@ -66,6 +66,10 @@ import SmartSchedulerLakshya from "./Main/PagesMain/Sub-Category/Blog-Category/S
 import PrivacyPolicyHub from "./Main/PagesMain/Sub-Category/Safety-Category/Hub/PrivacyPolicyHub";
 import IntroEXP from "./Pages/Resume/2/IntroEXP";
 import Experience from "./Pages/Resume/2/Experinece";
+import IntroEdu from "./Pages/Resume/2/IntroEdu";
+import Education from "./Pages/Resume/2/Education";
+import IntroSkill from "./Pages/Resume/2/IntroSkills";
+import Skills from "./Pages/Resume/2/Skills";
 const App = () => {
   return (
     <Provider store={appStore}>
@@ -124,7 +128,12 @@ const App = () => {
               <Route path="credentials-analyser" element={<CredentialsAnalyser />} />
               <Route path="build-resume/header-content" element={<HeaderContent />} />
               <Route path="build-resume/intro-exp-page" element={<IntroEXP />} />
+              <Route path="build-resume/intro-edu-page" element={< IntroEdu />} />
+              <Route path="build-resume/intro-skill-page" element={< IntroSkill />} />
+
+              <Route path="build-resume/skill-content" element={<Skills />} />
               <Route path="build-resume/experience-content" element={<Experience />} />
+              <Route path="build-resume/education-content" element={<Education />} />
               <Route path="editProfile" element={<EditProfile />} />
               <Route path="connections" element={<Connections />} />
               <Route path="settings" element={<Settings />} />

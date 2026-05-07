@@ -1,6 +1,6 @@
 import React from 'react';
 import { Phone, Mail, MapPin } from 'lucide-react';
-
+import { CheckCircle } from 'lucide-react';
 const DynamicResumeTemplate = ({ data }) => {
     return (
         <div className="max-w-4xl mx-auto bg-white shadow-lg font-sans text-slate-800">
@@ -72,6 +72,20 @@ const DynamicResumeTemplate = ({ data }) => {
                                 <div key={idx} className="flex justify-between items-start text-sm font-bold">
                                     <div className="max-w-[180px]">{edu.institution}</div>
                                     <div className="whitespace-nowrap">{edu.startDate}-{edu.endDate}</div>
+
+
+                                    {
+                                        edu.bullets && (
+                                            <ul className="space-y-1.5 ml-1">
+                                                {(edu.bullets || []).map((b, idx) => (
+                                                    <li key={idx} style={{ display: 'flex', gap: 6, fontSize: 12, color: '#475569', alignItems: 'flex-start' }}>
+                                                        <CheckCircle size={13} color="#06b6d4" style={{ flexShrink: 0, marginTop: 2 }} />
+                                                        <span dangerouslySetInnerHTML={{ __html: b }} />
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        )
+                                    }
                                 </div>
                             ))}
                         </div>

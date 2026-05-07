@@ -1,3 +1,4 @@
+import { CheckCircle } from 'lucide-react';
 import React from 'react';
 import { Phone, MapPin, Globe, Mail } from 'lucide-react';
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { ArrowLeft, Sparkles, Search } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-const WorkExperienceStep = () => {
+const IntroSkill = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -18,13 +18,13 @@ const WorkExperienceStep = () => {
             {/* Left Content Area */}
             <div className="flex-1 max-w-2xl">
                 <p className="text-lg font-medium text-slate-700 mb-4">
-                    Great progress! Next up → <span className="text-secondary">Experience</span>
+                    Great progress! Next up → <span className="text-secondary">Skills</span>
                 </p>
 
                 <h1 className="text-5xl md:text-6xl font-extrabold leading-tight mb-8">
-                    Add details about your <br />
+                    Time to showcase your  <br />
                     <span className="relative inline-block text-accent">
-                        Experience
+                        Skills.
                         {/* little upper side parabolic curve line */}
                         {/* smooth top parabolic curve */}
                         <svg
@@ -44,6 +44,8 @@ const WorkExperienceStep = () => {
                     </span>
                 </h1>
 
+                <h1 className='text-xl text-slate-600 mb-10 leading-tight'>Use expertly written suggestions to optimize* your skills section, or craft your own with AI writing help.</h1>
+
                 <div className="flex items-start gap-4 mb-12">
                     <div className="bg-orange-50 p-2 rounded-lg">
                         <Sparkles className="w-6 h-6 text-orange-400" />
@@ -56,7 +58,7 @@ const WorkExperienceStep = () => {
 
                 <div className="flex items-center justify-between mt-16">
                     <button className="flex items-center gap-2 text-secondary font-bold hover:underline" onClick={() => {
-                        navigate("/app/build-resume/header-content", {
+                        navigate("/app/build-resume/education-content", {
                             state: { resumeData }
                         });
                     }}>
@@ -71,7 +73,7 @@ const WorkExperienceStep = () => {
                             <path d="M85 75 L 95 80 L 85 85" stroke="currentColor" strokeWidth="2" />
                         </svg>
                         <button className="bg-secondary text-secondary-content rounded-full px-12 py-4 text-xl border-2 border-secondary transition-all hover:bg-base-100 hover:text-secondary flex items-center gap-2" onClick={() => {
-                            navigate("/app/build-resume/experience-content", {
+                            navigate("/app/build-resume/skill-content", {
                                 state: { resumeData }
                             });
                         }}>
@@ -126,4 +128,4 @@ const WorkExperienceStep = () => {
     );
 };
 
-export default WorkExperienceStep;
+export default IntroSkill;

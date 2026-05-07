@@ -47,7 +47,7 @@ const Example = () => {
                 {/* Header Section */}
                 <div className="max-w-4xl mx-auto text-center mb-16">
                     <h1 className="text-4xl md:text-6xl font-black tracking-tight text-slate-900 mb-4">
-                        Looking for  <span className="text-blue-600"> CVs or cover letters?.</span>
+                        Looking for  <span className="text-blue-600"> CVs or cover letters?</span>
                     </h1>
                     <p className="text-lg text-slate-600">Explore our extensive collection of CV and cover letter examples to find your perfect fit for any industry or job level.</p>
                 </div>

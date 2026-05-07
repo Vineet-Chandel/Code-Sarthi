@@ -1,7 +1,8 @@
 import React from 'react';
+import { CheckCircle } from 'lucide-react';
 import {
     Mail, Phone, Globe, Linkedin, Github, ExternalLink,
-    Code, Terminal, Award, BookOpen, CheckCircle, MapPin, Briefcase
+    Code, Terminal, Award, BookOpen, MapPin, Briefcase
 } from 'lucide-react';
 
 const AmanGuptaDynamicResume = ({ data, scale = 1 }) => {
@@ -45,7 +46,7 @@ const AmanGuptaDynamicResume = ({ data, scale = 1 }) => {
                                 <Github size={13} color="#06b6d4" /> {(github || '').split('/').pop() || "Vinayak-Dubey"}
                             </div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                                <MapPin size={13} color="#06b6d4" /> {location + " | " + pincode || "Kanpur, India"}
+                                <MapPin size={13} color="#06b6d4" /> {location + (pincode ? ` | ${pincode} ` : "") || "Kanpur, India"}
                             </div>
                         </div>
                     </div>
@@ -81,7 +82,7 @@ const AmanGuptaDynamicResume = ({ data, scale = 1 }) => {
                                                 <div>
                                                     <h3 style={{ fontWeight: 700, fontSize: 15 }}>{exp.role} <span style={{ color: '#0891b2', fontWeight: 600, fontSize: 13 }}> {exp.employmentType}</span></h3>
                                                     <p style={{ color: '#0891b2', fontWeight: 600, fontSize: 13 }}>
-                                                        {exp.company} <span style={{ color: '#94a3b8', fontWeight: 400 }}>| {exp.location}</span>
+                                                        {exp.company} <span style={{ color: '#94a3b8', fontWeight: 400 }}>|{exp.location}</span>
                                                     </p>
                                                 </div>
                                                 <span style={{ fontSize: 12, fontWeight: 700, color: '#64748b', whiteSpace: 'nowrap' }}>{exp.startDate + " - " + (exp.currentlyWorking ? "Present" : exp.endDate)}</span>
@@ -185,8 +186,18 @@ const AmanGuptaDynamicResume = ({ data, scale = 1 }) => {
                                                     {edu.cgpa ? `CGPA: ${edu.cgpa}` : `${edu.percentage}%`}
                                                 </span>
                                             </p>
-                                            {edu.coursework && (
-                                                <p style={{ fontSize: 10, color: '#94a3b8', marginTop: 4 }}>Focus: {edu.coursework.join(', ')}</p>
+                                            {edu.bullets && (
+                                                <p style={{ fontSize: 10, color: '#94a3b8', marginTop: 4 }}>
+
+                                                    {(edu.bullets || []).map((b, idx) => (
+                                                        <div key={idx} style={{ display: 'flex', gap: 6, fontSize: 12, color: '#475569', alignItems: 'flex-start' }}>
+                                                            <CheckCircle size={13} color="#06b6d4" style={{ flexShrink: 0, marginTop: 2 }} />
+                                                            <span dangerouslySetInnerHTML={{ __html: b }} />
+                                                        </div>
+                                                    ))}
+
+
+                                                </p>
                                             )}
                                         </div>
                                     ))}

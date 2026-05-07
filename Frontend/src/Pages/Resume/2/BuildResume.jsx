@@ -45,7 +45,7 @@ const steps = [
         description: "No more staring at a blank page. Our AI understands your experience and transforms rough notes into polished, impactful bullet points that hiring managers actually read.",
         icon: Sparkles,
         iconBg: "from-blue-400 to-indigo-600",
-        accentColor: "#3b82f6",
+        accentColor: "#183ab7",
         accentLight: "#eff6ff",
         timeLabel: "~3 minutes",
         timeIcon: Zap,
@@ -77,7 +77,7 @@ const steps = [
         description: "Export your polished resume in PDF or Word format in seconds. Multiple versions for different roles? No problem. You're interview-ready in under 5 minutes, guaranteed.",
         icon: Download,
         iconBg: "from-emerald-400 to-teal-600",
-        accentColor: "#10b981",
+        accentColor: "#006044",
         accentLight: "#ecfdf5",
         timeLabel: "~1 minute",
         timeIcon: Star,
@@ -208,13 +208,13 @@ const BuildResume = () => {
                     <h1 className="text-4xl md:text-6xl font-black tracking-tight text-slate-900 mb-4 leading-tight">
                         Here's how we{' '}
                         <span className="relative inline-block">
-                            <span className="text-blue-600">Get You Hired.</span>
+                            <span className="text-accent">Get You Hired.</span>
                             <svg className="absolute -bottom-1 left-0 w-full" height="6" viewBox="0 0 200 6">
-                                <path d="M0 5 Q100 0 200 5" stroke="#3b82f6" strokeWidth="2.5" fill="none" strokeLinecap="round" opacity="0.5" />
+                                <path d="M0 5 Q100 0 200 5" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" opacity="0.5" />
                             </svg>
                         </span>
                     </h1>
-                    <p className="text-slate-500 text-lg max-w-xl mx-auto leading-relaxed">
+                    <p className="text-slate-700 text-lg max-w-xl mx-auto leading-relaxed">
                         Three simple steps. One powerful resume. Your dream job — closer than ever.
                     </p>
                 </div>
@@ -225,12 +225,12 @@ const BuildResume = () => {
                         <React.Fragment key={i}>
                             <div
                                 className="w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs font-black"
-                                style={{ borderColor: step.accentColor, color: step.accentColor, background: step.accentLight }}
+                                style={{ borderColor: "#370a00", color: "#370a00", background: "#fff7ed" }}
                             >{i + 1}</div>
                             {i < steps.length - 1 && (
                                 <div className="flex-1 flex items-center gap-1 px-2">
-                                    <div className="flex-1 h-0.5 bg-gradient-to-r from-amber-300 via-blue-300 to-emerald-300 rounded-full" />
-                                    <ArrowRight className="w-4 h-4 text-slate-300 flex-shrink-0" />
+                                    <div className="flex-1 h-0.5 bg-secondary rounded-full" />
+                                    <ArrowRight className="w-4 h-4 text-slate-700 flex-shrink-0" />
                                 </div>
                             )}
                         </React.Fragment>
@@ -253,9 +253,9 @@ const BuildResume = () => {
                     }}
                 >
                     <div className="flex items-center gap-1.5 bg-white border border-slate-200 rounded-full px-4 py-2 shadow-sm">
-                        <Clock className="w-4 h-4 text-slate-400" />
+                        <Clock className="w-4 h-4 text-slate-700" />
                         <span className="font-semibold text-slate-700">Total time:</span>
-                        <span className="font-black text-blue-600">Under 5 minutes</span>
+                        <span className="font-black text-accent">Under 5 minutes</span>
                     </div>
                     <div className="flex items-center gap-1.5 bg-white border border-slate-200 rounded-full px-4 py-2 shadow-sm">
                         <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
@@ -274,14 +274,14 @@ const BuildResume = () => {
                     }}
                 >
                     <button
-                        className='group relative px-12 py-5 bg-blue-600 hover:bg-blue-700 text-white font-black text-lg rounded-full transition-all duration-300 hover:-translate-y-1 active:scale-95 shadow-lg hover:shadow-blue-300 flex items-center gap-3 overflow-hidden'
+                        className='group relative px-12 py-5 bg-base-200 hover:bg-secondary border border-secondary text-secondary  hover:text-secondary-content  hover:border-base-100   text-lg rounded-full transition-all duration-300 hover:-translate-y-1 active:scale-95  flex items-center gap-3 overflow-hidden'
                         onClick={() => navigate("/app/build-resume/resume-templates")}
                     >
                         <span className="relative z-10">Start Building My Resume</span>
                         <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+
                     </button>
-                    <p className="text-slate-400 text-sm">No credit card required · Free to start</p>
+                    <p className="text-slate-700 text-sm">No credit card required · Free to start</p>
                 </div>
 
             </div>
