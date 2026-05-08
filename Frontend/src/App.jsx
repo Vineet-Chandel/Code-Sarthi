@@ -1,22 +1,23 @@
+//  IMPORTS OF LIBRARIES
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
+//  STORE IMPORT --- consist of all slices of redux store ex. : userSlice, requestedUserSlice, receivedConnection, feedSlice,connectionSlice, chat-user-slice, blockedSlice etc. 
 import appStore from "./utils/appStore";
 
+//  PROTECTED ROUTE
+import ProtectedRoute from "./ProtectedRoute";
+
+// Landing Pages 
+
+/* ===== HOMEPAGE ===== */
 import Hero from "./Main/hero";
 import Body from "./Body";
-import ProtectedRoute from "./ProtectedRoute";
 import TermsAndConditions from "./Main/PagesMain/Sub-Category/Blog-Category/TermsAndConditions";
-/* ===== MAIN PUBLIC PAGES ===== */
-
 import Safety from "./Main/PagesMain/Main-Category/Safety";
 import Blogs from "./Main/PagesMain/Main-Category/Blogs";
 import Support from "./Main/PagesMain/Main-Category/Support";
 import Developers from "./Main/PagesMain/Main-Category/Developers";
-
-
-
-
-
 
 /* =====Sub - CATEGORIES ===== */
 
@@ -29,6 +30,8 @@ import HelpCenter from "./Main/PagesMain/Sub-Category/Support-Category/HelpCente
 import PrivacyCenter from "./Main/PagesMain/Sub-Category/Blog-Category/PrivacyCenter";
 import Feedback from "./Main/PagesMain/Sub-Category/Support-Category/Feedback";
 import SubmitARequest from "./Main/PagesMain/Sub-Category/Support-Category/SubmitARequest";
+
+
 /* ===== AUTH ===== */
 import Login from "./Pages/auth/Login";
 import Signup from "./Pages/auth/Signup";
@@ -73,16 +76,27 @@ import Skills from "./Pages/Resume/2/Skills";
 const App = () => {
   return (
     <Provider store={appStore}>
+
+
       <BrowserRouter>
         <Routes>
 
           {/* 🌐 PUBLIC ROUTES */}
+
+          {/* Route "/" is means the user simple type the domain link example : www.codesarthi.in or the default route of the project */}
+
           <Route path="/" element={<Hero />} />
           <Route path="/developers" element={<Developers />} />
           <Route path="/safety" element={<Safety />} />
           <Route path="/blogs" element={<Blogs />} />
           <Route path="/support" element={<Support />} />
           <Route path="/help-center" element={<HelpCenter />} />
+
+          {/*  <Route path="/feedback" element={<Feedback />} />
+           this lines means connect the route "/feedback" to the "Feedback component"
+           So when i will type "/feedback" in the URL, it will open the Feedback component.*/}
+
+
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/submit-a-request" element={<SubmitARequest />} />
           <Route path="/privacy-center" element={<PrivacyCenter />} />

@@ -170,7 +170,7 @@ const Education = ({ data }) => {
     const [selectedEducationIndex, setSelectedEducationIndex] = useState(null);
     const [selectedEndData, setSelectedEndData] = useState("")
 
-
+    const [editingBulletIndex, setEditingBulletIndex] = useState(null);
 
 
     const [points, setpoints] = useState([]);
@@ -226,6 +226,26 @@ const Education = ({ data }) => {
 
 
     }, [activeInputIndex]);
+
+
+
+    const [enhancerWorking, setEnhancerWorking] = useState("false");
+    const [enhancerData, setEnhancerData] = useState({});
+    const enhancer = async (bullet, index, bulletIndex) => {
+        try {
+            setEnhancerWorking(`${index}-${bulletIndex}`);
+            const response = await axios.post(
+                `${BASE_URL}/improve-pointer`,
+                { bullet }
+            );
+            return response.data.data.bullet;
+        } catch (err) {
+            console.error(err);
+            return null;
+        } finally {
+            setEnhancerWorking(null);
+        }
+    };
 
     return (
         <div className="min-h-[calc(100vh-4rem)] w-screen flex items-start justify-center p-4 md:p-6 bg-base-100">
@@ -579,8 +599,8 @@ const Education = ({ data }) => {
                                         </div>
 
                                         {activeInputIndex === index && (
-                                            <div className="mt-3 animate-in fade-in slide-in-from-top-2 duration-300 ml-5 mb-10 flex">
-                                                <div className='flex flex-col w-[100%]'>
+                                            <div className="mt-3 animate-in fade-in slide-in-from-top-2 duration-300 ml-5 mb-10 flex w-[95%] gap-2">
+                                                <div className='flex flex-col flex-1'>
                                                     <label className="block text-[15px] font-bold uppercase tracking-wider text-gray-700 mb-1 ml-1">
                                                         Add Bullet Point
                                                     </label>
@@ -591,32 +611,53 @@ const Education = ({ data }) => {
                                                         value={bulletInput}
                                                         placeholder="e.g. Led a team of 5 developers..."
                                                         onChange={(e) => setBulletInput(e.target.value)}
-                                                        className="w-[90%] rounded-xl border border-slate-900 bg-white px-4 py-2.5 text-sm 
-            text-gray-700 shadow-sm transition-all placeholder:text-gray-700
-            focus:border-secondary focus:ring-2 focus:ring-secondary focus:outline-none"
+                                                        // Add Enter Key Support
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'Enter') {
+                                                                e.preventDefault();
+                                                                handleAddBullet();
+                                                            }
+                                                        }}
+                                                        className="w-full rounded-xl border border-slate-900 bg-white px-4 py-2.5 text-sm 
+                       text-gray-700 shadow-sm transition-all placeholder:text-gray-400
+                       focus:border-secondary focus:ring-2 focus:ring-secondary focus:outline-none"
                                                     />
                                                 </div>
 
+
                                                 <button
-                                                    className="bg-secondary border border-secondary hover:bg-base-100 text-base-100 hover:text-secondary px-3 py-2 rounded-xl mt-3 flex justify-center items-center gap-2 hover:scale-105 transition-all duration-300 ease-in-out group"
+                                                    type="button"
+                                                    className="bg-secondary border border-secondary hover:bg-base-100 text-base-100 hover:text-secondary 
+                   px-5 py-2.5 rounded-xl flex justify-center items-center gap-2 
+                   hover:scale-105 transition-all duration-300 ease-in-out group"
                                                     onClick={() => {
                                                         if (!bulletInput.trim()) return;
 
-                                                        setEducation(prev => {
-                                                            if (!prev[index]) return prev;
-                                                            if ((prev[index].bullets || []).includes(bulletInput)) return prev;
+                                                        setEducation(prev =>
+                                                            prev.map((exp, i) => {
+                                                                if (i !== index) return exp;
 
-                                                            return prev.map((exp, i) =>
-                                                                i === index
-                                                                    ? { ...exp, bullets: [...(exp.bullets || []), bulletInput] }
-                                                                    : exp
-                                                            );
-                                                        });
+                                                                const updatedBullets = [...exp.bullets];
 
-                                                        setBulletInput(""); // clear input after add
+                                                                if (editingBulletIndex !== null) {
+                                                                    updatedBullets[editingBulletIndex] = bulletInput;
+                                                                } else {
+                                                                    updatedBullets.push(bulletInput);
+                                                                }
+
+                                                                return {
+                                                                    ...exp,
+                                                                    bullets: updatedBullets
+                                                                };
+                                                            })
+                                                        );
+
+                                                        setBulletInput("");
+                                                        setEditingBulletIndex(null);
+                                                        setActiveInputIndex(null);
                                                     }}
                                                 >
-                                                    ADD
+                                                    {editingBulletIndex !== null ? "UPDATE" : "ADD"}
                                                 </button>
                                             </div>
                                         )}
@@ -651,21 +692,64 @@ const Education = ({ data }) => {
                                                         </div>
                                                         <div className='rounded-full border-2 border-secondary p-2 h-fit flex justify-center items-center bg-base-100'
                                                             onClick={(e) => {
-                                                                e.stopPropagation(); setActiveInputIndex(index); setBulletInput(point);
-                                                                setEducation(prev =>
-                                                                    prev.map((edu, i) =>
-                                                                        i === index
-                                                                            ? {
-                                                                                ...edu,
-                                                                                bullets: edu.bullets.filter((_, j) => j !== bulletIndex)
-                                                                            }
-                                                                            : edu
-                                                                    )
-                                                                );
+                                                                e.stopPropagation();
+
+                                                                setActiveInputIndex(index);
+                                                                setEditingBulletIndex(bulletIndex);
+                                                                setBulletInput(point);
                                                             }}
                                                         >
                                                             <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 48 48">
                                                                 <path fill="currentColor" d="M32.206 6.025a6.907 6.907 0 1 1 9.768 9.767L39.77 18L30 8.23zM28.233 10L8.038 30.197a6 6 0 0 0-1.572 2.758L4.039 42.44a1.25 1.25 0 0 0 1.52 1.52l9.487-2.424a6 6 0 0 0 2.76-1.572l20.195-20.198z"></path>
+                                                            </svg>
+                                                        </div>
+                                                        <div className='rounded-full border-2 border-secondary p-2 h-fit flex justify-center items-center bg-base-100'
+                                                            onClick={async (e) => {
+                                                                e.stopPropagation();
+
+                                                                const improvedBullet = await enhancer(
+                                                                    point,
+                                                                    index,
+                                                                    bulletIndex
+                                                                );
+
+                                                                if (!improvedBullet) {
+                                                                    addToast({
+                                                                        type: "error",
+                                                                        title: "Enhancement Failed",
+                                                                        message: "Could not improve bullet point."
+                                                                    });
+                                                                    return;
+                                                                }
+
+                                                                setEducation(prev =>
+                                                                    prev.map((exp, i) =>
+                                                                        i === index
+                                                                            ? {
+                                                                                ...exp,
+                                                                                bullets: exp.bullets.map((b, j) =>
+                                                                                    j === bulletIndex ? improvedBullet : b
+                                                                                )
+                                                                            }
+                                                                            : exp
+                                                                    )
+                                                                );
+
+                                                                addToast({
+                                                                    type: "success",
+                                                                    title: "Bullet Enhanced",
+                                                                    message: "AI improved your resume bullet."
+                                                                });
+                                                            }}
+                                                        >
+                                                            {enhancerWorking === `${index}-${bulletIndex}` && < span className="loading loading-spinner">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
+                                                                    <path fill="#ee5252" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z">
+                                                                        <animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform>
+                                                                    </path>
+                                                                </svg></span>}
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
+                                                                <path fill="#884f06" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
                                                             </svg>
                                                         </div>
                                                     </div>
@@ -718,79 +802,38 @@ const Education = ({ data }) => {
                             {/* ── PREVIEW tab ── */}
                             {activeTab === "preview" && (
 
-                                <div>
+                                <div
+                                    className="
+                            relative
+                            flex
+                            items-start
+                            justify-center
+                            rounded-xl
+                            overflow-hidden
+                            bg-white
+                            shadow-2xl
+                            border
+                            border-slate-200
+                            transition-all
+                            duration-500
+py-1
+                            "
+                                >
+                                    {/* Resume Scaling Wrapper */}
                                     <div
-
-                                        className="group relative flex flex-col rounded-2xl overflow-hidden cursor-pointer"
-                                        style={{
-                                            opacity: isVisible ? 1 : 0,
-                                            transform: isVisible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.97)",
-                                            background: "#fff",
-                                        }}
-
+                                        className="
+                origin-top
+                scale-[0.61]
+                sm:scale-[0.64]
+                md:scale-[0.69]
+                lg:scale-[0.74]
+                xl:scale-[0.80]
+                transition-transform
+                duration-500
+            "
                                     >
-                                        {/* Badge */}
-                                        <div
-                                            className="absolute top-3 left-3 z-10 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest text-white"
-                                            style={{ background: "#000000", letterSpacing: "0.12em" }}
-                                        >
-                                            {/* {item.tag} */} tag of the temp
-                                        </div>
-
-
-
-                                        {/* Preview Area */}
-                                        <div className="relative w-full overflow-hidden bg-slate-50" style={{ aspectRatio: "1/1.41" }}>
-                                            <div
-                                                className="absolute top-0 left-0 w-[900px] origin-top-left pointer-events-none select-none scale-[1.05] lg:scale-[0.56]"
-                                                style={{
-
-                                                    transition: "transform 0.5s cubic-bezier(.4,0,.2,1)",
-                                                }}
-                                            >
-                                                <Temp1 data={resumeData} />
-                                            </div>
-
-                                            {/* Hover CTA overlay */}
-                                            <div
-                                                className="absolute inset-0 flex flex-col items-center justify-center gap-3"
-                                                style={{
-                                                    background: `linear-gradient(160deg, ${"#000000"}22 0%, ${"#000000"}55 100%)`,
-
-                                                    opacity: hovered ? 1 : 0,
-                                                    transition: "opacity 0.3s ease",
-                                                }}
-                                            >
-
-
-                                            </div>
-                                        </div>
-
-                                        {/* Footer */}
-                                        <div className="px-4 py-3 bg-white flex justify-between items-center gap-2">
-                                            <div>
-                                                {/* <h3 className="font-bold text-slate-800 text-sm truncate">{item.name}</h3>
-                                                <p className="text-[10px] text-slate-400 font-medium mt-0.5">Template #{item.id}</p> */}
-                                            </div>
-                                            <span className="shrink-0 text-[9px] bg-emerald-50 text-emerald-600 border border-emerald-200 px-2 py-1 rounded-lg uppercase font-black tracking-wider">
-                                                ATS
-                                            </span>
-                                        </div>
-
-                                        {/* Bottom accent bar */}
-                                        <div
-                                            className="h-0.5 w-full"
-                                            style={{
-                                                background: `linear-gradient(90deg, ${"#000000"}, transparent)`,
-                                                opacity: hovered ? 1 : 0,
-                                                transition: "opacity 0.3s",
-                                            }}
-                                        />
+                                        <Temp1 data={resumeData} />
                                     </div>
-
-
-
-
                                 </div>
                             )}
 

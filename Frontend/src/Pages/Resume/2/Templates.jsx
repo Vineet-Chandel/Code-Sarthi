@@ -426,15 +426,12 @@ const Templates = () => {
                         {templateMeta.length}+ Premium Templates · ATS-Friendly
                     </div>
 
-                    <h1 className="text-5xl md:text-7xl font-black tracking-tight text-black mb-5 leading-[1.05]">
+                    <h1 className="text-5xl  md:text-7xl font-black tracking-tight text-black mb-5 leading-[1.05]">
                         Your Resume,{" "}
-                        <span style={{
-                            background: "linear-gradient(90deg, #60a5fa, #a78bfa, #f472b6)",
-                            WebkitBackgroundClip: "text",
-                            WebkitTextFillColor: "transparent",
-                        }}>
-                            Elevated.
+                        <span className='text-accent'>
+                            Elevated
                         </span>
+                        .
                     </h1>
 
                     <p className="text-lg text-black/50 max-w-xl mx-auto leading-relaxed">

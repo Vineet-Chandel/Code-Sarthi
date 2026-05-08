@@ -344,80 +344,38 @@ const StartHeader = ({ data }) => {
 
                             {/* ── PREVIEW tab ── */}
                             {activeTab === "preview" && (
-
-                                <div>
+                                <div
+                                    className="
+                            relative
+                            flex
+                            items-start
+                            justify-center
+                            rounded-xl
+                            overflow-hidden
+                            bg-white
+                            shadow-2xl
+                            border
+                            border-slate-200
+                            transition-all
+                            duration-500
+py-1
+                            "
+                                >
+                                    {/* Resume Scaling Wrapper */}
                                     <div
-
-                                        className="group relative flex flex-col rounded-2xl overflow-hidden cursor-pointer"
-                                        style={{
-                                            opacity: isVisible ? 1 : 0,
-                                            transform: isVisible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.97)",
-                                            background: "#fff",
-                                        }}
-
+                                        className="
+                origin-top
+                scale-[0.61]
+                sm:scale-[0.64]
+                md:scale-[0.69]
+                lg:scale-[0.74]
+                xl:scale-[0.80]
+                transition-transform
+                duration-500
+            "
                                     >
-                                        {/* Badge */}
-                                        <div
-                                            className="absolute top-3 left-3 z-10 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest text-white"
-                                            style={{ background: "#000000", letterSpacing: "0.12em" }}
-                                        >
-                                            {/* {item.tag} */} tag of the temp
-                                        </div>
-
-
-
-                                        {/* Preview Area */}
-                                        <div className="relative w-full overflow-hidden bg-slate-50" style={{ aspectRatio: "1/1.41" }}>
-                                            <div
-                                                className="absolute top-0 left-0 w-[900px] origin-top-left pointer-events-none select-none scale-[1.05] lg:scale-[0.56]"
-                                                style={{
-
-                                                    transition: "transform 0.5s cubic-bezier(.4,0,.2,1)",
-                                                }}
-                                            >
-                                                <Temp1 data={resumeData} />
-                                            </div>
-
-                                            {/* Hover CTA overlay */}
-                                            <div
-                                                className="absolute inset-0 flex flex-col items-center justify-center gap-3"
-                                                style={{
-                                                    background: `linear-gradient(160deg, ${"#000000"}22 0%, ${"#000000"}55 100%)`,
-
-                                                    opacity: hovered ? 1 : 0,
-                                                    transition: "opacity 0.3s ease",
-                                                }}
-                                            >
-
-
-                                            </div>
-                                        </div>
-
-                                        {/* Footer */}
-                                        <div className="px-4 py-3 bg-white flex justify-between items-center gap-2">
-                                            <div>
-                                                {/* <h3 className="font-bold text-slate-800 text-sm truncate">{item.name}</h3>
-                                                <p className="text-[10px] text-slate-400 font-medium mt-0.5">Template #{item.id}</p> */}
-                                            </div>
-                                            <span className="shrink-0 text-[9px] bg-emerald-50 text-emerald-600 border border-emerald-200 px-2 py-1 rounded-lg uppercase font-black tracking-wider">
-                                                ATS
-                                            </span>
-                                        </div>
-
-                                        {/* Bottom accent bar */}
-                                        <div
-                                            className="h-0.5 w-full"
-                                            style={{
-                                                background: `linear-gradient(90deg, ${"#000000"}, transparent)`,
-                                                opacity: hovered ? 1 : 0,
-                                                transition: "opacity 0.3s",
-                                            }}
-                                        />
+                                        <Temp1 data={resumeData} />
                                     </div>
-
-
-
-
                                 </div>
                             )}
 

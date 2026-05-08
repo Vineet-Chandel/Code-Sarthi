@@ -7,6 +7,37 @@ const client = new OpenAI({
     baseURL: "https://api.groq.com/openai/v1",
 });
 
+
+const SYSTEM_PROMPT = `
+You are an elite FAANG-level resume strategist, ATS optimization expert, recruiter, and hiring manager.
+
+Your responsibility is to generate world-class resume bullet points that:
+- maximize ATS match score
+- sound achievement-oriented
+- include measurable impact
+- use industry-standard terminology
+- remain concise and believable
+- avoid fluff and generic language
+
+WRITING STYLE:
+- Results-driven
+- Professional
+- Technical
+- Recruiter-friendly
+- Quantified impact whenever possible
+
+STRICT OUTPUT RULES:
+1. Return ONLY valid JSON.
+2. Never include markdown.
+3. Never include explanations.
+4. Every bullet must be unique.
+5. Every bullet must start with a strong action verb.
+6. Every bullet must feel realistic and human-written.
+7. Avoid repeated verbs.
+8. Avoid buzzword stuffing.
+9. Keep bullets ATS-optimized.
+10. Output must be parseable JSON only.
+`;
 aiWorkRouter.post("/generate-exp-pointer", async (req, res) => {
     const { jobRole, company, employmentType } = req.body;
     console.log(process.env.XAI_API_KEY);
@@ -20,7 +51,7 @@ aiWorkRouter.post("/generate-exp-pointer", async (req, res) => {
 
     try {
         const prompt = `
-You are an expert resume writer and ATS optimization specialist.
+${SYSTEM_PROMPT}
 
 Context:
 - Role: ${jobRole}
@@ -155,6 +186,77 @@ Return ONLY valid JSON:
         res.status(200).json({
             success: true,
             data: parsedData.pointers,
+        });
+
+    } catch (error) {
+        console.error("Grok API Error:", error);
+        res.status(500).json({
+            success: false,
+            error: "AI generation failed",
+            message: error.message
+        });
+    }
+});
+
+aiWorkRouter.post("/improve-pointer", async (req, res) => {
+    const { bullet } = req.body;
+    console.log(process.env.XAI_API_KEY);
+    // Validation
+    if (!bullet) {
+        return res.status(400).json({
+            error: "Incomplete Data",
+            message: "bullet is required.",
+        });
+    }
+
+    try {
+        const prompt = `
+Original Resume Bullet:
+"${bullet}"
+
+TASK:
+Rewrite this into a world-class ATS-optimized resume bullet point.
+
+RULES:
+- preserve original meaning
+- improve clarity and professionalism
+- use a stronger action verb
+- add measurable impact if naturally possible
+- improve recruiter appeal
+- under 18 words
+- concise and technical
+- realistic, not exaggerated
+- avoid buzzwords and fluff
+
+OUTPUT:
+{
+  "pointer": {
+    "bullet": "..."
+  }
+}
+`;
+        const completion = await client.chat.completions.create({
+            model: "openai/gpt-oss-20b",
+            messages: [
+                { role: "system", content: "You generate strict JSON only." },
+                { role: "user", content: prompt }
+            ],
+            temperature: 0.7,
+        });
+
+        const rawText = completion.choices[0].message.content;
+
+        // Safe JSON parsing
+        let parsedData;
+        try {
+            parsedData = JSON.parse(rawText);
+        } catch (err) {
+            throw new Error("Invalid JSON response from Grok");
+        }
+
+        res.status(200).json({
+            success: true,
+            data: parsedData.pointer
         });
 
     } catch (error) {

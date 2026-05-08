@@ -15,8 +15,8 @@ const AmanGuptaDynamicResume = ({ data, scale = 1 }) => {
     } = data;
 
     return (
-        <div className="max-w-5xl mx-auto my-10 bg-white shadow-2xl flex font-sans text-slate-800 border border-slate-100 overflow-hidden">
-            <div className="bg-white shadow-2xl overflow-hidden border border-slate-100 flex flex-col">
+        <div className="max-w-5xl  bg-white shadow-2xl flex font-sans text-slate-800 border border-slate-100 overflow-hidden">
+            <div className="bg-white shadow-2xl overflow-hidden border border-slate-100 flex flex-col ">
 
                 {/* Header */}
                 <header className="bg-slate-900 text-white p-12">

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Layout, Sparkles, Download, CheckCircle2 } from 'lucide-react'; // Optional: icon library
+import CTAcreateResume from './CTAcreateResume';
 const Example = () => {
     return (
         <div className='w-full  bg-base-200  font-sans flex flex-col justify-center items-center'>
@@ -37,9 +38,7 @@ const Example = () => {
 
                 {/* CTA Section */}
                 <div className='mt-20 flex flex-col items-center gap-6 mb-20'>
-                    <button className='px-10 py-5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xl rounded-full transition-all hover:-translate-y-1 active:scale-95'>
-                        Create my resume now
-                    </button>
+                    <CTAcreateResume />
 
                 </div>
             </div>
@@ -70,9 +69,7 @@ const Example = () => {
 
                 {/* CTA Section */}
                 <div className='mt-20 flex flex-col items-center gap-6 mb-20'>
-                    <button className='px-10 py-5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xl rounded-full transition-all hover:-translate-y-1 active:scale-95'>
-                        Create my resume now
-                    </button>
+                    <CTAcreateResume />
 
                 </div>
             </div>

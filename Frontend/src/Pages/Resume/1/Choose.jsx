@@ -5,6 +5,7 @@ import Temp1 from '../3/Temp1';
 import Temp2 from '../3/Temp2';
 import Temp3 from '../3/Temp3';
 import Temp4 from '../3/Temp4';
+import CTAcreateResume from './CTAcreateResume';
 
 
 const Choose = () => {
@@ -182,7 +183,7 @@ const Choose = () => {
                 {/* Header Section */}
                 <div className="max-w-4xl mx-auto text-center mb-16">
                     <h1 className="text-3xl md:text-5xl font-black tracking-tight  text-slate-900 mb-4">
-                        Choose Your <span className="text-blue-600 ">Professional{" "}</span>Template.
+                        Choose Your <span className="text-accent ">Professional{" "}</span>Template.
                     </h1>
                     <p className="text-lg text-slate-600 mb-2 max-w-[70%] mx-auto">Select one of the ATS-friendly <span className='font-extrabold text-info underline underline-offset-8 decoration-primary decoration-2 cursor-pointer' onClick={() => Navigate("/app/resume-templates")}>resume templates</span>  below. Fill it in with AI-generated text inspired by your work experience.</p>
                     <p className="text-lg text-slate-600 mb-2 max-w-[70%] mx-auto">These professional templates have been tested in the real world and proven to bypass HR screening software. Rest easy knowing that your resume will land in human hands.</p>
@@ -290,9 +291,7 @@ const Choose = () => {
 
                 {/* CTA Section */}
                 <div className='mt-20 flex flex-col items-center gap-6 mb-20'>
-                    <button className='px-10 py-5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xl rounded-full transition-all hover:-translate-y-1 active:scale-95'>
-                        Create my resume now
-                    </button>
+                    <CTAcreateResume />
 
                 </div>
             </div>

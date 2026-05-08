@@ -1,5 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import CTAcreateResume from './CTAcreateResume'
 const Landing = () => {
     const Navigate = useNavigate()
     return (
@@ -27,14 +28,7 @@ const Landing = () => {
                         and apply with confidence from any device. Millions trust it—because it works. ''
                     </p>
 
-                    <div className='flex gap-5 mt-10'>
-                        <button className='text-center h-15 text-lg w-45 font-extrabold transition duration-200 hover:scale-110 bg-base-300 rounded-3xl hover:bg-secondary hover:text-secondary-content p-5  flex justify-center items-center '>
-                            Import your resume
-                        </button>
-                        <button className='text-center h-15 text-lg w-45 font-extrabold transition duration-200 hover:scale-110 bg-base-300 rounded-3xl hover:bg-secondary hover:text-secondary-content p-5  flex justify-center items-center ' onClick={() => Navigate('/app/build-resume')}>
-                            Create my resume
-                        </button>
-                    </div>
+                    <CTAcreateResume />
                     <div className='mb-20'>
                         <div className='text-start h-15 text-lg w-[700px] font-extrabold transition duration-200  rounded-3xl bg-primary p-5 text-primary-content flex  flex-col justify-cneter items-start  mt-10' >
 

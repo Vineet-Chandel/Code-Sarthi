@@ -1,6 +1,7 @@
 import React from 'react';
 import { Layout, Sparkles, Download, CheckCircle2 } from 'lucide-react'; // Optional: icon library
 import { useNavigate } from 'react-router-dom';
+import CTAcreateResume from './CTAcreateResume';
 
 const ResumeGetHired = () => {
     const Navigate = useNavigate();
@@ -12,7 +13,7 @@ const ResumeGetHired = () => {
                 {/* Header Section */}
                 <div className="max-w-4xl mx-auto text-center mb-16">
                     <h1 className="text-3xl md:text-5xl font-black tracking-tight text-slate-900 mb-4">
-                        Make a Resume That Gets You  <span className="text-blue-600">Hired</span>.
+                        Make a Resume That Gets You  <span className="text-accent">Hired</span>.
                     </h1>
 
                 </div>
@@ -62,9 +63,7 @@ const ResumeGetHired = () => {
 
                 {/* CTA Section */}
                 <div className='mt-20 flex flex-col items-center gap-6 mb-20'>
-                    <button className='px-10 py-5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xl rounded-full transition-all hover:-translate-y-1 active:scale-95' onClick={() => "/app/build-resume"}>
-                        Create my resume now
-                    </button>
+                    <CTAcreateResume />
 
                 </div>
             </div>
