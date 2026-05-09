@@ -147,22 +147,29 @@ const AmanGuptaDynamicResume = ({ data, scale = 1 }) => {
                     <aside style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
 
                         {/* Skills */}
-                        {skills && (
-                            <section style={{ background: '#f8fafc', padding: 20, borderRadius: 16, border: '1px solid #f1f5f9' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
-                                    <Code size={17} />
-                                    <h2 style={{ fontSize: 15, fontWeight: 700 }}>Technical Stack</h2>
-                                </div>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                                    {Object.entries(skills).map(([cat, list]) => (
-                                        <div key={cat}>
-                                            <h4 style={{ fontSize: 9, fontWeight: 900, textTransform: 'uppercase', color: '#94a3b8', marginBottom: 6, letterSpacing: '0.1em' }}>{cat}</h4>
-                                            <p style={{ fontSize: 11, color: '#475569', lineHeight: 1.6, fontWeight: 500 }}>{list}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </section>
-                        )}
+                        <div
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: 16
+                            }}
+                        >
+                            {(Array.isArray(skills) ? skills : Object.values(skills)).map(
+                                (skill, index) => (
+                                    <div key={index}>
+                                        <span style={{ fontWeight: 700 }}>
+                                            {skill.skillCategory}:
+                                        </span>{" "}
+
+                                        <span>
+                                            {Array.isArray(skill.skills)
+                                                ? skill.skills.join(", ")
+                                                : skill.skills}
+                                        </span>
+                                    </div>
+                                )
+                            )}
+                        </div>
                         {(!skills || Object.keys(skills).length === 0) && (
                             <p style={{ color: '#475569', fontStyle: 'italic' }}>No skills added yet.</p>
                         )}
@@ -228,7 +235,7 @@ const AmanGuptaDynamicResume = ({ data, scale = 1 }) => {
                                     ))}
                                 </ul>
                             )}
-                            {!achievements.length > 0 && !certifications.length > 0 && (
+                            {achievements.length === 0 && certifications.length === 0 && (
                                 <p style={{ color: '#475569', fontStyle: 'italic' }}>No recognition added yet.</p>
                             )}
                         </section>

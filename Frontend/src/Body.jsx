@@ -6,6 +6,9 @@ import { addUser } from "./utils/userSlice";
 import { useEffect, useState } from "react";
 import BASE_URL from "./Pages/auth/baseURL";
 import { useNavigate } from "react-router-dom";
+import InternetPopup from "./ErrorSaver/InternetPopup";
+
+
 const Body = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate(); // ✅ rename
@@ -122,7 +125,10 @@ const Body = () => {
 
     return (
         <div data-theme="caramellatte" className="bg-base-200">
+            <InternetPopup />
+
             <NavBar />
+
             <Outlet />
         </div>
     );

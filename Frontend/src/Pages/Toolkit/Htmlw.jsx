@@ -1,3331 +1,798 @@
-import { useGSAP } from '@gsap/react'
-import gsap from 'gsap'
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import React, { use } from "react";
+
+/* ─────────────────────────────────────────────
+   Reusable primitives
+───────────────────────────────────────────── */
+
+const SEND_ICON = (
+    <svg className="rotate-45" width="12" height="12" viewBox="0 0 14 14" fill="none">
+        <path
+            d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z"
+            fill="currentColor"
+        />
+    </svg>
+);
+
+function Tag({ children, variant = "pink" }) {
+    const variants = {
+        pink: "from-red-300 via-rose-300 to-pink-300 text-black",
+        blue: "from-blue-300 via-sky-300 to-cyan-300 text-black",
+    };
+    return (
+        <span
+            className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold bg-gradient-to-r ${variants[variant]} shrink-0`}
+        >
+            {SEND_ICON}
+            {children}
+        </span>
+    );
+}
+
+function MdnLink({ href, children = "MDN Reference" }) {
+    return (
+        <a
+            href={href}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold bg-gradient-to-r from-blue-300 via-sky-300 to-cyan-300 text-black hover:brightness-110 transition-all"
+        >
+            {SEND_ICON}
+            {children}
+        </a>
+    );
+}
+
+function Card({ children, className = "" }) {
+    return (
+        <div className={`bg-black rounded-2xl p-5 text-white ${className}`}>
+            {children}
+        </div>
+    );
+}
+
+function CodeBlock({ children }) {
+    return (
+        <div className="bg-[#111] border border-white/10 rounded-xl p-4 font-mono text-sm leading-relaxed">
+            {children}
+        </div>
+    );
+}
+
+function AttrTable({ rows }) {
+    return (
+        <div className="bg-[#111] border border-white/10 rounded-xl font-mono text-sm overflow-hidden">
+            {rows.map(([label, desc], i) => (
+                <div key={i}>
+                    <div className="flex gap-4 px-4 py-2">
+                        <span className="w-2/5 text-orange-400 shrink-0">{label}</span>
+                        <span className="text-gray-300 text-xs leading-snug">{desc}</span>
+                    </div>
+                    {i < rows.length - 1 && <div className="border-t border-white/10" />}
+                </div>
+            ))}
+        </div>
+    );
+}
+
+function SectionTitle({ children, className = "" }) {
+    return (
+        <h2 className={`w-full text-center font-head font-extrabold text-4xl md:text-5xl mt-14 mb-6 leading-none tracking-tight ${className}`}>
+            {children}
+        </h2>
+    );
+}
+
+/* HTML syntax helpers */
+const T = ({ c, children }) => <span className={c}>{children}</span>;
+const Kw = ({ children }) => <T c="text-orange-400">{children}</T>; // tag
+const At = ({ children }) => <T c="text-emerald-400">{children}</T>; // attr
+const Vl = ({ children }) => <T c="text-amber-300">"{children}"</T>; // value
+const Tx = ({ children }) => <T c="text-gray-200">{children}</T>; // text
+const Cm = ({ children }) => <T c="text-gray-500">{children}</T>; // comment
+const Sk = ({ children }) => <T c="text-sky-300">{children}</T>; // highlight text
+const W = ({ children }) => <span className="text-white">{children}</span>;
+
+/* open/close angle brackets inline */
+const OB = () => <W>&lt;</W>;
+const CB = () => <W>&gt;</W>;
+
+/* ─────────────────────────────────────────────
+   MAIN COMPONENT
+───────────────────────────────────────────── */
 
 const Htmlw = () => {
     useGSAP(() => {
         gsap.registerPlugin(ScrollTrigger);
-        gsap.from(".HEAD1", {
-            duration: 1.6,
-            y: 80,
-            rotationX: 60,
-            scale: 0.95,
-            opacity: 0,
-            ease: "power4.out",
-            transformOrigin: "50% 50%",
-            perspective: 1000,
-        });
-        gsap.from(".SUBHEAD1", {
-            duration: 1.6,
-            y: 80,
-            rotationX: 60,
-            scale: 0.95,
-            opacity: 0,
-            ease: "power4.out",
-        });
-        gsap.from(".HEAD2 ", {
-            duration: 1.6,
-            y: 80,
-            rotationX: 60,
-            scale: 0.95,
-            opacity: 0,
-            ease: "power4.out",
-            transformOrigin: "50% 50%",
-            perspective: 1000, // 🔥 IMPORTANT
 
-            scrollTrigger: {
-                trigger: ".HEAD2",
-                start: "top 90%",
+        const fadeUp = (cls, trigger) => {
+            gsap.from(cls, {
+                duration: 1.4,
+                y: 60,
+                rotationX: 50,
+                scale: 0.96,
+                opacity: 0,
+                ease: "power4.out",
+                transformOrigin: "50% 50%",
+                perspective: 900,
+                ...(trigger ? { scrollTrigger: { trigger, start: "top 88%" } } : {}),
+            });
+        };
 
-            },
-        });
-        gsap.from(".HEAD3 ", {
-            duration: 1.6,
-            y: 80,
-            rotationX: 60,
-            scale: 0.95,
-            opacity: 0,
-            ease: "power4.out",
-            transformOrigin: "50% 50%",
-            perspective: 1000, // 🔥 IMPORTANT
-
-            scrollTrigger: {
-                trigger: ".HEAD3",
-                start: "top 90%",
-
-            },
-        });
-        gsap.from(".HEAD4 ", {
-            duration: 1.6,
-            y: 80,
-            rotationX: 60,
-            scale: 0.95,
-            opacity: 0,
-            ease: "power4.out",
-            transformOrigin: "50% 50%",
-            perspective: 1000, // 🔥 IMPORTANT
-
-            scrollTrigger: {
-                trigger: ".HEAD4",
-                start: "top 90%",
-
-            },
-        });
-        gsap.from(".HEAD5 ", {
-            duration: 1.6,
-            y: 80,
-            rotationX: 60,
-            scale: 0.95,
-            opacity: 0,
-            ease: "power4.out",
-            transformOrigin: "50% 50%",
-            perspective: 1000, // 🔥 IMPORTANT
-
-            scrollTrigger: {
-                trigger: ".HEAD5",
-                start: "top 90%",
-
-            },
-        });
-        gsap.from(".HEAD6 ", {
-            duration: 1.6,
-            y: 80,
-            rotationX: 60,
-            scale: 0.95,
-            opacity: 0,
-            ease: "power4.out",
-            transformOrigin: "50% 50%",
-            perspective: 1000, // 🔥 IMPORTANT
-
-            scrollTrigger: {
-                trigger: ".HEAD6",
-                start: "top 90%",
-
-            },
-        });
+        fadeUp(".HEAD1");
+        fadeUp(".SUBHEAD1");
+        [".HEAD2", ".HEAD3", ".HEAD4", ".HEAD5", ".HEAD6"].forEach((cls) =>
+            fadeUp(cls, cls)
+        );
     });
 
     return (
-        <div className="w-screen bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300">
-            <div className="bg-gradient-to-br from-[#d9d7f3] via-[#b9e3f6] to-[#6ec6e8] p-10 border border-l-black border-r-black border-b-black rounded-b-[50px]">
-                <div className="w-full flex justify-center items-center font-head font-extrabold text-[5rem] leading-none HEAD1">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 32 32"><path fill="#e65100" d="m4 4l2 22l10 2l10-2l2-22Zm19.72 7H11.28l.29 3h11.86l-.802 9.335L15.99 25l-6.635-1.646L8.93 19h3.02l.19 2l3.86.77l3.84-.77l.29-4H8.84L8 8h16Z" /></svg> HTML TOOLKIT
+        <div className="w-screen bg-gradient-to-br from-green-200 via-emerald-200 to-teal-200 min-h-screen">
+
+            {/* ── Hero ── */}
+            <div className="bg-gradient-to-br from-[#d9d7f3] via-[#b9e3f6] to-[#6ec6e8] px-10 pt-14 pb-10 border-b-2 border-black/20 rounded-b-[40px] shadow-xl">
+                <div className="flex justify-center items-center gap-5 HEAD1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 32 32">
+                        <path fill="#e65100" d="m4 4l2 22l10 2l10-2l2-22Zm19.72 7H11.28l.29 3h11.86l-.802 9.335L15.99 25l-6.635-1.646L8.93 19h3.02l.19 2l3.86.77l3.84-.77l.29-4H8.84L8 8h16Z" />
+                    </svg>
+                    <h1 className="font-head font-extrabold text-5xl md:text-7xl leading-none tracking-tight">
+                        HTML TOOLKIT
+                    </h1>
                 </div>
-                <p className="SUBHEAD1 text-xl font-circular-web text-center">
-                    This HTML quick reference cheat sheet lists the common HTML and HTML5 tags in readable layout.
+                <p className="SUBHEAD1 text-center text-base md:text-lg text-black/70 mt-4 max-w-xl mx-auto font-circular-web">
+                    A quick reference cheat sheet for common HTML &amp; HTML5 tags — readable, practical, interactive.
                 </p>
             </div>
-            {/* first */}
-            <div className="w-full flex justify-center items-center font-head font-extrabold text-[3rem] mt-[50px] mb-[25px] leading-none HEAD1">
-                BASIC HTML STRUCTURE
-            </div>
-            <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
-                <div className=" bg-black p-5  rounded-3xl w-2/3 text-white flex flex-col gap-5 justify-center">
-                    <div className='h-[40px] w-1/4 font-bold text-sm relative bottom-3 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                        <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0_0_3844)">
-                                <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                            </g>
-                            <defs>
-                                <clipPath id="clip0_0_3844">
-                                    <rect width="14" height="14" fill="white" />
-                                </clipPath>
-                            </defs>
-                        </svg>
-                        Hello.html
-                    </div>
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
-                        {/* DOCTYPE */}
-                        <span className="text-sky-400"><p className="text-white inline-flex">&lt;</p>!doctype</span>{" "}
-                        <span className="text-sky-400">html</span>
-                        <span className="text-sky-400"><p className="text-white inline-flex">&gt;</p></span>
-                        <br />
 
-                        {/* html */}
-                        <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>html</span>{" "}
-                        <span className="text-emerald-400">lang</span>
-                        <span className="text-white">=</span>
-                        <span className="text-amber-300">"en"</span>
-                        <span className="text-orange-400"><p className="text-white inline-flex">&gt;</p></span>
-                        <br />
+            {/* ══════════════════════════════════════
+          SECTION 1 – BASIC STRUCTURE
+      ══════════════════════════════════════ */}
+            <SectionTitle className="HEAD1">BASIC HTML STRUCTURE</SectionTitle>
 
-                        <span className="pl-4 text-orange-400"><p className="text-white inline-flex">&lt;</p>head<p className="text-white inline-flex">&gt;</p></span>
-                        <br />
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 px-5 pb-4">
 
-                        <span className="pl-8 text-orange-400"><p className="text-white inline-flex">&lt;</p>meta</span>{" "}
-                        <span className="text-emerald-400">charset</span>
-                        <span className="text-white">=</span>
-                        <span className="text-amber-300">"UTF-8"</span>{" "}
-                        <span className="text-orange-400">/<p className="text-white inline-flex">&gt;</p></span>
-                        <br />
+                {/* Boilerplate */}
+                <Card className="lg:col-span-2 flex flex-col gap-4">
+                    <Tag>Hello.html — Boilerplate</Tag>
+                    <CodeBlock>
+                        <div><Kw><OB />!doctype</Kw> <Kw>html</Kw><Kw><CB /></Kw></div>
+                        <div><Kw><OB />html</Kw> <At>lang</At><W>=</W><Vl>en</Vl><Kw><CB /></Kw></div>
+                        <div className="pl-4"><Kw><OB />head<CB /></Kw></div>
+                        <div className="pl-8"><Kw><OB />meta</Kw> <At>charset</At><W>=</W><Vl>UTF-8</Vl> <Kw>/<CB /></Kw></div>
+                        <div className="pl-8"><Kw><OB />meta</Kw> <At>name</At><W>=</W><Vl>viewport</Vl> <At>content</At><W>=</W><Vl>width=device-width, initial-scale=1.0</Vl> <Kw>/<CB /></Kw></div>
+                        <div className="pl-8"><Kw><OB />title<CB /></Kw><Tx>HTML5 Boilerplate</Tx><Kw><OB />/title<CB /></Kw></div>
+                        <div className="pl-4"><Kw><OB />/head<CB /></Kw></div>
+                        <div className="pl-4"><Kw><OB />body<CB /></Kw></div>
+                        <div className="pl-8"><Kw><OB />h1<CB /></Kw><Tx>Toolkit for Developers!!</Tx><Kw><OB />/h1<CB /></Kw></div>
+                        <div className="pl-4"><Kw><OB />/body<CB /></Kw></div>
+                        <div><Kw><OB />/html<CB /></Kw></div>
+                    </CodeBlock>
+                </Card>
 
-                        <span className="pl-8 text-orange-400"><p className="text-white inline-flex">&lt;</p>meta</span>{" "}
-                        <span className="text-emerald-400">http-equiv</span>
-                        <span className="text-white">=</span>
-                        <span className="text-amber-300">"X-UA-Compatible"</span>{" "}
-                        <span className="text-emerald-400">content</span>
-                        <span className="text-white">=</span>
-                        <span className="text-amber-300">"IE=edge"</span>{" "}
-                        <span className="text-orange-400">/<p className="text-white inline-flex">&gt;</p></span>
-                        <br />
-
-                        <span className="pl-8 text-orange-400"><p className="text-white inline-flex">&lt;</p>meta</span>{" "}
-                        <span className="text-emerald-400">name</span>
-                        <span className="text-white">=</span>
-                        <span className="text-amber-300">"viewport"</span>{" "}
-                        <span className="text-emerald-400">content</span>
-                        <span className="text-white">=</span>
-                        <span className="text-amber-300">
-                            "width=device-width, initial-scale=1.0"
-                        </span>{" "}
-                        <span className="text-orange-400">/<p className="text-white inline-flex">&gt;</p></span>
-                        <br />
-
-                        <span className="pl-8 text-orange-400"><p className="text-white inline-flex">&lt;</p>title<p className="text-white inline-flex">&gt;</p></span>
-                        <span className="text-white">HTML5 Boilerplate</span>
-                        <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/title<p className="text-white inline-flex">&gt;</p></span>
-                        <br />
-
-                        <span className="pl-4 text-orange-400"><p className="text-white inline-flex">&lt;</p>/head<p className="text-white inline-flex">&gt;</p></span>
-                        <br />
-
-                        <span className="pl-4 text-orange-400"><p className="text-white inline-flex">&lt;</p>body<p className="text-white inline-flex">&gt;</p></span>
-                        <br />
-
-                        <span className="pl-8 text-orange-400"><p className="text-white inline-flex">&lt;</p>h1<p className="text-white inline-flex">&gt;</p></span>
-                        <span className="text-white">
-                            Toolkit for CodeSarthi Developers!!
-                        </span>
-                        <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/h1<p className="text-white inline-flex">&gt;</p></span>
-                        <br />
-
-                        <span className="pl-4 text-orange-400"><p className="text-white inline-flex">&lt;</p>/body<p className="text-white inline-flex">&gt;</p></span>
-                        <br />
-
-                        <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/html<p className="text-white inline-flex">&gt;</p></span>
-                    </div>
-                </div>
-                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-center gap-10 text-white">
-
-                    <div className="">
-                        <div className='h-[40px] w-1/2  font-bold text-sm relative bottom-3 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            Comment
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
-                            <div className="inline-flex">
-                                <span className="text-gray-500">&lt;!--</span>{" "}
-                                <p className="text-gray-500">this is a comment{" "}</p>
-                                <span className="text-gray-500">--&gt;</span>
-                            </div>
-
+                {/* Comment + Paragraph */}
+                <Card className="flex flex-col gap-5">
+                    <div>
+                        <Tag>Comment</Tag>
+                        <CodeBlock>
+                            <div className="flex flex-wrap gap-1"><Cm>&lt;!-- this is a comment --&gt;</Cm></div>
                             <br />
-                            <br />
-                            <br />
-
-                            {/* Multi-line comment */}
-                            <div >
-                                <span className="text-gray-500">&lt;!--</span>
-                            </div>
-
-                            <div className="pl-12  text-gray-500">
-                                Or you can comment out a
-                            </div>
-                            <div className="pl-12  text-gray-500">
-                                large number of lines.
-                            </div>
-
-                            <div>
-                                <span className="text-gray-500 ">--&gt;</span>
-                            </div>
+                            <Cm>&lt;!--</Cm>
+                            <div className="pl-8"><Cm>multi-line comment</Cm></div>
+                            <Cm>--&gt;</Cm>
+                        </CodeBlock>
+                    </div>
+                    <div className="border-t border-white/10 pt-4">
+                        <Tag>Paragraph</Tag>
+                        <CodeBlock>
+                            <div><Kw><OB />p<CB /></Kw><Tx>I'm from CodeSarthi Toolkit.</Tx><Kw><OB />/p<CB /></Kw></div>
+                            <div><Kw><OB />p<CB /></Kw><Tx>Share quick reference sheet.</Tx><Kw><OB />/p<CB /></Kw></div>
+                        </CodeBlock>
+                        <div className="mt-3">
+                            <MdnLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/p" />
                         </div>
                     </div>
-                    <hr className="border-t-2 border-gray-500" />
-                    <div className="">
-                        <div className='h-[40px] w-1/2  font-bold text-sm relative bottom-3 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            Paragraph
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
-                            {/* Line 1 */}
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>p<p className="text-white inline-flex">&gt;</p></span>
-                                <span className="text-gray-200">
-                                    I'm from CodeSarthi Toolkit.
-                                </span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/p<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
+                </Card>
+            </div>
 
-                            {/* Line 2 */}
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>p<p className="text-white inline-flex">&gt;</p></span>
-                                <span className="text-gray-200">
-                                    Share quick reference sheet.
-                                </span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/p<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-                        </div>
-                        <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent mt-5  p-1 px-5 bg-gradient-to-r from-blue-300 via-sky-300 to-cyan-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1 cursor-pointer'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/p" className="flex justify-center" target="_blank"  >
-                                See : MDN Reference
-                            </a>
-                        </div>
-                    </div>
+            {/* Links + Image */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-5 pb-4">
 
+                <Card className="flex flex-col gap-4">
+                    <Tag>HTML Links — Anchor Tag</Tag>
+                    <CodeBlock>
+                        <div><Kw><OB />a</Kw> <At>href</At><W>=</W><Vl>https://CodeSarthi.com</Vl><Kw><CB /></Kw><Sk>Toolkits</Sk><Kw><OB />/a<CB /></Kw></div>
+                        <div><Kw><OB />a</Kw> <At>href</At><W>=</W><Vl>mailto:vinay@abc.com</Vl><Kw><CB /></Kw><Sk>Email</Sk><Kw><OB />/a<CB /></Kw></div>
+                        <div><Kw><OB />a</Kw> <At>href</At><W>=</W><Vl>tel:+12345678</Vl><Kw><CB /></Kw><Sk>Call</Sk><Kw><OB />/a<CB /></Kw></div>
+                        <div><Kw><OB />a</Kw> <At>href</At><W>=</W><Vl>sms:+12345678&amp;body=hi</Vl><Kw><CB /></Kw><Sk>Msg</Sk><Kw><OB />/a<CB /></Kw></div>
+                    </CodeBlock>
+                    <MdnLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/a#attributes" />
+                    <AttrTable rows={[
+                        ["href", "The URL the hyperlink points to"],
+                        ["rel", "Relationship of the linked URL"],
+                        ["target", "_self, _blank, _top, _parent"],
+                    ]} />
+                </Card>
+
+                <Card className="flex flex-col gap-4">
+                    <Tag>HTML Image Tag</Tag>
+                    <CodeBlock>
+                        <div><Kw><OB />img</Kw></div>
+                        <div className="pl-6"><At>loading</At><W>=</W><Vl>lazy</Vl></div>
+                        <div className="pl-6"><At>src</At><W>=</W><Vl>https://xxx.png</Vl></div>
+                        <div className="pl-6"><At>alt</At><W>=</W><Vl>Describe image here</Vl></div>
+                        <div className="pl-6"><At>width</At><W>=</W><Vl>400</Vl></div>
+                        <div className="pl-6"><At>height</At><W>=</W><Vl>400</Vl></div>
+                        <div><Kw>/<CB /></Kw></div>
+                    </CodeBlock>
+                    <MdnLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/img" />
+                    <AttrTable rows={[
+                        ["src", "Required — image URL or path"],
+                        ["alt", "Text description of the image"],
+                        ["width", "Width of the image"],
+                        ["height", "Height of the image"],
+                        ["loading", "How the browser should load (lazy/eager)"],
+                    ]} />
+                </Card>
+            </div>
+
+            {/* Text Formatting + Headings + Sections */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-5 pb-4">
+
+                <Card>
+                    <Tag>Text Formatting Tags</Tag>
+                    <CodeBlock>
+                        {[
+                            [["b"], "Bold Text", "text-gray-200"],
+                            [["strong"], "This text is important", "text-gray-200"],
+                            [["i"], "Italic Text", "text-gray-200"],
+                            [["em"], "This text is emphasized", "text-gray-200"],
+                            [["u"], "Underline Text", "text-gray-200"],
+                            [["pre"], "Pre-formatted Text", "text-gray-200"],
+                            [["code"], "Source code", "text-sky-300"],
+                            [["del"], "Deleted text", "text-gray-200"],
+                            [["mark"], "Highlighted text (HTML5)", "text-yellow-300"],
+                            [["ins"], "Inserted text", "text-gray-200"],
+                            [["sup"], "Superscripted", "text-gray-200"],
+                            [["sub"], "Subscripted", "text-gray-200"],
+                            [["small"], "Smaller text", "text-gray-400"],
+                            [["kbd"], "Ctrl", "text-purple-300"],
+                            [["blockquote"], "Block Quote", "text-gray-200"],
+                        ].map(([tags, content, cc], i) => (
+                            <div key={i}>
+                                <Kw><OB />{tags[0]}<CB /></Kw>
+                                <span className={cc}>{content}</span>
+                                <Kw><OB />/{tags[0]}<CB /></Kw>
+                            </div>
+                        ))}
+                    </CodeBlock>
+                </Card>
+
+                <div className="flex flex-col gap-4">
+                    <Card>
+                        <Tag>Heading Tags</Tag>
+                        <CodeBlock>
+                            {["h1", "h2", "h3", "h4", "h5", "h6"].map((h, i) => (
+                                <div key={i}><Kw><OB />{h}<CB /></Kw><Tx>This is Heading {i + 1}</Tx><Kw><OB />/{h}<CB /></Kw></div>
+                            ))}
+                        </CodeBlock>
+                    </Card>
+
+                    <Card>
+                        <Tag>Section Division</Tag>
+                        <AttrTable rows={[
+                            ["<div>", "Division or section of page content"],
+                            ["<span>", "Section of text within other content"],
+                            ["<p>", "Paragraph of text"],
+                            ["<br>", "Line break"],
+                            ["<hr>", "Horizontal rule"],
+                        ]} />
+                    </Card>
                 </div>
             </div>
-            {/* second */}
-            <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
-                <div className=" bg-black p-5 flex flex-col justify-center rounded-3xl w-1/2 text-white">
-                    <div>
-                        <div className='h-[40px] w-1/3  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            HTML Links ( Anchor Tag )
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono mb-5">
-                            <div>
-                                <span className="text-orange-400">&lt;a</span>{" "}
-                                <span className="text-emerald-400">href</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">
-                                    "https://CodeSarthi.com"
-                                </span>
-                                <span className="text-orange-400">&gt;</span>
-                                <span className="text-sky-300">Toolkits</span>
-                                <span className="text-orange-400">&lt;/a&gt;</span>
-                            </div>
 
-                            <div>
-                                <span className="text-orange-400">&lt;a</span>{" "}
-                                <span className="text-emerald-400">href</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">
-                                    "mailto:vinay@abc.com"
-                                </span>
-                                <span className="text-orange-400">&gt;</span>
-                                <span className="text-sky-300">Email</span>
-                                <span className="text-orange-400">&lt;/a&gt;</span>
-                            </div>
+            {/* Scripts + iframe */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-5 pb-4">
 
-                            <div>
-                                <span className="text-orange-400">&lt;a</span>{" "}
-                                <span className="text-emerald-400">href</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">
-                                    "tel:+12345678"
-                                </span>
-                                <span className="text-orange-400">&gt;</span>
-                                <span className="text-sky-300">Call</span>
-                                <span className="text-orange-400">&lt;/a&gt;</span>
-                            </div>
+                <Card className="flex flex-col gap-5">
+                    <Tag>INTERNAL — JavaScript &amp; Stylesheet</Tag>
+                    <CodeBlock>
+                        <div><Kw><OB />script</Kw> <At>type</At><W>=</W><Vl>text/javascript</Vl><Kw><CB /></Kw></div>
+                        <div className="pl-6"><T c="text-purple-400">let</T> <Sk>text</Sk> <W>=</W> <T c="text-amber-300">'Hello Developers'</T><W>;</W></div>
+                        <div className="pl-6"><Sk>alert</Sk><W>(</W><Sk>text</Sk><W>);</W></div>
+                        <div><Kw><OB />/script<CB /></Kw></div>
+                    </CodeBlock>
+                    <CodeBlock>
+                        <div><Kw><OB />style</Kw> <At>type</At><W>=</W><Vl>text/css</Vl><Kw><CB /></Kw></div>
+                        <div className="pl-6"><Sk>h1</Sk> <W>{"{"}</W></div>
+                        <div className="pl-10"><At>color</At><W>: </W><T c="text-purple-400">purple</T><W>;</W></div>
+                        <div className="pl-6"><W>{"}"}</W></div>
+                        <div><Kw><OB />/style<CB /></Kw></div>
+                    </CodeBlock>
 
-                            <div>
-                                <span className="text-orange-400">&lt;a</span>{" "}
-                                <span className="text-emerald-400">href</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">
-                                    "sms:+12345678&amp;body=ha%20ha"
-                                </span>
-                                <span className="text-orange-400">&gt;</span>
-                                <span className="text-sky-300">Msg</span>
-                                <span className="text-orange-400">&lt;/a&gt;</span>
-                            </div>
-                        </div>
+                    <Tag>EXTERNAL — JavaScript &amp; Stylesheet</Tag>
+                    <CodeBlock>
+                        <div><Kw><OB />body<CB /></Kw></div>
+                        <div className="pl-6 text-gray-500">...</div>
+                        <div className="pl-6"><Kw><OB />script</Kw> <At>src</At><W>=</W><Vl>app.js</Vl><Kw><CB /></Kw><Kw><OB />/script<CB /></Kw></div>
+                        <div><Kw><OB />/body<CB /></Kw></div>
+                    </CodeBlock>
+                    <CodeBlock>
+                        <div><Kw><OB />head<CB /></Kw></div>
+                        <div className="pl-6"><Kw><OB />link</Kw> <At>rel</At><W>=</W><Vl>stylesheet</Vl> <At>href</At><W>=</W><Vl>style.css</Vl> <Kw>/<CB /></Kw></div>
+                        <div><Kw><OB />/head<CB /></Kw></div>
+                    </CodeBlock>
+                </Card>
+
+                <Card className="flex flex-col gap-4">
+                    <div className="flex items-center justify-between flex-wrap gap-2">
+                        <Tag>Inline Frame — iframe</Tag>
+                        <MdnLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe" />
                     </div>
-                    <hr className="border-t-2 border-gray-500" />
-                    <div>
-                        <div className='h-[40px] w-1/3  font-bold text-sm relative  border-transparent mt-5  p-1 px-5 bg-gradient-to-r from-blue-300 via-sky-300 to-cyan-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1 cursor-pointer'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/a#attributes" className="flex justify-center" target="_blank"  >
-                                See : MDN Reference
-                            </a>
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2">1. href</li>
-                                <li className="w-1/2">The URL that the hyperlink points to</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2">2. rel</li>
-                                <li className="w-1/2">Relationship of the linked URL</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2">3. target</li>
-                                <li className="w-1/2">Link target location:
-                                    _self, _blank, _top, _parent</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-                        </div>
-                    </div>
-                </div>
-
-                <div className=" bg-black p-5 rounded-3xl w-1/2 flex flex-col justify-between  text-white">
-                    <div className="mb-5">
-                        <div className='h-[40px] w-1/3  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            HTML Image Tag
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>img</span>
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-emerald-400">loading</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"lazy"</span>
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-emerald-400">src</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">
-                                    "https://xxx.png"
-                                </span>
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-emerald-400">alt</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">
-                                    "Describe image here"
-                                </span>
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-emerald-400">width</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"400"</span>
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-emerald-400">height</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"400"</span>
-                            </div>
-
-                            <div>
-                                <span className="text-orange-400">/<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                        </div>
-                    </div>
-                    <hr className="border-t-2 border-gray-500" />
-                    <div>
-                        <div className='h-[40px] w-1/3  font-bold text-sm relative  border-transparent mt-5  p-1 px-5 bg-gradient-to-r from-blue-300 via-sky-300 to-cyan-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1 cursor-pointer'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/img" className="flex justify-center" target="_blank"  >
-                                See : MDN Reference
-                            </a>
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2">1. src</li>
-                                <li className="w-1/2">Required, Image location (URL | Path)</li>
-                            </ul>
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2">2. alt</li>
-                                <li className="w-1/2">Describe of the image</li>
-                            </ul>
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2">3. width</li>
-                                <li className="w-1/2">Width of the image</li>
-                            </ul>
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2">4. height</li>
-                                <li className="w-1/2">	Height of the image</li>
-                            </ul>
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2">5. loading</li>
-                                <li className="w-1/2">How the browser should load</li>
-                            </ul>
-                            <hr className="border-t-2 border-gray-500" />
-                        </div>
-                    </div>
-                </div>
+                    <CodeBlock>
+                        <div><Kw><OB />iframe</Kw></div>
+                        <div className="pl-6"><At>title</At><W>=</W><Vl>Kanpur</Vl></div>
+                        <div className="pl-6"><At>width</At><W>=</W><Vl>100%</Vl></div>
+                        <div className="pl-6"><At>height</At><W>=</W><Vl>300</Vl></div>
+                        <div className="pl-6"><At>src</At><W>=</W><Vl>https://maps.google.com/…</Vl></div>
+                        <div className="pl-6"><At>scrolling</At><W>=</W><Vl>no</Vl></div>
+                        <div><Kw><CB /></Kw></div>
+                        <div><Kw><OB />/iframe <CB /></Kw></div>
+                    </CodeBlock>
+                    <iframe
+                        title="Kanpur"
+                        className="w-full h-64 rounded-xl border border-white/10"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d107760.06358267844!2d80.3612485463019!3d26.440255788773385!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399c4770b127c46f%3A0x1778302a9fbe7b41!2sKanpur%2C%20Uttar%20Pradesh!5e1!3m2!1sen!2sin!4v1769776040630!5m2!1sen!2sin"
+                    />
+                </Card>
             </div>
-            {/* third */}
-            <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
-                <div className=" bg-black p-10  rounded-3xl w-1/2 text-white flex flex-col justify-center ">
-                    <div>
-                        <div className='h-[40px] w-1/3  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            Text Formatting Tags
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono mb-5">
-                            <div>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>b<p className="text-white inline-flex ">&gt;</p> </span>
-                                <span className="text-gray-200">Bold Text</span>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>/b<p className="text-white inline-flex ">&gt;</p> </span>
-                            </div>
 
-                            <div>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>strong<p className="text-white inline-flex ">&gt;</p> </span>
-                                <span className="text-gray-200">This text is important</span>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>/strong<p className="text-white inline-flex ">&gt;</p> </span>
-                            </div>
+            {/* ══════════════════════════════════════
+          SECTION 2 – HTML5 TAGS
+      ══════════════════════════════════════ */}
+            <SectionTitle className="HEAD2">HTML 5 TAGS</SectionTitle>
 
-                            <div>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>i<p className="text-white inline-flex ">&gt;</p></span>
-                                <span className="text-gray-200">Italic Text</span>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>/i<p className="text-white inline-flex ">&gt;</p></span>
-                            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 px-5 pb-4">
 
-                            <div>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>em<p className="text-white inline-flex ">&gt;</p></span>
-                                <span className="text-gray-200">This text is emphasized</span>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>/em<p className="text-white inline-flex ">&gt;</p></span>
-                            </div>
+                {/* Document structure */}
+                <Card className="flex flex-col gap-5">
+                    <Tag>Document Structure</Tag>
+                    <CodeBlock>
+                        <div><Kw><OB />body<CB /></Kw></div>
+                        <div className="pl-4"><Kw><OB />header<CB /></Kw></div>
+                        <div className="pl-8"><Kw><OB />nav<CB /></Kw><Cm>...</Cm><Kw><OB />/nav<CB /></Kw></div>
+                        <div className="pl-4"><Kw><OB />/header<CB /></Kw></div>
+                        <div className="pl-4"><Kw><OB />main<CB /></Kw></div>
+                        <div className="pl-8"><Kw><OB />h1<CB /></Kw><Tx>CodeSarthi</Tx><Kw><OB />/h1<CB /></Kw></div>
+                        <div className="pl-4"><Kw><OB />/main<CB /></Kw></div>
+                        <div className="pl-4"><Kw><OB />footer<CB /></Kw></div>
+                        <div className="pl-8"><Kw><OB />p<CB /></Kw><Tx>TEAM AXONIC</Tx><Kw><OB />/p<CB /></Kw></div>
+                        <div className="pl-4"><Kw><OB />/footer<CB /></Kw></div>
+                        <div><Kw><OB />/body<CB /></Kw></div>
+                    </CodeBlock>
 
-                            <div>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>u<p className="text-white inline-flex ">&gt;</p></span>
-                                <span className="text-gray-200">Underline Text</span>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>/u<p className="text-white inline-flex ">&gt;</p></span>
-                            </div>
-
-                            <div>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>pre<p className="text-white inline-flex ">&gt;</p></span>
-                                <span className="text-gray-200">Pre-formatted Text</span>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>/pre<p className="text-white inline-flex ">&gt;</p></span>
-                            </div>
-
-                            <div>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>code<p className="text-white inline-flex ">&gt;</p></span>
-                                <span className="text-sky-300">Source code</span>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>/code<p className="text-white inline-flex ">&gt;</p></span>
-                            </div>
-
-                            <div>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>del<p className="text-white inline-flex ">&gt;</p></span>
-                                <span className="text-gray-200">Deleted text</span>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>/del<p className="text-white inline-flex ">&gt;</p></span>
-                            </div>
-
-                            <div>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>mark<p className="text-white inline-flex ">&gt;</p></span>
-                                <span className="text-yellow-300">
-                                    Highlighted text (HTML5)
-                                </span>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>/mark<p className="text-white inline-flex ">&gt;</p></span>
-                            </div>
-
-                            <div>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>ins<p className="text-white inline-flex ">&gt;</p></span>
-                                <span className="text-gray-200">Inserted text</span>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>/ins<p className="text-white inline-flex ">&gt;</p></span>
-                            </div>
-
-                            <div>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>sup<p className="text-white inline-flex ">&gt;</p></span>
-                                <span className="text-gray-200">
-                                    Makes text superscripted
-                                </span>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>/sup<p className="text-white inline-flex ">&gt;</p></span>
-                            </div>
-
-                            <div>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>sub<p className="text-white inline-flex ">&gt;</p></span>
-                                <span className="text-gray-200">
-                                    Makes text subscripted
-                                </span>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>/sub<p className="text-white inline-flex ">&gt;</p></span>
-                            </div>
-
-                            <div>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>small<p className="text-white inline-flex ">&gt;</p></span>
-                                <span className="text-gray-400">
-                                    Makes text smaller
-                                </span>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>/small<p className="text-white inline-flex ">&gt;</p></span>
-                            </div>
-
-                            <div>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>kbd<p className="text-white inline-flex ">&gt;</p></span>
-                                <span className="text-purple-300">Ctrl</span>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>/kbd<p className="text-white inline-flex ">&gt;</p></span>
-                            </div>
-
-                            <div>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>blockquote<p className="text-white inline-flex ">&gt;</p></span>
-                                <span className="text-gray-200">
-                                    Text Block Quote
-                                </span>
-                                <span className="text-orange-400"> <p className="text-white inline-flex ">&lt;</p>/blockquote<p className="text-white inline-flex ">&gt;</p></span>
-                            </div>
-                        </div>
+                    <div className="border-t border-white/10 pt-4">
+                        <Tag>Header Navigation</Tag>
+                        <CodeBlock>
+                            <div><Kw><OB />header<CB /></Kw></div>
+                            <div className="pl-4"><Kw><OB />nav<CB /></Kw></div>
+                            <div className="pl-8"><Kw><OB />ul<CB /></Kw></div>
+                            {["Edit Page", "Twitter", "Facebook"].map((l, i) => (
+                                <div key={i} className="pl-12">
+                                    <Kw><OB />li<CB /></Kw><Kw><OB />a</Kw> <At>href</At><W>=</W><Vl>#</Vl><Kw><CB /></Kw><Sk>{l}</Sk><Kw><OB />/a<CB /></Kw><Kw><OB />/li<CB /></Kw>
+                                </div>
+                            ))}
+                            <div className="pl-8"><Kw><OB />/ul<CB /></Kw></div>
+                            <div className="pl-4"><Kw><OB />/nav<CB /></Kw></div>
+                            <div><Kw><OB />/header<CB /></Kw></div>
+                        </CodeBlock>
                     </div>
-                </div>
+                </Card>
 
-                <div className=" bg-black p-5 rounded-3xl w-1/2 flex flex-col justify-between gap-5 text-white">
-                    <div>
-                        <div className='h-[40px] w-1/4  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            Heading Tags
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>h1<p className="text-white inline-flex">&gt;</p></span>
-                                <span className="text-gray-200">This is Heading 1</span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/h1<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
+                {/* mark, progress, audio */}
+                <Card className="flex flex-col gap-5">
+                    <Tag>HTML5 mark</Tag>
+                    <CodeBlock>
+                        <div><Kw><OB />p<CB /></Kw><Tx>I Love </Tx><Kw><OB />mark<CB /></Kw><T c="text-yellow-300">CodeSarthi</T><Kw><OB />/mark<CB /></Kw><Kw><OB />/p<CB /></Kw></div>
+                    </CodeBlock>
+                    <p className="text-sm text-black/80 bg-white/80 rounded-lg px-3 py-2">
+                        I Love <mark>CodeSarthi</mark>
+                    </p>
 
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>h2<p className="text-white inline-flex">&gt;</p></span>
-                                <span className="text-gray-200">This is Heading 2</span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/h2<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>h3<p className="text-white inline-flex">&gt;</p></span>
-                                <span className="text-gray-200">This is Heading 3</span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/h3<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>h4<p className="text-white inline-flex">&gt;</p></span>
-                                <span className="text-gray-200">This is Heading 4</span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/h4<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>h5<p className="text-white inline-flex">&gt;</p></span>
-                                <span className="text-gray-200">This is Heading 5</span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/h5<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>h6<p className="text-white inline-flex">&gt;</p></span>
-                                <span className="text-gray-200">This is Heading 6</span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/h6<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-                        </div>
-
-                    </div>
-                    <hr className="border-t-2 border-gray-500" />
-                    <div>
-                        <div className='h-[40px] w-1/4  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            Section Division
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">1. &lt;</p>div<p className="text-white inline-flex">&gt; &lt;</p>/div<p className="text-white inline-flex">&gt;</p></li>
-                                <li className="w-1/2">Division or Section of Page Content</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">2. &lt;</p>span<p className="text-white inline-flex">&gt; &lt;</p>/span<p className="text-white inline-flex">&gt;</p></li>
-                                <li className="w-1/2">Section of text within other content</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">3. &lt;</p>p<p className="text-white inline-flex">&gt; &lt;</p>/p<p className="text-white inline-flex">&gt;</p></li>
-                                <li className="w-1/2">Paragraph of text</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">4. &lt;</p>br<p className="text-white inline-flex">&gt; &lt;</p>/br<p className="text-white inline-flex">&gt;</p></li>
-                                <li className="w-1/2">Line break</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">5. &lt;</p>hr<p className="text-white inline-flex">&gt; &lt;</p>/hr<p className="text-white inline-flex">&gt;</p></li>
-                                <li className="w-1/2">Basic Horizontal Line</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {/* fourth */}
-            <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
-                <div className=" bg-black p-10  rounded-3xl w-1/2 text-white">
-                    <div>
-                        <div className='h-[40px] w-1/2  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            <p className="font-extrabold">INTERNAL</p><p className="font-extralight">JavaScript and Stylesheet</p>
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono mb-5">
-                            {/* opening tag */}
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>script</span>{" "}
-                                <span className="text-emerald-400">type</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"text/javascript"</span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            {/* JS code */}
-                            <div className="pl-8">
-                                <span className="text-purple-400">let</span>{" "}
-                                <span className="text-sky-300">text</span>{" "}
-                                <span className="text-white">=</span>{" "}
-                                <span className="text-amber-300">'Hello CodeSarhiians'</span>
-                                <span className="text-white">;</span>
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-sky-300">alert</span>
-                                <span className="text-white">(</span>
-                                <span className="text-sky-300">text</span>
-                                <span className="text-white">);</span>
-                            </div>
-
-                            {/* closing tag */}
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/script<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-                        </div>
-                        <hr className="border-t-2 border-gray-500" />
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono mb-5 mt-5">
-                            {/* opening tag */}
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>style</span>{" "}
-                                <span className="text-emerald-400">type</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"text/css"</span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            {/* CSS code */}
-                            <div className="pl-8">
-                                <span className="text-sky-300">h1</span>{" "}
-                                <span className="text-white"><p className="text-white inline-flex">&#12</p>3;</span>
-                            </div>
-
-                            <div className="pl-12">
-                                <span className="text-emerald-400">color</span>
-                                <span className="text-white">:</span>{" "}
-                                <span className="text-purple-400">purple</span>
-                                <span className="text-white">;</span>
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-white"><p className="text-white inline-flex">&#12</p>5;</span>
-                            </div>
-
-                            {/* closing tag */}
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/style<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div>
-                        <div className='h-[40px] w-1/2  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            <p className="font-extrabold">EXTERNAL</p><p className="font-extralight">JavaScript and Stylesheet</p>
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono  mb-5">
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>body<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            <div className="pl-8 text-gray-500">
-                                ...
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>script</span>{" "}
-                                <span className="text-emerald-400">src</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"app.js"</span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&gt;</p></span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/script<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/body<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                        </div>
-                        <hr className="border-t-2 border-gray-500" />
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono mb-5 mt-5">
-
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>head<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            <div className="pl-8 text-gray-500">
-                                ...
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>link</span>{" "}
-                                <span className="text-emerald-400">rel</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"stylesheet"</span>{" "}
-                                <span className="text-emerald-400">href</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"style.css"</span>{" "}
-                                <span className="text-orange-400">/<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/head<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-
-
-                        </div>
-                    </div>
-                </div>
-
-                <div className=" bg-black p-5 rounded-3xl w-1/2 flex flex-col justify-center gap-5 text-white">
-                    <div>
-
-                        <div className="w-full flex justify-between items-center mb-5 ">
-                            <div className='h-[40px]   font-bold text-sm relative border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                                <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <g clip-path="url(#clip0_0_3844)">
-                                        <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                    </g>
-                                    <defs>
-                                        <clipPath id="clip0_0_3844">
-                                            <rect width="14" height="14" fill="white" />
-                                        </clipPath>
-                                    </defs>
-                                </svg>
-                                Inline Frame ( with preview )
-                            </div>
-
-
-
-                            <div className='h-[40px] w-1/3  font-bold text-sm relative  border-transparent  p-1 px-5 bg-gradient-to-r from-blue-300 via-sky-300 to-cyan-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1 cursor-pointer'  >
-                                <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <g clip-path="url(#clip0_0_3844)">
-                                        <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                    </g>
-                                    <defs>
-                                        <clipPath id="clip0_0_3844">
-                                            <rect width="14" height="14" fill="white" />
-                                        </clipPath>
-                                    </defs>
-                                </svg>
-                                <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe" className="flex justify-center" target="_blank"  >
-                                    See : MDN Reference
-                                </a>
-                            </div>
-                        </div>
-
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>iframe</span>
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-emerald-400">title</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"New York"</span>
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-emerald-400">width</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"342"</span>
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-emerald-400">height</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"306"</span>
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-emerald-400">id</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"gmap_canvas"</span>
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-emerald-400">src</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300 break-all">
-                                    "https://maps.google.com/maps?q=2880%20Broadway,%20New%20York&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                                </span>
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-emerald-400">scrolling</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"no"</span>
-                            </div>
-
-                            <div>
-                                <span className="text-orange-400">&gt;</span>
-                            </div>
-
-                            <div className="pl-8 text-gray-500">{/* iframe content (empty) */}</div>
-
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/iframe <p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-                        </div>
-
-                        <iframe
-                            title="New York"
-                            className="w-full h-[500px] mt-5 rounded-3xl border-2 border-gray-500"
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d107760.06358267844!2d80.3612485463019!3d26.440255788773385!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399c4770b127c46f%3A0x1778302a9fbe7b41!2sKanpur%2C%20Uttar%20Pradesh!5e1!3m2!1sen!2sin!4v1769776040630!5m2!1sen!2sin"
-                        >
-                        </iframe>
-
-                    </div>
-                    <div>
-
-
+                    <div className="border-t border-white/10 pt-4">
+                        <Tag>HTML5 progress</Tag>
+                        <CodeBlock>
+                            <div><Kw><OB />progress</Kw> <At>value</At><W>=</W><Vl>50</Vl> <At>max</At><W>=</W><Vl>100</Vl><Kw><CB /></Kw><Kw><OB />/progress<CB /></Kw></div>
+                        </CodeBlock>
+                        <progress value="50" max="100" className="w-full mt-3 rounded-full overflow-hidden" />
                     </div>
 
-
-
-                </div>
-            </div>
-            {/* fifth */}
-            <div className="w-full flex justify-center items-center font-head font-extrabold text-[3rem] mt-5 mb-5 leading-none HEAD2">
-                HTML 5 TAGS
-            </div>
-            <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
-                <div className=" bg-black p-5  rounded-3xl w-1/3 text-white">
-
-                    <div>
-                        <div className='h-[40px] w-1/3  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            Document
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>body<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            <div className="pl-4">
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>header<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>nav<p className="text-white inline-flex">&gt;</p></span>
-                                <span className="text-gray-500">...</span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/nav<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            <div className="pl-4">
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/header<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            <div className="pl-4">
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>main<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>h1<p className="text-white inline-flex">&gt;</p></span>
-                                <span className="text-gray-200">CodeSarthi</span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/h1<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            <div className="pl-4">
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/main<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            <div className="pl-4">
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>footer<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>p<p className="text-white inline-flex">&gt;</p></span>
-                                <span className="text-gray-200">TEAM AXONIC</span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/p<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            <div className="pl-4">
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/footer<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/body<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-                        </div>
-                        <hr className="border-t-2 border-gray-500 mt-5" />
-                    </div>
-
-                    <div className="mt-5">
-                        <div className='h-[40px] w-1/2  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            Header Navigation
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>header<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            <div className="pl-4">
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>nav<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>ul<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            <div className="pl-12">
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>li<p className="text-white inline-flex">&gt;</p></span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>a</span>{" "}
-                                <span className="text-emerald-400">href</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"#"</span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&gt;</p></span>
-                                <span className="text-sky-300">Edit Page</span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/a<p className="text-white inline-flex">&gt;</p></span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/li<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            <div className="pl-12">
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>li<p className="text-white inline-flex">&gt;</p></span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>a</span>{" "}
-                                <span className="text-emerald-400">href</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"#"</span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&gt;</p></span>
-                                <span className="text-sky-300">Twitter</span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/a<p className="text-white inline-flex">&gt;</p></span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/li<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            <div className="pl-12">
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>li<p className="text-white inline-flex">&gt;</p></span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>a</span>{" "}
-                                <span className="text-emerald-400">href</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"#"</span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&gt;</p></span>
-                                <span className="text-sky-300">Facebook</span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/a<p className="text-white inline-flex">&gt;</p></span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/li<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/ul<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            <div className="pl-4">
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/nav<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/header<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-center gap-5 text-white">
-                    <div>
-                        <div className='h-[40px] w-1/3  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            HTML5 MARK
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono">
-                            {/* opening video tag */}
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>p<p className="text-white inline-flex">&gt;</p></span>
-                                <span className="text-gray-200">I Love </span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>mark<p className="text-white inline-flex">&gt;</p></span>
-                                <span className="text-yellow-300">CodeSarthi</span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/mark<p className="text-white inline-flex">&gt;</p></span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/p<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-                        </div>
-                        <p className="mt-5 justify-self-center">I Love <mark>CodeSarthi</mark></p>
-                        <hr className="border-t-2 border-gray-500 mt-5" />
-                    </div>
-                    <div>
-                        <div className='h-[40px] w-1/2  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            HTML5 PROGRESS
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono">
-
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>progress</span>{" "}
-                                <span className="text-emerald-400">value</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"50"</span>{" "}
-                                <span className="text-emerald-400">max</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"100"</span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&gt;</p></span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/progress<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-                        </div>
-                        <progress value="50" max="100" className="w-full mt-5 rounded-xl border overflow-hidden "></progress>
-                        <hr className="border-t-2 border-gray-500 mt-5" />
-                    </div>
-                    <div>
-                        <div className='h-[40px] w-1/3  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            HTML5 AUDIO
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono  mb-5">
-                            {/* opening audio tag */}
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>audio</span>{" "}
-                                <span className="text-emerald-400">controls</span>{" "}
-                                <span className="text-emerald-400">src</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300 break-all">
-                                    "sample.mp3"
-                                </span>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-
-                            {/* fallback text */}
-                            <div className="pl-8 text-gray-400">
-                                Your browser does not support the audio element.
-                            </div>
-
-                            {/* closing audio tag */}
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex">&lt;</p>/audio<p className="text-white inline-flex">&gt;</p></span>
-                            </div>
-                        </div>
-
-                        <audio
-                            controls
-                            src={"/audio/toolkit.mp3"}
-                            className="w-full"
-                        >
+                    <div className="border-t border-white/10 pt-4">
+                        <Tag>HTML5 audio</Tag>
+                        <CodeBlock>
+                            <div><Kw><OB />audio</Kw> <At>controls</At> <At>src</At><W>=</W><Vl>sample.mp3</Vl><Kw><CB /></Kw></div>
+                            <div className="pl-6 text-gray-500">Your browser does not support audio.</div>
+                            <div><Kw><OB />/audio<CB /></Kw></div>
+                        </CodeBlock>
+                        <audio controls src="/audio/toolkit.mp3" className="w-full mt-3">
                             Your browser does not support the audio element.
                         </audio>
                     </div>
-                </div>
-                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-center gap-5 text-white">
+                </Card>
+
+                {/* video + HTML5 tag reference */}
+                <Card className="flex flex-col gap-4">
+                    <Tag>HTML5 video</Tag>
+                    <CodeBlock>
+                        <div><Kw><OB />video</Kw> <At>controls</At> <At>width</At><W>=</W><Vl>100%</Vl><Kw><CB /></Kw></div>
+                        <div className="pl-6"><Kw><OB />source</Kw></div>
+                        <div className="pl-10"><At>src</At><W>=</W><Vl>sample.mp4</Vl></div>
+                        <div className="pl-10"><At>type</At><W>=</W><Vl>video/mp4</Vl></div>
+                        <div className="pl-6"><Kw>/<CB /></Kw></div>
+                        <div><Kw><OB />/video<CB /></Kw></div>
+                    </CodeBlock>
+                    <video
+                        src="/videos/feature-2.mp4"
+                        autoPlay loop muted playsInline preload="auto"
+                        className="rounded-xl object-cover h-48 w-full"
+                    />
+                </Card>
+            </div>
+
+            {/* HTML5 reference table */}
+            <div className="px-5 pb-4">
+                <Card>
+                    <Tag>HTML5 Elements Reference</Tag>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                        {[
+                            [
+                                ["article", "Content that's independent"],
+                                ["aside", "Secondary content"],
+                                ["audio", "Embeds a sound or audio stream"],
+                                ["canvas", "Draw graphics via JavaScript"],
+                                ["data", "Machine readable content"],
+                                ["datalist", "A set of pre-defined options"],
+                                ["details", "Additional information"],
+                                ["dialog", "A dialog box or sub-window"],
+                                ["embed", "Embeds external application"],
+                                ["figcaption", "A caption for a figure"],
+                            ],
+                            [
+                                ["figure", "A figure illustrated"],
+                                ["footer", "Footer or least important"],
+                                ["header", "Masthead or important info"],
+                                ["main", "The main content of the document"],
+                                ["mark", "Text highlighted"],
+                                ["meter", "A scalar value within a known range"],
+                                ["nav", "A section of navigation links"],
+                                ["output", "The result of a calculation"],
+                                ["picture", "A container for multiple image sources"],
+                                ["progress", "Completion progress of a task"],
+                            ],
+                            [
+                                ["ruby", "Represents a ruby annotation"],
+                                ["section", "A group in a series of related content"],
+                                ["source", "Resources for the media elements"],
+                                ["summary", "A summary for the <details> element"],
+                                ["template", "Defines fragments of HTML"],
+                                ["time", "A time or date"],
+                                ["track", "Text tracks for the media elements"],
+                                ["video", "Embeds video"],
+                                ["wbr", "A line break opportunity"],
+                            ],
+                        ].map((col, ci) => (
+                            <div key={ci} className="bg-[#111] border border-white/10 rounded-xl overflow-hidden font-mono text-sm">
+                                {col.map(([tag, desc], i) => (
+                                    <div key={i}>
+                                        <div className="flex gap-3 px-4 py-2">
+                                            <a
+                                                href={`https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/${tag.replace(/<.*>/, "")}`}
+                                                target="_blank" rel="noreferrer"
+                                                className="text-blue-400 hover:underline w-32 shrink-0"
+                                            >
+                                                {tag}
+                                            </a>
+                                            <span className="text-gray-300 text-xs leading-snug">{desc}</span>
+                                        </div>
+                                        {i < col.length - 1 && <div className="border-t border-white/10" />}
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+            </div>
+
+            {/* ══════════════════════════════════════
+          SECTION 3 – TABLES
+      ══════════════════════════════════════ */}
+            <SectionTitle className="HEAD3">HTML TABLES</SectionTitle>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 px-5 pb-4">
+                <Card>
+                    <Tag>HTML Table</Tag>
+                    <CodeBlock>
+                        <div><Kw>&lt;table&gt;</Kw></div>
+                        <div className="pl-4"><Kw>&lt;thead&gt;</Kw></div>
+                        <div className="pl-8"><Kw>&lt;tr&gt;</Kw></div>
+                        <div className="pl-12"><Kw>&lt;td&gt;</Kw><Tx>name</Tx><Kw>&lt;/td&gt;</Kw> <Kw>&lt;td&gt;</Kw><Tx>age</Tx><Kw>&lt;/td&gt;</Kw></div>
+                        <div className="pl-8"><Kw>&lt;/tr&gt;</Kw></div>
+                        <div className="pl-4"><Kw>&lt;/thead&gt;</Kw></div>
+                        <div className="pl-4"><Kw>&lt;tbody&gt;</Kw></div>
+                        {[["Roberta", "39"], ["Oliver", "25"]].map(([n, a], i) => (
+                            <div key={i}>
+                                <div className="pl-8"><Kw>&lt;tr&gt;</Kw></div>
+                                <div className="pl-12"><Kw>&lt;td&gt;</Kw><Tx>{n}</Tx><Kw>&lt;/td&gt;</Kw> <Kw>&lt;td&gt;</Kw><Tx>{a}</Tx><Kw>&lt;/td&gt;</Kw></div>
+                                <div className="pl-8"><Kw>&lt;/tr&gt;</Kw></div>
+                            </div>
+                        ))}
+                        <div className="pl-4"><Kw>&lt;/tbody&gt;</Kw></div>
+                        <div><Kw>&lt;/table&gt;</Kw></div>
+                    </CodeBlock>
+                </Card>
+
+                <Card>
+                    <Tag>Table Tags</Tag>
+                    <AttrTable rows={[
+                        ["<table>", "Defines a table"],
+                        ["<th>", "Defines a header cell"],
+                        ["<tr>", "Defines a row"],
+                        ["<td>", "Defines a cell"],
+                        ["<caption>", "Defines a table caption"],
+                        ["<colgroup>", "Defines a group of columns"],
+                        ["<col>", "Defines a column within a table"],
+                        ["<thead>", "Groups the header content"],
+                        ["<tbody>", "Groups the body content"],
+                        ["<tfoot>", "Groups the footer content"],
+                    ]} />
+                </Card>
+
+                <Card className="flex flex-col gap-5">
                     <div>
-                        <div className='h-[40px] w-1/3  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            HTML5 VIDEO
+                        <Tag>&lt;td&gt; Attributes</Tag>
+                        <AttrTable rows={[
+                            ["colspan", "Number of columns a cell should span"],
+                            ["headers", "One or more header cells related to"],
+                            ["rowspan", "Number of rows a cell should span"],
+                        ]} />
+                        <div className="mt-3">
+                            <MdnLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/td#attributes" />
                         </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
-                            {/* opening video tag */}
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex ">&lt;</p>video</span>{" "}
-                                <span className="text-emerald-400">controls</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">""</span>{" "}
-                                <span className="text-emerald-400">width</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"100%"</span>
-                                <span className="text-orange-400"><p className="text-white inline-flex ">&gt;</p></span>
-                            </div>
-
-                            {/* source tag */}
-                            <div className="pl-8">
-                                <span className="text-orange-400"><p className="text-white inline-flex ">&lt;</p>source</span>
-                            </div>
-
-                            <div className="pl-12">
-                                <span className="text-emerald-400">src</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300 break-all">
-                                    "sample.mp4"
-                                </span>
-                            </div>
-
-                            <div className="pl-12">
-                                <span className="text-emerald-400">type</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"video/mp4"</span>
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-orange-400">/<p className="text-white inline-flex ">&gt;</p></span>
-                            </div>
-
-                            {/* fallback text */}
-                            <div className="pl-8 text-gray-400">
-                                Sorry, your browser does not support embedded videos.
-                            </div>
-
-                            {/* closing video tag */}
-                            <div>
-                                <span className="text-orange-400"><p className="text-white inline-flex ">&lt;</p>/video<p className="text-white inline-flex ">&gt;</p></span>
-                            </div>
-                        </div>
-                        <video
-                            src={"/videos/feature-2.mp4"}
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
-                            preload="auto"
-                            className="  rounded-3xl object-cover h-[400px] w-full mt-5  "
-                        />
                     </div>
-                </div>
+                    <div className="border-t border-white/10 pt-4">
+                        <Tag>&lt;th&gt; Attributes</Tag>
+                        <AttrTable rows={[
+                            ["headers", "Header cells related to"],
+                            ["colspan", "Columns a cell should span"],
+                            ["rowspan", "Rows a cell should span"],
+                            ["abbr", "Description of cell's content"],
+                            ["scope", "The header element relates to"],
+                        ]} />
+                        <div className="mt-3">
+                            <MdnLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/th#attributes" />
+                        </div>
+                    </div>
+                </Card>
             </div>
-            {/* sixth */}
-            <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
-                <div className=" bg-black p-10 flex gap-5 rounded-3xl w-full text-white">
-                    <div className="bg-stone-900 p-5 w-1/3 rounded-3xl font-mono ">
 
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">1. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/article" target="_blanck" className="text-blue-500">article</a> </li>
-                            <li className="w-1/2">Content that’s independent</li>
-                        </ul>
+            {/* ══════════════════════════════════════
+          SECTION 4 – LISTS
+      ══════════════════════════════════════ */}
+            <SectionTitle className="HEAD4">HTML LISTS</SectionTitle>
 
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">2. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/aside" target="_blanck" className="text-blue-500">aside</a> </li>
-                            <li className="w-1/2">Secondary content</li>
-                        </ul>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 px-5 pb-4">
+                {[
+                    {
+                        tag: "ul", title: "Unordered List",
+                        items: ["I'm an item", "I'm another item", "I'm another item"],
+                        href: "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/ul",
+                    },
+                    {
+                        tag: "ol", title: "Ordered List",
+                        items: ["I'm the first item", "I'm the second item", "I'm the third item"],
+                        href: "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/ol",
+                    },
+                ].map(({ tag, title, items, href }) => (
+                    <Card key={tag} className="flex flex-col gap-4">
+                        <Tag>{title}</Tag>
+                        <CodeBlock>
+                            <div><Kw>&lt;{tag}&gt;</Kw></div>
+                            {items.map((t, i) => (
+                                <div key={i} className="pl-4"><Kw>&lt;li&gt;</Kw><Tx>{t}</Tx><Kw>&lt;/li&gt;</Kw></div>
+                            ))}
+                            <div><Kw>&lt;/{tag}&gt;</Kw></div>
+                        </CodeBlock>
+                        <MdnLink href={href} />
+                    </Card>
+                ))}
 
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">3. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/audio" target="_blanck" className="text-blue-500">audio</a> </li>
-                            <li className="w-1/2">Embeds a sound, or an audio stream</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">4.<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/bdi" target="_blanck" className="text-blue-500"> bdi</a> </li>
-
-                            <li className="w-1/2">Draw graphics via JavaScript</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">5.<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/canvas" target="_blanck" className="text-blue-500"> canvas</a> </li>
-                            <li className="w-1/2">Draw graphics via JavaScript</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">6.<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/data" target="_blanck" className="text-blue-500"> data</a> </li>
-                            <li className="w-1/2">Machine readable content</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">7.<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/datalist" target="_blanck" className="text-blue-500"> datalist</a> </li>
-                            <li className="w-1/2">A set of pre-defined options</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">8.<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details" target="_blanck" className="text-blue-500"> details</a> </li>
-                            <li className="w-1/2">Additional information</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">9.<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dialog" target="_blanck" className="text-blue-500"> dialog</a> </li>
-                            <li className="w-1/2">A dialog box or sub-window</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">10.<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/embed" target="_blanck" className="text-blue-500"> embed</a> </li>
-                            <li className="w-1/2">Embeds external application</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">10.<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/figcaption" target="_blanck" className="text-blue-500"> figcaption</a> </li>
-                            <li className="w-1/2">A caption or legend for a figure</li>
-                        </ul>
-                    </div>
-                    <hr className="h-full border-l-2 border-gray-500" />
-
-                    <div className="bg-stone-900 p-5 w-1/3 rounded-3xl font-mono ">
-
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">11. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/figure" target="_blanck" className="text-blue-500">figure</a> </li>
-                            <li className="w-1/2">A figure illustrated</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">12. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/footer" target="_blanck" className="text-blue-500">footer</a> </li>
-                            <li className="w-1/2">Footer or least important</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">13. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/header" target="_blanck" className="text-blue-500">footer</a> </li>
-                            <li className="w-1/2">Masthead or important information</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">14. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/main" target="_blanck" className="text-blue-500">main</a> </li>
-                            <li className="w-1/2">The main content of the document</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">15. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/mark" target="_blanck" className="text-blue-500">mark</a> </li>
-                            <li className="w-1/2">Text highlighted</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">16. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/meter" target="_blanck" className="text-blue-500">meter</a> </li>
-                            <li className="w-1/2">A scalar value within a known range</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">17. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/nav" target="_blanck" className="text-blue-500">nav</a> </li>
-                            <li className="w-1/2">A section of navigation links</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">18. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/output" target="_blanck" className="text-blue-500">output</a> </li>
-                            <li className="w-1/2">The result of a calculation</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">19. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/picture" target="_blanck" className="text-blue-500">picture</a> </li>
-                            <li className="w-1/2">A container for multiple image sources</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">20. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/progress" target="_blanck" className="text-blue-500">progress</a> </li>
-                            <li className="w-1/2">The completion progress of a task</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">20. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/rp" target="_blanck" className="text-blue-500">rp</a> </li>
-                            <li className="w-1/2">Provides fall-back parenthesis</li>
-                        </ul>
-
-
-
-                    </div>
-                    <hr className="h-full border-l-2 border-gray-500" />
-
-                    <div className="bg-stone-900 p-5 w-1/3 rounded-3xl font-mono ">
-
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">21. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/rt" target="_blanck" className="text-blue-500">rt</a> </li>
-                            <li className="w-1/2">Defines the pronunciation of character</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">22. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/ruby" target="_blanck" className="text-blue-500">ruby</a> </li>
-                            <li className="w-1/2">Represents a ruby annotation</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">23. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/section" target="_blanck" className="text-blue-500">section</a> </li>
-                            <li className="w-1/2">A group in a series of related content</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">24. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/source" target="_blanck" className="text-blue-500">source</a> </li>
-                            <li className="w-1/2">Resources for the media elements</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">25. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary" target="_blanck" className="text-blue-500">summary</a> </li>
-                            <li className="w-1/2">A summary for the &lt; details &gt; element</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">26. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/template" target="_blanck" className="text-blue-500">template</a> </li>
-                            <li className="w-1/2">Defines the fragments of HTML</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">27. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/time" target="_blanck" className="text-blue-500">time</a> </li>
-                            <li className="w-1/2">A time or date</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">27. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/track" target="_blanck" className="text-blue-500">track</a> </li>
-                            <li className="w-1/2">Text tracks for the media elements</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">27. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/video" target="_blanck" className="text-blue-500">video</a> </li>
-                            <li className="w-1/2">Embeds video</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">27. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/wbr" target="_blanck" className="text-blue-500">wbr</a> </li>
-                            <li className="w-1/2">A line break opportunity</li>
-                        </ul>
-                    </div>
-                </div>
-
+                <Card className="flex flex-col gap-4">
+                    <Tag>Definition List</Tag>
+                    <CodeBlock>
+                        <div><Kw>&lt;dl&gt;</Kw></div>
+                        <div className="pl-4"><Kw>&lt;dt&gt;</Kw><Tx>A Term</Tx><Kw>&lt;/dt&gt;</Kw></div>
+                        <div className="pl-8"><Kw>&lt;dd&gt;</Kw><T c="text-gray-400">Definition of a term</T><Kw>&lt;/dd&gt;</Kw></div>
+                        <div className="pl-4"><Kw>&lt;dt&gt;</Kw><Tx>Another Term</Tx><Kw>&lt;/dt&gt;</Kw></div>
+                        <div className="pl-8"><Kw>&lt;dd&gt;</Kw><T c="text-gray-400">Definition of another term</T><Kw>&lt;/dd&gt;</Kw></div>
+                        <div><Kw>&lt;/dl&gt;</Kw></div>
+                    </CodeBlock>
+                    <MdnLink href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dl" />
+                </Card>
             </div>
-            {/* seventh */}
-            <div className="w-full flex justify-center items-center font-head font-extrabold text-[3rem] mt-5 mb-5 leading-none HEAD3">
-                HTML TABLES
-            </div>
-            <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
-                <div className=" bg-black p-5  rounded-3xl w-1/3 text-white">
-                    <div>
-                        <div className='h-[40px] w-1/3  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            HTML Table
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono  mb-5">
-                            <div>
-                                <span className="text-orange-400">&lt;table&gt;</span>
+
+            {/* ══════════════════════════════════════
+          SECTION 5 – FORMS
+      ══════════════════════════════════════ */}
+            <SectionTitle className="HEAD5">HTML FORMS</SectionTitle>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 px-5 pb-4">
+
+                {/* Form example */}
+                <Card className="flex flex-col gap-4">
+                    <Tag>HTML Form Example</Tag>
+                    <CodeBlock>
+                        <div><Kw>&lt;form</Kw> <At>method</At><W>=</W><Vl>POST</Vl> <At>action</At><W>=</W><Vl>api/login</Vl><Kw>&gt;</Kw></div>
+                        <div className="pl-4"><Kw>&lt;label</Kw> <At>for</At><W>=</W><Vl>mail</Vl><Kw>&gt;</Kw><Tx>Email:</Tx><Kw>&lt;/label&gt;</Kw></div>
+                        <div className="pl-4"><Kw>&lt;input</Kw> <At>type</At><W>=</W><Vl>email</Vl> <At>id</At><W>=</W><Vl>mail</Vl> <At>name</At><W>=</W><Vl>mail</Vl> <Kw>/&gt;</Kw></div>
+                        <div className="pl-4"><Kw>&lt;input</Kw> <At>type</At><W>=</W><Vl>password</Vl> <At>name</At><W>=</W><Vl>pw</Vl> <Kw>/&gt;</Kw></div>
+                        <div className="pl-4"><Kw>&lt;input</Kw> <At>type</At><W>=</W><Vl>submit</Vl> <At>value</At><W>=</W><Vl>Login</Vl> <Kw>/&gt;</Kw></div>
+                        <div className="pl-4"><Kw>&lt;input</Kw> <At>type</At><W>=</W><Vl>checkbox</Vl> <At>id</At><W>=</W><Vl>ck</Vl><Kw>/&gt;</Kw></div>
+                        <div className="pl-4"><Kw>&lt;label</Kw> <At>for</At><W>=</W><Vl>ck</Vl><Kw>&gt;</Kw><Tx>Remember me</Tx><Kw>&lt;/label&gt;</Kw></div>
+                        <div><Kw>&lt;/form&gt;</Kw></div>
+                    </CodeBlock>
+                    <div className="border border-white/20 rounded-xl p-4 text-sm flex flex-col gap-2">
+                        <form method="POST" action="api/login" className="flex flex-col gap-2">
+                            <label htmlFor="mail">Email: <input type="email" id="mail" name="mail" className="text-black ml-2 rounded px-1" /></label>
+                            <label htmlFor="pw">Password: <input type="password" id="pw" name="pw" className="text-black ml-2 rounded px-1" /></label>
+                            <div className="flex items-center gap-3 mt-1">
+                                <input type="submit" value="Login" className="border border-white/30 rounded px-3 py-1 cursor-pointer hover:bg-white/10" />
+                                <label className="flex items-center gap-2">
+                                    <input type="checkbox" id="ck" name="ck" /> Remember me
+                                </label>
                             </div>
-
-                            <div className="pl-4">
-                                <span className="text-orange-400">&lt;thead&gt;</span>
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-orange-400">&lt;tr&gt;</span>
-                            </div>
-
-                            <div className="pl-12">
-                                <span className="text-orange-400">&lt;td&gt;</span>
-                                <span className="text-gray-200">name</span>
-                                <span className="text-orange-400">&lt;/td&gt;</span>
-
-                                <span className="ml-4 text-orange-400">&lt;td&gt;</span>
-                                <span className="text-gray-200">age</span>
-                                <span className="text-orange-400">&lt;/td&gt;</span>
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-orange-400">&lt;/tr&gt;</span>
-                            </div>
-
-                            <div className="pl-4">
-                                <span className="text-orange-400">&lt;/thead&gt;</span>
-                            </div>
-
-                            <div className="pl-4">
-                                <span className="text-orange-400">&lt;tbody&gt;</span>
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-orange-400">&lt;tr&gt;</span>
-                            </div>
-
-                            <div className="pl-12">
-                                <span className="text-orange-400">&lt;td&gt;</span>
-                                <span className="text-gray-200">Roberta</span>
-                                <span className="text-orange-400">&lt;/td&gt;</span>
-
-                                <span className="ml-4 text-orange-400">&lt;td&gt;</span>
-                                <span className="text-gray-200">39</span>
-                                <span className="text-orange-400">&lt;/td&gt;</span>
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-orange-400">&lt;/tr&gt;</span>
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-orange-400">&lt;tr&gt;</span>
-                            </div>
-
-                            <div className="pl-12">
-                                <span className="text-orange-400">&lt;td&gt;</span>
-                                <span className="text-gray-200">Oliver</span>
-                                <span className="text-orange-400">&lt;/td&gt;</span>
-
-                                <span className="ml-4 text-orange-400">&lt;td&gt;</span>
-                                <span className="text-gray-200">25</span>
-                                <span className="text-orange-400">&lt;/td&gt;</span>
-                            </div>
-
-                            <div className="pl-8">
-                                <span className="text-orange-400">&lt;/tr&gt;</span>
-                            </div>
-
-                            <div className="pl-4">
-                                <span className="text-orange-400">&lt;/tbody&gt;</span>
-                            </div>
-
-                            <div>
-                                <span className="text-orange-400">&lt;/table&gt;</span>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-between gap-5 text-white">
-                    <div>
-                        <div className='h-[40px] w-1/2  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            HTML Table Tags
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono  ">
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">1. &lt;</p>table<p className="text-white inline-flex">&gt;</p></li>
-                                <li className="w-1/2">Defines a table</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">2. &lt;</p>th<p className="text-white inline-flex">&gt;</p></li>
-                                <li className="w-1/2">Defines a header cell in a table</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">3. &lt;</p>tr<p className="text-white inline-flex">&gt;</p></li>
-                                <li className="w-1/2">Defines a row in a table</li>
-                            </ul>
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">4. &lt;</p>td<p className="text-white inline-flex">&gt;</p></li>
-                                <li className="w-1/2">Defines a cell in a table</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">5. &lt;</p>caption<p className="text-white inline-flex">&gt;</p></li>
-                                <li className="w-1/2">Defines a table caption</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">6. &lt;</p>colgroup<p className="text-white inline-flex">&gt;</p></li>
-                                <li className="w-1/2">Defines a group of columns</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">7. &lt;</p>col<p className="text-white inline-flex">&gt;</p></li>
-                                <li className="w-1/2">Defines a column within a table</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">8. &lt;</p>thead<p className="text-white inline-flex">&gt;</p></li>
-                                <li className="w-1/2">Groups the header content</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">9. &lt;</p>tbody<p className="text-white inline-flex">&gt;</p></li>
-                                <li className="w-1/2">Groups the body content</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">10. &lt;</p>tfoot<p className="text-white inline-flex">&gt;</p></li>
-                                <li className="w-1/2">Groups the footer content
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-between gap-5 text-white">
-                    <div>
-                        <div className='h-[40px] w-1/2  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            &lt;td&gt; Attributes
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono  ">
-
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">1.</p> colspan</li>
-                                <li className="w-1/2">Number of columns a cell should span</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">2.</p> headers</li>
-                                <li className="w-1/2">One or more header cells a cell is related to</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">3.</p> rowspan</li>
-                                <li className="w-1/2">Number of rows a cell should span</li>
-                            </ul>
-
-
-                        </div>
-
-                        <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent mt-5  p-1 px-5 bg-gradient-to-r from-blue-300 via-sky-300 to-cyan-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1 cursor-pointer'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/td#attributes" className="flex justify-center" target="_blank"  >
-                                See : MDN Reference
-                            </a>
-                        </div>
-                    </div>
-                    <hr className="border-t-2 border-gray-500" />
-                    <div>
-                        <div className='h-[40px] w-1/2  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            &lt;td&gt; Attributes
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono  ">
-
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">1.</p> headers</li>
-                                <li className="w-1/2">Number of columns a cell should span</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">2.</p> colspan</li>
-                                <li className="w-1/2">One or more header cells a cell is related to</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">3.</p> rowspan</li>
-                                <li className="w-1/2">Number of rows a cell should span</li>
-                            </ul>
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">4.</p> abbr</li>
-                                <li className="w-1/2">Description of the cell's content</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400"><p className="text-white inline-flex">5.</p> scope</li>
-                                <li className="w-1/2">The header element relates to</li>
-                            </ul>
-
-
-                        </div>
-                        <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent mt-5  p-1 px-5 bg-gradient-to-r from-blue-300 via-sky-300 to-cyan-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3  py-1 cursor-pointer'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/th#attributes" className=" flex justify-center " target="_blank"  >
-                                See : MDN Reference
-                            </a>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            {/* eighth */}
-            <div className="w-full flex justify-center items-center font-head font-extrabold text-[3rem] mt-5 mb-5 leading-none HEAD4">
-                HTML LISTS
-            </div>
-            <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
-                <div className=" bg-black p-5  rounded-3xl w-1/3 text-white">
-                    <div className='h-[40px] w-1/2  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                        <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0_0_3844)">
-                                <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                            </g>
-                            <defs>
-                                <clipPath id="clip0_0_3844">
-                                    <rect width="14" height="14" fill="white" />
-                                </clipPath>
-                            </defs>
-                        </svg>
-                        Unordered List
-                    </div>
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
-                        <div>
-                            <span className="text-orange-400">&lt;ul&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;li&gt;</span>
-                            <span className="text-gray-200">I&apos;m an item</span>
-                            <span className="text-orange-400">&lt;/li&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;li&gt;</span>
-                            <span className="text-gray-200">I&apos;m another item</span>
-                            <span className="text-orange-400">&lt;/li&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;li&gt;</span>
-                            <span className="text-gray-200">I&apos;m another item</span>
-                            <span className="text-orange-400">&lt;/li&gt;</span>
-                        </div>
-
-                        <div>
-                            <span className="text-orange-400">&lt;/ul&gt;</span>
-                        </div>
-                    </div>
-                    <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent mt-5  p-1 px-5 bg-gradient-to-r from-blue-300 via-sky-300 to-cyan-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1 cursor-pointer'  >
-                        <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0_0_3844)">
-                                <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                            </g>
-                            <defs>
-                                <clipPath id="clip0_0_3844">
-                                    <rect width="14" height="14" fill="white" />
-                                </clipPath>
-                            </defs>
-                        </svg>
-                        <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/ul" className="flex justify-center" target="_blank"  >
-                            See : MDN Reference
-                        </a>
-                    </div>
-                </div>
-                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-center  text-white">
-                    <div className='h-[40px] w-1/2  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                        <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0_0_3844)">
-                                <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                            </g>
-                            <defs>
-                                <clipPath id="clip0_0_3844">
-                                    <rect width="14" height="14" fill="white" />
-                                </clipPath>
-                            </defs>
-                        </svg>
-                        Ordered List
-                    </div>
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
-                        <div>
-                            <span className="text-orange-400">&lt;ol&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;li&gt;</span>
-                            <span className="text-gray-200">I&apos;m the first item</span>
-                            <span className="text-orange-400">&lt;/li&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;li&gt;</span>
-                            <span className="text-gray-200">I&apos;m the second item</span>
-                            <span className="text-orange-400">&lt;/li&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;li&gt;</span>
-                            <span className="text-gray-200">I&apos;m the third item</span>
-                            <span className="text-orange-400">&lt;/li&gt;</span>
-                        </div>
-
-                        <div>
-                            <span className="text-orange-400">&lt;/ol&gt;</span>
-                        </div>
-                    </div>
-                    <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent mt-5  p-1 px-5 bg-gradient-to-r from-blue-300 via-sky-300 to-cyan-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1 cursor-pointer'  >
-                        <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0_0_3844)">
-                                <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                            </g>
-                            <defs>
-                                <clipPath id="clip0_0_3844">
-                                    <rect width="14" height="14" fill="white" />
-                                </clipPath>
-                            </defs>
-                        </svg>
-                        <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/ol" className="flex justify-center" target="_blank"  >
-                            See : MDN Reference
-                        </a>
-                    </div>
-
-                </div>
-                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-center  text-white">
-                    <div className='h-[40px] w-1/2  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                        <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0_0_3844)">
-                                <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                            </g>
-                            <defs>
-                                <clipPath id="clip0_0_3844">
-                                    <rect width="14" height="14" fill="white" />
-                                </clipPath>
-                            </defs>
-                        </svg>
-                        Definition List
-                    </div>
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
-                        <div>
-                            <span className="text-orange-400">&lt;dl&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;dt&gt;</span>
-                            <span className="text-gray-200">A Term</span>
-                            <span className="text-orange-400">&lt;/dt&gt;</span>
-                        </div>
-
-                        <div className="pl-8">
-                            <span className="text-orange-400">&lt;dd&gt;</span>
-                            <span className="text-gray-400">Definition of a term</span>
-                            <span className="text-orange-400">&lt;/dd&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;dt&gt;</span>
-                            <span className="text-gray-200">Another Term</span>
-                            <span className="text-orange-400">&lt;/dt&gt;</span>
-                        </div>
-
-                        <div className="pl-8">
-                            <span className="text-orange-400">&lt;dd&gt;</span>
-                            <span className="text-gray-400">Definition of another term</span>
-                            <span className="text-orange-400">&lt;/dd&gt;</span>
-                        </div>
-
-                        <div>
-                            <span className="text-orange-400">&lt;/dl&gt;</span>
-                        </div>
-                    </div>
-                    <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent mt-5  p-1 px-5 bg-gradient-to-r from-blue-300 via-sky-300 to-cyan-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1 cursor-pointer'  >
-                        <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0_0_3844)">
-                                <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                            </g>
-                            <defs>
-                                <clipPath id="clip0_0_3844">
-                                    <rect width="14" height="14" fill="white" />
-                                </clipPath>
-                            </defs>
-                        </svg>
-                        <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dl" className="flex justify-center" target="_blank"  >
-                            See : MDN Reference
-                        </a>
-                    </div>
-
-                </div>
-            </div>
-            {/* ninth */}
-            <div className="w-full flex justify-center items-center font-head font-extrabold text-[3rem] mt-5 mb-5 leading-none HEAD5">
-                HTML FORMS
-            </div>
-            <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
-                <div className=" bg-black p-10  rounded-3xl w-1/3 text-white">
-                    <div className='h-[40px] w-1/2  font-bold text-sm relative mb-5 border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                        <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0_0_3844)">
-                                <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                            </g>
-                            <defs>
-                                <clipPath id="clip0_0_3844">
-                                    <rect width="14" height="14" fill="white" />
-                                </clipPath>
-                            </defs>
-                        </svg>
-                        HTML Form Example
-                    </div>
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
-                        {/* opening form */}
-                        <div>
-                            <span className="text-orange-400">&lt;form</span>{" "}
-                            <span className="text-emerald-400">method</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"POST"</span>{" "}
-                            <span className="text-emerald-400">action</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"api/login"</span>
-                            <span className="text-orange-400">&gt;</span>
-                        </div>
-
-                        {/* email */}
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;label</span>{" "}
-                            <span className="text-emerald-400">for</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"mail"</span>
-                            <span className="text-orange-400">&gt;</span>
-                            <span className="text-gray-200">Email: </span>
-                            <span className="text-orange-400">&lt;/label&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;input</span>{" "}
-                            <span className="text-emerald-400">type</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"email"</span>{" "}
-                            <span className="text-emerald-400">id</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"mail"</span>{" "}
-                            <span className="text-emerald-400">name</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"mail"</span>{" "}
-                            <span className="text-orange-400">/&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;br /&gt;</span>
-                        </div>
-
-                        {/* password */}
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;label</span>{" "}
-                            <span className="text-emerald-400">for</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"pw"</span>
-                            <span className="text-orange-400">&gt;</span>
-                            <span className="text-gray-200">Password: </span>
-                            <span className="text-orange-400">&lt;/label&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;input</span>{" "}
-                            <span className="text-emerald-400">type</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"password"</span>{" "}
-                            <span className="text-emerald-400">id</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"pw"</span>{" "}
-                            <span className="text-emerald-400">name</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"pw"</span>{" "}
-                            <span className="text-orange-400">/&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;br /&gt;</span>
-                        </div>
-
-                        {/* submit */}
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;input</span>{" "}
-                            <span className="text-emerald-400">type</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"submit"</span>{" "}
-                            <span className="text-emerald-400">value</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"Login"</span>{" "}
-                            <span className="text-orange-400">/&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;br /&gt;</span>
-                        </div>
-
-                        {/* checkbox */}
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;input</span>{" "}
-                            <span className="text-emerald-400">type</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"checkbox"</span>{" "}
-                            <span className="text-emerald-400">id</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"ck"</span>{" "}
-                            <span className="text-emerald-400">name</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"ck"</span>{" "}
-                            <span className="text-orange-400">/&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;label</span>{" "}
-                            <span className="text-emerald-400">for</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"ck"</span>
-                            <span className="text-orange-400">&gt;</span>
-                            <span className="text-gray-200">Remember me</span>
-                            <span className="text-orange-400">&lt;/label&gt;</span>
-                        </div>
-
-                        {/* closing form */}
-                        <div>
-                            <span className="text-orange-400">&lt;/form&gt;</span>
-                        </div>
-                    </div>
-                    <div className="mt-5 border-2 border-gray-600 p-5 rounded-3xl ">
-                        <form method="POST" action="api/login" >
-                            <label for="mail">Email: </label>
-                            <input type="email" id="mail" name="mail" className="text-black" />
-                            <br />
-                            <br />
-                            <label for="pw">Password: </label>
-                            <input type="password" id="pw" name="pw" className="text-black" />
-                            <br />
-                            <br />
-                            <input type="submit" value="Login" />
-                            <br />
-                            <br />
-                            <input type="checkbox" id="ck" name="ck" />
-                            <label for="ck">Remember me</label>
                         </form>
                     </div>
+                </Card>
 
-                </div>
-                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-between  text-white">
-                    <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                        <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0_0_3844)">
-                                <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                            </g>
-                            <defs>
-                                <clipPath id="clip0_0_3844">
-                                    <rect width="14" height="14" fill="white" />
-                                </clipPath>
-                            </defs>
-                        </svg>
-                        Lable Tag
-                    </div>
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
-                        {/* Nested label */}
-                        <div className="text-gray-500">
-                            &lt;!-- Nested label --&gt;
-                        </div>
-
-                        <div>
-                            <span className="text-orange-400">&lt;label&gt;</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-gray-200">Click me</span>
-                        </div>
-
-                        <div className="pl-4">
-                            <span className="text-orange-400">&lt;input</span>{" "}
-                            <span className="text-emerald-400">type</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"text"</span>{" "}
-                            <span className="text-emerald-400">id</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"user"</span>{" "}
-                            <span className="text-emerald-400">name</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"name"</span>{" "}
-                            <span className="text-orange-400">/&gt;</span>
-                        </div>
-
-                        <div>
-                            <span className="text-orange-400">&lt;/label&gt;</span>
-                        </div>
-
-                        <br />
-
-                        {/* For attribute label */}
-                        <div className="text-gray-500">
-                            &lt;!-- 'for' attribute --&gt;
-                        </div>
-
-                        <div>
-                            <span className="text-orange-400">&lt;label</span>{" "}
-                            <span className="text-emerald-400">for</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"user"</span>
-                            <span className="text-orange-400">&gt;</span>
-                            <span className="text-gray-200">Click me</span>
-                            <span className="text-orange-400">&lt;/label&gt;</span>
-                        </div>
-
-                        <div>
-                            <span className="text-orange-400">&lt;input</span>{" "}
-                            <span className="text-emerald-400">id</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"user"</span>{" "}
-                            <span className="text-emerald-400">type</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"text"</span>{" "}
-                            <span className="text-emerald-400">name</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"name"</span>{" "}
-                            <span className="text-orange-400">/&gt;</span>
-                        </div>
-
-                    </div>
-                    <hr className="border-t-2 border-gray-500" />
-                    <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                        <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0_0_3844)">
-                                <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                            </g>
-                            <defs>
-                                <clipPath id="clip0_0_3844">
-                                    <rect width="14" height="14" fill="white" />
-                                </clipPath>
-                            </defs>
-                        </svg>
-                        Radio Buttons
-                    </div>
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono">
-
-                        <div>
-                            <span className="text-orange-400">&lt;input</span>{" "}
-                            <span className="text-emerald-400">type</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"radio"</span>{" "}
-                            <span className="text-emerald-400">name</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"gender"</span>{" "}
-                            <span className="text-emerald-400">id</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"m"</span>{" "}
-                            <span className="text-orange-400">/&gt;</span>
-                        </div>
-
-                        <div>
-                            <span className="text-orange-400">&lt;label</span>{" "}
-                            <span className="text-emerald-400">for</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"m"</span>
-                            <span className="text-orange-400">&gt;</span>
-                            <span className="text-gray-200">Male</span>
-                            <span className="text-orange-400">&lt;/label&gt;</span>
-                        </div>
-
-                        <br />
-
-                        <div>
-                            <span className="text-orange-400">&lt;input</span>{" "}
-                            <span className="text-emerald-400">type</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"radio"</span>{" "}
-                            <span className="text-emerald-400">name</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"gender"</span>{" "}
-                            <span className="text-emerald-400">id</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"f"</span>{" "}
-                            <span className="text-orange-400">/&gt;</span>
-                        </div>
-
-                        <div>
-                            <span className="text-orange-400">&lt;label</span>{" "}
-                            <span className="text-emerald-400">for</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"f"</span>
-                            <span className="text-orange-400">&gt;</span>
-                            <span className="text-gray-200">Female</span>
-                            <span className="text-orange-400">&lt;/label&gt;</span>
-                        </div>
-
-                    </div>
-                    <div className="border-2 p-5 flex flex-col gap-3 rounded-xl border-gray-600">
-                        <div className="flex  gap-2">
-                            <input type="radio" name="gender" id="m" />
-                            <label for="m">Male</label>
-                        </div>
-                        <div className="flex  gap-2">
-                            <input type="radio" name="gender" id="f" />
-                            <label for="f">Female</label>
-                        </div>
-                    </div>
-                </div>
-                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-between  text-white">
+                {/* Label + Radio */}
+                <Card className="flex flex-col gap-5">
                     <div>
-                        <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            Input Tag
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
-                            <div>
-                                <span className="text-orange-400">&lt;label</span>{" "}
-                                <span className="text-emerald-400">for</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"Name"</span>
-                                <span className="text-orange-400">&gt;</span>
-                                <span className="text-gray-200">Name:</span>
-                                <span className="text-orange-400">&lt;/label&gt;</span>{" "}
-                                <span className="text-orange-400">&lt;input</span>{" "}
-                                <span className="text-emerald-400">type</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"text"</span>{" "}
-                                <span className="text-emerald-400">name</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"Name"</span>{" "}
-                                <span className="text-emerald-400">id</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">""</span>{" "}
-                                <span className="text-orange-400">/&gt;</span>
-                            </div>
-                        </div>
-                        <div className="border-2 border-gray-600 rounded-xl p-5 mt-3">
-                            <label for="Name">Name:</label> <input type="text" name="Name" id="" className="text-black" />
-                        </div>
-
-                    </div>
-                    <hr className="border-t-2 border-gray-500  mt-5 mb-5" />
-                    <div>
-                        <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            Textarea Tag
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
-
-                            <div>
-                                <span className="text-orange-400">&lt;textarea</span>{" "}
-                                <span className="text-emerald-400">rows</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"2"</span>{" "}
-                                <span className="text-emerald-400">cols</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"30"</span>{" "}
-                                <span className="text-emerald-400">name</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"address"</span>{" "}
-                                <span className="text-emerald-400">id</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"address"</span>
-                                <span className="text-orange-400">&gt;</span>
-                            </div>
-
-                            {/* textarea content (empty) */}
-                            <div className="pl-4 text-gray-500"></div>
-
-                            <div>
-                                <span className="text-orange-400">&lt;/textarea&gt;</span>
-                            </div>
-
-                        </div>
-                        <div className="border-2 border-gray-600 rounded-xl p-5 mt-3 flex justify-center items-center gap-2">
-                            TextArea :
-                            <textarea className="text-black" rows="2" cols="30" name="address" id="address">
-                            </textarea>
-                        </div>
-
-                    </div>
-                    <hr className="border-t-2 border-gray-500 mt-5 mb-5" />
-                    <div>
-                        <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            Checkboxes
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
-
-                            <div>
-                                <span className="text-orange-400">&lt;input</span>{" "}
-                                <span className="text-emerald-400">type</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"checkbox"</span>{" "}
-                                <span className="text-emerald-400">name</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"s"</span>{" "}
-                                <span className="text-emerald-400">id</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"soc"</span>{" "}
-                                <span className="text-orange-400">/&gt;</span>
-                            </div>
-
-                            <div>
-                                <span className="text-orange-400">&lt;label</span>{" "}
-                                <span className="text-emerald-400">for</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"soc"</span>
-                                <span className="text-orange-400">&gt;</span>
-                                <span className="text-gray-200">Soccer</span>
-                                <span className="text-orange-400">&lt;/label&gt;</span>
-                            </div>
-
+                        <Tag>Label Tag</Tag>
+                        <CodeBlock>
+                            <Cm>&lt;!-- Nested --&gt;</Cm>
+                            <div><Kw>&lt;label&gt;</Kw><Tx>Click me</Tx></div>
+                            <div className="pl-6"><Kw>&lt;input</Kw> <At>type</At><W>=</W><Vl>text</Vl><Kw>/&gt;</Kw></div>
+                            <div><Kw>&lt;/label&gt;</Kw></div>
                             <br />
-
-                            <div>
-                                <span className="text-orange-400">&lt;input</span>{" "}
-                                <span className="text-emerald-400">type</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"checkbox"</span>{" "}
-                                <span className="text-emerald-400">name</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"s"</span>{" "}
-                                <span className="text-emerald-400">id</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"bas"</span>{" "}
-                                <span className="text-orange-400">/&gt;</span>
-                            </div>
-
-                            <div>
-                                <span className="text-orange-400">&lt;label</span>{" "}
-                                <span className="text-emerald-400">for</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"bas"</span>
-                                <span className="text-orange-400">&gt;</span>
-                                <span className="text-gray-200">Baseball</span>
-                                <span className="text-orange-400">&lt;/label&gt;</span>
-                            </div>
-
-                        </div>
-                        <div className="border-2 border-gray-600 rounded-xl p-5 mt-3 flex justify-center items-center gap-2">
-                            <input type="checkbox" name="s" id="soc" />
-                            <label for="soc">Soccer</label>
-
-                            <input type="checkbox" name="s" id="bas" />
-                            <label for="bas">Baseball</label>
-                        </div>
-
+                            <Cm>&lt;!-- for attribute --&gt;</Cm>
+                            <div><Kw>&lt;label</Kw> <At>for</At><W>=</W><Vl>user</Vl><Kw>&gt;</Kw><Tx>Click me</Tx><Kw>&lt;/label&gt;</Kw></div>
+                            <div><Kw>&lt;input</Kw> <At>id</At><W>=</W><Vl>user</Vl> <At>type</At><W>=</W><Vl>text</Vl><Kw>/&gt;</Kw></div>
+                        </CodeBlock>
                     </div>
-                </div>
-            </div>
-            {/* tenth */}
-            <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
-                <div className=" bg-black p-10  rounded-3xl w-1/3 text-white">
-
-                    <div>
-                        <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            Feildset Tag
+                    <div className="border-t border-white/10 pt-4">
+                        <Tag>Radio Buttons</Tag>
+                        <CodeBlock>
+                            <div><Kw>&lt;input</Kw> <At>type</At><W>=</W><Vl>radio</Vl> <At>name</At><W>=</W><Vl>gender</Vl> <At>id</At><W>=</W><Vl>m</Vl><Kw>/&gt;</Kw></div>
+                            <div><Kw>&lt;label</Kw> <At>for</At><W>=</W><Vl>m</Vl><Kw>&gt;</Kw><Tx>Male</Tx><Kw>&lt;/label&gt;</Kw></div>
+                            <div><Kw>&lt;input</Kw> <At>type</At><W>=</W><Vl>radio</Vl> <At>name</At><W>=</W><Vl>gender</Vl> <At>id</At><W>=</W><Vl>f</Vl><Kw>/&gt;</Kw></div>
+                            <div><Kw>&lt;label</Kw> <At>for</At><W>=</W><Vl>f</Vl><Kw>&gt;</Kw><Tx>Female</Tx><Kw>&lt;/label&gt;</Kw></div>
+                        </CodeBlock>
+                        <div className="border border-white/20 rounded-xl p-4 mt-3 flex gap-6 text-sm">
+                            <label className="flex items-center gap-2"><input type="radio" name="gender" id="m" /> Male</label>
+                            <label className="flex items-center gap-2"><input type="radio" name="gender" id="f" /> Female</label>
                         </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
-                            <div>
-                                <span className="text-orange-400">&lt;fieldset&gt;</span>
-                            </div>
-
-                            <div className="pl-4">
-                                <span className="text-orange-400">&lt;legend&gt;</span>
-                                <span className="text-gray-200">Your favorite monster</span>
-                                <span className="text-orange-400">&lt;/legend&gt;</span>
-                            </div>
-
-                            <div className="pl-4">
-                                <span className="text-orange-400">&lt;input</span>{" "}
-                                <span className="text-emerald-400">type</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"radio"</span>{" "}
-                                <span className="text-emerald-400">id</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"kra"</span>{" "}
-                                <span className="text-emerald-400">name</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"m"</span>{" "}
-                                <span className="text-orange-400">/&gt;</span>
-                            </div>
-
-                            <div className="pl-4">
-                                <span className="text-orange-400">&lt;label</span>{" "}
-                                <span className="text-emerald-400">for</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"kra"</span>
-                                <span className="text-orange-400">&gt;</span>
-                                <span className="text-gray-200">Kraken</span>
-                                <span className="text-orange-400">&lt;/label&gt;</span>
-                                <span className="text-orange-400 ml-2">&lt;br /&gt;</span>
-                            </div>
-
-                            <div className="pl-4">
-                                <span className="text-orange-400">&lt;input</span>{" "}
-                                <span className="text-emerald-400">type</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"radio"</span>{" "}
-                                <span className="text-emerald-400">id</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"sas"</span>{" "}
-                                <span className="text-emerald-400">name</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"m"</span>{" "}
-                                <span className="text-orange-400">/&gt;</span>
-                            </div>
-
-                            <div className="pl-4">
-                                <span className="text-orange-400">&lt;label</span>{" "}
-                                <span className="text-emerald-400">for</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"sas"</span>
-                                <span className="text-orange-400">&gt;</span>
-                                <span className="text-gray-200">Sasquatch</span>
-                                <span className="text-orange-400">&lt;/label&gt;</span>
-                            </div>
-
-                            <div>
-                                <span className="text-orange-400">&lt;/fieldset&gt;</span>
-                            </div>
-                        </div>
-                        <fieldset className="border-2 border-gray-600 rounded-xl p-5 mt-3">
-                            <legend>Your favorite monster</legend>
-                            <input type="radio" id="kra" name="m" />
-                            <label for="kra">Kraken</label><br />
-                            <input type="radio" id="sas" name="m" />
-                            <label for="sas">Sasquatch</label>
-                        </fieldset>
                     </div>
+                </Card>
 
-                </div>
-                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-center gap-5 text-white">
-
-
+                {/* Input, Textarea, Checkbox, Select */}
+                <Card className="flex flex-col gap-5">
                     <div>
-                        <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            Select Tag
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
-                            {/* label */}
-                            <div>
-                                <span className="text-orange-400">&lt;label</span>{" "}
-                                <span className="text-emerald-400">for</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"city"</span>
-                                <span className="text-orange-400">&gt;</span>
-                                <span className="text-gray-200">City:</span>
-                                <span className="text-orange-400">&lt;/label&gt;</span>
-                            </div>
-
-                            {/* select */}
-                            <div>
-                                <span className="text-orange-400">&lt;select</span>{" "}
-                                <span className="text-emerald-400">name</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"city"</span>{" "}
-                                <span className="text-emerald-400">id</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"city"</span>
-                                <span className="text-orange-400">&gt;</span>
-                            </div>
-
-                            {/* options */}
-                            <div className="pl-4">
-                                <span className="text-orange-400">&lt;option</span>{" "}
-                                <span className="text-emerald-400">value</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"1"</span>
-                                <span className="text-orange-400">&gt;</span>
-                                <span className="text-gray-200">Kanpur</span>
-                                <span className="text-orange-400">&lt;/option&gt;</span>
-                            </div>
-
-                            <div className="pl-4">
-                                <span className="text-orange-400">&lt;option</span>{" "}
-                                <span className="text-emerald-400">value</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"2"</span>
-                                <span className="text-orange-400">&gt;</span>
-                                <span className="text-gray-200">Banglore</span>
-                                <span className="text-orange-400">&lt;/option&gt;</span>
-                            </div>
-
-                            <div className="pl-4">
-                                <span className="text-orange-400">&lt;option</span>{" "}
-                                <span className="text-emerald-400">value</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"3"</span>
-                                <span className="text-orange-400">&gt;</span>
-                                <span className="text-gray-200">
-                                    Mumbai
-                                </span>
-                                <span className="text-orange-400">&lt;/option&gt;</span>
-                            </div>
-
-                            <div>
-                                <span className="text-orange-400">&lt;/select&gt;</span>
-                            </div>
-                        </div>
-                        <div className="border-2 border-gray-600 rounded-xl p-5 mt-3">
-                            <label for="city">City:</label>
-                            <select name="city" id="city" className="text-black ml-3">
+                        <Tag>Select Tag</Tag>
+                        <CodeBlock>
+                            <div><Kw>&lt;select</Kw> <At>name</At><W>=</W><Vl>city</Vl><Kw>&gt;</Kw></div>
+                            {["Kanpur", "Bangalore", "Mumbai"].map((c, i) => (
+                                <div key={i} className="pl-4"><Kw>&lt;option</Kw> <At>value</At><W>=</W><Vl>{i + 1}</Vl><Kw>&gt;</Kw><Tx>{c}</Tx><Kw>&lt;/option&gt;</Kw></div>
+                            ))}
+                            <div><Kw>&lt;/select&gt;</Kw></div>
+                        </CodeBlock>
+                        <div className="border border-white/20 rounded-xl p-3 mt-3 text-sm">
+                            City: <select name="city" className="text-black ml-2 rounded px-1">
                                 <option value="1">Kanpur</option>
-                                <option value="2">Banglore</option>
+                                <option value="2">Bangalore</option>
                                 <option value="3">Mumbai</option>
                             </select>
                         </div>
                     </div>
-                    <hr className="border-t-2 border-gray-500" />
-                    <div>
-                        <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            Datalist tags(HTML5)
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
-
-                            {/* label */}
-                            <div>
-                                <span className="text-orange-400">&lt;label</span>{" "}
-                                <span className="text-emerald-400">for</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"b"</span>
-                                <span className="text-orange-400">&gt;</span>
-                                <span className="text-gray-200">Choose a browser: </span>
-                                <span className="text-orange-400">&lt;/label&gt;</span>
-                            </div>
-
-                            {/* input */}
-                            <div>
-                                <span className="text-orange-400">&lt;input</span>{" "}
-                                <span className="text-emerald-400">list</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"list"</span>{" "}
-                                <span className="text-emerald-400">id</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"b"</span>{" "}
-                                <span className="text-emerald-400">name</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"browser"</span>{" "}
-                                <span className="text-orange-400">/&gt;</span>
-                            </div>
-
-                            {/* datalist */}
-                            <div>
-                                <span className="text-orange-400">&lt;datalist</span>{" "}
-                                <span className="text-emerald-400">id</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"list"</span>
-                                <span className="text-orange-400">&gt;</span>
-                            </div>
-
-                            <div className="pl-4">
-                                <span className="text-orange-400">&lt;option</span>{" "}
-                                <span className="text-emerald-400">value</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"Chrome"</span>
-                                <span className="text-orange-400">&gt;&lt;/option&gt;</span>
-                            </div>
-
-                            <div className="pl-4">
-                                <span className="text-orange-400">&lt;option</span>{" "}
-                                <span className="text-emerald-400">value</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"Firefox"</span>
-                                <span className="text-orange-400">&gt;&lt;/option&gt;</span>
-                            </div>
-
-                            <div className="pl-4">
-                                <span className="text-orange-400">&lt;option</span>{" "}
-                                <span className="text-emerald-400">value</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"Internet Explorer"</span>
-                                <span className="text-orange-400">&gt;&lt;/option&gt;</span>
-                            </div>
-
-                            <div className="pl-4">
-                                <span className="text-orange-400">&lt;option</span>{" "}
-                                <span className="text-emerald-400">value</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"Opera"</span>
-                                <span className="text-orange-400">&gt;&lt;/option&gt;</span>
-                            </div>
-
-                            <div className="pl-4">
-                                <span className="text-orange-400">&lt;option</span>{" "}
-                                <span className="text-emerald-400">value</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"Safari"</span>
-                                <span className="text-orange-400">&gt;&lt;/option&gt;</span>
-                            </div>
-
-                            <div className="pl-4">
-                                <span className="text-orange-400">&lt;option</span>{" "}
-                                <span className="text-emerald-400">value</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"Microsoft Edge"</span>
-                                <span className="text-orange-400">&gt;&lt;/option&gt;</span>
-                            </div>
-
-                            <div>
-                                <span className="text-orange-400">&lt;/datalist&gt;</span>
-                            </div>
-
-                        </div>
-                        <div className="border-2 border-gray-600 rounded-xl p-5 mt-3">
-                            <label for="b" >Choose a browser: </label>
-                            <input list="list" id="b" name="browser" className="text-black" />
-                            <datalist id="list">
-                                <option value="Chrome"></option>
-                                <option value="Firefox"></option>
-                                <option value="Internet Explorer"></option>
-                                <option value="Opera"></option>
-                                <option value="Safari"></option>
-                                <option value="Microsoft Edge"></option>
-                            </datalist>
-                        </div>
-
+                    <div className="border-t border-white/10 pt-4">
+                        <Tag>Form Attributes</Tag>
+                        <AttrTable rows={[
+                            ["name", "Name of form for scripting"],
+                            ["action", "URL of form script"],
+                            ["method", "HTTP method — POST / GET"],
+                            ["enctype", "Media type, see enctype"],
+                            ["onsubmit", "Runs when form was submitted"],
+                            ["onreset", "Runs when form was reset"],
+                        ]} />
                     </div>
-                </div>
-                <div className=" bg-black p-5 rounded-3xl w-1/3 flex flex-col justify-between gap-5 text-white">
-                    <div>
-                        <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            Submit and Reset Buttons
-
-
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
-                            {/* opening form */}
-                            <div>
-                                <span className="text-orange-400">&lt;form</span>{" "}
-                                <span className="text-emerald-400">action</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"register.php"</span>{" "}
-                                <span className="text-emerald-400">method</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"post"</span>
-                                <span className="text-orange-400">&gt;</span>
-                            </div>
-
-                            {/* name field */}
-                            <div className="pl-4">
-                                <span className="text-orange-400">&lt;label</span>{" "}
-                                <span className="text-emerald-400">for</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"foo"</span>
-                                <span className="text-orange-400">&gt;</span>
-                                <span className="text-gray-200">Name:</span>
-                                <span className="text-orange-400">&lt;/label&gt;</span>
-                            </div>
-
-                            <div className="pl-4">
-                                <span className="text-orange-400">&lt;input</span>{" "}
-                                <span className="text-emerald-400">type</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"text"</span>{" "}
-                                <span className="text-emerald-400">name</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"name"</span>{" "}
-                                <span className="text-emerald-400">id</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"foo"</span>{" "}
-                                <span className="text-orange-400">/&gt;</span>
-                            </div>
-
-                            {/* submit */}
-                            <div className="pl-4">
-                                <span className="text-orange-400">&lt;input</span>{" "}
-                                <span className="text-emerald-400">type</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"submit"</span>{" "}
-                                <span className="text-emerald-400">value</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"Submit"</span>{" "}
-                                <span className="text-orange-400">/&gt;</span>
-                            </div>
-
-                            {/* reset */}
-                            <div className="pl-4">
-                                <span className="text-orange-400">&lt;input</span>{" "}
-                                <span className="text-emerald-400">type</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"reset"</span>{" "}
-                                <span className="text-emerald-400">value</span>
-                                <span className="text-white">=</span>
-                                <span className="text-amber-300">"Reset"</span>{" "}
-                                <span className="text-orange-400">/&gt;</span>
-                            </div>
-
-                            {/* closing form */}
-                            <div>
-                                <span className="text-orange-400">&lt;/form&gt;</span>
-                            </div>
-
-                        </div>
-                        <div className="border-2 border-gray-600 rounded-xl p-5 mt-3  ">
-                            <form action="register.php" method="post" className="flex gap-5" >
-                                <label for="foo">Name:</label>
-                                <input type="text" name="name" id="foo" className="text-black" />
-                                <input type="submit" value="Submit" className="border-2 border-gray-600 rounded-xl px-2" />
-                                <input type="reset" value="Reset" className="border-2 border-gray-600 rounded-xl px-2" />
-                            </form>
-                        </div>
-
-                    </div>
-                    <hr className="border-t-2 border-gray-500" />
-                    <div>
-                        <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                            <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_0_3844)">
-                                    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_0_3844">
-                                        <rect width="14" height="14" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            FORM ATTRIBUTES
-                        </div>
-                        <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
-
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400">name</li>
-                                <li className="w-1/2">	Name of form for scripting</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400">action</li>
-                                <li className="w-1/2">URL of form script</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400">method</li>
-                                <li className="w-1/2">HTTP method, POST / GET (default)</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400">enctype</li>
-                                <li className="w-1/2">Media type, See enctype</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400">onsubmit</li>
-                                <li className="w-1/2">Runs when the form was submit</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-                            <ul className="flex justify-around mb-2 mt-2">
-                                <li className="w-1/2 text-orange-400">onreset</li>
-                                <li className="w-1/2">Runs when the form was reset</li>
-                            </ul>
-
-                            <hr className="border-t-2 border-gray-500" />
-
-                        </div>
-                    </div>
-
-
-
-                </div>
+                </Card>
             </div>
-            {/* eleventh */}
-            <div className="w-full flex justify-center items-center font-head font-extrabold text-[3rem] mt-5 mb-5 leading-none HEAD6">
-                HTML INPUT ATTRIBUTES
-            </div>
-            <div className="w-full flex gap-5 p-5 font-circular-web text-lg  " >
 
+            {/* ══════════════════════════════════════
+          SECTION 6 – INPUT ATTRIBUTES
+      ══════════════════════════════════════ */}
+            <SectionTitle className="HEAD6">HTML INPUT ATTRIBUTES</SectionTitle>
 
-                <div className=" bg-black p-5 rounded-3xl w-1/2 flex flex-col justify-between gap-5 text-white">
-                    <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                        <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0_0_3844)">
-                                <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                            </g>
-                            <defs>
-                                <clipPath id="clip0_0_3844">
-                                    <rect width="14" height="14" fill="white" />
-                                </clipPath>
-                            </defs>
-                        </svg>
-                        Input Tag Attributes
-                    </div>
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono ">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-5 pb-10">
+
+                <Card className="flex flex-col gap-4">
+                    <Tag>Input Tag Attributes</Tag>
+                    <CodeBlock>
                         <div>
-                            <span className="text-orange-400">&lt;input</span>{" "}
-                            <span className="text-emerald-400">type</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"text"</span>{" "}
-                            <span className="text-emerald-400">name</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"?"</span>{" "}
-                            <span className="text-emerald-400">value</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"?"</span>{" "}
-                            <span className="text-emerald-400">minlength</span>
-                            <span className="text-white">=</span>
-                            <span className="text-amber-300">"6"</span>{" "}
-                            <span className="text-emerald-400">required</span>
-                            <span className="text-orange-400">/&gt;</span>
+                            <Kw>&lt;input</Kw> <At>type</At><W>=</W><Vl>text</Vl> <At>name</At><W>=</W><Vl>?</Vl> <At>value</At><W>=</W><Vl>?</Vl> <At>minlength</At><W>=</W><Vl>6</Vl> <At>required</At><Kw>/&gt;</Kw>
                         </div>
+                    </CodeBlock>
+                    <AttrTable rows={[
+                        ['type="…"', "The type of data being input"],
+                        ['value="…"', "Default value"],
+                        ['name="…"', "Used in the HTTP request"],
+                        ['id="…"', "Unique identifier for other HTML elements"],
+                        ["readonly", "Stops the user from modifying"],
+                        ["disabled", "Stops any interaction"],
+                        ["checked", "Whether radio/checkbox is selected"],
+                        ["required", "Marks the field as compulsory"],
+                        ['placeholder="…"', "Adds temporary hint text"],
+                        ['autocomplete="off"', "Disable auto completion"],
+                        ['maxlength="…"', "Maximum number of characters"],
+                        ['minlength="…"', "Minimum number of characters"],
+                        ['min="…"', "Minimum numerical value"],
+                        ['max="…"', "Maximum numerical value"],
+                        ['step="…"', "How the number will increment"],
+                        ['pattern="…"', "Specifies a Regular expression"],
+                        ["autofocus", "Element should be focused on load"],
+                        ["multiple", "Whether to allow multiple values"],
+                        ['accept=""', "Expected file type in file upload"],
+                    ]} />
+                </Card>
 
+                <Card className="flex flex-col gap-4">
+                    <Tag>Input Types</Tag>
+                    <div className="bg-[#111] border border-white/10 rounded-xl overflow-hidden font-mono text-sm">
+                        {[
+                            ["checkbox", <input type="checkbox" />],
+                            ["radio", <input type="radio" />],
+                            ["file", <input type="file" className="text-xs text-white" />],
+                            ["text", <input type="text" className="text-black rounded px-1 w-32" />],
+                            ["password", <input type="password" className="text-black rounded px-1 w-32" />],
+                            ["submit", <input type="submit" className="border border-white/30 rounded px-2 py-0.5 cursor-pointer" />],
+                            ["reset", <input type="reset" className="border border-white/30 rounded px-2 py-0.5 cursor-pointer" />],
+                            ["button", <input type="button" value="button" className="border border-white/30 rounded px-2 py-0.5 cursor-pointer" />],
+                            ["color", <input type="color" className="h-7 w-12 rounded" />],
+                            ["date", <input type="date" className="text-black rounded px-1" />],
+                            ["time", <input type="time" className="text-black rounded px-1" />],
+                            ["month", <input type="month" className="text-black rounded px-1" />],
+                            ["week", <input type="week" className="text-black rounded px-1" />],
+                            ["datetime-local", <input type="datetime-local" className="text-black rounded px-1" />],
+                            ["email", <input type="email" className="text-black rounded px-1 w-32" />],
+                            ["tel", <input type="tel" className="text-black rounded px-1 w-32" />],
+                            ["url", <input type="url" className="text-black rounded px-1 w-32" />],
+                            ["number", <input type="number" className="text-black rounded px-1 w-20" />],
+                            ["search", <input type="search" className="text-black rounded px-1 w-32" />],
+                            ["range", <input type="range" className="w-32" />],
+                        ].map(([type, demo], i, arr) => (
+                            <div key={type}>
+                                <div className="flex items-center justify-between gap-4 px-4 py-2">
+                                    <span className="text-orange-400 text-xs">type="{type}"</span>
+                                    <span className="shrink-0">{demo}</span>
+                                </div>
+                                {i < arr.length - 1 && <div className="border-t border-white/10" />}
+                            </div>
+                        ))}
                     </div>
-
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">1. type="…"</li>
-                            <li className="w-1/2">The type of data that is being input</li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">2. value="…"</li>
-                            <li className="w-1/2">Default value</li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">3. name="…"</li>
-                            <li className="w-1/2">Used to describe this data in the HTTP request</li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">4. id="…"</li>
-                            <li className="w-1/2">Unique identifier that other HTML elements</li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">5. readonly</li>
-                            <li className="w-1/2">Stops the user from modifying</li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">6. disabled</li>
-                            <li className="w-1/2">Stops any interaction</li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">7. checked</li>
-                            <li className="w-1/2">The radio or checkbox select or not</li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">8. required</li>
-                            <li className="w-1/2">	Being compulsory, See required</li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">9. placeholder="…"</li>
-                            <li className="w-1/2">Adds a temporary, See ::placeholder</li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">10. autocomplete="off"</li>
-                            <li className="w-1/2">Disable auto completion</li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">11. autocapitalize="none"</li>
-                            <li className="w-1/2">Disable auto capitalization</li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">12. inputmode="…"</li>
-                            <li className="w-1/2">Display a specific keyboard, See inputmode</li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">13. list="…"</li>
-                            <li className="w-1/2">The id of an associated datalist</li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">14. maxlength="…"</li>
-                            <li className="w-1/2">Maximum number of characters</li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">14. minlength="…"</li>
-                            <li className="w-1/2">Minimum number of characters</li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">14. min="…"</li>
-                            <li className="w-1/2">Minimum numerical value on range & number</li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">14. max="…"</li>
-                            <li className="w-1/2">Maximum numerical value on range & number</li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">14. step="…"</li>
-                            <li className="w-1/2">How the number will increment in range & number</li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">14. pattern="…"</li>
-                            <li className="w-1/2">Specifies a Regular expression, See pattern</li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">14. autofocus</li>
-                            <li className="w-1/2">Be focused</li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">14. spellcheck</li>
-                            <li className="w-1/2">Perform spell checking</li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">14. multiple</li>
-                            <li className="w-1/2">Whether to allow multiple values</li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">14. accept=""</li>
-                            <li className="w-1/2">	Expected file type in file upload controls</li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-
-                    </div>
-                </div>
-
-                <div className=" bg-black p-5  rounded-3xl w-1/2 text-white">
-                    <div className='h-[40px] w-1/2  font-bold text-sm relative  border-transparent p-1 px-5 bg-gradient-to-r from-red-300 via-rose-300 to-pink-300
- text-black rounded-3xl flex justify-center items-center inline-flex gap-3 px-3 py-1'  >
-                        <svg className='rotate-45' width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0_0_3844)">
-                                <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="#010101" />
-                            </g>
-                            <defs>
-                                <clipPath id="clip0_0_3844">
-                                    <rect width="14" height="14" fill="white" />
-                                </clipPath>
-                            </defs>
-                        </svg>
-                        INPUT TYPES
-                    </div>
-                    <div className="bg-stone-900 p-5 rounded-3xl font-mono mt-5">
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">1. type="checkbox"</li>
-                            <li className="w-1/2"><input type="checkbox" name="" id="" /></li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">2. type="radio"	</li>
-                            <li className="w-1/2"><input type="radio" name="" id="" /></li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">3. type="file"	No file chosen</li>
-                            <li className="w-1/2"><input type="file" name="No file choosen" className="border border-gray-600" id="" /></li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">4. type="hidden"	</li>
-                            <li className="w-1/2"><input type="hidden" name="" id="" /></li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">5.  type="text"</li>
-                            <li className="w-1/2"><input type="text" name="" id="" className="text-black" /></li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">6.    type="password"</li>
-                            <li className="w-1/2"><input type="password" name="" id="" className="text-black" /></li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">7.   type="image"	Submit</li>
-                            <li className="w-1/2"><input type="image" name="" id="" className="border border-gray-600 px-5 py-1 rounded-xl" /></li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">8.   type="reset"</li>
-                            <li className="w-1/2">	<input type="reset" name="" id="" className="border border-gray-600 px-5 py-1 rounded-xl" /></li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">9.  type="button"</li>
-                            <li className="w-1/2"><input type="button" name="button" value="button" id="" className="border border-gray-600 px-5 py-1 rounded-xl" /></li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">10.  type="submit"</li>
-                            <li className="w-1/2"><input type="submit" name="" id="" className="border border-gray-600 px-5 py-1 rounded-xl" /></li>
-                        </ul>
-
-
-
-
-
-
-
-
-
-
-
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">11.type="color"</li>
-                            <li className="w-1/2"><input type="color" name="" id="" className="border border-gray-600  w-1/2 h-full rounded-xl" /></li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">12. type="date"	</li>
-                            <li className="w-1/2"><input type="date" name="" id="" className="border text-black border-gray-600 px-5 py-1 rounded-xl" /></li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">13. type="time"</li>
-                            <li className="w-1/2"><input type="time" name="" id="" className="border text-black border-gray-600 px-5 py-1 rounded-xl" /></li>
-                        </ul>
-
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">14.       type="month"	</li>
-                            <li className="w-1/2"><input type="month" name="" id="" className="border text-black border-gray-600 px-5 py-1 rounded-xl" /></li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">15.  type="datetime-local"</li>
-                            <li className="w-1/2"><input type="datetime-local" name="" id="" className="border text-black border-gray-600 px-5 py-1 rounded-xl" /></li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">16.  type="week"</li>
-                            <li className="w-1/2"><input type="week" name="" id="" className="border text-black border-gray-600 px-5 py-1 rounded-xl" /></li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">17.       type="email"</li>
-                            <li className="w-1/2"><input type="email" name="" id="" className="border text-black border-gray-600 px-5 py-1 rounded-xl" /></li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">18. type="tel"</li>
-                            <li className="w-1/2"><input type="tel" name="" id="" className="border text-black border-gray-600 px-5 py-1 rounded-xl" /></li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">19.type="url"</li>
-                            <li className="w-1/2"><input type="url" name="" id="" className="border text-black border-gray-600 px-5 py-1 rounded-xl" /></li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">20.     type="number"</li>
-                            <li className="w-1/2"><input type="number" name="" id="" className="border text-black border-gray-600 px-5 py-1 rounded-xl" /></li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">21.  type="search"</li>
-                            <li className="w-1/2"><input type="search" name=" " id="" className="border text-black border-gray-600 px-5 py-1 rounded-xl" /></li>
-                        </ul>
-                        <hr className="border-t-2 border-gray-500" />
-                        <ul className="flex justify-around mb-2 mt-2">
-                            <li className="w-1/2">22.    type="range"</li>
-                            <li className="w-1/2"><input type="range" name=" " id="" className="border text-black border-gray-600 px-5 py-1 rounded-xl" /></li>
-                        </ul>
-
-
-                    </div>
-
-                </div>
+                </Card>
             </div>
 
-
-        </div >
+        </div>
     );
 };
 
 export default Htmlw;
-
-//    <hr className="border-t-2 border-gray-500 mt-5" />

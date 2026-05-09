@@ -1,292 +1,360 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Layout, Sparkles, Download, CheckCircle2, ArrowRight, Clock, Star, Zap } from 'lucide-react';
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useRef, useState } from 'react';
+import { Layout, Sparkles, Download, CheckCircle2, ArrowRight, ArrowLeft, Clock, Star, Zap } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-const steps = [
-    {
-        number: "01",
-        label: "STEP ONE",
-        title: "Pick a Template",
-        subtitle: "Your first impression starts here",
-        description: "Browse our curated library of recruiter-approved layouts. Every template is battle-tested against modern ATS systems, ensuring your resume actually gets seen — not filtered out.",
-        icon: Layout,
-        iconBg: "from-amber-400 to-orange-500",
-        accentColor: "#f59e0b",
-        accentLight: "#fef3c7",
-        timeLabel: "~1 minute",
-        timeIcon: Clock,
-        checks: [
-            "ATS-friendly & recruiter-approved",
-            "Flexible, modern layouts",
-            "Job and industry matched",
-        ],
-        visual: (
-            <div className="relative w-full h-40 flex items-center justify-center">
-                <div className="absolute inset-0 flex items-end justify-center gap-2 pb-2">
-                    {[
-                        { h: "h-16", bg: "bg-amber-200", border: "border-amber-400" },
-                        { h: "h-28", bg: "bg-amber-400", border: "border-amber-600" },
-                        { h: "h-20", bg: "bg-amber-300", border: "border-amber-500" },
-                    ].map((bar, i) => (
-                        <div key={i} className={`w-10 ${bar.h} ${bar.bg} border-2 ${bar.border} rounded-t-lg flex items-center justify-center`}>
-                            <div className="w-6 h-1 bg-white/60 rounded mt-auto mb-2" />
-                        </div>
-                    ))}
-                </div>
-                <div className="absolute top-2 right-2 bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow">Best Match ✓</div>
-            </div>
-        )
-    },
-    {
-        number: "02",
-        label: "STEP TWO",
-        title: "Add Context with AI",
-        subtitle: "Let intelligence fill the gaps",
-        description: "No more staring at a blank page. Our AI understands your experience and transforms rough notes into polished, impactful bullet points that hiring managers actually read.",
-        icon: Sparkles,
-        iconBg: "from-blue-400 to-indigo-600",
-        accentColor: "#183ab7",
-        accentLight: "#eff6ff",
-        timeLabel: "~3 minutes",
-        timeIcon: Zap,
-        checks: [
-            "Beats writer's block instantly",
-            "AI bullet point enhancer",
-            "Tailored to your industry",
-        ],
-        visual: (
-            <div className="relative w-full h-40 flex flex-col items-start justify-center px-4 gap-2">
-                {["Improved team workflow by...", "Led cross-functional team...", "Reduced costs by 30%..."].map((text, i) => (
-                    <div key={i} className="flex items-center gap-2 w-full">
-                        <div className="w-2 h-2 rounded-full bg-blue-500 flex-shrink-0" />
-                        <div className="flex-1 bg-blue-50 border border-blue-200 rounded-lg px-3 py-1.5 text-xs text-blue-700 font-medium truncate">{text}</div>
-                        <Sparkles className="w-3 h-3 text-blue-400 flex-shrink-0" />
-                    </div>
-                ))}
-                <div className="absolute top-2 right-2 animate-pulse">
-                    <div className="w-2 h-2 rounded-full bg-blue-500" />
-                </div>
-            </div>
-        )
-    },
-    {
-        number: "03",
-        label: "STEP THREE",
-        title: "Download & Send",
-        subtitle: "Ready before your coffee cools",
-        description: "Export your polished resume in PDF or Word format in seconds. Multiple versions for different roles? No problem. You're interview-ready in under 5 minutes, guaranteed.",
-        icon: Download,
-        iconBg: "from-emerald-400 to-teal-600",
-        accentColor: "#006044",
-        accentLight: "#ecfdf5",
-        timeLabel: "~1 minute",
-        timeIcon: Star,
-        checks: [
-            "PDF and Word formats",
-            "Unlimited versions & exports",
-            "Ready in under 5 minutes",
-        ],
-        visual: (
-            <div className="relative w-full h-40 flex items-center justify-center">
-                <div className="relative">
-                    <div className="w-24 h-32 bg-white border-2 border-emerald-300 rounded-lg shadow-lg flex flex-col items-center justify-center gap-1.5">
-                        <div className="w-14 h-1.5 bg-emerald-200 rounded-full" />
-                        <div className="w-10 h-1.5 bg-emerald-100 rounded-full" />
-                        <div className="w-14 h-1.5 bg-emerald-200 rounded-full" />
-                        <div className="w-12 h-1.5 bg-emerald-100 rounded-full" />
-                        <div className="mt-2 w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center">
-                            <Download className="w-4 h-4 text-white" />
-                        </div>
-                    </div>
-                    <div className="absolute -top-2 -right-2 bg-emerald-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-md">PDF</div>
-                    <div className="absolute -bottom-2 -left-2 bg-teal-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-md">DOCX</div>
-                </div>
-            </div>
-        )
-    }
+const TEMPLATES = [
+    { id: 0, name: 'Classic' }, { id: 1, name: 'Sidebar' }, { id: 2, name: 'Bold' },
+    { id: 3, name: 'Grid' }, { id: 4, name: 'Minimal' }, { id: 5, name: 'Creative' },
 ];
 
-const StepCard = ({ step, index, isVisible }) => {
-    const Icon = step.icon;
-    return (
-        <div
-            className="relative flex flex-col"
-            style={{
-                opacity: isVisible ? 1 : 0,
-                transform: isVisible ? 'translateY(0)' : 'translateY(40px)',
-                transition: `opacity 0.6s ease ${index * 0.18}s, transform 0.6s ease ${index * 0.18}s`
-            }}
-        >
-
-
-            {/* Card */}
-            <div
-                className="group flex-1 rounded-3xl border overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 cursor-default"
-                style={{ borderColor: `${step.accentColor}30`, background: 'white' }}
-            >
-                {/* Top accent bar */}
-                <div className="h-1.5 w-full" style={{ background: `linear-gradient(to right, ${step.accentColor}, ${step.accentColor}66)` }} />
-
-                {/* Visual area */}
-                <div
-                    className="w-full border-b"
-                    style={{ background: step.accentLight, borderColor: `${step.accentColor}20` }}
-                >
-                    {step.visual}
-                </div>
-
-                <div className="p-7">
-                    {/* Icon + Title */}
-                    <div className="flex items-start gap-4 mb-4">
-                        <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${step.iconBg} flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-110 transition-transform duration-300`}>
-                            <Icon className="text-white w-6 h-6" />
-                        </div>
-                        <div>
-                            <h3 className="text-xl font-black text-slate-900 leading-tight">{step.title}</h3>
-                            <p className="text-sm font-medium" style={{ color: step.accentColor }}>{step.subtitle}</p>
-                        </div>
-                    </div>
-
-                    {/* Description */}
-                    <p className="text-slate-500 text-sm leading-relaxed mb-5">{step.description}</p>
-
-                    {/* Checklist */}
-                    <ul className="space-y-2.5 mb-5">
-                        {step.checks.map((check, i) => (
-                            <li key={i} className="flex items-center gap-2.5 text-sm text-slate-700 font-medium">
-                                <CheckCircle2 className="w-4 h-4 flex-shrink-0" style={{ color: step.accentColor }} />
-                                {check}
-                            </li>
-                        ))}
-                    </ul>
-
-                    {/* Time badge */}
-                    <div
-                        className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full"
-                        style={{ background: step.accentLight, color: step.accentColor }}
-                    >
-                        <step.timeIcon className="w-3 h-3" />
-                        {step.timeLabel}
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+const BULLETS = {
+    'Software engineer': {
+        'Impact-driven': ['Architected microservices migration reducing deploy times by 60%', 'Owned backend infra serving 2M+ daily active users', 'Shipped 14 features in 2 quarters with zero P0 incidents'],
+        'Concise': ['Built and deployed 3 production APIs', 'Led backend migration to Node.js', 'Reduced bug backlog by 45%'],
+        'Technical': ['Designed event-driven architecture using Kafka & Redis', 'Implemented CI/CD pipelines via GitHub Actions & Docker', 'Optimized SQL queries cutting p95 latency from 800ms to 90ms'],
+    },
+    'Product manager': {
+        'Impact-driven': ['Grew DAU 38% by launching a redesigned onboarding flow', 'Drove $2.4M ARR through a new upsell strategy', 'Aligned 4 engineering teams on a single 6-month roadmap'],
+        'Concise': ['Launched 3 core product features on time', 'Increased retention by 22%', 'Managed a $1.2M product budget'],
+        'Technical': ['Defined API contracts between frontend and data teams', 'Wrote detailed PRDs with acceptance criteria for 12 epics', 'Partnered with ML team to ship a recommendation engine'],
+    },
 };
 
-const BuildResume = () => {
-    const navigate = useNavigate();
-    const [visible, setVisible] = useState(false);
-    const ref = useRef(null);
+const ROLES = ['Software engineer', 'Product manager', 'Designer', 'Data analyst'];
+const TONES = ['Impact-driven', 'Concise', 'Technical'];
 
-    useEffect(() => {
-        const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.1 });
-        if (ref.current) obs.observe(ref.current);
-        return () => obs.disconnect();
-    }, []);
+function TemplateThumb({ id, selected, onSelect }) {
+    return (
+        <div
+            onClick={() => onSelect(id)}
+            className={`cursor-pointer rounded-xl border-2 p-2 flex flex-col items-center gap-1.5 transition-all hover:-translate-y-0.5 ${selected ? 'border-neutral bg-base-300' : 'border-base-300 bg-base-100 hover:border-warning'}`}
+        >
+            <div className="w-full h-12 rounded-md border border-base-300 bg-base-100 flex flex-col justify-center gap-1 px-2">
+                <div className="h-1 bg-warning rounded-full w-4/5" />
+                <div className="h-1 bg-base-300 rounded-full w-3/5" />
+                <div className="h-1 bg-base-300 rounded-full w-4/5" />
+            </div>
+            <span className="text-[10px] font-semibold text-neutral tracking-wide">{TEMPLATES[id].name}</span>
+        </div>
+    );
+}
 
-    // Trigger on mount too
+function TypeWriter({ text, delay = 0 }) {
+    const [displayed, setDisplayed] = useState('');
     useEffect(() => {
-        const t = setTimeout(() => setVisible(true), 100);
+        setDisplayed('');
+        let i = 0;
+        const t = setTimeout(() => {
+            const iv = setInterval(() => {
+                setDisplayed(text.slice(0, ++i));
+                if (i >= text.length) clearInterval(iv);
+            }, 18);
+            return () => clearInterval(iv);
+        }, delay);
         return () => clearTimeout(t);
-    }, []);
+    }, [text, delay]);
+    return <span>{displayed}{displayed.length < text.length && <span className="animate-pulse">|</span>}</span>;
+}
+
+function DownloadBar({ label, icon: Icon }) {
+    const [pct, setPct] = useState(0);
+    const [done, setDone] = useState(false);
+    const [running, setRunning] = useState(false);
+    const start = () => {
+        if (running) return;
+        setRunning(true);
+        let p = 0;
+        const iv = setInterval(() => {
+            p += Math.floor(Math.random() * 14) + 4;
+            if (p >= 100) { p = 100; setDone(true); clearInterval(iv); }
+            setPct(p);
+        }, 120);
+    };
+    return (
+        <div className="flex items-center gap-2 text-xs font-medium text-base-content cursor-pointer" onClick={start}>
+            <Icon className="w-3.5 h-3.5 text-warning flex-shrink-0" />
+            <span className="w-24">{label}</span>
+            <div className="flex-1 h-1.5 bg-base-300 rounded-full overflow-hidden">
+                <div className="h-full bg-neutral rounded-full transition-all duration-150" style={{ width: pct + '%' }} />
+            </div>
+            <span className={`w-10 text-right font-bold ${done ? 'text-accent' : 'text-neutral'}`}>{done ? 'Done' : pct ? pct + '%' : '—'}</span>
+        </div>
+    );
+}
+
+const STEPS = [
+    {
+        number: '01', title: 'Pick a template', subtitle: 'Your first impression starts here',
+        icon: Layout, iconCls: 'bg-warning text-warning-content', time: '~1 minute', TimeIcon: Clock,
+        desc: 'Browse recruiter-approved layouts battle-tested against modern ATS systems.',
+        checks: ['ATS-friendly & recruiter-approved', 'Flexible, modern layouts', 'Job and industry matched'],
+    },
+    {
+        number: '02', title: 'Add context with AI', subtitle: 'Let intelligence fill the gaps',
+        icon: Sparkles, iconCls: 'bg-base-300 text-base-content', time: '~3 minutes', TimeIcon: Zap,
+        desc: 'Transform rough notes into polished, impactful bullet points hiring managers actually read.',
+        checks: ['Beats writer\'s block instantly', 'AI bullet point enhancer', 'Tailored to your industry'],
+    },
+    {
+        number: '03', title: 'Download & send', subtitle: 'Ready before your coffee cools',
+        icon: Download, iconCls: 'bg-secondary text-secondary-content', time: '~1 minute', TimeIcon: Star,
+        desc: 'Export in PDF or Word in seconds. Multiple versions for different roles.',
+        checks: ['PDF and Word formats', 'Unlimited versions & exports', 'Ready in under 5 minutes'],
+    },
+];
+
+export default function BuildResume() {
+    const navigate = useNavigate();
+    const [cur, setCur] = useState(0);
+    const [dir, setDir] = useState(1);
+    const [visible, setVisible] = useState(false);
+    const [selTempl, setSelTempl] = useState(0);
+    const [role, setRole] = useState('Software engineer');
+    const [tone, setTone] = useState('Impact-driven');
+    const [bullets, setBullets] = useState([]);
+    const [generating, setGenerating] = useState(false);
+
+    useEffect(() => { setTimeout(() => setVisible(true), 100); }, []);
+
+    const goTo = (n) => {
+        if (n < 0 || n > 2) return;
+        setDir(n > cur ? 1 : -1);
+        setCur(n);
+    };
+
+    const generate = () => {
+        setGenerating(true);
+        setBullets([]);
+        const src = BULLETS[role]?.[tone] || BULLETS['Software engineer']['Impact-driven'];
+        src.forEach((b, i) => setTimeout(() => {
+            setBullets(prev => [...prev, b]);
+            if (i === src.length - 1) setGenerating(false);
+        }, i * 320));
+    };
+
+    const step = STEPS[cur];
+    const Icon = step.icon;
 
     return (
-        <div className='w-screen min-h-screen bg-base-200 font-sans flex justify-center items-start py-8 px-4'>
-            <div className='w-[90%] h-[90%] bg-base-100 p-10  rounded-2xl shadow-2xl'>
+        <div className="w-screen min-h-screen bg-base-200 flex justify-center items-start py-8 px-4 font-sans">
+            <div className="w-[90%] bg-base-100 p-8 md:p-10 rounded-box border-[2px] border-base-300">
 
                 {/* Header */}
-                <div
-                    className="text-center mb-14"
-                    style={{
-                        opacity: visible ? 1 : 0,
-                        transform: visible ? 'translateY(0)' : 'translateY(-20px)',
-                        transition: 'opacity 0.7s ease, transform 0.7s ease'
-                    }}
-                >
-
-                    <h1 className="text-4xl md:text-6xl font-black tracking-tight text-slate-900 mb-4 leading-tight">
-                        Here's how we{' '}
-                        <span className="relative inline-block">
-                            <span className="text-accent">Get You Hired.</span>
-                            <svg className="absolute -bottom-1 left-0 w-full" height="6" viewBox="0 0 200 6">
-                                <path d="M0 5 Q100 0 200 5" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" opacity="0.5" />
-                            </svg>
-                        </span>
+                <div className="text-center mb-10" style={{
+                    opacity: visible ? 1 : 0, transform: visible ? 'none' : 'translateY(-16px)',
+                    transition: 'opacity .7s ease, transform .7s ease'
+                }}>
+                    <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-widest uppercase text-neutral bg-base-300 rounded-selector px-4 py-1.5 mb-4 border-[2px] border-base-300">
+                        resume builder
+                    </span>
+                    <h1 className="text-4xl md:text-5xl font-black text-base-content mb-3 leading-tight"
+                        style={{ fontFamily: "'Playfair Display', serif" }}>
+                        Here's how we <em className="text-accent not-italic">get you hired.</em>
                     </h1>
-                    <p className="text-slate-700 text-lg max-w-xl mx-auto leading-relaxed">
-                        Three simple steps. One powerful resume. Your dream job — closer than ever.
-                    </p>
+                    <p className="text-base-content/50 text-sm max-w-md mx-auto">Walk through each step live — everything is interactive.</p>
                 </div>
 
-                {/* Timeline connector (desktop) */}
-                <div className="hidden lg:flex items-center justify-center mb-10 px-16 gap-0">
-                    {steps.map((step, i) => (
+                {/* Timeline */}
+                <div className="flex items-center justify-center max-w-sm mx-auto mb-1 gap-0">
+                    {STEPS.map((s, i) => (
                         <React.Fragment key={i}>
-                            <div
-                                className="w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs font-black"
-                                style={{ borderColor: "#370a00", color: "#370a00", background: "#fff7ed" }}
-                            >{i + 1}</div>
-                            {i < steps.length - 1 && (
-                                <div className="flex-1 flex items-center gap-1 px-2">
-                                    <div className="flex-1 h-0.5 bg-secondary rounded-full" />
-                                    <ArrowRight className="w-4 h-4 text-slate-700 flex-shrink-0" />
+                            <button
+                                onClick={() => goTo(i)}
+                                className={`w-9 h-9 rounded-full border-[2px] flex items-center justify-center text-xs font-bold transition-all z-10 flex-shrink-0
+                  ${i === cur ? 'bg-warning border-base-300 text-warning-content scale-110' : i < cur ? 'bg-neutral border-neutral text-neutral-content' : 'bg-base-100 border-base-300 text-base-content/50'}`}
+                            >{i + 1}</button>
+                            {i < 2 && (
+                                <div className="flex-1 h-0.5 bg-base-300 relative overflow-hidden">
+                                    <div className="absolute inset-0 bg-neutral transition-all duration-500" style={{ width: i < cur ? '100%' : '0%' }} />
                                 </div>
                             )}
                         </React.Fragment>
                     ))}
                 </div>
 
-                {/* Steps Grid */}
-                <div ref={ref} className='grid grid-cols-1 md:grid-cols-3 gap-6 mb-14'>
-                    {steps.map((step, i) => (
-                        <StepCard key={i} step={step} index={i} isVisible={visible} />
+                {/* Progress bar */}
+                <div className="max-w-sm mx-auto h-1 bg-base-300 rounded-full overflow-hidden mb-8 mt-3">
+                    <div className="h-full bg-neutral rounded-full transition-all duration-500"
+                        style={{ width: cur === 0 ? '16%' : cur === 1 ? '50%' : '90%' }} />
+                </div>
+
+                {/* Stepper nav */}
+                <div className="flex items-center justify-center gap-4 mb-6">
+                    <button onClick={() => goTo(cur - 1)} disabled={cur === 0}
+                        className="w-9 h-9 rounded-full bg-base-200 border-[2px] border-base-300 flex items-center justify-center text-base-content/50 hover:bg-base-300 disabled:opacity-30 transition-all">
+                        <ArrowLeft className="w-4 h-4" />
+                    </button>
+                    <span className="font-bold text-base-content text-sm min-w-[140px] text-center"
+                        style={{ fontFamily: "'Playfair Display', serif" }}>{step.title}</span>
+                    <button onClick={() => goTo(cur + 1)} disabled={cur === 2}
+                        className="w-9 h-9 rounded-full bg-base-200 border-[2px] border-base-300 flex items-center justify-center text-base-content/50 hover:bg-base-300 disabled:opacity-30 transition-all">
+                        <ArrowRight className="w-4 h-4" />
+                    </button>
+                </div>
+
+                {/* Panel */}
+                <div className="bg-base-100 border-[2px] border-base-300 rounded-box overflow-hidden"
+                    style={{ animation: `${dir > 0 ? 'slideIn' : 'slideInLeft'} .35s ease` }}>
+                    <style>{`
+            @keyframes slideIn { from { opacity:0; transform:translateX(20px) } to { opacity:1; transform:none } }
+            @keyframes slideInLeft { from { opacity:0; transform:translateX(-20px) } to { opacity:1; transform:none } }
+          `}</style>
+
+                    {/* Step 1: Template picker */}
+                    {cur === 0 && (
+                        <div>
+                            <div className="bg-base-200 border-b-[2px] border-base-300 p-5">
+                                <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
+                                    {TEMPLATES.map(t => <TemplateThumb key={t.id} id={t.id} selected={selTempl === t.id} onSelect={setSelTempl} />)}
+                                </div>
+                            </div>
+                            <div className="p-6 flex flex-col gap-4">
+                                <div className="flex items-start gap-3">
+                                    <div className={`w-10 h-10 rounded-xl ${step.iconCls} flex items-center justify-center flex-shrink-0`}>
+                                        <Icon className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-semibold tracking-widest uppercase text-neutral mb-0.5">Step {step.number}</p>
+                                        <h3 className="text-lg font-bold text-base-content" style={{ fontFamily: "'Playfair Display', serif" }}>{step.title}</h3>
+                                        <p className="text-xs text-accent">{step.subtitle}</p>
+                                    </div>
+                                </div>
+                                <p className="text-sm text-base-content/60">{step.desc}</p>
+                                <ul className="space-y-2">
+                                    {step.checks.map(c => (
+                                        <li key={c} className="flex items-center gap-2 text-sm font-medium text-base-content">
+                                            <CheckCircle2 className="w-4 h-4 text-warning flex-shrink-0" />{c}
+                                        </li>
+                                    ))}
+                                </ul>
+                                <div className="inline-flex items-center gap-1.5 text-[11px] font-bold text-warning-content bg-warning border-[2px] border-base-300 rounded-selector px-3 py-1 self-start">
+                                    <Clock className="w-3 h-3" /> Selected: {TEMPLATES[selTempl].name}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Step 2: AI bullets */}
+                    {cur === 1 && (
+                        <div>
+                            <div className="bg-base-200 border-b-[2px] border-base-300 p-5 flex flex-col gap-3">
+                                <div>
+                                    <p className="text-[10px] font-semibold tracking-widest uppercase text-neutral mb-2">Your role</p>
+                                    <div className="flex flex-wrap gap-2">
+                                        {ROLES.map(r => (
+                                            <button key={r} onClick={() => setRole(r)}
+                                                className={`text-xs font-semibold px-3 py-1.5 rounded-selector border-[2px] transition-all ${role === r ? 'bg-warning border-base-300 text-warning-content' : 'bg-base-100 border-base-300 text-base-content hover:border-warning'}`}>
+                                                {r}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div>
+                                    <p className="text-[10px] font-semibold tracking-widest uppercase text-neutral mb-2">Tone</p>
+                                    <div className="flex flex-wrap gap-2">
+                                        {TONES.map(t => (
+                                            <button key={t} onClick={() => setTone(t)}
+                                                className={`text-xs font-semibold px-3 py-1.5 rounded-selector border-[2px] transition-all ${tone === t ? 'bg-warning border-base-300 text-warning-content' : 'bg-base-100 border-base-300 text-base-content hover:border-warning'}`}>
+                                                {t}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                                <button onClick={generate}
+                                    className="self-start flex items-center gap-2 bg-warning hover:bg-neutral hover:text-neutral-content text-warning-content border-[2px] border-base-300 rounded-selector px-4 py-2 text-xs font-bold transition-all">
+                                    <Sparkles className="w-3.5 h-3.5" /> Generate bullet points
+                                </button>
+                                {bullets.length > 0 && (
+                                    <div className="bg-base-100 border-[2px] border-base-300 rounded-xl p-3 flex flex-col gap-2">
+                                        {bullets.map((b, i) => (
+                                            <div key={i} className="flex items-start gap-2 text-xs font-medium text-base-content">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-warning mt-1.5 flex-shrink-0" />
+                                                <TypeWriter text={b} delay={0} />
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                            <div className="p-6 flex flex-col gap-4">
+                                <div className="flex items-start gap-3">
+                                    <div className={`w-10 h-10 rounded-xl ${step.iconCls} flex items-center justify-center flex-shrink-0`}>
+                                        <Icon className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-semibold tracking-widest uppercase text-neutral mb-0.5">Step {step.number}</p>
+                                        <h3 className="text-lg font-bold text-base-content" style={{ fontFamily: "'Playfair Display', serif" }}>{step.title}</h3>
+                                        <p className="text-xs text-accent">{step.subtitle}</p>
+                                    </div>
+                                </div>
+                                <p className="text-sm text-base-content/60">{step.desc}</p>
+                                <ul className="space-y-2">
+                                    {step.checks.map(c => <li key={c} className="flex items-center gap-2 text-sm font-medium text-base-content"><CheckCircle2 className="w-4 h-4 text-warning flex-shrink-0" />{c}</li>)}
+                                </ul>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Step 3: Download */}
+                    {cur === 2 && (
+                        <div>
+                            <div className="bg-base-200 border-b-[2px] border-base-300 p-5 flex flex-col gap-3">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-16 h-20 bg-base-100 border-[2px] border-base-300 rounded-xl flex flex-col items-center justify-center gap-1.5 relative flex-shrink-0">
+                                        {[32, 24, 32, 20].map((w, i) => <div key={i} className="h-1.5 bg-base-300 rounded-full" style={{ width: w }} />)}
+                                        <Download className="w-4 h-4 text-neutral mt-1" />
+                                        <span className="absolute -top-2 -right-2 text-[9px] font-bold bg-warning text-warning-content px-1.5 py-0.5 rounded-full">PDF</span>
+                                        <span className="absolute -bottom-2 -left-2 text-[9px] font-bold bg-secondary text-secondary-content px-1.5 py-0.5 rounded-full">DOCX</span>
+                                    </div>
+                                    <div className="flex flex-col gap-2 flex-1">
+                                        <DownloadBar label="resume.pdf" icon={Download} />
+                                        <DownloadBar label="resume.docx" icon={Download} />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="p-6 flex flex-col gap-4">
+                                <div className="flex items-start gap-3">
+                                    <div className={`w-10 h-10 rounded-xl ${step.iconCls} flex items-center justify-center flex-shrink-0`}>
+                                        <Icon className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-semibold tracking-widest uppercase text-neutral mb-0.5">Step {step.number}</p>
+                                        <h3 className="text-lg font-bold text-base-content" style={{ fontFamily: "'Playfair Display', serif" }}>{step.title}</h3>
+                                        <p className="text-xs text-accent">{step.subtitle}</p>
+                                    </div>
+                                </div>
+                                <p className="text-sm text-base-content/60">{step.desc}</p>
+                                <ul className="space-y-2">
+                                    {step.checks.map(c => <li key={c} className="flex items-center gap-2 text-sm font-medium text-base-content"><CheckCircle2 className="w-4 h-4 text-warning flex-shrink-0" />{c}</li>)}
+                                </ul>
+                                <div className="inline-flex items-center gap-1.5 text-[11px] font-bold text-warning-content bg-warning border-[2px] border-base-300 rounded-selector px-3 py-1 self-start">
+                                    <Zap className="w-3 h-3" /> Total time: under 5 minutes
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                {/* Stats + CTA */}
+                <div className="flex flex-wrap justify-center gap-3 mt-8 mb-6">
+                    {[['ti-users', '50,000+', 'job seekers'], ['ti-shield-check', 'ATS', 'guaranteed'], ['ti-clock', 'Under 5 mins', 'to complete']].map(([ic, b, s]) => (
+                        <div key={b} className="inline-flex items-center gap-2 text-xs font-medium text-base-content bg-base-100 border-[2px] border-base-300 rounded-full px-4 py-2">
+                            <span className="text-warning text-base"><i className={`ti ${ic}`} /></span>
+                            <strong className="text-accent">{b}</strong>{s}
+                        </div>
                     ))}
                 </div>
 
-                {/* Total time banner */}
-                <div
-                    className="flex items-center justify-center gap-3 mb-10 text-sm text-slate-500"
-                    style={{
-                        opacity: visible ? 1 : 0,
-                        transition: 'opacity 0.7s ease 0.7s'
-                    }}
-                >
-                    <div className="flex items-center gap-1.5 bg-white border border-slate-200 rounded-full px-4 py-2 shadow-sm">
-                        <Clock className="w-4 h-4 text-slate-700" />
-                        <span className="font-semibold text-slate-700">Total time:</span>
-                        <span className="font-black text-accent">Under 5 minutes</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 bg-white border border-slate-200 rounded-full px-4 py-2 shadow-sm">
-                        <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                        <span className="font-semibold text-slate-700">Trusted by</span>
-                        <span className="font-black text-slate-900">50,000+ job seekers</span>
-                    </div>
-                </div>
-
-                {/* CTA */}
-                <div
-                    className='flex flex-col items-center gap-4 mb-12'
-                    style={{
-                        opacity: visible ? 1 : 0,
-                        transform: visible ? 'translateY(0)' : 'translateY(20px)',
-                        transition: 'opacity 0.6s ease 0.8s, transform 0.6s ease 0.8s'
-                    }}
-                >
+                <div className="flex flex-col items-center gap-2">
                     <button
-                        className='group relative px-12 py-5 bg-base-200 hover:bg-secondary border border-secondary text-secondary  hover:text-secondary-content  hover:border-base-100   text-lg rounded-full transition-all duration-300 hover:-translate-y-1 active:scale-95  flex items-center gap-3 overflow-hidden'
-                        onClick={() => navigate("/app/build-resume/resume-templates")}
-                    >
-                        <span className="relative z-10">Start Building My Resume</span>
-                        <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
-
+                        onClick={() => navigate('/app/build-resume/resume-templates')}
+                        className="group flex items-center gap-3 bg-secondary hover:bg-neutral text-secondary-content border-[2px] border-secondary rounded-selector px-10 py-4 text-sm font-semibold transition-all duration-200 hover:-translate-y-1 active:scale-95">
+                        Start building my resume
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </button>
-                    <p className="text-slate-700 text-sm">No credit card required · Free to start</p>
+                    <p className="text-xs text-base-content/40">No credit card required · free to start</p>
                 </div>
 
             </div>
         </div>
     );
 }
-
-export default BuildResume;

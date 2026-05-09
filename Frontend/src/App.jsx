@@ -60,6 +60,7 @@ import EditProfile from "./personalPages/editProfile";
 import Connections from "./personalPages/Connections";
 import Collab from "./Pages/Collab";
 import HTML from "./Pages/Toolkit/Htmlw";
+import Css from "./Pages/Toolkit/Css";
 import Toolkit from "./Pages/Toolkit/Toolkitw";
 import Review from "./Main/PagesMain/Sub-Category/Support-Category/Review";
 import Settings from "./personalPages/Settings/Settings";
@@ -73,6 +74,8 @@ import IntroEdu from "./Pages/Resume/2/IntroEdu";
 import Education from "./Pages/Resume/2/Education";
 import IntroSkill from "./Pages/Resume/2/IntroSkills";
 import Skills from "./Pages/Resume/2/Skills";
+import PageNotFound from "./ErrorSaver/PageNotFound";
+
 const App = () => {
   return (
     <Provider store={appStore}>
@@ -86,6 +89,8 @@ const App = () => {
           {/* Route "/" is means the user simple type the domain link example : www.codesarthi.in or the default route of the project */}
 
           <Route path="/" element={<Hero />} />
+          {/* 📌 PAGE NOT FOUND ROUTE */}
+          <Route path="*" element={<PageNotFound />} />
           <Route path="/developers" element={<Developers />} />
           <Route path="/safety" element={<Safety />} />
           <Route path="/blogs" element={<Blogs />} />
@@ -118,7 +123,11 @@ const App = () => {
           <Route path="/signup" element={<Signup />} />
 
           {/* 🔒 PROTECTED APP */}
+
+          {/* Body is the main container for the app it will have the sidebar and the main content area and it is the layout of the app
+           so user will be redirect to the /app route when he will login */}
           <Route path="/app" element={<Body />}>
+
             <Route element={<ProtectedRoute />}>
               <Route index element={<Dashboard />} />
               <Route path="dashboard" element={<Dashboard />} />
@@ -157,6 +166,10 @@ const App = () => {
 
               <Route path="toolkit" element={<Toolkit />} />
               <Route path="toolkit/html" element={<HTML />} />
+              <Route path="toolkit/css" element={<Css />} />
+
+              {/* 📌 PAGE NOT FOUND ROUTE */}
+              <Route path="*" element={<PageNotFound />} />
             </Route>
           </Route>
 

@@ -1,49 +1,177 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState, useMemo } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import Temp1 from "../3/Temp1";
+import axios from "axios";
+import BASE_URL from '../../auth/baseURL';
+import { Slice } from 'lucide-react';
 import Toast from './Toast';
-import { AnimatePresence } from 'framer-motion';
-import Temp1 from '../3/Temp1';
-import { useLocation } from 'react-router-dom';
-
-const Skills = ({ data }) => {
-    const location = useLocation();
-    let resumeData = location.state?.resumeData || {};
+import { AnimatePresence } from "framer-motion";
+// ─── tiny hook ────────────────────────────────────────────────────────────────
+function useIntersectionObserver(options = {}) {
+    const ref = useRef(null);
     const [isVisible, setIsVisible] = useState(false);
-    const [aiModalOpen, setAiModalOpen] = useState(false);
-    const [activeTab, setActiveTab] = useState("preview"); // preview | tips | score
-    const [sidebarOpen, setSidebarOpen] = useState(true);
-    const [toasts, setToasts] = useState([]);
-    const [hovered, setHovered] = useState(false);
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                    observer.disconnect();
+                }
+            },
+            { threshold: 0.08, ...options }
+        );
+        if (ref.current) observer.observe(ref.current);
+        return () => observer.disconnect();
+    }, []);
+    return [ref, isVisible];
+}
+
+// ─── reusable field ───────────────────────────────────────────────────────────
 
 
-    // ─── tip item ─────────────────────────────────────────────────────────────────
-    const TipItem = ({ emoji, title, body }) => (
-        <div className="flex gap-3 py-3 border-b border-slate-100 last:border-none">
-            <div className="w-8 h-8 rounded-lg bg-violet-50 flex items-center justify-center flex-shrink-0 text-sm">
-                {emoji}
-            </div>
-            <p className="text-xs text-slate-500 leading-relaxed">
-                <span className="text-slate-800 font-semibold">{title}: </span>
-                {body}
-            </p>
+
+
+
+const ToastContainer = ({ toasts, removeToast }) => {
+    return (
+        <div className="fixed top-5 right-5 flex flex-col gap-3 z-50">
+            <AnimatePresence>
+                {toasts.map((t) => (
+                    <Toast
+                        key={t.id}
+                        {...t}
+                        onClose={() => removeToast(t.id)}
+                    />
+                ))}
+            </AnimatePresence>
         </div>
     );
-    const ToastContainer = ({ toasts, removeToast }) => {
-        return (
-            <div className="fixed top-5 right-5 flex flex-col gap-3 z-50">
-                <AnimatePresence>
-                    {toasts.map((t) => (
-                        <Toast
-                            key={t.id}
-                            {...t}
-                            onClose={() => removeToast(t.id)}
-                        />
-                    ))}
-                </AnimatePresence>
-            </div>
+};
+
+
+
+// ─── tip item ─────────────────────────────────────────────────────────────────
+const TipItem = ({ emoji, title, body }) => (
+    <div className="flex gap-3 py-3 border-b border-slate-100 last:border-none">
+        <div className="w-8 h-8 rounded-lg bg-violet-50 flex items-center justify-center flex-shrink-0 text-sm">
+            {emoji}
+        </div>
+        <p className="text-xs text-slate-500 leading-relaxed">
+            <span className="text-slate-800 font-semibold">{title}: </span>
+            {body}
+        </p>
+    </div>
+);
+
+const Education = ({ data }) => {
+    const location = useLocation();
+    let resumeData = location.state?.resumeData || {};
+
+    const [skills, setSkills] = useState([
+        {
+            skillCategory: "",
+            skills: [],
+        }
+    ]);
+
+
+    const [activeTab, setActiveTab] = useState("preview"); // preview | tips | score
+    const [sidebarOpen, setSidebarOpen] = useState(true);
+
+
+    const [SkillCategory, setSkillCategory] = useState("");
+    const [modalOpen, setModalOpen] = useState(false);
+
+
+
+
+    const finalResumeData = useMemo(() => ({
+        ...resumeData,
+
+        summaryBody: "",
+        degree: "",
+        major: "",
+        institution: "",
+        gradDate: "",
+
+        skills: skills.map(s => ({
+            skillCategory: s.skillCategory,
+            skills: s.skills.join(", ")
+        })),
+
+        projects: [],
+        certifications: [],
+        achievements: [],
+        languages: ["English (Fluent)", "Hindi (Native)"],
+    }), [resumeData, skills]);
+
+    const Navigate = useNavigate();
+
+
+
+
+    const handleChange2 = (index, id, value) => {
+        setSkills(prev =>
+            prev.map((exp, i) =>
+                i === index ? { ...exp, [id]: value } : exp
+            )
+        );
+    };
+    const addSkills = () => {
+        setSkills(prev => [
+            ...prev,
+            {
+                skillCategory: "",
+                skills: [],
+
+            }
+        ]);
+    };
+
+    const [toasts, setToasts] = useState([]);
+
+
+
+
+
+
+
+
+
+
+
+
+    const [value, setValue] = useState("");
+
+    const addSkillToCategory = (index, value) => {
+        if (!value.trim()) return;
+
+        setSkills(prev =>
+            prev.map((s, i) =>
+                i === index
+                    ? {
+                        ...s,
+                        skills: [...s.skills, value]
+                    }
+                    : s
+            )
         );
     };
 
 
+
+    const removeSkill = (categoryIndex, skillIndex) => {
+        setSkills(prev =>
+            prev.map((s, i) =>
+                i === categoryIndex
+                    ? {
+                        ...s,
+                        skills: s.skills.filter((_, j) => j !== skillIndex)
+                    }
+                    : s
+            )
+        );
+    };
     const addToast = ({ type = "success", title, message }) => {
         const id = Date.now();
         setToasts((prev) => [...prev, { id, type, title, message }]);
@@ -53,11 +181,14 @@ const Skills = ({ data }) => {
         setToasts((prev) => prev.filter((t) => t.id !== id));
     };
 
-    return (
-        <div className="min-h-[calc(100vh-4rem)] w-screen flex  items-start justify-center p-4 md:p-6 bg-base-100">
-            <ToastContainer toasts={toasts} removeToast={removeToast} />
 
+    const [commonSkills, setCommonSkills] = useState([]);
+
+    return (
+        <div className="min-h-[calc(100vh-4rem)] w-screen flex items-start justify-center p-4 md:p-6 bg-base-100">
+            <ToastContainer toasts={toasts} removeToast={removeToast} />
             <div className="w-full bg-base-100 rounded-3xl border border-slate-100 overflow-hidden border border-slate-700" >
+
                 {/* ── top bar ── */}
                 <div className="flex items-center justify-between px-5 py-3.5 bg-base-200 border-b border-slate-700">
                     <span className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full bg-base-100 text-secondary">
@@ -97,135 +228,170 @@ const Skills = ({ data }) => {
                 {/* ── body ── */}
                 <div className={`grid transition-all duration-500 ${sidebarOpen ? "lg:grid-cols-[1fr_500px]" : "grid-cols-1"}`}>
 
-                    {aiModalOpen && <div className='fixed w-screen h-screen bg-black/20 inset-0 z-30' onClick={() => {
-                        setAiModalOpen(false);
-                        setBullets([]);
-                        setpoints([]);
-                        setSelectedEndData("");
-                        setSelectedDegree("");
-                        setSelectedInstitution("");
-                        setSelectedField("");
-                        setSelectedEducationIndex(null);
-                    }}>
 
-
-                        <div className='w-full flex justify-center gap-5 p-5' >
-                            <div className="w-[50%] bg-base-100 h-[80vh] mt-10  rounded-xl p-5 " onClick={(e) => e.stopPropagation()}>
-                                <div className='mb-5'>
-                                    <h1 className="text-3xl font-bold text-slate-900 mb-2 leading-tight text-start  " >
-                                        Bullet points about what you did as a <br /> <span className="text-accent">{selectedDegree}</span>,
-                                    </h1>
-                                </div>
-
-                                <div >
-                                    {isAiworking ? (<div className='flex flex-col justify-center items-center h-[500px] w-full  gap-2'>
-                                        <div className='flex justify-center items-center gap-2'>
-                                            <h1 className="text-5xl font-bold text-[#884f06] mb-2 leading-tight text-center ">Shastra</h1>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width={50} height={50} viewBox="0 0 24 24" className='mb-3'>
-                                                <path fill="#884f06" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
-                                            </svg>
-                                        </div>
-                                        <h1 className="text-xl font-medium text-[#884f06] mb-2 leading-tight text-center ">AI Is Generating Your  Bullet Points, Please Wait...</h1>
-                                        <div className="animate-pulse flex flex-col items-center gap-3">
-                                            <div className="h-4 w-40 bg-[#884f06]/30 rounded"></div>
-                                            <div className="h-4 w-56 bg-[#884f06]/20 rounded"></div>
-                                        </div>
-                                    </div>) : (
-                                        <div className="h-[600px] overflow-y-auto  ">
-                                            {bullets.map((bullet, index) => (
-                                                <div className='bg-base-300 p-3 rounded-2xl flex mb-3 cursor-pointer hover:border hover:border-secondary transition-all '
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        setpoints((prev) => {
-                                                            if (prev.length == 10) {
-                                                                alert("You can only add 10 bullet points");
-                                                                return prev;
-                                                            }
-                                                            if (prev.includes(bullet.bullet)) {
-                                                                return prev;
-                                                            }
-
-                                                            return [...prev, bullet.bullet];
-                                                        });
-                                                        setBullets((prev) => prev.filter((_, i) => i !== index));
-                                                    }}
-                                                >
-                                                    <div className="flex gap-5 w-full items-center">
-                                                        <div className='rounded-full border-2 border-secondary p-2 h-fit flex justify-center items-center bg-base-100'  >
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
-                                                                <g fill="none">
-                                                                    <path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"></path>
-                                                                    <path fill="#884f06" d="M11 20a1 1 0 1 0 2 0v-7h7a1 1 0 1 0 0-2h-7V4a1 1 0 1 0-2 0v7H4a1 1 0 1 0 0 2h7z"></path>
-                                                                </g>
-                                                            </svg>
-                                                        </div>
-                                                        <div className='bg-base-100 p-4 rounded-2xl w-full' >{bullet.bullet}</div>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>)}
-
-
-                                </div>
-                            </div>
-                            <div className='bg-white w-[50%] h-[80vh] mt-10 mx-auto rounded-xl border-2 p-5' onClick={(e) => { e.stopPropagation() }}>
-                                <div className="h-[650px] overflow-y-auto">
-                                    <div className='mb-5'>
-                                        <h1 className="text-2xl font-bold text-slate-900 mb-2 leading-tight text-start  " >
-                                            Points Added : {points?.length}/10 <br />
-                                            Total Sugesstion : {bullets?.length}
-                                        </h1>
-                                    </div>
-                                    {points?.length === 0 ? (<div className='flex flex-col justify-center items-center h-[700px] w-[80%] mx-auto gap-2'>
-
-                                        <h1 className="text-xl font-medium text-slate-900 mb-2 leading-tight text-center ">No bullet points added yet. Select suggestions from the panel on the right.</h1>
-
-                                    </div>) : points?.map((point, index) => (
-                                        <div key={index + point} className='bg-base-300 p-3 rounded-2xl flex mb-3 cursor-pointer hover:border hover:border-secondary transition-all ' >
-                                            <div className="flex gap-5 w-full items-center">
-                                                <div className='rounded-full border-2 border-secondary p-2 h-fit flex justify-center items-center bg-base-100'
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        setpoints((prev) => prev.filter((_, i) => i !== index));
-
-                                                    }}
-                                                >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
-                                                        <path fill="#884f06" d="M16 9v10H8V9zm-1.5-6h-5l-1 1H5v2h14V4h-3.5zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2z"></path>
-                                                    </svg>
-                                                </div>
-                                                <div className='bg-base-100 p-4 rounded-2xl w-full'>{point}</div>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                                <button className='bg-secondary w-full text-center mt-5 rounded-xl text-base-100 py-3 px-5 font-bold ' onClick={() => {
-                                    setEducation(prev =>
-                                        prev.map((edu, i) =>
-                                            i === selectedEducationIndex
-                                                ? {
-                                                    ...edu,
-                                                    bullets: [...new Set([...(edu.bullets || []), ...points])]
-                                                }
-                                                : edu
-                                        )
-                                    );
-                                    setAiModalOpen(false);
-                                    setpoints([]);
-                                    setSelectedEndData("");
-                                    setSelectedDegree("");
-                                    setSelectedInstitution("");
-                                    setSelectedField("");
-                                    setSelectedEducationIndex(null);
-
-                                }}>Finalise Your Points</button>
-                            </div>
-
-                        </div>
-
-                    </div>}
                     {/* ── LEFT: form ── */}
                     <div className="p-6 md:p-10 border border-slate-700 ">
+                        <div className="mb-7 ">
+                            <h1 className="text-3xl md:text-4xl font-black tracking-tight text-slate-900 mb-2 leading-tight">
+                                We recommend including  {" "}
+                                <span className="text-accent">6-8 skills</span>.
+                            </h1>
+                            <p className="text-sm text-slate-500 leading-relaxed max-w-xl">
+                                Choose skills that align with the job requirements. Show employers you're confident of the work you do!
+
+                            </p>
+                        </div>
+
+                        <div className="space-y-5 mt-8">
+                            {skills.map((skill, index) => (
+                                <div
+                                    key={index}
+                                    className="bg-base-200 border border-slate-700 rounded-3xl p-5"
+                                >
+
+                                    {modalOpen && <div className='h-screen w-screen bg-black/70 fixed flex items-center justify-center z-30 inset-0'>
+                                        <div className='w-[70%] h-[70%] bg-base-100 rounded-3xl p-10 flex flex-col gap-5 border-4 border-base-300'>
+                                            <div className='text-2xl font-bold'>Category <mark className='bg-secondary text-secondary-content p-2 rounded-xl px-5'>{SkillCategory}</mark> ,</div>
+                                            <div className="flex h-full">
+                                                <div className="w-1/2 flex flex-col gap-5">
+                                                    here is the list of common skills in this category :
+                                                    <div className='bg-base-200 w-full rounded-3xl h-full border-2 border-slate-700 '>
+
+                                                    </div>
+                                                </div>
+                                                <div className="w-1/2">
+                                                    <div className='flex flex-wrap gap-2'>
+                                                        {commonSkills.map((skill, index) => (
+                                                            <button
+                                                                key={index}
+                                                                onClick={() => addSkill(skill)}
+                                                                className='bg-base-200 border border-slate-700 rounded-2xl px-3.5 py-2.5 text-sm text-slate-800 outline-none hover:border-secondary hover:ring-4 hover:ring-accent hover:bg-white transition-all duration-200 font-medium flex items-center gap-2 cursor-pointer'
+                                                            >
+                                                                {skill}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>}
+                                    {/* Category Input */}
+                                    <div className="flex justify-between items-start gap-5 flex-col ">
+                                        <input
+
+                                            type="text"
+                                            placeholder="Skill Category (Frontend, Backend...)"
+                                            value={skill.skillCategory}
+                                            onChange={(e) =>
+
+                                                handleChange2(index, "skillCategory", e.target.value)
+                                            }
+                                            className="w-full  bg-base-200 border border-slate-900 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 outline-none
+                 focus:border-secondary focus:ring-4 focus:ring-accent focus:bg-white
+                 transition-all duration-200 font-medium placeholder:text-slate-500"
+
+                                        />
+                                        <button className='bg-secondary border border-secondary hover:bg-base-100 text-base-100 hover:text-secondary px-3 py-2 rounded-xl mt-3 flex justify-center items-center gap-2 hover:scale-105 transition-all duration-300 ease-in-out group' onClick={() => {
+
+                                            if (skill.skillCategory.trim() === "") {
+
+                                                addToast({
+                                                    type: "error",
+                                                    title: "Error",
+                                                    message: "Please fill Skill Category  "
+                                                });
+                                                return;
+                                            }
+                                            setSkillCategory(skill.skillCategory)
+                                            setModalOpen(true)
+
+                                        }}>
+
+                                            <div className='flex justify-center items-center gap-2 bg-base-100 p-2 rounded-xl group-hover:bg-secondary group-hover:text-base-100 transition-all duration-300 ease-in-out'>
+                                                <h1 className="text-xl font-bold text-secondary leading-tight text-center group-hover:text-base-100 transition-all duration-300 ease-in-out">Shastra</h1>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" className='text-secondary group-hover:text-base-100'>
+                                                    <path fill="currentColor" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
+                                                </svg>
+                                            </div>
+                                            Generate skills</button>
+                                    </div>
+
+                                    {/* Skills Chips */}
+                                    <div className="flex flex-wrap gap-2 mt-4">
+                                        {skill.skills.map((item, idx) => (
+                                            <div
+                                                key={idx}
+                                                className="px-3 py-1.5 rounded-full bg-secondary text-secondary-content text-sm flex items-center gap-2"
+                                            >
+                                                {item}
+
+                                                <button
+                                                    onClick={() => removeSkill(index, idx)}
+                                                    className="hover:text-red-300"
+                                                >
+                                                    ×
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {/* Add Skill */}
+                                    <div className="flex items-center w-full justify-between gap-10 ">
+                                        < input
+                                            type="text"
+                                            placeholder="Press Enter to add skill"
+                                            className="w-full bg-base-200 border border-slate-900 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 outline-none
+                 focus:border-secondary focus:ring-4 focus:ring-accent focus:bg-white
+                 transition-all duration-200 font-medium placeholder:text-slate-500"
+
+
+                                            value={value}
+                                            onChange={(e) => setValue(e.target.value)}
+                                            onKeyDown={(e) => {
+                                                if (e.key !== "Enter") return;
+
+                                                e.preventDefault();
+
+                                                if (skill.skills.length >= 12) {
+                                                    addToast({
+                                                        type: "error",
+                                                        title: "Exceeded Limit",
+                                                        message: "Could not add more skills."
+                                                    });
+                                                    return;
+
+                                                }
+                                                addSkillToCategory(index, e.target.value);
+
+                                                e.target.value = "";
+                                                setValue("")
+                                            }}
+                                        />
+                                        <button className="mt-4 px-4 py-3 rounded-xl flex gap-2 items-center justify-center border border-slate-600 bg-secondary text-secondary-content font-semibold" onClick={() => {
+                                            addSkillToCategory(index, value); setValue("");
+                                            if (skill.skills.length >= 12) {
+                                                addToast({
+                                                    type: "error",
+                                                    title: "Exceeded Limit",
+                                                    message: "Could not add more skills."
+                                                });
+                                                return;
+
+                                            }
+                                        }}>Enter <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
+                                                <path fill="#f8cb82ff" d="M19 6a1 1 0 0 0-1 1v4a1 1 0 0 1-1 1H7.41l1.3-1.29a1 1 0 0 0-1.42-1.42l-3 3a1 1 0 0 0-.21.33a1 1 0 0 0 0 .76a1 1 0 0 0 .21.33l3 3a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.42L7.41 14H17a3 3 0 0 0 3-3V7a1 1 0 0 0-1-1"></path>
+                                            </svg></button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <button
+                            onClick={addSkills}
+                            className="mt-5 px-5 py-3 rounded-2xl bg-secondary text-secondary-content font-semibold hover:scale-[1.02] transition-all"
+                        >
+                            + Add Skill Category
+                        </button>
 
                     </div>
 
@@ -252,79 +418,38 @@ const Skills = ({ data }) => {
                             {/* ── PREVIEW tab ── */}
                             {activeTab === "preview" && (
 
-                                <div>
+                                <div
+                                    className="
+                            relative
+                            flex
+                            items-start
+                            justify-center
+                            rounded-xl
+                            overflow-hidden
+                            bg-white
+                            shadow-2xl
+                            border
+                            border-slate-200
+                            transition-all
+                            duration-500
+py-1
+                            "
+                                >
+                                    {/* Resume Scaling Wrapper */}
                                     <div
-
-                                        className="group relative flex flex-col rounded-2xl overflow-hidden cursor-pointer"
-                                        style={{
-                                            opacity: isVisible ? 1 : 0,
-                                            transform: isVisible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.97)",
-                                            background: "#fff",
-                                        }}
-
+                                        className="
+                origin-top
+                scale-[0.61]
+                sm:scale-[0.64]
+                md:scale-[0.69]
+                lg:scale-[0.74]
+                xl:scale-[0.80]
+                transition-transform
+                duration-500
+            "
                                     >
-                                        {/* Badge */}
-                                        <div
-                                            className="absolute top-3 left-3 z-10 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest text-white"
-                                            style={{ background: "#000000", letterSpacing: "0.12em" }}
-                                        >
-                                            {/* {item.tag} */} tag of the temp
-                                        </div>
-
-
-
-                                        {/* Preview Area */}
-                                        <div className="relative w-full overflow-hidden bg-slate-50" style={{ aspectRatio: "1/1.41" }}>
-                                            <div
-                                                className="absolute top-0 left-0 w-[900px] origin-top-left pointer-events-none select-none scale-[1.05] lg:scale-[0.56]"
-                                                style={{
-
-                                                    transition: "transform 0.5s cubic-bezier(.4,0,.2,1)",
-                                                }}
-                                            >
-                                                <Temp1 data={resumeData} />
-                                            </div>
-
-                                            {/* Hover CTA overlay */}
-                                            <div
-                                                className="absolute inset-0 flex flex-col items-center justify-center gap-3"
-                                                style={{
-                                                    background: `linear-gradient(160deg, ${"#000000"}22 0%, ${"#000000"}55 100%)`,
-
-                                                    opacity: hovered ? 1 : 0,
-                                                    transition: "opacity 0.3s ease",
-                                                }}
-                                            >
-
-
-                                            </div>
-                                        </div>
-
-                                        {/* Footer */}
-                                        <div className="px-4 py-3 bg-white flex justify-between items-center gap-2">
-                                            <div>
-                                                {/* <h3 className="font-bold text-slate-800 text-sm truncate">{item.name}</h3>
-                                                <p className="text-[10px] text-slate-400 font-medium mt-0.5">Template #{item.id}</p> */}
-                                            </div>
-                                            <span className="shrink-0 text-[9px] bg-emerald-50 text-emerald-600 border border-emerald-200 px-2 py-1 rounded-lg uppercase font-black tracking-wider">
-                                                ATS
-                                            </span>
-                                        </div>
-
-                                        {/* Bottom accent bar */}
-                                        <div
-                                            className="h-0.5 w-full"
-                                            style={{
-                                                background: `linear-gradient(90deg, ${"#000000"}, transparent)`,
-                                                opacity: hovered ? 1 : 0,
-                                                transition: "opacity 0.3s",
-                                            }}
-                                        />
+                                        <Temp1 data={finalResumeData} />
                                     </div>
-
-
-
-
                                 </div>
                             )}
 
@@ -353,7 +478,7 @@ const Skills = ({ data }) => {
                     <button
                         onClick={() => {
                             Navigate("/app/build-resume/intro-skill-page", {
-                                state: { resumeData }
+                                state: { resumeData: finalResumeData }
                             });
                         }}
                         className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl bg-base-300 text-secondary border-2 border-secondary
@@ -365,9 +490,9 @@ const Skills = ({ data }) => {
                         </svg>
                     </button>
                 </div>
-            </div>
+            </div >
         </div >
     )
 }
 
-export default Skills
+export default Education;
