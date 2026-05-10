@@ -50,8 +50,7 @@ const resumeData1 = {
             stack: "React | Tailwind CSS",
             github: "https://github.com/amangupta-dev/rollzone",
             live: "https://rollzone-game.vercel.app",
-            description:
-                "is an interactive, high-stakes Pig Dice game designed for a professional portfolio.",
+            description: "is an interactive, high-stakes Pig Dice game designed for a professional portfolio.",
             bullets: [
                 "Engineered a <b>dynamic game engine</b> using React hooks.",
                 "Implemented a <b>mobile-first responsive design</b> using Tailwind CSS.",
@@ -95,7 +94,6 @@ const resumeData1 = {
             endDate: "2027",
             cgpa: "8.7/10",
             bullets: ["Data Structures & Algorithms", "Operating Systems", "DBMS", "Computer Networks"],
-
         },
         {
             degree: "Class XII (Senior Secondary)",
@@ -105,12 +103,26 @@ const resumeData1 = {
             startDate: "2021",
             endDate: "2023",
             percentage: "92%",
-
         },
     ],
     certifications: ["AWS Certified Cloud Practitioner", "Meta Frontend Developer Certification"],
     achievements: ["Ranked Top 5% in LeetCode contests", "Winner of Hackathon XYZ", "Solved 500+ DSA problems"],
     languages: ["English (Fluent)", "Hindi (Native)"],
+};
+
+// ============================================================
+// THEME TOKENS (caramellatte)
+// ============================================================
+const T = {
+    base100: "oklab(97.962% 0.00443 0.01503)",   // near-white warm
+    base200: "oklch(95% 0.038 75.164)",            // cream
+    base300: "oklch(90% 0.076 70.697)",            // warm sand
+    content: "oklch(40% 0.123 38.172)",            // dark caramel text
+    accent: "oklab(46.44% 0.08796 0.06831)",       // caramel brown
+    accentContent: "oklch(90% 0.076 70.697)",
+    neutral: "oklch(55% 0.195 38.402)",
+    neutralContent: "oklch(98% 0.016 73.684)",
+    secondary: "oklab(22.574% 0.05917 0.04547)",   // deep espresso
 };
 
 // ============================================================
@@ -135,18 +147,34 @@ function useIntersectionObserver(options = {}) {
 const FILTER_TAGS = ["All", "Minimal", "Creative", "Modern", "Classic", "Bold"];
 
 const templateMeta = [
-    { id: 1, Component: Temp1, name: "Modern Professional", tag: "Modern", color: "#3B82F6" },
-    { id: 2, Component: Temp2, name: "Creative Minimal", tag: "Minimal", color: "#10B981" },
-    { id: 3, Component: Temp3, name: "Technical Executive", tag: "Bold", color: "#8B5CF6" },
-    { id: 4, Component: Temp4, name: "Focused Layout", tag: "Minimal", color: "#F59E0B" },
-    { id: 5, Component: Temp5, name: "Clean Slate", tag: "Classic", color: "#EF4444" },
-    { id: 6, Component: Temp6, name: "Clean Modern", tag: "Modern", color: "#06B6D4" },
-    { id: 7, Component: Temp7, name: "Creative Contrast", tag: "Creative", color: "#EC4899" },
-    { id: 8, Component: Temp8, name: "Cool Overlay", tag: "Bold", color: "#F97316" },
-    { id: 9, Component: Temp9, name: "Modern Functional", tag: "Modern", color: "#14B8A6" },
-    { id: 10, Component: Temp10, name: "Classic Module", tag: "Classic", color: "#6366F1" },
-    { id: 11, Component: Temp11, name: "Simple Linear", tag: "Minimal", color: "#84CC16" },
+    { id: 1, Component: Temp1, name: "Modern Professional", tag: "Modern", color: "#9B6A3A" },
+    { id: 2, Component: Temp2, name: "Creative Minimal", tag: "Minimal", color: "#C4874B" },
+    { id: 3, Component: Temp3, name: "Technical Executive", tag: "Bold", color: "#6B3E26" },
+    { id: 4, Component: Temp4, name: "Focused Layout", tag: "Minimal", color: "#B8924A" },
+    { id: 5, Component: Temp5, name: "Clean Slate", tag: "Classic", color: "#A05C2C" },
+    { id: 6, Component: Temp6, name: "Clean Modern", tag: "Modern", color: "#7A8C4E" },
+    { id: 7, Component: Temp7, name: "Creative Contrast", tag: "Creative", color: "#8B5E3C" },
+    { id: 8, Component: Temp8, name: "Cool Overlay", tag: "Bold", color: "#4A6741" },
+    { id: 9, Component: Temp9, name: "Modern Functional", tag: "Modern", color: "#3D6B72" },
+    { id: 10, Component: Temp10, name: "Classic Module", tag: "Classic", color: "#7B5C8A" },
+    { id: 11, Component: Temp11, name: "Simple Linear", tag: "Minimal", color: "#C49A3C" },
 ];
+
+// ============================================================
+// GRAIN TEXTURE OVERLAY
+// ============================================================
+const GrainOverlay = () => (
+    <svg
+        style={{ position: "fixed", inset: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 0, opacity: 0.045 }}
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <filter id="grain">
+            <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="4" stitchTiles="stitch" />
+            <feColorMatrix type="saturate" values="0" />
+        </filter>
+        <rect width="100%" height="100%" filter="url(#grain)" />
+    </svg>
+);
 
 // ============================================================
 // ANIMATED CARD
@@ -158,42 +186,67 @@ function TemplateCard({ item, index, onSelect, isFavorite, onToggleFavorite }) {
     return (
         <div
             ref={cardRef}
-            className="group relative flex flex-col rounded-2xl overflow-hidden cursor-pointer"
+            className="group relative flex flex-col cursor-pointer"
             style={{
                 opacity: isVisible ? 1 : 0,
-                transform: isVisible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.97)",
-                transition: `opacity 0.55s cubic-bezier(.4,0,.2,1) ${index * 55}ms, transform 0.55s cubic-bezier(.4,0,.2,1) ${index * 55}ms`,
-
-                border: `1.5px solid ${hovered ? item.color : "#e2e8f0"}`,
-                background: "#fff",
+                transform: isVisible ? "translateY(0) scale(1)" : "translateY(28px) scale(0.97)",
+                transition: `opacity 0.6s cubic-bezier(.4,0,.2,1) ${index * 60}ms, transform 0.6s cubic-bezier(.4,0,.2,1) ${index * 60}ms`,
+                borderRadius: "var(--radius-box, 1rem)",
+                overflow: "hidden",
+                border: `var(--border, 2px) solid ${hovered ? item.color : "oklch(87% 0.06 70)"}`,
+                background: "oklab(97.962% 0.00443 0.01503)",
+                boxShadow: hovered
+                    ? `0 8px 32px -4px ${item.color}44, 0 2px 8px -2px ${item.color}22`
+                    : "0 2px 12px -2px oklch(40% 0.08 60 / 0.10)",
             }}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
         >
-            {/* Badge */}
+            {/* Tag badge */}
             <div
-                className="absolute top-3 left-3 z-10 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest text-white"
-                style={{ background: item.color, letterSpacing: "0.12em" }}
+                style={{
+                    position: "absolute", top: 10, left: 10, zIndex: 10,
+                    padding: "3px 10px",
+                    borderRadius: "99px",
+                    fontSize: 9, fontWeight: 900, letterSpacing: "0.13em",
+                    textTransform: "uppercase",
+                    background: item.color,
+                    color: "#fff",
+                    fontFamily: "'DM Mono', monospace",
+                }}
             >
                 {item.tag}
             </div>
 
-            {/* Favorite Button */}
+            {/* Favorite */}
             <button
-                className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white/80 backdrop-blur flex items-center justify-center  hover:scale-110 transition-transform"
+                style={{
+                    position: "absolute", top: 10, right: 10, zIndex: 10,
+                    width: 32, height: 32, borderRadius: "50%",
+                    background: "oklab(97.962% 0.00443 0.01503)",
+                    border: "1.5px solid oklch(87% 0.06 70)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    cursor: "pointer", transition: "transform 0.2s",
+                    transform: isFavorite ? "scale(1.15)" : "scale(1)",
+                }}
                 onClick={(e) => { e.stopPropagation(); onToggleFavorite(item.id); }}
-                title="Favourite"
+                title="Save"
             >
-                <svg viewBox="0 0 24 24" className="w-4 h-4" fill={isFavorite ? "#EF4444" : "none"} stroke={isFavorite ? "#EF4444" : "#94a3b8"} strokeWidth="2">
+                <svg viewBox="0 0 24 24" style={{ width: 14, height: 14 }}
+                    fill={isFavorite ? item.color : "none"}
+                    stroke={isFavorite ? item.color : "oklch(65% 0.08 60)"}
+                    strokeWidth="2">
                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                 </svg>
             </button>
 
-            {/* Preview Area */}
-            <div className="relative w-full overflow-hidden bg-slate-50" style={{ aspectRatio: "1/1.41" }}>
+            {/* Preview */}
+            <div style={{ position: "relative", width: "100%", overflow: "hidden", background: "oklch(95% 0.038 75.164)", aspectRatio: "1/1.41" }}>
                 <div
-                    className="absolute top-0 left-0 w-[900px] origin-top-left pointer-events-none select-none"
                     style={{
+                        position: "absolute", top: 0, left: 0, width: 900,
+                        transformOrigin: "top left",
+                        pointerEvents: "none", userSelect: "none",
                         transform: hovered ? "scale(0.46)" : "scale(0.41)",
                         transition: "transform 0.5s cubic-bezier(.4,0,.2,1)",
                     }}
@@ -201,52 +254,68 @@ function TemplateCard({ item, index, onSelect, isFavorite, onToggleFavorite }) {
                     <item.Component data={resumeData1} />
                 </div>
 
-                {/* Hover CTA overlay */}
-                <div
-                    className="absolute inset-0 flex flex-col items-center justify-center gap-3"
-                    style={{
-                        background: `linear-gradient(160deg, ${item.color}22 0%, ${item.color}55 100%)`,
-
-                        opacity: hovered ? 1 : 0,
-                        transition: "opacity 0.3s ease",
-                    }}
-                >
+                {/* Hover overlay CTA */}
+                <div style={{
+                    position: "absolute", inset: 0,
+                    display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 12,
+                    background: `linear-gradient(160deg, ${item.color}18 0%, ${item.color}50 100%)`,
+                    opacity: hovered ? 1 : 0,
+                    transition: "opacity 0.3s ease",
+                }}>
                     <button
-                        className="px-7 py-2.5 rounded-xl font-bold text-white  text-sm"
                         style={{
+                            padding: "10px 28px",
+                            borderRadius: "var(--radius-field, 0.5rem)",
+                            fontWeight: 800, fontSize: 13, color: "#fff",
                             background: item.color,
-                            transform: hovered ? "translateY(0)" : "translateY(12px)",
+                            border: "none", cursor: "pointer",
+                            transform: hovered ? "translateY(0)" : "translateY(14px)",
                             transition: "transform 0.35s cubic-bezier(.4,0,.2,1) 0.05s",
-
+                            letterSpacing: "0.02em",
+                            fontFamily: "'DM Sans', sans-serif",
                         }}
-                        onClick={() => { onSelect(item) }}
+                        onClick={() => onSelect(item)}
                     >
                         Use This Template
                     </button>
-
                 </div>
             </div>
 
-            {/* Footer */}
-            <div className="px-4 py-3 bg-white flex justify-between items-center gap-2">
+            {/* Card footer */}
+            <div style={{
+                padding: "12px 16px",
+                background: "oklab(97.962% 0.00443 0.01503)",
+                display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8,
+            }}>
                 <div>
-                    <h3 className="font-bold text-slate-800 text-sm truncate">{item.name}</h3>
-                    <p className="text-[10px] text-slate-400 font-medium mt-0.5">Template #{item.id}</p>
+                    <div style={{ fontWeight: 800, fontSize: 13, color: "oklch(40% 0.123 38.172)", fontFamily: "'DM Sans', sans-serif" }}>
+                        {item.name}
+                    </div>
+                    <div style={{ fontSize: 10, color: "oklch(60% 0.08 60)", marginTop: 2, fontFamily: "'DM Mono', monospace" }}>
+                        Template #{item.id}
+                    </div>
                 </div>
-                <span className="shrink-0 text-[9px] bg-emerald-50 text-emerald-600 border border-emerald-200 px-2 py-1 rounded-lg uppercase font-black tracking-wider">
+                <span style={{
+                    fontSize: 9, fontWeight: 900, letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                    background: "oklch(93% 0.06 75)",
+                    color: "oklch(45% 0.12 75)",
+                    border: "1.5px solid oklch(82% 0.07 75)",
+                    padding: "3px 8px",
+                    borderRadius: "var(--radius-field, 0.5rem)",
+                    fontFamily: "'DM Mono', monospace",
+                }}>
                     ATS
                 </span>
             </div>
 
             {/* Bottom accent bar */}
-            <div
-                className="h-0.5 w-full"
-                style={{
-                    background: `linear-gradient(90deg, ${item.color}, transparent)`,
-                    opacity: hovered ? 1 : 0,
-                    transition: "opacity 0.3s",
-                }}
-            />
+            <div style={{
+                height: 3, width: "100%",
+                background: `linear-gradient(90deg, ${item.color}, transparent)`,
+                opacity: hovered ? 1 : 0,
+                transition: "opacity 0.3s",
+            }} />
         </div>
     );
 }
@@ -255,6 +324,8 @@ function TemplateCard({ item, index, onSelect, isFavorite, onToggleFavorite }) {
 // PREVIEW MODAL
 // ============================================================
 function PreviewModal({ item, onClose, onNext, onPrev }) {
+    const Navigate = useNavigate();
+
     useEffect(() => {
         const handler = (e) => {
             if (e.key === "Escape") onClose();
@@ -266,101 +337,138 @@ function PreviewModal({ item, onClose, onNext, onPrev }) {
     }, [onClose, onNext, onPrev]);
 
     if (!item) return null;
-    const Navigate = useNavigate();
+
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
-            style={{ background: "rgba(2,6,23,0.85)", }}
+            style={{
+                position: "fixed", inset: 0, zIndex: 50,
+                display: "flex", alignItems: "center", justifyContent: "center", padding: 16,
+                background: "oklch(18% 0.06 55 / 0.92)",
+
+            }}
             onClick={onClose}
         >
             <div
-                className="relative flex flex-col items-center"
-                style={{ maxWidth: 860, width: "100%" }}
+                style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", maxWidth: 860, width: "100%" }}
                 onClick={(e) => e.stopPropagation()}
             >
-                {/* Modal Header */}
-                <div className="w-full flex items-center justify-between mb-4 px-1">
+                {/* Header */}
+                <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, padding: "0 4px" }}>
                     <div>
-                        <h2 className="text-white font-black text-xl">{item.name}</h2>
-                        <p className="text-white/40 text-xs mt-0.5">
-                            <span className="text-white/60">Template #{item.id}</span> · {item.tag}
+                        <h2 style={{ color: "oklch(93% 0.04 75)", fontWeight: 900, fontSize: 20, fontFamily: "'DM Sans', sans-serif", margin: 0 }}>
+                            {item.name}
+                        </h2>
+                        <p style={{ color: "oklch(70% 0.06 70)", fontSize: 11, marginTop: 3, fontFamily: "'DM Mono', monospace" }}>
+                            Template #{item.id} · {item.tag}
                         </p>
                     </div>
-                    <div className="flex items-center gap-2">
-                        <button
-                            onClick={onPrev}
-                            className="w-9 h-9 rounded-xl bg-white/10 border border-white/10 text-white flex items-center justify-center hover:bg-white/20 transition"
-                        >
-                            ←
-                        </button>
-                        <button
-                            onClick={onNext}
-                            className="w-9 h-9 rounded-xl bg-white/10 border border-white/10 text-white flex items-center justify-center hover:bg-white/20 transition"
-                        >
-                            →
-                        </button>
-                        <button
-                            onClick={onClose}
-                            className="w-9 h-9 rounded-xl bg-red-500/20 border border-red-400/20 text-red-300 flex items-center justify-center hover:bg-red-500/30 transition text-lg leading-none"
-                        >
+                    <div style={{ display: "flex", gap: 8 }}>
+                        {[["←", onPrev], ["→", onNext]].map(([label, fn]) => (
+                            <button key={label} onClick={fn}
+                                style={{
+                                    width: 36, height: 36, borderRadius: "var(--radius-field, 0.5rem)",
+                                    background: "oklch(30% 0.08 60 / 0.6)",
+                                    border: "1.5px solid oklch(50% 0.08 60 / 0.4)",
+                                    color: "oklch(85% 0.05 70)",
+                                    display: "flex", alignItems: "center", justifyContent: "center",
+                                    cursor: "pointer", fontSize: 16,
+                                }}>
+                                {label}
+                            </button>
+                        ))}
+                        <button onClick={onClose}
+                            style={{
+                                width: 36, height: 36, borderRadius: "var(--radius-field, 0.5rem)",
+                                background: "oklch(30% 0.12 30 / 0.5)",
+                                border: "1.5px solid oklch(55% 0.15 30 / 0.4)",
+                                color: "oklch(75% 0.12 30)",
+                                display: "flex", alignItems: "center", justifyContent: "center",
+                                cursor: "pointer", fontSize: 20, lineHeight: 1,
+                            }}>
                             ×
                         </button>
                     </div>
                 </div>
 
-                {/* Resume Preview */}
-                <div
-                    className="w-full rounded-2xl overflow-hidden "
-                    style={{
-                        border: `2px solid ${item.color}55`,
-                        maxHeight: "80vh",
-                        overflowY: "auto",
-                    }}
-                >
+                {/* Resume preview */}
+                <div style={{
+                    width: "100%",
+                    borderRadius: "var(--radius-box, 1rem)",
+                    overflow: "auto",
+                    maxHeight: "75vh",
+                    border: `2px solid ${item.color}66`,
+                    boxShadow: `0 24px 64px -12px ${item.color}55`,
+                }}>
                     <item.Component data={resumeData1} />
                 </div>
 
-                {/* Footer actions */}
-                <div className="flex gap-3 mt-5">
+                {/* Actions */}
+                <div style={{ display: "flex", gap: 12, marginTop: 20 }}>
                     <button
-                        className="px-8 py-3 rounded-xl font-bold text-white text-sm "
-                        style={{ background: item.color }}
+                        style={{
+                            padding: "12px 32px",
+                            borderRadius: "var(--radius-field, 0.5rem)",
+                            fontWeight: 800, fontSize: 13, color: "#fff",
+                            background: item.color,
+                            border: "none", cursor: "pointer",
+                            fontFamily: "'DM Sans', sans-serif",
+                        }}
                         onClick={() => Navigate("/app/build-resume/header-content")}
                     >
-
                         Use This Template →
                     </button>
-
                     <button
-                        className="px-6 py-3 rounded-xl font-semibold text-white/70 text-sm bg-white/10 border border-white/10 hover:bg-white/15 transition"
+                        style={{
+                            padding: "12px 24px",
+                            borderRadius: "var(--radius-field, 0.5rem)",
+                            fontWeight: 600, fontSize: 13,
+                            color: "oklch(75% 0.06 70)",
+                            background: "oklch(28% 0.08 60 / 0.5)",
+                            border: "1.5px solid oklch(50% 0.06 60 / 0.4)",
+                            cursor: "pointer",
+                            fontFamily: "'DM Sans', sans-serif",
+                        }}
                         onClick={onClose}
                     >
                         Close
                     </button>
                 </div>
-                <p className="text-white/25 text-xs mt-3">Press ← → to navigate · Esc to close</p>
+
+                <p style={{ color: "oklch(55% 0.05 70)", fontSize: 11, marginTop: 12, fontFamily: "'DM Mono', monospace" }}>
+                    Press ← → to navigate · Esc to close
+                </p>
             </div>
         </div>
     );
 }
 
 // ============================================================
-// FLOATING STATS BAR
+// STATS BAR
 // ============================================================
 function StatsBar({ total, filtered, favorites }) {
     return (
-        <div className="flex flex-wrap items-center gap-4 text-sm">
-            <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-blue-500 inline-block" />
-                <span className="text-slate-500">{filtered} of {total} templates</span>
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 20, fontSize: 13 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "oklch(55% 0.12 70)", display: "inline-block" }} />
+                <span style={{ color: "oklch(55% 0.09 60)" }}>{filtered} of {total} templates</span>
             </div>
-            <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-red-400 inline-block" />
-                <span className="text-slate-500">{favorites} saved</span>
+            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "oklch(60% 0.15 30)", display: "inline-block" }} />
+                <span style={{ color: "oklch(55% 0.09 60)" }}>{favorites} saved</span>
             </div>
         </div>
     );
 }
+
+// ============================================================
+// DECORATIVE COFFEE RING
+// ============================================================
+const CoffeeRing = ({ style }) => (
+    <svg viewBox="0 0 120 120" style={{ opacity: 0.08, ...style }} xmlns="http://www.w3.org/2000/svg">
+        <circle cx="60" cy="60" r="54" fill="none" stroke="oklch(45% 0.14 55)" strokeWidth="6" />
+        <circle cx="60" cy="60" r="46" fill="none" stroke="oklch(50% 0.12 60)" strokeWidth="2" strokeDasharray="4 6" />
+    </svg>
+);
 
 // ============================================================
 // MAIN COMPONENT
@@ -371,13 +479,10 @@ const Templates = () => {
     const [previewItem, setPreviewItem] = useState(null);
     const [favorites, setFavorites] = useState(new Set());
     const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
-    const [viewMode, setViewMode] = useState("grid"); // "grid" | "wide"
-    const headerRef = useRef(null);
+    const [viewMode, setViewMode] = useState("grid");
     const [headerVisible, setHeaderVisible] = useState(false);
 
-    useEffect(() => {
-        setTimeout(() => setHeaderVisible(true), 80);
-    }, []);
+    useEffect(() => { setTimeout(() => setHeaderVisible(true), 80); }, []);
 
     const filtered = templateMeta.filter((t) => {
         const matchFilter = activeFilter === "All" || t.tag === activeFilter;
@@ -399,88 +504,173 @@ const Templates = () => {
     const goPrev = () => filtered[(previewIndex - 1 + filtered.length) % filtered.length] && setPreviewItem(filtered[(previewIndex - 1 + filtered.length) % filtered.length]);
 
     return (
-        <div className="w-full min-h-screen bg-base-200" style={{ fontFamily: "'DM Sans', system-ui, sans-serif" }}>
+        <div style={{
+            width: "100%", minHeight: "100vh",
+            background: "oklch(95% 0.038 75.164)",
+            fontFamily: "'DM Sans', system-ui, sans-serif",
+            position: "relative",
+            color: "oklch(40% 0.123 38.172)",
+        }}>
+            <GrainOverlay />
 
-            {/* ── TOP HERO HEADER ── */}
-            <div
-                className="w-full pt-16 pb-12 px-6 text-center"
-                style={{
+            {/* ── HERO HEADER ── */}
+            <div style={{ position: "relative", overflow: "hidden", padding: "72px 24px 56px", textAlign: "center" }}>
 
-                    position: "relative",
-                    overflow: "hidden",
-                }}
-            >
+                {/* Decorative rings */}
+                <CoffeeRing style={{ position: "absolute", top: -30, left: "8%", width: 180, height: 180, transform: "rotate(15deg)" }} />
+                <CoffeeRing style={{ position: "absolute", bottom: -20, right: "6%", width: 140, height: 140, transform: "rotate(-10deg)" }} />
 
+                {/* Warm gradient blob */}
+                <div style={{
+                    position: "absolute", top: "10%", left: "50%", transform: "translateX(-50%)",
+                    width: 600, height: 300,
+                    background: "radial-gradient(ellipse at center, oklch(85% 0.08 65 / 0.5) 0%, transparent 70%)",
+                    pointerEvents: "none",
+                }} />
 
-                <div
-                    ref={headerRef}
-                    style={{
-                        opacity: headerVisible ? 1 : 0,
-                        transform: headerVisible ? "translateY(0)" : "translateY(24px)",
-                        transition: "all 0.7s cubic-bezier(.4,0,.2,1)",
-                    }}
-                >
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-6"
-                        style={{ background: "rgba(99,102,241,0.18)", color: "#6780fdff", border: "1px solid rgba(99,102,241,0.3)" }}>
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#6780fdff] animate-pulse inline-block" />
+                <div style={{
+                    position: "relative", zIndex: 1,
+                    opacity: headerVisible ? 1 : 0,
+                    transform: headerVisible ? "translateY(0)" : "translateY(24px)",
+                    transition: "all 0.75s cubic-bezier(.4,0,.2,1)",
+                }}>
+                    {/* Eyebrow */}
+                    <div style={{
+                        display: "inline-flex", alignItems: "center", gap: 8,
+                        padding: "6px 16px", borderRadius: "var(--radius-selector, 2rem)",
+                        background: "oklch(88% 0.07 70 / 0.7)",
+                        border: "var(--border, 2px) solid oklch(80% 0.09 68)",
+                        fontSize: 10, fontWeight: 900, letterSpacing: "0.13em",
+                        textTransform: "uppercase", marginBottom: 24,
+                        color: "oklch(42% 0.13 50)",
+                        fontFamily: "'DM Mono', monospace",
+                    }}>
+                        <span style={{
+                            width: 6, height: 6, borderRadius: "50%",
+                            background: "oklch(55% 0.14 55)",
+                            animation: "pulse 2s infinite",
+                            display: "inline-block",
+                        }} />
                         {templateMeta.length}+ Premium Templates · ATS-Friendly
                     </div>
 
-                    <h1 className="text-5xl  md:text-7xl font-black tracking-tight text-black mb-5 leading-[1.05]">
+                    {/* Headline */}
+                    <h1 style={{
+                        fontSize: "clamp(2.8rem, 8vw, 5.5rem)",
+                        fontWeight: 900,
+                        letterSpacing: "-0.03em",
+                        lineHeight: 1.0,
+                        color: "oklch(28% 0.1 45)",
+                        margin: "0 0 20px",
+                        fontFamily: "'DM Sans', sans-serif",
+                    }}>
                         Your Resume,{" "}
-                        <span className='text-accent'>
+                        <span style={{
+                            position: "relative", display: "inline-block",
+                            color: "oklch(45% 0.14 55)",
+                        }}>
                             Elevated
+                            {/* Underline squiggle */}
+                            <svg viewBox="0 0 200 12" style={{
+                                position: "absolute", bottom: -6, left: 0, width: "100%", height: 10,
+                                overflow: "visible",
+                            }}>
+                                <path d="M2,8 Q25,2 50,8 Q75,14 100,8 Q125,2 150,8 Q175,14 198,8"
+                                    fill="none" stroke="oklch(55% 0.16 58)" strokeWidth="2.5" strokeLinecap="round" />
+                            </svg>
                         </span>
                         .
                     </h1>
 
-                    <p className="text-lg text-black/50 max-w-xl mx-auto leading-relaxed">
-                        Pick a template. Stand out. Land the role. Crafted with attention to every pixel.
+                    <p style={{
+                        fontSize: 16, lineHeight: 1.65,
+                        color: "oklch(52% 0.09 55)",
+                        maxWidth: 480, margin: "0 auto 40px",
+                    }}>
+                        Pick a template. Stand out. Land the role.
+                        Crafted with attention to every pixel.
                     </p>
 
                     {/* Stats row */}
-                    <div className="flex flex-wrap items-center justify-center gap-8 mt-10 ">
-                        {[["11", "Templates"], ["100%", "ATS-Ready"], ["∞", "Customizable"]].map(([val, label]) => (
-                            <div key={label} className="text-center">
-                                <div className="text-3xl font-black text-black">{val}</div>
-                                <div className="text-xs text-black/40 font-medium mt-0.5">{label}</div>
-                            </div>
+                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: 0 }}>
+                        {[["11", "Templates"], ["100%", "ATS-Ready"], ["∞", "Customizable"]].map(([val, label], i) => (
+                            <React.Fragment key={label}>
+                                <div style={{ textAlign: "center", padding: "0 28px" }}>
+                                    <div style={{
+                                        fontSize: "2rem", fontWeight: 900,
+                                        color: "oklch(38% 0.13 50)",
+                                        fontFamily: "'DM Sans', sans-serif",
+                                    }}>{val}</div>
+                                    <div style={{
+                                        fontSize: 10, color: "oklch(58% 0.08 60)", marginTop: 2, fontWeight: 600,
+                                        fontFamily: "'DM Mono', monospace", textTransform: "uppercase", letterSpacing: "0.1em",
+                                    }}>{label}</div>
+                                </div>
+                                {i < 2 && (
+                                    <div style={{
+                                        width: 1, height: 36,
+                                        background: "oklch(80% 0.07 65)",
+                                    }} />
+                                )}
+                            </React.Fragment>
                         ))}
                     </div>
                 </div>
             </div>
 
-            {/* ── STICKY CONTROLS BAR ── */}
-            <div
-                className="sticky top-5 z-30 w-[90%] mx-auto px-6 py-3 flex flex-wrap items-center gap-3 bg-base-100 rounded-xl shadow-2xl shadow-gray-900"
-
-            >
+            {/* ── STICKY CONTROLS ── */}
+            <div style={{
+                position: "sticky", top: 12, zIndex: 30,
+                width: "90%", margin: "0 auto",
+                padding: "12px 20px",
+                display: "flex", flexWrap: "wrap", alignItems: "center", gap: 12,
+                background: "oklab(97.4% 0.003 0.012)",
+                borderRadius: "var(--radius-box, 1rem)",
+                border: "var(--border, 2px) solid oklch(87% 0.065 70)",
+                boxShadow: "0 8px 32px -8px oklch(40% 0.1 55 / 0.18), 0 2px 8px -2px oklch(40% 0.1 55 / 0.08)",
+            }}>
                 {/* Search */}
-                <div className="relative flex-1 min-w-[180px] max-w-xs">
-                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <div style={{ position: "relative", flex: 1, minWidth: 160, maxWidth: 280 }}>
+                    <svg style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", width: 15, height: 15, color: "oklch(65% 0.07 60)" }}
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
                     </svg>
                     <input
                         type="text"
-                        placeholder="Search templates..."
+                        placeholder="Search templates…"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-9 pr-4 py-2  rounded-xl text-sm border border-slate-200 bg-base-200 text-slate-700 placeholder-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition"
+                        style={{
+                            width: "100%", paddingLeft: 32, paddingRight: 14, paddingTop: 8, paddingBottom: 8,
+                            borderRadius: "var(--radius-field, 0.5rem)",
+                            border: "var(--border, 2px) solid oklch(86% 0.065 70)",
+                            background: "oklch(95% 0.038 75.164)",
+                            fontSize: 13, color: "oklch(40% 0.123 38.172)",
+                            outline: "none",
+                            fontFamily: "'DM Sans', sans-serif",
+                        }}
                     />
                 </div>
 
-                {/* Filter Tags */}
-                <div className="flex flex-wrap gap-1.5">
+                {/* Filter tags */}
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
                     {FILTER_TAGS.map((tag) => (
                         <button
                             key={tag}
                             onClick={() => setActiveFilter(tag)}
-                            className="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-200"
                             style={{
-                                background: activeFilter === tag ? "#fec063ff" : "#fbeedcff",
-                                color: activeFilter === tag ? "#000000" : "#64748b",
-
-                                transform: activeFilter === tag ? "scale(1.04)" : "scale(1)",
+                                padding: "6px 14px",
+                                borderRadius: "var(--radius-selector, 2rem)",
+                                fontSize: 11, fontWeight: 800,
+                                letterSpacing: "0.04em",
+                                border: `var(--border, 2px) solid ${activeFilter === tag ? "oklch(52% 0.14 55)" : "oklch(84% 0.07 70)"}`,
+                                background: activeFilter === tag ? "oklch(52% 0.14 55)" : "oklch(93% 0.05 73)",
+                                color: activeFilter === tag ? "#fff" : "oklch(52% 0.09 60)",
+                                cursor: "pointer",
+                                transform: activeFilter === tag ? "scale(1.05)" : "scale(1)",
+                                transition: "all 0.2s",
+                                fontFamily: "'DM Mono', monospace",
+                                textTransform: "uppercase",
                             }}
                         >
                             {tag}
@@ -488,38 +678,54 @@ const Templates = () => {
                     ))}
                 </div>
 
-                {/* Spacer */}
-                <div className="flex-1" />
+                <div style={{ flex: 1 }} />
 
                 {/* Favorites toggle */}
                 <button
                     onClick={() => setShowFavoritesOnly((v) => !v)}
-                    className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all border"
                     style={{
-                        background: showFavoritesOnly ? "#fef2f2" : "#f8fafc",
-                        color: showFavoritesOnly ? "#ef4444" : "#94a3b8",
-                        borderColor: showFavoritesOnly ? "#fca5a5" : "#e2e8f0",
+                        display: "flex", alignItems: "center", gap: 6,
+                        padding: "7px 14px",
+                        borderRadius: "var(--radius-selector, 2rem)",
+                        fontSize: 11, fontWeight: 800,
+                        border: `var(--border, 2px) solid ${showFavoritesOnly ? "oklch(65% 0.15 35)" : "oklch(84% 0.07 70)"}`,
+                        background: showFavoritesOnly ? "oklch(94% 0.06 35)" : "oklch(93% 0.05 73)",
+                        color: showFavoritesOnly ? "oklch(45% 0.15 30)" : "oklch(62% 0.08 60)",
+                        cursor: "pointer",
+                        transition: "all 0.2s",
+                        fontFamily: "'DM Mono', monospace",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.04em",
                     }}
                 >
-                    <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill={showFavoritesOnly ? "#ef4444" : "none"} stroke="currentColor" strokeWidth="2">
+                    <svg viewBox="0 0 24 24" style={{ width: 13, height: 13 }}
+                        fill={showFavoritesOnly ? "oklch(55% 0.15 30)" : "none"}
+                        stroke="currentColor" strokeWidth="2.2">
                         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                     </svg>
                     Saved {favorites.size > 0 && `(${favorites.size})`}
                 </button>
 
                 {/* Grid toggle */}
-                <div className="flex gap-1 p-1 bg-slate-100 rounded-xl">
+                <div style={{
+                    display: "flex", gap: 4, padding: 4,
+                    background: "oklch(91% 0.05 72)",
+                    borderRadius: "var(--radius-field, 0.5rem)",
+                    border: "var(--border, 2px) solid oklch(85% 0.07 70)",
+                }}>
                     {[{ mode: "grid", icon: "▦" }, { mode: "wide", icon: "▤" }].map(({ mode, icon }) => (
-                        <button
-                            key={mode}
-                            onClick={() => setViewMode(mode)}
-                            className="w-7 h-7 rounded-lg text-sm flex items-center justify-center transition"
+                        <button key={mode} onClick={() => setViewMode(mode)}
                             style={{
-                                background: viewMode === mode ? "#fff" : "transparent",
-                                color: viewMode === mode ? "#3b82f6" : "#94a3b8",
-
-                            }}
-                        >
+                                width: 28, height: 28,
+                                borderRadius: "6px",
+                                fontSize: 13, cursor: "pointer",
+                                border: "none",
+                                background: viewMode === mode ? "oklab(97.962% 0.00443 0.01503)" : "transparent",
+                                color: viewMode === mode ? "oklch(48% 0.13 55)" : "oklch(65% 0.07 60)",
+                                display: "flex", alignItems: "center", justifyContent: "center",
+                                transition: "all 0.2s",
+                                boxShadow: viewMode === mode ? "0 1px 4px oklch(40% 0.08 55 / 0.12)" : "none",
+                            }}>
                             {icon}
                         </button>
                     ))}
@@ -527,15 +733,19 @@ const Templates = () => {
             </div>
 
             {/* ── MAIN GRID ── */}
-            <div className="w-full px-6 py-10 max-w-screen-2xl mx-auto">
+            <div style={{ width: "100%", padding: "32px 24px 64px", maxWidth: 1600, margin: "0 auto" }}>
 
                 {/* Results info */}
-                <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24, flexWrap: "wrap", gap: 12 }}>
                     <StatsBar total={templateMeta.length} filtered={filtered.length} favorites={favorites.size} />
                     {searchQuery && (
                         <button
                             onClick={() => setSearchQuery("")}
-                            className="text-xs text-blue-500 hover:text-blue-700 font-semibold flex items-center gap-1"
+                            style={{
+                                fontSize: 12, fontWeight: 700, color: "oklch(52% 0.14 55)",
+                                background: "none", border: "none", cursor: "pointer",
+                                fontFamily: "'DM Mono', monospace",
+                            }}
                         >
                             ✕ Clear search
                         </button>
@@ -544,26 +754,33 @@ const Templates = () => {
 
                 {/* Empty state */}
                 {filtered.length === 0 && (
-                    <div className="text-center py-24 text-slate-400">
-                        <div className="text-5xl mb-4">🔍</div>
-                        <p className="font-bold text-lg text-slate-600">No templates found</p>
-                        <p className="text-sm mt-1">Try a different filter or search term</p>
+                    <div style={{ textAlign: "center", padding: "96px 0", color: "oklch(62% 0.07 60)" }}>
+                        <div style={{ fontSize: 48, marginBottom: 16 }}>☕</div>
+                        <p style={{ fontWeight: 800, fontSize: 18, color: "oklch(45% 0.1 55)", marginBottom: 6 }}>No templates found</p>
+                        <p style={{ fontSize: 13, color: "oklch(60% 0.07 60)" }}>Try a different filter or search term</p>
                         <button
                             onClick={() => { setActiveFilter("All"); setSearchQuery(""); setShowFavoritesOnly(false); }}
-                            className="mt-6 px-6 py-2.5 bg-blue-500 text-white rounded-xl text-sm font-bold hover:bg-blue-600 transition"
+                            style={{
+                                marginTop: 24, padding: "10px 24px",
+                                borderRadius: "var(--radius-field, 0.5rem)",
+                                background: "oklch(52% 0.14 55)", color: "#fff",
+                                fontWeight: 800, fontSize: 13, border: "none", cursor: "pointer",
+                                fontFamily: "'DM Sans', sans-serif",
+                            }}
                         >
                             Reset Filters
                         </button>
                     </div>
                 )}
 
-                {/* Cards */}
-                <div
-                    className={`grid gap-6 ${viewMode === "grid"
-                        ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
-                        : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
-                        }`}
-                >
+                {/* Cards Grid */}
+                <div style={{
+                    display: "grid",
+                    gap: 24,
+                    gridTemplateColumns: viewMode === "grid"
+                        ? "repeat(auto-fill, minmax(260px, 1fr))"
+                        : "repeat(auto-fill, minmax(380px, 1fr))",
+                }}>
                     {filtered.map((item, index) => (
                         <TemplateCard
                             key={item.id}
@@ -577,35 +794,54 @@ const Templates = () => {
                 </div>
 
                 {/* Bottom CTA */}
-                <div
-                    className="mt-20 w-full rounded-3xl p-10 text-center"
-                    style={{
-                        background: "linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%)",
-                    }}
-                >
-                    <h2 className="text-3xl font-black text-white mb-2">Can't decide?</h2>
-                    <p className="text-white/50 mb-6 max-w-sm mx-auto text-sm">Fill your details once and instantly preview all templates live.</p>
-                    <button className="px-8 py-3.5 rounded-xl font-bold text-white"
-                        style={{
-                            background: "linear-gradient(90deg, #3b82f6, #8b5cf6)"
+                <div style={{
+                    marginTop: 80,
+                    borderRadius: "var(--radius-box, 1rem)",
+                    padding: "56px 32px",
+                    textAlign: "center",
+                    background: "oklch(28% 0.09 45)",
+                    border: "var(--border, 2px) solid oklch(38% 0.1 48)",
+                    position: "relative",
+                    overflow: "hidden",
+                }}>
+                    {/* Decorative rings inside CTA */}
+                    <CoffeeRing style={{ position: "absolute", top: -20, left: "3%", width: 120, height: 120 }} />
+                    <CoffeeRing style={{ position: "absolute", bottom: -20, right: "3%", width: 100, height: 100 }} />
+
+                    <div style={{ position: "relative", zIndex: 1 }}>
+                        <h2 style={{
+                            fontSize: "2rem", fontWeight: 900,
+                            color: "oklch(93% 0.04 72)", margin: "0 0 8px",
+                            fontFamily: "'DM Sans', sans-serif",
+                        }}>Can't decide?</h2>
+                        <p style={{ color: "oklch(68% 0.07 65)", fontSize: 14, maxWidth: 360, margin: "0 auto 24px" }}>
+                            Fill your details once and instantly preview all templates live.
+                        </p>
+                        <button style={{
+                            padding: "12px 32px",
+                            borderRadius: "var(--radius-field, 0.5rem)",
+                            fontWeight: 800, fontSize: 14, color: "oklch(28% 0.09 45)",
+                            background: "oklch(82% 0.12 68)",
+                            border: "none", cursor: "pointer",
+                            fontFamily: "'DM Sans', sans-serif",
+                            letterSpacing: "0.02em",
                         }}>
-                        Preview All with My Data →
-                    </button>
+                            Preview All with My Data →
+                        </button>
+                    </div>
                 </div>
             </div>
 
             {/* ── PREVIEW MODAL ── */}
-            {
-                previewItem && (
-                    <PreviewModal
-                        item={previewItem}
-                        onClose={() => setPreviewItem(null)}
-                        onNext={goNext}
-                        onPrev={goPrev}
-                    />
-                )
-            }
-        </div >
+            {previewItem && (
+                <PreviewModal
+                    item={previewItem}
+                    onClose={() => setPreviewItem(null)}
+                    onNext={goNext}
+                    onPrev={goPrev}
+                />
+            )}
+        </div>
     );
 };
 

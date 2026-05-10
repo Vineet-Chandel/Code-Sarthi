@@ -63,7 +63,7 @@ const TipItem = ({ emoji, title, body }) => (
     </div>
 );
 
-const Education = ({ data }) => {
+const Summary = ({ data }) => {
     const location = useLocation();
     let resumeData = location.state?.resumeData || {};
     const [skills, setSkills] = useState([
@@ -572,4 +572,4 @@ py-1
     )
 }
 
-export default Education;
+export default Summary;

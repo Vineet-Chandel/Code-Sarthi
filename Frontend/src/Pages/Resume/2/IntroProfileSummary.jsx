@@ -2,7 +2,7 @@ import React from 'react';
 import { ArrowLeft, Sparkles, Search, GraduationCap, ChevronRight } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-const IntroEdu = () => {
+const IntroSummary = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const resumeData = location.state?.resumeData;
@@ -72,7 +72,7 @@ const IntroEdu = () => {
                         className="w-1.5 h-1.5 rounded-full"
                         style={{ background: 'var(--color-neutral)', animation: 'pulseDot 2s ease-in-out infinite' }}
                     />
-                    Step 3 of 8 · Education
+                    Step 5 of 8 · Summary
                 </div>
 
                 {/* Heading */}
@@ -84,14 +84,14 @@ const IntroEdu = () => {
                         className="font-black leading-[1.08] tracking-tight"
                         style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', color: 'var(--color-secondary)' }}
                     >
-                        Now, let’s add your
+                        Let’s craft your
                         <br />
                         <span className="relative inline-block" style={{ color: 'var(--color-neutral)' }}>
-                            education
+                            professional summary
                             <svg
                                 viewBox="0 0 290 12"
                                 preserveAspectRatio="none"
-                                className="absolute left-0 w-full"
+                                className="absolute left-0 w-[full]"
                                 style={{ bottom: '-5px', height: '9px' }}
                                 aria-hidden="true"
                             >
@@ -132,7 +132,7 @@ const IntroEdu = () => {
                             AI writing assistant is active
                         </p>
                         <p className="text-xs leading-relaxed" style={{ color: 'var(--color-accent)' }}>
-                            Fix mistakes, rephrase bullet points, or let AI draft from your notes — all in one click.
+                            Choose from optimized professional summary examples or craft your own with AI writing help.
                         </p>
                     </div>
                 </div>
@@ -141,13 +141,13 @@ const IntroEdu = () => {
                 <div style={{ animation: 'fadeUp 0.55s ease 0.22s both' }}>
                     <div className="flex justify-between text-xs mb-2">
                         <span style={{ color: 'var(--color-accent)' }}>Resume completeness</span>
-                        <span className="font-bold" style={{ color: 'var(--color-secondary)' }}>25%</span>
+                        <span className="font-bold" style={{ color: 'var(--color-secondary)' }}>50%</span>
                     </div>
                     <div className="h-2 overflow-hidden" style={{ background: 'var(--color-base-300)', borderRadius: 'var(--radius-selector)' }}>
                         <div
                             className="h-full"
                             style={{
-                                width: '25%',
+                                width: '50%',
                                 background: 'linear-gradient(90deg, var(--color-secondary), var(--color-neutral))',
                                 borderRadius: 'var(--radius-selector)',
                                 transition: 'width 1s ease',
@@ -161,14 +161,14 @@ const IntroEdu = () => {
                                 <div
                                     className="rounded-full transition-all"
                                     style={{
-                                        width: i === 2 ? '10px' : '7px',
-                                        height: i === 2 ? '10px' : '7px',
-                                        background: i <= 2 ? 'var(--color-neutral)' : 'var(--color-base-300)',
-                                        outline: i === 2 ? '2px solid var(--color-secondary)' : 'none',
+                                        width: i === 4 ? '10px' : '7px',
+                                        height: i === 4 ? '10px' : '7px',
+                                        background: i <= 4 ? 'var(--color-neutral)' : 'var(--color-base-300)',
+                                        outline: i === 4 ? '2px solid var(--color-secondary)' : 'none',
                                         outlineOffset: '2px',
                                     }}
                                 />
-                                <span className="text-[9px] font-medium" style={{ color: i <= 2 ? 'var(--color-base-content)' : 'var(--color-base-300)' }}>
+                                <span className="text-[9px] font-medium" style={{ color: i <= 4 ? 'var(--color-base-content)' : 'var(--color-base-300)' }}>
                                     {label}
                                 </span>
                             </div>
@@ -184,7 +184,7 @@ const IntroEdu = () => {
                     <button
                         className="flex items-center gap-2 text-sm font-semibold transition-opacity hover:opacity-60"
                         style={{ color: 'var(--color-neutral)', background: 'none', border: 'none', cursor: 'pointer' }}
-                        onClick={() => navigate('/app/build-resume/experience-content', { state: { resumeData } })}
+                        onClick={() => navigate('/app/build-resume/skill-content', { state: { resumeData } })}
                     >
                         <ArrowLeft size={16} /> Back
                     </button>
@@ -207,7 +207,7 @@ const IntroEdu = () => {
                             e.currentTarget.style.transform = 'translate(0,0)';
                             e.currentTarget.style.boxShadow = '4px 4px 0px var(--color-neutral)';
                         }}
-                        onClick={() => navigate('/app/build-resume/education-content', { state: { resumeData } })}
+                        onClick={() => navigate('/app/build-resume/summary-content', { state: { resumeData } })}
                     >
                         Continue <ChevronRight size={16} />
                     </button>
@@ -298,7 +298,7 @@ const IntroEdu = () => {
                                 }}
                             >
                                 <GraduationCap size={8} />
-                                Education
+                                Summary
                             </div>
                             {[100, 82, 65].map((w, i) => (
                                 <div
@@ -378,4 +378,4 @@ const IntroEdu = () => {
     );
 };
 
-export default IntroEdu;
+export default IntroSummary;

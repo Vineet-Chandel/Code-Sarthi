@@ -111,11 +111,19 @@ const Search = ({ height, displayType }) => {
                 {/* INPUT */}
                 <input
                     type="text"
-                    placeholder="Username without @"
+                    placeholder="Search usernames..."
                     style={{ height: `${height}px` }}
                     className="w-full text-secondary placeholder:text-neutral rounded-xl bg-base-100 pl-14 pr-14 border border-base-300 border-[3px] outline-none focus:border-accent transition-all"
                     value={username}
-                    onChange={(e) => setUserName(e.target.value.trimStart())}
+                    onChange={(e) => {
+                        let val = e.target.value;
+
+                        if (val.startsWith("@")) {
+                            val = val.slice(1);
+                        }
+
+                        setUserName(val.trimStart());
+                    }}
                 />
 
                 {/* LOADING ICON */}

@@ -69,12 +69,15 @@ import ReceivedRequests from "./personalPages/ReceivedRequests";
 import SmartSchedulerLakshya from "./Main/PagesMain/Sub-Category/Blog-Category/SmartSchedulerLakshya";
 import PrivacyPolicyHub from "./Main/PagesMain/Sub-Category/Safety-Category/Hub/PrivacyPolicyHub";
 import IntroEXP from "./Pages/Resume/2/IntroEXP";
+import IntroSummary from "./Pages/Resume/2/IntroProfileSummary";
 import Experience from "./Pages/Resume/2/Experinece";
 import IntroEdu from "./Pages/Resume/2/IntroEdu";
 import Education from "./Pages/Resume/2/Education";
 import IntroSkill from "./Pages/Resume/2/IntroSkills";
 import Skills from "./Pages/Resume/2/Skills";
 import PageNotFound from "./ErrorSaver/PageNotFound";
+import Summary from "./Pages/Resume/2/ProfileSummary";
+
 
 const App = () => {
   return (
@@ -153,7 +156,8 @@ const App = () => {
               <Route path="build-resume/intro-exp-page" element={<IntroEXP />} />
               <Route path="build-resume/intro-edu-page" element={< IntroEdu />} />
               <Route path="build-resume/intro-skill-page" element={< IntroSkill />} />
-
+              <Route path="build-resume/intro-summary-page" element={< IntroSummary />} />
+              <Route path="build-resume/summary-content" element={<Summary />} />
               <Route path="build-resume/skill-content" element={<Skills />} />
               <Route path="build-resume/experience-content" element={<Experience />} />
               <Route path="build-resume/education-content" element={<Education />} />
