@@ -51,7 +51,7 @@ aiWorkRouter.post("/generate-exp-pointer", async (req, res) => {
     const { jobRole, company, employmentType } = req.body;
     console.log(process.env.XAI_API_KEY);
     // Validation
-    if (!jobRole || !company || !employmentType) {
+    if (!jobRole && !company || !employmentType) {
         return res.status(400).json({
             error: "Incomplete Data",
             message: "jobRole, company, and employmentType are required.",
@@ -293,7 +293,161 @@ OUTPUT FORMAT:
     }
 });
 
+aiWorkRouter.post("/generate-summary", async (req, res) => {
+    const {
+        skills,
+        experience,
+        education,
+        summaryTitle,
+    } = req.body;
 
+    if (
+        !skills &&
+        !experience &&
+        !education &&
+        !summaryTitle &&
+        !summaryTitle.trim()
+    ) {
+        return res.status(400).json({
+            success: false,
+            error: "Atleast one is required",
+        });
+    }
+
+    try {
+        const prompt = `
+${MASTER_SYSTEM_PROMPT}
+
+TASK TYPE:
+AI Resume Professional Summary Generator
+
+CANDIDATE TITLE:
+${summaryTitle}
+
+SKILLS:
+${JSON.stringify(skills, null, 2)}
+
+EXPERIENCE:
+${JSON.stringify(experience, null, 2)}
+
+EDUCATION:
+${JSON.stringify(education, null, 2)}
+
+OBJECTIVE:
+Generate EXACTLY 6 premium resume summaries based on the candidate profile.
+
+IMPORTANT:
+- Use provided skills naturally
+- Mention strongest technologies
+- Mention years/experience if available
+- Highlight achievements naturally
+- Make summaries recruiter-ready
+- ATS optimized
+- Human sounding
+- Avoid generic buzzwords
+- No fake achievements
+- No unrealistic claims
+- Different tone/style for every summary
+
+SUMMARY TYPES:
+1. Professional
+2. ATS Optimized
+3. Modern Tech
+4. Startup Style
+5. Concise Executive
+6. Confident Fresher
+
+SUMMARY RULES:
+- 50-120 words each
+- Present tense
+- Professional tone
+- No first-person ("I")
+- No third-person ("He/She")
+- Strong technical language
+- Clean grammar
+- Realistic writing
+- Diverse sentence structures
+- Focus on impact
+
+OUTPUT STRICT JSON ONLY:
+
+{
+  "type": "generated_summaries",
+  "data": [
+    {
+      "tone": "Professional",
+      "summary": "..."
+    },
+    {
+      "tone": "ATS Optimized",
+      "summary": "..."
+    },
+    {
+      "tone": "Modern Tech",
+      "summary": "..."
+    },
+    {
+      "tone": "Startup Style",
+      "summary": "..."
+    },
+    {
+      "tone": "Concise Executive",
+      "summary": "..."
+    },
+    {
+      "tone": "Confident Fresher",
+      "summary": "..."
+    }
+  ]
+}
+`;
+
+        const completion = await client.chat.completions.create({
+            model: "openai/gpt-oss-20b",
+
+            response_format: {
+                type: "json_object",
+            },
+
+            messages: [
+                {
+                    role: "system",
+                    content:
+                        "You generate STRICT valid JSON only.",
+                },
+                {
+                    role: "user",
+                    content: prompt,
+                },
+            ],
+
+            temperature: 0.9,
+        });
+
+        const rawText =
+            completion.choices[0].message.content;
+
+        const parsedData = JSON.parse(rawText);
+
+        return res.status(200).json({
+            success: true,
+            type: parsedData.type,
+            data: parsedData.data,
+        });
+
+    } catch (error) {
+        console.error(
+            "AI Summary Generation Error:",
+            error
+        );
+
+        return res.status(500).json({
+            success: false,
+            error: "Summary generation failed",
+            message: error.message,
+        });
+    }
+});
 
 aiWorkRouter.post("/improve-pointer", async (req, res) => {
     const { bullet } = req.body;

@@ -313,10 +313,19 @@ const Experience = ({ data }) => {
                                                         e.stopPropagation();
                                                         setpoints((prev) => {
                                                             if (prev.length == 10) {
-                                                                alert("You can only add 10 bullet points");
+                                                                addToast({
+                                                                    type: "error",
+                                                                    title: "Error",
+                                                                    message: "You can only add 10 bullet points",
+                                                                });
                                                                 return prev;
                                                             }
                                                             if (prev.includes(bullet.bullet)) {
+                                                                addToast({
+                                                                    type: "error",
+                                                                    title: "Error",
+                                                                    message: "You can only add 10 bullet points",
+                                                                });
                                                                 return prev;
                                                             }
 
