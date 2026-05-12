@@ -30,12 +30,8 @@ const resumeData1 = {
     summaryTitle: "Full Stack Developer & UI Specialist",
     summaryBody:
         "passionate about crafting high-performance web applications using the MERN stack. Expert in translating complex business requirements into elegant, scalable code with a focus on user-centric design and efficient backend architecture.",
-    degree: "Bachelor of Technology",
-    major: "Computer Science and Engineering",
-    institution: "Pranveer Singh Institute of Technology",
     location: "Kanpur,India",
     pincode: "208024",
-    gradDate: "2027",
     skills: {
         frontend: "React.js, Next.js, TypeScript, Tailwind CSS, Framer Motion",
         backend: "Node.js, Express.js, GraphQL, Socket.io",

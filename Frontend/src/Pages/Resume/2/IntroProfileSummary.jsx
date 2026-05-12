@@ -132,7 +132,9 @@ const IntroSummary = () => {
                             AI writing assistant is active
                         </p>
                         <p className="text-xs leading-relaxed" style={{ color: 'var(--color-accent)' }}>
-                            Choose from optimized professional summary examples or craft your own with AI writing help.
+                            From what you’ve included so far, your strengths in <span className="font-bold text-primary">[TopSkill1]</span>, <span className="font-bold text-primary">[TopSkill2]</span>, and <span className="font-bold text-primary">[TopSkill3]</span> really stand out.
+                            <br /><br />
+                            Employers value <span className="font-bold text-primary">[ValuedSkill]</span>, <span className="font-bold text-primary">[ValuedSkill2]</span>, and <span className="font-bold text-primary">[ValuedSkill3]</span>—be sure to highlight these in your summary! Mention your relevant coursework and your ability to contribute to projects to showcase a well-rounded skill set. A strong summary will help you shine!
                         </p>
                     </div>
                 </div>

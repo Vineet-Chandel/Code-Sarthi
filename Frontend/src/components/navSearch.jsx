@@ -1,11 +1,12 @@
-import React, { useState, useEffect, } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import BASE_URL from "../Pages/auth/baseURL";
 import axios from "axios";
+import { motion } from 'framer-motion';
 import { AiOutlineLoading } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { addConnectionUser } from "../utils/connectionSlice";
-
-
+import Toast from '../Pages/Resume/2/Toast';
+import { AnimatePresence } from "framer-motion";
 
 const Search = ({ height, displayType }) => {
     const [username, setUserName] = useState("");
@@ -77,7 +78,11 @@ const Search = ({ height, displayType }) => {
         } catch (err) {
             setIsSearching(false)
             setShowCard(false);
-            setNewError(err.response?.data?.message || "User not found");
+            addToast({
+                type: "error",
+                title: "User not found",
+                message: "User not found."
+            });
         }
 
     }
@@ -95,55 +100,202 @@ const Search = ({ height, displayType }) => {
 
         return () => clearTimeout(timer);
     }, [username]);
+
+
+
+
+    const [isExpanded, setIsExpanded] = useState(false);
+    const inputRef = useRef(null);
+    const buttonVariants = {
+        collapse: {
+            width: 200,
+            marginLeft: 0,
+            marginRight: 0
+        },
+        expand: {
+            width: 300,
+            marginLeft: 20,
+            marginRight: 10
+
+        }
+    };
+
+    useEffect(() => {
+        if (isExpanded) {
+            inputRef.current.focus();
+        } else {
+            setUserName("");
+        }
+    }, [isExpanded]);
+
+    const iconBubbleVariant = {
+        collapse: {
+            scale: 0,
+            opacity: 0,
+        },
+        expand: {
+            scale: 1,
+            opacity: 1,
+        }
+    };
+
+    const TRANSITION = {
+        duration: 0.4,
+        type: "spring",
+        bounce: 0.25
+    }
+
+    const ToastContainer = ({ toasts, removeToast }) => {
+        return (
+            <div className="fixed top-5 right-5 flex flex-col gap-3 z-50">
+                <AnimatePresence>
+                    {toasts.map((t) => (
+                        <Toast
+                            key={t.id}
+                            {...t}
+                            onClose={() => removeToast(t.id)}
+                        />
+                    ))}
+                </AnimatePresence>
+            </div>
+        );
+    };
+    const [toasts, setToasts] = useState([]);
+
+    const addToast = ({ type = "success", title, message }) => {
+        const id = Date.now();
+        setToasts((prev) => [...prev, { id, type, title, message }]);
+    };
+
+    const removeToast = (id) => {
+        setToasts((prev) => prev.filter((t) => t.id !== id));
+    };
+
     return (
-        <div className='w-[90%] flex flex-col gap-y-1 '>
-            <div className="relative">
+
+        <div className='relative w-[90%] z-30 flex flex-col gap-3 items-center justify-center mr-3' >
+            <ToastContainer toasts={toasts} removeToast={removeToast} />
+            <div className='relative h-[45px] flex items-center justify-center '>
 
 
-                {/* LEFT ICON */}
-                <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 80 80" className="absolute left-3 top-1/2 -translate-y-1/2">
-                    <g fill="none">
-                        <path fill="#8c3f27" d="M65.368 67.848a2 2 0 0 0 2.828-2.829zm-9.634-15.29a2 2 0 0 0-2.828 2.828zm12.462 12.461L55.734 52.557l-2.828 2.829l12.462 12.462z"></path>
-                        <path fill="#ff9d33" stroke="#370a00" strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M13.578 30.724a24.249 24.249 0 1 1 46.844 12.552a24.249 24.249 0 0 1-46.844-12.552"></path>
-                    </g>
-                </svg>
 
-                {/* INPUT */}
-                <input
-                    type="text"
-                    placeholder="Search usernames..."
-                    style={{ height: `${height}px` }}
-                    className="w-full text-secondary placeholder:text-neutral rounded-xl bg-base-100 pl-14 pr-14 border border-base-300 border-[3px] outline-none focus:border-accent transition-all"
-                    value={username}
-                    onChange={(e) => {
-                        let val = e.target.value;
+                <motion.div
+                    variants={iconBubbleVariant}
+                    initial="collapse"
+                    animate={isExpanded ? "expand" : "collapse"}
+                    transition={TRANSITION}
 
-                        if (val.startsWith("@")) {
-                            val = val.slice(1);
-                        }
+                    className='h-10 w-10 flex items-center justify-center ml-2 ' >
 
-                        setUserName(val.trimStart());
-                    }}
-                />
-
-                {/* LOADING ICON */}
-                {isSearching && (
-                    <div className="absolute right-14 bottom-0 flex justify-center items-center h-full ">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-                            <path fill="#efeded" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity="0.3" />
-                            <path fill="#efeded" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z">
-                                <animateTransform attributeName="transform" dur="1s" from="0 12 12" repeatCount="indefinite" to="360 12 12" type="rotate" />
-                            </path>
+                    <span className='h-full flex items-center justify-center ml-2 bg-base-100 p-2 rounded-full border-[3px] border-secondary'>
+                        <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 80 80" >
+                            <g fill="none">
+                                <path fill="#8c3f27" d="M65.368 67.848a2 2 0 0 0 2.828-2.829zm-9.634-15.29a2 2 0 0 0-2.828 2.828zm12.462 12.461L55.734 52.557l-2.828 2.829l12.462 12.462z"></path>
+                                <path fill="#ff9d33" stroke="#370a00" strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M13.578 30.724a24.249 24.249 0 1 1 46.844 12.552a24.249 24.249 0 0 1-46.844-12.552"></path>
+                            </g>
                         </svg>
-                    </div>
-                )}
+                    </span>
+                </motion.div>
+                <motion.div
+                    variants={buttonVariants}
+                    initial="collapse"
+                    animate={isExpanded ? "expand" : "collapse"}
+                    transition={TRANSITION}
+                    className='h-[45px] flex items-center justify-center outline-none border-none focus:ring-0 focus:border-0 '>
+                    <button onClick={() => { setIsExpanded(true); inputRef.current.focus() }} className='h-[45px] w-full cursor-pointer items-center justify-center flex gap-2 rounded-full bg-base-100 text-white font-medium border-[3px] border-secondary'>
+                        {!isExpanded && (
+                            <span className='h-full w-[30px] flex items-center justify-center ml-2 '>
+                                <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 80 80" >
+                                    <g fill="none">
+                                        <path fill="#8c3f27" d="M65.368 67.848a2 2 0 0 0 2.828-2.829zm-9.634-15.29a2 2 0 0 0-2.828 2.828zm12.462 12.461L55.734 52.557l-2.828 2.829l12.462 12.462z"></path>
+                                        <path fill="#ff9d33" stroke="#370a00" strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M13.578 30.724a24.249 24.249 0 1 1 46.844 12.552a24.249 24.249 0 0 1-46.844-12.552"></path>
+                                    </g>
+                                </svg>
+                            </span>
+                        )}
+                        <motion.input
+                            layout="input"
+                            ref={inputRef}
+                            value={username}
+                            type="text"
+                            placeholder='Search Devs...'
+                            onChange={(e) => {
+                                let val = e.target.value;
 
+                                if (val.startsWith("@")) {
+                                    val = val.slice(1);
+                                }
 
-                {/* RIGHT ICON */}
-                <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 48 48" className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer">
-                    <path fill="#ff9d33" stroke="#8c3f27" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M24 20a7 7 0 1 0 0-14a7 7 0 0 0 0 14M6 40.8V42h36v-1.2c0-4.48 0-6.72-.872-8.432a8 8 0 0 0-3.496-3.496C35.92 28 33.68 28 29.2 28H18.8c-4.48 0-6.72 0-8.432.872a8 8 0 0 0-3.496 3.496C6 34.08 6 36.32 6 40.8"></path>
-                </svg>
+                                setUserName(val.trimStart());
+                            }}
+                            onBlur={() => { if (!username) { setIsExpanded(false) } }}
+                            className='h-full w-full bg-transparent text-sm placeholder-black/50 outline-none text-black '
+                            style={isExpanded ? { marginLeft: "20px" } : {}}
+                        />
 
+                        {!isExpanded && ((isSearching) ? (
+
+                            <span className='h-full flex items-center justify-center ml-2  p-2'>
+                                <div className="h-full w-[30px] flex items-center justify-center ml-2 text-primary">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity="0.3" />
+                                        <path fill="currentColor" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z">
+                                            <animateTransform attributeName="transform" dur="1s" from="0 12 12" repeatCount="indefinite" to="360 12 12" type="rotate" />
+                                        </path>
+                                    </svg>
+                                </div>
+                            </span>
+                        ) : (
+
+                            <span className='h-10 w-10 flex items-center justify-center rounded-full justify-self-end mr-3'>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width={24}
+                                    height={24}
+                                    viewBox="0 0 48 48"
+                                    className="cursor-pointer"
+                                >
+                                    <path fill="#ff9d33" stroke="#8c3f27" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M24 20a7 7 0 1 0 0-14a7 7 0 0 0 0 14M6 40.8V42h36v-1.2c0-4.48 0-6.72-.872-8.432a8 8 0 0 0-3.496-3.496C35.92 28 33.68 28 29.2 28H18.8c-4.48 0-6.72 0-8.432.872a8 8 0 0 0-3.496 3.496C6 34.08 6 36.32 6 40.8"></path>
+                                </svg>
+                            </span>
+                        ))}
+
+                    </button>
+                </motion.div>
+
+                <motion.div
+                    variants={iconBubbleVariant}
+                    initial="collapse"
+                    animate={isExpanded ? "expand" : "collapse"}
+                    transition={TRANSITION}
+
+                    className='h-[45px] w-[30px] flex items-center justify-center ml-2 ' >
+
+                    <span className='h-full flex items-center justify-center ml-2 bg-base-100 p-2 rounded-full border-[3px] border-secondary'>
+                        {isSearching ? (
+                            <div className="h-full w-[30px] flex items-center justify-center ml-2 text-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24">
+                                    <path fill="currentColor" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity="0.3" />
+                                    <path fill="currentColor" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z">
+                                        <animateTransform attributeName="transform" dur="1s" from="0 12 12" repeatCount="indefinite" to="360 12 12" type="rotate" />
+                                    </path>
+                                </svg>
+                            </div>
+                        ) : (
+                            <span className='h-10 w-10 flex items-center justify-center rounded-full'>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width={24}
+                                    height={24}
+                                    viewBox="0 0 48 48"
+                                    className="cursor-pointer"
+                                >
+                                    <path fill="#ff9d33" stroke="#8c3f27" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M24 20a7 7 0 1 0 0-14a7 7 0 0 0 0 14M6 40.8V42h36v-1.2c0-4.48 0-6.72-.872-8.432a8 8 0 0 0-3.496-3.496C35.92 28 33.68 28 29.2 28H18.8c-4.48 0-6.72 0-8.432.872a8 8 0 0 0-3.496 3.496C6 34.08 6 36.32 6 40.8"></path>
+                                </svg>
+                            </span>
+                        )}
+                    </span>
+                </motion.div>
             </div>
             {showcard && (
                 <div
@@ -197,7 +349,7 @@ const Search = ({ height, displayType }) => {
                                     </div>
 
                                     <div className="flex items-center gap-2 mt-1">
-                                        <code className="text-accent text-sm font-mono">
+                                        <code className="text-secondary-content text-sm font-mono  border border-secondary px-3 py-1 rounded-xl bg-secondary " >
                                             @{data?.username}
                                         </code>
                                         <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
@@ -209,7 +361,7 @@ const Search = ({ height, displayType }) => {
                                 <div className="flex flex-col items-end gap-3">
                                     <button
                                         type="button"
-                                        className="w-10 h-10 flex items-center justify-center border border-secondary rounded-full transition-colors duration-200 hover:bg-white/10"
+                                        className="w-10 h-[45px] flex items-center justify-center border border-secondary rounded-full transition-colors duration-200 hover:bg-white/10"
                                         onClick={() => { setShowCard(false); setShowRequestModal(false) }}
                                         aria-label="Close profile menu"
                                     >
@@ -312,28 +464,7 @@ const Search = ({ height, displayType }) => {
                 </div>
             )}
 
-            {newError && (
-                <div
-                    className={`${displayType === "nav"
-                        ? "absolute right-0 top-full mt-3 w-full z-50"
-                        : "relative"
-                        } flex justify-center`}
-                >
-                    <div className="flex items-center rounded-2xl px-4 py-3 border border-secondary bg-error w-[50%] transition-all duration-300">
-                        <span className="mr-3" onClick={() => setNewError("")}>
-                            <svg width="24" height="24" viewBox="0 0 24 24">
-                                <path
-                                    fill="#801518"
-                                    d="M12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m0-18C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2m2.59 6L12 10.59L9.41 8L8 9.41L10.59 12L8 14.59L9.41 16L12 13.41L14.59 16L16 14.59L13.41 12L16 9.41z"
-                                />
-                            </svg>
-                        </span>
-
-                        <div className="text-error-content ml-2">{newError}</div>
-                    </div>
-                </div>
-            )}
-        </div>
+        </div >
     )
 }
 

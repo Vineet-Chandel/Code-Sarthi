@@ -3,8 +3,11 @@ import { Layout, Sparkles, Download, CheckCircle2, ArrowRight, ArrowLeft, Clock,
 import { useNavigate } from 'react-router-dom';
 
 const TEMPLATES = [
-    { id: 0, name: 'Classic' }, { id: 1, name: 'Sidebar' }, { id: 2, name: 'Bold' },
-    { id: 3, name: 'Grid' }, { id: 4, name: 'Minimal' }, { id: 5, name: 'Creative' },
+    { id: 0, name: 'Modern Professional' }, { id: 1, name: 'Creative Minimal' }, { id: 2, name: 'Technical Executive' },
+    { id: 3, name: 'Focused  Layout' }, { id: 4, name: 'Clean Slate' }, { id: 5, name: 'Clean Modern' },
+    { id: 6, name: 'Creative Contrast' }, { id: 7, name: 'Cool Overlay' }, { id: 8, name: 'Modern Functional' },
+    { id: 9, name: 'Classic Module' }, { id: 10, name: 'Simple Linear' }, { id: 11, name: 'And many more ...' },
+
 ];
 
 const BULLETS = {
@@ -136,7 +139,7 @@ export default function BuildResume() {
     const Icon = step.icon;
 
     return (
-        <div className="w-screen min-h-screen bg-base-200 flex justify-center items-start py-8 px-4 font-sans">
+        <div className="w-screen min-h-screen bg-base-200 flex justify-center items-start py-8 px-4 ">
             <div className="w-[90%] bg-base-100 p-8 md:p-10 rounded-box border-[2px] border-base-300">
 
                 {/* Header */}
@@ -148,7 +151,7 @@ export default function BuildResume() {
                         resume builder
                     </span>
                     <h1 className="text-4xl md:text-5xl font-black text-base-content mb-3 leading-tight"
-                        style={{ fontFamily: "'Playfair Display', serif" }}>
+                    >
                         Here's how we <em className="text-accent not-italic">get you hired.</em>
                     </h1>
                     <p className="text-base-content/50 text-sm max-w-md mx-auto">Walk through each step live — everything is interactive.</p>
@@ -175,7 +178,7 @@ export default function BuildResume() {
                 {/* Progress bar */}
                 <div className="max-w-sm mx-auto h-1 bg-base-300 rounded-full overflow-hidden mb-8 mt-3">
                     <div className="h-full bg-neutral rounded-full transition-all duration-500"
-                        style={{ width: cur === 0 ? '16%' : cur === 1 ? '50%' : '90%' }} />
+                        style={{ width: cur === 0 ? '33%' : cur === 1 ? '66%' : '100%' }} />
                 </div>
 
                 {/* Stepper nav */}
@@ -185,7 +188,7 @@ export default function BuildResume() {
                         <ArrowLeft className="w-4 h-4" />
                     </button>
                     <span className="font-bold text-base-content text-sm min-w-[140px] text-center"
-                        style={{ fontFamily: "'Playfair Display', serif" }}>{step.title}</span>
+                    >{step.title}</span>
                     <button onClick={() => goTo(cur + 1)} disabled={cur === 2}
                         className="w-9 h-9 rounded-full bg-base-200 border-[2px] border-base-300 flex items-center justify-center text-base-content/50 hover:bg-base-300 disabled:opacity-30 transition-all">
                         <ArrowRight className="w-4 h-4" />
@@ -215,7 +218,7 @@ export default function BuildResume() {
                                     </div>
                                     <div>
                                         <p className="text-[10px] font-semibold tracking-widest uppercase text-neutral mb-0.5">Step {step.number}</p>
-                                        <h3 className="text-lg font-bold text-base-content" style={{ fontFamily: "'Playfair Display', serif" }}>{step.title}</h3>
+                                        <h3 className="text-lg font-bold text-base-content" >{step.title}</h3>
                                         <p className="text-xs text-accent">{step.subtitle}</p>
                                     </div>
                                 </div>
@@ -282,7 +285,7 @@ export default function BuildResume() {
                                     </div>
                                     <div>
                                         <p className="text-[10px] font-semibold tracking-widest uppercase text-neutral mb-0.5">Step {step.number}</p>
-                                        <h3 className="text-lg font-bold text-base-content" style={{ fontFamily: "'Playfair Display', serif" }}>{step.title}</h3>
+                                        <h3 className="text-lg font-bold text-base-content" >{step.title}</h3>
                                         <p className="text-xs text-accent">{step.subtitle}</p>
                                     </div>
                                 </div>
@@ -318,7 +321,7 @@ export default function BuildResume() {
                                     </div>
                                     <div>
                                         <p className="text-[10px] font-semibold tracking-widest uppercase text-neutral mb-0.5">Step {step.number}</p>
-                                        <h3 className="text-lg font-bold text-base-content" style={{ fontFamily: "'Playfair Display', serif" }}>{step.title}</h3>
+                                        <h3 className="text-lg font-bold text-base-content" >{step.title}</h3>
                                         <p className="text-xs text-accent">{step.subtitle}</p>
                                     </div>
                                 </div>
@@ -347,7 +350,7 @@ export default function BuildResume() {
                 <div className="flex flex-col items-center gap-2">
                     <button
                         onClick={() => navigate('/app/build-resume/resume-templates')}
-                        className="group flex items-center gap-3 bg-secondary hover:bg-neutral text-secondary-content border-[2px] border-secondary rounded-selector px-10 py-4 text-sm font-semibold transition-all duration-200 hover:-translate-y-1 active:scale-95">
+                        className="group flex items-center gap-3 bg-secondary hover:bg-neutral text-secondary-content border-[2px] border-secondary rounded-selector px-10 py-4 text-sm font-semibold transition-all duration-200 hover:text-white hover:-translate-y-1 active:scale-95">
                         Start building my resume
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </button>
