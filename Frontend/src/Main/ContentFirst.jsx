@@ -322,7 +322,7 @@ const ContentFirst = () => {
     }];
 
     return (
-        <div className="BOSSCONT bg-black text-white w-screen flex flex-col justify-center items-center my-[150px]">
+        <div className="BOSSCONT bg-black text-white w-screen flex flex-col justify-center items-center ">
 
             <div className=" flex flex-col justify-center items-center w-full gap-6">
 

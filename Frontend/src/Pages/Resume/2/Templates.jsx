@@ -236,21 +236,30 @@ function TemplateCard({ item, index, onSelect, isFavorite, onToggleFavorite }) {
                 </svg>
             </button>
 
-            {/* Preview */}
-            <div style={{ position: "relative", width: "100%", overflow: "hidden", background: "oklch(95% 0.038 75.164)", aspectRatio: "1/1.41" }}>
+            <div style={{
+                position: "relative",
+                width: "100%",
+                overflow: "hidden",
+                clipPath: "inset(0 0 0 0)",          // bulletproof clip
+                background: "oklch(95% 0.038 75.164)",
+                aspectRatio: "1/1.41",
+            }}>
+                {/* ✅ No hardcoded width, no transform scale — A4Wrapper handles everything */}
                 <div
                     style={{
-                        position: "absolute", top: 0, left: 0, width: 900,
-                        transformOrigin: "top left",
-                        pointerEvents: "none", userSelect: "none",
-                        transform: hovered ? "scale(0.46)" : "scale(0.41)",
+                        position: "absolute",
+                        top: 0, left: 0, right: 0,
+                        pointerEvents: "none",
+                        userSelect: "none",
+                        transformOrigin: "top center",
+                        transform: hovered ? "scale(1.06)" : "scale(1)",   // subtle zoom on hover
                         transition: "transform 0.5s cubic-bezier(.4,0,.2,1)",
                     }}
                 >
                     <item.Component data={resumeData1} />
                 </div>
 
-                {/* Hover overlay CTA */}
+                {/* Hover overlay CTA — unchanged */}
                 <div style={{
                     position: "absolute", inset: 0,
                     display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 12,

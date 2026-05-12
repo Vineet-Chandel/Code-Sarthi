@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { useNavigate } from "react-router-dom";
-
+import { motion } from "framer-motion";
 import {
     Pages,
     NextPages,

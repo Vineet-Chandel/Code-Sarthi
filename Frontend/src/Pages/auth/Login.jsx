@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { addUser } from "../../utils/userSlice";
 import BASE_URL from "./baseURL";
 import Welcome from './Welcome';
+import { motion } from "framer-motion";
 
 
 import { useEffect, useRef, useState, createElement, useMemo, useCallback } from 'react';
@@ -299,6 +300,8 @@ const developers = [
 ];
 
 const Login = () => {
+
+    const [dwldResume, setDwldResume] = useState(false);
     const [openId, setOpenId] = useState(null);
     const toggle = (id) => setOpenId(openId === id ? null : id);
     const [activeId, setActiveId] = useState(null);
@@ -486,8 +489,10 @@ const Login = () => {
 
                         {/* Submit Button */}
                         <div className="pt-4">
-                            <button
+                            <motion.button
                                 type="submit"
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.4 }}
                                 disabled={isLoginStart}
                                 className={`w-full  bg-base-300 border-2 border-secondary  text-white  py-3 sm:py-4  rounded-2xl sm:rounded-3xl transition-all duration-300  text-base sm:text-xl md:text-2xl  font-semibold  ${isLoginStart ? "opacity-70 cursor-not-allowed" : "hover:from-blue-700 hover:to-blue-800"}`}
                             >
@@ -524,7 +529,7 @@ const Login = () => {
                                             </g>
                                         </svg>Enter Workspace</span>
                                 )}
-                            </button>
+                            </motion.button>
                         </div>
                     </form>
                     {/* Stats */}
@@ -577,16 +582,27 @@ const Login = () => {
                                             <p className="text-accent text-sm leading-relaxed mb-4">{dev.bio}</p>
 
                                             {/* Skill badges */}
-                                            <div className="flex flex-wrap gap-2 mb-4 ">
+                                            {/* Skill badges */}
+                                            <div className="flex flex-wrap gap-2 mb-4 " onClick={() => setDwldResume(true)}>
 
-                                                <a
-                                                    href='https://drive.google.com/file/d/1J8DmgZ6Mgl02RnkzLd7IMn955_Jrpk-m/view?usp=sharing'
-                                                    className="text-xs px-2.5 py-2 rounded-full border border-secondary bg-base-100 text-accent hover:bg-secondary hover:text-base-100 flex items-center justify-center gap-1"
+                                                <motion.a
+                                                    whileTap={{ scale: 0.5 }}
+                                                    whileHover={{ scale: 1.1 }}
+                                                    href='https://drive.google.com/file/d/1J8DmgZ6Mgl02RnkzLd7IMn955_Jrpk-m/view?usp=sharing' target='_blank'
+                                                    className="text-sm font-extrabold px-5 py-2 rounded-full border border-secondary bg-base-100 text-accent hover:bg-secondary hover:text-base-100 flex items-center justify-center gap-1"
                                                 >
-                                                    RESUME <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeMiterlimit={10} strokeWidth={1.5} d="m8 12l4 4m0 0l4-4m-4 4V4m7 13v.6c0 1.33-1.07 2.4-2.4 2.4H7.4C6.07 20 5 18.93 5 17.6V17"></path></svg>
-                                                </a>
+                                                    RESUME {
+                                                        dwldResume ? (<svg xmlns="http://www.w3.org/2000/svg" width={32} height={32} viewBox="0 0 24 24">
+                                                            <g fill="none">
+                                                                <circle cx={12} cy={12} r={8} fill="rgba(22, 157, 2, 1)" fillOpacity={0.25}></circle>
+                                                                <path stroke="rgba(22, 157, 2, 1)" strokeWidth={1.2} d="m8.5 11l2.894 2.894a.15.15 0 0 0 .212 0L19.5 6"></path>
+                                                                <path stroke="rgba(22, 157, 2, 1)" strokeLinecap="round" d="M19.358 10.547a7.5 7.5 0 1 1-3.608-5.042" strokeWidth={1}></path>
+                                                            </g>
+                                                        </svg>) : (<svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeMiterlimit={10} strokeWidth={1.5} d="m8 12l4 4m0 0l4-4m-4 4V4m7 13v.6c0 1.33-1.07 2.4-2.4 2.4H7.4C6.07 20 5 18.93 5 17.6V17"></path></svg>)}
+                                                </motion.a>
 
                                             </div>
+
 
                                             {/* Stats row */}
                                             <div className="grid grid-cols-2 gap-2 mb-4">
@@ -619,7 +635,9 @@ const Login = () => {
                                             {/* Social links + expand hint */}
                                             <div className="flex items-center justify-between pt-2 border-t border-white/5">
                                                 <div className="flex gap-3">
-                                                    <a
+                                                    <motion.a
+
+                                                        whileHover={{ scale: 1.1 }}
                                                         href={dev.github}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
@@ -629,8 +647,10 @@ const Login = () => {
                                                         <div className='border-2 border-secondary p-1.5 rounded-full '>
                                                             <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 24 24"><defs><mask id="SVGcZ81hcNk"><path fill="#fff" d="M9.5 8c0.83 0 1.5 0.45 1.5 1c0 0.55 -0.67 1 -1.5 1c-0.83 0 -1.5 -0.45 -1.5 -1c0 -0.55 0.67 -1 1.5 -1ZM14.5 8c0.83 0 1.5 0.45 1.5 1c0 0.55 -0.67 1 -1.5 1c-0.83 0 -1.5 -0.45 -1.5 -1c0 -0.55 0.67 -1 1.5 -1Z"></path><rect width={8} height={4} x={8} y={7}><animate attributeName="y" dur="9s" keyTimes="0;0.45;0.46;0.54;0.55;1" repeatCount="indefinite" values="7;7;11;11;7;7"></animate></rect></mask></defs><path fill="#6c3c00" fillOpacity={0} d="M15 4.5c-0.39 -0.1 -1.33 -0.5 -3 -0.5c-1.67 0 -2.61 0.4 -3 0.5c-0.53 -0.43 -1.94 -1.5 -3.5 -1.5c-0.34 1 -0.29 2.22 0 3c-0.75 1 -1 2 -1 3.5c0 2.19 0.48 3.58 1.5 4.5c1.02 0.92 2.11 1.37 3.5 1.5c-0.65 0.54 -0.5 1.87 -0.5 2.5v4h6v-4c0 -0.63 0.15 -1.96 -0.5 -2.5c1.39 -0.13 2.48 -0.58 3.5 -1.5c1.02 -0.92 1.5 -2.31 1.5 -4.5c0 -1.5 -0.25 -2.5 -1 -3.5c0.29 -0.78 0.34 -2 0 -3c-1.56 0 -2.97 1.07 -3.5 1.5Z"><animate fill="freeze" attributeName="fill-opacity" begin="0.9s" dur="0.15s" to={0.3}></animate></path><g fill="none" stroke="#6c3c00" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}><path strokeDasharray={32} d="M12 4c1.67 0 2.61 0.4 3 0.5c0.53 -0.43 1.94 -1.5 3.5 -1.5c0.34 1 0.29 2.22 0 3c0.75 1 1 2 1 3.5c0 2.19 -0.48 3.58 -1.5 4.5c-1.02 0.92 -2.11 1.37 -3.5 1.5c0.65 0.54 0.5 1.87 0.5 2.5c0 0.73 0 3 0 3M12 4c-1.67 0 -2.61 0.4 -3 0.5c-0.53 -0.43 -1.94 -1.5 -3.5 -1.5c-0.34 1 -0.29 2.22 0 3c-0.75 1 -1 2 -1 3.5c0 2.19 0.48 3.58 1.5 4.5c1.02 0.92 2.11 1.37 3.5 1.5c-0.65 0.54 -0.5 1.87 -0.5 2.5c0 0.73 0 3 0 3"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.6s" values="32;0"></animate></path><path strokeDasharray={10} strokeDashoffset={10} d="M9 19c-1.41 0 -2.84 -0.56 -3.69 -1.19c-0.84 -0.62 -1.09 -1.66 -2.31 -2.31"><animate attributeName="d" dur="3s" keyTimes="0;0.5;1" repeatCount="indefinite" values="M9 19c-1.41 0 -2.84 -0.56 -3.69 -1.19c-0.84 -0.62 -1.09 -1.66 -2.31 -2.31;M9 19c-1.41 0 -3 -0.5 -4 -0.5c-0.53 0 -1 0 -2 -0.5;M9 19c-1.41 0 -2.84 -0.56 -3.69 -1.19c-0.84 -0.62 -1.09 -1.66 -2.31 -2.31"></animate><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.7s" dur="0.2s" to={0}></animate></path></g><path fill="#6c3c00" d="M0 0h24v24H0z" mask="url(#SVGcZ81hcNk)"></path></svg>
                                                         </div>
-                                                    </a>
-                                                    <a
+                                                    </motion.a>
+                                                    <motion.a
+
+                                                        whileHover={{ scale: 1.1 }}
                                                         href={dev.linkedin}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
@@ -640,7 +660,7 @@ const Login = () => {
                                                         <div className='border-2 border-secondary p-2 rounded-xl '>
                                                             <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 20 20"><path fill="#6c3c00" d="M17.04 17.043h-2.962v-4.64c0-1.107-.023-2.531-1.544-2.531c-1.544 0-1.78 1.204-1.78 2.449v4.722H7.793V7.5h2.844v1.3h.039c.397-.75 1.364-1.54 2.808-1.54c3.001 0 3.556 1.974 3.556 4.545zM4.447 6.194c-.954 0-1.72-.771-1.72-1.72s.767-1.72 1.72-1.72a1.72 1.72 0 0 1 0 3.44m1.484 10.85h-2.97V7.5h2.97zM18.522 0H1.476C.66 0 0 .645 0 1.44v17.12C0 19.355.66 20 1.476 20h17.042c.815 0 1.482-.644 1.482-1.44V1.44C20 .646 19.333 0 18.518 0z"></path></svg>
                                                         </div>
-                                                    </a>
+                                                    </motion.a>
                                                 </div>
                                                 <span className="text-xs text-accent">
                                                     {isActive ? "collapse ↑" : "contributions ↓"}

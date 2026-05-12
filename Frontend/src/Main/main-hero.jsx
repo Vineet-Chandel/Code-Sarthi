@@ -48,7 +48,7 @@ const Mainhero = () => {
                 muted
                 playsInline
                 preload="auto"
-                className="newVideo absolute inset-0 w-full h-full object-cover rounded-b-[100px]"
+                className="newVideo absolute inset-0 w-full h-full object-cover "
             />
 
             {/* Center container */}
