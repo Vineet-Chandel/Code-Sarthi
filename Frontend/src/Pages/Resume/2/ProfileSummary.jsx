@@ -99,7 +99,9 @@ const Experience = ({ data }) => {
             setLoading(true);
 
             const payload = {
-                skills: resumeData?.skills || {},
+                skills: Array.isArray(resumeData?.skills)
+                    ? resumeData.skills.join(", ")
+                    : "",
 
                 experience: (resumeData?.experience || []).map((exp) => ({
                     company: exp?.company || "",
@@ -432,7 +434,7 @@ const Experience = ({ data }) => {
                                 ))}
                             </div>
 
-                            {/* ── PREVIEW tab ── */}
+
                             {/* ── PREVIEW tab ── */}
                             {activeTab === "preview" && (
                                 <div
