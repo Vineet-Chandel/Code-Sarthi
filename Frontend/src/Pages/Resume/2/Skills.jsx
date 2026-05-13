@@ -494,7 +494,6 @@ const Education = ({ data }) => {
 
                             {/* ── PREVIEW tab ── */}
                             {activeTab === "preview" && (
-
                                 <div
                                     className="
                             relative
@@ -513,20 +512,59 @@ py-1
                             "
                                 >
                                     {/* Resume Scaling Wrapper */}
-                                    <div
-                                        className="
-                origin-top
-                scale-[0.61]
-                sm:scale-[0.64]
-                md:scale-[0.69]
-                lg:scale-[0.74]
-                xl:scale-[0.80]
-                transition-transform
-                duration-500
-            "
-                                    >
-                                        <Temp1 data={finalResumeData} />
+
+
+
+                                    <div style={{
+                                        position: "relative",
+                                        width: "100%",
+                                        overflow: "hidden",
+                                        clipPath: "inset(0 0 0 0)",          // bulletproof clip
+                                        background: "oklch(95% 0.038 75.164)",
+                                        aspectRatio: "1/1.41",
+                                    }}>
+                                        {/* ✅ No hardcoded width, no transform scale — A4Wrapper handles everything */}
+                                        <div
+                                            style={{
+                                                position: "absolute",
+                                                top: 0, left: 0, right: 0,
+                                                pointerEvents: "none",
+                                                userSelect: "none",
+                                                transformOrigin: "top center",
+
+                                                transition: "transform 0.5s cubic-bezier(.4,0,.2,1)",
+                                            }}
+                                        >
+                                            <Temp1 data={finalResumeData} />
+                                        </div>
+
+                                        {/* Hover overlay CTA — unchanged */}
+                                        <div style={{
+                                            position: "absolute", inset: 0,
+                                            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 12,
+                                            // background: `linear-gradient(160deg, ${item.color}18 0%, ${item.color}50 100%)`,
+
+                                            transition: "opacity 0.3s ease",
+                                        }}>
+                                            <button
+                                                style={{
+                                                    padding: "10px 28px",
+                                                    borderRadius: "var(--radius-field, 0.5rem)",
+                                                    fontWeight: 800, fontSize: 13, color: "#fff",
+                                                    // background: item.color,
+                                                    border: "none", cursor: "pointer",
+
+                                                    transition: "transform 0.35s cubic-bezier(.4,0,.2,1) 0.05s",
+                                                    letterSpacing: "0.02em",
+                                                    fontFamily: "'DM Sans', sans-serif",
+                                                }}
+                                            // onClick={() => onSelect(item)}
+                                            >
+                                                Use This Template
+                                            </button>
+                                        </div>
                                     </div>
+
                                 </div>
                             )}
 

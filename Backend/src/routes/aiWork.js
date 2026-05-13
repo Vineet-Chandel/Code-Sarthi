@@ -301,133 +301,143 @@ aiWorkRouter.post("/generate-summary", async (req, res) => {
         summaryTitle,
     } = req.body;
 
+    const hasSkills =
+        Array.isArray(skills) && skills.length > 0;
+
+    const hasExperience =
+        Array.isArray(experience) &&
+        experience.length > 0;
+
+    const hasEducation =
+        Array.isArray(education) &&
+        education.length > 0;
+
+    const hasTitle =
+        typeof summaryTitle === "string" &&
+        summaryTitle.trim().length > 0;
+
     if (
-        !skills &&
-        !experience &&
-        !education &&
-        !summaryTitle &&
-        !summaryTitle.trim()
+        !hasSkills &&
+        !hasExperience &&
+        !hasEducation &&
+        !hasTitle
     ) {
         return res.status(400).json({
             success: false,
-            error: "Atleast one is required",
+            error: "At least one field is required",
         });
     }
 
     try {
-        const prompt = `
-${MASTER_SYSTEM_PROMPT}
+        const completion =
+            await client.chat.completions.create({
+                model: "openai/gpt-oss-20b",
 
-TASK TYPE:
-AI Resume Professional Summary Generator
+                messages: [
+                    {
+                        role: "system",
+                        content: `
+You are a professional ATS resume summary generator.
 
-CANDIDATE TITLE:
-${summaryTitle}
+Return ONLY valid JSON.
 
-SKILLS:
-${JSON.stringify(skills, null, 2)}
-
-EXPERIENCE:
-${JSON.stringify(experience, null, 2)}
-
-EDUCATION:
-${JSON.stringify(education, null, 2)}
-
-OBJECTIVE:
-Generate EXACTLY 6 premium resume summaries based on the candidate profile.
-
-IMPORTANT:
-- Use provided skills naturally
-- Mention strongest technologies
-- Mention years/experience if available
-- Highlight achievements naturally
-- Make summaries recruiter-ready
-- ATS optimized
-- Human sounding
-- Avoid generic buzzwords
-- No fake achievements
-- No unrealistic claims
-- Different tone/style for every summary
-
-SUMMARY TYPES:
-1. Professional
-2. ATS Optimized
-3. Modern Tech
-4. Startup Style
-5. Concise Executive
-6. Confident Fresher
-
-SUMMARY RULES:
-- 50-120 words each
-- Present tense
-- Professional tone
-- No first-person ("I")
-- No third-person ("He/She")
-- Strong technical language
-- Clean grammar
-- Realistic writing
-- Diverse sentence structures
-- Focus on impact
-
-OUTPUT STRICT JSON ONLY:
-
+Required structure:
 {
   "type": "generated_summaries",
   "data": [
     {
-      "tone": "Professional",
-      "summary": "..."
-    },
-    {
-      "tone": "ATS Optimized",
-      "summary": "..."
-    },
-    {
-      "tone": "Modern Tech",
-      "summary": "..."
-    },
-    {
-      "tone": "Startup Style",
-      "summary": "..."
-    },
-    {
-      "tone": "Concise Executive",
-      "summary": "..."
-    },
-    {
-      "tone": "Confident Fresher",
-      "summary": "..."
+      "tone": "",
+      "summary": ""
     }
   ]
 }
-`;
+                        `,
+                    },
 
-        const completion = await client.chat.completions.create({
-            model: "openai/gpt-oss-20b",
+                    {
+                        role: "user",
+                        content: `
+Generate 6 ATS-optimized resume summaries.
 
-            response_format: {
-                type: "json_object",
-            },
+Candidate Title:
+${summaryTitle || "Not Provided"}
 
-            messages: [
-                {
-                    role: "system",
-                    content:
-                        "You generate STRICT valid JSON only.",
-                },
-                {
-                    role: "user",
-                    content: prompt,
-                },
-            ],
+Skills:
+${JSON.stringify(skills || [])}
 
-            temperature: 0.9,
-        });
+Experience:
+${JSON.stringify(experience || [])}
+
+Education:
+${JSON.stringify(education || [])}
+
+Requirements:
+- Professional
+- Human sounding
+- ATS optimized
+- 50-100 words
+- Different tone for each summary
+- No markdown
+- No explanations
+                        `,
+                    },
+                ],
+
+                temperature: 0.2,
+                max_tokens: 1400,
+            });
 
         const rawText =
-            completion.choices[0].message.content;
+            completion.choices?.[0]?.message?.content;
 
-        const parsedData = JSON.parse(rawText);
+        if (!rawText) {
+            return res.status(500).json({
+                success: false,
+                error: "Empty AI response",
+            });
+        }
+
+        const cleanedText = rawText
+            .replace(/```json/g, "")
+            .replace(/```/g, "")
+            .trim();
+
+        const jsonMatch =
+            cleanedText.match(/\{[\s\S]*\}/);
+
+        if (!jsonMatch) {
+            return res.status(500).json({
+                success: false,
+                error: "No JSON found in AI response",
+            });
+        }
+
+        let parsedData;
+
+        try {
+            parsedData = JSON.parse(jsonMatch[0]);
+        } catch (err) {
+            console.error(
+                "JSON Parse Error:",
+                cleanedText
+            );
+
+            return res.status(500).json({
+                success: false,
+                error: "Invalid AI JSON response",
+            });
+        }
+
+        if (
+            parsedData.type !==
+            "generated_summaries" ||
+            !Array.isArray(parsedData.data)
+        ) {
+            return res.status(500).json({
+                success: false,
+                error: "Malformed AI response",
+            });
+        }
 
         return res.status(200).json({
             success: true,
