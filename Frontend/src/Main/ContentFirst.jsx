@@ -2,528 +2,552 @@ import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+/* ─────────────────────────────────────────────────────────
+   Inline styles injected once at module level
+───────────────────────────────────────────────────────── */
+const STYLES = `
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;600;700&display=swap');
+
+  :root {
+    --green:   #00ff87;
+    --teal:    #00d4aa;
+    --dim:     #0aff9d33;
+    --border:  rgba(0,255,135,0.18);
+    --card-bg: rgba(10,18,12,0.85);
+    --glass:   rgba(255,255,255,0.03);
+  }
+
+  .cs-section {
+    background: #060a07;
+    font-family: 'Outfit', sans-serif;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ── Ambient orbs ── */
+  .cs-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .cs-orb-1 { width: 600px; height: 600px; background: rgba(0,255,135,0.06); top: -120px; left: -180px; }
+  .cs-orb-2 { width: 500px; height: 500px; background: rgba(0,180,255,0.05); top: 40%; right: -150px; }
+  .cs-orb-3 { width: 700px; height: 700px; background: rgba(0,255,135,0.04); bottom: 10%; left: 30%; }
+
+  /* ── Dot-grid overlay ── */
+  .cs-grid {
+    position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background-image: radial-gradient(rgba(0,255,135,0.07) 1px, transparent 1px);
+    background-size: 36px 36px;
+  }
+
+  /* ── Section label badge ── */
+  .cs-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 6px 18px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--green);
+    background: rgba(0,255,135,0.05);
+    text-transform: uppercase;
+  }
+  .cs-badge-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--green);
+
+    animation: cs-pulse 2s ease-in-out infinite;
+  }
+  @keyframes cs-pulse {
+    0%,100% { opacity:1; transform:scale(1); }
+    50%      { opacity:0.4; transform:scale(0.75); }
+  }
+
+  /* ── Hero headline ── */
+  .cs-hero-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.6rem, 6vw, 5.2rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: #fff;
+    text-align: center;
+  }
+  .cs-hero-title span { color: var(--green); }
+
+  .cs-hero-sub {
+    font-size: clamp(1rem, 1.6vw, 1.25rem);
+    color: rgba(255,255,255,0.5);
+    font-weight: 300;
+    max-width: 640px;
+    text-align: center;
+    line-height: 1.7;
+  }
+  .cs-hero-sub b { color: rgba(255,255,255,0.9); font-weight: 600; }
+
+  /* ── Feature row cards (featuredData1) ── */
+  .cs-feat-row {
+    border: 1px solid var(--border);
+    border-radius: 32px;
+    background: var(--card-bg);
+
+    overflow: hidden;
+    transition: border-color 0.4s;
+    position: relative;
+  }
+  .cs-feat-row::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--green), transparent);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .cs-feat-row:hover { border-color: rgba(0,255,135,0.35);  }
+  .cs-feat-row:hover::before { opacity: 1; }
+
+  .cs-feat-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--green);
+    opacity: 0.6;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .cs-feat-heading {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.5rem, 2.5vw, 2.6rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: #fff;
+  }
+
+  .cs-tag-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    transition: all 0.25s;
+    cursor: default;
+    font-size: clamp(0.88rem, 1.2vw, 1rem);
+    color: rgba(255,255,255,0.55);
+    line-height: 1.5;
+  }
+  .cs-tag-item:hover {
+    background: rgba(0,255,135,0.06);
+    border-color: var(--border);
+    color: rgba(255,255,255,0.9);
+  }
+  .cs-tag-icon { color: var(--green); margin-top: 2px; flex-shrink: 0; font-size: 12px; }
+
+  /* Video wrapper */
+  .cs-video-wrap {
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+
+    position: relative;
+  }
+  .cs-video-wrap::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 70%, rgba(6,10,7,0.6) 100%);
+    pointer-events: none;
+  }
+
+  /* ── Section divider ── */
+  .cs-divider {
+    width: 100%; display: flex; align-items: center; gap: 20px;
+    padding: 0 48px;
+  }
+  .cs-divider-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--border)); }
+  .cs-divider-line.right { background: linear-gradient(90deg, var(--border), transparent); }
+  .cs-divider-icon { color: var(--green); font-size: 20px; opacity: 0.6; }
+
+  /* ── Explore section ── */
+  .cs-explore-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2rem, 5vw, 4.4rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: #fff;
+    text-align: center;
+  }
+  .cs-explore-title span { 
+    -webkit-text-stroke: 1px rgba(0,255,135,0.5);
+    color: transparent;
+  }
+
+  /* ── Grid cards (featuredData2) ── */
+  .cs-card {
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 28px;
+    background: var(--card-bg);
+    overflow: hidden;
+    transition: all 0.45s cubic-bezier(0.23,1,0.32,1);
+    position: relative;
+    display: flex; flex-direction: column;
+  }
+  .cs-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at top, rgba(0,255,135,0.07) 0%, transparent 65%);
+    opacity: 0;
+    transition: opacity 0.45s;
+  }
+  .cs-card:hover { 
+    border-color: rgba(0,255,135,0.28);
+    transform: translateY(-6px);
+
+  }
+  .cs-card:hover::before { opacity: 1; }
+
+  .cs-card-img-wrap {
+    overflow: hidden;
+    position: relative;
+  }
+  .cs-card-img-wrap::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 80px;
+    background: linear-gradient(transparent, var(--card-bg));
+  }
+  .cs-card img {
+    width: 100%; display: block;
+    transition: transform 0.6s cubic-bezier(0.23,1,0.32,1);
+  }
+  .cs-card:hover img { transform: scale(1.04); }
+
+  .cs-card-body { padding: 28px 28px 32px; flex: 1; display: flex; flex-direction: column; gap: 16px; position: relative; z-index: 1; }
+
+  .cs-card-heading {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.3rem, 2vw, 1.9rem);
+    letter-spacing: -0.02em;
+    color: #fff;
+  }
+
+  .cs-card-tags { display: flex; flex-direction: column; gap: 8px; }
+
+  .cs-card-tag {
+    font-size: 0.92rem;
+    color: rgba(255,255,255,0.48);
+    line-height: 1.55;
+    padding: 8px 12px;
+    border-left: 2px solid transparent;
+    transition: all 0.25s;
+  }
+  .cs-card:hover .cs-card-tag { border-color: var(--green); color: rgba(255,255,255,0.75); }
+
+  .cs-card-btn {
+    margin-top: auto;
+    align-self: flex-start;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 22px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(0,255,135,0.07);
+    color: var(--green);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .cs-card-btn:hover {
+    background: var(--green);
+    color: #060a07;
+    border-color: var(--green);
+
+  }
+  .cs-card-btn svg { transition: transform 0.25s; }
+  .cs-card-btn:hover svg { transform: rotate(45deg) scale(1.1); }
+
+  /* Arrow icon on cards */
+  .cs-card-arrow {
+    position: absolute; top: 20px; right: 20px;
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--green); opacity: 0;
+    transition: all 0.3s;
+    font-size: 16px;
+  }
+  .cs-card:hover .cs-card-arrow { opacity: 1; transform: translateY(-3px); }
+`;
 
 const ContentFirst = () => {
-    gsap.registerPlugin(ScrollTrigger);
-    useGSAP(() => {
-        gsap.from(".HEAD1", {
-            duration: 1.6,
-            y: 80,
-            rotationX: 60,
-            scale: 0.95,
-            opacity: 0,
-            ease: "power4.out",
-            transformOrigin: "50% 50%",
-            perspective: 1000, // 🔥 IMPORTANT
+  gsap.registerPlugin(ScrollTrigger);
 
-            scrollTrigger: {
-                trigger: ".BOSSCONT",
-                start: "top 90%",
+  useGSAP(() => {
+    const fadeUp = (selector, trigger = selector, delay = 0) =>
+      gsap.from(selector, {
+        duration: 1.4,
+        y: 70,
+        rotationX: 55,
+        scale: 0.96,
+        opacity: 0,
+        ease: "power4.out",
+        transformOrigin: "50% 100%",
+        perspective: 900,
+        delay,
+        scrollTrigger: { trigger, start: "top 88%" },
+      });
 
-            },
-        });
-        gsap.from(".SUBHEAD1", {
-            duration: 1.6,
-            y: 80,
-            rotationX: 60,
-            scale: 0.95,
-            opacity: 0,
-            ease: "power4.out",
-            scrollTrigger: {
-                trigger: ".BOSSCONT",
-                start: "top 90%",
-            }
-        })
-        gsap.from(".HEAD2 ", {
-            duration: 1.6,
-            y: 80,
-            rotationX: 60,
-            scale: 0.95,
-            opacity: 0,
-            ease: "power4.out",
-            transformOrigin: "50% 50%",
-            perspective: 1000, // 🔥 IMPORTANT
+    const slideIn = (selector, x = 0, y = 0) =>
+      gsap.from(selector, {
+        x, y, opacity: 0, duration: 1,
+        ease: "power3.out",
+        scrollTrigger: { trigger: selector, start: "top 88%" },
+      });
 
-            scrollTrigger: {
-                trigger: ".HEAD2",
-                start: "top 90%",
+    // Hero
+    fadeUp(".cs-HEAD1", ".cs-BOSSCONT", 0);
+    fadeUp(".cs-SUBHEAD1", ".cs-BOSSCONT", 0.15);
 
-            },
-        });
-        gsap.from(".pointer1", {
-            duration: 1.6,
-            y: 80,
-            rotationX: 60,
-            scale: 0.95,
-            opacity: 0,
-            ease: "power4.out",
-            transformOrigin: "50% 50%",
-            perspective: 1000, // 🔥 IMPORTANT
-
-            scrollTrigger: {
-                trigger: ".pointer1",
-                start: "top 90%",
-
-            },
-        });
-        gsap.from(".HEAD3 ", {
-            duration: 1.6,
-            y: 80,
-            rotationX: 60,
-            scale: 0.95,
-            opacity: 0,
-            ease: "power4.out",
-            transformOrigin: "50% 50%",
-            perspective: 1000, // 🔥 IMPORTANT
-
-            scrollTrigger: {
-                trigger: ".HEAD3",
-                start: "top 90%",
-
-            },
-        });
-        gsap.from(".pointer2", {
-            duration: 1.6,
-            y: 80,
-            rotationX: 60,
-            scale: 0.95,
-            opacity: 0,
-            ease: "power4.out",
-            transformOrigin: "50% 50%",
-            perspective: 1000, // 🔥 IMPORTANT
-
-            scrollTrigger: {
-                trigger: ".pointer2",
-                start: "top 90%",
-
-            },
-        });
-        gsap.from(".HEAD4 ", {
-            duration: 1.6,
-            y: 80,
-            rotationX: 60,
-            scale: 0.95,
-            opacity: 0,
-            ease: "power4.out",
-            transformOrigin: "50% 50%",
-            perspective: 1000, // 🔥 IMPORTANT
-
-            scrollTrigger: {
-                trigger: ".HEAD4",
-                start: "top 90%",
-
-            },
-        });
-        gsap.from(".pointer3", {
-            duration: 1.6,
-            y: 80,
-            rotationX: 60,
-            scale: 0.95,
-            opacity: 0,
-            ease: "power4.out",
-            transformOrigin: "50% 50%",
-            perspective: 1000, // 🔥 IMPORTANT
-
-            scrollTrigger: {
-                trigger: ".pointer3",
-                start: "top 90%",
-
-            },
-        });
-        gsap.from(".negMove", {
-            x: -30,
-            opacity: 0,
-            duration: 1,
-            scrollTrigger: {
-                trigger: ".negMove",
-                start: "top 90%",
-
-            },
-
-        })
-        gsap.from(".posMove", {
-            x: 30,
-            opacity: 0,
-            duration: 1,
-            scrollTrigger: {
-                trigger: ".posMove",
-                start: "top 90%",
-
-            },
-
-        })
-        gsap.from(".topMove", {
-            y: -50,
-            opacity: 0,
-            duration: 1,
-            scrollTrigger: {
-                trigger: ".topMove",
-                start: "top 90%",
-
-            },
-
-        })
-
-        gsap.from(".HEAD5 ", {
-            duration: 1.6,
-            y: 80,
-            rotationX: 60,
-            scale: 0.95,
-            opacity: 0,
-            ease: "power4.out",
-            transformOrigin: "50% 50%",
-            perspective: 1000, // 🔥 IMPORTANT
-
-            scrollTrigger: {
-                trigger: ".HEAD5",
-                start: "top 90%",
-
-            },
-        });
-        gsap.from(".pointer4", {
-            duration: 1.6,
-            y: 80,
-            rotationX: 60,
-            scale: 0.95,
-            opacity: 0,
-            ease: "power4.out",
-            transformOrigin: "50% 50%",
-            perspective: 1000, // 🔥 IMPORTANT
-
-            scrollTrigger: {
-                trigger: ".pointer4",
-                start: "top 90%",
-
-            },
-        });
-
-        gsap.from(".HEAD6 ", {
-            duration: 1.6,
-            y: 80,
-            rotationX: 60,
-            scale: 0.95,
-            opacity: 0,
-            ease: "power4.out",
-            transformOrigin: "50% 50%",
-            perspective: 1000, // 🔥 IMPORTANT
-
-            scrollTrigger: {
-                trigger: ".HEAD6",
-                start: "top 90%",
-
-            },
-        });
-
-        gsap.from(".SUBHEAD6", {
-            duration: 1.6,
-            y: 80,
-            rotationX: 60,
-            scale: 0.95,
-            opacity: 0,
-            ease: "power4.out",
-            scrollTrigger: {
-                trigger: ".SUBHEAD6",
-                start: "top 90%",
-            }
-        })
-
-
-        gsap.from(".HEAD7 ", {
-            duration: 1.6,
-            y: 80,
-            rotationX: 60,
-            scale: 0.95,
-            opacity: 0,
-            ease: "power4.out",
-            transformOrigin: "50% 50%",
-            perspective: 1000, // 🔥 IMPORTANT
-
-            scrollTrigger: {
-                trigger: ".HEAD7",
-                start: "top 90%",
-
-            },
-        });
-
-
-        gsap.from(".pointer5", {
-            duration: 1.6,
-            y: 80,
-            rotationX: 60,
-            scale: 0.95,
-            opacity: 0,
-            ease: "power4.out",
-            transformOrigin: "50% 50%",
-            perspective: 1000, // 🔥 IMPORTANT
-
-            scrollTrigger: {
-                trigger: ".pointer5",
-                start: "top 90%",
-
-            },
-        });
-
-
+    // Feature rows
+    document.querySelectorAll(".cs-feat-row").forEach((el, i) => {
+      gsap.from(el, {
+        y: 60, opacity: 0, duration: 1.2,
+        ease: "power3.out",
+        scrollTrigger: { trigger: el, start: "top 88%" },
+      });
     });
 
-    const featuredData1 = [{
-        id: 1,
-        heading: "KEEP DEVELOPERS ENGAGED",
-        tagLine1: "✦ Eliminating the friction of switching between fragmented apps by providing one seamless layer where messaging, meetings, and collaboration live together.",
-        tagLine2: "✦ Developers struggle to connect and build together in real-time — we enable personal chats, groups, communities, and AI-assisted interaction to keep everyone connected anytime, anywhere.",
-        tagLine3: "✦ Move beyond slow, disconnected feedback loops with a workspace that allows developers to connect, collaborate, and build together in real time from anywhere.",
-        video: "/videos/feature-1.mp4"
-    }, {
-        id: 2,
-        heading: "Eliminates dependency on Project Manager",
-        tagLine1: "✦ Many teams rely heavily on one person to manage tasks and coordination, creating bottlenecks — we enable self-managed, transparent project collaboration where teams can organize and lead themselves.",
-        tagLine2: "✦ In most teams, it’s hard to know who is doing what and how much progress is made — our system provides real-time tracking of tasks, time spent, and overall project progress for complete transparency.",
-        tagLine3: "✦ Developers often manage personal goals separately from team tasks — we combine individual task tracking and shared project dashboards into one structured workspace.",
-        tagLine4: "✦ Delays and blockers usually go unnoticed until it’s too late — our centralized interface lets project leaders monitor productivity, identify blockers early, and notify members instantly to keep projects on track.",
-        video: "/videos/feature-2.mp4"
-    }, {
-        id: 3,
-        heading: "TIME IS PRECIOUS",
-        tagLine1: "✦ Teams use separate apps for communication, task management, and time tracking — we bring chat, collaboration, project tracking, and productivity monitoring into one unified platform.",
-        tagLine2: "✦ In many teams, it’s unclear who is working on what and how much progress is made — we provide real-time task-wise tracking, time logs, and transparent project dashboards.",
-        tagLine3: "✦ Without proper tracking, delays and inefficiencies go unnoticed — our system ensures individual accountability with personal dashboards and measurable contributions.",
-        tagLine4: "✦ Issues and blockers are often discovered when it’s already critical — we offer a centralized workspace that highlights problems early and keeps teams aligned and on schedule.",
-        video: "/videos/feature-3.mp4"
-    }]
+    // Explore section
+    fadeUp(".cs-HEAD6", ".cs-HEAD6");
+    fadeUp(".cs-SUBHEAD6", ".cs-SUBHEAD6", 0.15);
 
-    const featuredData2 = [{
-        img: "/img/dev.webp",
-        heading: "DEVELOPERS TOOLKIT",
-        tagLine1: "✦ Functional components that reduce repetition and help you build faster with a clean, consistent structure.",
-        tagLine2: "✦ All essentials in one place — AI prompts, smart color palettes, and powerful customization tools.",
-        tagLine3: "✦ Add your own schema scripts anytime — try it now!",
-    }, {
-        img: "/img/SCHEDULER.webp",
-        heading: "SMART SCHEDULER",
-        tagLine1: "✦ A smart scheduler which tracks your daily goals shows you the progress report daily",
-        tagLine2: "✦ Automatically organizes your tasks with intelligent time-blocking and priority management",
-        tagLine3: "✦ Plan projects, study sessions, meetings, or personal goals — all in one streamlined timeline",
+    // Grid cards
+    document.querySelectorAll(".cs-card").forEach((el, i) => {
+      gsap.from(el, {
+        y: 50, opacity: 0, duration: 1,
+        delay: (i % 2) * 0.12,
+        ease: "power3.out",
+        scrollTrigger: { trigger: el, start: "top 90%" },
+      });
+    });
+  });
 
-    }, {
-        img: "/img/RESUME-GEN.webp",
-        heading: "RESUME GENERATOR",
-        tagLine1: "✦ We work with recruiters to design resume templates that are approved by them.",
-        tagLine2: "✦ One can create a full fleged resume within in 15 Minutes",
-        tagLine3: "✦ 20+ templates || Enhanced with AI || Resume Review",
-        tagLine4: "✦ AI-enhanced to generate industry-specific phrases tailored to match your resume and desired writing style",
-        tagLine5: "✦ Know when employers are interested in you and track your resume for every job.",
+  const featuredData1 = [
+    {
+      id: 1,
+      num: "01",
+      heading: "Keep Developers Engaged",
+      tagLines: [
+        "Eliminating friction by providing one seamless layer where messaging, meetings, and collaboration live together.",
+        "Enable personal chats, groups, communities, and AI-assisted interaction to keep everyone connected anytime.",
+        "Move beyond slow, disconnected feedback loops with a workspace that allows real-time collaboration from anywhere.",
+      ],
+      video: "/videos/feature-1.mp4",
+      label: "Collaboration",
+    },
+    {
+      id: 2,
+      num: "02",
+      heading: "Eliminate PM Dependency",
+      tagLines: [
+        "Enable self-managed, transparent project collaboration — teams organise and lead themselves without bottlenecks.",
+        "Real-time tracking of tasks, time spent, and overall project progress for complete team transparency.",
+        "Combine individual task tracking and shared project dashboards into one structured workspace.",
+        "Identify blockers early and notify members instantly to keep every project on track.",
+      ],
+      video: "/videos/feature-2.mp4",
+      label: "Project Management",
+    },
+    {
+      id: 3,
+      num: "03",
+      heading: "Time is Precious",
+      tagLines: [
+        "Bring chat, collaboration, project tracking, and productivity monitoring into one unified platform.",
+        "Real-time task-wise tracking, time logs, and transparent project dashboards — crystal clarity always.",
+        "Individual accountability with personal dashboards and measurable contributions for every team member.",
+        "A centralised workspace that highlights problems early and keeps teams aligned and on schedule.",
+      ],
+      video: "/videos/feature-3.mp4",
+      label: "Productivity",
+    },
+  ];
 
-    }, {
-        img: "/img/team.webp",
-        heading: "GLOBAL DEVELOPER COMMUNITY",
-        tagLine1: "✦ Contact as well as collab with the developers all over the world",
-        tagLine2: "✦ Share your skills ,experience on the various community at the same time learn from others",
-        tagLine3: "✦ Collab with developers from across the world over at any project where  ",
-    }];
+  const featuredData2 = [
+    {
+      img: "/img/dev.webp",
+      heading: "Developer's Toolkit",
+      tags: [
+        "Functional components that reduce repetition and help you build faster with a clean, consistent structure.",
+        "All essentials in one place — AI prompts, smart colour palettes, and powerful customisation tools.",
+        "Add your own schema scripts anytime — try it now!",
+      ],
+    },
+    {
+      img: "/img/SCHEDULER.webp",
+      heading: "Smart Scheduler",
+      tags: [
+        "Tracks your daily goals and shows you progress reports in real time.",
+        "Automatically organises tasks with intelligent time-blocking and priority management.",
+        "Plan projects, study sessions, meetings, or personal goals — all in one streamlined timeline.",
+      ],
+    },
+    {
+      img: "/img/RESUME-GEN.webp",
+      heading: "Resume Generator",
+      tags: [
+        "Templates designed in collaboration with recruiters — already approved before you apply.",
+        "Create a full-fledged, standout resume in under 15 minutes.",
+        "20+ templates · AI-enhanced · Resume review · Real-time employer tracking.",
+      ],
+    },
+    {
+      img: "/img/team.webp",
+      heading: "Global Dev Community",
+      tags: [
+        "Contact and collaborate with developers worldwide on any project.",
+        "Share your skills and experience across communities while learning from others.",
+        "Cross-timezone collaboration with built-in async and real-time tools.",
+      ],
+    },
+  ];
 
-    return (
-        <div className="BOSSCONT bg-black text-white w-screen flex flex-col justify-center items-center ">
+  return (
+    <>
+      {/* Inject global styles */}
+      <style>{STYLES}</style>
 
-            <div className=" flex flex-col justify-center items-center w-full gap-6">
+      <div className="cs-BOSSCONT cs-section w-screen flex flex-col justify-center items-center pb-24 mt-[-50px] pt-[300px]">
 
-                <div className=" HEAD1 text-5xl font-extrabold font-head text-center
-                 max-xl:text-4xl 
-                max-lg:text-3xl 
-                max-md:text-2xl 
-                max-sm:text-xl  ">
-                    A PLATFORM FOR ENDLESS POSSIBILITIES
-                </div>
+        {/* Ambient background */}
+        <div className="cs-grid" />
+        <div className="cs-orb cs-orb-1" />
+        <div className="cs-orb cs-orb-2" />
+        <div className="cs-orb cs-orb-3" />
 
-                <div className="SUBHEAD1 text-2xl font-extralight w-[80%] 2xl:w-[60%] text-center
-                
-                max-lg:text-1xl 
-                max-md:text-lg
-                max-sm:text-md text-gray-400">
-                    <b className='font-extrabold'>CodeSarthi</b>  connects you with a global developer community to build and scale.
-                    Designed to boost <b className='font-extrabold'>productivity</b>  while keeping workflows <b className='font-extrabold'>fast</b> and <b className='font-extrabold'>efficient</b>.
-                </div>
+        {/* ───── Hero ───── */}
+        <div className="relative z-10 flex flex-col justify-center items-center w-full gap-7 pt-20 pb-6 px-6">
+          <div className="cs-HEAD1 cs-badge">
+            <div className="cs-badge-dot" />
+            Platform Overview
+          </div>
 
-            </div>
+          <h1 className="cs-HEAD1 cs-hero-title">
+            A Platform for<br />
+            <span>Endless Possibilities</span>
+          </h1>
 
-
-            <div className='relative top-10'>
-                {featuredData1.map((items) => (
-                    <div key={items.id} className="w-[95%] mx-auto mt-5 border rounded-[60px] lg:rounded-[120px] 
-      flex flex-col lg:flex-row items-center justify-between 
-       p-10 ">
-
-                        {/* LEFT CONTENT */}
-                        <div className="w-full lg:w-[40%]  flex flex-col gap-6 text-center lg:text-left ml-3">
-
-                            <h2 className="
-        text-2xl 
-        sm:text-3xl 
-        md:text-4xl 
-        lg:text-4xl 
-        xl:text-5xl 
-        font-extrabold font-head HEAD2">
-                                {items.heading}
-                            </h2>
-
-                            <div className="space-y-4 text-gray-300 pointer1">
-                                <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
-                                    {items.tagLine1}
-                                </p>
-                                <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
-                                    {items.tagLine2}
-                                </p>
-                                <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
-                                    {items.tagLine3}
-                                </p>
-                                <p className="text-base sm:text-lg lg:text-xl hover:text-green-400 transition">
-                                    {items.tagLine4}
-                                </p>
-                            </div>
-
-
-                        </div>
-
-                        {/* RIGHT VIDEO */}
-                        <div className="w-full lg:w-[60%] flex justify-center mt-10 lg:mt-0  ml-8">
-                            <video
-                                src={items.video}
-                                autoPlay
-                                loop
-                                muted
-                                playsInline
-                                className="
-          w-full  
-          object-cover 
-          rounded-[40px] lg:rounded-[120px]"
-                            />
-                        </div>
-
-                    </div>
-                ))}
-
-
-            </div>
-
-            <div className=" flex flex-col justify-center items-center w-full gap-6 mt-[100px] mb-[20px]">
-
-                <div className=" HEAD6 text-5xl font-extrabold font-head text-center
-                 max-xl:text-4xl 
-                max-lg:text-3xl 
-                max-md:text-2xl 
-                max-sm:text-xl  ">
-                    LOTS OF THINGS ARE STILL LEFT TO EXPLORE
-                </div>
-
-                <div className="SUBHEAD6 text-2xl font-extralight w-[60%] text-center
-  max-lg:text-xl 
-  max-md:text-lg
-  max-sm:text-base font text-gray-400">
-                    <b className='font-extrabold'>CodeSarthi</b> comes to you packed with powerful tools to boost
-                    <b className='font-extrabold'> productivity</b>, with many more features still to explore —
-                    all while keeping workflows <b className='font-extrabold'> fast</b> and
-                    <b className='font-extrabold'> efficient</b>.
-                </div>
-
-
-            </div>
-            <div className='w-full  flex flex-col justify-center items-center p-5 gap-5'>
-
-
-                {featuredData2
-                    .reduce((rows, item, index) => {
-                        if (index % 2 === 0) {
-                            rows.push([item, featuredData2[index + 1]]);
-                        }
-                        return rows;
-                    }, [])
-                    .map((row, index) => (
-                        <div
-                            key={index}
-                            className="w-full px-6 lg:px-20 py-10 flex flex-col lg:flex-row gap-10"
-                        >
-                            {row.map(
-                                (card, i) =>
-                                    card && (
-                                        <div
-                                            key={i}
-                                            className="w-full lg:w-1/2 border border-gray-700/60 
-              rounded-3xl overflow-hidden 
-              bg-[#111] hover:shadow-2xl hover:shadow-green-500/10
-              transition-all duration-500 group"
-                                        >
-                                            <img
-                                                src={card.img}
-                                                alt=""
-                                                className="w-full object-cover"
-                                            />
-
-                                            <div className="p-8 flex flex-col items-center gap-6 text-center">
-
-                                                {/* Heading */}
-                                                <h2
-                                                    className="
-                  text-3xl md:text-4xl xl:text-5xl 
-                  font-extrabold font-head 
-                  tracking-tight"
-                                                >
-                                                    {card.heading}
-                                                </h2>
-
-                                                {/* Taglines */}
-                                                <div className="flex flex-col gap-3 text-gray-300">
-                                                    {[card.tagLine1, card.tagLine2, card.tagLine3, card.tagLine4]
-                                                        .filter(Boolean)
-                                                        .map((tag, idx) => (
-                                                            <p
-                                                                key={idx}
-                                                                className="
-                        text-base md:text-lg 
-                        transition-all duration-300
-                        group-hover:text-green-400
-                        group-hover:scale-105"
-                                                            >
-                                                                {tag}
-                                                            </p>
-                                                        ))}
-                                                </div>
-
-                                                {/* Button */}
-                                                <button
-                                                    className="
-                  mt-4 px-6 py-2 
-                  bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300
-                  text-black font-semibold text-sm
-                  rounded-full
-                  flex items-center gap-2
-                  hover:scale-105
-                  transition-all duration-300"
-                                                >
-                                                    <svg
-                                                        className="rotate-45"
-                                                        width="14"
-                                                        height="14"
-                                                        viewBox="0 0 14 14"
-                                                        fill="none"
-                                                    >
-                                                        <path
-                                                            d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z"
-                                                            fill="black"
-                                                        />
-                                                    </svg>
-                                                    LEARN MORE
-                                                </button>
-                                            </div>
-                                        </div>
-                                    )
-                            )}
-                        </div>
-                    ))}
-            </div>
-
-
-
+          <p className="cs-SUBHEAD1 cs-hero-sub">
+            <b>CodeSarthi</b> connects you with a global developer community to build and scale.
+            Designed to boost <b>productivity</b> while keeping workflows <b>fast</b> and <b>efficient</b>.
+          </p>
         </div>
-    )
-}
 
-export default ContentFirst
+        {/* ───── Feature rows ───── */}
+        <div className="relative z-10 w-full max-w-[1400px] px-4 md:px-10 flex flex-col gap-6 mt-6">
+          {featuredData1.map((item, idx) => (
+            <div key={item.id} className={`cs-feat-row flex flex-col ${idx % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} items-stretch gap-0`}>
+
+              {/* Text panel */}
+              <div className="flex flex-col gap-6 p-8 lg:p-12 w-full lg:w-[45%] justify-center">
+                <p className="cs-feat-num">// {item.num} — {item.label}</p>
+                <h2 className="cs-feat-heading">{item.heading}</h2>
+
+                <div className="flex flex-col gap-1">
+                  {item.tagLines.map((line, i) => (
+                    <div key={i} className="cs-tag-item">
+                      <span className="cs-tag-icon">◆</span>
+                      <span>{line}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Video panel */}
+              <div className="w-full lg:w-[55%] p-4 lg:p-6 flex items-center">
+                <div className="cs-video-wrap w-full">
+                  <video
+                    src={item.video}
+                    autoPlay loop muted playsInline
+                    className="w-full object-cover block"
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* ───── Divider ───── */}
+        <div className="relative z-10 w-full mt-24 mb-4">
+          <div className="cs-divider">
+            <div className="cs-divider-line" />
+            <div className="cs-divider-icon">✦</div>
+            <div className="cs-divider-line right" />
+          </div>
+        </div>
+
+        {/* ───── Explore section header ───── */}
+        <div className="relative z-10 flex flex-col justify-center items-center w-full gap-6 mt-16 mb-4 px-6">
+          <div className="cs-HEAD6 cs-badge">
+            <div className="cs-badge-dot" />
+            More to Discover
+          </div>
+
+          <h2 className="cs-HEAD6 cs-explore-title">
+            Lots of Things Are<br />
+            Still Left to <span>Explore</span>
+          </h2>
+
+          <p className="cs-SUBHEAD6 cs-hero-sub">
+            <b>CodeSarthi</b> is packed with powerful tools to boost <b>productivity</b>,
+            with many more features still to explore — all while keeping workflows
+            <b> fast</b> and <b>efficient</b>.
+          </p>
+        </div>
+
+        {/* ───── Feature grid ───── */}
+        <div className="relative z-10 w-full max-w-[1400px] px-4 md:px-10 mt-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {featuredData2.map((card, i) => (
+              <div key={i} className="cs-card">
+                {/* Image */}
+                <div className="cs-card-img-wrap">
+                  <img src={card.img} alt={card.heading} />
+                </div>
+
+                {/* Body */}
+                <div className="cs-card-body">
+                  <div className="cs-card-arrow">↗</div>
+                  <h3 className="cs-card-heading">{card.heading}</h3>
+
+                  <div className="cs-card-tags">
+                    {card.tags.map((tag, j) => (
+                      <p key={j} className="cs-card-tag">◆ {tag}</p>
+                    ))}
+                  </div>
+
+                  <button className="cs-card-btn">
+                    <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+                      <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill="currentColor" />
+                    </svg>
+                    Learn More
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+      </div>
+    </>
+  );
+};
+
+export default ContentFirst;

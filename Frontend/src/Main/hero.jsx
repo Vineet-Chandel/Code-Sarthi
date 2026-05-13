@@ -48,10 +48,10 @@ const Hero = () => {
             <Lines />
             <ContentFirst />
             <ContentSecond />
-            <Devs />
 
             <ContentThird />
-            <Footer />
+            <Devs />
+
         </div>
     );
 };

@@ -88,7 +88,8 @@ const ParallaxText = ({
 
 export default function Lines() {
     return (
-        <section className="bg-gray-200 text-black py-20 space-y-6 overflow-hidden mb-[100px] rounded-b-[100px] font-generalBold">
+
+        <section className="absolute bg-gray-200 text-black py-20 space-y-6 overflow-hidden  rounded-b-[100px] font-generalBold z-30">
             <ParallaxText baseVelocity={-1} >
                 • DEVELOPERS • RESUME BUILDER • SHASTRA AI • COLLABRATE • SCHEDULE • PROJECTS • TOOLKIT • MEETINGS
             </ParallaxText>

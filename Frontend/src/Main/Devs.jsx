@@ -55,7 +55,7 @@ const Devs = () => {
     return (
         <section
             ref={containerRef}
-            className="relative h-screen w-full overflow-hidden my-[150px]"
+            className="relative h-screen w-full overflow-hidden mt-[150px]"
         >
             {/* background */}
             <img
