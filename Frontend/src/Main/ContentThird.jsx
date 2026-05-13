@@ -17,13 +17,13 @@ const STYLES = `
   padding: 36px 36px 32px;
   gap: 24px;
   transition: transform 0.4s cubic-bezier(0.23,1,0.32,1),
-              border-color 0.35s, box-shadow 0.4s;
+              border-color 0.35s,
   cursor: default;
 }
 .ct-card:hover {
   transform: translateY(-7px);
   border-color: rgba(0,255,135,0.22);
-  box-shadow: 0 24px 64px rgba(0,255,135,0.06);
+
 }
 
 /* Top shimmer line */
@@ -95,7 +95,7 @@ const STYLES = `
   background: #00ff87;
   color: #060a07;
   border-color: #00ff87;
-  box-shadow: 0 0 28px rgba(0,255,135,0.28);
+
 }
 .ct-card-btn svg { transition: transform 0.25s; }
 .ct-card-btn:hover svg { transform: rotate(45deg) scale(1.1); }
@@ -168,7 +168,7 @@ const STYLES = `
 .ct-banner-dot {
   width: 7px; height: 7px; border-radius: 50%;
   background: #00ff87;
-  box-shadow: 0 0 8px #00ff87;
+
   animation: ct-pulse 2s ease-in-out infinite;
 }
 @keyframes ct-pulse {
@@ -212,11 +212,11 @@ const STYLES = `
   padding: 6px 6px 6px 22px;
   width: 100%;
   max-width: 480px;
-  transition: border-color 0.25s, box-shadow 0.25s;
+  transition: border-color 0.25s,
 }
 .ct-input-row:focus-within {
   border-color: rgba(0,255,135,0.4);
-  box-shadow: 0 0 0 3px rgba(0,255,135,0.08);
+
 }
 .ct-input {
   flex: 1;
@@ -247,7 +247,7 @@ const STYLES = `
 }
 .ct-submit-btn:hover {
   background: #fff;
-  box-shadow: 0 0 30px rgba(0,255,135,0.3);
+
 }
 .ct-submit-btn svg { transition: transform 0.25s; }
 .ct-submit-btn:hover svg { transform: rotate(45deg) scale(1.1); }
@@ -274,171 +274,171 @@ const STYLES = `
 
 /* Arrow icon reused */
 const ArrowIcon = ({ color = "currentColor" }) => (
-    <svg className="rotate-45" width="12" height="12" viewBox="0 0 14 14" fill="none">
-        <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill={color} />
-    </svg>
+  <svg className="rotate-45" width="12" height="12" viewBox="0 0 14 14" fill="none">
+    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill={color} />
+  </svg>
 );
 
 const ctaCards = [
-    {
-        num: "01",
-        tag: "// Toolkit",
-        title: "Developer Toolkit",
-        desc: "Functional components, AI prompts, smart colour palettes, and schema scripts — all the essentials in one place to help you build faster.",
-        cta: "Visit Toolkit",
-        icon: "⌥",
-    },
-    {
-        num: "02",
-        tag: "// Community",
-        title: "Global Dev Community",
-        desc: "Connect and collaborate with developers worldwide. Share skills, learn from peers, and co-build projects across time zones.",
-        cta: "Join Community",
-        icon: "◈",
-    },
-    {
-        num: "03",
-        tag: "// Support",
-        title: "Help & Support",
-        desc: "Stuck? Our support team and ZENITH guardian are on standby. No tickets lost in the void — we actually respond.",
-        cta: "Reach Support",
-        icon: "◉",
-    },
+  {
+    num: "01",
+    tag: "// Toolkit",
+    title: "Developer Toolkit",
+    desc: "Functional components, AI prompts, smart colour palettes, and schema scripts — all the essentials in one place to help you build faster.",
+    cta: "Visit Toolkit",
+    icon: "⌥",
+  },
+  {
+    num: "02",
+    tag: "// Community",
+    title: "Global Dev Community",
+    desc: "Connect and collaborate with developers worldwide. Share skills, learn from peers, and co-build projects across time zones.",
+    cta: "Join Community",
+    icon: "◈",
+  },
+  {
+    num: "03",
+    tag: "// Support",
+    title: "Help & Support",
+    desc: "Stuck? Our support team and ZENITH guardian are on standby. No tickets lost in the void — we actually respond.",
+    cta: "Reach Support",
+    icon: "◉",
+  },
 ];
 
 const ContentThird = () => {
-    const [email, setEmail] = useState("");
-    const [submitted, setSubmitted] = useState(false);
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
 
-    const handleSubmit = () => {
-        if (email.trim()) setSubmitted(true);
-    };
+  const handleSubmit = () => {
+    if (email.trim()) setSubmitted(true);
+  };
 
-    return (
-        <>
-            <style>{STYLES}</style>
+  return (
+    <>
+      <style>{STYLES}</style>
 
+      <div
+        style={{ background: "#060a07", fontFamily: "'Outfit', sans-serif" }}
+        className="w-full flex flex-col items-center px-4 md:px-10 gap-6 pb-6"
+      >
+
+        {/* ── Divider matching other sections ── */}
+        <div className="w-full max-w-[1400px] flex items-center gap-4 mb-4">
+          <div style={{ flex: 1, height: 1, background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.08))" }} />
+          <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, letterSpacing: "0.15em", color: "rgba(255,255,255,0.2)", textTransform: "uppercase" }}>
+            Quick Access
+          </span>
+          <div style={{ flex: 1, height: 1, background: "linear-gradient(90deg, rgba(255,255,255,0.08), transparent)" }} />
+        </div>
+
+        {/* ── CTA cards row ── */}
+        <div
+          className="w-full max-w-[1400px]"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+            gap: "16px",
+          }}
+        >
+          {ctaCards.map((card, i) => (
             <div
-                style={{ background: "#060a07", fontFamily: "'Outfit', sans-serif" }}
-                className="w-full flex flex-col items-center px-4 md:px-10 gap-6 pb-6"
+              key={i}
+              className="ct-card ct-anim"
+              style={{ animationDelay: `${i * 0.1}s` }}
             >
+              <span className="ct-card-num">{card.num}</span>
 
-                {/* ── Divider matching other sections ── */}
-                <div className="w-full max-w-[1400px] flex items-center gap-4 mb-4">
-                    <div style={{ flex: 1, height: 1, background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.08))" }} />
-                    <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, letterSpacing: "0.15em", color: "rgba(255,255,255,0.2)", textTransform: "uppercase" }}>
-                        Quick Access
-                    </span>
-                    <div style={{ flex: 1, height: 1, background: "linear-gradient(90deg, rgba(255,255,255,0.08), transparent)" }} />
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                <p className="ct-card-tag">{card.tag}</p>
+
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <span style={{
+                    fontSize: "1.6rem",
+                    color: "rgba(0,255,135,0.35)",
+                    lineHeight: 1,
+                    fontWeight: 400,
+                  }}>
+                    {card.icon}
+                  </span>
+                  <h3 className="ct-card-title">{card.title}</h3>
                 </div>
 
-                {/* ── CTA cards row ── */}
-                <div
-                    className="w-full max-w-[1400px]"
-                    style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-                        gap: "16px",
-                    }}
-                >
-                    {ctaCards.map((card, i) => (
-                        <div
-                            key={i}
-                            className="ct-card ct-anim"
-                            style={{ animationDelay: `${i * 0.1}s` }}
-                        >
-                            <span className="ct-card-num">{card.num}</span>
+                <p className="ct-card-desc">{card.desc}</p>
+              </div>
 
-                            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                                <p className="ct-card-tag">{card.tag}</p>
-
-                                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                                    <span style={{
-                                        fontSize: "1.6rem",
-                                        color: "rgba(0,255,135,0.35)",
-                                        lineHeight: 1,
-                                        fontWeight: 400,
-                                    }}>
-                                        {card.icon}
-                                    </span>
-                                    <h3 className="ct-card-title">{card.title}</h3>
-                                </div>
-
-                                <p className="ct-card-desc">{card.desc}</p>
-                            </div>
-
-                            <button className="ct-card-btn">
-                                <ArrowIcon />
-                                {card.cta}
-                            </button>
-                        </div>
-                    ))}
-                </div>
-
-                {/* ── Newsletter banner ── */}
-                <div className="ct-banner w-full max-w-[1400px] ct-anim" style={{ animationDelay: "0.35s" }}>
-                    <div className="ct-banner-stripes" />
-                    <div className="ct-banner-orb" />
-
-                    {/* Dot-grid same as other sections */}
-                    <div style={{
-                        position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
-                        backgroundImage: "radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)",
-                        backgroundSize: "32px 32px",
-                    }} />
-
-                    <div className="ct-banner-label">
-                        <div className="ct-banner-dot" />
-                        Newsletter
-                    </div>
-
-                    <div className="ct-banner-title">
-                        Stay<br /><span>Tuned</span>
-                    </div>
-
-                    <p className="ct-banner-desc">
-                        Want to keep up with every update, feature drop, and thing
-                        we build for <b>developers</b>? One email. <b>No spam.</b> Ever.
-                    </p>
-
-                    {/* Email input */}
-                    {!submitted ? (
-                        <div className="ct-input-row">
-                            <input
-                                className="ct-input"
-                                type="email"
-                                placeholder="your@email.com"
-                                value={email}
-                                onChange={e => setEmail(e.target.value)}
-                                onKeyDown={e => e.key === "Enter" && handleSubmit()}
-                            />
-                            <button className="ct-submit-btn" onClick={handleSubmit}>
-                                <ArrowIcon color="#060a07" />
-                                Subscribe
-                            </button>
-                        </div>
-                    ) : (
-                        <div style={{
-                            position: "relative", zIndex: 1,
-                            display: "inline-flex", alignItems: "center", gap: 10,
-                            padding: "14px 28px", borderRadius: 999,
-                            border: "1px solid rgba(0,255,135,0.3)",
-                            background: "rgba(0,255,135,0.07)",
-                            fontFamily: "'Space Mono', monospace",
-                            fontSize: 12, letterSpacing: "0.1em",
-                            color: "#00ff87", textTransform: "uppercase",
-                        }}>
-                            <span style={{ fontSize: 16 }}>✓</span>
-                            You're on the list
-                        </div>
-                    )}
-
-                    <p className="ct-privacy">No spam · Unsubscribe anytime · We respect your inbox</p>
-                </div>
-
+              <button className="ct-card-btn">
+                <ArrowIcon />
+                {card.cta}
+              </button>
             </div>
-        </>
-    );
+          ))}
+        </div>
+
+        {/* ── Newsletter banner ── */}
+        <div className="ct-banner w-full max-w-[1400px] ct-anim" style={{ animationDelay: "0.35s" }}>
+          <div className="ct-banner-stripes" />
+          <div className="ct-banner-orb" />
+
+          {/* Dot-grid same as other sections */}
+          <div style={{
+            position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
+            backgroundImage: "radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)",
+            backgroundSize: "32px 32px",
+          }} />
+
+          <div className="ct-banner-label">
+            <div className="ct-banner-dot" />
+            Newsletter
+          </div>
+
+          <div className="ct-banner-title">
+            Stay<br /><span>Tuned</span>
+          </div>
+
+          <p className="ct-banner-desc">
+            Want to keep up with every update, feature drop, and thing
+            we build for <b>developers</b>? One email. <b>No spam.</b> Ever.
+          </p>
+
+          {/* Email input */}
+          {!submitted ? (
+            <div className="ct-input-row">
+              <input
+                className="ct-input"
+                type="email"
+                placeholder="your@email.com"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                onKeyDown={e => e.key === "Enter" && handleSubmit()}
+              />
+              <button className="ct-submit-btn" onClick={handleSubmit}>
+                <ArrowIcon color="#060a07" />
+                Subscribe
+              </button>
+            </div>
+          ) : (
+            <div style={{
+              position: "relative", zIndex: 1,
+              display: "inline-flex", alignItems: "center", gap: 10,
+              padding: "14px 28px", borderRadius: 999,
+              border: "1px solid rgba(0,255,135,0.3)",
+              background: "rgba(0,255,135,0.07)",
+              fontFamily: "'Space Mono', monospace",
+              fontSize: 12, letterSpacing: "0.1em",
+              color: "#00ff87", textTransform: "uppercase",
+            }}>
+              <span style={{ fontSize: 16 }}>✓</span>
+              You're on the list
+            </div>
+          )}
+
+          <p className="ct-privacy">No spam · Unsubscribe anytime · We respect your inbox</p>
+        </div>
+
+      </div>
+    </>
+  );
 };
 
 export default ContentThird;

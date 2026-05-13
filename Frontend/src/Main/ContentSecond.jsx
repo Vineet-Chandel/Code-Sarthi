@@ -76,7 +76,7 @@ const STYLES = `
 /* Ambient orb behind the whole section */
 .gs-bg-orb {
   position: absolute; border-radius: 50%;
-  filter: blur(140px); pointer-events: none; z-index: 0;
+
 }
 
 /* ── Section badge ── */
@@ -93,7 +93,7 @@ const STYLES = `
 .gs-badge-dot {
   width: 7px; height: 7px; border-radius: 50%;
   background: #00ff87;
-  box-shadow: 0 0 8px #00ff87;
+
   animation: gs-pulse 2s ease-in-out infinite;
 }
 @keyframes gs-pulse {
@@ -125,7 +125,7 @@ const STYLES = `
   border: 1px solid rgba(255,255,255,0.07);
   display: flex; flex-direction: column;
   transition: transform 0.45s cubic-bezier(0.23,1,0.32,1),
-              border-color 0.35s, box-shadow 0.45s;
+
   cursor: default;
 }
 .gs-card:hover {
@@ -136,7 +136,7 @@ const STYLES = `
 .gs-card-bar {
   height: 2px; width: 100%;
   background: var(--card-color);
-  box-shadow: 0 0 18px var(--card-glow), 0 0 40px var(--card-glow);
+
   opacity: 0.8;
   transition: opacity 0.35s;
 }
@@ -201,7 +201,7 @@ const STYLES = `
   border: 1px solid var(--card-color);
   color: var(--card-color);
   text-transform: uppercase;
-  backdrop-filter: blur(6px);
+
 }
 
 /* Status pill on image */
@@ -214,13 +214,13 @@ const STYLES = `
   background: rgba(0,0,0,0.65);
   color: rgba(255,255,255,0.5);
   border: 1px solid rgba(255,255,255,0.1);
-  backdrop-filter: blur(6px);
+
   text-transform: uppercase;
 }
 .gs-status-dot {
   width: 6px; height: 6px; border-radius: 50%;
   background: var(--card-color);
-  box-shadow: 0 0 6px var(--card-glow);
+
   animation: gs-pulse 2s ease-in-out infinite;
 }
 

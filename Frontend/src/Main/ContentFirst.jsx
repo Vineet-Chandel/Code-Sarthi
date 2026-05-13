@@ -29,7 +29,7 @@ const STYLES = `
   .cs-orb {
     position: absolute;
     border-radius: 50%;
-    filter: blur(120px);
+
     pointer-events: none;
     z-index: 0;
   }

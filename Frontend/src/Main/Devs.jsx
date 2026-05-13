@@ -17,13 +17,10 @@ const STYLES = `
 .dv-hero-title {
   font-family: 'Syne', sans-serif;
   font-weight: 800;
-  font-size: clamp(5rem, 16vw, 10rem);
+font-size: clamp(4rem, 11vw, 7rem);
   line-height: 0.9;
   letter-spacing: -0.04em;
-  background: linear-gradient(170deg, #fff5e0 0%, #ffb830 40%, #ff4d1c 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+
 }
 
 .dv-hero-sub {
@@ -321,7 +318,7 @@ const Devs = () => {
 
     const opacity = useTransform(smoothProgress, [0, 0.18, 0.82, 1], [0, 1, 1, 0]);
     const y = useTransform(smoothProgress, [0, 1], [80, -80]);
-    const scale = useTransform(smoothProgress, [0, 0.5, 1], [0.96, 1, 1.04]);
+
 
 
     return (
@@ -339,7 +336,7 @@ const Devs = () => {
                     src="/img/developers.png"
                     alt="developers"
                     className="absolute inset-0 h-full w-full object-cover"
-                    style={{ filter: "saturate(0.7) brightness(0.6)" }}
+
                 />
 
                 {/* Multi-layer overlay for depth */}
@@ -359,27 +356,18 @@ const Devs = () => {
 
                 {/* Content */}
                 <motion.div
-                    style={{ opacity, y, scale }}
+                    style={{ opacity, y }}
                     className="relative z-10 flex h-full flex-col items-center justify-center text-center px-6 gap-5"
                 >
-                    {/* Pre-label */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2, duration: 0.8 }}
-                        className="dv-scroll-hint"
-                    >
-                        <div className="dv-scroll-line" />
-                        Made for developers
-                        <div className="dv-scroll-line" />
-                    </motion.div>
+
 
                     {/* Main title */}
                     <motion.h1
-                        className="dv-hero-title"
+                        className="dv-hero-title text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-orange-600 "
                         initial={{ opacity: 0, y: 40 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.35, duration: 1, ease: [0.23, 1, 0.32, 1] }}
+
                     >
                         CodeSarthi
                     </motion.h1>
