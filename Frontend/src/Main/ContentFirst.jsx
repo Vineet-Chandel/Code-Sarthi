@@ -1,6 +1,7 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Lines from './Lines';
 
 /* ─────────────────────────────────────────────────────────
    Inline styles injected once at module level
@@ -424,8 +425,8 @@ const ContentFirst = () => {
       {/* Inject global styles */}
       <style>{STYLES}</style>
 
-      <div className="cs-BOSSCONT cs-section w-screen flex flex-col justify-center items-center pb-24 mt-[-50px] pt-[300px]">
-
+      <div className="cs-BOSSCONT cs-section w-screen flex flex-col justify-center items-center pb-24  pt-[0px]">
+        <Lines />
         {/* Ambient background */}
         <div className="cs-grid" />
         <div className="cs-orb cs-orb-1" />

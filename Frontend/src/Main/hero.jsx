@@ -45,7 +45,7 @@ const Hero = () => {
             {loading && <Preloader />}
             <Nav />
             <Mainhero />
-            <Lines />
+
             <ContentFirst />
             <ContentSecond />
 

@@ -4,54 +4,54 @@ import React, { useRef } from "react";
    Each guardian has its own colour signature
 ───────────────────────────────────────────── */
 const cards = [
-    {
-        unit: "UNIT-01",
-        title: "ASTRA",
-        role: "Verification Guardian",
-        quote: "Trust is verified in silence",
-        img: "../img/cs-verification-manager.png",
-        color: "#00e5ff",        // ice-cyan
-        glow: "rgba(0,229,255,0.22)",
-        dimGlow: "rgba(0,229,255,0.07)",
-        status: "ACTIVE",
-        tag: "VERIFICATION",
-    },
-    {
-        unit: "UNIT-02",
-        title: "NOVA",
-        role: "Identity Guardian",
-        quote: "Your digital identity, reconstructed",
-        img: "../img/cs-identity-manager.png",
-        color: "#ffb830",        // amber-gold
-        glow: "rgba(255,184,48,0.22)",
-        dimGlow: "rgba(255,184,48,0.07)",
-        status: "ACTIVE",
-        tag: "IDENTITY",
-    },
-    {
-        unit: "UNIT-03",
-        title: "ORION",
-        role: "Community & AI Guardian",
-        quote: "Every developer is a signal",
-        img: "../img/cs-community-ai-manager.png",
-        color: "#bf7fff",        // violet
-        glow: "rgba(191,127,255,0.22)",
-        dimGlow: "rgba(191,127,255,0.07)",
-        status: "ACTIVE",
-        tag: "COMMUNITY",
-    },
-    {
-        unit: "UNIT-04",
-        title: "ZENITH",
-        role: "Help & Support Guardian",
-        quote: "No noise. Only solutions",
-        img: "/img/cs-help-support.png",
-        color: "#00ff87",        // brand-green
-        glow: "rgba(0,255,135,0.22)",
-        dimGlow: "rgba(0,255,135,0.07)",
-        status: "ACTIVE",
-        tag: "SUPPORT",
-    },
+  {
+    unit: "UNIT-01",
+    title: "ASTRA",
+    role: "Verification Guardian",
+    quote: "Trust is verified in silence",
+    img: "../img/cs-verification-manager.png",
+    color: "#00e5ff",        // ice-cyan
+    glow: "rgba(0,229,255,0.22)",
+    dimGlow: "rgba(0,229,255,0.07)",
+    status: "ACTIVE",
+    tag: "VERIFICATION",
+  },
+  {
+    unit: "UNIT-02",
+    title: "NOVA",
+    role: "Identity Guardian",
+    quote: "Your digital identity, reconstructed",
+    img: "../img/cs-identity-manager.png",
+    color: "#ffb830",        // amber-gold
+    glow: "rgba(255,184,48,0.22)",
+    dimGlow: "rgba(255,184,48,0.07)",
+    status: "ACTIVE",
+    tag: "IDENTITY",
+  },
+  {
+    unit: "UNIT-03",
+    title: "ORION",
+    role: "Community & AI Guardian",
+    quote: "Every developer is a signal",
+    img: "../img/cs-community-ai-manager.png",
+    color: "#bf7fff",        // violet
+    glow: "rgba(191,127,255,0.22)",
+    dimGlow: "rgba(191,127,255,0.07)",
+    status: "ACTIVE",
+    tag: "COMMUNITY",
+  },
+  {
+    unit: "UNIT-04",
+    title: "ZENITH",
+    role: "Help & Support Guardian",
+    quote: "No noise. Only solutions",
+    img: "/img/cs-help-support.png",
+    color: "#00ff87",        // brand-green
+    glow: "rgba(0,255,135,0.22)",
+    dimGlow: "rgba(0,255,135,0.07)",
+    status: "ACTIVE",
+    tag: "SUPPORT",
+  },
 ];
 
 /* ── Inline styles ── */
@@ -112,7 +112,7 @@ const STYLES = `
   text-align: center;
 }
 .gs-title span {
-  -webkit-text-stroke: 1px rgba(255,255,255,0.35);
+  -webkit-text-stroke: 1px rgba(0, 255, 13, 0.35);
   color: transparent;
 }
 
@@ -294,102 +294,102 @@ const STYLES = `
 `;
 
 const ContentSecond = () => {
-    return (
-        <>
-            <style>{STYLES}</style>
+  return (
+    <>
+      <style>{STYLES}</style>
 
-            <section className="gs-section w-full py-24 px-4 md:px-10 flex flex-col items-center gap-14 mt-[-100px]">
-                {/* Background elements */}
-                <div className="gs-grid" />
-                <div className="gs-bg-orb" style={{ width: 800, height: 800, background: "rgba(0,255,135,0.04)", top: -200, left: "50%", transform: "translateX(-50%)" }} />
+      <section className="gs-section w-full py-24 px-4 md:px-10 flex flex-col items-center gap-14 mt-[-100px]">
+        {/* Background elements */}
+        <div className="gs-grid" />
+        <div className="gs-bg-orb" style={{ width: 800, height: 800, background: "rgba(0,255,135,0.04)", top: -200, left: "50%", transform: "translateX(-50%)" }} />
 
-                {/* ── Header ── */}
-                <div className="relative z-10 flex flex-col items-center gap-5">
-                    <div className="gs-badge">
-                        <div className="gs-badge-dot" />
-                        Intelligent Agents
-                    </div>
+        {/* ── Header ── */}
+        <div className="relative z-10 flex flex-col items-center gap-5">
+          <div className="gs-badge">
+            <div className="gs-badge-dot" />
+            Intelligent Agents
+          </div>
 
-                    <h2 className="gs-title">
-                        Meet the <span>Guardians</span>
-                    </h2>
+          <h2 className="gs-title">
+            Meet the <span>Guardians</span>
+          </h2>
 
-                    <p style={{
-                        fontFamily: "'Outfit', sans-serif",
-                        fontSize: "clamp(0.95rem, 1.4vw, 1.15rem)",
-                        color: "rgba(255,255,255,0.4)",
-                        fontWeight: 300,
-                        maxWidth: 560,
-                        textAlign: "center",
-                        lineHeight: 1.7,
-                    }}>
-                        Four autonomous intelligences — each with a singular purpose,
-                        operating in the background so you never have to think about it.
-                    </p>
+          <p style={{
+            fontFamily: "'Outfit', sans-serif",
+            fontSize: "clamp(0.95rem, 1.4vw, 1.15rem)",
+            color: "rgba(255,255,255,0.4)",
+            fontWeight: 300,
+            maxWidth: 560,
+            textAlign: "center",
+            lineHeight: 1.7,
+          }}>
+            Four autonomous intelligences — each with a singular purpose,
+            operating in the background so you never have to think about it.
+          </p>
+        </div>
+
+        {/* ── Cards grid ── */}
+        <div
+          className="relative z-10 w-full max-w-[1400px]"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+            gap: "20px",
+          }}
+        >
+          {cards.map((card, i) => (
+            <div
+              key={i}
+              className="gs-card gs-card-anim"
+              style={{
+                "--card-color": card.color,
+                "--card-glow": card.glow,
+                "--card-dim-glow": card.dimGlow,
+                animationDelay: `${i * 0.12}s`,
+              }}
+            >
+              {/* Top accent bar */}
+              <div className="gs-card-bar" />
+
+              {/* Image */}
+              <div className="gs-img-wrap">
+                {/* Unit badge */}
+                <div className="gs-unit-badge">{card.unit}</div>
+
+                {/* Status */}
+                <div className="gs-status">
+                  <div className="gs-status-dot" />
+                  {card.status}
                 </div>
 
-                {/* ── Cards grid ── */}
-                <div
-                    className="relative z-10 w-full max-w-[1400px]"
-                    style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-                        gap: "20px",
-                    }}
-                >
-                    {cards.map((card, i) => (
-                        <div
-                            key={i}
-                            className="gs-card gs-card-anim"
-                            style={{
-                                "--card-color": card.color,
-                                "--card-glow": card.glow,
-                                "--card-dim-glow": card.dimGlow,
-                                animationDelay: `${i * 0.12}s`,
-                            }}
-                        >
-                            {/* Top accent bar */}
-                            <div className="gs-card-bar" />
+                <img src={card.img} alt={card.title} />
+                <div className="gs-scan" />
+                <div className="gs-img-fade" />
+              </div>
 
-                            {/* Image */}
-                            <div className="gs-img-wrap">
-                                {/* Unit badge */}
-                                <div className="gs-unit-badge">{card.unit}</div>
+              {/* Body */}
+              <div className="gs-card-body">
+                <p className="gs-tag">// {card.tag}</p>
+                <h3 className="gs-name">{card.title}</h3>
+                <p className="gs-role">{card.role}</p>
+                <div className="gs-divider" />
+                <p className="gs-quote">{card.quote}</p>
+              </div>
+            </div>
+          ))}
+        </div>
 
-                                {/* Status */}
-                                <div className="gs-status">
-                                    <div className="gs-status-dot" />
-                                    {card.status}
-                                </div>
-
-                                <img src={card.img} alt={card.title} />
-                                <div className="gs-scan" />
-                                <div className="gs-img-fade" />
-                            </div>
-
-                            {/* Body */}
-                            <div className="gs-card-body">
-                                <p className="gs-tag">// {card.tag}</p>
-                                <h3 className="gs-name">{card.title}</h3>
-                                <p className="gs-role">{card.role}</p>
-                                <div className="gs-divider" />
-                                <p className="gs-quote">{card.quote}</p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-
-                {/* ── Bottom flourish ── */}
-                <div className="relative z-10 flex items-center gap-4 w-full max-w-[1400px]">
-                    <div style={{ flex: 1, height: 1, background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.08))" }} />
-                    <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, letterSpacing: "0.15em", color: "rgba(255,255,255,0.2)", textTransform: "uppercase" }}>
-                        4 of 4 Guardians Active
-                    </span>
-                    <div style={{ flex: 1, height: 1, background: "linear-gradient(90deg, rgba(255,255,255,0.08), transparent)" }} />
-                </div>
-            </section>
-        </>
-    );
+        {/* ── Bottom flourish ── */}
+        <div className="relative z-10 flex items-center gap-4 w-full max-w-[1400px]">
+          <div style={{ flex: 1, height: 1, background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.08))" }} />
+          <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, letterSpacing: "0.15em", color: "rgba(255,255,255,0.2)", textTransform: "uppercase" }}>
+            4 of 4 Guardians Active
+          </span>
+          <div style={{ flex: 1, height: 1, background: "linear-gradient(90deg, rgba(255,255,255,0.08), transparent)" }} />
+        </div>
+      </section>
+    </>
+  );
 };
 
 export default ContentSecond;

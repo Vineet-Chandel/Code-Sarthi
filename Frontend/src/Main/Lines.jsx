@@ -88,15 +88,12 @@ const ParallaxText = ({
 
 export default function Lines() {
     return (
-
-        <section className="absolute bg-gray-200 text-black py-20 space-y-6 overflow-hidden  rounded-b-[100px] font-generalBold z-30">
-            <ParallaxText baseVelocity={-1} >
-                • DEVELOPERS • RESUME BUILDER • SHASTRA AI • COLLABRATE • SCHEDULE • PROJECTS • TOOLKIT • MEETINGS
-            </ParallaxText>
-
-
-
-
-        </section>
+        <div className="z-50">
+            <section className="bg-gray-200 text-black py-20 space-y-6 overflow-hidden rounded-b-[100px] font-generalBold">
+                <ParallaxText baseVelocity={-1} >
+                    • DEVELOPERS • RESUME BUILDER • SHASTRA AI • COLLABRATE • SCHEDULE • PROJECTS • TOOLKIT • MEETINGS
+                </ParallaxText>
+            </section>
+        </div>
     );
 }
