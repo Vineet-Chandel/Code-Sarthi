@@ -119,7 +119,7 @@ authRouter.post("/auth/signup", async (req, res) => {
 
                 <!-- CONTAINER MAIN COMPONENT (Max-Width Constrained for Cross-Platform Desktop/Mobile Consistency) -->
                 <table border="0" cellpadding="0" cellspacing="0" width="100%"
-                    style="max-width: 560px; background-color: #ffffff; border-radius: 24px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-collapse: collapse; table-layout: fixed;">
+                    style="max-width: 560px; background-color: #ffffff; border-radius: 24px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05);  table-layout: fixed;">
 
                     <!-- HEADER HERO SECTION -->
                     <tr>
@@ -127,29 +127,32 @@ authRouter.post("/auth/signup", async (req, res) => {
                             style="background: #0f0f23 linear-gradient(135deg, #0f0f23 0%, #1a1040 100%); padding: 40px 32px 0 32px; position: relative; overflow: hidden;">
 
                             <!-- Header Logo Module -->
-                            <table border="0" cellpadding="0" cellspacing="0" align="center"
-                                style="margin-bottom: 30px; border-collapse: collapse;">
-                                <tr>
-                                    <td align="center" valign="middle"
-                                        style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(102, 126, 234, 0.3); border-radius: 50px; padding: 8px 20px 8px 8px;">
-                                        <table border="0" cellpadding="0" cellspacing="0"
-                                            style="border-collapse: collapse;">
-                                            <tr>
-                                                <td valign="middle" style="padding: 0; margin: 0; line-height: 0;">
-                                                    <img src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776693732/image_wxefat.png"
-                                                        width="32" height="32"
-                                                        style="display: block; border-radius: 8px; border: 0;"
-                                                        alt="CodeSarthi Logo" />
-                                                </td>
-                                                <td valign="middle"
-                                                    style="padding-left: 10px; font-family: 'Sora', Arial, sans-serif; font-size: 18px; font-weight: 700; color: #ffffff; letter-spacing: 0.5px; line-height: 32px;">
-                                                    CodeSarthi
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
+                            <a href="https://codesarthi.in/"
+                                style="text-decoration: none; color: inherit; cursor: pointer; ">
+                                <table border="0" cellpadding="0" cellspacing="0" align="center"
+                                    style="margin-bottom: 30px; ">
+
+                                    <tr>
+                                        <td align="center" valign="middle"
+                                            style="cursor: pointer; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(102, 126, 234, 0.3); border-radius: 50px; padding: 8px 20px 8px 8px;">
+                                            <table border="0" cellpadding="0" cellspacing="0">
+                                                <tr>
+                                                    <td valign="middle" style="padding: 0; margin: 0; line-height: 0;">
+                                                        <img src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776693732/image_wxefat.png"
+                                                            width="32" height="32"
+                                                            style="display: block; border-radius: 8px; border: 0;"
+                                                            alt="CodeSarthi Logo" />
+                                                    </td>
+                                                    <td valign="middle"
+                                                        style="padding-left: 10px; font-family: 'Sora', Arial, sans-serif; font-size: 18px; font-weight: 700; color: #ffffff; letter-spacing: 0.5px; line-height: 32px;">
+                                                        CodeSarthi
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </a>
 
                             <!-- Onboarding Badge Segment -->
                             <div
@@ -158,18 +161,17 @@ authRouter.post("/auth/signup", async (req, res) => {
                             </div>
 
                             <!-- Mock IDE Code Frame Window Layer -->
-                            <table border="0" cellpadding="0" cellspacing="0" width="100%" align="center"
-                                style="border-collapse: collapse;">
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" align="center">
                                 <tr>
                                     <td align="center" valign="top">
                                         <table border="0" cellpadding="0" cellspacing="0" width="100%"
-                                            style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(102, 126, 234, 0.25); border-bottom: none; border-radius: 16px 16px 0 0; border-collapse: collapse;">
+                                            style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(102, 126, 234, 0.25); border-bottom: none; border-radius: 16px 16px 0 0; ">
                                             <tr>
                                                 <td style="padding: 22px 24px 0 24px; text-align: left;" valign="top">
 
                                                     <!-- Frame Status Window Buttons -->
                                                     <table border="0" cellpadding="0" cellspacing="0"
-                                                        style="margin-bottom: 16px; border-collapse: collapse;">
+                                                        style="margin-bottom: 16px;">
                                                         <tr>
                                                             <td width="10" height="10"
                                                                 style="background: #ff5f57; border-radius: 50%; padding: 0;">
@@ -204,8 +206,8 @@ authRouter.post("/auth/signup", async (req, res) => {
                                                             style="color: rgba(255, 255, 255, 0.75);">(</span><span
                                                             style="color: #f472b6;">{</span><br />
                                                         &nbsp;&nbsp;<span
-                                                            style="color: rgba(255, 255, 255, 0.75);">name:</span> <span
-                                                            style="color: #34d399;">'${user.firstName}'</span><span
+                                                            style="color: rgba(255, 255, 255, 0.75);">name:</span>
+                                                        <span style="color: #34d399;">'${user.firstName}'</span><span
                                                             style="color: rgba(255, 255, 255, 0.25);">,</span><br />
                                                         &nbsp;&nbsp;<span
                                                             style="color: rgba(255, 255, 255, 0.75);">skills:</span>
@@ -266,7 +268,7 @@ authRouter.post("/auth/signup", async (req, res) => {
 
                             <!-- FEATURE ENTRY CARD MODULE 1 -->
                             <table border="0" cellpadding="0" cellspacing="0" width="100%"
-                                style="margin-bottom: 20px; border-bottom: 1px solid #f3f4f6; padding-bottom: 20px; border-collapse: collapse;">
+                                style="margin-bottom: 20px; border-bottom: 1px solid #f3f4f6; padding-bottom: 20px; ">
                                 <tr>
                                     <td width="40" valign="top" style="padding-top: 2px;">
                                         <img width="40" height="40"
@@ -300,7 +302,7 @@ authRouter.post("/auth/signup", async (req, res) => {
 
                             <!-- FEATURE ENTRY CARD MODULE 2 -->
                             <table border="0" cellpadding="0" cellspacing="0" width="100%"
-                                style="margin-bottom: 20px; border-bottom: 1px solid #f3f4f6; padding-bottom: 20px; border-collapse: collapse;">
+                                style="margin-bottom: 20px; border-bottom: 1px solid #f3f4f6; padding-bottom: 20px; ">
                                 <tr>
                                     <td width="40" valign="top" style="padding-top: 2px;">
                                         <img width="40" height="40"
@@ -329,7 +331,7 @@ authRouter.post("/auth/signup", async (req, res) => {
 
                             <!-- FEATURE ENTRY CARD MODULE 3 -->
                             <table border="0" cellpadding="0" cellspacing="0" width="100%"
-                                style="margin-bottom: 24px; border-collapse: collapse;">
+                                style="margin-bottom: 24px; ">
                                 <tr>
                                     <td width="40" valign="top" style="padding-top: 2px;">
                                         <img width="40" height="40"
@@ -368,7 +370,7 @@ authRouter.post("/auth/signup", async (req, res) => {
 
                             <!-- QUOTE BOX PANEL COMPONENT -->
                             <table border="0" cellpadding="0" cellspacing="0" width="100%"
-                                style="background: linear-gradient(135deg, #fafafe, #f5f3ff); border-left: 3px solid #7c3aed; border-radius: 0 12px 12px 0; border-collapse: collapse; margin: 32px 0;">
+                                style="background: linear-gradient(135deg, #fafafe, #f5f3ff); border-left: 3px solid #7c3aed; border-radius: 0 12px 12px 0;  margin: 32px 0;">
                                 <tr>
                                     <td style="padding: 18px 20px;" valign="top">
                                         <p
@@ -385,11 +387,10 @@ authRouter.post("/auth/signup", async (req, res) => {
 
                             <!-- SYSTEM WARNING BLOCK NOTIFICATION -->
                             <table border="0" cellpadding="0" cellspacing="0" width="100%"
-                                style="background-color: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; border-collapse: collapse;">
+                                style="background-color: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; ">
                                 <tr>
                                     <td style="padding: 16px;" valign="top">
-                                        <table border="0" cellpadding="0" cellspacing="0" width="100%"
-                                            style="border-collapse: collapse;">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="">
                                             <tr>
                                                 <td width="24" valign="top"
                                                     style="font-family: 'Sora', Arial, sans-serif; font-size: 18px; line-height: 24px;">
@@ -420,26 +421,29 @@ authRouter.post("/auth/signup", async (req, res) => {
                             valign="top">
 
                             <!-- Footnote Mini Brand Module -->
-                            <table border="0" cellpadding="0" cellspacing="0" align="center"
-                                style="margin-bottom: 20px; border-collapse: collapse;">
-                                <tr>
-                                    <td valign="middle" style="padding: 0; margin: 0; line-height: 0;">
-                                        <img src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776693732/image_wxefat.png"
-                                            width="26" height="26"
-                                            style="display: block; border-radius: 6px; border: 0;"
-                                            alt="CodeSarthi Mini Icon" />
-                                    </td>
-                                    <td valign="middle"
-                                        style="padding-left: 8px; font-family: 'Sora', Arial, sans-serif; font-size: 14px; font-weight: 700; color: rgba(255, 255, 255, 0.7); letter-spacing: 0.3px;">
-                                        CodeSarthi
-                                    </td>
-                                    end text-fill block row module
-                                </tr>
-                            </table>
+                            <a href="https://www.codesarthi.in/" target="_blank"
+                                style="text-decoration: none; color: inherit; cursor: pointer;">
+                                <table border="0" cellpadding="0" cellspacing="0" align="center"
+                                    style="margin-bottom: 20px; ">
+                                    <tr>
+                                        <td valign="middle" style="padding: 0; margin: 0; line-height: 0;">
+                                            <img src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776693732/image_wxefat.png"
+                                                width="26" height="26"
+                                                style="display: block; border-radius: 6px; border: 0;"
+                                                alt="CodeSarthi Mini Icon" />
+                                        </td>
+                                        <td valign="middle"
+                                            style="padding-left: 8px; font-family: 'Sora', Arial, sans-serif; font-size: 14px; font-weight: 700; color: rgba(255, 255, 255, 0.7); letter-spacing: 0.3px;">
+                                            CodeSarthi
+                                        </td>
+
+                                    </tr>
+                                </table>
+                            </a>
 
                             <!-- Native Multi-Column Native Social Platform Anchor Elements Row Links -->
                             <table border="0" cellpadding="0" cellspacing="0" align="center"
-                                style="margin-bottom: 24px; border-collapse: collapse;">
+                                style="margin-bottom: 24px; ">
                                 <tr>
                                     <td align="center" style="padding: 0 6px;">
                                         <a href="https://www.instagram.com/codesarthik06/" target="_blank"

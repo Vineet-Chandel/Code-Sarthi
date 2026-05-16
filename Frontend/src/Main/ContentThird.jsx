@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-
+import Toast from '../Pages/Resume/2/Toast';
+import axios from 'axios';
 const STYLES = `
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600&display=swap');
 
@@ -271,7 +272,9 @@ const STYLES = `
   to { opacity: 1; transform: translateY(0); }
 }
 `;
-
+import { AnimatePresence } from "framer-motion";
+import BASE_URL from '../Pages/auth/baseURL';
+import { Loader2 } from 'lucide-react';
 /* Arrow icon reused */
 const ArrowIcon = ({ color = "currentColor" }) => (
   <svg className="rotate-45" width="12" height="12" viewBox="0 0 14 14" fill="none">
@@ -309,13 +312,67 @@ const ctaCards = [
 const ContentThird = () => {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [toasts, setToasts] = useState([]);
 
-  const handleSubmit = () => {
+  const [isStartSubmitting, setIsStartSubmitting] = useState(false);
 
 
+  const ToastContainer = ({ toasts, removeToast }) => {
+    return (
+      <div className="fixed top-5 right-5 flex flex-col gap-3 z-50">
+        <AnimatePresence>
+          {toasts.map((t) => (
+            <Toast
+              key={t.id}
+              {...t}
+              onClose={() => removeToast(t.id)}
+            />
+          ))}
+        </AnimatePresence>
+      </div>
+    );
+  };
+  const addToast = ({ type = "success", title, message }) => {
+    const id = Date.now();
+    setToasts((prev) => [...prev, { id, type, title, message }]);
+  };
 
+  const removeToast = (id) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  };
+  const handleSubmit = async () => {
+    try {
+      setIsStartSubmitting(true);
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    // if (email.trim()) setSubmitted(true);
+      if (!emailRegex.test(email)) {
+        return addToast({
+          type: "error",
+          title: "Invalid Email",
+          message: "Please enter a valid email"
+        });
+      }
+      const res = await axios.post(
+        `${BASE_URL}/newsletter/subscribe`,
+        { email },
+        { withCredentials: true }
+      );
+      setSubmitted(true);
+      setEmail("");
+      addToast({ type: "success", title: "Success", message: res.data.message })
+    } catch (error) {
+
+      addToast({
+        type: "error",
+        title: "Error",
+        message:
+          error?.response?.data?.message ||
+          error?.message ||
+          "Something went wrong"
+      });
+    } finally {
+      setIsStartSubmitting(false)
+    }
   };
 
   return (
@@ -326,7 +383,7 @@ const ContentThird = () => {
         style={{ background: "#060a07", fontFamily: "'Outfit', sans-serif" }}
         className="w-full flex flex-col items-center px-4 md:px-10 gap-6 pb-6"
       >
-
+        <ToastContainer toasts={toasts} removeToast={removeToast} />
         {/* ── Divider matching other sections ── */}
         <div className="w-full max-w-[1400px] flex items-center gap-4 mb-4">
           <div style={{ flex: 1, height: 1, background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.08))" }} />
@@ -418,7 +475,15 @@ const ContentThird = () => {
               />
               <button className="ct-submit-btn" onClick={handleSubmit}>
                 <ArrowIcon color="#060a07" />
-                Subscribe
+
+                {isStartSubmitting ? (
+                  <span className="flex items-center">
+                    <Loader2 className="animate-spin" size={20} />
+
+                  </span>
+                ) : (
+                  <span>Subscribe</span>
+                )}
               </button>
             </div>
           ) : (
@@ -432,8 +497,11 @@ const ContentThird = () => {
               fontSize: 12, letterSpacing: "0.1em",
               color: "#00ff87", textTransform: "uppercase",
             }}>
-              <span style={{ fontSize: 16 }}>✓</span>
-              You're on the list
+              Thanks for subscribing
+              <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" viewBox="0 0 24 24">
+                <path fill="#1fee07" d="M22 5.5H9c-1.1 0-2 .9-2 2v9a2 2 0 0 0 2 2h13c1.11 0 2-.89 2-2v-9a2 2 0 0 0-2-2m0 3.67l-6.5 3.33L9 9.17V7.5l6.5 3.31L22 7.5zM5 16.5c0 .17.03.33.05.5H1c-.552 0-1-.45-1-1s.448-1 1-1h4zM3 7h2.05c-.02.17-.05.33-.05.5V9H3c-.55 0-1-.45-1-1s.45-1 1-1m-2 5c0-.55.45-1 1-1h3v2H2c-.55 0-1-.45-1-1"></path>
+              </svg>
+
             </div>
           )}
 
