@@ -7,8 +7,8 @@ import { addUser } from "../../utils/userSlice";
 import BASE_URL from "./baseURL";
 import Welcome from './Welcome';
 import { motion } from "framer-motion";
-
-
+import { AnimatePresence } from "framer-motion";
+import Toast from '../Resume/2/Toast';
 import { useEffect, useRef, useState, createElement, useMemo, useCallback } from 'react';
 import { gsap } from 'gsap';
 
@@ -317,9 +317,9 @@ const Login = () => {
     const [password, setPassword] = useState("");
 
     const [showPassword, setShowPassword] = useState(false);
-    const [newError, setNewError] = useState(false);
+
     const [isOpen, setIsOpen] = useState(false);
-    const [errorisOpen, errorsetIsOpen] = useState(false);
+
     const [isLoginStart, setIsLoginStart] = useState(false);
     const [showWelcome, setShowWelcome] = useState(false);
 
@@ -337,9 +337,7 @@ const Login = () => {
         setIsOpen(prev => !prev);
     }
 
-    const erroToggleDiv = () => {
-        errorsetIsOpen(prev => !prev);
-    }
+
     const handleLogin = async (e) => {
         e.preventDefault();
 
@@ -367,19 +365,52 @@ const Login = () => {
         } catch (error) {
             setIsLoginStart(false);
             const message = error.response?.data?.message || "Something went wrong";
-            setNewError(message);
-            errorsetIsOpen(true);
+            addToast({
+                type: "error",
+                title: "Error",
+                message:
+                    error?.response?.data?.message ||
+                    error?.message ||
+                    "Something went wrong"
+            });
         }
     };
 
 
+    const [toasts, setToasts] = useState([]);
 
+
+
+    const ToastContainer = ({ toasts, removeToast }) => {
+        return (
+            <div className="fixed top-5 right-5 flex flex-col gap-3 z-50">
+                <AnimatePresence>
+                    {toasts.map((t) => (
+                        <Toast
+                            key={t.id}
+                            {...t}
+                            onClose={() => removeToast(t.id)}
+                        />
+                    ))}
+                </AnimatePresence>
+            </div>
+        );
+    };
+    const addToast = ({ type = "success", title, message }) => {
+        const id = Date.now();
+        setToasts((prev) => [...prev, { id, type, title, message }]);
+    };
+
+    const removeToast = (id) => {
+        setToasts((prev) => prev.filter((t) => t.id !== id));
+    };
     if (showWelcome) {
         return <Welcome />;
     }
 
     return (
         <div data-theme="caramellatte" className="min-h-screen w-full flex items-center justify-center bg-base-300 px-[50px] py-[20px]">
+            <ToastContainer toasts={toasts} removeToast={removeToast} />
             <div className="w-full bg-base-100  rounded-2xl  flex flex-col md:flex-row gap-6 overflow-hidden border border-secondary border-[3px]">
 
                 {/* LEFT - Login Form */}
@@ -458,16 +489,7 @@ const Login = () => {
 
 
 
-                        <div className="space-y-2">
-                            <div className={`${errorisOpen ? "block" : "hidden "} flex items-center rounded-2xl px-4 py-3 border border-red-600 bg-red/50  transition-all duration-30 `} >
-                                <span className="mr-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#FF6F6F" d="M12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m0-18C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2m2.59 6L12 10.59L9.41 8L8 9.41L10.59 12L8 14.59L9.41 16L12 13.41L14.59 16L16 14.59L13.41 12L16 9.41z" /></svg>
-                                </span>
-                                <div className="text-red-500 ml-2">
-                                    {newError}
-                                </div>
-                            </div>
-                        </div>
+
 
                         {/* Links */}
                         <div className="flex flex-col sm:flex-row justify-between items-center text-sm gap-3 px-2">

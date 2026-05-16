@@ -7,9 +7,9 @@ import BASE_URL from "./baseURL";
 import { Link } from "react-router-dom";
 import Welcome from './Welcome';
 import { motion } from "framer-motion";
+import Toast from '../Resume/2/Toast';
 
-
-
+import { AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState, createElement, useMemo, useCallback } from 'react';
 import { gsap } from 'gsap';
 
@@ -338,18 +338,33 @@ const Signup = () => {
 
     const newErrors = {};
 
-    for (const key in formData) {
-      if (key !== "middleName" && !formData[key]) {
-        newErrors[key] = "Required";
-      }
-    }
+
 
     if (!formData.termsAccepted) {
-      newErrors.termsAccepted = "Accept terms";
+      addToast({
+        type: "error",
+        title: "Error",
+        message: "Please accept terms and conditions",
+      });
+      return;
     }
+    for (const key in formData) {
+      if (key !== "middleName" && !formData[key]) {
+        addToast({
+          type: "error",
+          title: "Error",
+          message: "Please fill all the required fields",
+        });
 
+        return;
+      }
+    }
     if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
+      addToast({
+        type: "error",
+        title: "Error",
+        message: "Please fill above fields",
+      });
       return;
     }
     try {
@@ -378,8 +393,14 @@ const Signup = () => {
       }, 4500);
 
     } catch (err) {
-      setNewError(err?.response?.data?.message || err.message);
-      errorsetIsOpen(true);
+      addToast({
+        type: "error",
+        title: "Error",
+        message:
+          err?.response?.data?.message ||
+          err?.message ||
+          "Something went wrong"
+      });
     } finally {
       // ✅ 5. ALWAYS RESET LOADING 
       setIsSubmitting(false);
@@ -451,12 +472,43 @@ const Signup = () => {
     if (passwordStrength === 3) return 'bg-yellow-500';
     return 'bg-green-500';
   };
+
+
+  const [toasts, setToasts] = useState([]);
+
+
+
+  const ToastContainer = ({ toasts, removeToast }) => {
+    return (
+      <div className="fixed top-5 right-5 flex flex-col gap-3 z-50">
+        <AnimatePresence>
+          {toasts.map((t) => (
+            <Toast
+              key={t.id}
+              {...t}
+              onClose={() => removeToast(t.id)}
+            />
+          ))}
+        </AnimatePresence>
+      </div>
+    );
+  };
+  const addToast = ({ type = "success", title, message }) => {
+    const id = Date.now();
+    setToasts((prev) => [...prev, { id, type, title, message }]);
+  };
+
+  const removeToast = (id) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  };
+
+
   if (showWelcome) {
     return <Welcome />;
   }
   return (
     <div data-theme="caramellatte" className="min-h-screen w-full flex items-center justify-center bg-base-300 px-[50px] py-3">
-
+      <ToastContainer toasts={toasts} removeToast={removeToast} />
       <div className="w-full bg-base-100  rounded-3xl border border-secondary border-[3px] flex flex-col md:flex-row gap-6 overflow-hidden  transition-all duration-500">
 
         {/* LEFT - Signup Form */}
@@ -478,16 +530,6 @@ const Signup = () => {
 
 
 
-          <div className="space-y-2">
-            <div className={`${errorisOpen ? "block" : "hidden "} flex items-center rounded-2xl px-4 py-3 border border-red-600 bg-red/50  transition-all duration-30 `} >
-              <span className="mr-3">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#FF6F6F" d="M12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m0-18C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2m2.59 6L12 10.59L9.41 8L8 9.41L10.59 12L8 14.59L9.41 16L12 13.41L14.59 16L16 14.59L13.41 12L16 9.41z" /></svg>
-              </span>
-              <div className="text-red-500 ml-2">
-                {newError}
-              </div>
-            </div>
-          </div>
           <form onSubmit={handleUpdate} className="space-y-8 flex flex-col text-accent">
 
             {/* Name Fields */}
@@ -743,19 +785,19 @@ const Signup = () => {
                   />
                 </div>
                 <ul className="text-xs text-accent space-y-1 ml-3">
-                  <li className={`flex items-center gap-2 ${formData.password.length >= 8 ? 'text-green-400' : ''}`}>
+                  <li className={`flex items-center gap-2 ${formData.password.length >= 8 ? 'text-green-600' : ''}`}>
                     <span>{formData.password.length >= 8 ? '✓' : '○'}</span>
                     At least 8 characters
                   </li>
-                  <li className={`flex items-center gap-2 ${/[A-Z]/.test(formData.password) ? 'text-green-400' : ''}`}>
+                  <li className={`flex items-center gap-2 ${/[A-Z]/.test(formData.password) ? 'text-green-600' : ''}`}>
                     <span>{/[A-Z]/.test(formData.password) ? '✓' : '○'}</span>
                     One uppercase letter
                   </li>
-                  <li className={`flex items-center gap-2 ${/[0-9]/.test(formData.password) ? 'text-green-400' : ''}`}>
+                  <li className={`flex items-center gap-2 ${/[0-9]/.test(formData.password) ? 'text-green-600' : ''}`}>
                     <span>{/[0-9]/.test(formData.password) ? '✓' : '○'}</span>
                     One number
                   </li>
-                  <li className={`flex items-center gap-2 ${/[^A-Za-z0-9]/.test(formData.password) ? 'text-green-400' : ''}`}>
+                  <li className={`flex items-center gap-2 ${/[^A-Za-z0-9]/.test(formData.password) ? 'text-green-600' : ''}`}>
                     <span>{/[^A-Za-z0-9]/.test(formData.password) ? '✓' : '○'}</span>
                     One special character
                   </li>

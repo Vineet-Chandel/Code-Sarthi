@@ -353,7 +353,7 @@ const Devs = () => {
             <section
                 ref={containerRef}
                 className="relative h-screen w-full overflow-hidden"
-                style={{ marginTop: 150 }}
+
             >
                 {/* Background image */}
                 <img

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Toast from '../Pages/Resume/2/Toast';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 const STYLES = `
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600&display=swap');
 
@@ -275,6 +276,7 @@ const STYLES = `
 import { AnimatePresence } from "framer-motion";
 import BASE_URL from '../Pages/auth/baseURL';
 import { Loader2 } from 'lucide-react';
+import path from 'node:path';
 /* Arrow icon reused */
 const ArrowIcon = ({ color = "currentColor" }) => (
   <svg className="rotate-45" width="12" height="12" viewBox="0 0 14 14" fill="none">
@@ -290,6 +292,7 @@ const ctaCards = [
     desc: "Functional components, AI prompts, smart colour palettes, and schema scripts — all the essentials in one place to help you build faster.",
     cta: "Visit Toolkit",
     icon: "⌥",
+    path: "/app/toolkit"
   },
   {
     num: "02",
@@ -298,6 +301,7 @@ const ctaCards = [
     desc: "Connect and collaborate with developers worldwide. Share skills, learn from peers, and co-build projects across time zones.",
     cta: "Join Community",
     icon: "◈",
+    path: "/community"
   },
   {
     num: "03",
@@ -306,15 +310,16 @@ const ctaCards = [
     desc: "Stuck? Our support team and ZENITH guardian are on standby. No tickets lost in the void — we actually respond.",
     cta: "Reach Support",
     icon: "◉",
+    path: "/help-center"
   },
 ];
 
 const ContentThird = () => {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [isStartSubmitting, setIsStartSubmitting] = useState(false);
   const [toasts, setToasts] = useState([]);
 
-  const [isStartSubmitting, setIsStartSubmitting] = useState(false);
 
 
   const ToastContainer = ({ toasts, removeToast }) => {
@@ -375,6 +380,9 @@ const ContentThird = () => {
     }
   };
 
+
+  const navigate = useNavigate();
+
   return (
     <>
       <style>{STYLES}</style>
@@ -407,6 +415,7 @@ const ContentThird = () => {
               key={i}
               className="ct-card ct-anim"
               style={{ animationDelay: `${i * 0.1}s` }}
+
             >
               <span className="ct-card-num">{card.num}</span>
 
@@ -428,7 +437,7 @@ const ContentThird = () => {
                 <p className="ct-card-desc">{card.desc}</p>
               </div>
 
-              <button className="ct-card-btn">
+              <button className="ct-card-btn" onClick={() => navigate(card.path)}>
                 <ArrowIcon />
                 {card.cta}
               </button>
@@ -473,16 +482,15 @@ const ContentThird = () => {
                 onChange={e => setEmail(e.target.value)}
                 onKeyDown={e => e.key === "Enter" && handleSubmit()}
               />
-              <button className="ct-submit-btn" onClick={handleSubmit}>
-                <ArrowIcon color="#060a07" />
+              <button className="ct-submit-btn flex " onClick={handleSubmit}>
 
                 {isStartSubmitting ? (
                   <span className="flex items-center">
                     <Loader2 className="animate-spin" size={20} />
-
                   </span>
                 ) : (
-                  <span>Subscribe</span>
+                  <span className='flex items-center'> <ArrowIcon color="#060a07" />
+                    <span className='flex ml-2'>Subscribe</span></span>
                 )}
               </button>
             </div>
