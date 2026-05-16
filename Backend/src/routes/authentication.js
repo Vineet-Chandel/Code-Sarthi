@@ -2,6 +2,7 @@ const express = require("express");
 const authRouter = express.Router();
 const { validateSignUpData } = require("../utils/validation");
 const User = require("../models/user");
+const NewsletterSubscriber = require("../models/newsLetter");
 const bcrypt = require("bcryptjs");
 const { userAuth } = require("../middlewares/userAuth");
 
@@ -58,32 +59,39 @@ authRouter.post("/auth/signup", async (req, res) => {
             profession,
         });
         let rate = Math.floor(Math.random() * 100);
-        if (rate < 30) {
-            if (user.gender === "male") {
-                user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/v1776697410/Untitled_Design_720x720_q1fftf.png"
-            } else if (user.gender === "female") {
-                user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/v1776698378/Genshin_Impact_Pin_qleydy.jpg"
-            } else {
-                user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/v1776698539/Quick_Note_Pin_qky24p.jpg"
-            }
-        } else if (rate < 60 && rate > 30) {
-            if (user.gender === "male") {
-                user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/v1776697561/Quick_Saves_Pin_xsaxre.jpg"
-            } else if (user.gender === "female") {
-                user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/v1776698900/Pink_Girl_Pin_da3s6t.jpg"
-            } else {
-                user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/v1776698539/Quick_Note_Pin_qky24p.jpg"
-            }
-        } else if (rate < 100 && rate > 60) {
-            if (user.gender === "male") {
-                user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/v1776697603/Character_Ideas_Pin_sybp9c.jpg"
-            } else if (user.gender === "female") {
-                user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/v1776698959/Chibi_Pin_cadgdi.jpg"
-            } else {
-                user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/v1776698539/Quick_Note_Pin_qky24p.jpg"
-            }
+        if (rate < 12.5) {
+            user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778848890/robo6_qerfgw.jpg";
+        } else if (rate < 25 && rate > 12.5) {
+            user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778848891/robo2_th69at.jpg";
+        } else if (rate < 37.5 && rate > 25) {
+            user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778848890/robo7_ixkipt.jpg";
+        } else if (rate < 50 && rate > 37.5) {
+            user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778848889/robo4_v1qyln.jpg";
+        } else if (rate < 62.5 && rate > 50) {
+            user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778848889/robo5_p3bwre.jpg";
+        } else if (rate < 75 && rate > 62.5) {
+            user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778848888/robo3_uqaqzv.jpg";
+        } else if (rate < 87.5 && rate > 75) {
+            user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778848889/robo1_fyviei.jpg";
+        } else if (rate < 100 && rate > 87.5) {
+            user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778848888/robo8_jhm1p8.jpg";
+        }
+
+        const unsubscribeToken = crypto.randomBytes(32).toString("hex");
+
+        // if user is subscribed to newsletter, update the isActive to true
+        const emailData = await NewsletterSubscriber.findOne({ email: user.gmail });
+        if (emailData) {
+            emailData.isActive = true;
+            emailData.unsubscribeToken = unsubscribeToken;
+            await emailData.save();
         } else {
-            user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/v1776698539/Quick_Note_Pin_qky24p.jpg"
+            await NewsletterSubscriber.create({
+                email: user.gmail,
+                isActive: true,
+                subscribedAt: Date.now(),
+                unsubscribeToken: unsubscribeToken,
+            });
         }
 
         const savedUser = await user.save();
@@ -94,6 +102,410 @@ authRouter.post("/auth/signup", async (req, res) => {
             secure: true,
             sameSite: "none",
             maxAge: 8 * 60 * 60 * 1000
+        });
+
+        const { data, error } = await resend.emails.send({
+            from: 'CodeSarthi <astra@codesarthi.in>',
+            to: [user.gmail],
+            subject: "Welcome to CodeSarthi",
+            html: `<body
+    style="margin: 0; padding: 0; width: 100% !important; background-color: #f4f4f7; font-family: 'Sora', Arial, sans-serif; -webkit-font-smoothing: antialiased; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;">
+
+    <!-- MASTER LAYOUT WRAPPER COMPONENT -->
+    <table border="0" cellpadding="0" cellspacing="0" width="100%"
+        style="background-color: #f4f4f7; width: 100% !important; margin: 0; padding: 40px 0;">
+        <tr>
+            <td align="center" valign="top">
+
+                <!-- CONTAINER MAIN COMPONENT (Max-Width Constrained for Cross-Platform Desktop/Mobile Consistency) -->
+                <table border="0" cellpadding="0" cellspacing="0" width="100%"
+                    style="max-width: 560px; background-color: #ffffff; border-radius: 24px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-collapse: collapse; table-layout: fixed;">
+
+                    <!-- HEADER HERO SECTION -->
+                    <tr>
+                        <td align="center" valign="top"
+                            style="background: #0f0f23 linear-gradient(135deg, #0f0f23 0%, #1a1040 100%); padding: 40px 32px 0 32px; position: relative; overflow: hidden;">
+
+                            <!-- Header Logo Module -->
+                            <table border="0" cellpadding="0" cellspacing="0" align="center"
+                                style="margin-bottom: 30px; border-collapse: collapse;">
+                                <tr>
+                                    <td align="center" valign="middle"
+                                        style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(102, 126, 234, 0.3); border-radius: 50px; padding: 8px 20px 8px 8px;">
+                                        <table border="0" cellpadding="0" cellspacing="0"
+                                            style="border-collapse: collapse;">
+                                            <tr>
+                                                <td valign="middle" style="padding: 0; margin: 0; line-height: 0;">
+                                                    <img src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776693732/image_wxefat.png"
+                                                        width="32" height="32"
+                                                        style="display: block; border-radius: 8px; border: 0;"
+                                                        alt="CodeSarthi Logo" />
+                                                </td>
+                                                <td valign="middle"
+                                                    style="padding-left: 10px; font-family: 'Sora', Arial, sans-serif; font-size: 18px; font-weight: 700; color: #ffffff; letter-spacing: 0.5px; line-height: 32px;">
+                                                    CodeSarthi
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Onboarding Badge Segment -->
+                            <div
+                                style="display: inline-block; background: rgba(167, 139, 250, 0.15); border: 1px solid rgba(167, 139, 250, 0.3); border-radius: 50px; padding: 6px 16px; font-family: 'Sora', Arial, sans-serif; font-size: 11px; color: #a78bfa; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 24px;">
+                                🎉 &nbsp;Welcome aboard
+                            </div>
+
+                            <!-- Mock IDE Code Frame Window Layer -->
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" align="center"
+                                style="border-collapse: collapse;">
+                                <tr>
+                                    <td align="center" valign="top">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="100%"
+                                            style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(102, 126, 234, 0.25); border-bottom: none; border-radius: 16px 16px 0 0; border-collapse: collapse;">
+                                            <tr>
+                                                <td style="padding: 22px 24px 0 24px; text-align: left;" valign="top">
+
+                                                    <!-- Frame Status Window Buttons -->
+                                                    <table border="0" cellpadding="0" cellspacing="0"
+                                                        style="margin-bottom: 16px; border-collapse: collapse;">
+                                                        <tr>
+                                                            <td width="10" height="10"
+                                                                style="background: #ff5f57; border-radius: 50%; padding: 0;">
+                                                            </td>
+                                                            <td width="6" style="padding: 0;"></td>
+                                                            <td width="10" height="10"
+                                                                style="background: #febc2e; border-radius: 50%; padding: 0;">
+                                                            </td>
+                                                            <td width="6" style="padding: 0;"></td>
+                                                            <td width="10" height="10"
+                                                                style="background: #28c840; border-radius: 50%; padding: 0;">
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+
+                                                    <!-- Formatted Interactive Script Code Lines -->
+                                                    <div
+                                                        style="font-family: 'Space Mono', monospace; font-size: 12px; line-height: 1.8; color: #ffffff; white-space: normal; word-break: break-all;">
+                                                        <span style="color: #c084fc;">import</span> <span
+                                                            style="color: rgba(255, 255, 255, 0.75);">{ Developer
+                                                            }</span> <span style="color: #c084fc;">from</span> <span
+                                                            style="color: #34d399;">'@codesarthi/you'</span><span
+                                                            style="color: rgba(255, 255, 255, 0.25);">;</span><br />
+                                                        <span
+                                                            style="color: rgba(255, 255, 255, 0.25); font-size: 11px;">/*
+                                                            ✨ Your journey starts here */</span><br />
+                                                        <span style="color: #60a5fa;">const</span> <span
+                                                            style="color: #fbbf24;">journey</span> <span
+                                                            style="color: rgba(255, 255, 255, 0.75);">=</span> <span
+                                                            style="color: #60a5fa;">new</span> <span
+                                                            style="color: #fb923c;">Developer</span><span
+                                                            style="color: rgba(255, 255, 255, 0.75);">(</span><span
+                                                            style="color: #f472b6;">{</span><br />
+                                                        &nbsp;&nbsp;<span
+                                                            style="color: rgba(255, 255, 255, 0.75);">name:</span> <span
+                                                            style="color: #34d399;">'${user.firstName}'</span><span
+                                                            style="color: rgba(255, 255, 255, 0.25);">,</span><br />
+                                                        &nbsp;&nbsp;<span
+                                                            style="color: rgba(255, 255, 255, 0.75);">skills:</span>
+                                                        <span style="color: #f472b6;">[</span><span
+                                                            style="color: #34d399;">'DSA'</span><span
+                                                            style="color: rgba(255, 255, 255, 0.25);">,</span> <span
+                                                            style="color: #34d399;">'Web Dev'</span><span
+                                                            style="color: rgba(255, 255, 255, 0.25);">,</span> <span
+                                                            style="color: #34d399;">'AI'</span><span
+                                                            style="color: #f472b6;">]</span><span
+                                                            style="color: rgba(255, 255, 255, 0.25);">,</span><br />
+                                                        &nbsp;&nbsp;<span
+                                                            style="color: rgba(255, 255, 255, 0.75);">mindset:</span>
+                                                        <span style="color: #34d399;">'growth'</span><br />
+                                                        <span style="color: #f472b6;">}</span><span
+                                                            style="color: rgba(255, 255, 255, 0.75);">)</span><span
+                                                            style="color: rgba(255, 255, 255, 0.25);">;</span><br />
+                                                        <span style="height: 6px; display: block;"></span>
+                                                        <span style="color: #fbbf24;">journey</span><span
+                                                            style="color: rgba(255, 255, 255, 0.75);">.</span><span
+                                                            style="color: #60a5fa;">start</span><span
+                                                            style="color: rgba(255, 255, 255, 0.75);">()</span><span
+                                                            style="color: rgba(255, 255, 255, 0.25);">;</span><span
+                                                            style="display: inline-block; width: 2px; height: 13px; background: #667eea; vertical-align: middle; margin-left: 2px;"></span>
+                                                    </div>
+                                                    <div style="height: 22px;"></div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- CORE CONTENT BODY COMPONENT SECTION -->
+                    <tr>
+                        <td style="padding: 40px 32px; background-color: #ffffff;" valign="top">
+
+                            <h1
+                                style="font-family: 'Sora', Arial, sans-serif; font-size: 26px; font-weight: 800; color: #0f0e1a; line-height: 1.3; margin: 0 0 12px 0; letter-spacing: -0.5px;">
+                                You're in, <span style="color: #4f46e5;">${user.firstName}!</span> 🎉<br />
+                                Let's build something great.
+                            </h1>
+
+                            <p
+                                style="font-family: 'Sora', Arial, sans-serif; font-size: 14px; color: #6b7280; line-height: 1.7; margin: 0 0 32px 0;">
+                                Welcome to <strong style="color: #4f46e5; font-weight: 600;">CodeSarthi</strong> — it
+                                connects you with a global developer community to build and scale projects. Designed to
+                                boost efficiency while keeping workflows fluid and intuitive.
+                            </p>
+
+                            <!-- Mini Section Segment Heading Title -->
+                            <p
+                                style="font-family: 'Sora', Arial, sans-serif; font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 1.2px; margin: 0 0 16px 0;">
+                                What's waiting for you
+                            </p>
+
+                            <!-- FEATURE ENTRY CARD MODULE 1 -->
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%"
+                                style="margin-bottom: 20px; border-bottom: 1px solid #f3f4f6; padding-bottom: 20px; border-collapse: collapse;">
+                                <tr>
+                                    <td width="40" valign="top" style="padding-top: 2px;">
+                                        <img width="40" height="40"
+                                            style="display: block; border-radius: 12px; background-color: #ede9fe; border: 0;"
+                                            src="https://img.icons8.com/?size=100&id=118374&format=png&color=000000"
+                                            alt="Collaboration Icon" />
+                                    </td>
+                                    <td style="padding-left: 16px;" valign="top">
+                                        <div
+                                            style="font-family: 'Sora', Arial, sans-serif; font-size: 15px; font-weight: 700; color: #111827; margin-bottom: 8px; line-height: 1.3;">
+                                            Real-time collaboration with Global developers
+                                        </div>
+                                        <div
+                                            style="font-family: 'Sora', Arial, sans-serif; font-size: 13px; color: #6b7280; line-height: 1.6; margin-bottom: 8px;">
+                                            • Eliminating friction by providing one seamless layer where messaging,
+                                            meetings, and shared code live dynamically together.
+                                        </div>
+                                        <div
+                                            style="font-family: 'Sora', Arial, sans-serif; font-size: 13px; color: #6b7280; line-height: 1.6; margin-bottom: 8px;">
+                                            • Enable instant personal chats, global hub circles, specialized workspaces,
+                                            and AI-assisted pair-programming setups.
+                                        </div>
+                                        <div
+                                            style="font-family: 'Sora', Arial, sans-serif; font-size: 13px; color: #6b7280; line-height: 1.6;">
+                                            • Move entirely beyond fragmented asynchronous updates via contextual code
+                                            comments and high-bandwidth team environments.
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- FEATURE ENTRY CARD MODULE 2 -->
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%"
+                                style="margin-bottom: 20px; border-bottom: 1px solid #f3f4f6; padding-bottom: 20px; border-collapse: collapse;">
+                                <tr>
+                                    <td width="40" valign="top" style="padding-top: 2px;">
+                                        <img width="40" height="40"
+                                            style="display: block; border-radius: 12px; background-color: #eff6ff; border: 0;"
+                                            src="https://img.icons8.com/?size=100&id=R9cokz2UAdyo&format=png&color=000000"
+                                            alt="AI Analyzer Icon" />
+                                    </td>
+                                    <td style="padding-left: 16px;" valign="top">
+                                        <div
+                                            style="font-family: 'Sora', Arial, sans-serif; font-size: 15px; font-weight: 700; color: #111827; margin-bottom: 8px; line-height: 1.3;">
+                                            AI Resume Builder & Analyser
+                                        </div>
+                                        <div
+                                            style="font-family: 'Sora', Arial, sans-serif; font-size: 13px; color: #6b7280; line-height: 1.6; margin-bottom: 8px;">
+                                            • Structure tech achievements from scratch or drop your existing file to
+                                            construct tailored, high-grade ATS optimized iterations instantly.
+                                        </div>
+                                        <div
+                                            style="font-family: 'Sora', Arial, sans-serif; font-size: 13px; color: #6b7280; line-height: 1.6;">
+                                            • Receive instant diagnostics identifying semantic content gaps with precise
+                                            industry metric-driven suggestions.
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- FEATURE ENTRY CARD MODULE 3 -->
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%"
+                                style="margin-bottom: 24px; border-collapse: collapse;">
+                                <tr>
+                                    <td width="40" valign="top" style="padding-top: 2px;">
+                                        <img width="40" height="40"
+                                            style="display: block; border-radius: 12px; background-color: #ecfdf5; border: 0;"
+                                            src="https://img.icons8.com/?size=100&id=s4Xt7WXfxRMk&format=png&color=000000"
+                                            alt="Operations Decentralization Icon" />
+                                    </td>
+                                    <td style="padding-left: 16px;" valign="top">
+                                        <div
+                                            style="font-family: 'Sora', Arial, sans-serif; font-size: 15px; font-weight: 700; color: #111827; margin-bottom: 8px; line-height: 1.3;">
+                                            Decentralizing Project Operations
+                                        </div>
+                                        <div
+                                            style="font-family: 'Sora', Arial, sans-serif; font-size: 13px; color: #6b7280; line-height: 1.6; margin-bottom: 8px;">
+                                            • Enable self-managed, transparent project collaboration — product squads
+                                            synchronize seamlessly without management bottlenecks.
+                                        </div>
+                                        <div
+                                            style="font-family: 'Sora', Arial, sans-serif; font-size: 13px; color: #6b7280; line-height: 1.6; margin-bottom: 8px;">
+                                            • Automated real-time logging of product cycles, code velocity metrics, and
+                                            development sprint health parameters.
+                                        </div>
+                                        <div
+                                            style="font-family: 'Sora', Arial, sans-serif; font-size: 13px; color: #6b7280; line-height: 1.6; margin-bottom: 8px;">
+                                            • Consolidate localized feature tracking tickets and comprehensive master
+                                            architecture updates onto a single view.
+                                        </div>
+                                        <div
+                                            style="font-family: 'Sora', Arial, sans-serif; font-size: 13px; color: #6b7280; line-height: 1.6;">
+                                            • Isolate regression dependencies early and alert cross-functional engineers
+                                            instantly to preserve release velocities.
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- QUOTE BOX PANEL COMPONENT -->
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%"
+                                style="background: linear-gradient(135deg, #fafafe, #f5f3ff); border-left: 3px solid #7c3aed; border-radius: 0 12px 12px 0; border-collapse: collapse; margin: 32px 0;">
+                                <tr>
+                                    <td style="padding: 18px 20px;" valign="top">
+                                        <p
+                                            style="font-family: 'Sora', Arial, sans-serif; font-size: 13.5px; color: #374151; line-height: 1.65; font-style: italic; margin: 0 0 8px 0;">
+                                            "The best time to start collaborating was yesterday. The second best time is
+                                            right now. You've already taken the first step."
+                                        </p>
+                                        <p
+                                            style="font-family: 'Sora', Arial, sans-serif; font-size: 12px; color: #7c3aed; font-weight: 700; margin: 0;">
+                                            — Team CodeSarthi</p>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- SYSTEM WARNING BLOCK NOTIFICATION -->
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%"
+                                style="background-color: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; border-collapse: collapse;">
+                                <tr>
+                                    <td style="padding: 16px;" valign="top">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="100%"
+                                            style="border-collapse: collapse;">
+                                            <tr>
+                                                <td width="24" valign="top"
+                                                    style="font-family: 'Sora', Arial, sans-serif; font-size: 18px; line-height: 24px;">
+                                                    🔒
+                                                </td>
+                                                <td style="padding-left: 12px;" valign="top">
+                                                    <p
+                                                        style="font-family: 'Sora', Arial, sans-serif; font-size: 12.5px; color: #78350f; line-height: 1.6; margin: 0;">
+                                                        <strong style="font-weight: 700;">Keep your account
+                                                            safe:</strong> CodeSarthi will never request credentials or
+                                                        account passwords via email or platform chats. Ensure you enable
+                                                        two-factor authentication in your account profile metrics for
+                                                        optimized data security.
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </td>
+                    </tr>
+
+                    <!-- EMAIL FOOTER PANEL COMPONENT -->
+                    <tr>
+                        <td style="background-color: #0f0e1a; padding: 36px 32px; text-align: center;" align="center"
+                            valign="top">
+
+                            <!-- Footnote Mini Brand Module -->
+                            <table border="0" cellpadding="0" cellspacing="0" align="center"
+                                style="margin-bottom: 20px; border-collapse: collapse;">
+                                <tr>
+                                    <td valign="middle" style="padding: 0; margin: 0; line-height: 0;">
+                                        <img src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776693732/image_wxefat.png"
+                                            width="26" height="26"
+                                            style="display: block; border-radius: 6px; border: 0;"
+                                            alt="CodeSarthi Mini Icon" />
+                                    </td>
+                                    <td valign="middle"
+                                        style="padding-left: 8px; font-family: 'Sora', Arial, sans-serif; font-size: 14px; font-weight: 700; color: rgba(255, 255, 255, 0.7); letter-spacing: 0.3px;">
+                                        CodeSarthi
+                                    </td>
+                                    end text-fill block row module
+                                </tr>
+                            </table>
+
+                            <!-- Native Multi-Column Native Social Platform Anchor Elements Row Links -->
+                            <table border="0" cellpadding="0" cellspacing="0" align="center"
+                                style="margin-bottom: 24px; border-collapse: collapse;">
+                                <tr>
+                                    <td align="center" style="padding: 0 6px;">
+                                        <a href="https://www.instagram.com/codesarthik06/" target="_blank"
+                                            style="text-decoration: none; display: block; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 4px 8px;">
+                                            <img width="24" height="24" style="display: block; border: 0;"
+                                                src="https://img.icons8.com/?size=100&id=32292&format=png&color=ffffff"
+                                                alt="Instagram Profile Link" />
+                                        </a>
+                                    </td>
+                                    <td align="center" style="padding: 0 6px;">
+                                        <a href="https://www.youtube.com/@CodeSarthi-ZENITH" target="_blank"
+                                            style="text-decoration: none; display: block; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 4px 8px;">
+                                            <img width="24" height="24" style="display: block; border: 0;"
+                                                src="https://img.icons8.com/?size=100&id=37325&format=png&color=ffffff"
+                                                alt="YouTube Channel Link" />
+                                        </a>
+                                    </td>
+                                    <td align="center" style="padding: 0 6px;">
+                                        <a href="mailto:codesarthi.headmail@gmail.com"
+                                            style="text-decoration: none; display: block; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 4px 8px;">
+                                            <img width="24" height="24" style="display: block; border: 0;"
+                                                src="https://img.icons8.com/?size=100&id=53388&format=png&color=ffffff"
+                                                alt="Direct Mail Anchor" />
+                                        </a>
+                                    </td>
+                                    <td align="center" style="padding: 0 6px;">
+                                        <a href="https://github.com/Vineet-Chandel/Code-Sarthi" target="_blank"
+                                            style="text-decoration: none; display: block; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 4px 8px;">
+                                            <img width="24" height="24" style="display: block; border: 0;"
+                                                src="https://img.icons8.com/?size=100&id=xLUf9A2uno5L&format=png&color=ffffff"
+                                                alt="GitHub Repository CodeLink" />
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Utility Platform Hyperlink Navigation Bar Module -->
+                            <div style="margin-bottom: 20px; font-family: 'Sora', Arial, sans-serif;">
+                                <a href="https://www.codesarthi.in/help-center" target="_blank"
+                                    style="font-size: 12.5px; color: #a78bfa; text-decoration: none; font-weight: 500; margin: 0 12px;">Help
+                                    Center</a>
+                                <span style="color: rgba(255, 255, 255, 0.15); font-size: 12px;">|</span>
+                                <a href="https://www.codesarthi.in/privacy-&-policy-hub" target="_blank"
+                                    style="font-size: 12.5px; color: #a78bfa; text-decoration: none; font-weight: 500; margin: 0 12px;">Privacy
+                                    Policy</a>
+                                <span style="color: rgba(255, 255, 255, 0.15); font-size: 12px;">|</span>
+                                <a href="mailto:codesarthi.help@gmail.com"
+                                    style="font-size: 12.5px; color: #a78bfa; text-decoration: none; font-weight: 500; margin: 0 12px;">Support</a>
+                            </div>
+
+                            <!-- Legal Disclaimer & Regional Data Segment Block -->
+                            <p
+                                style="font-family: 'Sora', Arial, sans-serif; font-size: 11.5px; color: rgba(255, 255, 255, 0.3); line-height: 1.7; margin: 0;">
+                                © 2026 CodeSarthi &nbsp;·&nbsp; Kanpur, Uttar Pradesh, India<br />
+                                This is an automated system dispatch. Please do not reply directly to this mail account.
+                            </p>
+
+                        </td>
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+    </table>
+
+</body>`,
         });
 
         res.status(201).json({
@@ -218,7 +630,7 @@ authRouter.get("/auth/verify-email", userAuth, async (req, res) => {
 
 
         const { data, error } = await resend.emails.send({
-            from: 'CodeSarthi <nova@codesarthi.in>',
+            from: 'CodeSarthi <astra@codesarthi.in>',
             to: [userGmail],
             subject: "Your Verification Code",
             html: `<body style="margin:0; padding:0; background-color:#f0f2ff; font-family:Arial,Helvetica,sans-serif;">
@@ -464,7 +876,7 @@ authRouter.get("/auth/verify-email", userAuth, async (req, res) => {
             return console.error({ error });
         }
 
-        console.log({ data });
+        ``
 
 
         res.status(200).json({
@@ -524,7 +936,7 @@ authRouter.post("/auth/verify-email", userAuth, async (req, res) => {
 
 
                 const { data, error } = await resend.emails.send({
-                    from: 'CodeSarthi <nova@codesarthi.in>',
+                    from: 'CodeSarthi <astra@codesarthi.in>',
                     to: [userGmail],
                     subject: "Your Email Verification Status",
                     html: `<body style="margin:0; padding:0; background-color:#f0f2ff; font-family:Arial,Helvetica,sans-serif;">

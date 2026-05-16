@@ -57,9 +57,9 @@ passRoute.patch("/auth/reset-password", userAuth, async (req, res) => {
         await targetUser.save();
 
         const { data, error } = await resend.emails.send({
-            from: 'CodeSarthi <nova@codesarthi.in>',
+            from: 'CodeSarthi <astra@codesarthi.in>',
             to: [gmail],
-            subject: "Security Alert",
+            subject: "Security Alert!",
             html: `<body style="margin:0; padding:0; background-color:#f0f2ff; font-family:Arial,Helvetica,sans-serif;">
 
     <!-- Preheader -->
@@ -445,9 +445,9 @@ passRoute.post("/auth/forgot-password", async (req, res) => {
         /* ---------------- SEND EMAIL ---------------- */
 
         const { data, error } = await resend.emails.send({
-            from: 'CodeSarthi <nova@codesarthi.in>',
+            from: 'CodeSarthi <astra@codesarthi.in>',
             to: [user.gmail],
-            subject: "Your Verification code",
+            subject: "Your Verificat!ion code",
             html: `<body style="margin:0; padding:0; background-color:#f0f2ff; font-family:Arial,Helvetica,sans-serif;">
 
     <!-- Preheader -->
@@ -846,9 +846,9 @@ passRoute.patch("/auth/forgot-password/:token1", async (req, res) => {
 
 
         const { data, error } = await resend.emails.send({
-            from: 'CodeSarthi <nova@codesarthi.in>',
+            from: 'CodeSarthi <astra@codesarthi.in>',
             to: [user.gmail],
-            subject: "Security Alert",
+            subject: "Security Alert!",
             html: `<body style="margin:0; padding:0; background-color:#f0f2ff; font-family:Arial,Helvetica,sans-serif;">
 
     <!-- Preheader -->

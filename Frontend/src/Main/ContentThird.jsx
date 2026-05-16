@@ -206,7 +206,7 @@ const STYLES = `
   position: relative; z-index: 1;
   display: flex; align-items: center;
   gap: 10px;
-  background: rgba(255,255,255,0.04);
+  background: #ffffff0a;
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 999px;
   padding: 6px 6px 6px 22px;
@@ -311,7 +311,11 @@ const ContentThird = () => {
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = () => {
-    if (email.trim()) setSubmitted(true);
+
+
+
+
+    // if (email.trim()) setSubmitted(true);
   };
 
   return (
@@ -403,7 +407,7 @@ const ContentThird = () => {
 
           {/* Email input */}
           {!submitted ? (
-            <div className="ct-input-row">
+            <div className="ct-input-row ">
               <input
                 className="ct-input"
                 type="email"

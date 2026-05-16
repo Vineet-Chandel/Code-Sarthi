@@ -73,7 +73,7 @@ reviewRouter.post("/create-review", async (req, res) => {
 
 
         const { emailData, emailError } = await resend.emails.send({
-            from: 'CodeSarthi <nova@codesarthi.in>',
+            from: 'CodeSarthi <zenith@codesarthi.in>',
             to: [data.email],
             subject: "Thanks for your review on CodeSarthi 🎉",
             html: `
