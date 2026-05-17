@@ -357,7 +357,7 @@ const Devs = () => {
             >
                 {/* Background image */}
                 <img
-                    src="/img/developers.png"
+                    src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778992199/image_5_dxhrvb.webp"
                     alt="developers"
                     className="absolute inset-0 h-full w-full object-cover"
 

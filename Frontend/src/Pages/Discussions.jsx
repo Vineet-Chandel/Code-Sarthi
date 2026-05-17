@@ -1518,7 +1518,7 @@ const Discussions = () => {
                             </div>
 
                             {/* MESSAGES AREA - Premium Bubbles */}
-                            <div className="flex-1 overflow-y-auto p-6 space-y-2 custom-scrollbar bg-base-100 " style={{ backgroundImage: "url('/img/img.png')", backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }} onClick={() => { setShowMenu(false) }}>
+                            <div className="flex-1 overflow-y-auto p-6 space-y-2 custom-scrollbar bg-base-100 " style={{ backgroundImage: "url('https://res.cloudinary.com/dggoaxqxl/image/upload/v1778990394/__f3g2d3.webp')", backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }} onClick={() => { setShowMenu(false) }}>
                                 {messages.map((msg, index) => {
                                     const isMe = msg?.sender?._id === currentUserId;
 

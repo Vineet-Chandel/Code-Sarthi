@@ -383,7 +383,7 @@ const ContentFirst = () => {
 
   const featuredData2 = [
     {
-      img: "/img/dev.webp",
+      img: "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778989275/image_kkzust.webp",
       heading: "Developer's Toolkit",
       tags: [
         "Functional components that reduce repetition and help you build faster with a clean, consistent structure.",
@@ -392,7 +392,7 @@ const ContentFirst = () => {
       ],
     },
     {
-      img: "/img/SCHEDULER.webp",
+      img: "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778989421/image_2_mpco7p.webp",
       heading: "Smart Scheduler",
       tags: [
         "Tracks your daily goals and shows you progress reports in real time.",
@@ -401,7 +401,7 @@ const ContentFirst = () => {
       ],
     },
     {
-      img: "/img/RESUME-GEN.webp",
+      img: "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778989518/image_4_oflojd.webp",
       heading: "Resume Generator",
       tags: [
         "Templates designed in collaboration with recruiters — already approved before you apply.",
@@ -410,7 +410,7 @@ const ContentFirst = () => {
       ],
     },
     {
-      img: "/img/team.webp",
+      img: "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778989459/image_3_euxgba.webp",
       heading: "Global Dev Community",
       tags: [
         "Contact and collaborate with developers worldwide on any project.",
@@ -463,8 +463,14 @@ const ContentFirst = () => {
 
                 <div className="flex flex-col gap-1">
                   {item.tagLines.map((line, i) => (
-                    <div key={i} className="cs-tag-item">
-                      <span className="cs-tag-icon">◆</span>
+                    <div key={i} className="cs-tag-item ">
+                      <span className="cs-tag-icon"><svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24">
+                        <g fill="none" stroke="#04be0aff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}>
+                          <circle cx={18.5} cy={4.5} r={2}></circle>
+                          <circle cx={4.5} cy={18.5} r={2}></circle>
+                          <path d="M4.5 16.5c0-6.627 5.373-12 12-12m-3.459 14.805l-1.792-5.15c-.674-1.936-1.011-2.905-.505-3.411c.507-.506 1.476-.17 3.414.504l5.143 1.788c1.075.373 1.613.56 1.729.922a.8.8 0 0 1 .032.31c-.039.377-.526.671-1.5 1.26c-.27.163-.483.29-.643.407c-.125.09-.187.135-.206.365s.07.32.248.497l2.127 2.127a1.406 1.406 0 0 1 0 1.988l-.166.166a1.44 1.44 0 0 1-2.039 0l-2.1-2.1c-.179-.18-.268-.27-.5-.25c-.23.02-.276.084-.368.212c-.112.157-.236.362-.393.623c-.58.963-.87 1.445-1.244 1.487a.8.8 0 0 1-.326-.034c-.356-.118-.54-.649-.91-1.711"></path>
+                        </g>
+                      </svg></span>
                       <span>{line}</span>
                     </div>
                   ))}

@@ -9,7 +9,7 @@ const cards = [
     title: "ASTRA",
     role: "Verification Guardian",
     quote: "Trust is verified in silence",
-    img: "../img/cs-verification-manager.png",
+    img: "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778989004/CS_Verification_Manager_uohza5.webp",
     color: "#00e5ff",        // ice-cyan
     glow: "rgba(0,229,255,0.22)",
     dimGlow: "rgba(0,229,255,0.07)",
@@ -21,7 +21,7 @@ const cards = [
     title: "NOVA",
     role: "Identity Guardian",
     quote: "Your digital identity, reconstructed",
-    img: "../img/cs-identity-manager.png",
+    img: "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778989004/CS_Identity_Manager_amyjyi.webp",
     color: "#ffb830",        // amber-gold
     glow: "rgba(255,184,48,0.22)",
     dimGlow: "rgba(255,184,48,0.07)",
@@ -33,7 +33,7 @@ const cards = [
     title: "ORION",
     role: "Community & AI Guardian",
     quote: "Every developer is a signal",
-    img: "../img/cs-community-ai-manager.png",
+    img: "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778989003/CS_Community_AI_Manager_z664dg.webp",
     color: "#bf7fff",        // violet
     glow: "rgba(191,127,255,0.22)",
     dimGlow: "rgba(191,127,255,0.07)",
@@ -45,7 +45,7 @@ const cards = [
     title: "ZENITH",
     role: "Help & Support Guardian",
     quote: "No noise. Only solutions",
-    img: "/img/cs-help-support.png",
+    img: "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778989005/CS_Help_Support_onbjoi.webp",
     color: "#00ff87",        // brand-green
     glow: "rgba(0,255,135,0.22)",
     dimGlow: "rgba(0,255,135,0.07)",

@@ -99,8 +99,8 @@ const Experience = ({ data }) => {
             setLoading(true);
 
             const payload = {
-                skills: Array.isArray(resumeData?.skills)
-                    ? resumeData.skills.join(", ")
+                skills: resumeData?.skills
+                    ? resumeData.skills
                     : "",
 
                 experience: (resumeData?.experience || []).map((exp) => ({
@@ -179,7 +179,7 @@ const Experience = ({ data }) => {
 
             const response = await axios.post(
                 `${BASE_URL}/generate-summary`,
-                payload
+                payload, { withCredentials: true }
             );
 
             setGeneratedSummaries(
@@ -337,7 +337,7 @@ const Experience = ({ data }) => {
 
 
                                             <div className='w-full flex justify-center gap-5 p-5' >
-                                                <div className="w-[97%] bg-base-100 h-[80vh]  rounded-xl p-5" onClick={(e) => e.stopPropagation()}>
+                                                <div className="w-[97%] bg-base-100   rounded-xl p-5" onClick={(e) => e.stopPropagation()}>
                                                     <div className='mb-5'>
                                                         <h1 className="text-2xl text-center font-bold text-slate-900 mb-2 leading-tight  " >
                                                             Generating Professional Summary according to your qualifications and experience
@@ -345,7 +345,7 @@ const Experience = ({ data }) => {
                                                     </div>
 
                                                     <div >
-                                                        {loading ? (<div className='flex flex-col justify-center items-center h-[500px] w-full  gap-2'>
+                                                        {loading ? (<div className='flex flex-col justify-center items-center  w-full  gap-2'>
                                                             <div className='flex justify-center items-center gap-2'>
                                                                 <h1 className="text-5xl font-bold text-[#884f06] mb-2 leading-tight text-center ">Shastra</h1>
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width={50} height={50} viewBox="0 0 24 24" className='mb-3'>
@@ -358,7 +358,7 @@ const Experience = ({ data }) => {
                                                                 <div className="h-4 w-56 bg-[#884f06]/20 rounded"></div>
                                                             </div>
                                                         </div>) : (
-                                                            <div className="h-[600px] overflow-y-auto space-y-4 pr-2">
+                                                            <div className=" overflow-y-auto space-y-4 pr-2">
                                                                 {generatedSummaries.map((item, index) => (
                                                                     <div
                                                                         key={index}

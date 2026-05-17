@@ -388,7 +388,7 @@ Requirements:
             });
 
         const rawText =
-            completion.choices?.[0]?.message?.content;
+            completion.choices[0].message.content;
 
         if (!rawText) {
             return res.status(500).json({
