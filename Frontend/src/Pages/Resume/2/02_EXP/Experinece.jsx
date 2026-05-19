@@ -1,11 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import Temp1 from "../3/Temp1";
+import Temp1 from "../../3/Temp1";
 import axios from "axios";
-import BASE_URL from '../../auth/baseURL';
+import BASE_URL from '../../../auth/baseURL';
 import { Slice } from 'lucide-react';
-import Toast from './Toast';
+import Toast from '../Toast';
 import { AnimatePresence } from "framer-motion";
+import ProgressMeter from '../ProgressMeter';
+import Header from '../Header';
+import Step from '../Step';
 // ─── tiny hook ────────────────────────────────────────────────────────────────
 function useIntersectionObserver(options = {}) {
     const ref = useRef(null);
@@ -82,21 +85,20 @@ const TipItem = ({ emoji, title, body }) => (
     </div>
 );
 
-const Education = ({ data }) => {
+const Experience = ({ data }) => {
     const location = useLocation();
     let resumeData = location.state?.resumeData || {};
 
-    const [education, setEducation] = useState([
+    const [experiences, setExperiences] = useState([
         {
-            institution: "",
+            role: "",
+            company: "",
             location: "",
-            degree: "",
-            field: "",
             startDate: "",
             endDate: "",
-            cgpa: "",
+            currentlyWorking: false,
             bullets: [],
-
+            employmentType: ""
         }
     ]);
 
@@ -112,8 +114,9 @@ const Education = ({ data }) => {
 
     resumeData = {
         ...resumeData,
-        education:
-            education,
+        experience:
+            experiences,
+
         summaryBody: "",
         degree: "",
         major: "",
@@ -122,6 +125,8 @@ const Education = ({ data }) => {
         gradDate: "",
         skills: {},
         projects: [],
+
+        education: [],
         certifications: [],
         achievements: [],
         languages: ["English (Fluent)", "Hindi (Native)"],
@@ -134,51 +139,40 @@ const Education = ({ data }) => {
 
 
     const handleChange2 = (index, id, value) => {
-        setEducation(prev =>
+        setExperiences(prev =>
             prev.map((exp, i) =>
                 i === index ? { ...exp, [id]: value } : exp
             )
         );
     };
-    const addEducation = () => {
-        setEducation(prev => [
+    const addExperience = () => {
+        setExperiences(prev => [
             ...prev,
             {
-                institution: "",
+                role: "",
+                company: "",
                 location: "",
-                degree: "",
-                field: "",
                 startDate: "",
                 endDate: "",
-                cgpa: "",
+                currentlyWorking: false,
                 bullets: [],
-
+                employmentType: "",
             }
         ]);
     };
     const [activeInputIndex, setActiveInputIndex] = useState(null);
+    const [editingBulletIndex, setEditingBulletIndex] = useState(null);
     const [toasts, setToasts] = useState([]);
     const [aiModalOpen, setAiModalOpen] = useState(false);
     const [bullets, setBullets] = useState([]);
     const [isAiworking, setIsAiworking] = useState(false);
-    // dwnekbevekfdnvfvekdvbnkn;beveb;dkv
-    //;.bk;enebkebve;beb;enb;kevnenbvnebebn;keb
-    const [selectedDegree, setSelectedDegree] = useState();
-    const [selectedInstitution, setSelectedInstitution] = useState();
-    const [selectedField, setSelectedField] = useState();
-    const [selectedCgpa, setSelectedCgpa] = useState();
-    const [selectedEducationIndex, setSelectedEducationIndex] = useState(null);
-    const [selectedEndData, setSelectedEndData] = useState("")
-
-    const [editingBulletIndex, setEditingBulletIndex] = useState(null);
-
-
+    const [selectedRole, setSelectedRole] = useState();
+    const [selectedCompany, setSelectedCompany] = useState();
+    const [selectedEmploymentType, setSelectedEmploymentType] = useState();
+    const [selectedExpIndex, setSelectedExpIndex] = useState(null);
     const [points, setpoints] = useState([]);
 
     const [bulletInput, setBulletInput] = useState("");
-
-
-
     const addToast = ({ type = "success", title, message }) => {
         const id = Date.now();
         setToasts((prev) => [...prev, { id, type, title, message }]);
@@ -190,25 +184,25 @@ const Education = ({ data }) => {
 
 
     useEffect(() => {
-        if (bullets?.length == 0 && selectedDegree && selectedInstitution && selectedField) {
-            bulletspoints(selectedDegree, selectedInstitution, selectedField, selectedEndData);
+        if (bullets?.length == 0 && selectedRole && selectedCompany && selectedEmploymentType) {
+            bulletspoints(selectedRole, selectedCompany, selectedEmploymentType);
         }
 
 
     }, [points]);
 
     useEffect(() => {
-        if (selectedDegree && selectedInstitution && selectedField) {
-            bulletspoints(selectedDegree, selectedInstitution, selectedField);
+        if (selectedRole && selectedCompany && selectedEmploymentType) {
+            bulletspoints(selectedRole, selectedCompany, selectedEmploymentType);
         }
-    }, [selectedDegree, selectedInstitution, selectedField]);
+    }, [selectedRole, selectedCompany, selectedEmploymentType]);
 
-    const bulletspoints = async (selectedDegree, selectedInstitution, selectedField) => {
+    const bulletspoints = async (jobRole, company, employmentType) => {
         try {
             setIsAiworking(true);
             const response = await axios.post(
-                `${BASE_URL}/generate-edu-pointer`,
-                { degree: selectedDegree, college: selectedInstitution, feild: selectedField, cgpa: selectedCgpa, graduationYear: education }
+                `${BASE_URL}/generate-exp-pointer`,
+                { jobRole: jobRole, company: company, employmentType: employmentType }
             );
 
             setBullets(response.data.data);
@@ -220,15 +214,6 @@ const Education = ({ data }) => {
             setIsAiworking(false);
         }
     };
-
-    useEffect(() => {
-        setBulletInput("");
-
-
-    }, [activeInputIndex]);
-
-
-
     const [enhancerWorking, setEnhancerWorking] = useState("false");
     const [enhancerData, setEnhancerData] = useState({});
     const enhancer = async (bullet, index, bulletIndex) => {
@@ -247,6 +232,14 @@ const Education = ({ data }) => {
         }
     };
 
+    useEffect(() => {
+        setBulletInput("");
+
+    }, [activeInputIndex]);
+
+
+
+
     return (
         <div className="min-h-[calc(100vh-4rem)] w-screen flex items-start justify-center p-4 md:p-6 bg-base-100">
             <ToastContainer toasts={toasts} removeToast={removeToast} />
@@ -254,24 +247,9 @@ const Education = ({ data }) => {
 
                 {/* ── top bar ── */}
                 <div className="flex items-center justify-between px-5 py-3.5 bg-base-200 border-b border-slate-700">
-                    <span className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full bg-base-100 text-secondary">
-                        Step 3 of 6
-                    </span>
+                    <Step index={1} />
 
-                    {/* progress dots */}
-                    <div className="flex items-center gap-1.5">
-                        {[0, 1, 2, 3, 4, 5].map((i) => (
-                            <div
-                                key={i}
-                                className={`rounded-full transition-all duration-300 ${i === 0 || i === 1 || i === 2
-                                    ? "w-2 h-2 bg-primary"
-                                    : i === 3
-                                        ? "w-5 h-2 bg-secondary"
-                                        : "w-2 h-2 bg-neutral"
-                                    }`}
-                            />
-                        ))}
-                    </div>
+                    <ProgressMeter index={1} />
 
                     <button
                         onClick={() => setSidebarOpen((p) => !p)}
@@ -281,8 +259,11 @@ const Education = ({ data }) => {
                                 : "bg-base-100 text-secondary border-secondary "
                             }`}
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 16 16">
-                            <path fill="currentColor" d="M3.5 2A2.5 2.5 0 0 0 1 4.5v7A2.5 2.5 0 0 0 3.5 14h9a2.5 2.5 0 0 0 2.5-2.5v-7A2.5 2.5 0 0 0 12.5 2zM2 4.5A1.5 1.5 0 0 1 3.5 3h9A1.5 1.5 0 0 1 14 4.5v7a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 11.5zM3 5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1zm9 0H4v1h8zM8 9a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1zm4 0H9v2h3zM3.5 8a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zM3 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5"></path>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1.4em" height="1.4em" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M12 2c4.714 0 7.071 0 8.535 1.464c1.08 1.08 1.364 2.647 1.439 5.286L22 9.5H2.026v-.75c.075-2.64.358-4.205 1.438-5.286C4.93 2 7.286 2 12 2" opacity={0.5}></path>
+                            <path fill="currentColor" d="M13 6a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-3 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0M7 6a1 1 0 1 1-2 0a1 1 0 0 1 2 0"></path>
+                            <path fill="currentColor" d="M2 12c0 4.714 0 7.071 1.464 8.535c1.01 1.01 2.446 1.324 4.786 1.421L9 22V9.5H2.026l-.023.75Q2 11.066 2 12" opacity={0.7}></path>
+                            <path fill="currentColor" d="M22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22c-.819 0-2.316 0-3-.008V9.5h13l-.003.75Q22 11.066 22 12"></path>
                         </svg>
                         {sidebarOpen ? "Hide" : "Preview"}
                     </button>
@@ -291,23 +272,14 @@ const Education = ({ data }) => {
                 {/* ── body ── */}
                 <div className={`grid transition-all duration-500 ${sidebarOpen ? "lg:grid-cols-[1fr_500px]" : "grid-cols-1"}`}>
 
-                    {aiModalOpen && <div className='fixed w-screen h-screen bg-black/20 inset-0 z-30' onClick={() => {
-                        setAiModalOpen(false);
-                        setBullets([]);
-                        setpoints([]);
-                        setSelectedEndData("");
-                        setSelectedDegree("");
-                        setSelectedInstitution("");
-                        setSelectedField("");
-                        setSelectedEducationIndex(null);
-                    }}>
+                    {aiModalOpen && <div className='fixed w-screen h-screen bg-black/20 inset-0 z-30' onClick={() => { setAiModalOpen(false); setBullets([]), setpoints([]), setSelectedRole(""), setSelectedCompany(""), setSelectedEmploymentType(""), setSelectedExpIndex(null) }}>
 
 
                         <div className='w-full flex justify-center gap-5 p-5' >
-                            <div className="w-[50%] bg-base-100 h-[80vh] mt-10  rounded-xl p-5 " onClick={(e) => e.stopPropagation()}>
+                            <div className="w-[50%] bg-base-100 h-[80vh] mt-10  rounded-xl p-5" onClick={(e) => e.stopPropagation()}>
                                 <div className='mb-5'>
                                     <h1 className="text-3xl font-bold text-slate-900 mb-2 leading-tight text-start  " >
-                                        Bullet points about what you did as a <br /> <span className="text-accent">{selectedDegree}</span>,
+                                        Bullet points about what you did as a <br /> <span className="text-accent">{selectedRole}</span>,
                                     </h1>
                                 </div>
 
@@ -332,10 +304,19 @@ const Education = ({ data }) => {
                                                         e.stopPropagation();
                                                         setpoints((prev) => {
                                                             if (prev.length == 10) {
-                                                                alert("You can only add 10 bullet points");
+                                                                addToast({
+                                                                    type: "error",
+                                                                    title: "Error",
+                                                                    message: "You can only add 10 bullet points",
+                                                                });
                                                                 return prev;
                                                             }
                                                             if (prev.includes(bullet.bullet)) {
+                                                                addToast({
+                                                                    type: "error",
+                                                                    title: "Error",
+                                                                    message: "You can only add 10 bullet points",
+                                                                });
                                                                 return prev;
                                                             }
 
@@ -394,23 +375,19 @@ const Education = ({ data }) => {
                                     ))}
                                 </div>
                                 <button className='bg-secondary w-full text-center mt-5 rounded-xl text-base-100 py-3 px-5 font-bold ' onClick={() => {
-                                    setEducation(prev =>
-                                        prev.map((edu, i) =>
-                                            i === selectedEducationIndex
-                                                ? {
-                                                    ...edu,
-                                                    bullets: [...new Set([...(edu.bullets || []), ...points])]
-                                                }
-                                                : edu
+                                    setExperiences(prev =>
+                                        prev.map((exp, i) =>
+                                            i === selectedExpIndex
+                                                ? { ...exp, bullets: [...new Set([...exp.bullets, ...points])] }
+                                                : exp
                                         )
                                     );
                                     setAiModalOpen(false);
                                     setpoints([]);
-                                    setSelectedEndData("");
-                                    setSelectedDegree("");
-                                    setSelectedInstitution("");
-                                    setSelectedField("");
-                                    setSelectedEducationIndex(null);
+                                    setSelectedRole("");
+                                    setSelectedCompany("");
+                                    setSelectedEmploymentType("");
+                                    setSelectedExpIndex(null);
 
                                 }}>Finalise Your Points</button>
                             </div>
@@ -420,122 +397,61 @@ const Education = ({ data }) => {
                     </div>}
                     {/* ── LEFT: form ── */}
                     <div className="p-6 md:p-10 border border-slate-700 ">
-                        <div className="mb-7 ">
-                            <h1 className="text-3xl md:text-4xl font-black tracking-tight text-slate-900 mb-2 leading-tight">
-                                Tell us about your {" "}
-                                <span className="text-accent">education</span>.
-                            </h1>
-                            <p className="text-sm text-slate-500 leading-relaxed max-w-xl">
-                                Include any education, training, or programs—even if unfinished—to highlight your progress and goals.
-
-                            </p>
-                        </div>
-                        {education.map((form, index) => (
+                        <Header index={1} />
+                        {experiences.map((form, index) => (
                             <div key={index} className="bg-base-300 rounded-3xl shadow-inner p-7 mb-6">
                                 <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-lg font-bold text-slate-700">Educationn Feild #{index + 1}</h3>
+                                    <h3 className="text-lg font-bold text-slate-700">Experience #{index + 1}</h3>
                                     <button
                                         onClick={() => {
-                                            const newExperiences = [...education];
+                                            const newExperiences = [...experiences];
                                             newExperiences.splice(index, 1);
-                                            setEducation(newExperiences);
+                                            setExperiences(newExperiences);
                                         }}
                                         className="text-accent hover:text-secondary transition-colors cursor-pointer"
                                     >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width={40} height={40} viewBox="0 0 24 24">
-                                            <path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2zM18 4h-2.5l-.71-.71c-.18-.18-.44-.29-.7-.29H9.91c-.26 0-.52.11-.7.29L8.5 4H6c-.55 0-1 .45-1 1s.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1"></path>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24">
+                                            <path fill="#884f06" d="M3 6.524c0-.395.327-.714.73-.714h4.788c.006-.842.098-1.995.932-2.793A3.68 3.68 0 0 1 12 2a3.68 3.68 0 0 1 2.55 1.017c.834.798.926 1.951.932 2.793h4.788c.403 0 .73.32.73.714a.72.72 0 0 1-.73.714H3.73A.72.72 0 0 1 3 6.524M11.607 22h.787c2.707 0 4.06 0 4.94-.863s.971-2.28 1.151-5.111l.26-4.08c.098-1.537.146-2.306-.295-2.792c-.442-.487-1.187-.487-2.679-.487H8.23c-1.491 0-2.237 0-2.679.487c-.441.486-.392 1.255-.295 2.791l.26 4.08c.18 2.833.27 4.249 1.15 5.112S8.9 22 11.607 22"></path>
                                         </svg>
                                     </button>
                                 </div>
 
                                 <div className="flex items-start gap-5 mb-6">
                                     <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                                        <InputField label="Institute Name" id="institution" value={form.institution} required={true}
-                                            placeholder="National Institute of Technology Jalandhar "
+                                        <InputField label="Role" id="role" value={form.role} required={true}
+                                            placeholder="Frontend Developer "
                                             onChange={(id, value) => handleChange2(index, id, value)}
                                         />
 
-                                        <InputField label="Institute Location" id="location" value={form.location} required={true}
-                                            placeholder="Jalandhar,India"
+                                        <InputField label="Company" id="company" value={form.company} required={true}
+                                            placeholder="Google"
                                             onChange={(id, value) => handleChange2(index, id, value)}
                                         />
                                     </div>
                                 </div>
-                                <div className='flex items-center justify-center gap-3'>
-                                    <div className='mb-2'>
-                                        <label className="text-sm font-medium text-slate-700 mb-2 block">
-                                            Degree
-                                        </label>
-                                        <select
-                                            className="input input-bordered border border-slate-900 text-black rounded-xl bg-base-200 w-full px-2 py-1"
-                                            value={form.degree}
-                                            required={true}
-                                            onChange={(e) =>
-                                                handleChange2(index, "degree", e.target.value)
-                                            }
-                                        >
-                                            <option value="">Select Degree</option>
-                                            <optgroup label="School Education">
-                                                <option>High School Diploma</option>
-                                                <option>Secondary School Certificate (SSC)</option>
-                                                <option>Higher Secondary Certificate (HSC)</option>
-                                                <option>Intermediate</option>
-                                            </optgroup>
-
-                                            <optgroup label="Diploma & Certifications">
-                                                <option>Diploma</option>
-                                                <option>Associate Degree</option>
-                                                <option>Postgraduate Diploma</option>
-                                                <option>Certification</option>
-                                                <option>Professional Certification</option>
-                                                <option>Vocational Training</option>
-                                            </optgroup>
-
-                                            <optgroup label="Bachelor's Degrees">
-                                                <option>Bachelor of Arts (BA)</option>
-                                                <option>Bachelor of Science (BSc)</option>
-                                                <option>Bachelor of Commerce (BCom)</option>
-                                                <option>Bachelor of Technology (BTech)</option>
-                                                <option>Bachelor of Engineering (BE)</option>
-                                                <option>Bachelor of Computer Applications (BCA)</option>
-                                                <option>Bachelor of Business Administration (BBA)</option>
-                                                <option>Bachelor of Medicine, Bachelor of Surgery (MBBS)</option>
-                                                <option>Bachelor of Laws (LLB)</option>
-                                            </optgroup>
-
-                                            <optgroup label="Master's Degrees">
-                                                <option>Master of Arts (MA)</option>
-                                                <option>Master of Science (MSc)</option>
-                                                <option>Master of Commerce (MCom)</option>
-                                                <option>Master of Technology (MTech)</option>
-                                                <option>Master of Engineering (ME)</option>
-                                                <option>Master of Computer Applications (MCA)</option>
-                                                <option>Master of Business Administration (MBA)</option>
-                                                <option>Master of Laws (LLM)</option>
-                                            </optgroup>
-
-                                            <optgroup label="Doctorate">
-                                                <option>Doctor of Philosophy (PhD)</option>
-                                                <option>Doctorate</option>
-                                            </optgroup>
-
-                                            <optgroup label="Other">
-                                                <option>Other</option>
-                                            </optgroup>
-                                        </select>
-                                    </div>
-                                    <InputField label="Field of Study" id="field" value={form.field}
-                                        placeholder="Computer Science and Engineering"
-                                        onChange={(id, value) => handleChange2(index, id, value)}
-                                    />
-                                </div>
+                                <label className="text-sm font-medium text-slate-700 mb-2 block">
+                                    Type of Employment
+                                </label>
+                                <select
+                                    className="input input-bordered border border-slate-900 text-black rounded-xl bg-base-200 w-full px-2 py-1"
+                                    value={form.employmentType}
+                                    required={true}
+                                    onChange={(e) =>
+                                        handleChange2(index, "employmentType", e.target.value)
+                                    }
+                                >
+                                    <option value="">Select Type</option>
+                                    <option>Internship</option>
+                                    <option>Full-time</option>
+                                    <option>Freelance</option>
+                                </select>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-
-                                    <InputField label="CGPA/Percentage" id="cgpa" value={form.cgpa}
-                                        placeholder="8.7/10 or 92%"
+                                    <InputField label="Location" id="location" value={form.location}
+                                        placeholder="New York"
                                         onChange={(id, value) => handleChange2(index, id, value)}
                                     />
+
                                     <InputField type="month" label="Start Date" id="startDate" value={form.startDate}
 
                                         onChange={(id, value) => handleChange2(index, id, value)} />
@@ -543,8 +459,23 @@ const Education = ({ data }) => {
 
                                         onChange={(id, value) => handleChange2(index, id, value)} />
 
+                                    <label className="flex items-center gap-2">
+                                        <input
+                                            type="checkbox"
+                                            checked={form.currentlyWorking}
+                                            onChange={(e) => {
+                                                const updated = [...experiences];
+                                                updated[index].currentlyWorking = e.target.checked;
 
+                                                if (e.target.checked) {
+                                                    updated[index].endDate = "";
+                                                }
 
+                                                setExperiences(updated);
+                                            }}
+                                        />
+                                        Currently working here
+                                    </label>
                                 </div>
 
 
@@ -552,17 +483,16 @@ const Education = ({ data }) => {
                                 <button className='bg-secondary border border-secondary hover:bg-base-100 text-base-100 hover:text-secondary px-3 py-2 rounded-xl mt-3 flex justify-center items-center gap-2 hover:scale-105 transition-all duration-300 ease-in-out group' onClick={() => {
 
 
-                                    if (education[index].degree === '' || education[index].institution === '' || education[index].field === '' || education[index].cgpa === '') {
+                                    if (experiences[index].role === '' || experiences[index].company === '' || experiences[index].employmentType === '') {
 
                                         addToast({
                                             type: "error",
                                             title: "Error",
-                                            message: "Please fill Degree, Institution, Field and the CGPA/Percentage  "
+                                            message: "Please fill Role, Company and the Employment Type"
                                         });
                                         return;
                                     }
-
-                                    setSelectedEndData(""); setAiModalOpen(true); setSelectedDegree(education[index].degree); setSelectedInstitution(education[index].institution); setSelectedField(education[index].field); setSelectedCgpa(education[index].cgpa); setSelectedEducationIndex(index); setSelectedEndData(education[index].endDate);
+                                    setAiModalOpen(true); setSelectedRole(experiences[index].role); setSelectedCompany(experiences[index].company); setSelectedEmploymentType(experiences[index].employmentType); setSelectedExpIndex(index);
                                 }}>
 
                                     <div className='flex justify-center items-center gap-2 bg-base-100 p-2 rounded-xl group-hover:bg-secondary group-hover:text-base-100 transition-all duration-300 ease-in-out'>
@@ -571,19 +501,19 @@ const Education = ({ data }) => {
                                             <path fill="currentColor" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
                                         </svg>
                                     </div>
-                                    Generate Bullets for Education</button>
+                                    Generate Bullets for Experience</button>
 
 
                                 <div className='bg-white w-[100%] mt-10 mx-auto rounded-xl border-2 p-5' onClick={(e) => { e.stopPropagation() }}>
                                     <div className="overflow-y-auto h-fit">
                                         <div className='mb-5 flex items-center justify-between'>
                                             <h1 className="text-2xl font-bold text-slate-900 mb-2 leading-tight text-start  " >
-                                                Points Added : {education[index].bullets?.length}/10 <br />
+                                                Points Added : {experiences[index].bullets?.length}/10 <br />
                                             </h1>
 
                                             <div className='bg-primary p-3 rounded-full text-base-100 flex justify-center items-center cursor-pointer' onClick={() => {
 
-                                                if (education[index].bullets?.length === 10) {
+                                                if (experiences[index].bullets?.length >= 10) {
                                                     addToast({
                                                         type: "error",
                                                         title: "Error",
@@ -599,10 +529,10 @@ const Education = ({ data }) => {
                                         </div>
 
                                         {activeInputIndex === index && (
-                                            <div className="mt-3 animate-in fade-in slide-in-from-top-2 duration-300 ml-5 mb-10 flex w-[95%] gap-2">
+                                            <div className="mt-3 animate-in fade-in slide-in-from-top-2 duration-300 ml-5 mb-10 flex items-end gap-3 w-[95%]">
                                                 <div className='flex flex-col flex-1'>
                                                     <label className="block text-[15px] font-bold uppercase tracking-wider text-gray-700 mb-1 ml-1">
-                                                        Add Bullet Point
+                                                        {editingBulletIndex !== null ? "Edit Bullet Point" : "Add Bullet Point"}
                                                     </label>
 
                                                     <input
@@ -611,11 +541,11 @@ const Education = ({ data }) => {
                                                         value={bulletInput}
                                                         placeholder="e.g. Led a team of 5 developers..."
                                                         onChange={(e) => setBulletInput(e.target.value)}
-                                                        // Add Enter Key Support
+                                                        // Handle Enter key
                                                         onKeyDown={(e) => {
                                                             if (e.key === 'Enter') {
                                                                 e.preventDefault();
-                                                                handleAddBullet();
+
                                                             }
                                                         }}
                                                         className="w-full rounded-xl border border-slate-900 bg-white px-4 py-2.5 text-sm 
@@ -623,7 +553,6 @@ const Education = ({ data }) => {
                        focus:border-secondary focus:ring-2 focus:ring-secondary focus:outline-none"
                                                     />
                                                 </div>
-
 
                                                 <button
                                                     type="button"
@@ -633,7 +562,7 @@ const Education = ({ data }) => {
                                                     onClick={() => {
                                                         if (!bulletInput.trim()) return;
 
-                                                        setEducation(prev =>
+                                                        setExperiences(prev =>
                                                             prev.map((exp, i) => {
                                                                 if (i !== index) return exp;
 
@@ -661,20 +590,24 @@ const Education = ({ data }) => {
                                                 </button>
                                             </div>
                                         )}
-                                        {(activeInputIndex !== index && education[index].bullets?.length === 0) ? (<div className='flex flex-col justify-center items-center  w-[80%] mx-auto gap-2'>
+                                        {(activeInputIndex !== index && experiences[index].bullets?.length === 0) ? (<div className='flex flex-col justify-center items-center  w-[80%] mx-auto gap-2'>
 
                                             <h1 className="text-xl font-medium text-slate-900 mb-2 leading-tight text-center ">No bullet points yet. Don’t waste time thinking — let AI craft powerful, recruiter-ready points for you in seconds.</h1>
 
-                                        </div>) : education[index].bullets?.map((point, bulletIndex) => (
+                                        </div>) : experiences[index].bullets?.map((point, bulletIndex) => (
                                             <div key={bulletIndex + point} className='bg-base-300 p-3 rounded-2xl flex mb-3 cursor-pointer hover:border hover:border-secondary transition-all ' >
                                                 <div className="flex gap-5 w-full items-center">
                                                     <div className='flex gap-2'>
+
                                                         <div className='rounded-full border-2 border-secondary p-2 h-fit flex justify-center items-center bg-base-100'
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
-                                                                setActiveInputIndex(index);
 
-                                                                setEducation(prev =>
+                                                                setEditingBulletIndex(null);
+                                                                setBulletInput("");
+                                                                setActiveInputIndex(null);
+
+                                                                setExperiences(prev =>
                                                                     prev.map((exp, i) =>
                                                                         i === index
                                                                             ? {
@@ -690,6 +623,11 @@ const Education = ({ data }) => {
                                                                 <path fill="#884f06" d="M16 9v10H8V9zm-1.5-6h-5l-1 1H5v2h14V4h-3.5zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2z"></path>
                                                             </svg>
                                                         </div>
+
+
+
+
+
                                                         <div className='rounded-full border-2 border-secondary p-2 h-fit flex justify-center items-center bg-base-100'
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
@@ -703,6 +641,8 @@ const Education = ({ data }) => {
                                                                 <path fill="currentColor" d="M32.206 6.025a6.907 6.907 0 1 1 9.768 9.767L39.77 18L30 8.23zM28.233 10L8.038 30.197a6 6 0 0 0-1.572 2.758L4.039 42.44a1.25 1.25 0 0 0 1.52 1.52l9.487-2.424a6 6 0 0 0 2.76-1.572l20.195-20.198z"></path>
                                                             </svg>
                                                         </div>
+
+
                                                         <div className='rounded-full border-2 border-secondary p-2 h-fit flex justify-center items-center bg-base-100'
                                                             onClick={async (e) => {
                                                                 e.stopPropagation();
@@ -722,7 +662,7 @@ const Education = ({ data }) => {
                                                                     return;
                                                                 }
 
-                                                                setEducation(prev =>
+                                                                setExperiences(prev =>
                                                                     prev.map((exp, i) =>
                                                                         i === index
                                                                             ? {
@@ -752,6 +692,7 @@ const Education = ({ data }) => {
                                                                 <path fill="#884f06" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
                                                             </svg>
                                                         </div>
+
                                                     </div>
                                                     <div className='bg-base-100 p-4 rounded-2xl w-full'>{point}</div>
                                                 </div>
@@ -768,14 +709,14 @@ const Education = ({ data }) => {
                         ))}
                         <div className="flex justify-end mt-10">
                             <button
-                                onClick={addEducation}
+                                onClick={addExperience}
                                 className="px-6 py-2 rounded-full bg-primary text-white flex items-center gap-2"
                             ><svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
                                     <g fill="none">
                                         <path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"></path>
                                         <path fill="#ffffff" d="M10.5 20a1.5 1.5 0 0 0 3 0v-6.5H20a1.5 1.5 0 0 0 0-3h-6.5V4a1.5 1.5 0 0 0-3 0v6.5H4a1.5 1.5 0 0 0 0 3h6.5z"></path>
                                     </g>
-                                </svg> Add Education</button>
+                                </svg> Add Experience</button>
                         </div>
                     </div>
 
@@ -899,14 +840,14 @@ py-1
 
                     <button
                         onClick={() => {
-                            Navigate("/app/build-resume/intro-skill-page", {
+                            Navigate("/app/build-resume/intro-edu-page", {
                                 state: { resumeData }
                             });
                         }}
                         className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl bg-base-300 text-secondary border-2 border-secondary
                        hover:bg-secondary hover:text-secondary-content  hover:border-base-100 active:scale-95 transition-all duration-200 "
                     >
-                        Next: Skills
+                        Next: Education
                         <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
                             <path fill="currentColor" d="M2 5v14c0 .86 1.012 1.318 1.659.753l8-7a1 1 0 0 0 0-1.506l-8-7C3.012 3.682 2 4.141 2 5m11 0v14c0 .86 1.012 1.318 1.659.753l8-7a1 1 0 0 0 0-1.506l-8-7C14.012 3.682 13 4.141 13 5"></path>
                         </svg>
@@ -917,4 +858,4 @@ py-1
     )
 }
 
-export default Education;
+export default Experience;

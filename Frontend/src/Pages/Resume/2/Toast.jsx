@@ -43,28 +43,17 @@ const Toast = ({ type = "success", title, message, onClose }) => {
             <div className={`absolute -left-4 -bottom-4 h-24 w-24 rounded-full blur-3xl opacity-40 ${theme.blob}`} />
 
             {/* Icon Container */}
-            <div className={`relative z-10 flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full  bg-base-300 ${theme.iconBg} shadow-inner`}>
+            <div className={`relative z-10 flex h-[50px] w-[50px] flex-shrink-0 items-center justify-center rounded-full  bg-base-300 ${theme.iconBg} shadow-inner `}>
                 {isSuccess ? (
                     <svg className={`h-6 w-6 ${theme.iconText}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
                 ) : (
-                    <svg xmlns="http://www.w3.org/2000/svg" width={50} height={50} viewBox="0 0 24 24">
-                        <path fill="#ee5252" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,20a9,9,0,1,1,9-9A9,9,0,0,1,12,21Z" transform="matrix(0 0 0 0 12 12)">
-                            <animateTransform id="SVGBGG9rcpE" attributeName="transform" begin="0;SVGryjChH5y.end" calcMode="spline" dur="1.2s" keySplines=".52,.6,.25,.99" type="translate" values="12 12;0 0"></animateTransform>
-                            <animateTransform additive="sum" attributeName="transform" begin="0;SVGryjChH5y.end" calcMode="spline" dur="1.2s" keySplines=".52,.6,.25,.99" type="scale" values="0;1"></animateTransform>
-                            <animate attributeName="opacity" begin="0;SVGryjChH5y.end" calcMode="spline" dur="1.2s" keySplines=".52,.6,.25,.99" values="1;0"></animate>
-                        </path>
-                        <path fill="#ee5252" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,20a9,9,0,1,1,9-9A9,9,0,0,1,12,21Z" transform="matrix(0 0 0 0 12 12)">
-                            <animateTransform id="SVG0KQtjdtU" attributeName="transform" begin="SVGBGG9rcpE.begin+0.2s" calcMode="spline" dur="1.2s" keySplines=".52,.6,.25,.99" type="translate" values="12 12;0 0"></animateTransform>
-                            <animateTransform additive="sum" attributeName="transform" begin="SVGBGG9rcpE.begin+0.2s" calcMode="spline" dur="1.2s" keySplines=".52,.6,.25,.99" type="scale" values="0;1"></animateTransform>
-                            <animate attributeName="opacity" begin="SVGBGG9rcpE.begin+0.2s" calcMode="spline" dur="1.2s" keySplines=".52,.6,.25,.99" values="1;0"></animate>
-                        </path>
-                        <path fill="#ee5252" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,20a9,9,0,1,1,9-9A9,9,0,0,1,12,21Z" transform="matrix(0 0 0 0 12 12)">
-                            <animateTransform id="SVGryjChH5y" attributeName="transform" begin="SVGBGG9rcpE.begin+0.4s" calcMode="spline" dur="1.2s" keySplines=".52,.6,.25,.99" type="translate" values="12 12;0 0"></animateTransform>
-                            <animateTransform additive="sum" attributeName="transform" begin="SVGBGG9rcpE.begin+0.4s" calcMode="spline" dur="1.2s" keySplines=".52,.6,.25,.99" type="scale" values="0;1"></animateTransform>
-                            <animate attributeName="opacity" begin="SVGBGG9rcpE.begin+0.4s" calcMode="spline" dur="1.2s" keySplines=".52,.6,.25,.99" values="1;0"></animate>
-                        </path>
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" className="mb-2" viewBox="0 0 24 24">
+                        <path fill="#ee5252" d="M4 16v5.25h16V16a8 8 0 1 0-16 0" opacity={0.5}></path>
+                        <path fill="#ee5252" d="M12.75 2a.75.75 0 0 0-1.5 0v3a.75.75 0 0 0 1.5 0zm8.78 3.47a.75.75 0 0 1 0 1.06l-1.5 1.5a.75.75 0 1 1-1.06-1.06l1.5-1.5a.75.75 0 0 1 1.06 0m-18 0a.75.75 0 0 0-1.06 1.06l1.5 1.5a.75.75 0 0 0 1.06-1.06zm11.042 5.335a.75.75 0 0 0-.563 1.39c.814.33 1.466.981 1.795 1.796a.75.75 0 1 0 1.39-.563a4.76 4.76 0 0 0-2.622-2.623M12.75 18.8a1.5 1.5 0 1 0-1.5 0v2.45h1.5zM4 21.25H2a.75.75 0 0 0 0 1.5h20a.75.75 0 0 0 0-1.5z"></path>
                     </svg>
                 )}
             </div>

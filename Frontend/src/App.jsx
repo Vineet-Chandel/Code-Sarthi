@@ -43,7 +43,7 @@ import Meeting from "./Pages/Meeting";
 import Explore from "./Pages/Explore";
 import Resume from "./Pages/Resume/1/Resume";
 import Templates from "./Pages/Resume/2/Templates";
-import HeaderContent from "./Pages/Resume/2/StartHeader"
+import HeaderContent from "./Pages/Resume/2/01_HEADER/StartHeader"
 import HowResume from "./Pages/Resume/4/HowResume";
 import HowCv from "./Pages/Resume/4/HowCv";
 import HowCoverLetter from "./Pages/Resume/4/HowCoverLetter";
@@ -68,15 +68,16 @@ import RequestedUser from "./personalPages/RequestedUser";
 import ReceivedRequests from "./personalPages/ReceivedRequests";
 import SmartSchedulerLakshya from "./Main/PagesMain/Sub-Category/Blog-Category/SmartSchedulerLakshya";
 import PrivacyPolicyHub from "./Main/PagesMain/Sub-Category/Safety-Category/Hub/PrivacyPolicyHub";
-import IntroEXP from "./Pages/Resume/2/IntroEXP";
-import IntroSummary from "./Pages/Resume/2/IntroProfileSummary";
-import Experience from "./Pages/Resume/2/Experinece";
-import IntroEdu from "./Pages/Resume/2/IntroEdu";
-import Education from "./Pages/Resume/2/Education";
-import IntroSkill from "./Pages/Resume/2/IntroSkills";
-import Skills from "./Pages/Resume/2/Skills";
+
+import IntroEXP from "./Pages/Resume/2/02_EXP/IntroEXP";
+import IntroSummary from "./Pages/Resume/2/05_PRSUM/IntroProfileSummary";
+import Experience from "./Pages/Resume/2/02_EXP/Experinece";
+import IntroEdu from "./Pages/Resume/2/03_EDU/IntroEdu";
+import Education from "./Pages/Resume/2/03_EDU/Education";
+import IntroSkill from "./Pages/Resume/2/04_SKILLS/IntroSkills";
+import Skills from "./Pages/Resume/2/04_SKILLS/Skills";
 import PageNotFound from "./ErrorSaver/PageNotFound";
-import Summary from "./Pages/Resume/2/ProfileSummary";
+import Summary from "./Pages/Resume/2/05_PRSUM/ProfileSummary";
 
 
 const App = () => {

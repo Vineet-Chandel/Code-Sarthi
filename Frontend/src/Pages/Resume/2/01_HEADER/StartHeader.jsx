@@ -1,8 +1,14 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import Temp1 from "../3/Temp1";
+import Temp1 from "../../3/Temp1";
 import { useLocation, useNavigate } from "react-router-dom";
-import IntroEXP from "./IntroEXP";
-
+import IntroEXP from "../02_EXP/IntroEXP";
+import PhoneInput from 'react-phone-number-input'
+import 'react-phone-number-input/style.css'
+import validator from "validator";
+import ProgressMeter from "../ProgressMeter";
+import Header from "../Header";
+import Step from "../Step";
+import { isValidPhoneNumber } from "react-phone-number-input";
 // ─── tiny hook ────────────────────────────────────────────────────────────────
 function useIntersectionObserver(options = {}) {
     const ref = useRef(null);
@@ -24,7 +30,7 @@ function useIntersectionObserver(options = {}) {
 }
 
 // ─── reusable field ───────────────────────────────────────────────────────────
-const InputField = ({ label, id, value, type = "text", placeholder, onChange }) => (
+const InputField = ({ label, id, value, type = "text", placeholder, onChange, onBlur, onFocus, emailSucess, phoneSucess }) => (
     <div className="flex flex-col gap-1 w-full group">
         <label
             htmlFor={id}
@@ -32,24 +38,101 @@ const InputField = ({ label, id, value, type = "text", placeholder, onChange }) 
         >
             {label}
         </label>
-        <input
-            id={id}
-            type={type}
-            value={value}
-            placeholder={placeholder}
-            onChange={(e) => onChange(id, e.target.value)}
-            className="w-full bg-base-200 border border-slate-900 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 outline-none
-                 focus:border-secondary focus:ring-4 focus:ring-accent focus:bg-white
-                 transition-all duration-200 font-medium placeholder:text-slate-500"
-        />
+        <div
+
+            className="
+    flex items-center gap-2 w-full
+    bg-base-200 border border-slate-900
+    rounded-xl px-3.5 py-2.5
+    text-sm text-slate-800 outline-none
+    focus-within:border-secondary
+    focus-within:ring-4
+    focus-within:ring-accent
+    focus-within:bg-white
+    transition-all duration-200
+    font-medium
+    
+">
+
+            {id === 'phone' && (
+
+                <div className='w-full flex items-center'>
+                    <PhoneInput
+                        international
+                        defaultCountry="IN"
+                        value={value}
+                        onChange={(value) => onChange(id, value)}
+                        onBlur={onBlur}
+                        onFocus={onFocus}
+                        className=" w-full bg-transparent
+        border-none outline-none
+h-full 
+        focus:ring-0 placeholder:text-slate-600"
+                    />
+                    {phoneSucess && (
+                        <div className="flex items-center justify-center ml-2">
+                            <p className="text-success text-xs  flex items-center justify-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" viewBox="0 0 24 24">
+                                    <path d="M0 0h24v24H0z" fill="none" />
+                                    <g fill="none">
+                                        <circle cx="10" cy="14" r="7" fill="currentColor" fill-opacity=".25" />
+                                        <path stroke="currentColor" stroke-width="1.2" d="m6 13l4 3l7-9" />
+                                    </g>
+                                </svg>
+
+                            </p>
+                        </div>)}
+                </div>
+            )}
+
+            {id !== 'phone' && <input
+                id={id}
+                type={type}
+                value={value}
+                placeholder={placeholder}
+                onBlur={onBlur}
+                onFocus={onFocus}
+                onChange={(e) => onChange(id, e.target.value)}
+                className="
+        w-full bg-transparent
+        border-none outline-none
+h-full 
+        focus:ring-0 placeholder:text-slate-600
+    "
+            />}
+
+            {id === 'email' && emailSucess && (
+                <div className=" w-full h-full flex items-center justify-end">
+                    <p className="text-success text-xs  flex items-center justify-start">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" viewBox="0 0 24 24">
+                            <path d="M0 0h24v24H0z" fill="none" />
+                            <g fill="none">
+                                <circle cx="10" cy="14" r="7" fill="currentColor" fill-opacity=".25" />
+                                <path stroke="currentColor" stroke-width="1.2" d="m6 13l4 3l7-9" />
+                            </g>
+                        </svg>
+
+                    </p>
+                </div>)}
+
+
+
+        </div>
     </div>
 );
 
 // ─── social link row ──────────────────────────────────────────────────────────
 const SocialField = ({ icon, id, value, placeholder, onChange }) => (
-    <div className="flex items-center gap-3 bg-base-200 border border-slate-900 rounded-xl px-3.5 py-2.5
-                  focus-within:border-violet-500 focus-within:ring-4 focus-within:ring-violet-500/10
-                  focus-within:bg-white transition-all duration-200">
+    <div className="  flex items-center gap-2 w-full
+    bg-base-200 border border-slate-900
+    rounded-xl px-3.5 py-2.5
+    text-sm text-slate-800 outline-none
+    focus-within:border-secondary
+    focus-within:ring-4
+    focus-within:ring-accent
+    focus-within:bg-white
+    transition-all duration-200
+    font-medium">
         <div className="p-2 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden border border-secondary bg-base-100 ">
             {icon}
         </div>
@@ -135,57 +218,39 @@ const StartHeader = ({ data }) => {
         fname: form.fname,
         lname: form.lname,
         phone: form.phone,
-        github: `https://${form.github}`,
-        linkedin: `https://${form.linkedin}`,
+        github: form.github,
+        linkedin: form.linkedin,
         portfolio: form.portfolio,
         email: form.email,
         summaryTitle: form.summaryTitle,
         location: form.location,
         pincode: form.pincode,
 
-        summaryBody: "",
-        degree: "",
-        major: "",
-        institution: "",
 
-        gradDate: "",
-        skills: [],
-        projects: [],
-        experience: [],
-        education: [],
-        certifications: [],
-        achievements: [],
-        languages: [],
     };
     const Navigate = useNavigate();
     const [isVisible] = useIntersectionObserver();
     const [hovered, setHovered] = useState(false);
 
+    const [emailSucess, setEmailSucess] = useState(false);
+    const [phoneSucess, setPhoneSucess] = useState(false);
 
+
+
+
+
+    const navigate = useNavigate();
     return (
         <div className="min-h-[calc(100vh-4rem)] w-screen flex items-start justify-center p-4 md:p-6 bg-base-100">
             <div className="w-full bg-base-100 rounded-3xl border border-slate-700 overflow-hidden " >
 
                 {/* ── top bar ── */}
                 <div className="flex items-center justify-between px-5 py-3.5 bg-base-200 border-b border-slate-700">
-                    <span className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full bg-base-100 text-secondary">
-                        Step 1 of 6
-                    </span>
 
-                    {/* progress dots */}
-                    <div className="flex items-center gap-1.5">
-                        {[0, 1, 2, 3, 4, 5].map((i) => (
-                            <div
-                                key={i}
-                                className={`rounded-full transition-all duration-300 ${i === 0
-                                    ? "w-2 h-2 bg-secondary"
-                                    : i === 1
-                                        ? "w-5 h-2 bg-primary"
-                                        : "w-2 h-2 bg-neutral"
-                                    }`}
-                            />
-                        ))}
-                    </div>
+                    <Step index={0} />
+
+
+                    <ProgressMeter index={0} />
 
                     <button
                         onClick={() => setSidebarOpen((p) => !p)}
@@ -195,8 +260,11 @@ const StartHeader = ({ data }) => {
                                 : "bg-base-100 text-secondary border-secondary "
                             }`}
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 16 16">
-                            <path fill="currentColor" d="M3.5 2A2.5 2.5 0 0 0 1 4.5v7A2.5 2.5 0 0 0 3.5 14h9a2.5 2.5 0 0 0 2.5-2.5v-7A2.5 2.5 0 0 0 12.5 2zM2 4.5A1.5 1.5 0 0 1 3.5 3h9A1.5 1.5 0 0 1 14 4.5v7a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 11.5zM3 5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1zm9 0H4v1h8zM8 9a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1zm4 0H9v2h3zM3.5 8a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zM3 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5"></path>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1.4em" height="1.4em" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M12 2c4.714 0 7.071 0 8.535 1.464c1.08 1.08 1.364 2.647 1.439 5.286L22 9.5H2.026v-.75c.075-2.64.358-4.205 1.438-5.286C4.93 2 7.286 2 12 2" opacity={0.5}></path>
+                            <path fill="currentColor" d="M13 6a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-3 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0M7 6a1 1 0 1 1-2 0a1 1 0 0 1 2 0"></path>
+                            <path fill="currentColor" d="M2 12c0 4.714 0 7.071 1.464 8.535c1.01 1.01 2.446 1.324 4.786 1.421L9 22V9.5H2.026l-.023.75Q2 11.066 2 12" opacity={0.7}></path>
+                            <path fill="currentColor" d="M22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22c-.819 0-2.316 0-3-.008V9.5h13l-.003.75Q22 11.066 22 12"></path>
                         </svg>
                         {sidebarOpen ? "Hide" : "Preview"}
                     </button>
@@ -207,15 +275,7 @@ const StartHeader = ({ data }) => {
 
                     {/* ── LEFT: form ── */}
                     <div className="p-6 md:p-10 border border-slate-700">
-                        <div className="mb-7">
-                            <h1 className="text-3xl md:text-4xl font-black tracking-tight text-slate-900 mb-2 leading-tight">
-                                Let's start with your{" "}
-                                <span className="text-accent">header</span>.
-                            </h1>
-                            <p className="text-sm text-slate-500 leading-relaxed max-w-xl">
-                                The first thing recruiters see. Keep your contact details sharp and up-to-date.
-                            </p>
-                        </div>
+                        <Header index={0} />
 
                         {/* avatar + name row */}
                         <div className="flex items-start gap-5 mb-6">
@@ -225,22 +285,28 @@ const StartHeader = ({ data }) => {
                                 onMouseEnter={() => setHoveringImg(true)}
                                 onMouseLeave={() => setHoveringImg(false)}
                             >
-                                <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl border-2 border-dashed border-slate-300
-                                hover:border-violet-400 overflow-hidden relative transition-colors duration-200">
-                                    <img
-                                        src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aman"
-                                        className="w-full h-full object-cover"
-                                        alt="Profile"
-                                    />
+                                <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl border-2 border-dashed border-slate-600
+                                 overflow-hidden relative transition-colors duration-200">
+                                    <svg className="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                        <path d="M0 0h24v24H0z" fill="none" />
+                                        <circle cx="12" cy="6" r="4" fill="currentColor" />
+                                        <path fill="currentColor" d="M20 17.5c0 2.485 0 4.5-8 4.5s-8-2.015-8-4.5S7.582 13 12 13s8 2.015 8 4.5" />
+                                    </svg>
+
+
+
+
                                     <div
                                         className={`absolute inset-0 bg-black/40 backdrop-blur-[2px] flex flex-col items-center justify-center
-                                text-white transition-opacity duration-200 ${hoveringImg ? "opacity-100" : "opacity-0"}`}
+                                text-white transition-opacity duration-200 rounded-2xl ${hoveringImg ? "opacity-100" : "opacity-0"}`}
                                     >
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
-                                            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                            <path d="M0 0h24v24H0z" fill="none" />
+                                            <path fill="currentColor" fill-rule="evenodd" d="M12 15.75a.75.75 0 0 0 .75-.75V4.027l1.68 1.961a.75.75 0 1 0 1.14-.976l-3-3.5a.75.75 0 0 0-1.14 0l-3 3.5a.75.75 0 1 0 1.14.976l1.68-1.96V15c0 .414.336.75.75.75" clip-rule="evenodd" />
+                                            <path fill="currentColor" d="M16 9c-.702 0-1.053 0-1.306.169a1 1 0 0 0-.275.275c-.169.253-.169.604-.169 1.306V15a2.25 2.25 0 1 1-4.5 0v-4.25c0-.702 0-1.053-.169-1.306a1 1 0 0 0-.275-.275C9.053 9 8.702 9 8 9c-2.828 0-4.243 0-5.121.879C2 10.757 2 12.17 2 14.999v1c0 2.83 0 4.243.879 5.122C3.757 22 5.172 22 8 22h8c2.828 0 4.243 0 5.121-.879S22 18.828 22 16v-1c0-2.829 0-4.243-.879-5.121C20.243 9 18.828 9 16 9" />
                                         </svg>
-                                        <span className="text-[9px] font-bold uppercase mt-1 tracking-wider">change</span>
+
+                                        <span className="text-[9px] font-bold uppercase mt-1 tracking-wider">Upload</span>
                                     </div>
                                 </div>
                                 <div className="absolute -bottom-1.5 -right-1.5 w-6 h-6 bg-violet-600 rounded-lg border-2 border-white
@@ -261,8 +327,27 @@ const StartHeader = ({ data }) => {
 
                         {/* contact fields */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                            <InputField className="text-black" label="Email Address" id="email" type="email" value={form.email} placeholder="you@example.com" onChange={handleChange} />
-                            <InputField className="text-black" label="Phone Number" id="phone" value={form.phone} placeholder="+91 ..." onChange={handleChange} />
+                            <InputField className="text-black" label="Email Address" id="email" type="email" value={form.email} placeholder="you@example.com" onChange={(id, value) => {
+                                handleChange(id, value);
+
+                            }}
+                                onBlur={() => {
+                                    if (form.email && !validator.isEmail(form.email)) {
+                                        setEmailSucess(false);
+                                    } else if (form.email === "" || form.email === null || form.email === undefined) {
+                                        setEmailSucess(false);
+                                    } else {
+                                        setEmailSucess(true);
+                                    }
+                                }} emailSucess={emailSucess} />
+
+                            <InputField className="text-black" label="Phone Number" id="phone" value={form.phone} placeholder="+91 93892 XXXXX" onChange={handleChange}
+                                onBlur={() => {
+                                    const isValid = isValidPhoneNumber(form.phone || "");
+
+                                    setPhoneSucess(isValid);
+                                }} phoneSucess={phoneSucess}
+                            />
                         </div>
 
                         <div className="mb-4">
@@ -275,7 +360,7 @@ const StartHeader = ({ data }) => {
                         </div>
 
                         {/* social links */}
-                        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-600 mb-3">
                             Online presence
                         </p>
                         <div className="flex flex-col gap-2.5">
@@ -512,7 +597,7 @@ py-1
                         </svg>
                     </button>
                 </div>
-            </div>
+            </div >
         </div >
     );
 };

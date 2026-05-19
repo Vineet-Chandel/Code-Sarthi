@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import Temp1 from "../3/Temp1";
+import Temp1 from "../../3/Temp1";
 import axios from "axios";
-import BASE_URL from '../../auth/baseURL';
+import BASE_URL from '../../../auth/baseURL';
 
-import Toast from './Toast';
+import Toast from '../Toast';
 import { AnimatePresence } from "framer-motion";
+import ProgressMeter from '../ProgressMeter';
+import Header from '../Header';
+import Step from '../Step';
 
 
 
@@ -233,24 +236,9 @@ const Experience = ({ data }) => {
 
                 {/* ── top bar ── */}
                 <div className="flex items-center justify-between px-5 py-3.5 bg-base-200 border-b border-slate-700">
-                    <span className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full bg-base-100 text-secondary">
-                        Step 2 of 6
-                    </span>
+                    <Step index={4} />
 
-                    {/* progress dots */}
-                    <div className="flex items-center gap-1.5">
-                        {[0, 1, 2, 3, 4, 5].map((i) => (
-                            <div
-                                key={i}
-                                className={`rounded-full transition-all duration-300 ${i === 0 || i === 1
-                                    ? "w-2 h-2 bg-primary"
-                                    : i === 2
-                                        ? "w-5 h-2 bg-secondary"
-                                        : "w-2 h-2 bg-neutral"
-                                    }`}
-                            />
-                        ))}
-                    </div>
+                    <ProgressMeter index={4} />
 
                     <button
                         onClick={() => setSidebarOpen((p) => !p)}
@@ -260,8 +248,11 @@ const Experience = ({ data }) => {
                                 : "bg-base-100 text-secondary border-secondary "
                             }`}
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 16 16">
-                            <path fill="currentColor" d="M3.5 2A2.5 2.5 0 0 0 1 4.5v7A2.5 2.5 0 0 0 3.5 14h9a2.5 2.5 0 0 0 2.5-2.5v-7A2.5 2.5 0 0 0 12.5 2zM2 4.5A1.5 1.5 0 0 1 3.5 3h9A1.5 1.5 0 0 1 14 4.5v7a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 11.5zM3 5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1zm9 0H4v1h8zM8 9a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1zm4 0H9v2h3zM3.5 8a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zM3 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5"></path>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1.4em" height="1.4em" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M12 2c4.714 0 7.071 0 8.535 1.464c1.08 1.08 1.364 2.647 1.439 5.286L22 9.5H2.026v-.75c.075-2.64.358-4.205 1.438-5.286C4.93 2 7.286 2 12 2" opacity={0.5}></path>
+                            <path fill="currentColor" d="M13 6a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-3 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0M7 6a1 1 0 1 1-2 0a1 1 0 0 1 2 0"></path>
+                            <path fill="currentColor" d="M2 12c0 4.714 0 7.071 1.464 8.535c1.01 1.01 2.446 1.324 4.786 1.421L9 22V9.5H2.026l-.023.75Q2 11.066 2 12" opacity={0.7}></path>
+                            <path fill="currentColor" d="M22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22c-.819 0-2.316 0-3-.008V9.5h13l-.003.75Q22 11.066 22 12"></path>
                         </svg>
                         {sidebarOpen ? "Hide" : "Preview"}
                     </button>
@@ -272,15 +263,7 @@ const Experience = ({ data }) => {
 
                     {/* ── LEFT: form ── */}
                     <div className="p-6 md:p-10 border border-slate-700 ">
-                        <div className="mb-7 ">
-                            <h1 className="text-3xl md:text-4xl font-black tracking-tight text-slate-900 mb-2 leading-tight">
-                                Craft your  {" "}
-                                <span className="text-accent">summary</span>.
-                            </h1>
-                            <p className="text-sm text-slate-500 leading-relaxed max-w-xl">
-                                Start with a prewritten option or write your own. Edit as needed, then use <b>Enhance with AI</b> to polish it.
-                            </p>
-                        </div>
+                        <Header index={4} />
 
                         <div className="bg-base-300 rounded-3xl shadow-inner p-7 mb-6 w-full">
                             <div className="flex items-center justify-between mb-4">
