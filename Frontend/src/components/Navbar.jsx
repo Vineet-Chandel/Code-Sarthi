@@ -155,13 +155,13 @@ const NavBar = () => {
                             {/* Sidebar */}
                             <div
                                 ref={sidebarRef}
-                                className="absolute left-0 top-0 h-full w-[85%] sm:w-72 lg:w-80 bg-white/80 backdrop-blur-lg  z-50 rounded-r-xl"
+                                className="absolute left-0 top-0 h-full w-[85%] sm:w-72 lg:w-80 bg-base-100    z-50 rounded-r-3xl border border-secondary"
                                 role="dialog"
                                 aria-modal="true"
                                 aria-label="Navigation menu"
                             >
                                 {/* Sidebar header */}
-                                <div className="flex justify-between items-center p-3 border-b mb-5 pb-5 relative top-3 border-gray-200">
+                                <div className="flex justify-between items-center p-3 border-b mb-5 pb-5 relative top-3 border-secondary">
                                     <div className="top flex gap-3">
                                         <div className="flex items-center gap-2">
 
@@ -181,25 +181,23 @@ const NavBar = () => {
                                         onClick={closeSidebar}
                                         aria-label="Close navigation menu"
                                     >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 40 40">
-                                            <g fill="none">
-                                                <g stroke="#000" strokeLinecap="round" strokeLinejoin="round" clipPath="url(#SVGw9scfcdR)" strokeWidth="1">
-                                                    <path fill="#000" d="M19.02.5C8.8.5.515 8.784.515 19.003c0 10.547 9.918 20.465 20.465 20.465c10.219 0 18.503-8.285 18.503-18.504C39.484 10.418 29.566.5 19.019.5z" />
-                                                    <path fill="#00fbff" d="M19.003 37.506c10.219 0 18.503-8.284 18.503-18.503S29.222.5 19.003.5S.5 8.784.5 19.003s8.284 18.503 18.503 18.503" />
-                                                    <path fill="#fff" d="M28.568 24.136c-.152-.73-2.192-2.988-4.251-5.133c2.059-2.144 4.099-4.403 4.25-5.133c.437-.845-.597-2.002-1.508-2.923c-.91-.92-2.078-1.898-2.923-1.509c-.73.152-2.988 2.192-5.133 4.251C16.859 11.63 14.6 9.59 13.87 9.44c-.845-.437-2.002.597-2.913 1.508s-1.955 2.078-1.519 2.923c.152.73 2.192 2.989 4.251 5.133c-2.059 2.145-4.099 4.403-4.25 5.133c-.437.845.597 2.003 1.508 2.923s2.078 1.945 2.923 1.509c.73-.152 2.989-2.192 5.133-4.251c2.145 2.059 4.403 4.099 5.133 4.25c.845.437 2.003-.597 2.923-1.508c.92-.91 1.945-2.079 1.509-2.924" />
-                                                </g>
-                                                <defs>
-                                                    <clipPath id="SVGw9scfcdR">
-                                                        <path fill="#fff" d="M0 0h40v40H0z" />
-                                                    </clipPath>
-                                                </defs>
-                                            </g>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="3em" viewBox="0 0 24 24">
+                                            <defs>
+                                                <mask id="SVGi3NDrbmQ">
+                                                    <g fill="none" strokeWidth={1.2}>
+                                                        <circle cx={12} cy={12} r={8.4} stroke="silver" strokeOpacity={0.25}></circle>
+                                                        <path stroke="#fff" strokeLinecap="round" strokeLinejoin="round" d="m16 8l-8 8m0-8l8 8"></path>
+                                                    </g>
+                                                </mask>
+                                            </defs>
+                                            <path fill="#000" d="M0 0h24v24H0z" mask="url(#SVGi3NDrbmQ)"></path>
                                         </svg>
+
                                     </button>
                                 </div>
 
                                 {/* Navigation links */}
-                                <nav className="p-1 space-y-1 border-b mb-5  pb-5 border-gray-200">
+                                <nav className="p-1 space-y-1 border-b mb-5  pb-5 border-secondary">
                                     {Pages.map((item, index) => (
                                         <button
                                             key={item.id}
@@ -226,7 +224,7 @@ const NavBar = () => {
                                     ))}
 
                                 </nav>
-                                <nav className="p-1 space-y-1 border-b mb-5 pb-5 border-gray-200">
+                                <nav className="p-1 space-y-1 border-b mb-5 pb-5 border-secondary">
                                     {NextPages.map((item, index) => (
                                         <button
                                             key={item.id}
@@ -329,15 +327,15 @@ const NavBar = () => {
                             {/* Profile sidebar */}
                             <div
                                 ref={profileRef}
-                                className="absolute right-0 top-0  w-[85%] sm:w-72 lg:w-80 bg-white  rounded-xl z-50"
+                                className="absolute right-0 top-0   bg-base-100   rounded-l-3xl border border-secondary z-50"
                                 role="dialog"
                                 aria-modal="true"
                                 aria-label="Profile menu"
                             >
                                 {/* Profile header */}
-                                <div className="flex items-center justify-between p-6 border-b border-gray-200">
+                                <div className="flex items-center justify-between p-6 border-b border-secondary">
                                     <div className="flex items-center gap-3">
-                                        <div className="h-12 w-12 rounded-full overflow-hidden">
+                                        <div className="h-[55px] w-[55px] rounded-full overflow-hidden border-secondary border-[2px]">
                                             <img
                                                 src={user.photoUrl.url}
                                                 alt="Profile"
@@ -350,52 +348,60 @@ const NavBar = () => {
                                         </div>
                                     </div>
                                     <button
-                                        className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full hover:bg-gray-100 transition-colors duration-200"
+                                        className="w-[45px] h-[45px] ml-5 flex items-center justify-centerhover:bg-gray-100 transition-colors duration-200"
                                         onClick={closeProfile}
                                         aria-label="Close profile menu"
                                     >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16">
-                                            <path fill="#000000" d="m8.707 8l3.646-3.646a.5.5 0 0 0-.707-.707L8 7.293L4.354 3.647a.5.5 0 0 0-.707.707L7.293 8l-3.646 3.646a.5.5 0 0 0 .708.707l3.646-3.646l3.646 3.646a.5.5 0 0 0 .708 0a.5.5 0 0 0 0-.707L8.709 8z" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-[100%] w-[100%] " viewBox="0 0 24 24">
+                                            <defs>
+                                                <mask id="SVGi3NDrbmQ">
+                                                    <g fill="none" strokeWidth={1.2}>
+                                                        <circle cx={12} cy={12} r={8.4} stroke="silver" strokeOpacity={0.25}></circle>
+                                                        <path stroke="#fff" strokeLinecap="round" strokeLinejoin="round" d="m16 8l-8 8m0-8l8 8"></path>
+                                                    </g>
+                                                </mask>
+                                            </defs>
+                                            <path fill="#000" d="M0 0h24v24H0z" mask="url(#SVGi3NDrbmQ)"></path>
                                         </svg>
                                     </button>
                                 </div>
 
                                 {/* Profile menu */}
-                                <nav className="p-1 space-y-1 border-b mb-5  pb-5 border-gray-200">
+                                <nav className="p-1 space-y-1 border-b mb-5  pb-5 border-secondary">
                                     {ProfilePlace.map((item, index) => (
                                         <button
                                             key={item.id}
                                             onClick={() => { setActivePage(item.name); closeProfile(); navigate(`/app/${item.path}`) }}
-                                            className={`flex items-center gap-3 py-2 px-3 sm:px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
+                                            className={`flex items-center gap-3 py-2 px-3 sm:px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-600 text-white" : "text-gray-700 hover:bg-gray-300 hover:text-gray-900"}`}
                                             style={{ animationDelay: `${index * 0.05}s` }}
                                         >
 
 
-                                            <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold" : "font-normal"}`}>
+                                            <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold bg-gray-600 text-white" : "font-normal"}`}>
                                                 {item.icon}
                                             </span>
-                                            <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold" : "font-normal"}`}>
+                                            <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold bg-gray-600 text-white" : "font-normal"}`}>
                                                 {item.name}
                                             </span>
                                         </button>
                                     ))}
 
                                 </nav>
-                                <nav className="p-1 space-y-1 border-b mb-5 pb-5 border-gray-200">
+                                <nav className="p-1 space-y-1 border-b mb-5 pb-5 border-secondary">
                                     {SettingPlace.map((item, index) => (
                                         <button
                                             key={item.id}
                                             onClick={() => { setActivePage(item.name); closeProfile(); navigate(`/app/${item.path}`) }}
-                                            className={`flex items-center gap-3 py-2 px-3 sm:px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
+                                            className={`flex items-center gap-3 py-2 px-3 sm:px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "font-semibold bg-gray-600 text-white" : "text-gray-700 hover:bg-gray-300 hover:text-gray-900"}`}
                                             style={{ animationDelay: `${index * 0.05}s` }}
                                         >
 
 
 
-                                            <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold" : "font-normal"}`}>
+                                            <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold bg-gray-600 text-white" : "font-normal"}`}>
                                                 {item.icon}
                                             </span>
-                                            <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold" : "font-normal"}`}>
+                                            <span className={`font-medium transition-all duration-200 ${activePage === item.name ? "font-semibold bg-gray-600 text-white" : "font-normal"}`}>
                                                 {item.name}
                                             </span>
                                         </button>
@@ -407,7 +413,7 @@ const NavBar = () => {
                                         <button
                                             key={item.id}
                                             onClick={() => { setActivePage(item.name); closeProfile(); handelLogout(); navigate(`/login`) }}
-                                            className={`flex items-center gap-3 py-2 px-3 sm:px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"}`}
+                                            className={`flex items-center gap-3 py-2 px-3 sm:px-4 w-full text-left rounded-lg transition-all duration-200 ${activePage === item.name ? "bg-gray-200 text-gray-900" : "text-gray-700 hover:bg-gray-300 hover:text-gray-900"}`}
                                             style={{ animationDelay: `${index * 0.05}s` }}
 
                                         >
