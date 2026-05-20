@@ -89,20 +89,24 @@ const Education = ({ data }) => {
     const location = useLocation();
     let resumeData = location.state?.resumeData || {};
 
-    const [education, setEducation] = useState([
-        {
-            institution: "",
-            location: "",
-            degree: "",
-            field: "",
-            startDate: "",
-            endDate: "",
-            cgpa: "",
-            bullets: [],
+    const [education, setEducation] = useState(
+        resumeData?.education?.length > 0
+            ? resumeData.education
+            : [
+                {
 
-        }
-    ]);
+                    institution: "",
+                    location: "",
+                    degree: "",
+                    field: "",
+                    startDate: "",
+                    endDate: "",
+                    cgpa: "",
+                    bullets: [],
 
+                }
+            ]
+    );
 
     const [activeTab, setActiveTab] = useState("preview"); // preview | tips | score
     const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -117,17 +121,6 @@ const Education = ({ data }) => {
         ...resumeData,
         education:
             education,
-        summaryBody: "",
-        degree: "",
-        major: "",
-        institution: "",
-
-        gradDate: "",
-        skills: {},
-        projects: [],
-        certifications: [],
-        achievements: [],
-        languages: ["English (Fluent)", "Hindi (Native)"],
     };
 
 
@@ -250,6 +243,11 @@ const Education = ({ data }) => {
         }
     };
 
+
+
+
+
+
     return (
         <div className="min-h-[calc(100vh-4rem)] w-screen flex items-start justify-center p-4 md:p-6 bg-base-100">
             <ToastContainer toasts={toasts} removeToast={removeToast} />
@@ -259,7 +257,7 @@ const Education = ({ data }) => {
                 <div className="flex items-center justify-between px-5 py-3.5 bg-base-200 border-b border-slate-700">
                     <Step index={2} />
 
-                    <ProgressMeter index={2} />
+                    <ProgressMeter index={2} resumeData={resumeData} />
 
                     <button
                         onClick={() => setSidebarOpen((p) => !p)}

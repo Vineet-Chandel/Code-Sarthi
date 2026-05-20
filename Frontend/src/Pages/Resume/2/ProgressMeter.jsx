@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 
-const ProgressMeter = ({ index }) => {
+const ProgressMeter = ({ index, resumeData }) => {
 
     const Navigate = useNavigate();
     return (
@@ -9,26 +9,26 @@ const ProgressMeter = ({ index }) => {
             {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                 <div
                     key={i}
-                    className={` rounded-full transition-all duration-300 ${i === index
+                    className={` rounded-full transition-all duration-300 ${i <= index
                         ? "text-secondary"
                         : "text-neutral"
                         } cursor-pointer`}
                     onClick={() => {
                         switch (i) {
                             case 0:
-                                Navigate("/app/build-resume/header-content");
+                                Navigate("/app/build-resume/header-content", { state: { resumeData } });
                                 break;
                             case 1:
-                                Navigate("/app/build-resume/experience-content");
+                                Navigate("/app/build-resume/experience-content", { state: { resumeData } });
                                 break;
                             case 2:
-                                Navigate("/app/build-resume/education-content");
+                                Navigate("/app/build-resume/education-content", { state: { resumeData } });
                                 break;
                             case 3:
-                                Navigate("/app/build-resume/skill-content");
+                                Navigate("/app/build-resume/skill-content", { state: { resumeData } });
                                 break;
                             case 4:
-                                Navigate("/app/build-resume/summary-content");
+                                Navigate("/app/build-resume/summary-content", { state: { resumeData } });
                                 break;
                             case 5:
                                 Navigate("/resume/2/resumeBuilder/achievements");

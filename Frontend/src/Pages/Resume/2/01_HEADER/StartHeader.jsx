@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
+import { useSelector } from "react-redux";
 import Temp1 from "../../3/Temp1";
 import { useLocation, useNavigate } from "react-router-dom";
 import IntroEXP from "../02_EXP/IntroEXP";
@@ -9,6 +10,9 @@ import ProgressMeter from "../ProgressMeter";
 import Header from "../Header";
 import Step from "../Step";
 import { isValidPhoneNumber } from "react-phone-number-input";
+
+
+
 // ─── tiny hook ────────────────────────────────────────────────────────────────
 function useIntersectionObserver(options = {}) {
     const ref = useRef(null);
@@ -176,13 +180,15 @@ const TipItem = ({ emoji, title, body }) => (
 
 // ─── main component ───────────────────────────────────────────────────────────
 const StartHeader = ({ data }) => {
+
+    const user = useSelector(store => store.user.user.DATA);
     const location = useLocation();
-    data = location.state?.resumeData || {};
+    let resumeData = location.state?.resumeData || {};
     const [form, setForm] = useState({
-        fname: data?.fname || "",
-        lname: data?.lname || "",
-        summaryTitle: data?.summaryTitle || "",
-        email: data?.email || "",
+        fname: data?.fname || `${user.firstName}`,
+        lname: data?.lname || `${user.lastName}`,
+        summaryTitle: data?.summaryTitle || `${user.profession}`,
+        email: data?.email || `${user.gmail}`,
         phone: data?.phone || "",
         location: data?.location || "",
         pincode: data?.pincode || "",
@@ -213,7 +219,9 @@ const StartHeader = ({ data }) => {
     ];
     const score = Math.round((checks.filter((c) => c.done).length / checks.length) * 100);
 
-    const resumeData = {
+    resumeData = {
+
+        ...resumeData,
         //header
         fname: form.fname,
         lname: form.lname,
@@ -250,7 +258,7 @@ const StartHeader = ({ data }) => {
                     <Step index={0} />
 
 
-                    <ProgressMeter index={0} />
+                    <ProgressMeter index={0} resumeData={resumeData} />
 
                     <button
                         onClick={() => setSidebarOpen((p) => !p)}

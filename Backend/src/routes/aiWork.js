@@ -331,7 +331,10 @@ aiWorkRouter.post("/generate-summary", async (req, res) => {
     try {
         const completion =
             await client.chat.completions.create({
-                model: "openai/gpt-oss-20b",
+                model: "llama-3.3-70b-versatile",
+                response_format: {
+                    type: "json_object",
+                },
 
                 messages: [
                     {
@@ -384,12 +387,16 @@ Requirements:
                 ],
 
                 temperature: 0.2,
-                max_tokens: 1400,
+                max_tokens: 2200,
             });
 
+        // console.log(
+        //     JSON.stringify(completion, null, 2)
+        // );
         const rawText =
-            completion.choices[0].message.content;
+            completion?.choices?.[0]?.message?.content || "";
 
+        // console.log("RAW AI RESPONSE:\n", rawText);
         if (!rawText) {
             return res.status(500).json({
                 success: false,
@@ -397,29 +404,19 @@ Requirements:
             });
         }
 
-        const cleanedText = rawText
-            .replace(/```json/g, "")
-            .replace(/```/g, "")
-            .trim();
 
-        const jsonMatch =
-            cleanedText.match(/\{[\s\S]*\}/);
 
-        if (!jsonMatch) {
-            return res.status(500).json({
-                success: false,
-                error: "No JSON found in AI response",
-            });
-        }
+
 
         let parsedData;
-
+        console.log(typeof rawText);
+        console.log(rawText);
         try {
-            parsedData = JSON.parse(jsonMatch[0]);
+            parsedData = JSON.parse(rawText);
         } catch (err) {
             console.error(
                 "JSON Parse Error:",
-                cleanedText
+                rawText
             );
 
             return res.status(500).json({
@@ -428,11 +425,18 @@ Requirements:
             });
         }
 
-        if (
-            parsedData.type !==
-            "generated_summaries" ||
-            !Array.isArray(parsedData.data)
-        ) {
+        const isValidData =
+            parsedData?.type ===
+            "generated_summaries" &&
+            Array.isArray(parsedData?.data) &&
+            parsedData.data.length === 6 &&
+            parsedData.data.every(
+                (item) =>
+                    typeof item?.tone === "string" &&
+                    typeof item?.summary === "string"
+            );
+
+        if (!isValidData) {
             return res.status(500).json({
                 success: false,
                 error: "Malformed AI response",
@@ -511,8 +515,13 @@ OUTPUT FORMAT:
             temperature: 0.7,
         });
 
-        const rawText = completion.choices[0].message.content;
+        const rawText =
+            completion?.choices?.[0]?.message?.content || "";
 
+        const cleanedText = rawText
+            .replace(/```json/gi, "")
+            .replace(/```/g, "")
+            .trim();
         // Safe JSON parsing
         let parsedData;
         try {

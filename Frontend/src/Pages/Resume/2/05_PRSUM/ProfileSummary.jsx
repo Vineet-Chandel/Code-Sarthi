@@ -9,7 +9,7 @@ import { AnimatePresence } from "framer-motion";
 import ProgressMeter from '../ProgressMeter';
 import Header from '../Header';
 import Step from '../Step';
-
+import { useEffect } from 'react';
 
 
 
@@ -46,7 +46,7 @@ const TipItem = ({ emoji, title, body }) => (
     </div>
 );
 
-const Experience = ({ data }) => {
+const ProfileSummary = ({ data }) => {
     const location = useLocation();
     let resumeData = location.state?.resumeData || {};
 
@@ -66,6 +66,7 @@ const Experience = ({ data }) => {
         ...resumeData,
         summaryBody: summary
     };
+
 
 
     const Navigate = useNavigate();
@@ -238,7 +239,7 @@ const Experience = ({ data }) => {
                 <div className="flex items-center justify-between px-5 py-3.5 bg-base-200 border-b border-slate-700">
                     <Step index={4} />
 
-                    <ProgressMeter index={4} />
+                    <ProgressMeter index={4} resumeData={resumeData} />
 
                     <button
                         onClick={() => setSidebarOpen((p) => !p)}
@@ -538,4 +539,4 @@ py-1
     )
 }
 
-export default Experience;
+export default ProfileSummary;

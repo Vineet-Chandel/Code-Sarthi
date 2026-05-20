@@ -89,18 +89,22 @@ const Experience = ({ data }) => {
     const location = useLocation();
     let resumeData = location.state?.resumeData || {};
 
-    const [experiences, setExperiences] = useState([
-        {
-            role: "",
-            company: "",
-            location: "",
-            startDate: "",
-            endDate: "",
-            currentlyWorking: false,
-            bullets: [],
-            employmentType: ""
-        }
-    ]);
+    const [experiences, setExperiences] = useState(
+        resumeData?.experience?.length > 0
+            ? resumeData.experience
+            : [
+                {
+                    role: "",
+                    company: "",
+                    location: "",
+                    startDate: "",
+                    endDate: "",
+                    currentlyWorking: false,
+                    bullets: [],
+                    employmentType: ""
+                }
+            ]
+    );
 
 
     const [activeTab, setActiveTab] = useState("preview"); // preview | tips | score
@@ -114,22 +118,7 @@ const Experience = ({ data }) => {
 
     resumeData = {
         ...resumeData,
-        experience:
-            experiences,
-
-        summaryBody: "",
-        degree: "",
-        major: "",
-        institution: "",
-
-        gradDate: "",
-        skills: {},
-        projects: [],
-
-        education: [],
-        certifications: [],
-        achievements: [],
-        languages: ["English (Fluent)", "Hindi (Native)"],
+        experience: experiences
     };
 
 
@@ -249,7 +238,7 @@ const Experience = ({ data }) => {
                 <div className="flex items-center justify-between px-5 py-3.5 bg-base-200 border-b border-slate-700">
                     <Step index={1} />
 
-                    <ProgressMeter index={1} />
+                    <ProgressMeter index={1} resumeData={resumeData} />
 
                     <button
                         onClick={() => setSidebarOpen((p) => !p)}
@@ -398,6 +387,8 @@ const Experience = ({ data }) => {
                     {/* ── LEFT: form ── */}
                     <div className="p-6 md:p-10 border border-slate-700 ">
                         <Header index={1} />
+
+
                         {experiences.map((form, index) => (
                             <div key={index} className="bg-base-300 rounded-3xl shadow-inner p-7 mb-6">
                                 <div className="flex items-center justify-between mb-4">

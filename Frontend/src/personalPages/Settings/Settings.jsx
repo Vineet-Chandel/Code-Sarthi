@@ -186,19 +186,19 @@ const Settings = () => {
                                             aria-selected={active === item.name}
                                             aria-controls={`setting-panel-${item.name}`}
                                             id={`tab-${item.name}`}
-                                            onClick={() => setActive(item.name)}
+                                            onClick={() => { setActive(item.name); setIsOpen(false) }}
 
                                             className={`w-full relative px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl cursor-pointer
-                  transition-all duration-300 group overflow-hidden
+                  transition-all duration-300 group overflow-hidden text-primary
                   ${active === item.name
-                                                    ? "bg-gradient-to-r from-cyan-500/20 to-blue-600/20 border-2 border-accent/50 "
+                                                    ? "bg-gradient-to-r from-primary/20 to-secondary/20 border-2 border-dashed border-secondary "
                                                     : "hover:bg-white/5 border border-transparent"
                                                 }`}
                                         >
 
 
-                                            <span className="relative z-10  text-sm tracking-wide flex items-center gap-3 text-accent">
-                                                <span className="text-accent text-lg">{item.globalSVG}</span>
+                                            <span className="relative z-10  text-sm tracking-wide flex items-center gap-3 text-primary">
+                                                <span className="text-primary text-lg">{item.globalSVG}</span>
                                                 {item.name}
                                                 {active === item.name && (
                                                     <span
@@ -225,22 +225,22 @@ const Settings = () => {
                                         aria-selected={active === item.name}
                                         aria-controls={`setting-panel-${item.name}`}
                                         id={`tab-${item.name}`}
-                                        onClick={() => setActive(item.name)}
+                                        onClick={() => { setActive(item.name); setIsOpen(false) }}
                                         className={`w-full relative px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl cursor-pointer
-                  transition-all duration-300 group overflow-hidden text-accent
+                  transition-all duration-300 group overflow-hidden text-primary
                   ${active === item.name
-                                                ? "bg-gradient-to-r from-cyan-500/20 to-blue-600/20 border-2 border-accent/50 "
+                                                ? "bg-gradient-to-r from-primary/20 to-secondary/20  border-2 border-dashed border-secondary "
                                                 : "hover:bg-white/5 border border-transparent"
                                             }`}
                                     >
 
 
                                         <span className="relative z-10  text-sm tracking-wide flex items-center gap-3">
-                                            <span className="text-accent text-lg">{item.globalSVG}</span>
+                                            <span className="text-primary text-lg">{item.globalSVG}</span>
                                             {item.name}
                                             {active === item.name && (
                                                 <span
-                                                    className="ml-auto text-accent"
+                                                    className="ml-auto text-primary"
 
                                                 >
                                                     ▶
@@ -262,22 +262,22 @@ const Settings = () => {
                                         aria-selected={active === item.name}
                                         aria-controls={`setting-panel-${item.name}`}
                                         id={`tab-${item.name}`}
-                                        onClick={() => setActive(item.name)}
+                                        onClick={() => { setActive(item.name); setIsOpen(true) }}
                                         className={`w-full relative px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl cursor-pointer
-                  transition-all duration-300 group overflow-hidden text-accent
+                  transition-all duration-300 group overflow-hidden text-primary
                   ${active === item.name
-                                                ? "bg-gradient-to-r from-cyan-500/20 to-blue-600/20 border-2 border-accent/50 "
+                                                ? "bg-gradient-to-r from-primary/20 to-secondary/20 border-2 border-dashed border-secondary "
                                                 : "hover:bg-white/5 border border-transparent"
                                             }`}
                                     >
 
 
                                         <span className="relative z-10  text-sm tracking-wide flex items-center gap-3">
-                                            <span className="text-accent text-lg">{item.globalSVG}</span>
+                                            <span className="text-primary text-lg">{item.globalSVG}</span>
                                             {item.name}
                                             {active === item.name && (
                                                 <motion.span
-                                                    className="ml-auto text-accent"
+                                                    className="ml-auto text-primary"
                                                     initial={{ scale: 0 }}
                                                     animate={{ scale: 1 }}
                                                 >
@@ -300,14 +300,18 @@ const Settings = () => {
                                         aria-selected={active === item.name}
                                         aria-controls={`setting-panel-${item.name}`}
                                         id={`tab-${item.name}`}
-                                        onClick={() => navigate(`${item.path}`)}
+                                        onClick={() => { navigate(`${item.path}`); setIsOpen(false) }}
                                         className={`w-full relative px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl cursor-pointer
-                  transition-all duration-300 group overflow-hidden text-accent`}
+                  transition-all duration-300 group overflow-hidden text-primary
+                  ${active === item.name
+                                                ? "bg-gradient-to-r from-primary/20 to-secondary/20 border-2 border-accent/50 "
+                                                : "hover:bg-white/5 border border-transparent"
+                                            }`}
                                     >
 
 
                                         <span className="relative z-10  text-sm tracking-wide flex items-center gap-3">
-                                            <span className="text-accent text-lg">{item.globalSVG}</span>
+                                            <span className="text-primary text-lg">{item.globalSVG}</span>
                                             {item.name}
                                             {active === item.name && (
                                                 <motion.span
@@ -332,26 +336,23 @@ const Settings = () => {
                                         aria-selected={active === item.name}
                                         aria-controls={`setting-panel-${item.name}`}
                                         id={`tab-${item.name}`}
-                                        onClick={() => handleLogout()}
-                                        className={`w-full relative px-3 sm:px-4 py-2.5 sm:py-3 mt-5  rounded-xl cursor-pointer
-                  transition-all duration-300 group overflow-hidden text-accent
-                  ${active === item.name
-                                                ? "bg-gradient-to-r from-cyan-500/20 to-blue-600/20 border-2 border-accent/50 "
-                                                : "hover:bg-white/5 border border-transparent"
+                                        onClick={() => { handleLogout(); setIsOpen(false) }}
+                                        className={`w-full relative px-3 sm:px-4 py-2.5 sm:py-3 mt-5 bg-primary rounded-xl cursor-pointer
+                  transition-all duration-300 group overflow-hidden text-white"
                                             }`}
                                     >
 
-
-                                        <span className="relative z-10  text-xl tracking-wide flex items-center gap-3 text-accent">
-                                            <span className="text-accent text-lg">{item.globalSVG}</span>
-                                            {item.name} {isSignOuting && (<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity={0.5}></path><path fill="currentColor" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z"><animateTransform attributeName="transform" dur="1s" from="0 12 12" repeatCount="indefinite" to="360 12 12" type="rotate"></animateTransform></path></svg>)}
+                                        <span className="relative z-10  text-xl font-bold tracking-wide flex items-center gap-3">
+                                            <span className="text-white text-base">{item.globalSVG}</span>
+                                            {item.name}
                                             {active === item.name && (
-                                                <span
+                                                <motion.span
                                                     className="ml-auto text-accent"
-
+                                                    initial={{ scale: 0 }}
+                                                    animate={{ scale: 1 }}
                                                 >
                                                     ▶
-                                                </span>
+                                                </motion.span>
                                             )}
                                         </span>
                                     </button>

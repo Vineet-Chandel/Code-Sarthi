@@ -69,15 +69,25 @@ const TipItem = ({ emoji, title, body }) => (
 const Education = ({ data }) => {
     const location = useLocation();
     let resumeData = location.state?.resumeData || {};
-    const [skills, setSkills] = useState([
-        {
-            id: crypto.randomUUID(),
-            skillCategory: "",
-            skills: [],
-            inputValue: "",
-        }
-    ]);
 
+
+    const [skills, setSkills] = useState(
+        resumeData?.skills?.length > 0
+            ? resumeData.skills.map((s) => ({
+                id: crypto.randomUUID(),
+                skillCategory: s.skillCategory,
+                skills: s.skills.split(", "),
+                inputValue: "",
+            }))
+            : [
+                {
+                    id: crypto.randomUUID(),
+                    skillCategory: "",
+                    skills: [],
+                    inputValue: "",
+                }
+            ]
+    );
 
     const [activeTab, setActiveTab] = useState("preview"); // preview | tips | score
     const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -92,21 +102,14 @@ const Education = ({ data }) => {
     const finalResumeData = useMemo(() => ({
         ...resumeData,
 
-        summaryBody: "",
-        degree: "",
-        major: "",
-        institution: "",
-        gradDate: "",
+
 
         skills: skills.map(s => ({
             skillCategory: s.skillCategory,
             skills: s.skills.join(", ")
         })),
 
-        projects: [],
-        certifications: [],
-        achievements: [],
-        languages: ["English (Fluent)", "Hindi (Native)"],
+
     }), [resumeData, skills]);
 
     const Navigate = useNavigate();
@@ -223,7 +226,7 @@ const Education = ({ data }) => {
                 <div className="flex items-center justify-between px-5 py-3.5 bg-base-200 border-b border-slate-700">
                     <Step index={3} />
 
-                    <ProgressMeter index={3} />
+                    <ProgressMeter index={3} resumeData={finalResumeData} />
 
                     <button
                         onClick={() => setSidebarOpen((p) => !p)}
