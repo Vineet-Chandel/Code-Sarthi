@@ -9,7 +9,7 @@ const Step = ({ index }) => {
                 <path fill="currentColor" d="M7.055 8.005A4.73 4.73 0 0 1 11.73 4h.542a4.73 4.73 0 0 1 4.674 4.005a.43.43 0 0 1-.145.175c-.414.288-1.61.82-4.8.82s-4.386-.532-4.8-.82a.43.43 0 0 1-.145-.175" opacity=".5" />
             </svg>
             </span>
-            Step {index + 1} of 6
+            Step {index + 1} of 8
         </span>
     )
 }

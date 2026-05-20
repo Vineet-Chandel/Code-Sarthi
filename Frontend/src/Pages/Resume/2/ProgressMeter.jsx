@@ -6,7 +6,7 @@ const ProgressMeter = ({ index, resumeData }) => {
     const Navigate = useNavigate();
     return (
         <div className="flex items-center gap-2">
-            {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+            {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
                 <div
                     key={i}
                     className={` rounded-full transition-all duration-300 ${i <= index
@@ -31,16 +31,13 @@ const ProgressMeter = ({ index, resumeData }) => {
                                 Navigate("/app/build-resume/summary-content", { state: { resumeData } });
                                 break;
                             case 5:
-                                Navigate("/resume/2/resumeBuilder/achievements");
+                                Navigate("/app/build-resume/project-content");
                                 break;
                             case 6:
-                                Navigate("/resume/2/resumeBuilder/certifications");
+                                Navigate("/app/build-resume/additional-details");
                                 break;
                             case 7:
-                                Navigate("/resume/2/resumeBuilder/languages");
-                                break;
-                            case 8:
-                                Navigate("/resume/2/resumeBuilder/preview");
+                                Navigate("/app/build-resume/preview");
                                 break;
                             default:
                                 break;

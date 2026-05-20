@@ -78,6 +78,7 @@ import IntroSkill from "./Pages/Resume/2/04_SKILLS/IntroSkills";
 import Skills from "./Pages/Resume/2/04_SKILLS/Skills";
 import PageNotFound from "./ErrorSaver/PageNotFound";
 import Summary from "./Pages/Resume/2/05_PRSUM/ProfileSummary";
+import Project from "./Pages/Resume/2/06_PROJECT/Project";
 
 
 const App = () => {
@@ -154,6 +155,7 @@ const App = () => {
               <Route path="how-cover-letter" element={<HowCoverLetter />} />
               <Route path="credentials-analyser" element={<CredentialsAnalyser />} />
               <Route path="build-resume/header-content" element={<HeaderContent />} />
+              <Route path="build-resume/project-content" element={<Project />} />
               <Route path="build-resume/intro-exp-page" element={<IntroEXP />} />
               <Route path="build-resume/intro-edu-page" element={< IntroEdu />} />
               <Route path="build-resume/intro-skill-page" element={< IntroSkill />} />

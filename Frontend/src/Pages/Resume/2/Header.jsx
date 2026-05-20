@@ -66,6 +66,22 @@ const Header = ({ index }) => {
             mainLine2: "SUMMARY",
             subLine:
                 "Craft a confident introduction that captures your strengths, career goals, and personality — then refine it with AI for maximum impact."
+        },
+
+        {
+            icon: (
+                <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path fill="#000" d="M19 4h-4.18a2.988 2.988 0 0 0-5.64 0H5a2.006 2.006 0 0 0-2 2v14a2.006 2.006 0 0 0 2 2h14a2.006 2.006 0 0 0 2-2V6a2.006 2.006 0 0 0-2-2m-7 0a1 1 0 1 1-1 1a1.003 1.003 0 0 1 1-1m-2 5l2.79 2.794l2.52-2.52L14 8h4v4l-1.276-1.311l-3.932 3.935L10 11.83l-2.586 2.584L6 13Zm9 10H5v-2h14Z" />
+                </svg>
+
+            ),
+
+            mainLine1: "Showcase your",
+            mainLine2: "PROJECTS",
+
+            subLine:
+                "Highlight the projects that demonstrate your skills, creativity, and problem-solving abilities — and enhance them with AI-powered suggestions for maximum impact."
         }
 
     ];
