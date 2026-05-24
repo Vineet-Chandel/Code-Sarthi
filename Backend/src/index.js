@@ -13,8 +13,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
     cors({
-        origin: process.env.AT_FRONT,
-        // origin: process.env.AT_SYSTEM_API,
+        // origin: process.env.AT_FRONT,
+        origin: process.env.AT_SYSTEM_API,
         credentials: true
     })
 );
@@ -40,29 +40,29 @@ cloudinary.config({
 });
 
 
-// app.use("/api", authRouter);
-// app.use("/api", profileRouter);
-// app.use("/api", requestRouter);
-// app.use("/api", userPreference);
-// app.use("/api", passwordManagment);
-// app.use("/api", fileUpload);
-// app.use("/api", chatRouter);
-// app.use("/api", feedbackRouter);
-// app.use("/api", reviewRouter);
-// app.use("/api", aiWorkRouter);
-// app.use("/api", newsletterRouter);
+app.use("/api", authRouter);
+app.use("/api", profileRouter);
+app.use("/api", requestRouter);
+app.use("/api", userPreference);
+app.use("/api", passwordManagment);
+app.use("/api", fileUpload);
+app.use("/api", chatRouter);
+app.use("/api", feedbackRouter);
+app.use("/api", reviewRouter);
+app.use("/api", aiWorkRouter);
+app.use("/api", newsletterRouter);
 
-app.use("/", authRouter);
-app.use("/", profileRouter);
-app.use("/", requestRouter);
-app.use("/", userPreference);
-app.use("/", passwordManagment);
-app.use("/", fileUpload);
-app.use("/", chatRouter);
-app.use("/", feedbackRouter);
-app.use("/", reviewRouter);
-app.use("/", aiWorkRouter);
-app.use("/", newsletterRouter);
+// app.use("/", authRouter);
+// app.use("/", profileRouter);
+// app.use("/", requestRouter);
+// app.use("/", userPreference);
+// app.use("/", passwordManagment);
+// app.use("/", fileUpload);
+// app.use("/", chatRouter);
+// app.use("/", feedbackRouter);
+// app.use("/", reviewRouter);
+// app.use("/", aiWorkRouter);
+// app.use("/", newsletterRouter);
 const PORT = process.env.PORT || 8000;
 
 (async () => {
