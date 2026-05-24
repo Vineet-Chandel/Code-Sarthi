@@ -250,12 +250,12 @@ const Experience = ({ data }) => {
                         <div className='w-full flex justify-center gap-5 p-5' >
                             <div className="w-[50%] bg-base-100 h-[80vh] mt-10  rounded-xl p-5" onClick={(e) => e.stopPropagation()}>
                                 <div className='mb-5'>
-                                    <h1 className="text-3xl font-bold text-slate-900 mb-2 leading-tight text-start  " >
-                                        Bullet points about what you did as a <br /> <span className="text-accent">{selectedRole}</span>,
+                                    <h1 className="text-3xl font-bold text-info mb-2 leading-tight text-start  " >
+                                        Bullet points about what you did as a <br /> <span className="text-accent-content">{selectedRole}</span>,
                                     </h1>
                                 </div>
 
-                                <div >
+                                <div className='bg-white/20'>
                                     {isAiworking ? (<div className='flex flex-col justify-center items-center h-[500px] w-full  gap-2'>
                                         <div className='flex justify-center items-center gap-2'>
                                             <h1 className="text-5xl font-bold text-white mb-2 leading-tight text-center ">Shastra</h1>
@@ -302,7 +302,7 @@ const Experience = ({ data }) => {
                                                             <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
                                                                 <g fill="none">
                                                                     <path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"></path>
-                                                                    <path fill="#884f06" d="M11 20a1 1 0 1 0 2 0v-7h7a1 1 0 1 0 0-2h-7V4a1 1 0 1 0-2 0v7H4a1 1 0 1 0 0 2h7z"></path>
+                                                                    <path fill="#ffffff" d="M11 20a1 1 0 1 0 2 0v-7h7a1 1 0 1 0 0-2h-7V4a1 1 0 1 0-2 0v7H4a1 1 0 1 0 0 2h7z"></path>
                                                                 </g>
                                                             </svg>
                                                         </div>
@@ -338,7 +338,7 @@ const Experience = ({ data }) => {
                                                     }}
                                                 >
                                                     <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
-                                                        <path fill="#884f06" d="M16 9v10H8V9zm-1.5-6h-5l-1 1H5v2h14V4h-3.5zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2z"></path>
+                                                        <path fill="#ffffff" d="M16 9v10H8V9zm-1.5-6h-5l-1 1H5v2h14V4h-3.5zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2z"></path>
                                                     </svg>
                                                 </div>
                                                 <div className='bg-base-100 p-4 rounded-2xl w-full'>{point}</div>
@@ -346,7 +346,7 @@ const Experience = ({ data }) => {
                                         </div>
                                     ))}
                                 </div>
-                                <button className='bg-secondary w-full text-center mt-5 rounded-xl text-base-100 py-3 px-5 font-bold ' onClick={() => {
+                                <button className='bg-secondary w-full text-center mt-5 rounded-xl text-white py-3 px-5 font-bold ' onClick={() => {
                                     setExperiences(prev =>
                                         prev.map((exp, i) =>
                                             i === selectedExpIndex
