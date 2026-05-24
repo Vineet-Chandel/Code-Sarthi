@@ -24,8 +24,8 @@ const Preview = ({ resumeData, activeTab, setActiveTab }) => {
                         onClick={() => setActiveTab(tab)}
                         className={`flex-1 py-3.5 text-lg font-semibold capitalize transition-all duration-200 border-b-2
             ${activeTab === tab
-                                ? "text-secondary border-secondary bg-base-100"
-                                : "text-slate-700 border-transparent hover:text-slate-600"
+                                ? "text-secondary-content border-secondary-content bg-base-100"
+                                : "text-info border-transparent hover:text-white"
                             }`}
                     >
                         {tab}

@@ -18,20 +18,33 @@ const InputField = ({ label, id, value, type = "text", placeholder, onChange }) 
     <div className="flex flex-col gap-1 w-full group">
         <label
             htmlFor={id}
-            className="text-[10px] font-semibold uppercase tracking-widest text-slate-700 group-focus-within:text-secondary transition-colors ml-0.5"
+            className="text-[13px] font-semibold uppercase tracking-widest text-info group-focus-within:text-white transition-colors ml-0.5"
         >
             {label}
         </label>
-        <input
-            id={id}
-            type={type}
-            value={value}
-            placeholder={placeholder}
-            onChange={(e) => onChange(id, e.target.value)}
-            className="w-full bg-base-200 border border-slate-900 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 outline-none
-                 focus:border-secondary focus:ring-4 focus:ring-accent focus:bg-white
-                 transition-all duration-200 font-medium placeholder:text-slate-500"
-        />
+        <div className='    flex items-center gap-2 w-full
+    bg-base-200 border border-slate-600
+    rounded-xl px-3.5 py-2.5
+    text-sm text-slate-800 outline-none
+    focus-within:border-secondary
+    focus-within:ring-1
+    focus-within:ring-accent-content
+    
+    transition-all duration-200
+    font-medium'>
+
+            <input
+                id={id}
+                type={type}
+                value={value}
+                placeholder={placeholder}
+                onChange={(e) => onChange(id, e.target.value)}
+                className="
+        w-full bg-transparent
+        border-none outline-none
+h-full text-white
+        focus:ring-0 placeholder:text-info
+    "  /></div>
     </div>
 );
 
@@ -202,10 +215,10 @@ const Experience = ({ data }) => {
     return (
         <div className="min-h-[calc(100vh-4rem)] w-screen flex items-start justify-center p-4 md:p-6 bg-base-100">
             <ToastContainer toasts={toasts} removeToast={removeToast} />
-            <div className="w-full bg-base-100 rounded-3xl border border-slate-100 overflow-hidden border border-slate-700" >
+            <div className="w-full bg-base-100 rounded-3xl  border-slate-100 overflow-hidden border border-white" >
 
                 {/* ── top bar ── */}
-                <div className="flex items-center justify-between px-5 py-3.5 bg-base-200 border-b border-slate-700">
+                <div className="flex items-center justify-between px-5 py-3.5 bg-base-200 border-b border-white">
                     <Step index={1} />
 
                     <ProgressMeter index={1} resumeData={resumeData} />
@@ -214,8 +227,8 @@ const Experience = ({ data }) => {
                         onClick={() => setSidebarOpen((p) => !p)}
                         className={`flex items-center gap-2 text-lg font-medium px-3 py-1.5 rounded-lg border transition-all duration-200
                         ${sidebarOpen
-                                ? "bg-secondary text-secondary-content border-secondary-content"
-                                : "bg-base-100 text-secondary border-secondary "
+                                ? "bg-secondary-content text-base-100 border-secondary"
+                                : "bg-base-100 text-secondary-content border-secondary"
                             }`}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width="1.4em" height="1.4em" viewBox="0 0 24 24">
@@ -245,9 +258,9 @@ const Experience = ({ data }) => {
                                 <div >
                                     {isAiworking ? (<div className='flex flex-col justify-center items-center h-[500px] w-full  gap-2'>
                                         <div className='flex justify-center items-center gap-2'>
-                                            <h1 className="text-5xl font-bold text-[#884f06] mb-2 leading-tight text-center ">Shastra</h1>
+                                            <h1 className="text-5xl font-bold text-white mb-2 leading-tight text-center ">Shastra</h1>
                                             <svg xmlns="http://www.w3.org/2000/svg" width={50} height={50} viewBox="0 0 24 24" className='mb-3'>
-                                                <path fill="#884f06" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
+                                                <path fill="#fff" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
                                             </svg>
                                         </div>
                                         <h1 className="text-xl font-medium text-[#884f06] mb-2 leading-tight text-center ">AI Is Generating Your  Bullet Points, Please Wait...</h1>
@@ -355,14 +368,14 @@ const Experience = ({ data }) => {
 
                     </div>}
                     {/* ── LEFT: form ── */}
-                    <div className="p-6 md:p-10 border border-slate-700 ">
+                    <div className="p-6 md:p-10 border border-white ">
                         <Header index={1} />
 
 
                         {experiences.map((form, index) => (
                             <div key={index} className="bg-base-300 rounded-3xl shadow-inner p-7 mb-6">
                                 <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-lg font-bold text-slate-700">Experience #{index + 1}</h3>
+                                    <h3 className="text-lg font-bold text-white">Experience #{index + 1}</h3>
                                     <button
                                         onClick={() => {
                                             const newExperiences = [...experiences];
@@ -372,7 +385,7 @@ const Experience = ({ data }) => {
                                         className="text-accent hover:text-secondary transition-colors cursor-pointer"
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24">
-                                            <path fill="#884f06" d="M3 6.524c0-.395.327-.714.73-.714h4.788c.006-.842.098-1.995.932-2.793A3.68 3.68 0 0 1 12 2a3.68 3.68 0 0 1 2.55 1.017c.834.798.926 1.951.932 2.793h4.788c.403 0 .73.32.73.714a.72.72 0 0 1-.73.714H3.73A.72.72 0 0 1 3 6.524M11.607 22h.787c2.707 0 4.06 0 4.94-.863s.971-2.28 1.151-5.111l.26-4.08c.098-1.537.146-2.306-.295-2.792c-.442-.487-1.187-.487-2.679-.487H8.23c-1.491 0-2.237 0-2.679.487c-.441.486-.392 1.255-.295 2.791l.26 4.08c.18 2.833.27 4.249 1.15 5.112S8.9 22 11.607 22"></path>
+                                            <path fill="#ffffff" d="M3 6.524c0-.395.327-.714.73-.714h4.788c.006-.842.098-1.995.932-2.793A3.68 3.68 0 0 1 12 2a3.68 3.68 0 0 1 2.55 1.017c.834.798.926 1.951.932 2.793h4.788c.403 0 .73.32.73.714a.72.72 0 0 1-.73.714H3.73A.72.72 0 0 1 3 6.524M11.607 22h.787c2.707 0 4.06 0 4.94-.863s.971-2.28 1.151-5.111l.26-4.08c.098-1.537.146-2.306-.295-2.792c-.442-.487-1.187-.487-2.679-.487H8.23c-1.491 0-2.237 0-2.679.487c-.441.486-.392 1.255-.295 2.791l.26 4.08c.18 2.833.27 4.249 1.15 5.112S8.9 22 11.607 22"></path>
                                         </svg>
                                     </button>
                                 </div>
@@ -390,11 +403,11 @@ const Experience = ({ data }) => {
                                         />
                                     </div>
                                 </div>
-                                <label className="text-sm font-medium text-slate-700 mb-2 block">
+                                <label className="text-[13px] font-medium text-info mb-2 block">
                                     Type of Employment
                                 </label>
                                 <select
-                                    className="input input-bordered border border-slate-900 text-black rounded-xl bg-base-200 w-full px-2 py-1"
+                                    className="input input-bordered border border-slate-900 text-white rounded-xl bg-base-200 w-full px-2 py-1"
                                     value={form.employmentType}
                                     required={true}
                                     onChange={(e) =>
@@ -441,7 +454,7 @@ const Experience = ({ data }) => {
 
 
 
-                                <button className='bg-secondary border border-secondary hover:bg-base-100 text-base-100 hover:text-secondary px-3 py-2 rounded-xl mt-3 flex justify-center items-center gap-2 hover:scale-105 transition-all duration-300 ease-in-out group' onClick={() => {
+                                <button className=' border border-accent bg-base-100 text-info  px-3 py-2 rounded-xl mt-3 flex justify-center items-center gap-2 hover:scale-105 transition-all duration-300 ease-in-out group' onClick={() => {
 
 
                                     if (experiences[index].role === '' || experiences[index].company === '' || experiences[index].employmentType === '') {
@@ -456,10 +469,10 @@ const Experience = ({ data }) => {
                                     setAiModalOpen(true); setSelectedRole(experiences[index].role); setSelectedCompany(experiences[index].company); setSelectedEmploymentType(experiences[index].employmentType); setSelectedExpIndex(index);
                                 }}>
 
-                                    <div className='flex justify-center items-center gap-2 bg-base-100 p-2 rounded-xl group-hover:bg-secondary group-hover:text-base-100 transition-all duration-300 ease-in-out'>
-                                        <h1 className="text-xl font-bold text-secondary leading-tight text-center group-hover:text-base-100 transition-all duration-300 ease-in-out">Shastra</h1>
+                                    <div className='flex justify-center items-center gap-2  p-2 rounded-xl bg-secondary group-hover:text-base-100 transition-all duration-300 ease-in-out'>
+                                        <h1 className="text-xl font-bold text-secondary-content leading-tight text-center  transition-all duration-300 ease-in-out">Shastra</h1>
                                         <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" className='text-secondary group-hover:text-base-100'>
-                                            <path fill="currentColor" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
+                                            <path fill="#fff" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
                                         </svg>
                                     </div>
                                     Generate Bullets for Experience</button>
@@ -671,7 +684,7 @@ const Experience = ({ data }) => {
                         <div className="flex justify-end mt-10">
                             <button
                                 onClick={addExperience}
-                                className="px-6 py-2 rounded-full bg-primary text-white flex items-center gap-2"
+                                className="px-6 py-2 rounded-full bg-secondary text-white flex items-center gap-2"
                             ><svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
                                     <g fill="none">
                                         <path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"></path>
@@ -689,7 +702,7 @@ const Experience = ({ data }) => {
 
 
                 {/* ── footer ── */}
-                <div className="flex items-center justify-end px-6 md:px-10 py-4 bg-base-200 border-t border-slate-700">
+                <div className="flex items-center justify-end px-6 md:px-10 py-4 bg-base-200 border-t border-white">
 
                     <button
                         onClick={() => {

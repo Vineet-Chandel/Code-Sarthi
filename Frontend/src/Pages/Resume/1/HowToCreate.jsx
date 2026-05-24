@@ -2,7 +2,7 @@ import React from 'react'
 
 const HowToCreate = () => {
     return (
-        <div className='w-full  bg-base-200  font-sans flex flex-col justify-center items-center  '>
+        <div className='w-full  bg-base-100  font-sans flex flex-col justify-center items-center  '>
 
             <div className='w-[95%] h-[500px] bg-base-100 rounded-xl px-40  pb-20'>
                 <div className='bg-secondary w-full h-full flex justify-center items-center rounded-[40px] '>

@@ -8,7 +8,7 @@ const Header = ({ index }) => {
         {
             icon: (
                 <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 20 20">
-                    <path fill="#000" d="M6 2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM5 4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1zm2 0a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2z"></path>
+                    <path fill="#fff" d="M6 2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM5 4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1zm2 0a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2z"></path>
                 </svg>
             ),
             mainLine1: "Let’s begin with your",
@@ -89,20 +89,20 @@ const Header = ({ index }) => {
 
     return (
         <div className="mb-7">
-            <h1 className="text-3xl md:text-4xl font-light  tracking-tight text-slate-900 mb-2 leading-tight flex items-center gap-1">
+            <h1 className="text-3xl md:text-4xl font-light  tracking-tight text-white mb-2 leading-tight flex items-center gap-1">
 
 
 
                 {Data[index].icon}
 
 
-                <span>
+                <span className='text-info'>
                     {Data[index].mainLine1}  {" "}
-                    <span className="text-4xl md:text-5xl text-accent font-bold">{Data[index].mainLine2}</span>.
+                    <span className="text-4xl md:text-5xl text-secondary-content font-bold">{Data[index].mainLine2}</span>.
                 </span>
 
             </h1>
-            <p className="text-sm text-slate-500 leading-relaxed max-w-xl">
+            <p className="text-sm text-info leading-relaxed max-w-xl">
                 {Data[index].subLine}
             </p>
         </div>

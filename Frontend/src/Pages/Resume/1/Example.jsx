@@ -5,7 +5,7 @@ import App from '@/App';
 import { AppleCardsCarouselDemo } from '../AppleCardsCarouselDemo';
 const Example = () => {
     return (
-        <div className='w-full  bg-base-200  font-sans flex flex-col justify-center items-center'>
+        <div className='w-full  bg-base-100  font-sans flex flex-col justify-center items-center'>
 
             <div className='w-[95%] h-full bg-base-100 rounded-xl '>
                 {/* Header Section */}

@@ -214,8 +214,8 @@ const Project = ({ data }) => {
                         onClick={() => setSidebarOpen((p) => !p)}
                         className={`flex items-center gap-2 text-lg font-medium px-3 py-1.5 rounded-lg border transition-all duration-200
                         ${sidebarOpen
-                                ? "bg-secondary text-secondary-content border-secondary-content"
-                                : "bg-base-100 text-secondary border-secondary "
+                                ? "bg-secondary-content text-base-100 border-secondary"
+                                : "bg-base-100 text-secondary-content border-secondary"
                             }`}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width="1.4em" height="1.4em" viewBox="0 0 24 24">

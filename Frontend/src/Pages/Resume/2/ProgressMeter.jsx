@@ -10,8 +10,8 @@ const ProgressMeter = ({ index, resumeData }) => {
                 <div
                     key={i}
                     className={` rounded-full transition-all duration-300 ${i <= index
-                        ? "text-secondary"
-                        : "text-neutral"
+                        ? "text-secondary-content"
+                        : "text-gray-600"
                         } cursor-pointer`}
                     onClick={() => {
                         switch (i) {

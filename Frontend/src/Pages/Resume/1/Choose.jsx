@@ -177,17 +177,17 @@ const Choose = () => {
 
     const Navigate = useNavigate();
     return (
-        <div className='w-full  bg-base-200  font-sans flex flex-col justify-center items-center'>
+        <div className='w-full  bg-base-100  font-sans flex flex-col justify-center items-center'>
 
-            <div className='w-[95%] h-full bg-base-100 rounded-xl '>
+            <div className='w-[98%] h-full bg-base-100 rounded-xl '>
                 {/* Header Section */}
                 <div className="max-w-4xl mx-auto text-center mb-16">
-                    <h1 className="text-3xl md:text-5xl font-black tracking-tight  text-slate-900 mb-4">
-                        Choose Your <span className="text-accent ">Professional{" "}</span>Template.
+                    <h1 className="text-3xl md:text-5xl font-black tracking-tight  text-info mb-4">
+                        Choose Your <span className="text-accent-content ">Professional {" "}</span>.
                     </h1>
-                    <p className="text-lg text-slate-600 mb-2 max-w-[70%] mx-auto">Select one of the ATS-friendly <span className='font-extrabold text-info underline underline-offset-8 decoration-primary decoration-2 cursor-pointer' onClick={() => Navigate("/app/resume-templates")}>resume templates</span>  below. Fill it in with AI-generated text inspired by your work experience.</p>
-                    <p className="text-lg text-slate-600 mb-2 max-w-[70%] mx-auto">These professional templates have been tested in the real world and proven to bypass HR screening software. Rest easy knowing that your resume will land in human hands.</p>
-                    <p className="text-lg text-slate-600 mb-2 max-w-[70%] mx-auto">You can try <span className='font-extrabold text-info underline underline-offset-8 decoration-primary decoration-2 cursor-pointer' onClick={() => Navigate("/app/how-resume")}>CodeSarthi’s AI Resume Builder</span> for free. Easily create a resume in the builder and download it as a TXT file. Then, when you’re ready to try a premium template, you can upgrade your free resume.</p>
+                    <p className="text-lg text-info mb-2 max-w-[100%] mx-auto">Select one of the ATS-friendly <span className='font-extrabold text-info underline underline-offset-8 decoration-primary decoration-2 cursor-pointer' onClick={() => Navigate("/app/resume-templates")}>resume templates</span>  below. Fill it in with AI-generated text inspired by your work experience.</p>
+                    <p className="text-lg text-info mb-2 max-w-[100%] mx-auto">These professional templates have been tested in the real world and proven to bypass HR screening software. Rest easy knowing that your resume will land in human hands.</p>
+                    <p className="text-lg text-info mb-2 max-w-[100%] mx-auto">You can try <span className='font-extrabold text-info underline underline-offset-8 decoration-primary decoration-2 cursor-pointer' onClick={() => Navigate("/app/how-resume")}>CodeSarthi’s AI Resume Builder</span> for free. Easily create a resume in the builder and download it as a TXT file. Then, when you’re ready to try a premium template, you can upgrade your free resume.</p>
                 </div>
 
                 {/* Steps Grid */}
