@@ -17,7 +17,7 @@ const Toast = ({ type = "success", title, message, onClose }) => {
 
     // Color Mapping for cleaner JSX
     const theme = {
-        bg: isSuccess ? "bg-base-100" : "bg-red-100",
+        bg: isSuccess ? "bg-base-100" : "bg-red-400/20",
         accent: isSuccess ? "bg-accent" : "bg-red-500",
         border: isSuccess ? "border-accent" : "border-red-500",
         iconBg: isSuccess ? "bg-white" : "bg-white",
@@ -60,10 +60,10 @@ const Toast = ({ type = "success", title, message, onClose }) => {
 
             {/* Text Content */}
             <div className="relative z-10 flex-1">
-                <h3 className="text-sm font-semibold tracking-tight text-gray-900 leading-none">
+                <h3 className="text-lg font-semibold tracking-tight text-secondary-content leading-none">
                     {title}
                 </h3>
-                <p className="mt-1.5 text-xs font-medium leading-relaxed text-gray-500">
+                <p className="mt-1.5 text-sm font-medium leading-relaxed text-info">
                     {message}
                 </p>
             </div>
@@ -71,7 +71,7 @@ const Toast = ({ type = "success", title, message, onClose }) => {
             {/* Close Button */}
             <button
                 onClick={onClose}
-                className="absolute right-3 top-3 rounded-lg p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+                className="absolute right-3 top-3 rounded-lg p-1 text-white transition-colors hover:bg-gray-100 hover:text-gray-600"
             >
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />

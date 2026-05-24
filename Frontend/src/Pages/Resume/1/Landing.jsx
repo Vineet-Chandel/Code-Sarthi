@@ -10,19 +10,19 @@ const Landing = () => {
 
             <div className='flex rounded-t-xl bg-base-100'>
                 <div className='w-[50%] mt-5   pl-10 pt-10 '>
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-6"
-                        style={{ background: "rgba(104, 241, 99, 0.18)", color: "#2e6212ff", border: "1px solid rgba(99, 241, 118, 0.3)" }}>
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#2e6212ff] animate-pulse inline-block" />
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs border border-[#5a5a5a] font-bold uppercase tracking-widest mb-6"
+                        style={{ background: "#242424", color: "#ffffff" }}>
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#ffffff] animate-pulse inline-block" />
                         {50}+ Premium Templates · ATS-Friendly
                     </div>
 
-                    <h1 style={{ fontFamily: "'Syne',sans-serif", fontSize: 'clamp(60px,6vw,80px)', fontWeight: 800, color: '#000000ff', lineHeight: 1.0, letterSpacing: '-0.03em', marginBottom: '16px' }}>
-                        AI Resume<br /><span style={{ color: '#1a6cf6' }}>Builder & Analyser</span>
+                    <h1 className='text-[75px]' style={{ fontWeight: 800, color: '#ffffff', lineHeight: 1.0, letterSpacing: '-0.03em', marginBottom: '16px' }}>
+                        AI Resume<br /><span style={{ color: '#ffffff' }}>Builder & Analyser</span>
                     </h1>
 
 
 
-                    <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '20px', maxWidth: '620px' }} className=' text-slate-700'>
+                    <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '20px', maxWidth: '620px' }} className=' text-info'>
                         ''  Create a standout resume in minutes with our AI-powered builder.
                         Use professional templates, add optimized content in one click,
                         and apply with confidence from any device. Millions trust it—because it works. ''
@@ -30,11 +30,11 @@ const Landing = () => {
 
                     <CTAcreateResume />
                     <div className='mb-20'>
-                        <div className='text-start h-15 text-lg w-[700px] font-extrabold transition duration-200  rounded-3xl bg-primary p-5 text-primary-content flex  flex-col justify-cneter items-start  mt-10' >
+                        <div className='text-start h-15 text-lg w-[700px] font-extrabold transition duration-200  rounded-3xl bg-base-300 p-5 text-primary-content flex  flex-col justify-cneter items-start  mt-10' >
 
 
                             <div className="flex items-center w-full gap-1 text-4xl"><svg xmlns="http://www.w3.org/2000/svg" width={40} height={40} viewBox="0 0 24 24"><g fill="none"><path d="m5.5 13l4.5 4.5l11-11L16.5 2z"></path><path stroke="#fff" strokeWidth={0.8} d="M10 17.5L5.5 13m4.5 4.5l-2.414 2.414a2 2 0 0 1-1.414.586H2.5v-3.672a2 2 0 0 1 .586-1.414L5.5 12.999m4.5 4.5l11-11L16.5 2l-11 11M5 3l.332.668L6 4l-.668.332L5 5l-.332-.668L4 4l.668-.332zm7.75 17l.25.5l.5.25l-.5.25l-.25.5l-.25-.5l-.5-.25l.5-.25zm6.75-6l.622 1.378L21.5 16l-1.378.622L19.5 18l-.622-1.378L17.5 16l1.378-.622z"></path></g></svg> <span className='ml-3'> Let AI to do your work</span></div>
-                            <div className='flex justify-center w-full'><div className='text-start  text-md w-45 rounded-3xl bg-primary p-5 text-primary-content flex justify-start items-center ' >Describe your role in a few words, and we'll generate tailored content for your work experience section.</div></div>
+                            <div className='flex justify-center w-full'><div className='text-start  text-md w-45 rounded-3xl bg-accent mt-5 p-5 text-primary-content flex justify-start items-center ' >Describe your role in a few words, and we'll generate tailored content for your work experience section.</div></div>
 
 
                         </div>

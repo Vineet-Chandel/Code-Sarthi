@@ -187,12 +187,9 @@ const Search = ({ height, displayType }) => {
 
                     className='h-10 w-10 flex items-center justify-center ml-2 ' >
 
-                    <span className='h-full flex items-center justify-center ml-2 bg-base-100 p-2 rounded-full border-[3px] border-secondary'>
-                        <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 80 80" >
-                            <g fill="none">
-                                <path fill="#8c3f27" d="M65.368 67.848a2 2 0 0 0 2.828-2.829zm-9.634-15.29a2 2 0 0 0-2.828 2.828zm12.462 12.461L55.734 52.557l-2.828 2.829l12.462 12.462z"></path>
-                                <path fill="#ff9d33" stroke="#370a00" strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M13.578 30.724a24.249 24.249 0 1 1 46.844 12.552a24.249 24.249 0 0 1-46.844-12.552"></path>
-                            </g>
+                    <span className='h-full flex items-center justify-center ml-2 bg-base-100 p-2 rounded-full border-[2px] border-secondary-content'>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5A6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5S14 7.01 14 9.5S11.99 14 9.5 14"></path>
                         </svg>
                     </span>
                 </motion.div>
@@ -202,15 +199,13 @@ const Search = ({ height, displayType }) => {
                     animate={isExpanded ? "expand" : "collapse"}
                     transition={TRANSITION}
                     className='h-[45px] flex items-center justify-center outline-none border-none focus:ring-0 focus:border-0 '>
-                    <button onClick={() => { setIsExpanded(true); inputRef.current.focus() }} className='h-[45px] w-full cursor-pointer items-center justify-center flex gap-2 rounded-full bg-base-100 text-white font-medium border-[3px] border-secondary'>
+                    <button onClick={() => { setIsExpanded(true); inputRef.current.focus() }} className='h-[45px] w-full cursor-pointer items-center justify-center flex gap-2 rounded-full bg-base-100 text-white font-medium border-[2px] border-secondary-content'>
                         {!isExpanded && (
                             <span className='h-full w-[30px] flex items-center justify-center ml-2 '>
-                                <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 80 80" >
-                                    <g fill="none">
-                                        <path fill="#8c3f27" d="M65.368 67.848a2 2 0 0 0 2.828-2.829zm-9.634-15.29a2 2 0 0 0-2.828 2.828zm12.462 12.461L55.734 52.557l-2.828 2.829l12.462 12.462z"></path>
-                                        <path fill="#ff9d33" stroke="#370a00" strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M13.578 30.724a24.249 24.249 0 1 1 46.844 12.552a24.249 24.249 0 0 1-46.844-12.552"></path>
-                                    </g>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
+                                    <path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5A6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5S14 7.01 14 9.5S11.99 14 9.5 14"></path>
                                 </svg>
+
                             </span>
                         )}
                         <motion.input
@@ -229,7 +224,7 @@ const Search = ({ height, displayType }) => {
                                 setUserName(val.trimStart());
                             }}
                             onBlur={() => { if (!username) { setIsExpanded(false) } }}
-                            className='h-full w-full bg-transparent text-sm placeholder-black/50 outline-none text-black '
+                            className='h-full w-full bg-transparent text-sm placeholder-info outline-none text-white '
                             style={isExpanded ? { marginLeft: "20px" } : {}}
                         />
 
@@ -237,25 +232,16 @@ const Search = ({ height, displayType }) => {
 
                             <span className='h-full flex items-center justify-center ml-2  p-2'>
                                 <div className="h-full w-[30px] flex items-center justify-center ml-2 text-primary">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24">
-                                        <path fill="currentColor" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity="0.3" />
-                                        <path fill="currentColor" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z">
-                                            <animateTransform attributeName="transform" dur="1s" from="0 12 12" repeatCount="indefinite" to="360 12 12" type="rotate" />
-                                        </path>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="M11.5 14c4.14 0 7.5 1.57 7.5 3.5V20H4v-2.5c0-1.93 3.36-3.5 7.5-3.5m6.5 3.5c0-1.38-2.91-2.5-6.5-2.5S5 16.12 5 17.5V19h13zM11.5 5A3.5 3.5 0 0 1 15 8.5a3.5 3.5 0 0 1-3.5 3.5A3.5 3.5 0 0 1 8 8.5A3.5 3.5 0 0 1 11.5 5m0 1A2.5 2.5 0 0 0 9 8.5a2.5 2.5 0 0 0 2.5 2.5A2.5 2.5 0 0 0 14 8.5A2.5 2.5 0 0 0 11.5 6"></path>
                                     </svg>
                                 </div>
                             </span>
                         ) : (
 
                             <span className='h-10 w-10 flex items-center justify-center rounded-full justify-self-end mr-3'>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width={24}
-                                    height={24}
-                                    viewBox="0 0 48 48"
-                                    className="cursor-pointer"
-                                >
-                                    <path fill="#ff9d33" stroke="#8c3f27" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M24 20a7 7 0 1 0 0-14a7 7 0 0 0 0 14M6 40.8V42h36v-1.2c0-4.48 0-6.72-.872-8.432a8 8 0 0 0-3.496-3.496C35.92 28 33.68 28 29.2 28H18.8c-4.48 0-6.72 0-8.432.872a8 8 0 0 0-3.496 3.496C6 34.08 6 36.32 6 40.8"></path>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1.7em" height="1.7em" viewBox="0 0 24 24">
+                                    <path fill="currentColor" d="M11.5 14c4.14 0 7.5 1.57 7.5 3.5V20H4v-2.5c0-1.93 3.36-3.5 7.5-3.5m6.5 3.5c0-1.38-2.91-2.5-6.5-2.5S5 16.12 5 17.5V19h13zM11.5 5A3.5 3.5 0 0 1 15 8.5a3.5 3.5 0 0 1-3.5 3.5A3.5 3.5 0 0 1 8 8.5A3.5 3.5 0 0 1 11.5 5m0 1A2.5 2.5 0 0 0 9 8.5a2.5 2.5 0 0 0 2.5 2.5A2.5 2.5 0 0 0 14 8.5A2.5 2.5 0 0 0 11.5 6"></path>
                                 </svg>
                             </span>
                         ))}
@@ -271,9 +257,9 @@ const Search = ({ height, displayType }) => {
 
                     className='h-[45px] w-[30px] flex items-center justify-center ml-2 ' >
 
-                    <span className='h-full flex items-center justify-center ml-2 bg-base-100 p-2 rounded-full border-[3px] border-secondary'>
+                    <span className='h-full flex items-center justify-center ml-2 bg-base-100 p-2 rounded-full border-[2px] border-secondary-content'>
                         {isSearching ? (
-                            <div className="h-full w-[30px] flex items-center justify-center ml-2 text-primary">
+                            <div className="h-full w-[30px] flex items-center justify-center] text-primary">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24">
                                     <path fill="currentColor" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity="0.3" />
                                     <path fill="currentColor" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z">
@@ -283,14 +269,8 @@ const Search = ({ height, displayType }) => {
                             </div>
                         ) : (
                             <span className='h-10 w-10 flex items-center justify-center rounded-full'>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width={24}
-                                    height={24}
-                                    viewBox="0 0 48 48"
-                                    className="cursor-pointer"
-                                >
-                                    <path fill="#ff9d33" stroke="#8c3f27" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M24 20a7 7 0 1 0 0-14a7 7 0 0 0 0 14M6 40.8V42h36v-1.2c0-4.48 0-6.72-.872-8.432a8 8 0 0 0-3.496-3.496C35.92 28 33.68 28 29.2 28H18.8c-4.48 0-6.72 0-8.432.872a8 8 0 0 0-3.496 3.496C6 34.08 6 36.32 6 40.8"></path>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1.7em" height="1.7em" viewBox="0 0 24 24">
+                                    <path fill="currentColor" d="M11.5 14c4.14 0 7.5 1.57 7.5 3.5V20H4v-2.5c0-1.93 3.36-3.5 7.5-3.5m6.5 3.5c0-1.38-2.91-2.5-6.5-2.5S5 16.12 5 17.5V19h13zM11.5 5A3.5 3.5 0 0 1 15 8.5a3.5 3.5 0 0 1-3.5 3.5A3.5 3.5 0 0 1 8 8.5A3.5 3.5 0 0 1 11.5 5m0 1A2.5 2.5 0 0 0 9 8.5a2.5 2.5 0 0 0 2.5 2.5A2.5 2.5 0 0 0 14 8.5A2.5 2.5 0 0 0 11.5 6"></path>
                                 </svg>
                             </span>
                         )}
@@ -302,13 +282,13 @@ const Search = ({ height, displayType }) => {
                     className={`${displayType === "nav"
                         ? "absolute right-0 top-full mt-3 w-[700px] z-50"
                         : "relative"
-                        } group bg-base-300  rounded-3xl border border-secondary border-[2px]`}
+                        } group bg-base-300  rounded-3xl border border-secondary-content border-[2px]`}
                 >
                     <div className="relative p-6 flex flex-col md:flex-row gap-6">
 
                         {/* LEFT PROFILE */}
                         <div className="flex flex-col items-center md:items-start space-y-4 ">
-                            <div className="relative w-28 h-28 rounded-2xl overflow-hidden  border border-secondary border-[3px]">
+                            <div className="relative w-28 h-28 rounded-2xl overflow-hidden  border border-secondary-content border-[2px]">
                                 <img
                                     src={data?.photoUrl?.url}
                                     className="  w-full h-full object-cover rounded-2xl group-hover:scale-110 transition-transform duration-700"
@@ -317,17 +297,17 @@ const Search = ({ height, displayType }) => {
 
                             {/* STATS */}
                             <div className="grid grid-cols-2 gap-2 w-full">
-                                <div className="text-center p-2 bg-base-100 rounded-lg border border-secondary border-[2px]">
+                                <div className="text-center p-2 bg-base-100 rounded-lg border border-secondary-content border-[2px]">
                                     <div className="text-xs text-secondary">Age</div>
                                     <div className="text-lg font-bold text-accent">{data?.age}</div>
                                 </div>
-                                <div className="text-center p-2 bg-base-100 rounded-lg border border-secondary border-[2px]">
+                                <div className="text-center p-2 bg-base-100 rounded-lg border border-secondary-content border-[2px]">
                                     <div className="text-xs text-secondary">Gender</div>
                                     <div className="text-lg font-bold text-accent">{data?.gender}</div>
                                 </div>
 
                             </div>
-                            <div className="flex items-center gap-2 px-3 py-1.5 bg-base-100 rounded-full border border-secondary border-[2px]">
+                            <div className="flex items-center gap-2 px-3 py-1.5 bg-base-100 rounded-full border border-secondary-content border-[2px]">
                                 <div className="w-2 h-2 bg-green-700 rounded-full animate-pulse"></div>
                                 <span className="text-md text-secondary">{data?.college}</span>
                             </div>
@@ -349,7 +329,7 @@ const Search = ({ height, displayType }) => {
                                     </div>
 
                                     <div className="flex items-center gap-2 mt-1">
-                                        <code className="text-secondary-content text-sm font-mono  border border-secondary px-3 py-1 rounded-xl bg-secondary " >
+                                        <code className="text-secondary-content text-sm font-mono  border border-secondary-content px-3 py-1 rounded-xl bg-secondary " >
                                             @{data?.username}
                                         </code>
                                         <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
@@ -361,7 +341,7 @@ const Search = ({ height, displayType }) => {
                                 <div className="flex flex-col items-end gap-3">
                                     <button
                                         type="button"
-                                        className="w-10 h-[45px] flex items-center justify-center border border-secondary rounded-full transition-colors duration-200 hover:bg-white/10"
+                                        className="w-10 h-[45px] flex items-center justify-center border border-secondary-content rounded-full transition-colors duration-200 hover:bg-white/10"
                                         onClick={() => { setShowCard(false); setShowRequestModal(false) }}
                                         aria-label="Close profile menu"
                                     >
@@ -378,7 +358,7 @@ const Search = ({ height, displayType }) => {
                             </div>
 
                             {/* ABOUT */}
-                            <div className="rounded-xl p-4 bg-base-100 border border-secondary border-[2px] shadow-inner backdrop-blur-xl">
+                            <div className="rounded-xl p-4 bg-base-100 border border-secondary-content border-[2px] shadow-inner backdrop-blur-xl">
                                 <h3 className="text-sm text-start font-semibold text-secondary mb-2">
                                     ABOUT :
                                 </h3>
@@ -399,7 +379,7 @@ const Search = ({ height, displayType }) => {
                                     data.skills.map((skill, idx) => (
                                         <span
                                             key={idx}
-                                            className=" px-3 py-1.5 text-xs font-medium rounded-xl bg-accent border border-white/10 text-gray-300  border border-secondary border-[2px] transition-all duration-300 group relative overflow-hidden "
+                                            className=" px-3 py-1.5 text-xs font-medium rounded-xl bg-accent border border-white/10 text-gray-300  border border-secondary-content border-[2px] transition-all duration-300 group relative overflow-hidden "
                                         >
                                             <div className="absolute inset-0 bg-accent/10 "></div>
                                             <span className="relative text-accent-content">{skill}</span>
@@ -418,7 +398,7 @@ const Search = ({ height, displayType }) => {
 
                                 {data?._id && !connectionsARR.some(item => item.userId === data._id) && (
                                     <button disabled={actionId === data?._id}
-                                        className={`${actionId === data?._id ? "opacity-70 cursor-not-allowed" : ""} relative hover:bg-base-200 group flex-1 min-w-[140px] bg-base-300 border border-[2px] border-secondary text-white px-4 py-2.5  rounded-xl font-medium  transition-all duration-300 active:scale-95 overflow-hidden`} onClick={() => sendRequest(data?.username, data?._id)}>
+                                        className={`${actionId === data?._id ? "opacity-70 cursor-not-allowed" : ""} relative hover:bg-base-200 group flex-1 min-w-[140px] bg-base-300 border border-[2px] border-secondary-content text-white px-4 py-2.5  rounded-xl font-medium  transition-all duration-300 active:scale-95 overflow-hidden`} onClick={() => sendRequest(data?.username, data?._id)}>
                                         <span className="relative z-10 flex items-center justify-center gap-2 text-xl">
 
                                             {actionId === data?._id && (<svg xmlns="http://www.w3.org/2000/svg" width={45} height={45} viewBox="0 0 24 24">

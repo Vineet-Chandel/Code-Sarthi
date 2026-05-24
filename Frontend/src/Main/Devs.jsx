@@ -6,6 +6,7 @@ import {
     useSpring,
 } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import Highlighter from "./Highlighter";
 
 /* ─────────────────────────────────────────
    Styles
@@ -34,7 +35,7 @@ font-size: clamp(4rem, 11vw, 7rem);
 .dv-hero-tagline {
   font-family: 'Space Mono', monospace;
   font-size: clamp(0.75rem, 1vw, 0.9rem);
-  color: rgba(255,255,255,0.3);
+  color: gray;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -403,7 +404,7 @@ const Devs = () => {
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.55, duration: 0.8 }}
                     >
-                        Made by developers, for developers.
+                        <Highlighter />
                     </motion.p>
 
                     {/* Tagline */}

@@ -235,7 +235,7 @@ const Top = () => {
     return (
         <div className="relative w-full">
             {/* NAVBAR */}
-            <div className=" z-10 w-full 2xl:px-7 xl:px-6 lg:px-4 px-2  w-screen text-secondary mt-5 mb-5">
+            <div className=" z-10 w-full 2xl:px-7 xl:px-6 lg:px-4 px-2   text-secondary mt-5 mb-5">
                 <div className="flex items-center  justify-center">
 
                     {/* MENU */}
@@ -252,7 +252,7 @@ const Top = () => {
                             >
                                 <div
                                     onClick={() => navigate(item.path)}
-                                    className="flex items-center gap-1 px-3 py-1 rounded-lg cursor-pointer
+                                    className="flex items-center gap-1 px-3 py-1 rounded-lg cursor-pointer text-secondary-content font-medium
                                                transition-all duration-300
                                                hover:bg-white hover:text-black group"
                                 >

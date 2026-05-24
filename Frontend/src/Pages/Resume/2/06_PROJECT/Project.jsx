@@ -60,19 +60,17 @@ const Project = ({ data }) => {
     const location = useLocation();
     let resumeData = location.state?.resumeData || {};
 
-    const [experiences, setExperiences] = useState(
+    const [projects, setProjects] = useState(
         resumeData?.experience?.length > 0
             ? resumeData.experience
             : [
                 {
-                    role: "",
-                    company: "",
-                    location: "",
-                    startDate: "",
-                    endDate: "",
-                    currentlyWorking: false,
-                    bullets: [],
-                    employmentType: ""
+                    name: "",
+                    stack: "",
+                    github: "",
+                    live: "",
+                    description: "",
+                    bullets: []
                 }
             ]
     );
@@ -84,12 +82,12 @@ const Project = ({ data }) => {
 
 
 
-    const prevExperience = resumeData?.experience || [];
+    const prevExperience = resumeData?.projects || [];
 
 
     resumeData = {
         ...resumeData,
-        experience: experiences
+        projects: projects
     };
 
 
@@ -99,37 +97,38 @@ const Project = ({ data }) => {
 
 
     const handleChange2 = (index, id, value) => {
-        setExperiences(prev =>
-            prev.map((exp, i) =>
-                i === index ? { ...exp, [id]: value } : exp
+        setProjects(prev =>
+            prev.map((project, i) =>
+                i === index ? { ...project, [id]: value } : project
             )
         );
     };
-    const addExperience = () => {
-        setExperiences(prev => [
+    const addProject = () => {
+        setProjects(prev => [
             ...prev,
             {
-                role: "",
-                company: "",
-                location: "",
-                startDate: "",
-                endDate: "",
-                currentlyWorking: false,
+                name: "",
+                stack: "",
+                github: "",
+                live: "",
+                description: "",
                 bullets: [],
-                employmentType: "",
             }
         ]);
     };
+
     const [activeInputIndex, setActiveInputIndex] = useState(null);
     const [editingBulletIndex, setEditingBulletIndex] = useState(null);
     const [toasts, setToasts] = useState([]);
     const [aiModalOpen, setAiModalOpen] = useState(false);
     const [bullets, setBullets] = useState([]);
     const [isAiworking, setIsAiworking] = useState(false);
-    const [selectedRole, setSelectedRole] = useState();
-    const [selectedCompany, setSelectedCompany] = useState();
-    const [selectedEmploymentType, setSelectedEmploymentType] = useState();
-    const [selectedExpIndex, setSelectedExpIndex] = useState(null);
+    const [selectedName, setSelectedName] = useState();
+    const [selectedStack, setSelectedStack] = useState();
+    const [selectedGithub, setSelectedGithub] = useState();
+    const [selectedLive, setSelectedLive] = useState();
+    const [selectedDescription, setSelectedDescription] = useState();
+    const [selectedProIndex, setSelectedProIndex] = useState(null);
     const [points, setpoints] = useState([]);
 
     const [bulletInput, setBulletInput] = useState("");

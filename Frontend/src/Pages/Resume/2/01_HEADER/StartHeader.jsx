@@ -60,32 +60,34 @@ const InputField = ({ label, id, value, type = "text", placeholder, onChange, on
 
             {id === 'phone' && (
 
-                <div className='w-full flex items-center'>
-                    <PhoneInput
-                        international
-                        defaultCountry="IN"
-                        value={value}
-                        onChange={(value) => onChange(id, value)}
-                        onBlur={onBlur}
-                        onFocus={onFocus}
-                        className=" w-full bg-transparent
-        border-none outline-none
-h-full 
-        focus:ring-0 placeholder:text-slate-600"
-                    />
-                    {phoneSucess && (
-                        <div className="flex items-center justify-center ml-2">
-                            <p className="text-success text-xs  flex items-center justify-start">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" viewBox="0 0 24 24">
-                                    <path d="M0 0h24v24H0z" fill="none" />
-                                    <g fill="none">
-                                        <circle cx="10" cy="14" r="7" fill="currentColor" fill-opacity=".25" />
-                                        <path stroke="currentColor" stroke-width="1.2" d="m6 13l4 3l7-9" />
+                <div className="w-full max-w-md">
+
+
+                    <div className="relative flex items-center w-full bg-slate-900/50 border border-slate-800 rounded-xl px-3.5 py-2.5 transition-all duration-200 focus-within:border-emerald-500/50 focus-within:ring-2 focus-within:ring-emerald-500/10">
+
+                        <PhoneInput
+                            id={id}
+                            international
+                            defaultCountry="IN"
+                            value={value}
+                            onChange={(val) => onChange(id, val)}
+                            onBlur={onBlur}
+                            onFocus={onFocus}
+                            className="flex-1 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none bg-transparent border-none"
+                        />
+
+                        {phoneSucess && (
+                            <div className="flex items-center justify-center ml-2 text-emerald-400 animate-in fade-in zoom-in-95 duration-200">
+                                <span className="text-xs font-medium mr-1.5 text-emerald-500/90">Verified</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1.25em" height="1.25em" viewBox="0 0 24 24" className="drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]">
+                                    <g fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <circle cx="12" cy="12" r="10" className="opacity-20" fill="currentColor" />
+                                        <path d="m9 12l2 2l4-4" />
                                     </g>
                                 </svg>
-
-                            </p>
-                        </div>)}
+                            </div>
+                        )}
+                    </div>
                 </div>
             )}
 

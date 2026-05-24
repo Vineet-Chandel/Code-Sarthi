@@ -68,7 +68,7 @@ import RequestedUser from "./personalPages/RequestedUser";
 import ReceivedRequests from "./personalPages/ReceivedRequests";
 import SmartSchedulerLakshya from "./Main/PagesMain/Sub-Category/Blog-Category/SmartSchedulerLakshya";
 import PrivacyPolicyHub from "./Main/PagesMain/Sub-Category/Safety-Category/Hub/PrivacyPolicyHub";
-
+import IntroProject from "./Pages/Resume/2/06_PROJECT/IntroProject"
 import IntroEXP from "./Pages/Resume/2/02_EXP/IntroEXP";
 import IntroSummary from "./Pages/Resume/2/05_PRSUM/IntroProfileSummary";
 import Experience from "./Pages/Resume/2/02_EXP/Experinece";
@@ -158,6 +158,7 @@ const App = () => {
               <Route path="build-resume/project-content" element={<Project />} />
               <Route path="build-resume/intro-exp-page" element={<IntroEXP />} />
               <Route path="build-resume/intro-edu-page" element={< IntroEdu />} />
+              <Route path="build-resume/intro-project-page" element={< IntroProject />} />
               <Route path="build-resume/intro-skill-page" element={< IntroSkill />} />
               <Route path="build-resume/intro-summary-page" element={< IntroSummary />} />
               <Route path="build-resume/summary-content" element={<Summary />} />

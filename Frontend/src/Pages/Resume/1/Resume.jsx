@@ -7,6 +7,7 @@ import Example from './Example';
 import Choose from './Choose';
 import HowToCreate from './HowToCreate';
 import Block from './Block';
+import { AppleCardsCarouselDemo } from '../AppleCardsCarouselDemo';
 
 
 
@@ -15,12 +16,13 @@ const Resume = () => {
         <div>
             <Top />
             <Landing />
-            <ResumeGetHired />
             <HowToCreate />
+            <ResumeGetHired />
             <Block />
+            <Example />
             <Choose />
             <WhyWe />
-            <Example />
+            <AppleCardsCarouselDemo />
 
 
 

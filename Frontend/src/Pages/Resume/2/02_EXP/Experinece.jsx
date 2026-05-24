@@ -9,7 +9,7 @@ import { AnimatePresence } from "framer-motion";
 import ProgressMeter from '../ProgressMeter';
 import Header from '../Header';
 import Step from '../Step';
-import { preview } from 'vite';
+
 import Preview from '../Preview';
 
 
@@ -94,8 +94,7 @@ const Experience = ({ data }) => {
 
 
     const Navigate = useNavigate();
-    const [isVisible] = useIntersectionObserver();
-    const [hovered, setHovered] = useState(false);
+
 
 
     const handleChange2 = (index, id, value) => {
