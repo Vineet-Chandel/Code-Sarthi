@@ -40,7 +40,7 @@ const Block = () => {
 
     ];
     return (
-        <div className='w-full  mt-20 bg-base-100  font-sans flex justify-center items-center'>
+        <div className='w-full  mt-20 mb-20 bg-base-100  font-sans flex justify-center items-center'>
 
             <div className='w-[95%] h-full bg-base-100 rounded-xl '>
                 <div className="max-w-4xl mx-auto text-center mb-16">
@@ -83,11 +83,7 @@ const Block = () => {
 
 
                 </div>
-                {/* CTA Section */}
-                <div className='mt-10 flex flex-col items-center gap-6 mb-10'>
-                    <CTAcreateResume />
 
-                </div>
             </div>
         </div>
     );

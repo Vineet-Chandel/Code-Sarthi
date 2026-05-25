@@ -22,7 +22,7 @@ const Resume = () => {
             <Example />
             <Choose />
             <WhyWe />
-            <AppleCardsCarouselDemo />
+
 
 
 

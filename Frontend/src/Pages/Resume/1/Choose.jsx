@@ -182,7 +182,7 @@ const Choose = () => {
             <div className='w-[98%] h-full bg-base-100 rounded-xl '>
                 {/* Header Section */}
                 <div className="max-w-4xl mx-auto text-center mb-16">
-                    <h1 className="text-3xl md:text-5xl font-black tracking-tight  text-info mb-4">
+                    <h1 className="text-4xl md:text-6xl font-black tracking-tight  text-info mb-4">
                         Choose Your <span className="text-accent-content ">Professional {" "}</span>.
                     </h1>
                     <p className="text-lg text-info mb-2 max-w-[100%] mx-auto">Select one of the ATS-friendly <span className='font-extrabold text-info underline underline-offset-8 decoration-primary decoration-2 cursor-pointer' onClick={() => Navigate("/app/resume-templates")}>resume templates</span>  below. Fill it in with AI-generated text inspired by your work experience.</p>
@@ -290,8 +290,11 @@ const Choose = () => {
                 </div>
 
                 {/* CTA Section */}
-                <div className='mt-20 flex flex-col items-center gap-6 mb-20'>
-                    <CTAcreateResume />
+                <div className='   flex flex-col items-center gap-6 mb-5'>
+                    <span>
+                        <CTAcreateResume />
+                    </span>
+
 
                 </div>
             </div>

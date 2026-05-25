@@ -2,7 +2,7 @@ import React from 'react';
 import { ArrowLeft, Sparkles, Search, GraduationCap, ChevronRight } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-const IntroEdu = () => {
+const IntroEXP = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const resumeData = location.state?.resumeData;
@@ -10,7 +10,7 @@ const IntroEdu = () => {
     return (
         <div
             data-theme="caramellatte"
-            className="min-h-screen font-sans relative overflow-hidden flex flex-col md:flex-row items-center justify-center p-8 md:p-20 gap-16"
+            className="min-h-screen font-sans relative overflow-hidden flex flex-col md:flex-row items-center justify-center px-8 md:px-20 gap-16"
             style={{ backgroundColor: 'var(--color-base-100)', color: 'var(--color-base-content)' }}
         >
             {/* Noise texture overlay */}
@@ -33,15 +33,6 @@ const IntroEdu = () => {
                     animation: 'driftA 9s ease-in-out infinite',
                 }}
             />
-            <div
-                className="pointer-events-none absolute bottom-[-60px] left-[5%] w-[320px] h-[320px] rounded-full"
-                style={{
-                    background: 'radial-gradient(circle, var(--color-warning) 0%, transparent 70%)',
-                    opacity: 0.25,
-                    filter: 'blur(55px)',
-                    animation: 'driftB 11s ease-in-out infinite',
-                }}
-            />
 
             {/* Decorative dashed rings */}
             <svg
@@ -50,8 +41,8 @@ const IntroEdu = () => {
                 style={{ opacity: 0.12 }}
                 aria-hidden="true"
             >
-                <circle cx="55" cy="55" r="50" stroke="var(--color-neutral)" strokeWidth="1.5" strokeDasharray="5 4" />
-                <circle cx="55" cy="55" r="30" stroke="var(--color-neutral)" strokeWidth="1" strokeDasharray="3 5" />
+                <circle cx="55" cy="55" r="50" stroke="var(--color-info)" strokeWidth="1.5" strokeDasharray="5 4" />
+                <circle cx="55" cy="55" r="30" stroke="var(--color-info)" strokeWidth="1" strokeDasharray="3 5" />
             </svg>
 
             {/* ── LEFT PANEL ── */}
@@ -70,23 +61,23 @@ const IntroEdu = () => {
                 >
                     <span
                         className="w-1.5 h-1.5 rounded-full"
-                        style={{ background: 'var(--color-neutral)', animation: 'pulseDot 2s ease-in-out infinite' }}
+                        style={{ background: 'var(--color-secondary-content)', animation: 'pulseDot 2s ease-in-out infinite' }}
                     />
-                    Step 3 of 8 · Education
+                    Step 2 of 8 · EDUCATION
                 </div>
 
                 {/* Heading */}
                 <div style={{ animation: 'fadeUp 0.55s ease both' }}>
-                    <p className="text-sm font-medium mb-3" style={{ color: 'var(--color-neutral)', letterSpacing: '0.02em' }}>
+                    <p className="text-sm font-medium mb-3" style={{ color: 'var(--color-info)', letterSpacing: '0.02em' }}>
                         Great progress! Next up →
                     </p>
                     <h1
                         className="font-black leading-[1.08] tracking-tight"
-                        style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', color: 'var(--color-secondary)' }}
+                        style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', color: 'var(--color-info)' }}
                     >
                         Now, let’s add your
                         <br />
-                        <span className="relative inline-block" style={{ color: 'var(--color-neutral)' }}>
+                        <span className="relative inline-block" style={{ color: 'var(--color-secondary-content)' }}>
                             education
                             <svg
                                 viewBox="0 0 290 12"
@@ -98,7 +89,7 @@ const IntroEdu = () => {
                                 <path
                                     d="M2 8 C 50 2, 100 12, 150 6 S 230 2, 288 8"
                                     fill="none"
-                                    stroke="var(--color-warning)"
+                                    stroke="var(--color-info)"
                                     strokeWidth="3"
                                     strokeLinecap="round"
                                 />
@@ -120,18 +111,18 @@ const IntroEdu = () => {
                     <div
                         className="w-10 h-10 flex items-center justify-center shrink-0"
                         style={{
-                            background: 'var(--color-warning)',
-                            color: 'var(--color-warning-content)',
+                            background: 'var(--color-secondary-content)',
+                            color: 'var(--color-base-100)',
                             borderRadius: 'var(--radius-field)',
                         }}
                     >
                         <Sparkles className="w-5 h-5" />
                     </div>
                     <div>
-                        <p className="text-sm font-bold mb-0.5" style={{ color: 'var(--color-secondary)' }}>
+                        <p className="text-sm font-bold mb-0.5" style={{ color: 'var(--color-secondary-content)' }}>
                             AI writing assistant is active
                         </p>
-                        <p className="text-xs leading-relaxed" style={{ color: 'var(--color-accent)' }}>
+                        <p className="text-xs leading-relaxed" style={{ color: 'var(--color-info)' }}>
                             Fix mistakes, rephrase bullet points, or let AI draft from your notes — all in one click.
                         </p>
                     </div>
@@ -140,15 +131,15 @@ const IntroEdu = () => {
                 {/* Progress */}
                 <div style={{ animation: 'fadeUp 0.55s ease 0.22s both' }}>
                     <div className="flex justify-between text-xs mb-2">
-                        <span style={{ color: 'var(--color-accent)' }}>Resume completeness</span>
-                        <span className="font-bold" style={{ color: 'var(--color-secondary)' }}>25%</span>
+                        <span style={{ color: 'var(--color-info)' }}>Resume completeness</span>
+                        <span className="font-bold" style={{ color: 'var(--color-info)' }}>12.5%</span>
                     </div>
                     <div className="h-2 overflow-hidden" style={{ background: 'var(--color-base-300)', borderRadius: 'var(--radius-selector)' }}>
                         <div
                             className="h-full"
                             style={{
-                                width: '25%',
-                                background: 'linear-gradient(90deg, var(--color-secondary), var(--color-neutral))',
+                                width: '12.5%',
+                                background: 'linear-gradient(90deg, var(--color-info), var(--color-info))',
                                 borderRadius: 'var(--radius-selector)',
                                 transition: 'width 1s ease',
                             }}
@@ -163,12 +154,12 @@ const IntroEdu = () => {
                                     style={{
                                         width: i === 2 ? '10px' : '7px',
                                         height: i === 2 ? '10px' : '7px',
-                                        background: i <= 2 ? 'var(--color-neutral)' : 'var(--color-base-300)',
-                                        outline: i === 2 ? '2px solid var(--color-secondary)' : 'none',
+                                        background: i <= 2 ? 'var(--color-info)' : 'gray',
+                                        outline: i === 2 ? '2px solid var(--color-info)' : 'none',
                                         outlineOffset: '2px',
                                     }}
                                 />
-                                <span className="text-[9px] font-medium" style={{ color: i <= 2 ? 'var(--color-base-content)' : 'var(--color-base-300)' }}>
+                                <span className="text-[11px] font-medium" style={{ color: i <= 3 ? 'var(--color-base-content)' : 'gray' }}>
                                     {label}
                                 </span>
                             </div>
@@ -183,8 +174,8 @@ const IntroEdu = () => {
                 >
                     <button
                         className="flex items-center gap-2 text-sm font-semibold transition-opacity hover:opacity-60"
-                        style={{ color: 'var(--color-neutral)', background: 'none', border: 'none', cursor: 'pointer' }}
-                        onClick={() => navigate('/app/build-resume/experience-content', { state: { resumeData } })}
+                        style={{ color: 'var(--color-secondary-content)', background: 'none', border: 'none', cursor: 'pointer' }}
+                        onClick={() => navigate('/app/build-resume/header-content', { state: { resumeData } })}
                     >
                         <ArrowLeft size={16} /> Back
                     </button>
@@ -192,20 +183,20 @@ const IntroEdu = () => {
                     <button
                         className="flex items-center gap-2 px-8 py-3.5 text-sm font-bold transition-all duration-150 active:scale-95"
                         style={{
-                            background: 'var(--color-secondary)',
-                            color: 'var(--color-secondary-content)',
-                            border: '2px solid var(--color-secondary)',
+                            background: 'var(--color-secondary-content)',
+                            color: 'var(--color-base-100)',
+                            border: '2px solid var(--color-info)',
                             borderRadius: 'var(--radius-selector)',
-                            boxShadow: '4px 4px 0px var(--color-neutral)',
+                            boxShadow: '4px 4px 0px var(--color-info)',
                             cursor: 'pointer',
                         }}
                         onMouseEnter={e => {
                             e.currentTarget.style.transform = 'translate(-2px,-2px)';
-                            e.currentTarget.style.boxShadow = '6px 6px 0px var(--color-neutral)';
+                            e.currentTarget.style.boxShadow = '6px 6px 0px var(--color-info)';
                         }}
                         onMouseLeave={e => {
                             e.currentTarget.style.transform = 'translate(0,0)';
-                            e.currentTarget.style.boxShadow = '4px 4px 0px var(--color-neutral)';
+                            e.currentTarget.style.boxShadow = '4px 4px 0px var(--color-info)';
                         }}
                         onClick={() => navigate('/app/build-resume/education-content', { state: { resumeData } })}
                     >
@@ -224,7 +215,7 @@ const IntroEdu = () => {
                     className=" w-[450px] flex flex-col items-center justify-between pb-5 "
                     style={{
                         height: '372px',
-                        background: 'var(--color-warning)',
+                        background: 'var(--color-secondary-content)',
 
                         borderRadius: 'var(--radius-box)',
 
@@ -247,7 +238,7 @@ const IntroEdu = () => {
                         <div
                             className="h-1.5 w-full mb-4"
                             style={{
-                                background: 'linear-gradient(90deg, var(--color-secondary) 0%, var(--color-neutral) 50%, var(--color-warning) 100%)',
+                                background: 'linear-gradient(90deg, var(--color-info) 0%, var(--color-info) 50%, var(--color-secondary-content) 100%)',
                                 borderRadius: 'var(--radius-selector)',
                             }}
                         />
@@ -258,7 +249,7 @@ const IntroEdu = () => {
                                 className="w-10 h-10 flex items-center justify-center text-xs font-bold"
                                 style={{
                                     background: 'var(--color-base-200)',
-                                    color: 'var(--color-secondary)',
+                                    color: 'var(--color-info)',
                                     border: '2px solid var(--color-base-300)',
                                     borderRadius: '50%',
                                 }}
@@ -266,14 +257,14 @@ const IntroEdu = () => {
                                 JD
                             </div>
                             <div>
-                                <div className="h-2.5 w-24 mb-1.5" style={{ background: 'var(--color-secondary)', borderRadius: 'var(--radius-selector)', opacity: 0.85 }} />
+                                <div className="h-2.5 w-24 mb-1.5" style={{ background: 'var(--color-info)', borderRadius: 'var(--radius-selector)', opacity: 0.85 }} />
                                 <div className="h-2 w-16" style={{ background: 'var(--color-base-300)', borderRadius: 'var(--radius-selector)' }} />
                             </div>
                         </div>
 
                         {/* experience (dimmed) */}
                         <div className="mb-4" style={{ opacity: 0.28 }}>
-                            <div className="h-2 w-16 mb-2" style={{ background: 'var(--color-neutral)', borderRadius: 'var(--radius-selector)' }} />
+                            <div className="h-2 w-16 mb-2" style={{ background: 'var(--color-info)', borderRadius: 'var(--radius-selector)' }} />
                             <div className="space-y-1.5">
                                 <div className="h-1.5 w-full" style={{ background: 'var(--color-base-300)', borderRadius: 'var(--radius-selector)' }} />
                                 <div className="h-1.5 w-4/5" style={{ background: 'var(--color-base-300)', borderRadius: 'var(--radius-selector)' }} />
@@ -285,14 +276,14 @@ const IntroEdu = () => {
                             className="relative p-3 mb-4"
                             style={{
                                 background: 'var(--color-base-300)',
-                                border: '2px dashed var(--color-neutral)',
+                                border: '2px dashed var(--color-info)',
                                 borderRadius: 'var(--radius-box)',
                             }}
                         >
                             <div
                                 className="absolute -top-3 left-3 flex items-center gap-1 px-2 py-0.5 text-[9px] font-bold tracking-widest uppercase"
                                 style={{
-                                    background: 'var(--color-secondary)',
+                                    background: 'var(--color-base-100)',
                                     color: 'var(--color-secondary-content)',
                                     borderRadius: 'var(--radius-selector)',
                                 }}
@@ -307,7 +298,7 @@ const IntroEdu = () => {
                                     style={{
                                         width: `${w}%`,
                                         borderRadius: 'var(--radius-selector)',
-                                        backgroundImage: 'linear-gradient(90deg, var(--color-accent) 25%, var(--color-secondary) 50%, var(--color-base-300) 75%)',
+                                        backgroundImage: 'linear-gradient(90deg, var(--color-accent) 25%, var(--color-info) 50%, var(--color-base-300) 75%)',
                                         backgroundSize: '200% 100%',
                                         animation: `shimmer 2s ease-in-out infinite ${i * 0.22}s`,
                                     }}
@@ -326,8 +317,8 @@ const IntroEdu = () => {
                         <button
                             className="absolute bottom-4 right-4 w-8 h-8 flex items-center justify-center transition-transform hover:scale-110"
                             style={{
-                                background: 'var(--color-warning)',
-                                color: 'var(--color-warning-content)',
+                                background: 'var(--color-base-100)',
+                                color: 'var(--color-info)',
                                 border: '2px solid var(--color-base-300)',
                                 borderRadius: '50%',
                                 cursor: 'pointer',
@@ -340,7 +331,7 @@ const IntroEdu = () => {
 
                     <button
                         className="mt-5 text-xs font-semibold underline underline-offset-4 transition-opacity hover:opacity-60"
-                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-primary)' }}
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-base-100)' }}
                     >
                         Change template
                     </button>
@@ -378,4 +369,4 @@ const IntroEdu = () => {
     );
 };
 
-export default IntroEdu;
+export default IntroEXP;

@@ -34,56 +34,147 @@ const Welcome = () => {
         };
     }, [navigate]);
     return (
+
         <div
-            className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#050505] transition-all duration-[1200ms] ease-in-out ${visible ? "opacity-100" : "opacity-0 scale-95 pointer-events-none"
+            className={`fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-hidden bg-[#050505] px-4 transition-all duration-[1200ms] ease-in-out ${visible
+                ? "opacity-100 scale-100"
+                : "opacity-0 scale-95 pointer-events-none"
                 }`}
         >
-            {/* Ambient Background Depth */}
+            {/* Ambient Background */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/10 blur-[140px] rounded-full" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-cyan-600/5 blur-[140px] rounded-full" />
+                <div className="absolute top-[-10%] left-[-10%] h-[45%] w-[45%] rounded-full bg-blue-600/10 blur-[120px] md:blur-[160px]" />
+
+                <div className="absolute bottom-[-10%] right-[-10%] h-[45%] w-[45%] rounded-full bg-cyan-600/5 blur-[120px] md:blur-[160px]" />
             </div>
 
-            <div className="relative z-10 flex flex-col items-center">
-                {/* Minimal Top Label */}
-                <span className="mb-6 text-[10px] uppercase tracking-[0.6em] text-blue-400/60 font-medium">
+            {/* Main Content */}
+            <div className="relative z-10 flex flex-col items-center text-center">
+                {/* Top Label */}
+                <span
+                    className="
+                            mb-5
+                            text-[8px]
+                            sm:text-[9px]
+                            md:text-[10px]
+                            uppercase
+                            tracking-[0.4em]
+                            md:tracking-[0.6em]
+                            text-gray-500
+                            font-medium
+                        "
+                >
                     Developer Ecosystem
                 </span>
 
-                <div className="flex flex-col items-center text-center space-y-2">
-                    <h2 className="text-3xl md:text-4xl font-light italic text-gray-400/80 font-serif tracking-wide">
+                {/* Heading */}
+                <div className="flex flex-col items-center space-y-1 md:space-y-2">
+                    <h2
+                        className="
+                                text-xl
+                                sm:text-2xl
+                                md:text-4xl
+                                font-light italic
+                                text-gray-400/80
+                                font-serif
+                                tracking-wide
+                            "
+                    >
                         Welcome to
                     </h2>
-                    <h1 className="text-7xl md:text-9xl font-bold tracking-tighter text-white">
-                        Code<span className="text-blue-500">Sarthi</span>
+
+                    <h1
+                        className="
+                                text-5xl
+                                sm:text-6xl
+                                md:text-8xl
+                                lg:text-9xl
+                                font-bold
+                                tracking-tight
+                                md:tracking-tighter
+                                text-white
+                                leading-none
+                            "
+                    >
+                        CodeSarthi
                     </h1>
                 </div>
 
-                {/* Tagline Reveal */}
-                <p className={`mt-6 text-[11px] uppercase tracking-[0.4em] text-gray-500 transition-all duration-1000 delay-500 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-                    }`}>
+                {/* Tagline */}
+                <p
+                    className={`mt-5 md:mt-6 text-[9px] sm:text-[10px] md:text-[11px] uppercase tracking-[0.25em] sm:tracking-[0.35em] md:tracking-[0.4em] text-gray-500 transition-all duration-1000 delay-500 ${visible
+                        ? "opacity-100 translate-y-0"
+                        : "opacity-0 translate-y-2"
+                        }`}
+                >
                     Architecting the Future
                 </p>
 
-                {/* Precision Loader */}
-                <div className="relative mt-16 w-64 h-[1px] bg-white/5 overflow-hidden">
+                {/* Loader */}
+                <div
+                    className="
+                            relative mt-12 md:mt-16
+                            h-[2px]
+                            w-48
+                            sm:w-60
+                            md:w-72
+                            bg-white/5
+                            overflow-hidden
+                            rounded-full
+                        "
+                >
                     <div
-                        className="absolute top-0 left-0 h-full bg-gradient-to-r from-transparent via-blue-500 to-transparent transition-all duration-300 ease-out"
+                        className="absolute left-0 top-0 h-full bg-gradient-to-r from-transparent via-blue-500 to-transparent transition-all duration-300 ease-out"
                         style={{ width: `${progress}%` }}
                     />
                 </div>
 
-                {/* Dynamic Counter */}
-                <span className="mt-4 font-mono text-[10px] text-gray-600 tracking-[0.2em]">
+                {/* Counter */}
+                <span
+                    className="
+                            mt-4
+                            font-mono
+                            text-[9px]
+                            sm:text-[10px]
+                            md:text-xs
+                            text-gray-600
+                            tracking-[0.15em]
+                            md:tracking-[0.2em]
+                        "
+                >
                     {progress}%
                 </span>
             </div>
 
-            {/* Subtle Footer */}
-            <div className="absolute bottom-12 flex flex-col items-center gap-2">
-                <div className="h-8 w-[1px] bg-gradient-to-b from-blue-500/50 to-transparent" />
-                <span className="text-[9px] uppercase tracking-[0.3em] text-gray-600 inline-block">
-                    Made in India <svg className=" inline-block" xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 64 64">
+            {/* Footer */}
+            <div
+                className="
+                        absolute bottom-6 md:bottom-10
+                        flex flex-col items-center gap-2
+                    "
+            >
+                <div className="h-6 md:h-8 w-[1px] bg-gradient-to-b from-blue-500/50 to-transparent" />
+
+                <span
+                    className="
+                            flex items-center gap-1
+                            text-[8px]
+                            sm:text-[9px]
+                            uppercase
+                            tracking-[0.2em]
+                            md:tracking-[0.3em]
+                            text-gray-600
+                            text-center
+                        "
+                >
+                    Made in India
+
+                    <svg
+                        className="inline-block h-3 w-3 md:h-4 md:w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 64 64"
+                        fill="none"
+                    >
                         <path fill="#e6e7e8" d="M0 24h64v14H0z"></path>
                         <path fill="#f93" d="M54 9H10C3.373 9 0 13.925 0 20v4h64v-4c0-6.075-3.373-11-10-11"></path>
                         <path fill="#128807" d="M0 42c0 6.075 3.373 11 10 11h44c6.627 0 10-4.925 10-11v-4H0z"></path>
@@ -96,6 +187,14 @@ const Welcome = () => {
                 </span>
             </div>
         </div>
+
+
+
+
+
+
+
+
     );
 };
 

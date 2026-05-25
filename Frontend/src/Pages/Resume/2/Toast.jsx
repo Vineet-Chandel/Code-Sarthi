@@ -17,12 +17,22 @@ const Toast = ({ type = "success", title, message, onClose }) => {
 
     // Color Mapping for cleaner JSX
     const theme = {
-        bg: isSuccess ? "bg-base-100" : "bg-red-400/20",
-        accent: isSuccess ? "bg-accent" : "bg-red-500",
-        border: isSuccess ? "border-accent" : "border-red-500",
-        iconBg: isSuccess ? "bg-white" : "bg-white",
-        iconText: isSuccess ? "text-accent" : "text-red-500",
-        blob: isSuccess ? "bg-accent/40" : "bg-red-500/40",
+        // Uses your deep dark colors for backgrounds with subtle, sophisticated borders
+        bg: isSuccess ? "bg-base-200/90 backdrop-blur-md" : "bg-error/10 backdrop-blur-md",
+        border: isSuccess ? "border-success/30" : "border-error/30",
+
+        // Accents and indicators using your explicit semantic colors
+        accent: isSuccess ? "bg-success" : "bg-error",
+
+        // Icon styling that stays clean and visible against the dark backgrounds
+        iconBg: isSuccess ? "bg-success/20" : "bg-error/20",
+        iconText: isSuccess ? "text-success" : "text-error",
+
+        // Background decorative blob or glow effect
+        blob: isSuccess ? "bg-success/10 blur-xl" : "bg-error/10 blur-xl",
+
+        // Text color mapping to your absolute white content variables
+        text: isSuccess ? "text-success-content" : "text-error-content",
     };
 
     return (

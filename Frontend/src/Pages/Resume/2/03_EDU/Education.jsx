@@ -386,7 +386,7 @@ const Education = ({ data }) => {
                         {education.map((form, index) => (
                             <div key={index} className="bg-base-300 rounded-3xl shadow-inner p-7 mb-6">
                                 <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-lg font-bold text-slate-700">Educationn Feild #{index + 1}</h3>
+                                    <h3 className="text-lg font-bold text-white">Educationn Feild #{index + 1}</h3>
                                     <button
                                         onClick={() => {
                                             const newExperiences = [...education];
