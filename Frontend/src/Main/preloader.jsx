@@ -236,7 +236,7 @@ const Preloader = ({ onFinish }) => {
                     duration={1.2}
                     className="
                     absolute z-[60]
-                    bottom-6 right-6
+                    bottom-10 right-6
     
                     text-white font-extrabold
                     leading-none

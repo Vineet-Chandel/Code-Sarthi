@@ -132,7 +132,7 @@ const STYLES = `
 
   .cs-tag-item {
     display: flex; align-items: flex-start; gap: 10px;
-    padding: 12px 16px;
+
     border-radius: 12px;
     border: 1px solid transparent;
     transition: all 0.25s;
@@ -457,11 +457,11 @@ const ContentFirst = () => {
             <div key={item.id} className={`cs-feat-row flex flex-col ${idx % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} items-stretch gap-0`}>
 
               {/* Text panel */}
-              <div className="flex flex-col gap-6 p-8 lg:p-12 w-full lg:w-[45%] justify-center">
+              <div className="flex flex-col gap-6 p-6  lg:p-10 w-full lg:w-[45%] justify-center">
                 <p className="cs-feat-num">// {item.num} — {item.label}</p>
                 <h2 className="cs-feat-heading">{item.heading}</h2>
 
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-1 ">
                   {item.tagLines.map((line, i) => (
                     <div key={i} className="cs-tag-item ">
                       <span className="cs-tag-icon"><svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24">
@@ -523,7 +523,7 @@ const ContentFirst = () => {
         <div className="relative z-10 w-full max-w-[1400px] px-4 md:px-10 mt-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {featuredData2.map((card, i) => (
-              <div key={i} className="cs-card">
+              <div key={i} className="cs-card group">
                 {/* Image */}
                 <div className="cs-card-img-wrap">
                   <img src={card.img} alt={card.heading} />
@@ -536,7 +536,7 @@ const ContentFirst = () => {
 
                   <div className="cs-card-tags">
                     {card.tags.map((tag, j) => (
-                      <p key={j} className="cs-card-tag">◆ {tag}</p>
+                      <p key={j} className="cs-card-tag " > <span className='group-hover:text-green-500'> ✦ </span>  {tag}</p>
                     ))}
                   </div>
 

@@ -53,7 +53,7 @@ const Mainhero = () => {
 
             {/* Center container */}
             <div className="relative  flex flex-col items-center justify-between h-full w-full pt-[6rem] pb-[2rem]">
-                <div className='w-screen relative left-5 max-xl:left-4 max-lg:left-3 max-md:left-2 max-sm:left-1'>
+                <div className='w-screen relative left-5 max-xl:left-4 max-lg:left-3 max-md:left-2 '>
 
                     <div className=" text-white font-extrabold font-zentry  text-[11rem] max-xl:text-[9rem] max-lg:text-[7rem] max-md:text-[5rem] max-sm:text-[3.5rem] leading-none">DEVELOPERS</div>
 
@@ -97,7 +97,7 @@ const Mainhero = () => {
                     />
                 </div>
 
-                <div className="w-screen h-auto flex  flex-col justify-end items-end relative right-5 max-xl:right-4 max-lg:right-3 max-md:right-2 max-sm:right-1 py-10 px-5">
+                <div className="w-screen h-auto flex  flex-col justify-end items-end relative right-5 max-xl:right-4 max-lg:right-3 max-md:right-2  py-10 ">
 
                     <div className="
                 text-white 

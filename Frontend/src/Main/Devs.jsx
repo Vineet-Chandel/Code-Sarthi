@@ -12,52 +12,110 @@ import Highlighter from "./Highlighter";
    Styles
 ───────────────────────────────────────── */
 const STYLES = `
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600&display=swap');
 
-/* ── Hero ── */
+
 .dv-hero-title {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-font-size: clamp(4rem, 11vw, 7rem);
-  line-height: 0.9;
-  letter-spacing: -0.04em;
+  font-family: head;
 
+
+  
+
+  line-height: 0.85;
+  letter-spacing: -0.07em;
+
+  text-wrap: balance;
+
+  background-size: 200% auto;
+
+
+
+}
+
+@keyframes dv-shine {
+  to {
+    background-position: 200% center;
+  }
 }
 
 .dv-hero-sub {
   font-family: 'Outfit', sans-serif;
   font-weight: 300;
-  font-size: clamp(1rem, 1.8vw, 1.3rem);
-  color: rgba(255,255,255,0.6);
+
+  font-size: clamp(0.95rem, 2vw, 1.25rem);
+
+  color: rgba(255,255,255,0.72);
+
   letter-spacing: 0.01em;
+
+  max-width: 700px;
+
+  line-height: 1.7;
 }
 
 .dv-hero-tagline {
   font-family: 'Space Mono', monospace;
-  font-size: clamp(0.75rem, 1vw, 0.9rem);
-  color: gray;
-  letter-spacing: 0.1em;
+
+  font-size: clamp(0.65rem, 1.5vw, 0.85rem);
+
+  color: rgba(255,255,255,0.45);
+
+  letter-spacing: 0.16em;
+
   text-transform: uppercase;
+
+  max-width: 90%;
 }
 
 .dv-hero-btn {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 14px 32px;
+  justify-content: center;
+
+  gap: 12px;
+
+  padding: 14px 26px;
+
   border-radius: 999px;
-  background: #fff;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,0.98),
+      rgba(255,255,255,0.88)
+    );
+
   color: #0a0a0a;
+
   font-family: 'Space Mono', monospace;
-  font-size: 12px;
+
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  border: none;
+
+  border: 1px solid rgba(255,255,255,0.22);
+
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.23,1,0.32,1);
+
   position: relative;
   overflow: hidden;
+
+  transition:
+    transform 0.4s cubic-bezier(0.23,1,0.32,1),
+    box-shadow 0.4s ease;
+
+  box-shadow:
+    0 15px 50px rgba(255,255,255,0.1),
+    0 0 0 rgba(255,180,48,0);
+}
+
+
+.dv-hero-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+
+  box-shadow:
+    0 18px 50px rgba(255,180,48,0.22);
 }
 .dv-hero-btn::before {
   content: '';
@@ -129,17 +187,27 @@ font-size: clamp(4rem, 11vw, 7rem);
 .dv-watermark {
   font-family: 'Syne', sans-serif;
   font-weight: 800;
-  font-size: clamp(4rem, 14vw, 8rem);
-  letter-spacing: -0.04em;
-  line-height: 0.85;
-  -webkit-text-stroke: 1px rgba(255,255,255,0.06);
+
+  font-size: clamp(3rem, 16vw, 10rem);
+
+  letter-spacing: -0.06em;
+
+  line-height: 0.82;
+
+  -webkit-text-stroke: 1px rgba(255,255,255,0.05);
+
   color: transparent;
+
   user-select: none;
   pointer-events: none;
+
   white-space: nowrap;
+
   text-align: center;
-  width: 100vw;
-  justify-self: center;
+
+  width: 100%;
+
+  overflow: hidden;
 }
 
 /* column headings */
@@ -183,10 +251,19 @@ font-size: clamp(4rem, 11vw, 7rem);
   transition: all 0.25s;
 }
 .dv-social:hover {
-  border-color: rgba(0,255,135,0.4);
-  background: rgba(0,255,135,0.08);
-  transform: translateY(-3px);
+  border-color: rgba(255,184,48,0.4);
 
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,184,48,0.12),
+      rgba(255,120,40,0.12)
+    );
+
+  transform: translateY(-4px) scale(1.05);
+
+  box-shadow:
+    0 12px 30px rgba(255,184,48,0.12);
 }
 
 /* brand badge */
@@ -249,6 +326,60 @@ font-size: clamp(4rem, 11vw, 7rem);
 }
 @keyframes dv-in {
   to { opacity:1; transform:translateY(0); }
+}
+
+
+@media (max-width: 768px) {
+
+  .dv-footer {
+    text-align: center;
+  }
+
+  .dv-col-head {
+    justify-content: center;
+  }
+
+  .dv-tagline-footer {
+    max-width: 100%;
+    margin-inline: auto;
+  }
+
+  .dv-brand {
+    justify-content: center;
+  }
+
+  .dv-status-bar {
+    justify-content: center;
+  }
+
+  .dv-link:hover {
+    transform: none;
+  }
+
+}
+
+@media (max-width: 640px) {
+
+  .dv-hero-title {
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+  }
+
+  .dv-hero-sub {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .dv-hero-btn {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .dv-social {
+    width: 42px;
+    height: 42px;
+  }
+
 }
 `;
 
@@ -353,7 +484,7 @@ const Devs = () => {
             {/* ──────────────── HERO ──────────────── */}
             <section
                 ref={containerRef}
-                className="relative h-screen w-full overflow-hidden"
+                className="relative min-h-screen w-full overflow-hidden"
 
             >
                 {/* Background image */}
@@ -382,13 +513,23 @@ const Devs = () => {
                 {/* Content */}
                 <motion.div
                     style={{ opacity, y }}
-                    className="relative z-10 flex h-full flex-col items-center justify-center text-center px-6 gap-5"
+                    className="
+                    relative z-10
+                    flex min-h-screen flex-col items-center justify-center
+                    text-center
+                    w-full
+                    max-w-[1000px]
+                    mx-auto
+                    px-5 sm:px-6 md:px-10
+                    gap-4 sm:gap-5
+                    py-24
+                    "
                 >
 
 
                     {/* Main title */}
                     <motion.h1
-                        className="dv-hero-title text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-orange-600 "
+                        className="dv-hero-title text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-orange-600 text-[2.5rem] sm:text-[4rem] md:text-[7rem]"
                         initial={{ opacity: 0, y: 40 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.35, duration: 1, ease: [0.23, 1, 0.32, 1] }}
@@ -440,12 +581,15 @@ const Devs = () => {
 
                     {/* ── Top row: brand + columns ── */}
                     <div
-                        className="dv-appear"
-                        style={{
-                            display: "grid",
-                            gridTemplateColumns: "1.4fr 1fr 1fr",
-                            gap: "48px",
-                        }}
+                        className="
+                        dv-appear
+                      grid
+                    grid-cols-1
+                      sm:grid-cols-2
+                      xl:grid-cols-[1.4fr_1fr_1fr]
+                      gap-12
+                      xl:gap-16
+                      "
                     >
                         {/* Brand column */}
                         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
@@ -460,7 +604,16 @@ const Devs = () => {
                             </div>
 
                             {/* Team member */}
-                            <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 4 }}>
+                            <div
+                                className="
+flex
+items-center
+justify-center
+md:justify-start
+gap-3
+mt-2
+"
+                            >
                                 <img
                                     src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776693732/image_wxefat.png"
                                     alt="Team"
@@ -477,8 +630,7 @@ const Devs = () => {
                                         fontSize: "0.85rem", fontWeight: 500,
                                         color: "rgba(255,255,255,0.7)",
                                     }}>
-                                        Core Me
-                                    </div>
+                                        CodeSarthi                                    </div>
                                     <div style={{
                                         fontFamily: "'Space Mono', monospace",
                                         fontSize: "10px", letterSpacing: "0.1em",
@@ -491,7 +643,16 @@ const Devs = () => {
                             </div>
 
                             {/* Social icons */}
-                            <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
+                            <div
+                                className="
+flex
+flex-wrap
+justify-center
+md:justify-start
+gap-3
+mt-2
+"
+                            >
                                 {socials.map((s, i) => (
                                     <a
                                         key={i}
@@ -510,7 +671,7 @@ const Devs = () => {
                         {/* Features column */}
                         <div>
                             <div className="dv-col-head">Features</div>
-                            <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                            <div className="flex flex-col gap-2 items-center md:items-start">
                                 {footerFeatures.map((item, i) => (
                                     <a key={i} href="#" className="dv-link">{item}</a>
                                 ))}
@@ -535,17 +696,31 @@ const Devs = () => {
                     }} />
 
                     {/* ── Watermark ── */}
-                    <div className="dv-watermark py-8" style={{ marginBottom: -16 }}>
+                    <div
+                        className="
+dv-watermark
+py-6
+sm:py-8
+px-4
+"
+                        style={{ marginBottom: -16 }}
+                    >
                         CODESARTHI
                     </div>
 
                     {/* ── Bottom bar ── */}
-                    <div style={{
-                        display: "flex", alignItems: "center",
-                        justifyContent: "space-between", flexWrap: "wrap",
-                        gap: 12, paddingTop: 28,
-                        borderTop: "1px solid rgba(255,255,255,0.05)",
-                    }}>
+                    <div className="
+flex
+flex-col
+md:flex-row
+items-center
+justify-between
+gap-5
+text-center
+md:text-left
+pt-7
+border-t border-white/5
+">
                         <div className="dv-status-bar">
                             <div className="dv-status-dot" />
                             Vineet Singh Chandel
