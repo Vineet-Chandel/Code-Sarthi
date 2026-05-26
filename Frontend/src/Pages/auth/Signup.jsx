@@ -490,7 +490,7 @@ const Signup = () => {
     return <Welcome />;
   }
   return (
-    <div data-theme="caramellatte" className="min-h-screen w-full flex items-center justify-center bg-base-300 px-[50px] py-3">
+    <div data-theme="caramellatte" className="min-h-screen w-full flex items-center justify-center bg-base-300 p-[10px]  md:p-[15px]">
       <ToastContainer toasts={toasts} removeToast={removeToast} />
       <div className="w-full bg-base-100  rounded-3xl border border-secondary  flex flex-col md:flex-row gap-6 overflow-hidden  transition-all duration-500">
 

@@ -391,9 +391,9 @@ const Login = () => {
     }
 
     return (
-        <div data-theme="caramellatte" className="min-h-screen w-full flex items-center justify-center bg-base-300  p-[20px]">
+        <div data-theme="caramellatte" className="min-h-screen w-full flex items-center justify-center bg-base-300 p-[10px]  md:p-[15px]">
             <ToastContainer toasts={toasts} removeToast={removeToast} />
-            <div className="w-full bg-base-100  rounded-2xl  flex flex-col md:flex-row gap-6 overflow-hidden border border-secondary border-[3px]">
+            <div className="w-full bg-base-100  rounded-2xl  flex flex-col md:flex-row gap-6 overflow-hidden border border-accent   ">
 
                 {/* LEFT - Login Form */}
                 <div className="flex flex-col gap-6 p-5 md:p-12 w-full md:w-[50%] text-white">
