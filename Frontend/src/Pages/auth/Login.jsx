@@ -408,7 +408,7 @@ const Login = () => {
                                 cursorCharacter="|"
                             />
                         </h1>
-                        <p className="text-gray-600 text-lg md:text-xl pl-2">Continue your journey with CodeSarthi — where developers grow smarter every day.</p>
+                        <p className="text-info text-lg md:text-xl pl-2">Continue your journey with CodeSarthi — where developers grow smarter every day.</p>
                     </div>
 
 

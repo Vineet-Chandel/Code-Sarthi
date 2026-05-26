@@ -506,7 +506,7 @@ const Signup = () => {
                 cursorCharacter="|"
               />
             </h1>
-            <p className="text-gray-700 text-lg md:text-xl pl-2">
+            <p className="text-info text-lg md:text-xl pl-2">
               Enter your details to join the smart developers community! 🚀
             </p>
           </div>
@@ -792,7 +792,7 @@ const Signup = () => {
             <div className='flex justify-between items-center w-full'>
               <div className="space-y-2 w-[48.5%]">
                 <label htmlFor="college" className="text-md ml-3 block text-accent-content-content">
-                  College or Company <span className="text-white ml-1">*</span>
+                  Oganization <span className="text-white ml-1">*</span>
                 </label>
                 <div className="flex items-center rounded-2xl px-4 py-3 border  bg-base-200 border-base-300    focus-within:  transition-all duration-300">
                   <span className="mr-3">
@@ -807,7 +807,7 @@ const Signup = () => {
                   <input
                     id="college"
                     type="text"
-                    placeholder="IIIT Hyderabad | Microsoft"
+                    placeholder="Institute | Organization"
                     className="w-full outline-none text-accent-content bg-transparent placeholder-info placeholder:opacity-70 text-lg"
                     value={formData.college}
                     onChange={handleChange}
