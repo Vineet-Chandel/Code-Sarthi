@@ -3,7 +3,7 @@ import Toast from '../Pages/Resume/2/Toast';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 const STYLES = `
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600&display=swap');
+
 
 /* ── CTA cards ── */
 .ct-card {
@@ -58,7 +58,7 @@ const STYLES = `
 }
 
 .ct-card-title {
-  font-family: 'Syne', sans-serif;
+  font-family:head;
   font-weight: 800;
   font-size: clamp(1.4rem, 2.2vw, 2rem);
   letter-spacing: -0.03em;
@@ -180,7 +180,7 @@ const STYLES = `
 
 .ct-banner-title {
   position: relative; z-index: 1;
-  font-family: 'Syne', sans-serif;
+  font-family: head;
   font-weight: 800;
   font-size: clamp(3.5rem, 9vw, 8rem);
   letter-spacing: -0.04em;

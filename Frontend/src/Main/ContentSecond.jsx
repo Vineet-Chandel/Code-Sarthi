@@ -56,7 +56,6 @@ const cards = [
 
 /* ── Inline styles ── */
 const STYLES = `
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500&display=swap');
 
 .gs-section {
   background: #060a07;
@@ -103,7 +102,7 @@ const STYLES = `
 
 /* ── Section title ── */
 .gs-title {
-  font-family: 'Syne', sans-serif;
+  font-family: head;
   font-weight: 800;
   font-size: clamp(2.4rem, 5.5vw, 5rem);
   line-height: 1.05;
@@ -243,7 +242,7 @@ const STYLES = `
 
 /* Name */
 .gs-name {
-  font-family: 'Syne', sans-serif;
+  font-family: head;
   font-weight: 800;
   font-size: clamp(2rem, 3vw, 2.8rem);
   letter-spacing: -0.03em;

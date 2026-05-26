@@ -7,7 +7,7 @@ import Lines from './Lines';
    Inline styles injected once at module level
 ───────────────────────────────────────────────────────── */
 const STYLES = `
-  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;600;700&display=swap');
+
 
   :root {
     --green:   #00ff87;
@@ -70,7 +70,7 @@ const STYLES = `
 
   /* ── Hero headline ── */
   .cs-hero-title {
-    font-family: 'Syne', sans-serif;
+    font-family: head;
     font-weight: 800;
     font-size: clamp(2.6rem, 6vw, 5.2rem);
     line-height: 1.05;
@@ -122,7 +122,7 @@ const STYLES = `
   }
 
   .cs-feat-heading {
-    font-family: 'Syne', sans-serif;
+    font-family: head;
     font-weight: 800;
     font-size: clamp(1.5rem, 2.5vw, 2.6rem);
     line-height: 1.1;
@@ -174,7 +174,7 @@ const STYLES = `
 
   /* ── Explore section ── */
   .cs-explore-title {
-    font-family: 'Syne', sans-serif;
+    font-family: head;
     font-weight: 800;
     font-size: clamp(2rem, 5vw, 4.4rem);
     line-height: 1.05;
@@ -230,7 +230,7 @@ const STYLES = `
   .cs-card-body { padding: 28px 28px 32px; flex: 1; display: flex; flex-direction: column; gap: 16px; position: relative; z-index: 1; }
 
   .cs-card-heading {
-    font-family: 'Syne', sans-serif;
+    font-family: head;
     font-weight: 800;
     font-size: clamp(1.3rem, 2vw, 1.9rem);
     letter-spacing: -0.02em;
