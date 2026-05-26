@@ -40,6 +40,7 @@ const InputField = ({ label, id, value, type = "text", placeholder, onChange }) 
                 placeholder={placeholder}
                 onChange={(e) => onChange(id, e.target.value)}
                 className="
+
         w-full bg-transparent
         border-none outline-none
 h-full text-white
@@ -215,10 +216,10 @@ const Experience = ({ data }) => {
     return (
         <div className="min-h-[calc(100vh-4rem)] w-screen flex items-start justify-center p-4 md:p-6 bg-base-100">
             <ToastContainer toasts={toasts} removeToast={removeToast} />
-            <div className="w-full bg-base-100 rounded-3xl  border-slate-100 overflow-hidden border border-white" >
+            <div className="w-full bg-base-100 rounded-3xl  border-gray-700 overflow-hidden border" >
 
                 {/* ── top bar ── */}
-                <div className="flex items-center justify-between px-5 py-3.5 bg-base-200 border-b border-white">
+                <div className="flex items-center justify-between px-5 py-3.5 bg-base-200 border-b border-gray-700">
                     <Step index={1} />
 
                     <ProgressMeter index={1} resumeData={resumeData} />
@@ -255,18 +256,18 @@ const Experience = ({ data }) => {
                                     </h1>
                                 </div>
 
-                                <div className='bg-white/20'>
+                                <div >
                                     {isAiworking ? (<div className='flex flex-col justify-center items-center h-[500px] w-full  gap-2'>
                                         <div className='flex justify-center items-center gap-2'>
-                                            <h1 className="text-5xl font-bold text-white mb-2 leading-tight text-center ">Shastra</h1>
+                                            <h1 className="text-5xl font-bold text-[#ffffff] mb-2 leading-tight text-center ">Shastra</h1>
                                             <svg xmlns="http://www.w3.org/2000/svg" width={50} height={50} viewBox="0 0 24 24" className='mb-3'>
-                                                <path fill="#fff" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
+                                                <path fill="#ffffff" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
                                             </svg>
                                         </div>
-                                        <h1 className="text-xl font-medium text-[#884f06] mb-2 leading-tight text-center ">AI Is Generating Your  Bullet Points, Please Wait...</h1>
+                                        <h1 className="text-xl font-medium text-info mb-2 leading-tight text-center ">AI Is Generating Your  Bullet Points, Please Wait...</h1>
                                         <div className="animate-pulse flex flex-col items-center gap-3">
-                                            <div className="h-4 w-40 bg-[#884f06]/30 rounded"></div>
-                                            <div className="h-4 w-56 bg-[#884f06]/20 rounded"></div>
+                                            <div className="h-4 w-40 bg-secondary rounded"></div>
+                                            <div className="h-4 w-56 bg-secondary rounded"></div>
                                         </div>
                                     </div>) : (
                                         <div className="h-[600px] overflow-y-auto  ">
@@ -345,30 +346,31 @@ const Experience = ({ data }) => {
                                             </div>
                                         </div>
                                     ))}
-                                </div>
-                                <button className='bg-secondary w-full text-center mt-5 rounded-xl text-white py-3 px-5 font-bold ' onClick={() => {
-                                    setExperiences(prev =>
-                                        prev.map((exp, i) =>
-                                            i === selectedExpIndex
-                                                ? { ...exp, bullets: [...new Set([...exp.bullets, ...points])] }
-                                                : exp
-                                        )
-                                    );
-                                    setAiModalOpen(false);
-                                    setpoints([]);
-                                    setSelectedRole("");
-                                    setSelectedCompany("");
-                                    setSelectedEmploymentType("");
-                                    setSelectedExpIndex(null);
+                                    <button className='bg-secondary w-full text-center mt-5 rounded-xl text-white py-3 px-5 font-bold ' onClick={() => {
+                                        setExperiences(prev =>
+                                            prev.map((exp, i) =>
+                                                i === selectedExpIndex
+                                                    ? { ...exp, bullets: [...new Set([...exp.bullets, ...points])] }
+                                                    : exp
+                                            )
+                                        );
+                                        setAiModalOpen(false);
+                                        setpoints([]);
+                                        setSelectedRole("");
+                                        setSelectedCompany("");
+                                        setSelectedEmploymentType("");
+                                        setSelectedExpIndex(null);
 
-                                }}>Finalise Your Points</button>
+                                    }}>Finalise Your Points</button>
+                                </div>
+
                             </div>
 
                         </div>
 
                     </div>}
                     {/* ── LEFT: form ── */}
-                    <div className="p-6 md:p-10 border border-white ">
+                    <div className="p-6 md:p-10 border border-gray-700 ">
                         <Header index={1} />
 
 
@@ -427,7 +429,6 @@ const Experience = ({ data }) => {
                                     />
 
                                     <InputField type="month" label="Start Date" id="startDate" value={form.startDate}
-
                                         onChange={(id, value) => handleChange2(index, id, value)} />
                                     <InputField type="month" label="End Date" id="endDate" value={form.endDate}
 
@@ -530,7 +531,7 @@ const Experience = ({ data }) => {
 
                                                 <button
                                                     type="button"
-                                                    className="bg-secondary border border-secondary hover:bg-base-100 text-base-100 hover:text-secondary 
+                                                    className="bg-secondary border border-secondary hover:text-white text-info hover:text-secondary 
                    px-5 py-2.5 rounded-xl flex justify-center items-center gap-2 
                    hover:scale-105 transition-all duration-300 ease-in-out group"
                                                     onClick={() => {
@@ -594,7 +595,7 @@ const Experience = ({ data }) => {
                                                             }}
                                                         >
                                                             <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
-                                                                <path fill="#884f06" d="M16 9v10H8V9zm-1.5-6h-5l-1 1H5v2h14V4h-3.5zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2z"></path>
+                                                                <path fill="#ffffff" d="M16 9v10H8V9zm-1.5-6h-5l-1 1H5v2h14V4h-3.5zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2z"></path>
                                                             </svg>
                                                         </div>
 
@@ -663,7 +664,7 @@ const Experience = ({ data }) => {
                                                                     </path>
                                                                 </svg></span>}
                                                             <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
-                                                                <path fill="#884f06" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
+                                                                <path fill="#ffffff" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
                                                             </svg>
                                                         </div>
 
@@ -702,7 +703,7 @@ const Experience = ({ data }) => {
 
 
                 {/* ── footer ── */}
-                <div className="flex items-center justify-end px-6 md:px-10 py-4 bg-base-200 border-t border-white">
+                <div className="flex items-center justify-end px-6 md:px-10 py-4 bg-base-200 border-t border-gray-700">
 
                     <button
                         onClick={() => {

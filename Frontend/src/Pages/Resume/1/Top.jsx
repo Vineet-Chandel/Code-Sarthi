@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 /* ─────────────────────────────────────────────
    DATA
@@ -133,490 +131,10 @@ const navItems = [
 ];
 
 /* ─────────────────────────────────────────────
-   STYLES (injected once)
-───────────────────────────────────────────── */
-const CSS = `
-  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body { background: #0a0a0a; }
-
-  .pnav-root {
-    --nav-bg: rgba(10,10,10,0.75);
-    --nav-border: rgba(255,255,255,0.08);
-    --nav-text: rgba(255,255,255,0.82);
-    --nav-muted: rgba(255,255,255,0.38);
-    --nav-hover-bg: rgba(255,255,255,0.06);
-    --nav-active-bg: rgba(255,255,255,0.10);
-    --nav-pill-bg: rgba(255,255,255,0.05);
-    --drop-bg: rgba(14,14,14,0.96);
-    --drop-border: rgba(255,255,255,0.10);
-    --drop-item-hover: rgba(255,255,255,0.05);
-    --drop-divider: rgba(255,255,255,0.06);
-    --accent: #ffffff;
-    font-family: 'DM Sans', system-ui, sans-serif;
-    position: relative;
-    width: 100%;
-    z-index: 100;
-  }
-
-  .pnav-bar {
-    position: relative;
-    top: 15px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% - 40px);
-    max-width: 1200px;
-    height: 58px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 8px 0 20px;
-    background: var(--nav-bg);
-    border: 1px solid var(--nav-border);
-    border-radius: 16px;
-
-
-    transition: box-shadow 0.3s ease, border-color 0.3s ease;
-    z-index: 200;
-  }
-  .pnav-bar:hover {
-    border-color: rgba(255,255,255,0.14);
-    box-shadow: 0 0 0 1px rgba(255,255,255,0.04), 0 24px 60px rgba(0,0,0,0.6);
-  }
-
-  /* LOGO */
-  .pnav-logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    flex-shrink: 0;
-    text-decoration: none;
-  }
-  .pnav-logo-mark {
-    width: 30px;
-    height: 30px;
-    border-radius: 8px;
-    background: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .pnav-logo-mark svg { display: block; }
-  .pnav-logo-text {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 15px;
-    letter-spacing: -0.02em;
-    color: #fff;
-  }
-
-  /* DESKTOP MENU */
-  .pnav-menu {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    list-style: none;
-  }
-  @media (max-width: 860px) { .pnav-menu { display: none; } }
-
-  .pnav-item {
-    position: relative;
-  }
-
-  .pnav-trigger {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 7px 14px;
-    border-radius: 10px;
-    cursor: pointer;
-    background: transparent;
-    border: none;
-    color: var(--nav-text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 400;
-    letter-spacing: 0.01em;
-    transition: background 0.18s ease, color 0.18s ease;
-    white-space: nowrap;
-    user-select: none;
-  }
-  .pnav-trigger:hover,
-  .pnav-item.open .pnav-trigger {
-    background: var(--nav-hover-bg);
-    color: #fff;
-  }
-  .pnav-trigger.active-page {
-    background: var(--nav-active-bg);
-    color: #fff;
-  }
-
-  .pnav-chevron {
-    width: 14px;
-    height: 14px;
-    opacity: 0.5;
-    transition: transform 0.25s ease, opacity 0.2s ease;
-    flex-shrink: 0;
-  }
-  .pnav-item.open .pnav-chevron {
-    transform: rotate(180deg);
-    opacity: 0.9;
-  }
-
-  /* DROPDOWN */
-  .pnav-drop {
-    position: absolute;
-    top: calc(100% + 14px);
-    left: 50%;
-    transform: translateX(-50%) translateY(10px) scale(0.98);
-transform-origin: top center;
-    background: var(--drop-bg);
-    border: 1px solid var(--drop-border);
-    border-radius: 18px;
-
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1), 0 32px 80px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.06);
-    padding: 18px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.22s ease, transform 0.22s ease;
-    z-index: 300;
-    min-width: 220px;
-  }
-  .pnav-drop.wide { min-width: 740px; }
-  .pnav-drop.visible {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateX(-50%) translateY(0);
-  }
-  .pnav-drop-inner {
-    display: flex;
-    gap: 4px;
-  }
-  .pnav-drop-section {
-    flex: 1;
-    min-width: 180px;
-  }
-  .pnav-drop-section + .pnav-drop-section {
-    border-left: 1px solid var(--drop-divider);
-    padding-left: 12px;
-    margin-left: 8px;
-  }
-  .pnav-section-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--nav-muted);
-    padding: 0 10px 8px;
-    display: block;
-  }
-  .pnav-drop-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 10px 10px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background 0.15s ease;
-  }
-  .pnav-drop-item:hover {
-    background: var(--drop-item-hover);
-  }
-  .pnav-drop-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.08);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-  .pnav-drop-info { flex: 1; min-width: 0; }
-  .pnav-drop-title {
-    font-size: 13px;
-    font-weight: 500;
-    color: rgba(255,255,255,0.88);
-    line-height: 1.3;
-    margin-bottom: 2px;
-  }
-  .pnav-drop-desc {
-    font-size: 11.5px;
-    color: var(--nav-muted);
-    line-height: 1.45;
-  }
-
-  /* DROPDOWN ARROW NOTCH */
-  .pnav-drop::before {
-    content: '';
-    position: absolute;
-    top: -6px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 10px;
-    height: 6px;
-    background: var(--drop-bg);
-    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-  }
-
-  /* CTA BUTTONS */
-  .pnav-cta {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
-  }
-  @media (max-width: 860px) {
-    .pnav-cta-login { display: none !important; }
-  }
-
-  .pnav-btn {
-    display: inline-flex;
-    align-items: center;
-    height: 36px;
-    padding: 0 18px;
-    border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13.5px;
-    font-weight: 500;
-    cursor: pointer;
-    border: none;
-    transition: all 0.18s ease;
-    letter-spacing: 0.01em;
-    white-space: nowrap;
-  }
-  .pnav-btn-ghost {
-    background: transparent;
-    color: var(--nav-text);
-    border: 1px solid var(--nav-border);
-  }
-  .pnav-btn-ghost:hover {
-    background: var(--nav-hover-bg);
-    border-color: rgba(255,255,255,0.16);
-    color: #fff;
-  }
-  .pnav-btn-solid {
-    background: #fff;
-    color: #0a0a0a;
-  }
-  .pnav-btn-solid:hover {
-    background: #e8e8e8;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(255,255,255,0.15);
-  }
-  .pnav-btn-solid:active {
-    transform: translateY(0);
-  }
-
-  /* HAMBURGER */
-  .pnav-ham-btn {
-    display: none;
-    align-items: center;
-    justify-content: center;
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    background: var(--nav-hover-bg);
-    border: 1px solid var(--nav-border);
-    cursor: pointer;
-    color: #fff;
-    transition: background 0.18s ease;
-  }
-  .pnav-ham-btn:hover { background: var(--nav-active-bg); }
-  @media (max-width: 860px) { .pnav-ham-btn { display: flex; } }
-
-  /* MOBILE OVERLAY */
-  .pnav-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-
-    z-index: 190;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-  }
-  .pnav-overlay.show {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  /* MOBILE DRAWER */
-  .pnav-drawer {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 320px;
-    max-width: 92vw;
-    background: rgba(12,12,12,0.98);
-    border-left: 1px solid rgba(255,255,255,0.08);
-will-change: transform;
-    z-index: 300;
-    transform: translateX(100%);
-    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-  }
-  .pnav-drawer.open { transform: translateX(0); }
-
-  .pnav-drawer-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 20px 16px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-  }
-
-  .pnav-logo-mark img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: inherit;
-}
-  .pnav-close-btn {
-    width: 34px;
-    height: 34px;
-    border-radius: 9px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.10);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: rgba(255,255,255,0.7);
-    transition: background 0.15s ease;
-  }
-  .pnav-close-btn:hover { background: rgba(255,255,255,0.10); color: #fff; }
-
-  .pnav-drawer-nav { padding: 12px 12px; flex: 1; }
-
-  .pnav-mob-item {
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 2px;
-  }
-  .pnav-mob-trigger {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 13px 14px;
-    cursor: pointer;
-    border-radius: 12px;
-    transition: background 0.15s ease;
-    color: rgba(255,255,255,0.82);
-  }
-  .pnav-mob-trigger:hover { background: rgba(255,255,255,0.05); }
-  .pnav-mob-trigger.mob-open { background: rgba(255,255,255,0.05); color: #fff; }
-
-  .pnav-mob-label {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 400;
-  }
-
-  .pnav-mob-chevron {
-    width: 16px;
-    height: 16px;
-    opacity: 0.4;
-    transition: transform 0.22s ease, opacity 0.2s ease;
-    flex-shrink: 0;
-  }
-  .pnav-mob-trigger.mob-open .pnav-mob-chevron {
-    transform: rotate(180deg);
-    opacity: 0.8;
-  }
-
-  .pnav-mob-drop {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s cubic-bezier(0.4,0,0.2,1);
-    padding: 0 4px;
-  }
-  .pnav-mob-drop.open { max-height: 800px; }
-
-  .pnav-mob-sec-title {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.3);
-    padding: 10px 10px 4px;
-    font-family: 'Syne', sans-serif;
-  }
-
-  .pnav-mob-drop-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 9px 10px;
-    border-radius: 9px;
-    cursor: pointer;
-    transition: background 0.15s ease;
-    margin-bottom: 1px;
-  }
-  .pnav-mob-drop-item:hover { background: rgba(255,255,255,0.04); }
-  .pnav-mob-drop-icon {
-    font-size: 13px;
-    width: 28px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255,255,255,0.05);
-    border-radius: 7px;
-    flex-shrink: 0;
-  }
-  .pnav-mob-drop-title {
-    font-size: 13px;
-    font-weight: 400;
-    color: rgba(255,255,255,0.75);
-  }
-
-  .pnav-drawer-foot {
-    padding: 16px 16px 28px;
-    border-top: 1px solid rgba(255,255,255,0.06);
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .pnav-drawer-foot .pnav-btn { width: 100%; justify-content: center; height: 42px; font-size: 14px; }
-
-  /* SCROLL SHRINK */
-  .pnav-bar.scrolled {
-  position:fixed;
-    top: 10px;
-    box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 20px 50px rgba(0,0,0,0.7);
-  }
-
-  /* INDICATOR DOT  */
-  .pnav-dot {
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.6);
-    position: absolute;
-    bottom: -8px;
-    left: 50%;
-    transform: translateX(-50%) scale(0);
-    transition: transform 0.2s ease;
-  }
-  .pnav-item.open .pnav-dot { transform: translateX(-50%) scale(1); }
-`;
-
-/* ─────────────────────────────────────────────
    CHEVRON SVG
 ───────────────────────────────────────────── */
 const Chevron = ({ className }) => (
-  <svg className={className} viewBox="0 0 16 16" fill="none">
+  <svg className={className} viewBox="0 0 16 16" fill="none" width="14" height="14">
     <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
@@ -625,112 +143,245 @@ const Chevron = ({ className }) => (
    MAIN COMPONENT
 ───────────────────────────────────────────── */
 export default function PremiumNavbar() {
+  // Replace with your actual Redux selector:
+  // const user = useSelector(store => store.user.user.DATA);
+  const user = { firstName: "John", lastName: "Doe", photoUrl: { url: null } };
 
-  const user = useSelector(store => store.user.user.DATA);
   const [openId, setOpenId] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [openMobId, setOpenMobId] = useState(null);
   const [scrolled, setScrolled] = useState(false);
   const leaveTimer = useRef(null);
-  const barRef = useRef(null);
 
-  const Navigate = useNavigate();
-
-  // inject styles once
+  // Inject Google Fonts once
   useEffect(() => {
-    if (document.getElementById("pnav-styles")) return;
-    const s = document.createElement("style");
-    s.id = "pnav-styles";
-    s.textContent = CSS;
-    document.head.appendChild(s);
+    if (document.getElementById("pnav-gfonts")) return;
+    const link = document.createElement("link");
+    link.id = "pnav-gfonts";
+    link.rel = "stylesheet";
+    link.href =
+      "https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap";
+    document.head.appendChild(link);
   }, []);
 
-  // scroll listener
+  // Scroll listener
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 20);
+    let ticking = false;
+    const handler = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 20);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
     window.addEventListener("scroll", handler, { passive: true });
     return () => window.removeEventListener("scroll", handler);
   }, []);
 
-  const openDrop = (id) => { clearTimeout(leaveTimer.current); setOpenId(id); };
-  const closeDrop = () => { leaveTimer.current = setTimeout(() => setOpenId(null), 130); };
-
-  const toggleMob = (id) => setOpenMobId(prev => prev === id ? null : id);
-
-
-
+  // Body overflow lock when drawer opens
   useEffect(() => {
-    document.body.style.overflow = drawerOpen ? "hidden" : "auto";
-
-    return () => {
-      document.body.style.overflow = "auto";
-    };
+    document.body.style.overflow = drawerOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
   }, [drawerOpen]);
+
+  const openDrop = (id) => {
+    clearTimeout(leaveTimer.current);
+    setOpenId(id);
+  };
+  const closeDrop = () => {
+    leaveTimer.current = setTimeout(() => setOpenId(null), 130);
+  };
+  const toggleMob = (id) => setOpenMobId((prev) => (prev === id ? null : id));
+
+  const navigate = (path) => {
+    // Replace with your router: Navigate(path)
+    window.location.href = path;
+  };
+
   return (
-    <div className="pnav-root">
-      {/* ─ NAVBAR ─ */}
+    <div className="relative w-full z-[100]" style={{ fontFamily: "'DM Sans', system-ui, sans-serif" }}>
+
+      {/* ── NAVBAR BAR ── */}
       <nav
-        ref={barRef}
-        className={`pnav-bar${scrolled ? " scrolled" : ""}`}
+        className={[
+          // layout
+          "flex items-center justify-between",
+          // sizing
+          "min-h-[60px] px-[10px] pl-[14px]",
+          // shape
+          "rounded-[20px]",
+          // positioning — floating pill
+          "absolute left-1/2 -translate-x-1/2",
+          // width
+          "w-[calc(100%-24px)] max-w-[1280px]",
+
+          // transition
+          "transition-all duration-300 ease-in-out",
+          // scrolled vs idle
+          "relative top-3 bg-[rgba(10,10,10,0.82)] border border-[rgba(255,255,255,0.10)]",
+
+          "z-[200]",
+          // mobile tweaks
+          "sm:rounded-[20px]",
+        ].join(" ")}
         role="navigation"
         aria-label="Main navigation"
       >
-        {/* Logo */}
-        <a className="pnav-logo" href="#" aria-label="Home">
-          <div className="pnav-logo-mark">
-            <img
-              src={user?.photoUrl?.url || "/default-avatar.png"}
-              alt={user?.firstName || "User"}
-            />
+        {/* ── LOGO ── */}
+        <a
+          href="#"
+          aria-label="Home"
+          className="flex items-center gap-2 flex-shrink-0 no-underline cursor-pointer"
+        >
+          <div className="w-[30px] h-[30px] rounded-[8px] bg-black flex items-center justify-center flex-shrink-0 overflow-hidden">
+            {user?.photoUrl?.url ? (
+              <img
+                src={user.photoUrl.url}
+                alt={user?.firstName || "User"}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M3 13L8 3l5 10" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M5.5 9.5h5" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
+              </svg>
+            )}
           </div>
-          <span className="pnav-logo-text">
+          <span
+            className="font-bold text-[15px] tracking-[-0.02em] text-white max-w-[140px] truncate"
+            style={{ fontFamily: "'Syne', sans-serif" }}
+          >
             {user?.firstName} {user?.lastName}
           </span>
         </a>
 
-        {/* Desktop menu */}
-        <ul className="pnav-menu" role="menubar">
+        {/* ── DESKTOP MENU ── */}
+        <ul
+          className="hidden lg:flex items-center gap-[2px] list-none mx-3 flex-1 justify-center"
+          role="menubar"
+        >
           {navItems.map((item) => {
             const isOpen = openId === item.id;
             const isWide = !item.isSmall && item.dropdown.sections.length > 1;
+
             return (
               <li
                 key={item.id}
-                className={`pnav-item${isOpen ? " open" : ""}`}
+                className="relative"
                 role="none"
                 onMouseEnter={() => openDrop(item.id)}
                 onMouseLeave={closeDrop}
               >
+                {/* Trigger */}
                 <button
-                  className="pnav-trigger"
+                  className={[
+                    "flex items-center gap-[5px] px-[14px] py-[7px] rounded-[10px]",
+                    "cursor-pointer border-none text-[rgba(255,255,255,0.82)]",
+                    "text-[14px] font-normal tracking-[0.01em] whitespace-nowrap select-none",
+                    "transition-all duration-[180ms] ease-in-out",
+                    isOpen
+                      ? "bg-[rgba(255,255,255,0.10)] text-white"
+                      : "bg-transparent hover:bg-[rgba(255,255,255,0.06)] hover:text-white",
+                  ].join(" ")}
+                  style={{ fontFamily: "'DM Sans', sans-serif" }}
                   role="menuitem"
                   aria-haspopup="true"
                   aria-expanded={isOpen}
                 >
                   {item.label}
-                  <Chevron className="pnav-chevron" />
+                  <svg
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    width="14"
+                    height="14"
+                    className={[
+                      "flex-shrink-0 transition-all duration-[250ms] ease-in-out",
+                      isOpen ? "rotate-180 opacity-90" : "opacity-50",
+                    ].join(" ")}
+                  >
+                    <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
                 </button>
-                <span className="pnav-dot" aria-hidden="true" />
 
-                {/* Dropdown */}
+                {/* Indicator dot */}
+                <span
+                  className={[
+                    "absolute bottom-[-8px] left-1/2 -translate-x-1/2",
+                    "w-[4px] h-[4px] rounded-full bg-[rgba(255,255,255,0.6)]",
+                    "transition-transform duration-200",
+                    isOpen ? "scale-100" : "scale-0",
+                  ].join(" ")}
+                  aria-hidden="true"
+                />
+
+                {/* Dropdown panel */}
                 <div
-                  className={`pnav-drop${isWide ? " wide" : ""}${isOpen ? " visible" : ""}`}
+                  className={[
+                    // position
+                    "absolute top-[calc(100%+12px)] left-1/2",
+                    // shape & glass
+                    "rounded-[20px] p-4",
+                    "bg-[rgba(15,15,15,0.96)] border border-[rgba(255,255,255,0.08)]",
+
+
+                    // min-width
+                    isWide ? "min-w-[740px] xl:min-w-[620px]" : "min-w-[220px]",
+                    // animation
+                    "transition-all duration-[180ms] ease-in-out origin-top",
+                    isOpen
+                      ? "opacity-100 pointer-events-auto -translate-x-1/2 translate-y-0 scale-100"
+                      : "opacity-0 pointer-events-none -translate-x-1/2 translate-y-2 scale-[0.98]",
+                    "z-[300]",
+                  ].join(" ")}
                   role="menu"
                   onMouseEnter={() => openDrop(item.id)}
                   onMouseLeave={closeDrop}
                 >
-                  <div className="pnav-drop-inner">
+                  {/* Arrow notch */}
+                  <span
+                    className="absolute -top-[6px] left-1/2 -translate-x-1/2 w-[10px] h-[6px] bg-[rgba(15,15,15,0.96)]"
+                    style={{ clipPath: "polygon(50% 0%, 0% 100%, 100% 100%)" }}
+                    aria-hidden="true"
+                  />
+
+                  <div className="flex gap-1">
                     {item.dropdown.sections.map((sec, si) => (
-                      <div className="pnav-drop-section" key={si}>
+                      <div
+                        key={si}
+                        className={[
+                          "flex-1 min-w-[180px]",
+                          si > 0
+                            ? "border-l border-[rgba(255,255,255,0.06)] pl-3 ml-2"
+                            : "",
+                        ].join(" ")}
+                      >
                         {sec.title && (
-                          <span className="pnav-section-title">{sec.title}</span>
+                          <span
+                            className="block text-[10px] font-semibold tracking-[0.12em] uppercase text-[rgba(255,255,255,0.38)] px-[10px] pb-2"
+                            style={{ fontFamily: "'Syne', sans-serif" }}
+                          >
+                            {sec.title}
+                          </span>
                         )}
                         {sec.items.map((di, dii) => (
-                          <div className="pnav-drop-item" key={dii} role="menuitem" tabIndex={0}>
-                            <div className="pnav-drop-icon">{di.icon}</div>
-                            <div className="pnav-drop-info">
-                              <div className="pnav-drop-title">{di.title}</div>
-                              <div className="pnav-drop-desc">{di.desc}</div>
+                          <div
+                            key={dii}
+                            role="menuitem"
+                            tabIndex={0}
+                            className="flex items-start gap-[10px] px-[10px] py-[10px] rounded-[10px] cursor-pointer transition-colors duration-[150ms] hover:bg-[rgba(255,255,255,0.05)] group"
+                          >
+                            <div className="w-8 h-8 rounded-[8px] bg-[rgba(255,255,255,0.07)] border border-[rgba(255,255,255,0.08)] flex items-center justify-center text-[14px] flex-shrink-0 mt-[1px]">
+                              {di.icon}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="text-[13px] font-medium text-[rgba(255,255,255,0.88)] leading-[1.3] mb-[2px]">
+                                {di.title}
+                              </div>
+                              <div className="text-[11.5px] text-[rgba(255,255,255,0.38)] leading-[1.45]">
+                                {di.desc}
+                              </div>
                             </div>
                           </div>
                         ))}
@@ -743,13 +394,48 @@ export default function PremiumNavbar() {
           })}
         </ul>
 
-        {/* CTA */}
-        <div className="pnav-cta">
-          <button className="pnav-btn pnav-btn-ghost pnav-cta-login" onClick={() => { Navigate("/app/build-resume") }}>Import Resume</button>
-          <button className="pnav-btn pnav-btn-solid" onClick={() => { Navigate("/app/build-resume") }}>Create my Resume</button>
+        {/* ── CTA BUTTONS ── */}
+        <div className="flex items-center gap-2 flex-shrink-0">
+          {/* Login / Import — hidden on mobile */}
+          <button
+            onClick={() => navigate("/app/build-resume")}
+            className={[
+              "hidden md:inline-flex items-center justify-center",
+              "h-[38px] px-4 rounded-[12px]",
+              "text-[13px] font-semibold whitespace-nowrap",
+              "bg-transparent text-[rgba(255,255,255,0.82)] border border-[rgba(255,255,255,0.08)]",
+              "cursor-pointer transition-all duration-[160ms]",
+              "hover:bg-[rgba(255,255,255,0.06)] hover:border-[rgba(255,255,255,0.16)] hover:text-white",
+            ].join(" ")}
+          >
+            Import Resume
+          </button>
+
+          {/* Primary CTA — hidden on xs */}
+          <button
+            onClick={() => navigate("/app/build-resume")}
+            className={[
+              "hidden sm:inline-flex items-center justify-center",
+              "h-[38px] px-4 rounded-[12px]",
+              "text-[13px] font-semibold whitespace-nowrap",
+              "bg-white text-[#0a0a0a] border-0",
+              "cursor-pointer transition-all duration-[160ms]",
+              "hover:bg-[#e8e8e8] hover:-translate-y-[1px] ",
+              "active:translate-y-0",
+            ].join(" ")}
+          >
+            Create my Resume
+          </button>
+
           {/* Hamburger */}
           <button
-            className="pnav-ham-btn"
+            className={[
+              "lg:hidden flex items-center justify-center",
+              "w-[38px] h-[38px] rounded-[10px]",
+              "bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.08)]",
+              "cursor-pointer text-white transition-colors duration-[180ms]",
+              "hover:bg-[rgba(255,255,255,0.10)]",
+            ].join(" ")}
             aria-label="Open menu"
             onClick={() => setDrawerOpen(true)}
           >
@@ -760,32 +446,54 @@ export default function PremiumNavbar() {
         </div>
       </nav>
 
-      {/* ─ MOBILE OVERLAY ─ */}
+      {/* ── MOBILE OVERLAY ── */}
       <div
-        className={`pnav-overlay${drawerOpen ? " show" : ""}`}
+        className={[
+          "fixed inset-0 bg-black/60 z-[190]",
+          "transition-opacity duration-300",
+          drawerOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none",
+        ].join(" ")}
         onClick={() => setDrawerOpen(false)}
         aria-hidden="true"
       />
 
-      {/* ─ MOBILE DRAWER ─ */}
+      {/* ── MOBILE DRAWER ── */}
       <div
-        className={`pnav-drawer${drawerOpen ? " open" : ""}`}
+        className={[
+          "fixed top-0 right-0 bottom-0 z-[300]",
+          "flex flex-col overflow-y-auto",
+          "w-[min(340px,92vw)]",
+          "bg-[rgba(12,12,12,0.98)] border-l border-[rgba(255,255,255,0.08)]",
+          "transition-transform duration-[280ms] ease-in-out",
+          drawerOpen ? "translate-x-0" : "translate-x-full",
+        ].join(" ")}
         role="dialog"
         aria-label="Navigation menu"
         aria-modal="true"
       >
-        <div className="pnav-drawer-head">
-          <a className="pnav-logo" href="#" aria-label="Home">
-            <div className="pnav-logo-mark">
+        {/* Drawer header */}
+        <div className="flex items-center justify-between px-5 pt-5 pb-4 border-b border-[rgba(255,255,255,0.06)]">
+          <a href="#" aria-label="Home" className="flex items-center gap-2 no-underline cursor-pointer">
+            <div className="w-[30px] h-[30px] rounded-[8px] bg-black flex items-center justify-center">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M3 13L8 3l5 10" stroke="#0a0a0a" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M5.5 9.5h5" stroke="#0a0a0a" strokeWidth="1.8" strokeLinecap="round" />
+                <path d="M3 13L8 3l5 10" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M5.5 9.5h5" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
               </svg>
             </div>
-            <span className="pnav-logo-text">Resumé</span>
+            <span
+              className="font-bold text-[15px] tracking-[-0.02em] text-white"
+              style={{ fontFamily: "'Syne', sans-serif" }}
+            >
+              Resumé
+            </span>
           </a>
           <button
-            className="pnav-close-btn"
+            className={[
+              "w-[34px] h-[34px] rounded-[9px] flex items-center justify-center",
+              "bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.10)]",
+              "cursor-pointer text-[rgba(255,255,255,0.7)] transition-colors duration-[150ms]",
+              "hover:bg-[rgba(255,255,255,0.10)] hover:text-white",
+            ].join(" ")}
             aria-label="Close menu"
             onClick={() => setDrawerOpen(false)}
           >
@@ -795,30 +503,74 @@ export default function PremiumNavbar() {
           </button>
         </div>
 
-        <div className="pnav-drawer-nav" role="menu">
+        {/* Drawer nav items */}
+        <div className="px-3 py-3 flex-1" role="menu">
           {navItems.map((item) => {
             const isOpen = openMobId === item.id;
             return (
-              <div className="pnav-mob-item" key={item.id}>
+              <div key={item.id} className="rounded-[12px] overflow-hidden mb-[2px]">
                 <div
-                  className={`pnav-mob-trigger${isOpen ? " mob-open" : ""}`}
+                  className={[
+                    "flex items-center justify-between px-[14px] py-[13px]",
+                    "cursor-pointer rounded-[12px] transition-colors duration-[150ms]",
+                    isOpen
+                      ? "bg-[rgba(255,255,255,0.05)] text-white"
+                      : "text-[rgba(255,255,255,0.82)] hover:bg-[rgba(255,255,255,0.05)]",
+                  ].join(" ")}
                   role="menuitem"
                   aria-expanded={isOpen}
                   onClick={() => toggleMob(item.id)}
                 >
-                  <span className="pnav-mob-label">{item.label}</span>
-                  <Chevron className="pnav-mob-chevron" />
+                  <span
+                    className="text-[15px] font-normal"
+                    style={{ fontFamily: "'DM Sans', sans-serif" }}
+                  >
+                    {item.label}
+                  </span>
+                  <svg
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    width="16"
+                    height="16"
+                    className={[
+                      "flex-shrink-0 transition-all duration-[220ms] ease-in-out",
+                      isOpen ? "rotate-180 opacity-80" : "opacity-40",
+                    ].join(" ")}
+                  >
+                    <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
                 </div>
-                <div className={`pnav-mob-drop${isOpen ? " open" : ""}`}>
+
+                {/* Mobile sub-items */}
+                <div
+                  className={[
+                    "overflow-hidden transition-all duration-300 ease-in-out px-1",
+                    isOpen ? "max-h-[800px]" : "max-h-0",
+                  ].join(" ")}
+                >
                   {item.dropdown.sections.map((sec, si) => (
                     <div key={si}>
                       {sec.title && (
-                        <div className="pnav-mob-sec-title">{sec.title}</div>
+                        <div
+                          className="text-[10px] font-semibold tracking-[0.12em] uppercase text-[rgba(255,255,255,0.3)] px-[10px] pt-[10px] pb-1"
+                          style={{ fontFamily: "'Syne', sans-serif" }}
+                        >
+                          {sec.title}
+                        </div>
                       )}
                       {sec.items.map((di, dii) => (
-                        <div className="pnav-mob-drop-item" key={dii} role="menuitem" tabIndex={0}>
-                          <div className="pnav-mob-drop-icon">{di.icon}</div>
-                          <span className="pnav-mob-drop-title">{di.title}</span>
+                        <div
+                          key={dii}
+                          role="menuitem"
+                          tabIndex={0}
+                          className="flex items-center gap-[10px] px-[10px] py-[9px] rounded-[9px] cursor-pointer mb-[1px] transition-colors duration-[150ms] hover:bg-[rgba(255,255,255,0.04)]"
+                        >
+                          <div className="text-[13px] w-[28px] h-[28px] flex items-center justify-center bg-[rgba(255,255,255,0.05)] rounded-[7px] flex-shrink-0">
+                            {di.icon}
+                          </div>
+                          <span className="text-[13px] font-normal text-[rgba(255,255,255,0.75)]">
+                            {di.title}
+                          </span>
                         </div>
                       ))}
                     </div>
@@ -829,9 +581,31 @@ export default function PremiumNavbar() {
           })}
         </div>
 
-        <div className="pnav-drawer-foot">
-          <button className="pnav-btn pnav-btn-ghost" onClick={() => { Navigate("/app/build-resume") }}>Import Resume</button>
-          <button className="pnav-btn pnav-btn-solid" onClick={() => { Navigate("/app/build-resume") }}>Create my Resume</button>
+        {/* Drawer footer */}
+        <div className="px-4 pb-7 pt-4 border-t border-[rgba(255,255,255,0.06)] flex flex-col gap-2">
+          <button
+            onClick={() => navigate("/app/build-resume")}
+            className={[
+              "w-full flex items-center justify-center h-[42px] rounded-[12px]",
+              "text-[14px] font-semibold cursor-pointer transition-all duration-[160ms]",
+              "bg-transparent text-[rgba(255,255,255,0.82)] border border-[rgba(255,255,255,0.08)]",
+              "hover:bg-[rgba(255,255,255,0.06)] hover:border-[rgba(255,255,255,0.16)] hover:text-white",
+            ].join(" ")}
+          >
+            Import Resume
+          </button>
+          <button
+            onClick={() => navigate("/app/build-resume")}
+            className={[
+              "w-full flex items-center justify-center h-[42px] rounded-[12px]",
+              "text-[14px] font-semibold cursor-pointer transition-all duration-[160ms]",
+              "bg-white text-[#0a0a0a] border-0",
+              "hover:bg-[#e8e8e8] hover:-translate-y-[1px] ",
+              "active:translate-y-0",
+            ].join(" ")}
+          >
+            Create my Resume
+          </button>
         </div>
       </div>
     </div>

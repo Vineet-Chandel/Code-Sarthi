@@ -73,7 +73,7 @@ const InputField = ({ label, id, value, type = "text", placeholder, onChange, on
                             onChange={(val) => onChange(id, val)}
                             onBlur={onBlur}
                             onFocus={onFocus}
-                            className="flex-1 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none bg-transparent border-none"
+                            className="flex-1 text-sm text-black placeholder:text-slate-600 focus:outline-none bg-transparent border-none"
                         />
 
                         {phoneSucess && (

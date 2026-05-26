@@ -134,9 +134,24 @@ export default function HowItWorks() {
         <div className="bg-base-100 px-6">
 
             <div className="flex items-center justify-center gap-3 mb-8">
-
-                <span className="text-[100px] font-extrabold  text-info">
-                    Here's how we get <span className="text-white">You Hired</span>
+                <span
+                    className="
+    text-[42px]
+    leading-tight
+    sm:text-[52px]
+    md:text-[64px]
+    lg:text-[78px]
+    xl:text-[92px]
+    2xl:text-[100px]
+    font-extrabold
+    text-info
+    tracking-tight
+  "
+                >
+                    Here's how we get{" "}
+                    <span className="text-white">
+                        You Hired
+                    </span>
                 </span>
 
             </div>
@@ -151,7 +166,7 @@ export default function HowItWorks() {
             </div>
 
             {/* grid — 1px gap on a base-300 background creates divider lines */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-base-300 border border-base-300 rounded-box overflow-hidden">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-px bg-base-300 border border-base-300 rounded-box overflow-hidden">
                 {STEPS.map((s) => (
                     <div
                         key={s.num}

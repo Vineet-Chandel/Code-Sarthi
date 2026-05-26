@@ -48,7 +48,7 @@ import HowResume from "./Pages/Resume/4/HowResume";
 import HowCv from "./Pages/Resume/4/HowCv";
 import HowCoverLetter from "./Pages/Resume/4/HowCoverLetter";
 import CredentialsAnalyser from "./Pages/Resume/4/ConditionalAnlyz";
-import BuildResume from "./Pages/Resume/2/BuildResume";
+import BuildResume from "./Pages/Resume/2/01_HEADER/BuildResume";
 import Shastra from "./Pages/Shastra";
 import Projects from "./Pages/Projects";
 import ProjectManager from "./Pages/Project-Manager";

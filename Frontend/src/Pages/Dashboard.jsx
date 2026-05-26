@@ -66,12 +66,12 @@ const Dashboard = () => {
         </svg>
     }
     return (
-        <div data-theme="caramellatte" className="min-h-screen bg-base-100  p-10 px-6 py-10">
+        <div data-theme="caramellatte" className="min-h-screen bg-base-100  px-3 lg:py-6 py-10">
 
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10">
 
                 {/* LEFT PROFILE CARD */}
-                <div className="lg:col-span-1 bg-base-100 border border-base-300 rounded-3xl p-8">
+                <div className="lg:col-span-1 bg-base-100 border border-base-300 rounded-3xl px-2 md:px-6 lg:px-8 py-10">
 
                     {/* Profile Image */}
                     <div className="flex justify-center">
@@ -156,7 +156,7 @@ const Dashboard = () => {
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-1 mt-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3">
 
                         <div className="bg-base-200 border border-secondary rounded-2xl p-3 flex-col justify-center  items-center hover:scale-105 transition">
                             <h3 className="text-3xl font-bold">{connections.total}</h3>
@@ -175,12 +175,12 @@ const Dashboard = () => {
 
 
                     {/* Info List */}
-                    <div className="mt-2  flex justify-between items-center">
-                        <div className=" gap-3 bg-white/5 p-3 rounded-xl flex justify-between items-center">
+                    <div className="mt-2 gap-3 flex justify-around items-center">
+                        <div className="w-[50%] gap-3 bg-white/5 p-3 rounded-xl flex justify-between items-center">
                             <span className="text-md font-light flex justify-center items-center gap-3"><FaUniversity color="#ffffff" />{user.college}</span>
                         </div>
 
-                        <div className=" gap-3 bg-white/5 p-3 rounded-xl flex justify-between items-center">
+                        <div className="w-[50%] gap-3 bg-white/5 p-3 rounded-xl flex justify-between items-center">
                             <span className="text-md font-light flex justify-center items-center gap-3"><BsPersonWorkspace color="#ffffff" />{user.profession}</span>
                         </div>
                     </div>

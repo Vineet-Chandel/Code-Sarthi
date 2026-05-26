@@ -63,7 +63,7 @@ const IntroEXP = () => {
                         className="w-1.5 h-1.5 rounded-full"
                         style={{ background: 'var(--color-secondary-content)', animation: 'pulseDot 2s ease-in-out infinite' }}
                     />
-                    Step 2 of 8 · EDUCATION
+                    Step 3 of 8 · EDUCATION
                 </div>
 
                 {/* Heading */}
@@ -175,7 +175,7 @@ const IntroEXP = () => {
                     <button
                         className="flex items-center gap-2 text-sm font-semibold transition-opacity hover:opacity-60"
                         style={{ color: 'var(--color-secondary-content)', background: 'none', border: 'none', cursor: 'pointer' }}
-                        onClick={() => navigate('/app/build-resume/header-content', { state: { resumeData } })}
+                        onClick={() => navigate('/app/build-resume/experience-content', { state: { resumeData } })}
                     >
                         <ArrowLeft size={16} /> Back
                     </button>
