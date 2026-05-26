@@ -545,8 +545,8 @@ const Login = () => {
                 </div>
 
 
-                <div className="w-full md:w-[50%] p-6">
-                    <div className="w-full h-full bg-base-200 text-accent rounded-2xl p-8 md:p-12 relative overflow-hidden group">
+                <div className="w-full md:w-[50%] p-2 sm:p-6">
+                    <div className="w-full h-full bg-base-200 text-accent rounded-2xl p-4 sm:p-6 md:p-12 relative overflow-hidden group">
 
                         <div className="relative z-10 space-y-8">
 

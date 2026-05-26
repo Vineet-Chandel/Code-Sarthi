@@ -495,7 +495,7 @@ const Signup = () => {
       <div className="w-full bg-base-100  rounded-3xl border border-secondary  flex flex-col md:flex-row gap-6 overflow-hidden  transition-all duration-500">
 
         {/* LEFT - Signup Form */}
-        <div className="flex flex-col gap-8 p-8 md:p-12 w-full md:w-[50%] text-white">
+        <div className="flex flex-col gap-8  p-6  md:p-12 w-full md:w-[50%] text-white">
           <div className="space-y-2">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-secondary-content to-accent leading-tight ">
               <TextType
@@ -817,7 +817,7 @@ const Signup = () => {
               </div>
               <div className="space-y-2  w-[48.5%]">
                 <label htmlFor="profession" className="text-md ml-3 block text-accent-content-content">
-                  Your Profession <span className="text-white ml-1">*</span>
+                  Profession <span className="text-white ml-1">*</span>
                 </label>
                 <div className="flex items-center rounded-2xl px-4 py-3 border  bg-base-200 border-base-300    focus-within:  transition-all duration-300">
                   <span className="mr-3">
@@ -951,8 +951,8 @@ const Signup = () => {
 
         {/* RIGHT - Content Panel */}
 
-        <div className="w-full md:w-[50%] p-6">
-          <div className="w-full h-full bg-base-200 text-accent-content rounded-2xl p-8 md:p-12 relative overflow-hidden group">
+        <div className="w-full md:w-[50%] p-3 md:p-6">
+          <div className="w-full h-full bg-base-200 text-accent-content rounded-2xl p-4 sm:p-6  md:p-12 relative overflow-hidden group">
 
             <div className="relative z-10 space-y-8">
 
