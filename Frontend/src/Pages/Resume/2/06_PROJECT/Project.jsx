@@ -57,12 +57,12 @@ const ToastContainer = ({ toasts, removeToast }) => {
 
 
 const Project = ({ data }) => {
-    const location = useLocation();
-    let resumeData = location.state?.resumeData || {};
+    const live = useLocation();
+    let resumeData = live.state?.resumeData || {};
 
     const [projects, setProjects] = useState(
-        resumeData?.experience?.length > 0
-            ? resumeData.experience
+        resumeData?.projects?.length > 0
+            ? resumeData.projects
             : [
                 {
                     name: "",
@@ -74,7 +74,6 @@ const Project = ({ data }) => {
                 }
             ]
     );
-
 
     const [activeTab, setActiveTab] = useState("preview"); // preview | tips | score
     const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -123,12 +122,10 @@ const Project = ({ data }) => {
     const [aiModalOpen, setAiModalOpen] = useState(false);
     const [bullets, setBullets] = useState([]);
     const [isAiworking, setIsAiworking] = useState(false);
-    const [selectedName, setSelectedName] = useState();
-    const [selectedStack, setSelectedStack] = useState();
-    const [selectedGithub, setSelectedGithub] = useState();
-    const [selectedLive, setSelectedLive] = useState();
-    const [selectedDescription, setSelectedDescription] = useState();
-    const [selectedProIndex, setSelectedProIndex] = useState(null);
+    const [selectedProjectName, setSelectedProjectName] = useState("");
+    const [selectedProjectStack, setSelectedProjectStack] = useState("");
+    const [selectedProjectGithub, setSelectedProjectGithub] = useState("");
+    const [selectedProjectIndex, setSelectedProjectIndex] = useState(null);
     const [points, setpoints] = useState([]);
 
     const [bulletInput, setBulletInput] = useState("");
@@ -143,25 +140,25 @@ const Project = ({ data }) => {
 
 
     useEffect(() => {
-        if (bullets?.length == 0 && selectedRole && selectedCompany && selectedEmploymentType) {
-            bulletspoints(selectedRole, selectedCompany, selectedEmploymentType);
+        if (bullets?.length == 0 && selectedProjectName && selectedProjectStack && selectedProjectGithub) {
+            bulletspoints(selectedProjectName, selectedProjectStack, selectedProjectGithub);
         }
 
 
     }, [points]);
 
     useEffect(() => {
-        if (selectedRole && selectedCompany && selectedEmploymentType) {
-            bulletspoints(selectedRole, selectedCompany, selectedEmploymentType);
+        if (selectedProjectName && selectedProjectStack && selectedProjectGithub) {
+            bulletspoints(selectedProjectName, selectedProjectStack, selectedProjectGithub);
         }
-    }, [selectedRole, selectedCompany, selectedEmploymentType]);
+    }, [selectedProjectName, selectedProjectStack, selectedProjectGithub]);
 
-    const bulletspoints = async (jobRole, company, employmentType) => {
+    const bulletspoints = async (jobRole, stack, github) => {
         try {
             setIsAiworking(true);
             const response = await axios.post(
                 `${BASE_URL}/generate-exp-pointer`,
-                { jobRole: jobRole, company: company, employmentType: employmentType }
+                { jobRole: jobRole, stack: stack, github: github }
             );
 
             setBullets(response.data.data);
@@ -231,14 +228,14 @@ const Project = ({ data }) => {
                 {/* ── body ── */}
                 <div className={`grid transition-all duration-500 ${sidebarOpen ? "lg:grid-cols-[1fr_500px]" : "grid-cols-1"}`}>
 
-                    {aiModalOpen && <div className='fixed w-screen h-screen bg-black/20 inset-0 z-30' onClick={() => { setAiModalOpen(false); setBullets([]), setpoints([]), setSelectedRole(""), setSelectedCompany(""), setSelectedEmploymentType(""), setSelectedExpIndex(null) }}>
+                    {aiModalOpen && <div className='fixed w-screen h-screen bg-black/20 inset-0 z-30' onClick={() => { setAiModalOpen(false); setBullets([]), setpoints([]), setSelectedProjectName(""), setSelectedProjectStack(""), setSelectedProjectGithub(""), setSelectedProjectIndex(null) }}>
 
 
                         <div className='w-full flex justify-center gap-5 p-5' >
                             <div className="w-[50%] bg-base-100 h-[80vh] mt-10  rounded-xl p-5" onClick={(e) => e.stopPropagation()}>
                                 <div className='mb-5'>
                                     <h1 className="text-3xl font-bold text-slate-900 mb-2 leading-tight text-start  " >
-                                        Bullet points about what you did as a <br /> <span className="text-accent">{selectedRole}</span>,
+                                        Bullet points about what you did as a <br /> <span className="text-accent">{selectedProjectName}</span>,
                                     </h1>
                                 </div>
 
@@ -334,19 +331,19 @@ const Project = ({ data }) => {
                                     ))}
                                 </div>
                                 <button className='bg-secondary w-full text-center mt-5 rounded-xl text-base-100 py-3 px-5 font-bold ' onClick={() => {
-                                    setExperiences(prev =>
+                                    setProjects(prev =>
                                         prev.map((exp, i) =>
-                                            i === selectedExpIndex
+                                            i === selectedProjectIndex
                                                 ? { ...exp, bullets: [...new Set([...exp.bullets, ...points])] }
                                                 : exp
                                         )
                                     );
                                     setAiModalOpen(false);
                                     setpoints([]);
-                                    setSelectedRole("");
-                                    setSelectedCompany("");
-                                    setSelectedEmploymentType("");
-                                    setSelectedExpIndex(null);
+                                    setSelectedProjectName("");
+                                    setSelectedProjectStack("");
+                                    setSelectedProjectGithub("");
+                                    setSelectedProjectIndex(null);
 
                                 }}>Finalise Your Points</button>
                             </div>
@@ -359,15 +356,15 @@ const Project = ({ data }) => {
                         <Header index={5} />
 
 
-                        {experiences.map((form, index) => (
+                        {projects.map((form, index) => (
                             <div key={index} className="bg-base-300 rounded-3xl shadow-inner p-7 mb-6">
                                 <div className="flex items-center justify-between mb-4">
                                     <h3 className="text-lg font-bold text-slate-700">Experience #{index + 1}</h3>
                                     <button
                                         onClick={() => {
-                                            const newExperiences = [...experiences];
-                                            newExperiences.splice(index, 1);
-                                            setExperiences(newExperiences);
+                                            const updated = [...projects];
+                                            updated.splice(index, 1);
+                                            setProjects(updated);
                                         }}
                                         className="text-accent hover:text-secondary transition-colors cursor-pointer"
                                     >
@@ -376,67 +373,78 @@ const Project = ({ data }) => {
                                         </svg>
                                     </button>
                                 </div>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-                                <div className="flex items-start gap-5 mb-6">
-                                    <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                                        <InputField label="Role" id="role" value={form.role} required={true}
-                                            placeholder="Frontend Developer "
-                                            onChange={(id, value) => handleChange2(index, id, value)}
-                                        />
+                                    <InputField
+                                        label="Project Name"
+                                        id="name"
+                                        value={form.name}
+                                        placeholder="AI Resume Builder"
+                                        onChange={(id, value) =>
+                                            handleChange2(index, id, value)
+                                        }
+                                    />
 
-                                        <InputField label="Company" id="company" value={form.company} required={true}
-                                            placeholder="Google"
-                                            onChange={(id, value) => handleChange2(index, id, value)}
-                                        />
-                                    </div>
+                                    <InputField
+                                        label="Tech Stack"
+                                        id="stack"
+                                        value={form.stack}
+                                        placeholder="React, Node.js, MongoDB"
+                                        onChange={(id, value) =>
+                                            handleChange2(index, id, value)
+                                        }
+                                    />
+
+                                    <InputField
+                                        label="Github Link"
+                                        id="github"
+                                        value={form.github}
+                                        placeholder="https://github.com/..."
+                                        onChange={(id, value) =>
+                                            handleChange2(index, id, value)
+                                        }
+                                    />
+
+                                    <InputField
+                                        label="Live Link"
+                                        id="live"
+                                        value={form.live}
+                                        placeholder="https://yourproject.com"
+                                        onChange={(id, value) =>
+                                            handleChange2(index, id, value)
+                                        }
+                                    />
                                 </div>
-                                <label className="text-sm font-medium text-slate-700 mb-2 block">
-                                    Type of Employment
-                                </label>
-                                <select
-                                    className="input input-bordered border border-slate-900 text-black rounded-xl bg-base-200 w-full px-2 py-1"
-                                    value={form.employmentType}
-                                    required={true}
-                                    onChange={(e) =>
-                                        handleChange2(index, "employmentType", e.target.value)
-                                    }
-                                >
-                                    <option value="">Select Type</option>
-                                    <option>Internship</option>
-                                    <option>Full-time</option>
-                                    <option>Freelance</option>
-                                </select>
 
+                                <div className="mt-4">
+                                    <label className="text-sm font-medium text-slate-700 mb-2 block">
+                                        Description
+                                    </label>
+
+                                    <textarea
+                                        value={form.description}
+                                        onChange={(e) =>
+                                            handleChange2(index, "description", e.target.value)
+                                        }
+                                        placeholder="Describe your project..."
+                                        className="
+        w-full min-h-[120px]
+        rounded-2xl
+        border border-slate-700
+        bg-base-100
+        p-4
+        outline-none
+        focus:border-secondary
+    "
+                                    />
+                                </div>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                                    <InputField label="Location" id="location" value={form.location}
+                                    <InputField label="live" id="live" value={form.live}
                                         placeholder="New York"
                                         onChange={(id, value) => handleChange2(index, id, value)}
                                     />
 
-                                    <InputField type="month" label="Start Date" id="startDate" value={form.startDate}
 
-                                        onChange={(id, value) => handleChange2(index, id, value)} />
-                                    <InputField type="month" label="End Date" id="endDate" value={form.endDate}
-
-                                        onChange={(id, value) => handleChange2(index, id, value)} />
-
-                                    <label className="flex items-center gap-2">
-                                        <input
-                                            type="checkbox"
-                                            checked={form.currentlyWorking}
-                                            onChange={(e) => {
-                                                const updated = [...experiences];
-                                                updated[index].currentlyWorking = e.target.checked;
-
-                                                if (e.target.checked) {
-                                                    updated[index].endDate = "";
-                                                }
-
-                                                setExperiences(updated);
-                                            }}
-                                        />
-                                        Currently working here
-                                    </label>
                                 </div>
 
 
@@ -444,16 +452,16 @@ const Project = ({ data }) => {
                                 <button className='bg-secondary border border-secondary hover:bg-base-100 text-base-100 hover:text-secondary px-3 py-2 rounded-xl mt-3 flex justify-center items-center gap-2 hover:scale-105 transition-all duration-300 ease-in-out group' onClick={() => {
 
 
-                                    if (experiences[index].role === '' || experiences[index].company === '' || experiences[index].employmentType === '') {
+                                    if (projects[index].name === '' || projects[index].stack === '' || projects[index].github === '') {
 
                                         addToast({
                                             type: "error",
                                             title: "Error",
-                                            message: "Please fill Role, Company and the Employment Type"
+                                            message: "Please fill name, stack and the Employment Type"
                                         });
                                         return;
                                     }
-                                    setAiModalOpen(true); setSelectedRole(experiences[index].role); setSelectedCompany(experiences[index].company); setSelectedEmploymentType(experiences[index].employmentType); setSelectedExpIndex(index);
+                                    setAiModalOpen(true); setSelectedProjectName(projects[index].name); setSelectedProjectStack(projects[index].stack); setSelectedProjectGithub(projects[index].github); setSelectedProjectIndex(index);
                                 }}>
 
                                     <div className='flex justify-center items-center gap-2 bg-base-100 p-2 rounded-xl group-hover:bg-secondary group-hover:text-base-100 transition-all duration-300 ease-in-out'>
@@ -469,12 +477,12 @@ const Project = ({ data }) => {
                                     <div className="overflow-y-auto h-fit">
                                         <div className='mb-5 flex items-center justify-between'>
                                             <h1 className="text-2xl font-bold text-slate-900 mb-2 leading-tight text-start  " >
-                                                Points Added : {experiences[index].bullets?.length}/10 <br />
+                                                Points Added : {projects[index].bullets?.length}/10 <br />
                                             </h1>
 
                                             <div className='bg-primary p-3 rounded-full text-base-100 flex justify-center items-center cursor-pointer' onClick={() => {
 
-                                                if (experiences[index].bullets?.length >= 10) {
+                                                if (projects[index].bullets?.length >= 10) {
                                                     addToast({
                                                         type: "error",
                                                         title: "Error",
@@ -523,7 +531,7 @@ const Project = ({ data }) => {
                                                     onClick={() => {
                                                         if (!bulletInput.trim()) return;
 
-                                                        setExperiences(prev =>
+                                                        setProjects(prev =>
                                                             prev.map((exp, i) => {
                                                                 if (i !== index) return exp;
 
@@ -551,11 +559,11 @@ const Project = ({ data }) => {
                                                 </button>
                                             </div>
                                         )}
-                                        {(activeInputIndex !== index && experiences[index].bullets?.length === 0) ? (<div className='flex flex-col justify-center items-center  w-[80%] mx-auto gap-2'>
+                                        {(activeInputIndex !== index && projects[index].bullets?.length === 0) ? (<div className='flex flex-col justify-center items-center  w-[80%] mx-auto gap-2'>
 
                                             <h1 className="text-xl font-medium text-slate-900 mb-2 leading-tight text-center ">No bullet points yet. Don’t waste time thinking — let AI craft powerful, recruiter-ready points for you in seconds.</h1>
 
-                                        </div>) : experiences[index].bullets?.map((point, bulletIndex) => (
+                                        </div>) : projects[index].bullets?.map((point, bulletIndex) => (
                                             <div key={bulletIndex + point} className='bg-base-300 p-3 rounded-2xl flex mb-3 cursor-pointer hover:border hover:border-secondary transition-all ' >
                                                 <div className="flex gap-5 w-full items-center">
                                                     <div className='flex gap-2'>
@@ -568,7 +576,7 @@ const Project = ({ data }) => {
                                                                 setBulletInput("");
                                                                 setActiveInputIndex(null);
 
-                                                                setExperiences(prev =>
+                                                                setProjects(prev =>
                                                                     prev.map((exp, i) =>
                                                                         i === index
                                                                             ? {
@@ -623,7 +631,7 @@ const Project = ({ data }) => {
                                                                     return;
                                                                 }
 
-                                                                setExperiences(prev =>
+                                                                setProjects(prev =>
                                                                     prev.map((exp, i) =>
                                                                         i === index
                                                                             ? {
@@ -670,7 +678,7 @@ const Project = ({ data }) => {
                         ))}
                         <div className="flex justify-end mt-10">
                             <button
-                                onClick={addExperience}
+                                onClick={addProject}
                                 className="px-6 py-2 rounded-full bg-primary text-white flex items-center gap-2"
                             ><svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
                                     <g fill="none">

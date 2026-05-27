@@ -70,6 +70,8 @@ import SmartSchedulerLakshya from "./Main/PagesMain/Sub-Category/Blog-Category/S
 import PrivacyPolicyHub from "./Main/PagesMain/Sub-Category/Safety-Category/Hub/PrivacyPolicyHub";
 import IntroProject from "./Pages/Resume/2/06_PROJECT/IntroProject"
 import IntroEXP from "./Pages/Resume/2/02_EXP/IntroEXP";
+import IntroPreview from "./Pages/Resume/2/08_PREVIEW/IntroPreview";
+
 import IntroSummary from "./Pages/Resume/2/05_PRSUM/IntroProfileSummary";
 import Experience from "./Pages/Resume/2/02_EXP/Experinece";
 import IntroEdu from "./Pages/Resume/2/03_EDU/IntroEdu";
@@ -79,6 +81,7 @@ import Skills from "./Pages/Resume/2/04_SKILLS/Skills";
 import PageNotFound from "./ErrorSaver/PageNotFound";
 import Summary from "./Pages/Resume/2/05_PRSUM/ProfileSummary";
 import Project from "./Pages/Resume/2/06_PROJECT/Project";
+import Preview from "./Pages/Resume/2/08_PREVIEW/Preview";
 
 
 const App = () => {
@@ -158,10 +161,12 @@ const App = () => {
               <Route path="build-resume/project-content" element={<Project />} />
               <Route path="build-resume/intro-exp-page" element={<IntroEXP />} />
               <Route path="build-resume/intro-edu-page" element={< IntroEdu />} />
+              <Route path="build-resume/intro-preview-page" element={< IntroPreview />} />
               <Route path="build-resume/intro-project-page" element={< IntroProject />} />
               <Route path="build-resume/intro-skill-page" element={< IntroSkill />} />
               <Route path="build-resume/intro-summary-page" element={< IntroSummary />} />
               <Route path="build-resume/summary-content" element={<Summary />} />
+              <Route path="build-resume/preview-content" element={<Preview />} />
               <Route path="build-resume/skill-content" element={<Skills />} />
               <Route path="build-resume/experience-content" element={<Experience />} />
               <Route path="build-resume/education-content" element={<Education />} />

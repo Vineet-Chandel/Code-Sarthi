@@ -258,7 +258,7 @@ const ProfileSummary = ({ data }) => {
 
                         <div className="bg-base-300 rounded-3xl shadow-inner p-7 mb-6 w-full">
                             <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-lg font-bold text-slate-700">Professional Summary </h3>
+                                <h3 className="text-lg font-bold text-white">Professional Summary </h3>
                             </div>
 
                             <div className="flex items-start flex-col gap-5 mb-6 ">
@@ -272,8 +272,8 @@ const ProfileSummary = ({ data }) => {
                                             placeholder="Frontend Developer with 3+ years of experience in building scalable web applications..."
                                             rows={10}
                                             maxLength={500}
-                                            className="w-full bg-base-100 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 outline-none
-                 focus:border-secondary focus:ring-4 focus:ring-accent focus:bg-white
+                                            className="w-full bg-base-100 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none
+                 focus:border-info  focus:ring-info focus:bg-secondary
                  transition-all duration-200 font-medium placeholder:text-slate-500"
 
                                         />
@@ -284,7 +284,7 @@ const ProfileSummary = ({ data }) => {
 
 
 
-                                <button className='bg-secondary border border-secondary hover:bg-base-100 text-base-100 hover:text-secondary px-3 py-2 rounded-xl mt-3 flex justify-center items-center gap-2 hover:scale-105 transition-all duration-300 ease-in-out group' onClick={() => {
+                                <button className=' border border-secondary bg-base-100 text-info  px-3 py-2 rounded-xl mt-3 flex justify-center items-center gap-2 hover:scale-105 transition-all duration-300 ease-in-out group' onClick={() => {
 
 
 
@@ -292,10 +292,10 @@ const ProfileSummary = ({ data }) => {
                                     setAiModalOpen(true);
                                 }}>
 
-                                    <div className='flex justify-center items-center gap-2 bg-base-100 p-2 rounded-xl group-hover:bg-secondary group-hover:text-base-100 transition-all duration-300 ease-in-out'>
-                                        <h1 className="text-xl font-bold text-secondary leading-tight text-center group-hover:text-base-100 transition-all duration-300 ease-in-out">Shastra</h1>
+                                    <div className='flex justify-center items-center gap-2  p-2 rounded-xl bg-secondary group-hover:text-base-100 transition-all duration-300 ease-in-out'>
+                                        <h1 className="text-xl font-bold text-secondary-content leading-tight text-center  transition-all duration-300 ease-in-out">Shastra</h1>
                                         <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" className='text-secondary group-hover:text-base-100'>
-                                            <path fill="currentColor" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
+                                            <path fill="#fff" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
                                         </svg>
                                     </div>
                                     Get Profile Summary With AI</button>
@@ -313,7 +313,7 @@ const ProfileSummary = ({ data }) => {
                                             <div className='w-full flex justify-center gap-5 p-5' >
                                                 <div className="w-[97%] bg-base-100   rounded-xl p-5" onClick={(e) => e.stopPropagation()}>
                                                     <div className='mb-5'>
-                                                        <h1 className="text-2xl text-center font-bold text-slate-900 mb-2 leading-tight  " >
+                                                        <h1 className="text-2xl text-center font-bold text-info mb-2 leading-tight  " >
                                                             Generating Professional Summary according to your qualifications and experience
                                                         </h1>
                                                     </div>
@@ -321,15 +321,15 @@ const ProfileSummary = ({ data }) => {
                                                     <div >
                                                         {loading ? (<div className='flex flex-col justify-center items-center  w-full  gap-2'>
                                                             <div className='flex justify-center items-center gap-2'>
-                                                                <h1 className="text-5xl font-bold text-[#884f06] mb-2 leading-tight text-center ">Shastra</h1>
+                                                                <h1 className="text-5xl font-bold text-[#ffffff] mb-2 leading-tight text-center ">Shastra</h1>
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width={50} height={50} viewBox="0 0 24 24" className='mb-3'>
-                                                                    <path fill="#884f06" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
+                                                                    <path fill="#ffffff" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
                                                                 </svg>
                                                             </div>
-                                                            <h1 className="text-xl font-medium text-[#884f06] mb-2 leading-tight text-center ">AI is refining your professional summary...</h1>
+                                                            <h1 className="text-xl font-medium text-[#ffffff] mb-2 leading-tight text-center ">AI is refining your professional summary...</h1>
                                                             <div className="animate-pulse flex flex-col items-center gap-3">
-                                                                <div className="h-4 w-40 bg-[#884f06]/30 rounded"></div>
-                                                                <div className="h-4 w-56 bg-[#884f06]/20 rounded"></div>
+                                                                <div className="h-4 w-40 bg-[#ffffff]/30 rounded"></div>
+                                                                <div className="h-4 w-56 bg-[#ffffff]/20 rounded"></div>
                                                             </div>
                                                         </div>) : (
                                                             <div className=" overflow-y-auto space-y-4 pr-2">
@@ -402,14 +402,13 @@ const ProfileSummary = ({ data }) => {
 
                     <button
                         onClick={() => {
-                            Navigate("/app/build-resume/intro-edu-page", {
+                            Navigate("/app/build-resume/intro-project-page", {
                                 state: { resumeData }
                             });
                         }}
-                        className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl bg-base-300 text-secondary border-2 border-secondary
-                       hover:bg-secondary hover:text-secondary-content  hover:border-base-100 active:scale-95 transition-all duration-200 "
-                    >
-                        Next: Additional Details
+                        className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl bg-base-100 text-info border-2 border-secondary
+                        hover:text-secondary-content   active:scale-95 transition-all duration-200 "    >
+                        Next: Projects
                         <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
                             <path fill="currentColor" d="M2 5v14c0 .86 1.012 1.318 1.659.753l8-7a1 1 0 0 0 0-1.506l-8-7C3.012 3.682 2 4.141 2 5m11 0v14c0 .86 1.012 1.318 1.659.753l8-7a1 1 0 0 0 0-1.506l-8-7C14.012 3.682 13 4.141 13 5"></path>
                         </svg>

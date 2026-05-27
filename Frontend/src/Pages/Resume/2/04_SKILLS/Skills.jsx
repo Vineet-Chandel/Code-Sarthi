@@ -186,7 +186,7 @@ const Education = ({ data }) => {
     return (
         <div className="min-h-[calc(100vh-4rem)] w-screen flex items-start justify-center p-4 md:p-6 bg-base-100">
             <ToastContainer toasts={toasts} removeToast={removeToast} />
-            <div className="w-full bg-base-100 rounded-3xl border border-slate-100 overflow-hidden border border-slate-700" >
+            <div className="w-full bg-base-100 rounded-3xl  overflow-hidden border border-slate-700" >
 
                 {/* ── top bar ── */}
                 <div className="flex items-center justify-between px-5 py-3.5 bg-base-200 border-b border-slate-700">
@@ -300,9 +300,15 @@ const Education = ({ data }) => {
 
                                     </div>}
                                     {/* Category Input */}
-                                    <div className="flex justify-between items-start gap-5 flex-col ">
+                                    <div className="flex justify-between items-start gap-2 flex-col ">
+                                        <label
+                                            htmlFor="skills-category"
+                                            className="text-[13px] font-semibold uppercase tracking-widest text-info group-focus-within:text-white transition-colors ml-0.5"
+                                        >
+                                            Skills Category
+                                        </label>
                                         <input
-
+                                            id='skills-category'
                                             type="text"
                                             placeholder="Skill Category (Frontend, Backend...)"
                                             value={skill.skillCategory}
@@ -310,12 +316,12 @@ const Education = ({ data }) => {
 
                                                 handleChange2(index, "skillCategory", e.target.value)
                                             }
-                                            className="w-full  bg-base-200 border border-slate-900 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 outline-none
-                 focus:border-secondary focus:ring-4 focus:ring-accent focus:bg-white
+                                            className="w-full  bg-base-100 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none
+                 focus:border-info  focus:ring-info focus:bg-secondary
                  transition-all duration-200 font-medium placeholder:text-slate-500"
 
                                         />
-                                        <button className='bg-secondary border border-secondary hover:bg-base-100 text-base-100 hover:text-secondary px-3 py-2 rounded-xl mt-3 flex justify-center items-center gap-2 hover:scale-105 transition-all duration-300 ease-in-out group' onClick={() => {
+                                        <button className=' border border-secondary bg-base-100 text-info  px-3 py-2 rounded-xl mt-3 flex justify-center items-center gap-2 hover:scale-105 transition-all duration-300 ease-in-out group' onClick={() => {
 
                                             if (skill.skillCategory.trim() === "") {
 
@@ -332,32 +338,98 @@ const Education = ({ data }) => {
                                             bulletspoints(skill.skillCategory)
                                         }}>
 
-                                            <div className='flex justify-center items-center gap-2 bg-base-100 p-2 rounded-xl group-hover:bg-secondary group-hover:text-base-100 transition-all duration-300 ease-in-out'>
-                                                <h1 className="text-xl font-bold text-secondary leading-tight text-center group-hover:text-base-100 transition-all duration-300 ease-in-out">Shastra</h1>
+                                            <div className='flex justify-center items-center gap-2  p-2 rounded-xl bg-secondary group-hover:text-base-100 transition-all duration-300 ease-in-out'>
+                                                <h1 className="text-xl font-bold text-secondary-content leading-tight text-center  transition-all duration-300 ease-in-out">Shastra</h1>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" className='text-secondary group-hover:text-base-100'>
-                                                    <path fill="currentColor" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
+                                                    <path fill="#fff" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
                                                 </svg>
                                             </div>
                                             Generate skills</button>
                                     </div>
 
                                     {/* Skills Chips */}
-                                    <div className="flex flex-wrap gap-2 mt-4">
-                                        {skill.skills.map((item, idx) => (
-                                            <div
-                                                key={idx}
-                                                className="px-3 py-1.5 rounded-full bg-secondary text-secondary-content text-sm flex items-center gap-2"
-                                            >
-                                                {item}
+                                    <div className="flex flex-col gap-2 mt-4 mb-3">
+                                        <label
+                                            htmlFor="skills-category"
+                                            className="text-[13px] font-semibold uppercase tracking-widest text-info group-focus-within:text-white transition-colors ml-0.5"
+                                        >
+                                            Add Skills
+                                        </label>
+                                        <div
+                                            className="
+    grid
+    grid-cols-2
+    sm:grid-cols-3
+    md:grid-cols-4
+    lg:grid-cols-5
+    xl:grid-cols-6
+    gap-3
+  "
+                                        >
+                                            {skill.skills.map((item, idx) => (
+                                                <div
+                                                    key={idx}
+                                                    className="
+        group
+        w-full
+        min-w-0
+        px-4 py-2
+        rounded-2xl
+        bg-accent
+        text-secondary-content
+        border border-white/10
 
-                                                <button
-                                                    onClick={() => removeSkill(index, idx)}
-                                                    className="hover:text-red-300"
+
+        flex items-center justify-between gap-2
+
+        transition-all duration-300 ease-out
+        hover:scale-[1.03]
+        hover:shadow-lg
+        hover:shadow-black/20
+      "
                                                 >
-                                                    ×
-                                                </button>
-                                            </div>
-                                        ))}
+                                                    <span className="truncate text-sm sm:text-base font-medium">
+                                                        {item}
+                                                    </span>
+
+                                                    <button
+                                                        onClick={() => removeSkill(index, idx)}
+                                                        className="
+          group/delete
+          shrink-0
+          flex items-center justify-center
+          rounded-full
+          p-1
+          text-white/70
+          transition-all duration-300 ease-out
+          hover:bg-red-500/15
+          hover:text-red-400
+          active:scale-90
+        "
+                                                    >
+                                                        <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            width="1.4em"
+                                                            height="1.4em"
+                                                            viewBox="0 0 24 24"
+                                                            className="
+            transition-transform duration-500 ease-out
+            group-hover/delete:rotate-180
+            group-hover/delete:scale-110
+          "
+                                                        >
+                                                            <path
+                                                                fill="currentColor"
+                                                                fillRule="evenodd"
+                                                                d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12s4.477 10 10 10m4.066-14.066a.75.75 0 0 1 0 1.06L13.06 12l3.005 3.005a.75.75 0 0 1-1.06 1.06L12 13.062l-3.005 3.005a.75.75 0 1 1-1.06-1.06L10.938 12L7.934 8.995a.75.75 0 1 1 1.06-1.06L12 10.938l3.005-3.005a.75.75 0 0 1 1.06 0"
+                                                                clipRule="evenodd"
+                                                            />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+
                                     </div>
 
                                     {/* Add Skill */}
@@ -366,8 +438,8 @@ const Education = ({ data }) => {
                                             key={skill.id}
                                             type="text"
                                             placeholder="Press Enter to add skill"
-                                            className="w-full bg-base-200 border border-slate-900 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 outline-none
-                 focus:border-secondary focus:ring-4 focus:ring-accent focus:bg-white
+                                            className="w-full bg-base-100 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none
+                 focus:border-info focus:ring-info focus:bg-secondary
                  transition-all duration-200 font-medium placeholder:text-slate-500"
 
 
@@ -393,7 +465,7 @@ const Education = ({ data }) => {
                                                 handleChange2(index, "inputValue", "");
                                             }}
                                         />
-                                        <button className="mt-4 px-4 py-3 rounded-xl flex gap-2 items-center justify-center border border-slate-600 bg-secondary text-secondary-content font-semibold" onClick={() => {
+                                        <button className=" px-4 py-3 rounded-xl flex gap-2 items-center justify-center border border-slate-600 bg-secondary text-secondary-content font-semibold" onClick={() => {
 
                                             if (skills[index].skills.length > 20) {
                                                 addToast({
@@ -407,9 +479,11 @@ const Education = ({ data }) => {
                                             addSkillToCategory(index, skill.inputValue);
 
                                             handleChange2(index, "inputValue", "");
-                                        }}>Enter <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
-                                                <path fill="#f8cb82ff" d="M19 6a1 1 0 0 0-1 1v4a1 1 0 0 1-1 1H7.41l1.3-1.29a1 1 0 0 0-1.42-1.42l-3 3a1 1 0 0 0-.21.33a1 1 0 0 0 0 .76a1 1 0 0 0 .21.33l3 3a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.42L7.41 14H17a3 3 0 0 0 3-3V7a1 1 0 0 0-1-1"></path>
-                                            </svg></button>
+                                        }}>Enter
+                                            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
+                                                <path fill="#ffffff" d="M19 6a1 1 0 0 0-1 1v4a1 1 0 0 1-1 1H7.41l1.3-1.29a1 1 0 0 0-1.42-1.42l-3 3a1 1 0 0 0-.21.33a1 1 0 0 0 0 .76a1 1 0 0 0 .21.33l3 3a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.42L7.41 14H17a3 3 0 0 0 3-3V7a1 1 0 0 0-1-1"></path>
+                                            </svg>
+                                        </button>
                                     </div>
                                 </div>
                             ))}
@@ -439,10 +513,9 @@ const Education = ({ data }) => {
                                 state: { resumeData: finalResumeData }
                             });
                         }}
-                        className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl bg-base-300 text-secondary border-2 border-secondary
-                       hover:bg-secondary hover:text-secondary-content  hover:border-base-100 active:scale-95 transition-all duration-200 "
-                    >
-                        Next: Profile Summary
+                        className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl bg-base-100 text-info border-2 border-secondary
+                        hover:text-secondary-content   active:scale-95 transition-all duration-200 "    >
+                        Next : Profile Summary
                         <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
                             <path fill="currentColor" d="M2 5v14c0 .86 1.012 1.318 1.659.753l8-7a1 1 0 0 0 0-1.506l-8-7C3.012 3.682 2 4.141 2 5m11 0v14c0 .86 1.012 1.318 1.659.753l8-7a1 1 0 0 0 0-1.506l-8-7C14.012 3.682 13 4.141 13 5"></path>
                         </svg>

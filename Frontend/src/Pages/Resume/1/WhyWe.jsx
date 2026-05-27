@@ -15,7 +15,7 @@ const FEATURES = [
     pill: "Explore templates",
     badge: "180+ Templates",
     image:
-      "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1777480434/Professional_Resume_Designs_ok7fmt.avif",
+      "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1779851789/Create_your_RESUME_3_wfdm4s.png",
   },
   {
     num: "02",
@@ -504,18 +504,24 @@ const WhyWe = () => {
 
                 {/* Image */}
                 <div className="ww-img-wrap">
-                  <div className="ww-img-frame">
-                    <span className="ww-sheen" />
-                    <span className="ww-corner ww-tl" />
-                    <span className="ww-corner ww-tr" />
-                    <span className="ww-corner ww-bl" />
-                    <span className="ww-corner ww-br" />
-                    <div className="ww-img-sheen" />
-                    <img
-                      src={f.image}
-                      alt={f.title}
-                      loading="lazy"
-                    />
+                  <div className="">
+
+                    <div className="ww-img-sheen " />
+                    <span className="block overflow-hidden rounded-[40px]">
+                      <img
+                        src={f.image}
+                        alt={f.title}
+                        loading="lazy"
+                        className="
+      w-full h-full object-cover
+      rounded-[40px]
+      transition-transform duration-500 ease-out
+      hover:scale-105
+      will-change-transform
+    "
+                      />
+                    </span>
+
                     <div className="ww-img-badge">{f.badge}</div>
                   </div>
                 </div>
