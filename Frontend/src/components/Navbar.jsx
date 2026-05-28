@@ -307,7 +307,7 @@ group-hover:after:w-full">
                     >
                         <div className="h-full w-full rounded-full overflow-hidden  border-info border-[3px]">
                             <img
-                                src={user.photoUrl.url}
+                                src={user?.photoUrl?.url}
                                 alt="Profile"
                                 className="h-full w-full object-cover transition-all duration-500 group-hover:scale-125 group-hover:brightness-110 group-active:scale-100"
                             />
@@ -339,7 +339,7 @@ group-hover:after:w-full">
                                         <div className="flex items-center gap-3">
                                             <div className="h-[55px] w-[55px] rounded-full overflow-hidden border-secondary border-[2px]">
                                                 <img
-                                                    src={user.photoUrl.url}
+                                                    src={user?.photoUrl?.url}
                                                     alt="Profile"
                                                     className="h-full w-full object-cover"
                                                 />

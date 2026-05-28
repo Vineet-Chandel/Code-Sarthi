@@ -14,7 +14,7 @@ import Preview from '../Preview';
 // ─── reusable field ───────────────────────────────────────────────────────────
 const ToastContainer = ({ toasts, removeToast }) => {
     return (
-        <div className="fixed top-5 right-5 flex flex-col gap-3 z-50">
+        <div className="fixed bottom-5 right-5 flex flex-col gap-3 z-50">
             <AnimatePresence>
                 {toasts.map((t) => (
                     <Toast
@@ -269,7 +269,7 @@ const Education = ({ data }) => {
                                                                             if (points.includes(skill.skill)) {
                                                                                 addToast({
                                                                                     type: "error",
-                                                                                    title: "Error",
+                                                                                    title: "Oh Snap!",
                                                                                     message: "You already added this skill"
                                                                                 });
                                                                             } if (skill.skill.length > 0 && !points.includes(skill.skill)) { setpoints(prev => [...prev, skill.skill]); }
@@ -341,8 +341,8 @@ const Education = ({ data }) => {
 
                                                 addToast({
                                                     type: "error",
-                                                    title: "Error",
-                                                    message: "Please fill Skill Category  "
+                                                    title: "Oh Snap!",
+                                                    message: "Please fill the Skill Category"
                                                 });
                                                 return;
                                             }
@@ -465,10 +465,10 @@ const Education = ({ data }) => {
 
                                                 e.preventDefault();
 
-                                                if (skills[index].skills.length >= 20) {
+                                                if (skills[index].skills.length >= 10) {
                                                     addToast({
                                                         type: "error",
-                                                        title: "Exceeded Limit",
+                                                        title: "Limit Exceeded!",
                                                         message: "Could not add more skills."
                                                     });
                                                     return;

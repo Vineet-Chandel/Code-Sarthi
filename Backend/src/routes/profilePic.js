@@ -66,7 +66,54 @@ profilePic.post(
 
             res.json({
                 success: true,
-                photoUrl: updatedUser.photoUrl.url,
+                data: updatedUser,
+                message: "Profile updated successfully",
+            });
+
+        } catch (err) {
+            res.status(500).json({
+                success: false,
+                message: err.message || "Something went wrong",
+            });
+        }
+    }
+);
+
+
+profilePic.post(
+    "/remove-profile-pic/upload",
+    userAuth,
+    async (req, res) => {
+        try {
+            const user = req.user;
+            if (!user) {
+                throw new Error("Please Re-login")
+            }
+
+            // get current user
+            const currentUser = await User.findById(req.user._id);
+
+            // delete old image if exists
+            if (currentUser?.photoUrl?.id) {
+                await cloudinary.uploader.destroy(currentUser.photoUrl.id);
+            }
+
+
+            // update EXISTING user (not create new one)
+            const updatedUser = await User.findByIdAndUpdate(
+                req.user._id,
+                {
+                    photoUrl: {
+                        url: "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776698539/Quick_Note_Pin_qky24p.jpg",
+                        id: "",
+                    },
+                },
+                { new: true }
+            );
+
+            res.json({
+                success: true,
+                data: updatedUser,
                 message: "Profile updated successfully",
             });
 

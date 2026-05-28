@@ -18,7 +18,7 @@ import Preview from '../Preview';
 
 const ToastContainer = ({ toasts, removeToast }) => {
     return (
-        <div className="fixed top-5 right-5 flex flex-col gap-3 z-50">
+        <div className="fixed bottom-5 right-5 flex flex-col gap-3 z-50">
             <AnimatePresence>
                 {toasts.map((t) => (
                     <Toast

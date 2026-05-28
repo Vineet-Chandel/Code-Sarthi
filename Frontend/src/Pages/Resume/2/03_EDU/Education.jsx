@@ -52,7 +52,7 @@ h-full text-white
 
 const ToastContainer = ({ toasts, removeToast }) => {
     return (
-        <div className="fixed top-5 right-5 flex flex-col gap-3 z-50">
+        <div className="fixed bottom-5 right-5 flex flex-col gap-3 z-50">
             <AnimatePresence>
                 {toasts.map((t) => (
                     <Toast
@@ -707,7 +707,7 @@ const Education = ({ data }) => {
 
                                                                 addToast({
                                                                     type: "success",
-                                                                    title: "Bullet Enhanced",
+                                                                    title: "Bullet Enhanced!",
                                                                     message: "AI improved your resume bullet."
                                                                 });
                                                             }}
