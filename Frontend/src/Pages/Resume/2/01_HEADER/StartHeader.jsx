@@ -259,13 +259,24 @@ const StartHeader = ({ data }) => {
 
                     <ProgressMeter index={0} resumeData={resumeData} />
 
+
                     <button
                         onClick={() => setSidebarOpen((p) => !p)}
-                        className={`flex items-center gap-2 text-lg font-medium px-3 py-1.5 rounded-lg border transition-all duration-200
-                        ${sidebarOpen
+                        className={`
+        hidden sm:flex
+        items-center gap-2
+        text-sm sm:text-base
+        font-medium
+        px-3 py-2
+        rounded-lg
+        border
+        transition-all duration-200
+        
+        ${sidebarOpen
                                 ? "bg-secondary-content text-base-100 border-secondary"
                                 : "bg-base-100 text-secondary-content border-secondary"
-                            }`}
+                            }
+    `}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width="1.4em" height="1.4em" viewBox="0 0 24 24">
                             <path fill="currentColor" d="M12 2c4.714 0 7.071 0 8.535 1.464c1.08 1.08 1.364 2.647 1.439 5.286L22 9.5H2.026v-.75c.075-2.64.358-4.205 1.438-5.286C4.93 2 7.286 2 12 2" opacity={0.5}></path>

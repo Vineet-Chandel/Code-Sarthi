@@ -74,7 +74,7 @@ const Welcome = () => {
                                 text-xl
                                 sm:text-2xl
                                 md:text-4xl
-                                font-light italic
+                                font-light 
                                 text-gray-400/80
                                 font-serif
                                 tracking-wide
@@ -89,9 +89,10 @@ const Welcome = () => {
                                 sm:text-6xl
                                 md:text-8xl
                                 lg:text-9xl
-                                font-bold
+                                font-poppins
+                                font-extrabold
                                 tracking-tight
-                                md:tracking-tighter
+                        
                                 text-white
                                 leading-none
                             "

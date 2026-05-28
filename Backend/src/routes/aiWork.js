@@ -7,7 +7,18 @@ const client = new OpenAI({
     baseURL: "https://api.groq.com/openai/v1",
 });
 
+const JSON_SYSTEM_PROMPT = `
+You are a JSON API.
 
+CRITICAL RULES:
+- Return ONLY valid JSON
+- Never return markdown
+- Never use code fences
+- Never explain anything
+- Never add introductory text
+- Never add trailing text
+- Output must be directly parseable using JSON.parse()
+`;
 const MASTER_SYSTEM_PROMPT = `
 You are an elite FAANG-level resume strategist, ATS optimization expert,
 technical recruiter, hiring manager, and career coach.
@@ -51,7 +62,7 @@ aiWorkRouter.post("/generate-exp-pointer", async (req, res) => {
     const { jobRole, company, employmentType } = req.body;
     console.log(process.env.XAI_API_KEY);
     // Validation
-    if (!jobRole && !company || !employmentType) {
+    if (!jobRole || !company || !employmentType) {
         return res.status(400).json({
             error: "Incomplete Data",
             message: "jobRole, company, and employmentType are required.",
@@ -60,46 +71,100 @@ aiWorkRouter.post("/generate-exp-pointer", async (req, res) => {
 
     try {
         const prompt = `
-${MASTER_SYSTEM_PROMPT}
-
-TASK TYPE:
-Professional Experience Resume Bullets
-
-CONTEXT:
-- Role: ${jobRole}
-- Company: ${company}
-- Employment Type: ${employmentType}
-
-TASK:
-Generate EXACTLY 5 ATS-optimized experience bullet points.
-
-EXPERIENCE RULES:
-- Follow XYZ format naturally
-- Maximum 14 words per bullet
-- Every bullet must start with a unique strong action verb
-- Include metrics whenever realistic
-- Mention tools/technologies naturally
-- Focus on impact, optimization, scalability, automation, leadership, or performance
-- Make every bullet feel like real industry experience
-- Avoid generic developer phrases
-
-OUTPUT FORMAT:
-{
-  "type": "experience",
-  "data": [
-    { "bullet": "..." },
-    { "bullet": "..." },
-    { "bullet": "..." },
-    { "bullet": "..." },
-    { "bullet": "..." }
-  ]
-}
-`;
+        ${MASTER_SYSTEM_PROMPT}
+        
+        ROLE:
+        You are an expert technical resume writer specializing in ATS-optimized software engineering resumes.
+        
+        TASK TYPE:
+        Professional Experience Resume Bullet Generation
+        
+        EXPERIENCE DETAILS:
+        - Role: ${jobRole}
+        - Company: ${company}
+        - Employment Type: ${employmentType}
+        
+        OBJECTIVE:
+        Generate EXACTLY 5 strong, ATS-friendly professional experience bullet points.
+        
+        STRICT REQUIREMENTS:
+        - Each bullet MUST:
+          - Contain 10–14 words
+          - Start with a UNIQUE strong action verb
+          - Follow the XYZ resume format naturally:
+            - Accomplished X
+            - Measured by Y
+            - Using Z
+          - Sound like authentic industry experience
+          - Be impact-driven and achievement-oriented
+          - Highlight scalability, optimization, automation, architecture, security, performance, or leadership
+          - Include realistic metrics or measurable improvements whenever naturally possible
+          - Mention relevant tools, frameworks, databases, cloud platforms, or methodologies naturally
+          - Be concise, technical, and recruiter-friendly
+          - Follow modern software engineering resume standards
+        
+        TECHNICAL FOCUS AREAS:
+        - Full-stack development
+        - API engineering
+        - Microservices
+        - Database optimization
+        - Cloud infrastructure
+        - CI/CD pipelines
+        - Performance tuning
+        - Authentication & security
+        - Real-time systems
+        - Monitoring & observability
+        - DevOps workflows
+        - Automation and productivity improvements
+        - Cross-functional collaboration
+        
+        DO NOT:
+        - Use phrases like:
+          - "Worked on"
+          - "Responsible for"
+          - "Helped with"
+          - "Participated in"
+        - Repeat action verbs
+        - Use vague or filler statements
+        - Add unrealistic metrics or fake achievements
+        - Use first-person pronouns
+        - Exceed 14 words
+        - Generate generic internship-style bullets unless employment type requires it
+        
+        PREFERRED ACTION VERBS:
+        Engineered, Architected, Optimized, Automated, Implemented, Developed, Integrated, Scaled, Enhanced, Deployed, Streamlined, Reduced, Accelerated, Secured, Orchestrated
+        
+        STYLE GUIDELINES:
+        - Make bullets sound production-level and technically credible
+        - Prioritize ATS keyword relevance
+        - Ensure variety across all 5 bullets
+        - Keep language clean, modern, and resume-ready
+        
+        OUTPUT RULES:
+        - Return ONLY valid JSON
+        - No markdown
+        - No explanations
+        - No extra text
+        - Maintain exact schema structure
+        - Generate EXACTLY 5 bullets
+        
+        OUTPUT FORMAT:
+        {
+          "type": "experience",
+          "data": [
+            { "bullet": "..." },
+            { "bullet": "..." },
+            { "bullet": "..." },
+            { "bullet": "..." },
+            { "bullet": "..." }
+          ]
+        }
+        `;
 
         const completion = await client.chat.completions.create({
             model: "openai/gpt-oss-20b",
             messages: [
-                { role: "system", content: "You generate strict JSON only." },
+                { role: "system", content: JSON_SYSTEM_PROMPT },
                 { role: "user", content: prompt }
             ],
             temperature: 0.7,
@@ -145,45 +210,89 @@ aiWorkRouter.post("/generate-edu-pointer", async (req, res) => {
 
     try {
         const prompt = `
-${MASTER_SYSTEM_PROMPT}
-
-TASK TYPE:
-Education Resume Bullets
-
-CONTEXT:
-- Degree: ${degree}
-- Field: ${feild}
-- Institution: ${college}
-- CGPA: ${cgpa}
-- Graduation Year: ${graduationYear}
-
-TASK:
-Generate EXACTLY 5 ATS-optimized education bullet points.
-
-EDUCATION RULES:
-- Maximum 14 words per bullet
-- Focus on academics, achievements, coursework, leadership, certifications, research, projects
-- Mention technical subjects/tools naturally
-- Include measurable achievements where realistic
-- Keep tone professional and recruiter-friendly
-- Avoid generic student phrases
-
-OUTPUT FORMAT:
-{
-  "type": "education",
-  "data": [
-    { "bullet": "..." },
-    { "bullet": "..." },
-    { "bullet": "..." },
-    { "bullet": "..." },
-    { "bullet": "..." }
-  ]
-}
-`;
+        ${MASTER_SYSTEM_PROMPT}
+        
+        ROLE:
+        You are an expert technical resume writer specializing in ATS-optimized academic and student resumes.
+        
+        TASK TYPE:
+        Education Resume Bullet Generation
+        
+        EDUCATION DETAILS:
+        - Degree: ${degree}
+        - Field of Study: ${feild}
+        - Institution: ${college}
+        - CGPA: ${cgpa}
+        - Graduation Year: ${graduationYear}
+        
+        OBJECTIVE:
+        Generate EXACTLY 5 strong, ATS-friendly education resume bullet points.
+        
+        STRICT REQUIREMENTS:
+        - Each bullet MUST:
+          - Contain 10–14 words
+          - Start with a strong action verb when naturally possible
+          - Sound professional, achievement-oriented, and recruiter-friendly
+          - Highlight academics, technical coursework, projects, certifications, leadership, research, or achievements
+          - Naturally include technical subjects, tools, frameworks, or methodologies when relevant
+          - Include measurable accomplishments ONLY if realistically inferable
+          - Follow modern software engineering/student resume standards
+          - Be concise and impactful
+        
+        PRIORITY AREAS:
+        - Relevant coursework
+        - Academic excellence
+        - Technical projects
+        - Research contributions
+        - Hackathons or competitions
+        - Certifications
+        - Leadership roles
+        - Team collaborations
+        - Development tools and technologies
+        - Problem-solving or analytical work
+        
+        DO NOT:
+        - Use generic phrases like:
+          - "Hardworking student"
+          - "Quick learner"
+          - "Responsible for"
+          - "Participated in"
+        - Add unrealistic achievements or fake metrics
+        - Use first-person pronouns
+        - Repeat the same action verb
+        - Exceed 14 words
+        - Generate vague or filler content
+        
+        STYLE GUIDELINES:
+        - Keep bullets ATS-optimized and keyword-rich
+        - Use clean industry-standard terminology
+        - Make bullets sound resume-ready without additional editing
+        - Ensure variety across all 5 bullets
+        
+        OUTPUT RULES:
+        - Return ONLY valid JSON
+        - No markdown
+        - No explanations
+        - No extra text
+        - Maintain exact schema structure
+        - Generate EXACTLY 5 bullets
+        
+        OUTPUT FORMAT:
+        {
+          "type": "education",
+          "data": [
+            { "bullet": "..." },
+            { "bullet": "..." },
+            { "bullet": "..." },
+            { "bullet": "..." },
+            { "bullet": "..." }
+          ]
+        }
+        `;
         const completion = await client.chat.completions.create({
             model: "openai/gpt-oss-20b",
             messages: [
-                { role: "system", content: "You generate strict JSON only." },
+                { role: "system", content: JSON_SYSTEM_PROMPT },
                 { role: "user", content: prompt }
             ],
             temperature: 0.7,
@@ -229,39 +338,103 @@ aiWorkRouter.post("/generate-skills", async (req, res) => {
     try {
         const prompt = `
         ${MASTER_SYSTEM_PROMPT}
-
-TASK TYPE:
-Resume Skills Generation
-
-CONTEXT:
-- Skill Category: ${category}
-
-TASK:
-Generate EXACTLY 15 highly relevant resume skills.
-
-SKILL RULES:
-- Skills must be ATS-relevant
-- Include tools, frameworks, technologies, platforms, methodologies, or concepts
-- Keep skills concise
-- Avoid duplicate technologies
-- Avoid generic soft skills
-- Prefer industry-standard naming
-- Include modern and trending technologies when relevant
-
-OUTPUT FORMAT:
-{
-  "type": "skills",
-  "data": [
-    { "skill": "React.js" },
-    { "skill": "Node.js" },
-    { "skill": "MongoDB" }
-  ]
-}
-`;
+        
+        ROLE:
+        You are an expert technical resume writer and ATS optimization specialist.
+        
+        TASK TYPE:
+        Resume Skills Generation
+        
+        SKILL CATEGORY:
+        ${category}
+        
+        OBJECTIVE:
+        Generate EXACTLY 15 highly relevant, ATS-optimized technical resume skills for the given category.
+        
+        STRICT REQUIREMENTS:
+        - Generate ONLY technical and industry-relevant skills
+        - Skills must align with modern software engineering and tech hiring standards
+        - Include a balanced mix of:
+          - Programming languages
+          - Frameworks
+          - Libraries
+          - Databases
+          - Cloud platforms
+          - DevOps tools
+          - APIs
+          - Testing tools
+          - Architecture concepts
+          - Development methodologies
+        - Prefer modern, in-demand, recruiter-searched technologies
+        - Use official industry-standard naming conventions
+        - Keep each skill concise and clean
+        - Avoid duplicates or overlapping technologies
+        - Prioritize ATS keyword relevance
+        
+        DO NOT:
+        - Include soft skills
+        - Include vague terms like:
+          - "Coding"
+          - "Programming"
+          - "Problem Solving"
+          - "Communication"
+        - Add explanations or proficiency levels
+        - Use outdated technologies unless category specifically requires them
+        - Generate unrelated skills
+        
+        CATEGORY-SPECIFIC GUIDELINES:
+        - If category is Frontend:
+          Include modern UI frameworks, state management, styling, testing, and build tools.
+          
+        - If category is Backend:
+          Include APIs, databases, authentication, server frameworks, caching, and scalability tools.
+          
+        - If category is Full Stack:
+          Include frontend, backend, database, deployment, and DevOps technologies.
+          
+        - If category is DevOps:
+          Include CI/CD, containers, orchestration, monitoring, and cloud technologies.
+          
+        - If category is Data Science/AI:
+          Include ML frameworks, data processing, visualization, and AI tooling.
+          
+        - If category is Mobile:
+          Include cross-platform/native frameworks, SDKs, deployment, and mobile databases.
+        
+        OUTPUT RULES:
+        - Return ONLY valid JSON
+        - No markdown
+        - No explanations
+        - No extra text
+        - Maintain exact schema structure
+        - Generate EXACTLY 15 skills
+        
+        OUTPUT FORMAT:
+        {
+          "type": "skills",
+          "data": [
+            { "skill": "React.js" },
+            { "skill": "Next.js" },
+            { "skill": "TypeScript" },
+            { "skill": "Node.js" },
+            { "skill": "Express.js" },
+            { "skill": "MongoDB" },
+            { "skill": "PostgreSQL" },
+            { "skill": "Redis" },
+            { "skill": "Docker" },
+            { "skill": "AWS" },
+            { "skill": "Tailwind CSS" },
+            { "skill": "REST APIs" },
+            { "skill": "GraphQL" },
+            { "skill": "GitHub Actions" },
+            { "skill": "JWT Authentication" }
+          ]
+        }
+        `;
         const completion = await client.chat.completions.create({
             model: "openai/gpt-oss-20b",
             messages: [
-                { role: "system", content: "You generate strict JSON only." },
+                { role: "system", content: JSON_SYSTEM_PROMPT },
                 { role: "user", content: prompt }
             ],
             temperature: 0.7,
@@ -476,40 +649,80 @@ aiWorkRouter.post("/improve-pointer", async (req, res) => {
 
     try {
         const prompt = `
-${MASTER_SYSTEM_PROMPT}
-
-TASK TYPE:
-Resume Bullet Enhancement
-
-ORIGINAL BULLET:
-"${bullet}"
-
-TASK:
-Rewrite the bullet into a stronger ATS-optimized resume bullet.
-
-IMPROVEMENT RULES:
-- Preserve original meaning
-- Improve professionalism
-- Use stronger action verbs
-- Improve clarity and readability
-- Add measurable impact only if naturally possible
-- Keep under 16 words
-- Make it concise and technical
-- Remove weak phrasing
-- Avoid exaggeration
-
-OUTPUT FORMAT:
-{
-  "type": "enhanced_bullet",
-  "data": {
-    "bullet": "..."
-  }
-}
-`;
+        ${MASTER_SYSTEM_PROMPT}
+        
+        ROLE:
+        You are an expert technical resume writer specializing in ATS-optimized software engineering resumes.
+        
+        TASK TYPE:
+        Resume Bullet Enhancement
+        
+        ORIGINAL BULLET:
+        "${bullet}"
+        
+        OBJECTIVE:
+        Rewrite the bullet into a stronger, cleaner, and more impactful ATS-friendly resume bullet while preserving the original meaning.
+        
+        STRICT REQUIREMENTS:
+        - Preserve the original intent and technical meaning
+        - Keep the bullet between 8–16 words
+        - Start with a strong action verb
+        - Improve clarity, readability, and professionalism
+        - Make the bullet achievement-oriented and technically impressive
+        - Include measurable impact ONLY if realistically inferable
+        - Use concise, recruiter-friendly language
+        - Optimize for modern ATS parsing standards
+        - Sound like an experienced software engineering resume bullet
+        
+        TECHNICAL ENHANCEMENT GUIDELINES:
+        - Emphasize:
+          - Performance improvements
+          - Scalability
+          - System architecture
+          - APIs
+          - Security
+          - Automation
+          - Databases
+          - Real-time functionality
+          - UI/UX improvements
+          - Deployment or optimization
+        - Replace weak verbs with stronger technical verbs
+        - Improve technical specificity where naturally possible
+        
+        DO NOT:
+        - Use phrases like:
+          - "Worked on"
+          - "Helped with"
+          - "Responsible for"
+          - "Participated in"
+        - Add unrealistic metrics or fake claims
+        - Use first-person pronouns
+        - Use filler words or vague descriptions
+        - Change the core meaning
+        - Exceed 16 words
+        
+        GOOD ACTION VERBS:
+        Built, Engineered, Developed, Optimized, Automated, Architected, Implemented, Designed, Integrated, Scaled, Enhanced, Deployed
+        
+        OUTPUT RULES:
+        - Return ONLY valid JSON
+        - No markdown
+        - No explanations
+        - No extra text
+        - Maintain exact schema structure
+        
+        OUTPUT FORMAT:
+        {
+          "type": "enhanced_bullet",
+          "data": {
+            "bullet": "..."
+          }
+        }
+        `;
         const completion = await client.chat.completions.create({
             model: "openai/gpt-oss-20b",
             messages: [
-                { role: "system", content: "You generate strict JSON only." },
+                { role: "system", content: JSON_SYSTEM_PROMPT },
                 { role: "user", content: prompt }
             ],
             temperature: 0.7,
@@ -522,6 +735,121 @@ OUTPUT FORMAT:
             .replace(/```json/gi, "")
             .replace(/```/g, "")
             .trim();
+        // Safe JSON parsing
+        let parsedData;
+        try {
+            parsedData = JSON.parse(rawText);
+        } catch (err) {
+            throw new Error("Invalid JSON response from Grok");
+        }
+
+        res.status(200).json({
+            success: true,
+            data: parsedData.data,
+            type: parsedData.type,
+        });
+
+    } catch (error) {
+        console.error("Grok API Error:", error);
+        res.status(500).json({
+            success: false,
+            error: "AI generation failed",
+            message: error.message
+        });
+    }
+});
+
+aiWorkRouter.post("/generate-project-pointer", async (req, res) => {
+    const { name, stack, description } = req.body;
+    console.log(process.env.XAI_API_KEY);
+    // Validation
+    if (!name || !stack || !description) {
+        return res.status(400).json({
+            error: "Incomplete Data",
+            message: "name, stack, and description are required.",
+        });
+    }
+
+    try {
+        const prompt = `
+        ${MASTER_SYSTEM_PROMPT}
+        
+        ROLE:
+        You are an expert technical resume writer specializing in ATS-optimized software engineering resumes.
+        
+        TASK TYPE:
+        Project Resume Bullet Generation
+        
+        PROJECT DETAILS:
+        - Project Name: ${name}
+        - Tech Stack: ${stack}
+        - Project Description: ${description}
+        
+        OBJECTIVE:
+        Generate EXACTLY 5 strong, ATS-friendly resume bullet points for the project section.
+        
+        STRICT REQUIREMENTS:
+        - Each bullet MUST:
+          - Be between 10–14 words
+          - Start with a powerful action verb
+          - Sound achievement-oriented and impact-driven
+          - Highlight technical implementation, scalability, performance, architecture, or functionality
+          - Naturally include relevant technologies from the provided stack
+          - Include measurable metrics/results whenever realistically possible
+          - Be concise, professional, and recruiter-friendly
+          - Follow modern software engineering resume standards
+        
+        - DO NOT:
+          - Use generic phrases like "Worked on", "Responsible for", "Helped with"
+          - Repeat the same action verb
+          - Mention soft skills without technical context
+          - Add fake or unrealistic achievements
+          - Use first-person pronouns
+          - Exceed 14 words per bullet
+        
+        PREFERRED FOCUS AREAS:
+        - Full-stack architecture
+        - API development
+        - Authentication & security
+        - Real-time systems
+        - Database optimization
+        - AI integrations
+        - Performance improvements
+        - Deployment & scalability
+        - UI/UX enhancements
+        - Team collaboration features
+        - Automation or productivity gains
+        
+        OUTPUT RULES:
+        - Return ONLY valid JSON
+        - No markdown
+        - No explanations
+        - No extra text
+        - Maintain exact schema structure
+        
+        OUTPUT FORMAT:
+        {
+          "type": "project",
+          "data": [
+            { "bullet": "..." },
+            { "bullet": "..." },
+            { "bullet": "..." },
+            { "bullet": "..." },
+            { "bullet": "..." }
+          ]
+        }
+        `;
+        const completion = await client.chat.completions.create({
+            model: "openai/gpt-oss-20b",
+            messages: [
+                { role: "system", content: JSON_SYSTEM_PROMPT },
+                { role: "user", content: prompt }
+            ],
+            temperature: 0.7,
+        });
+
+        const rawText = completion.choices[0].message.content;
+
         // Safe JSON parsing
         let parsedData;
         try {

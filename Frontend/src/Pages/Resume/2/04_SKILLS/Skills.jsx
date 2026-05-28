@@ -250,15 +250,15 @@ const Education = ({ data }) => {
 
                                                         {isAiworking ? (<div className='flex flex-col justify-center items-center h-full w-full  gap-2'>
                                                             <div className='flex justify-center items-center gap-2'>
-                                                                <h1 className="text-5xl font-bold text-[#884f06] mb-2 leading-tight text-center ">Shastra</h1>
+                                                                <h1 className="text-5xl font-bold text-[#ffffff] mb-2 leading-tight text-center ">Shastra</h1>
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width={50} height={50} viewBox="0 0 24 24" className='mb-3'>
-                                                                    <path fill="#884f06" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
+                                                                    <path fill="#ffffff" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
                                                                 </svg>
                                                             </div>
-                                                            <h1 className="text-xl font-medium text-[#884f06] mb-2 leading-tight text-center ">AI Is Generating Your  Bullet Points, Please Wait...</h1>
+                                                            <h1 className="text-xl font-medium text-[#ffffff] mb-2 leading-tight text-center ">AI Is Generating Your  Bullet Points, Please Wait...</h1>
                                                             <div className="animate-pulse flex flex-col items-center gap-3">
-                                                                <div className="h-4 w-40 bg-[#884f06]/30 rounded"></div>
-                                                                <div className="h-4 w-56 bg-[#884f06]/20 rounded"></div>
+                                                                <div className="h-4 w-40 bg-[#ffffff]/30 rounded"></div>
+                                                                <div className="h-4 w-56 bg-[#ffffff]/20 rounded"></div>
                                                             </div>
                                                         </div>) : (
                                                             <div className='grid grid-cols-3 gap-2 overflow-y-auto h-[100%] px-5 py-3'>
@@ -274,18 +274,18 @@ const Education = ({ data }) => {
                                                                                 });
                                                                             } if (skill.skill.length > 0 && !points.includes(skill.skill)) { setpoints(prev => [...prev, skill.skill]); }
                                                                         }}
-                                                                        className='bg-base-300 border border-slate-700 rounded-2xl px-3.5 py-2.5 text-sm text-slate-800 outline-none hover:border-secondary hover:ring-4 hover:ring-accent hover:bg-white transition-all duration-200 font-medium flex items-center gap-2 cursor-pointer'
+                                                                        className='bg-base-300 border border-slate-700 rounded-2xl px-3.5 py-2.5 text-sm text-white hover:text-base-100 outline-none hover:border-secondary hover:ring-4 hover:ring-accent hover:bg-white transition-all duration-200 font-medium flex items-center gap-2 cursor-pointer'
                                                                     >
                                                                         <span className='p-2 bg-base-100 border border-slate-500 rounded-full'><svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 48 48" >
-                                                                            <path fill="#0d1422ff" d="M24 5a1.5 1.5 0 0 1 1.5 1.5v16h16a1.5 1.5 0 0 1 0 3h-16v16a1.5 1.5 0 0 1-3 0v-16h-16a1.5 1.5 0 0 1 0-3h16v-16A1.5 1.5 0 0 1 24 5"></path>
-                                                                        </svg></span> <span> {skill.skill}</span>
+                                                                            <path fill="#ffffff" d="M24 5a1.5 1.5 0 0 1 1.5 1.5v16h16a1.5 1.5 0 0 1 0 3h-16v16a1.5 1.5 0 0 1-3 0v-16h-16a1.5 1.5 0 0 1 0-3h16v-16A1.5 1.5 0 0 1 24 5"></path>
+                                                                        </svg></span> <span > {skill.skill}</span>
                                                                     </button>
                                                                 ))}
                                                             </div>)}
                                                     </div>
                                                 </div>
                                                 <div className="w-1/4 bg-base-200 p-5 rounded-3xl border border-slate-700">
-                                                    <h1 className='text-lg font-bold'>Skills Summary</h1>
+                                                    <h1 className='text-lg font-bold'>Selected Skills</h1>
                                                     {points.map((point, index) => (
                                                         <div
                                                             key={skill.id}
@@ -294,6 +294,20 @@ const Education = ({ data }) => {
                                                             {point}
                                                         </div>
                                                     ))}
+
+                                                    {points.length === 0 && < div className='flex flex-col justify-center items-center h-full w-full  gap-2'>
+                                                        <div className='flex justify-center items-center gap-2'>
+                                                            <h1 className="text-5xl font-bold text-[#ffffff] mb-2 leading-tight text-center ">Shastra</h1>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width={50} height={50} viewBox="0 0 24 24" className='mb-3'>
+                                                                <path fill="#ffffff" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
+                                                            </svg>
+                                                        </div>
+                                                        <h1 className="text-xl font-medium text-[#ffffff] mb-2 leading-tight text-center ">AI Is Generating Your  Bullet Points, Please Wait...</h1>
+                                                        <div className="animate-pulse flex flex-col items-center gap-3">
+                                                            <div className="h-4 w-40 bg-[#ffffff]/30 rounded"></div>
+                                                            <div className="h-4 w-56 bg-[#ffffff]/20 rounded"></div>
+                                                        </div>
+                                                    </div>}
                                                 </div>
                                             </div>
                                         </div>

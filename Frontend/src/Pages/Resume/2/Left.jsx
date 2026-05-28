@@ -50,7 +50,18 @@ const Left = ({
 
         <div
             data-theme="caramellatte"
-            className="min-h-screen font-sans relative overflow-hidden flex flex-col md:flex-row items-center justify-center px-8 md:px-20 gap-16"
+            className="
+            min-h-screen
+            font-sans
+            relative
+            overflow-hidden
+            flex flex-col lg:flex-row
+            items-center
+            justify-center
+            px-4 sm:px-6 md:px-10 lg:px-20
+            py-8 md:py-12
+            gap-10 md:gap-14 lg:gap-20
+            "
             style={{ backgroundColor: 'var(--color-base-100)', color: 'var(--color-base-content)' }}
         >
             {/* Noise texture overlay */}
@@ -65,7 +76,16 @@ const Left = ({
 
             {/* Warm ambient blobs */}
             <div
-                className="pointer-events-none absolute top-[-80px] right-[10%] w-[420px] h-[420px] rounded-full"
+                className="
+              pointer-events-none
+              absolute
+              top-[-80px]
+              right-[10%]
+              w-[220px] h-[220px]
+              sm:w-[320px] sm:h-[320px]
+              lg:w-[420px] lg:h-[420px]
+              rounded-full
+              "
                 style={{
                     background: 'radial-gradient(circle, var(--color-base-300) 0%, transparent 70%)',
                     opacity: 0.7,
@@ -86,13 +106,12 @@ const Left = ({
             </svg>
             <div
                 className="
-          relative z-10
-          w-full
-          max-w-2xl
-          flex flex-col
-          gap-5 sm:gap-6
-          px-4 sm:px-0
-        "
+             relative z-10
+             w-full
+             max-w-xl lg:max-w-2xl
+             flex flex-col
+             gap-4 sm:gap-5 md:gap-6
+             "
             >
 
                 {/* STEP BADGE */}
@@ -144,10 +163,10 @@ const Left = ({
     font-black
     leading-[1.05]
     tracking-tight
-    text-3xl
-    xs:text-4xl
-    sm:text-5xl
-    lg:text-6xl
+    text-2xl
+sm:text-4xl
+md:text-5xl
+lg:text-6xl
     break-words
   "
                     >
@@ -278,9 +297,11 @@ const Left = ({
 
                     {/* STEP DOTS */}
                     <div className="
-                    flex flex-wrap
-                    gap-x-4 gap-y-3
-                    items-center
+                flex flex-wrap
+justify-center sm:justify-start
+gap-x-3 sm:gap-x-4
+gap-y-3
+items-center
                 ">
 
                         {[
@@ -346,11 +367,13 @@ const Left = ({
 
                 {/* BUTTONS */}
                 <div className="
-                flex flex-col sm:flex-row
-                gap-4
-                sm:items-center
-                sm:justify-between
-                pt-2
+        flex flex-col
+sm:flex-row
+gap-3 sm:gap-4
+sm:items-center
+sm:justify-between
+pt-3
+w-full
             ">
 
                     <button
@@ -404,14 +427,31 @@ const Left = ({
 
             {/* ── RIGHT PANEL — Resume card ── */}
             <div
-                className="relative z-10 flex-1 flex flex-col items-center justify-center"
+                className="
+              relative z-10
+              w-full
+              lg:flex-1
+              flex flex-col
+              items-center
+              justify-center
+              "
                 style={{ animation: 'fadeUp 0.65s ease 0.18s both' }}
             >
                 {/* depth shadow card */}
                 <div
-                    className=" w-[450px] flex flex-col items-center justify-between pb-5 "
+                    className="
+                    w-full
+                    max-w-[300px]
+                    sm:max-w-[360px]
+                    md:max-w-[420px]
+                    lg:max-w-[450px]
+                    flex flex-col
+                    items-center
+                    justify-between
+                    pb-4 sm:pb-5
+                    "
                     style={{
-                        height: '372px',
+                        height: 'auto',
                         background: 'var(--color-secondary-content)',
 
                         borderRadius: 'var(--radius-box)',
@@ -422,7 +462,11 @@ const Left = ({
 
                     {/* main resume card */}
                     <div
-                        className="relative w-[450px] p-5"
+                        className="
+                        relative
+                        w-full
+                        p-4 sm:p-5
+                        "
                         style={{
                             background: 'var(--color-base-100)',
                             border: '2px solid var(--color-base-300)',

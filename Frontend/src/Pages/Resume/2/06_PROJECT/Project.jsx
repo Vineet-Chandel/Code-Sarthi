@@ -17,7 +17,7 @@ const InputField = ({ label, id, value, type = "text", placeholder, onChange }) 
     <div className="flex flex-col gap-1 w-full group">
         <label
             htmlFor={id}
-            className="text-[10px] font-semibold uppercase tracking-widest text-slate-700 group-focus-within:text-secondary transition-colors ml-0.5"
+            className="text-[10px] font-semibold uppercase tracking-widest text-info group-focus-within:text-white transition-colors ml-0.5"
         >
             {label}
         </label>
@@ -27,8 +27,8 @@ const InputField = ({ label, id, value, type = "text", placeholder, onChange }) 
             value={value}
             placeholder={placeholder}
             onChange={(e) => onChange(id, e.target.value)}
-            className="w-full bg-base-200 border border-slate-900 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 outline-none
-                 focus:border-secondary focus:ring-4 focus:ring-accent focus:bg-white
+            className="w-full bg-base-100 border border-slate-900 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none
+                 focus:border-info  focus:bg-secondary
                  transition-all duration-200 font-medium placeholder:text-slate-500"
         />
     </div>
@@ -124,7 +124,7 @@ const Project = ({ data }) => {
     const [isAiworking, setIsAiworking] = useState(false);
     const [selectedProjectName, setSelectedProjectName] = useState("");
     const [selectedProjectStack, setSelectedProjectStack] = useState("");
-    const [selectedProjectGithub, setSelectedProjectGithub] = useState("");
+    const [selectedProjectDescription, setSelectedProjectDescription] = useState("");
     const [selectedProjectIndex, setSelectedProjectIndex] = useState(null);
     const [points, setpoints] = useState([]);
 
@@ -140,25 +140,25 @@ const Project = ({ data }) => {
 
 
     useEffect(() => {
-        if (bullets?.length == 0 && selectedProjectName && selectedProjectStack && selectedProjectGithub) {
-            bulletspoints(selectedProjectName, selectedProjectStack, selectedProjectGithub);
+        if (bullets?.length == 0 && selectedProjectName && selectedProjectStack && selectedProjectDescription) {
+            bulletspoints(selectedProjectName, selectedProjectStack, selectedProjectDescription);
         }
 
 
     }, [points]);
 
     useEffect(() => {
-        if (selectedProjectName && selectedProjectStack && selectedProjectGithub) {
-            bulletspoints(selectedProjectName, selectedProjectStack, selectedProjectGithub);
+        if (selectedProjectName && selectedProjectStack && selectedProjectDescription) {
+            bulletspoints(selectedProjectName, selectedProjectStack, selectedProjectDescription);
         }
-    }, [selectedProjectName, selectedProjectStack, selectedProjectGithub]);
+    }, [selectedProjectName, selectedProjectStack, selectedProjectDescription]);
 
     const bulletspoints = async (jobRole, stack, github) => {
         try {
             setIsAiworking(true);
             const response = await axios.post(
-                `${BASE_URL}/generate-exp-pointer`,
-                { jobRole: jobRole, stack: stack, github: github }
+                `${BASE_URL}/generate-project-pointer`,
+                { name: selectedProjectName, stack: selectedProjectStack, description: selectedProjectDescription }
             );
 
             setBullets(response.data.data);
@@ -228,29 +228,29 @@ const Project = ({ data }) => {
                 {/* ── body ── */}
                 <div className={`grid transition-all duration-500 ${sidebarOpen ? "lg:grid-cols-[1fr_500px]" : "grid-cols-1"}`}>
 
-                    {aiModalOpen && <div className='fixed w-screen h-screen bg-black/20 inset-0 z-30' onClick={() => { setAiModalOpen(false); setBullets([]), setpoints([]), setSelectedProjectName(""), setSelectedProjectStack(""), setSelectedProjectGithub(""), setSelectedProjectIndex(null) }}>
+                    {aiModalOpen && <div className='fixed w-screen h-screen bg-black/20 inset-0 z-30' onClick={() => { setAiModalOpen(false); setBullets([]), setpoints([]), setSelectedProjectName(""), setSelectedProjectStack(""), setSelectedProjectDescription(""), setSelectedProjectIndex(null) }}>
 
 
                         <div className='w-full flex justify-center gap-5 p-5' >
                             <div className="w-[50%] bg-base-100 h-[80vh] mt-10  rounded-xl p-5" onClick={(e) => e.stopPropagation()}>
                                 <div className='mb-5'>
-                                    <h1 className="text-3xl font-bold text-slate-900 mb-2 leading-tight text-start  " >
-                                        Bullet points about what you did as a <br /> <span className="text-accent">{selectedProjectName}</span>,
+                                    <h1 className="text-3xl font-bold text-info mb-2 leading-tight text-start  " >
+                                        Bullet points about what you did as a <br /> <span className="text-white">{selectedProjectName}</span>,
                                     </h1>
                                 </div>
 
                                 <div >
                                     {isAiworking ? (<div className='flex flex-col justify-center items-center h-[500px] w-full  gap-2'>
                                         <div className='flex justify-center items-center gap-2'>
-                                            <h1 className="text-5xl font-bold text-[#884f06] mb-2 leading-tight text-center ">Shastra</h1>
+                                            <h1 className="text-5xl font-bold text-[#ffffff] mb-2 leading-tight text-center ">Shastra</h1>
                                             <svg xmlns="http://www.w3.org/2000/svg" width={50} height={50} viewBox="0 0 24 24" className='mb-3'>
-                                                <path fill="#884f06" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
+                                                <path fill="#ffffff" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
                                             </svg>
                                         </div>
-                                        <h1 className="text-xl font-medium text-[#884f06] mb-2 leading-tight text-center ">AI Is Generating Your  Bullet Points, Please Wait...</h1>
+                                        <h1 className="text-xl font-medium text-[#ffffff] mb-2 leading-tight text-center ">AI Is Generating Your  Bullet Points, Please Wait...</h1>
                                         <div className="animate-pulse flex flex-col items-center gap-3">
-                                            <div className="h-4 w-40 bg-[#884f06]/30 rounded"></div>
-                                            <div className="h-4 w-56 bg-[#884f06]/20 rounded"></div>
+                                            <div className="h-4 w-40 bg-[#ffffff]/30 rounded"></div>
+                                            <div className="h-4 w-56 bg-[#ffffff]/20 rounded"></div>
                                         </div>
                                     </div>) : (
                                         <div className="h-[600px] overflow-y-auto  ">
@@ -286,7 +286,7 @@ const Project = ({ data }) => {
                                                             <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
                                                                 <g fill="none">
                                                                     <path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"></path>
-                                                                    <path fill="#884f06" d="M11 20a1 1 0 1 0 2 0v-7h7a1 1 0 1 0 0-2h-7V4a1 1 0 1 0-2 0v7H4a1 1 0 1 0 0 2h7z"></path>
+                                                                    <path fill="#ffffff" d="M11 20a1 1 0 1 0 2 0v-7h7a1 1 0 1 0 0-2h-7V4a1 1 0 1 0-2 0v7H4a1 1 0 1 0 0 2h7z"></path>
                                                                 </g>
                                                             </svg>
                                                         </div>
@@ -322,30 +322,31 @@ const Project = ({ data }) => {
                                                     }}
                                                 >
                                                     <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
-                                                        <path fill="#884f06" d="M16 9v10H8V9zm-1.5-6h-5l-1 1H5v2h14V4h-3.5zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2z"></path>
+                                                        <path fill="#ffffff" d="M16 9v10H8V9zm-1.5-6h-5l-1 1H5v2h14V4h-3.5zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2z"></path>
                                                     </svg>
                                                 </div>
                                                 <div className='bg-base-100 p-4 rounded-2xl w-full'>{point}</div>
                                             </div>
                                         </div>
                                     ))}
-                                </div>
-                                <button className='bg-secondary w-full text-center mt-5 rounded-xl text-base-100 py-3 px-5 font-bold ' onClick={() => {
-                                    setProjects(prev =>
-                                        prev.map((exp, i) =>
-                                            i === selectedProjectIndex
-                                                ? { ...exp, bullets: [...new Set([...exp.bullets, ...points])] }
-                                                : exp
-                                        )
-                                    );
-                                    setAiModalOpen(false);
-                                    setpoints([]);
-                                    setSelectedProjectName("");
-                                    setSelectedProjectStack("");
-                                    setSelectedProjectGithub("");
-                                    setSelectedProjectIndex(null);
+                                    <button className='bg-secondary w-full text-center mt-5 rounded-xl text-white py-3 px-5 font-bold ' onClick={() => {
+                                        setProjects(prev =>
+                                            prev.map((exp, i) =>
+                                                i === selectedProjectIndex
+                                                    ? { ...exp, bullets: [...new Set([...exp.bullets, ...points])] }
+                                                    : exp
+                                            )
+                                        );
+                                        setAiModalOpen(false);
+                                        setpoints([]);
+                                        setSelectedProjectName("");
+                                        setSelectedProjectStack("");
+                                        setSelectedProjectDescription("");
+                                        setSelectedProjectIndex(null);
 
-                                }}>Finalise Your Points</button>
+                                    }}>Finalise Your Points</button>
+                                </div>
+
                             </div>
 
                         </div>
@@ -359,7 +360,7 @@ const Project = ({ data }) => {
                         {projects.map((form, index) => (
                             <div key={index} className="bg-base-300 rounded-3xl shadow-inner p-7 mb-6">
                                 <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-lg font-bold text-slate-700">Experience #{index + 1}</h3>
+                                    <h3 className="text-lg font-bold text-white">Experience #{index + 1}</h3>
                                     <button
                                         onClick={() => {
                                             const updated = [...projects];
@@ -369,7 +370,7 @@ const Project = ({ data }) => {
                                         className="text-accent hover:text-secondary transition-colors cursor-pointer"
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24">
-                                            <path fill="#884f06" d="M3 6.524c0-.395.327-.714.73-.714h4.788c.006-.842.098-1.995.932-2.793A3.68 3.68 0 0 1 12 2a3.68 3.68 0 0 1 2.55 1.017c.834.798.926 1.951.932 2.793h4.788c.403 0 .73.32.73.714a.72.72 0 0 1-.73.714H3.73A.72.72 0 0 1 3 6.524M11.607 22h.787c2.707 0 4.06 0 4.94-.863s.971-2.28 1.151-5.111l.26-4.08c.098-1.537.146-2.306-.295-2.792c-.442-.487-1.187-.487-2.679-.487H8.23c-1.491 0-2.237 0-2.679.487c-.441.486-.392 1.255-.295 2.791l.26 4.08c.18 2.833.27 4.249 1.15 5.112S8.9 22 11.607 22"></path>
+                                            <path fill="#ffffff" d="M3 6.524c0-.395.327-.714.73-.714h4.788c.006-.842.098-1.995.932-2.793A3.68 3.68 0 0 1 12 2a3.68 3.68 0 0 1 2.55 1.017c.834.798.926 1.951.932 2.793h4.788c.403 0 .73.32.73.714a.72.72 0 0 1-.73.714H3.73A.72.72 0 0 1 3 6.524M11.607 22h.787c2.707 0 4.06 0 4.94-.863s.971-2.28 1.151-5.111l.26-4.08c.098-1.537.146-2.306-.295-2.792c-.442-.487-1.187-.487-2.679-.487H8.23c-1.491 0-2.237 0-2.679.487c-.441.486-.392 1.255-.295 2.791l.26 4.08c.18 2.833.27 4.249 1.15 5.112S8.9 22 11.607 22"></path>
                                         </svg>
                                     </button>
                                 </div>
@@ -417,7 +418,7 @@ const Project = ({ data }) => {
                                 </div>
 
                                 <div className="mt-4">
-                                    <label className="text-sm font-medium text-slate-700 mb-2 block">
+                                    <label className="text-sm font-medium text-info` mb-2 block">
                                         Description
                                     </label>
 
@@ -438,21 +439,14 @@ const Project = ({ data }) => {
     "
                                     />
                                 </div>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                                    <InputField label="live" id="live" value={form.live}
-                                        placeholder="New York"
-                                        onChange={(id, value) => handleChange2(index, id, value)}
-                                    />
-
-
-                                </div>
 
 
 
-                                <button className='bg-secondary border border-secondary hover:bg-base-100 text-base-100 hover:text-secondary px-3 py-2 rounded-xl mt-3 flex justify-center items-center gap-2 hover:scale-105 transition-all duration-300 ease-in-out group' onClick={() => {
+
+                                <button className='bg-base-100 border border-secondary hover:bg-base-100 text-info  px-3 py-2 rounded-xl mt-3 flex justify-center items-center gap-2 hover:scale-105 transition-all duration-300 ease-in-out group' onClick={() => {
 
 
-                                    if (projects[index].name === '' || projects[index].stack === '' || projects[index].github === '') {
+                                    if (projects[index].name === '' || projects[index].stack === '' || projects[index].description === '') {
 
                                         addToast({
                                             type: "error",
@@ -461,13 +455,13 @@ const Project = ({ data }) => {
                                         });
                                         return;
                                     }
-                                    setAiModalOpen(true); setSelectedProjectName(projects[index].name); setSelectedProjectStack(projects[index].stack); setSelectedProjectGithub(projects[index].github); setSelectedProjectIndex(index);
+                                    setAiModalOpen(true); setSelectedProjectName(projects[index].name); setSelectedProjectStack(projects[index].stack); setSelectedProjectDescription(projects[index].description); setSelectedProjectIndex(index);
                                 }}>
 
-                                    <div className='flex justify-center items-center gap-2 bg-base-100 p-2 rounded-xl group-hover:bg-secondary group-hover:text-base-100 transition-all duration-300 ease-in-out'>
-                                        <h1 className="text-xl font-bold text-secondary leading-tight text-center group-hover:text-base-100 transition-all duration-300 ease-in-out">Shastra</h1>
+                                    <div className='flex justify-center items-center gap-2  p-2 rounded-xl bg-secondary group-hover:text-base-100 transition-all duration-300 ease-in-out'>
+                                        <h1 className="text-xl font-bold text-secondary-content leading-tight text-center  transition-all duration-300 ease-in-out">Shastra</h1>
                                         <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" className='text-secondary group-hover:text-base-100'>
-                                            <path fill="currentColor" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
+                                            <path fill="#fff" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
                                         </svg>
                                     </div>
                                     Generate Bullets for Experience</button>
@@ -525,7 +519,7 @@ const Project = ({ data }) => {
 
                                                 <button
                                                     type="button"
-                                                    className="bg-secondary border border-secondary hover:bg-base-100 text-base-100 hover:text-secondary 
+                                                    className="bg-secondary border border-secondary hover:bg-base-100 text-info hover:text-white 
                    px-5 py-2.5 rounded-xl flex justify-center items-center gap-2 
                    hover:scale-105 transition-all duration-300 ease-in-out group"
                                                     onClick={() => {
@@ -589,7 +583,7 @@ const Project = ({ data }) => {
                                                             }}
                                                         >
                                                             <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
-                                                                <path fill="#884f06" d="M16 9v10H8V9zm-1.5-6h-5l-1 1H5v2h14V4h-3.5zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2z"></path>
+                                                                <path fill="#ffffff" d="M16 9v10H8V9zm-1.5-6h-5l-1 1H5v2h14V4h-3.5zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2z"></path>
                                                             </svg>
                                                         </div>
 
@@ -658,7 +652,7 @@ const Project = ({ data }) => {
                                                                     </path>
                                                                 </svg></span>}
                                                             <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
-                                                                <path fill="#884f06" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
+                                                                <path fill="#ffffff" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
                                                             </svg>
                                                         </div>
 
@@ -679,13 +673,13 @@ const Project = ({ data }) => {
                         <div className="flex justify-end mt-10">
                             <button
                                 onClick={addProject}
-                                className="px-6 py-2 rounded-full bg-primary text-white flex items-center gap-2"
+                                className="px-6 py-2 rounded-full bg-base-300 text-white flex items-center gap-2"
                             ><svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
                                     <g fill="none">
                                         <path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"></path>
                                         <path fill="#ffffff" d="M10.5 20a1.5 1.5 0 0 0 3 0v-6.5H20a1.5 1.5 0 0 0 0-3h-6.5V4a1.5 1.5 0 0 0-3 0v6.5H4a1.5 1.5 0 0 0 0 3h6.5z"></path>
                                     </g>
-                                </svg> Add Experience</button>
+                                </svg> Add Projects</button>
                         </div>
                     </div>
 
@@ -705,10 +699,10 @@ const Project = ({ data }) => {
                                 state: { resumeData }
                             });
                         }}
-                        className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl bg-base-300 text-secondary border-2 border-secondary
-                       hover:bg-secondary hover:text-secondary-content  hover:border-base-100 active:scale-95 transition-all duration-200 "
+                        className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl bg-base-100 text-info border-2 border-secondary
+                       hover:bg-secondary hover:text-secondary-content  hover:border-info active:scale-95 transition-all duration-200 "
                     >
-                        Next: Education
+                        Next: Additional Details
                         <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
                             <path fill="currentColor" d="M2 5v14c0 .86 1.012 1.318 1.659.753l8-7a1 1 0 0 0 0-1.506l-8-7C3.012 3.682 2 4.141 2 5m11 0v14c0 .86 1.012 1.318 1.659.753l8-7a1 1 0 0 0 0-1.506l-8-7C14.012 3.682 13 4.141 13 5"></path>
                         </svg>
