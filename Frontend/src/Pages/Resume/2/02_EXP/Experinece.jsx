@@ -218,29 +218,45 @@ const Experience = ({ data }) => {
             <ToastContainer toasts={toasts} removeToast={removeToast} />
             <div className="w-full bg-base-100 rounded-3xl  border-gray-700 overflow-hidden border" >
 
-                {/* ── top bar ── */}
-                <div className="flex items-center justify-between px-5 py-3.5 bg-base-200 border-b border-gray-700">
-                    <Step index={1} />
 
-                    <ProgressMeter index={1} resumeData={resumeData} />
 
-                    <button
-                        onClick={() => setSidebarOpen((p) => !p)}
-                        className={`flex items-center gap-2 text-lg font-medium px-3 py-1.5 rounded-lg border transition-all duration-200
-                        ${sidebarOpen
-                                ? "bg-secondary-content text-base-100 border-secondary"
-                                : "bg-base-100 text-secondary-content border-secondary"
-                            }`}
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="1.4em" height="1.4em" viewBox="0 0 24 24">
-                            <path fill="currentColor" d="M12 2c4.714 0 7.071 0 8.535 1.464c1.08 1.08 1.364 2.647 1.439 5.286L22 9.5H2.026v-.75c.075-2.64.358-4.205 1.438-5.286C4.93 2 7.286 2 12 2" opacity={0.5}></path>
-                            <path fill="currentColor" d="M13 6a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-3 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0M7 6a1 1 0 1 1-2 0a1 1 0 0 1 2 0"></path>
-                            <path fill="currentColor" d="M2 12c0 4.714 0 7.071 1.464 8.535c1.01 1.01 2.446 1.324 4.786 1.421L9 22V9.5H2.026l-.023.75Q2 11.066 2 12" opacity={0.7}></path>
-                            <path fill="currentColor" d="M22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22c-.819 0-2.316 0-3-.008V9.5h13l-.003.75Q22 11.066 22 12"></path>
-                        </svg>
-                        {sidebarOpen ? "Hide" : "Preview"}
-                    </button>
+                <div className="flex flex-col min-[480px]:flex-row items-center justify-around min-[480px]:justify-center gap-5 min-[480px]:gap-3 bg-base-200 px-2 py-3.5 border-b border-slate-700 sm:px-5">
+                    {/* Step Counter */}
+                    <span className="w-full flex justify-center min-[480px]:justify-start min-[480px]:w-1/5">
+                        <Step index={1} />
+                    </span>
+
+                    {/* Progress Meter Container */}
+                    <span className="flex min-[480px]:w-[70%] justify-center  w-full min-[480px]:justify-end sm:w-3/5 ">
+                        <ProgressMeter index={1} resumeData={resumeData} />
+                    </span>
+
+                    {/* Sidebar Toggle Button Container */}
+                    <span className="hidden w-1/5 justify-end sm:flex">
+                        <button
+                            onClick={() => setSidebarOpen((p) => !p)}
+                            className={`
+        flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-all duration-200 justify-self-end sm:text-base
+        ${sidebarOpen
+                                    ? "bg-secondary-content text-base-100 border-secondary"
+                                    : "bg-base-100 text-secondary-content border-secondary"
+                                }
+      `}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1.4em" height="1.4em" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M12 2c4.714 0 7.071 0 8.535 1.464c1.08 1.08 1.364 2.647 1.439 5.286L22 9.5H2.026v-.75c.075-2.64.358-4.205 1.438-5.286C4.93 2 7.286 2 12 2" opacity={0.5}></path>
+                                <path fill="currentColor" d="M13 6a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-3 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0M7 6a1 1 0 1 1-2 0a1 1 0 0 1 2 0"></path>
+                                <path fill="currentColor" d="M2 12c0 4.714 0 7.071 1.464 8.535c1.01 1.01 2.446 1.324 4.786 1.421L9 22V9.5H2.026l-.023.75Q2 11.066 2 12" opacity={0.7}></path>
+                                <path fill="currentColor" d="M22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22c-.819 0-2.316 0-3-.008V9.5h13l-.003.75Q22 11.066 22 12"></path>
+                            </svg>
+                            {sidebarOpen ? "Hide" : "Preview"}
+                        </button>
+                    </span>
                 </div>
+
+
+
+
 
                 {/* ── body ── */}
                 <div className={`grid transition-all duration-500 ${sidebarOpen ? "lg:grid-cols-[1fr_500px]" : "grid-cols-1"}`}>

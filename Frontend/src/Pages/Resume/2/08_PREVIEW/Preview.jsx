@@ -1,81 +1,8 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import ProgressMeter from "../ProgressMeter";
+import Step from "../Step";
 
-// ─────────────────────────────────────────────────────────────────────────────
-// DEFAULT RESUME DATA
-// ─────────────────────────────────────────────────────────────────────────────
-const defaultData = {
-    fname: "Aman", lname: "Gupta", phone: "+91 98765 43210",
-    github: "https://github.com/amangupta-dev",
-    linkedin: "https://linkedin.com/in/aman-gupta",
-    portfolio: "https://aman-portfolio.dev",
-    email: "aman.dev@gmail.com",
-    summaryTitle: "Full Stack Developer & UI Specialist",
-    summaryBody: "Passionate about crafting high-performance web applications using the MERN stack. Expert in translating complex business requirements into elegant, scalable code with a focus on user-centric design and efficient backend architecture.",
-    location: "Kanpur, India", pincode: "208024",
-    skills: {
-        Frontend: "React.js, Next.js, TypeScript, Tailwind CSS, Framer Motion",
-        Backend: "Node.js, Express.js, GraphQL, Socket.io",
-        Auth: "NextAuth.js, Firebase Auth, OAuth 2.0",
-        Database: "PostgreSQL, MongoDB, Redis, Prisma ORM",
-        Tools: "Docker, Git, Vercel, Postman, Figma",
-        Deployment: "AWS S3, Netlify, Render, Vercel",
-    },
-    projects: [
-        {
-            name: "RollZone!", stack: "React · Tailwind CSS",
-            github: "https://github.com/amangupta-dev/rollzone",
-            live: "https://rollzone-game.vercel.app",
-            description: "An interactive high-stakes Pig Dice game designed for a professional portfolio.",
-            bullets: [
-                "Engineered a <b>dynamic game engine</b> using React hooks.",
-                "Implemented a <b>mobile-first responsive design</b> using Tailwind CSS.",
-                "Integrated <b>local storage persistence</b> to save player scores.",
-                "Optimized performance for a smooth 60fps animation experience.",
-            ],
-        },
-        {
-            name: "DevConnect", stack: "Next.js · PostgreSQL",
-            github: "https://github.com/amangupta-dev/devconnect",
-            live: "https://devconnect-platform.app",
-            description: "A specialized networking portal for software engineers.",
-            bullets: [
-                "Architected a <b>relational database schema</b> using Prisma ORM.",
-                "Developed a <b>server-side rendered (SSR)</b> feed for SEO.",
-                "Built an <b>automated markdown parser</b> with syntax highlighting.",
-                "Deployed using <b>Docker containers</b> on AWS.",
-            ],
-        },
-    ],
-    experience: [
-        {
-            role: "Frontend Developer", company: "XYZ Tech", location: "Remote",
-            startDate: "Jan 2025", endDate: "Present", currentlyWorking: true,
-            employmentType: "Internship",
-            bullets: [
-                "Built responsive UI components using React and TypeScript",
-                "Improved page load performance by 30% via code splitting",
-            ],
-        },
-    ],
-    education: [
-        {
-            degree: "B.Tech", field: "Computer Science & Engineering",
-            institution: "Pranveer Singh Institute of Technology",
-            location: "Kanpur, India", startDate: "2023", endDate: "2027",
-            cgpa: "8.7 / 10",
-            bullets: ["Data Structures & Algorithms", "Operating Systems", "DBMS", "Computer Networks"],
-        },
-        {
-            degree: "Class XII", field: "PCM",
-            institution: "ABC Senior Secondary School",
-            location: "Lucknow, India", startDate: "2021", endDate: "2023",
-            percentage: "92%",
-        },
-    ],
-    certifications: ["AWS Certified Cloud Practitioner", "Meta Frontend Developer Certification"],
-    achievements: ["Ranked top 5% in LeetCode contests", "Winner of Hackathon XYZ 2024", "Solved 500+ DSA problems on LeetCode"],
-    languages: ["English — Fluent", "Hindi — Native"],
-};
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CONFIGURATION ACCENTS
@@ -326,7 +253,9 @@ function ContactItem({ icon, text, href }) {
 // ─────────────────────────────────────────────────────────────────────────────
 // MAIN WORKSPACE INTERFACE
 // ─────────────────────────────────────────────────────────────────────────────
-export default function ResumeViewer({ data = defaultData }) {
+export default function ResumeViewer() {
+    const live = useLocation();
+    let data = live.state?.resumeData || {};
     const [activeFilter, setActiveFilter] = useState("all");
     const [toast, setToast] = useState({ visible: false, message: "" });
     const [headerCopied, setHeaderCopied] = useState(false);
@@ -345,7 +274,7 @@ export default function ResumeViewer({ data = defaultData }) {
     }
 
     function handleHeaderCopy() {
-        const text = `${data.fname} ${data.lname}\n${data.summaryTitle}\n${data.email} | ${data.phone}\n${data.linkedin}\n${data.portfolio}`;
+        const text = `${data?.fname} ${data?.lname}\n${data?.summaryTitle}\n${data?.email} | ${data?.phone}\n${data?.linkedin}\n${data?.portfolio}`;
         navigator.clipboard.writeText(text).then(() => {
             setHeaderCopied(true);
             setTimeout(() => setHeaderCopied(false), 1600);
@@ -356,12 +285,34 @@ export default function ResumeViewer({ data = defaultData }) {
     const filters = ["all", "experience", "education", "projects", "skills"];
 
     const copyTexts = {
-        summary: `${data.fname} is ${data.summaryBody}`,
-        skills: Object.entries(data.skills).map(([k, v]) => `${k}: ${v}`).join("\n"),
-        exp: data.experience.map(e => `${e.role} @ ${e.company}\n${e.bullets.join("\n")}`).join("\n\n"),
-        edu: data.education.map(e => `${e.degree} — ${e.institution} (${e.startDate}–${e.endDate})`).join("\n"),
-        proj: data.projects.map(p => `${p.name} [${p.stack}]\n${p.description}\n${p.bullets.map(b => b.replace(/<[^>]+>/g, "")).join("\n")}`).join("\n\n"),
-        extra: [...data.certifications, ...data.achievements, ...data.languages].join("\n"),
+        summary: `${data?.fname || ""} is ${data?.summaryBody || ""}`,
+
+        skills: Object.entries(data?.skills ?? {})
+            .map(([k, v]) => `${k}: ${v}`)
+            .join("\n"),
+
+        exp: (data?.experience ?? [])
+            .map(e => `${e.role} @ ${e.company}\n${e.bullets.join("\n")}`)
+            .join("\n\n"),
+
+        edu: (data?.education ?? [])
+            .map(e => `${e.degree} — ${e.institution} (${e.startDate}–${e.endDate})`)
+            .join("\n"),
+
+        proj: (data?.projects ?? [])
+            .map(
+                p =>
+                    `${p.name} [${p.stack}]\n${p.description}\n${p.bullets
+                        .map(b => b.replace(/<[^>]+>/g, ""))
+                        .join("\n")}`
+            )
+            .join("\n\n"),
+
+        extra: [
+            ...(data?.certifications ?? []),
+            ...(data?.achievements ?? []),
+            ...(data?.languages ?? []),
+        ].join("\n"),
     };
 
     return (
@@ -371,22 +322,46 @@ export default function ResumeViewer({ data = defaultData }) {
             {/* ══════════════════════════════════════════════════════════
           HERO OVERVIEW BIOGRAPHY CARD
       ══════════════════════════════════════════════════════════ */}
+            <div className="border rounded-3xl mb-4">
+                <div className=" rounded-3xl flex flex-col min-[480px]:flex-row items-center justify-around min-[480px]:justify-center gap-5 min-[480px]:gap-3 bg-base-200 px-2 py-3.5 border-b border-slate-700 sm:px-5">
+                    {/* Step Counter */}
+                    <span className="w-full flex justify-center min-[480px]:justify-start min-[480px]:w-1/5">
+                        <Step index={7} />
+                    </span>
+
+                    {/* Progress Meter Container */}
+                    <span className="flex min-[480px]:w-[70%] justify-center  w-full min-[480px]:justify-end sm:w-3/5 ">
+                        <ProgressMeter index={7} resumeData={data} />
+                    </span>
+
+                    <span className=" min-[480px]:w-[30%] flex gap-1 w-full  items-center justify-center text-white font-poppins text-2xl">
+
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M10 2h4c3.771 0 5.657 0 6.828 1.172S22 6.229 22 10v1c0 .552 0 1.55-.006 2H2.007C2 12.55 2 11.552 2 11v-1c0-3.771 0-5.657 1.172-6.828S6.229 2 10 2" opacity={0.5}></path>
+                            <path fill="currentColor" d="M7.985 17.5c-2.84 0-4.26 0-5.141-.879C2.272 16.052 2.07 15.258 2 14v-1h20v1c-.07 1.258-.272 2.052-.844 2.621c-.882.879-2.301.879-5.14.879h-3.263v4h3.262c.416 0 .753.336.753.75s-.337.75-.753.75h-8.03a.75.75 0 0 1-.753-.75c0-.414.337-.75.753-.75h3.262v-4z"></path>
+                        </svg>
+                        Preview
+                    </span>
+                </div>
+            </div>
+
+
             <header className="bg-white border border-slate-200 rounded-xl p-5 md:p-6 mb-4 shadow-sm">
                 <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                     <div className="flex items-start gap-4">
                         {/* Structural Monogram Avatar */}
                         <div className="w-14 h-14 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-lg font-bold shrink-0 border border-blue-100">
-                            {data.fname[0]}{data.lname[0]}
+                            {data?.fname[0]}{data?.lname[0]}
                         </div>
 
                         <div>
                             <h1 className="text-2xl font-bold tracking-tight text-slate-900 leading-none">
-                                {data.fname} <span className="text-blue-600">{data.lname}</span>
+                                {data?.fname} <span className="text-blue-600">{data?.lname}</span>
                             </h1>
-                            <p className="text-sm font-medium text-slate-500 mt-1.5">{data.summaryTitle}</p>
+                            <p className="text-sm font-medium text-slate-500 mt-1.5">{data?.summaryTitle}</p>
                             <div className="flex items-center gap-1.5 mt-2.5 text-xs text-slate-400 font-medium">
                                 <Icon d={IC.map} size={13} />
-                                {data.location} <span className="text-slate-300">·</span> {data.pincode}
+                                {data?.location} <span className="text-slate-300">·</span> {data?.pincode}
                             </div>
                         </div>
                     </div>
@@ -407,16 +382,16 @@ export default function ResumeViewer({ data = defaultData }) {
 
                 {/* Contact Strip Grid */}
                 <div className="flex flex-wrap gap-x-4 gap-y-1.5">
-                    <ContactItem icon={IC.mail} text={data.email} href={`mailto:${data.email}`} />
-                    <ContactItem icon={IC.phone} text={data.phone} />
-                    <ContactItem icon={IC.github} text="GitHub" href={data.github} />
-                    <ContactItem icon={IC.linkedin} text="LinkedIn" href={data.linkedin} />
-                    <ContactItem icon={IC.globe} text="Portfolio" href={data.portfolio} />
+                    <ContactItem icon={IC.mail} text={data?.email} href={`mailto:${data?.email}`} />
+                    <ContactItem icon={IC.phone} text={data?.phone} />
+                    <ContactItem icon={IC.github} text="GitHub" href={data?.github} />
+                    <ContactItem icon={IC.linkedin} text="LinkedIn" href={data?.linkedin} />
+                    <ContactItem icon={IC.globe} text="Portfolio" href={data?.portfolio} />
                 </div>
             </header>
 
             {/* ── SEGMENT CONTROLLER FILTER BAR ─────────────────────────── */}
-            <nav className="flex gap-1 overflow-x-auto p-1 bg-slate-100 border border-slate-200 rounded-xl mb-4 scrollbar-none">
+            <nav className="flex flex-wrap gap-1 p-1 bg-slate-100 border border-slate-200 rounded-xl mb-4 overflow-hidden">
                 {filters.map(f => (
                     <button
                         key={f}
@@ -448,7 +423,7 @@ export default function ResumeViewer({ data = defaultData }) {
                             onShare={handleShare}
                         >
                             <p className="text-xs text-slate-600 leading-relaxed">
-                                <strong className="font-semibold text-slate-900">{data.fname}</strong> is {data.summaryBody}
+                                <strong className="font-semibold text-slate-900">{data?.fname}</strong> is {data?.summaryBody}
                             </p>
                             <div className="flex flex-wrap gap-1.5 mt-3.5">
                                 {["MERN Stack", "UI / UX", "Full-Stack"].map(t => (
@@ -470,13 +445,13 @@ export default function ResumeViewer({ data = defaultData }) {
                             copyText={copyTexts.skills}
                             onShare={handleShare}
                         >
-                            {Object.entries(data.skills).map(([category, items]) => (
+                            {Object.entries(data?.skills || {}).map(([category, items]) => (
                                 <div key={category} className="mb-3.5 last:mb-0">
                                     <h3 className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5 font-mono">
                                         {category}
                                     </h3>
                                     <div className="flex flex-wrap">
-                                        {items.split(", ").map(item => (
+                                        {String(items).split(", ").map((item) => (
                                             <Tag key={item} label={item.trim()} />
                                         ))}
                                     </div>
@@ -492,18 +467,18 @@ export default function ResumeViewer({ data = defaultData }) {
                             onShare={handleShare}
                         >
                             <SubLabel>Certifications</SubLabel>
-                            {data.certifications.map((cert, idx) => (
+                            {data?.certifications?.map((cert, idx) => (
                                 <ListItem key={idx} icon={IC.award} iconColor="#eab308">{cert}</ListItem>
                             ))}
 
                             <SubLabel>Achievements</SubLabel>
-                            {data.achievements.map((ach, idx) => (
+                            {data?.achievements?.map((ach, idx) => (
                                 <ListItem key={idx} icon={IC.star} iconColor="#eab308">{ach}</ListItem>
                             ))}
 
                             <SubLabel>Languages</SubLabel>
                             <div className="flex flex-wrap mt-1">
-                                {data.languages.map((lang, idx) => (
+                                {data?.languages?.map((lang, idx) => (
                                     <Tag key={idx} label={lang} />
                                 ))}
                             </div>
@@ -523,7 +498,7 @@ export default function ResumeViewer({ data = defaultData }) {
                             copyText={copyTexts.exp}
                             onShare={handleShare}
                         >
-                            {data.experience.map((exp, idx) => (
+                            {data?.experience.map((exp, idx) => (
                                 <TimelineEntry
                                     key={idx}
                                     dotColor={ACCENTS.exp.dot}
@@ -570,7 +545,7 @@ export default function ResumeViewer({ data = defaultData }) {
                             copyText={copyTexts.edu}
                             onShare={handleShare}
                         >
-                            {data.education.map((edu, idx) => (
+                            {data?.education.map((edu, idx) => (
                                 <TimelineEntry
                                     key={idx}
                                     dotColor={ACCENTS.edu.dot}
@@ -617,7 +592,7 @@ export default function ResumeViewer({ data = defaultData }) {
                             onShare={handleShare}
                         >
                             <div className="grid grid-cols-1 gap-4">
-                                {data.projects.map((project, idx) => (
+                                {data?.projects?.map((project, idx) => (
                                     <ProjectCard key={idx} project={project} />
                                 ))}
                             </div>
@@ -633,13 +608,14 @@ export default function ResumeViewer({ data = defaultData }) {
                             onShare={handleShare}
                         >
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {Object.entries(data.skills).map(([category, items]) => (
-                                    <div key={category} className="bg-slate-50 border border-slate-200 rounded-xl p-4 transition-all duration-150 hover:border-slate-300">
-                                        <h3 className="text-xs font-bold font-mono uppercase tracking-wider text-slate-400 mb-2.5">
+                                {Object.entries(data?.skills ?? {}).map(([category, items]) => (
+                                    <div key={category} className="mb-3.5 last:mb-0">
+                                        <h3 className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5 font-mono">
                                             {category}
                                         </h3>
+
                                         <div className="flex flex-wrap">
-                                            {items.split(", ").map(item => (
+                                            {items.split(", ").map((item) => (
                                                 <Tag key={item} label={item.trim()} />
                                             ))}
                                         </div>
