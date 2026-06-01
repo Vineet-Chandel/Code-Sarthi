@@ -31,7 +31,6 @@ const ToastContainer = ({ toasts, removeToast }) => {
 
 
 
-
 const Education = ({ data }) => {
     const location = useLocation();
     let resumeData = location.state?.resumeData || {};

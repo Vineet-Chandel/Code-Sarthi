@@ -55,7 +55,6 @@ const ToastContainer = ({ toasts, removeToast }) => {
 
 
 
-
 const Project = ({ data }) => {
     const live = useLocation();
     let resumeData = live.state?.resumeData || {};

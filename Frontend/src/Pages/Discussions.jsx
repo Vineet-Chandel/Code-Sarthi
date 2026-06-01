@@ -11,6 +11,7 @@ import { IoBarChart } from "react-icons/io5";
 import { useMemo } from "react";
 import debounce from "lodash.debounce";
 import { useCallback } from "react";
+
 import { useNavigate } from "react-router-dom";
 
 // code editor
@@ -27,6 +28,7 @@ import {
     symbols,
     flags
 } from "./CollectionEmojieData";
+import { motion, transform } from "framer-motion";
 const emojis = {
     smileys_people,
     animals_nature,
@@ -66,6 +68,12 @@ const Discussions = () => {
     const [chatingCollege, setChatingCollege] = useState("");
     const [chatingProfession, setChatingProfession] = useState("");
     const [chatingSkills, setChatingSkills] = useState([]);
+    const [isHoveredChats, setIsHoveredChats] = useState(
+        new Set());
+
+    useEffect(() => {
+        console.log(isHoveredChats);
+    }, [isHoveredChats]);
     const [chatingAbout, setChatingAbout] = useState("");
     const currentUserId = user?._id;
     const [search, setSearch] = useState("");
@@ -564,7 +572,7 @@ const Discussions = () => {
 
 
     const [newGroupTabOpen, setNewGroupTabOpen] = useState(false);
-
+    const [rotate, setRotate] = useState(false);
 
 
 
@@ -882,7 +890,7 @@ const Discussions = () => {
                             </div>
                         </div>
 
-                        {/* LIST AREA - Premium Cards */}
+                        {/* LIST OF CHATS */}
 
                         {
                             section == 1 && (
@@ -892,55 +900,179 @@ const Discussions = () => {
                                         {(filteredChats || []).map((item, index) => (
                                             <div
                                                 key={index}
-                                                className="group relative flex items-center gap-3 mb-1 p-3 rounded-xl bg-base-100 hover:bg-base-300 transition-all duration-300 cursor-pointer border-2  hover:border-secondary border-base-300  "
+                                                className={`group relative flex items-center gap-3 mb-1 p-3 rounded-xl bg-base-100 hover:bg-[#f5f5f5] transition-all duration-300 cursor-pointer border  hover:border-base-200 border-base-300 ${item.atFrontUser?._id === chatingUserId ? "bg-white" : ""}`} onMouseEnter={() => setIsHoveredChats(new Set([item.atFrontUser._id]))} onMouseLeave={() => { setIsHoveredChats(new Set([])) }}
                                                 onClick={() => {
                                                     setMessages([]);
-                                                    setchatActive(true);
+                                                    setchatActive(prev => !prev);
                                                     setChatingPhotoUrl(item.atFrontUser?.photoUrl?.url);
-                                                    setChatingUserId(item.atFrontUser?._id);
-                                                    setChatingFirstName(item.atFrontUser?.firstName);
-                                                    setChatingLastName(item.atFrontUser?.lastName);
-                                                    setChatingUsername(item.atFrontUser?.username);
-                                                    setChatingGmail(item.atFrontUser?.gmail);
-                                                    setChatingMiddleName(item.atFrontUser?.middleName);
+                                                    setChatingUserId(item.atFrontUser?._id === chatingUserId ? "" : item.atFrontUser?._id);
+                                                    setChatingFirstName(item.atFrontUser?.firstName === chatingFirstName ? "" : item.atFrontUser?.firstName);
+                                                    setChatingLastName(item.atFrontUser?.lastName === chatingLastName ? "" : item.atFrontUser?.lastName);
+                                                    setChatingUsername(item.atFrontUser?.username === chatingUsername ? "" : item.atFrontUser?.username);
+                                                    setChatingGmail(item.atFrontUser?.gmail === chatingGmail ? "" : item.atFrontUser?.gmail);
+                                                    setChatingMiddleName(item.atFrontUser?.middleName === chatingMiddleName ? "" : item.atFrontUser?.middleName);
                                                     loadMessages(item.LastMsg?.conversationId);
-                                                    setChatingIsVerified(item.atFrontUser?.isVerified);
-                                                    setChatingCollege(item.atFrontUser?.college);
-                                                    setChatingProfession(item.atFrontUser?.profession);
-                                                    setChatingSkills(item.atFrontUser?.skills);
-                                                    setChatingAbout(item.atFrontUser?.about);
+                                                    setChatingIsVerified(item.atFrontUser?.isVerified === chatingIsVerified ? "" : item.atFrontUser?.isVerified);
+                                                    setChatingCollege(item.atFrontUser?.college === chatingCollege ? "" : item.atFrontUser?.college);
+                                                    setChatingProfession(item.atFrontUser?.profession === chatingProfession ? "" : item.atFrontUser?.profession);
+                                                    setChatingSkills(item.atFrontUser?.skills === chatingSkills ? "" : item.atFrontUser?.skills);
+                                                    setChatingAbout(item.atFrontUser?.about === chatingAbout ? "" : item.atFrontUser?.about);
+
+                                                    setRotate(prev => !prev);
                                                 }}
                                             >
                                                 {/* Online indicator */}
                                                 <div className="relative">
+                                                    {item.atFrontUser?.photoUrl?.url ? (
+                                                        (isHoveredChats.has(item.atFrontUser._id) ||
+                                                            item.atFrontUser?._id === chatingUserId) ? (
 
-                                                    {item.atFrontUser?.photoUrl?.url ? (<img
-                                                        src={item.atFrontUser?.photoUrl?.url}
-                                                        alt="profile"
-                                                        className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300"
-                                                    />
+                                                            <div className="w-full">
+                                                                {
+                                                                    rotate && (<div className="  absolute inset-0  ">
+                                                                        <img
+                                                                            src={item.atFrontUser.photoUrl.url}
+                                                                            alt="profile"
+                                                                            className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-500 ease-in-out "
+                                                                        />
+                                                                    </div>)
+                                                                }
+
+                                                                <motion.div
+                                                                    animate={{
+                                                                        rotate: rotate ? 360 : 0,
+                                                                        x: rotate ? 280 : 0
+                                                                    }}
+                                                                    transition={{
+                                                                        duration: 0.8,
+                                                                        ease: "easeInOut"
+                                                                    }}
+                                                                    className="bg-black w-12 h-12 md:w-14 md:h-14 flex items-center justify-center ring-2 ring-accent group-hover:ring-secondary rounded-xl p-0.5"
+                                                                >
+                                                                    {item.atFrontUser?._id === chatingUserId ? (
+                                                                        <div className="bg-accent w-full h-full rounded-xl flex flex-col justify-center items-center gap-1 transition-colors duration-500 ease-in-out"
+
+                                                                        >
+                                                                            <div className="flex gap-1">
+                                                                                <div className="w-[5px] h-[5px] bg-white rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                            </div>
+
+                                                                            <div className="flex gap-1">
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                            </div>
+
+                                                                            <div className="flex gap-1">
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                            </div>
+
+                                                                            <div className="flex gap-1">
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                            </div>
+
+                                                                            <div className="flex gap-1">
+                                                                                <div className="w-[5px] h-[5px] bg-white rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                            </div>
+                                                                        </div>
+                                                                    ) : (
+                                                                        <div className="bg-accent w-full h-full rounded-xl flex flex-col justify-center items-center gap-1 transition-colors duration-500 ease-in-out">
+                                                                            <div className="flex gap-1">
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                            </div>
+
+                                                                            <div className="flex gap-1">
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                            </div>
+
+                                                                            <div className="flex gap-1">
+                                                                                <div className="w-[5px] h-[5px] bg-white rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                            </div>
+
+                                                                            <div className="flex gap-1">
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                            </div>
+
+                                                                            <div className="flex gap-1">
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                                <div className="w-[5px] h-[5px] bg-white/20 rounded-full transition-colors duration-500 ease-in-out"></div>
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+
+                                                                </motion.div>
+
+
+                                                            </div>
+
+                                                        ) : (
+
+                                                            <div className="relative">
+                                                                <img
+                                                                    src={item.atFrontUser.photoUrl.url}
+                                                                    alt="profile"
+                                                                    className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-500 ease-in-out group-hover:rounded-xl"
+                                                                />
+                                                            </div>
+
+                                                        )
                                                     ) : (
                                                         <img
                                                             src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776259172/Pinterest_Pin_di5dy8.jpg"
                                                             alt="profile"
-                                                            className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300"
+                                                            className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-500 ease-in-out"
                                                         />
                                                     )}
-
-
                                                 </div>
 
                                                 <div className="flex-1 min-w-0">
                                                     <div className="flex justify-between items-center">
-                                                        <h3 className="text-accent font-semibold truncate">
+                                                        <h3 className={` group-hover:text-black font-semibold truncat ${item.atFrontUser?._id === chatingUserId ? "text-black" : "text-white"}`}>
                                                             {item.atFrontUser?.firstName || "CodeSarthi"} {item.atFrontUser?.lastName || "User"}
                                                         </h3>
-                                                        <span className="text-xs text-accent">
+                                                        <span className={`text-xs  group-hover:text-black ${item.atFrontUser?._id === chatingUserId ? "hidden" : "text-white"} `}>
                                                             {formatRelativeDate(item.lastMsgAt)}
 
                                                         </span>
                                                     </div>
-                                                    <p className="text-sm text-gray-900 truncate mt-0.5">
+                                                    <p className="text-sm text-gray-900 truncate ml-1">
 
 
 
@@ -961,8 +1093,13 @@ const Discussions = () => {
                                                                     <span className="text-xs text-gray-500">Online</span>
                                                                 </div>
                                                             ) : (
-                                                                <span className="text-xs text-gray-400 truncate">
-                                                                    {item.LastMsg?.content || "Hey! let's collab"}
+                                                                <span className={` ${item.atFrontUser?._id === chatingUserId ? "text-base-300" : "text-gray-400"} text-xs  flex gap-1 items-center group-hover:text-base-200 truncate`}>
+                                                                    <span><svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" viewBox="0 0 24 24">
+                                                                        <path d="M0 0h24v24H0z" fill="none" />
+                                                                        <path fill="currentColor" d="M18 3a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4h-2.586l-2.707 2.707a1 1 0 0 1-1.32.083l-.094-.083L8.585 19H6a4 4 0 0 1-3.995-3.8L2 15V7a4 4 0 0 1 4-4zm-4 9H8a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2m2-4H8a1 1 0 1 0 0 2h8a1 1 0 0 0 0-2" />
+                                                                    </svg>
+
+                                                                    </span>  {item.LastMsg?.content || "Hey! let's collab"}
                                                                 </span>
                                                             )
                                                         ) : null}
@@ -972,7 +1109,7 @@ const Discussions = () => {
 
                                                 {/* Unread badge - commented but styled */}
                                                 {(item.unReadCount != 0 && item.atFrontUser.username == user.username) && (
-                                                    <div className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white text-xs flex items-center justify-center ">
+                                                    <div className="absolute right-3 bottom-1 -translate-y-1/2 w-5 h-5 rounded-full bg-accent text-white text-xs flex items-center justify-center ">
                                                         {item.unReadCount}
                                                     </div>
                                                 )}
@@ -1761,7 +1898,7 @@ hover:bg-white/10 active:scale-95`} onClick={() => { setActiveEmojiFeild("smiley
                                                 <button
                                                     key={`${emoji}-${index}`}
                                                     onClick={() => handleEmojiClick(emoji)}
-                                                    className="text-xl m-1 scale-[1.8]  transition"
+                                                    className="text-xl m-1   transition"
                                                 >
                                                     {emoji}
                                                 </button>

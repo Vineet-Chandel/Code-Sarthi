@@ -69,7 +69,6 @@ const ToastContainer = ({ toasts, removeToast }) => {
 };
 
 
-
 const Experience = ({ data }) => {
     const location = useLocation();
     let resumeData = location.state?.resumeData || {};
@@ -261,13 +260,13 @@ const Experience = ({ data }) => {
                 {/* ── body ── */}
                 <div className={`grid transition-all duration-500 ${sidebarOpen ? "lg:grid-cols-[1fr_500px]" : "grid-cols-1"}`}>
 
-                    {aiModalOpen && <div className='fixed w-screen h-screen bg-black/20 inset-0 z-30' onClick={() => { setAiModalOpen(false); setBullets([]), setpoints([]), setSelectedRole(""), setSelectedCompany(""), setSelectedEmploymentType(""), setSelectedExpIndex(null) }}>
+                    {aiModalOpen && <div className='fixed inset-0 z-30 bg-black/20 overflow-y-auto' onClick={() => { setAiModalOpen(false); setBullets([]), setpoints([]), setSelectedRole(""), setSelectedCompany(""), setSelectedEmploymentType(""), setSelectedExpIndex(null) }}>
 
 
-                        <div className='w-full flex justify-center gap-5 p-5' >
-                            <div className="w-[50%] bg-base-100 h-[80vh] mt-10  rounded-xl p-5" onClick={(e) => e.stopPropagation()}>
+                        <div className='w-full flex flex-col xl:flex-row bg-black justify-center gap-5 p-3 sm:p-5'>
+                            <div className="w-full xl:w-1/2 h-[75vh] sm:h-[80vh] bg-base-100 rounded-xl p-4 sm:p-5 mt-2 xl:mt-10 " onClick={(e) => e.stopPropagation()}>
                                 <div className='mb-5'>
-                                    <h1 className="text-3xl font-bold text-info mb-2 leading-tight text-start  " >
+                                    <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-info mb-2 leading-tight text-start  " >
                                         Bullet points about what you did as a <br /> <span className="text-accent-content">{selectedRole}</span>,
                                     </h1>
                                 </div>
@@ -275,7 +274,7 @@ const Experience = ({ data }) => {
                                 <div >
                                     {isAiworking ? (<div className='flex flex-col justify-center items-center h-[500px] w-full  gap-2'>
                                         <div className='flex justify-center items-center gap-2'>
-                                            <h1 className="text-5xl font-bold text-[#ffffff] mb-2 leading-tight text-center ">Shastra</h1>
+                                            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#ffffff] mb-2 leading-tight text-center ">Shastra</h1>
                                             <svg xmlns="http://www.w3.org/2000/svg" width={50} height={50} viewBox="0 0 24 24" className='mb-3'>
                                                 <path fill="#ffffff" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
                                             </svg>
@@ -315,7 +314,7 @@ const Experience = ({ data }) => {
                                                     }}
                                                 >
                                                     <div className="flex gap-5 w-full items-center">
-                                                        <div className='rounded-full border-2 border-secondary p-2 h-fit flex justify-center items-center bg-base-100'  >
+                                                        <div className='rounded-full border-2 border-secondary p-1.5 sm:p-2 shrink-0 h-fit flex justify-center items-center bg-base-100'  >
                                                             <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
                                                                 <g fill="none">
                                                                     <path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"></path>
@@ -332,7 +331,7 @@ const Experience = ({ data }) => {
 
                                 </div>
                             </div>
-                            <div className='bg-white w-[50%] h-[80vh] mt-10 mx-auto rounded-xl border-2 p-5' onClick={(e) => { e.stopPropagation() }}>
+                            <div className=" w-full xl:w-1/2    bg-white rounded-xl border-2 p-4 sm:p-5 mt-2 xl:mt-10 " onClick={(e) => { e.stopPropagation() }}>
                                 <div className="h-[650px] overflow-y-auto">
                                     <div className='mb-5'>
                                         <h1 className="text-2xl font-bold text-slate-900 mb-2 leading-tight text-start  " >
@@ -347,7 +346,7 @@ const Experience = ({ data }) => {
                                     </div>) : points?.map((point, index) => (
                                         <div key={index + point} className='bg-base-300 p-3 rounded-2xl flex mb-3 cursor-pointer hover:border hover:border-secondary transition-all ' >
                                             <div className="flex gap-5 w-full items-center">
-                                                <div className='rounded-full border-2 border-secondary p-2 h-fit flex justify-center items-center bg-base-100'
+                                                <div className='rounded-full border-2 border-secondary p-1.5 sm:p-2 shrink-0 h-fit flex justify-center items-center bg-base-100'
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         setpoints((prev) => prev.filter((_, i) => i !== index));
@@ -358,7 +357,7 @@ const Experience = ({ data }) => {
                                                         <path fill="#ffffff" d="M16 9v10H8V9zm-1.5-6h-5l-1 1H5v2h14V4h-3.5zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2z"></path>
                                                     </svg>
                                                 </div>
-                                                <div className='bg-base-100 p-4 rounded-2xl w-full'>{point}</div>
+                                                <div className='bg-base-100 p-3 sm:p-4 rounded-2xl w-full break-words text-sm sm:text-base'>{point}</div>
                                             </div>
                                         </div>
                                     ))}
@@ -587,10 +586,10 @@ const Experience = ({ data }) => {
 
                                         </div>) : experiences[index].bullets?.map((point, bulletIndex) => (
                                             <div key={bulletIndex + point} className='bg-base-300 p-3 rounded-2xl flex mb-3 cursor-pointer hover:border hover:border-secondary transition-all ' >
-                                                <div className="flex gap-5 w-full items-center">
+                                                <div className="flex gap-3 sm:gap-5 w-full items-center">
                                                     <div className='flex gap-2'>
 
-                                                        <div className='rounded-full border-2 border-secondary p-2 h-fit flex justify-center items-center bg-base-100'
+                                                        <div className='rounded-full border-2 border-secondary p-1.5 sm:p-2 shrink-0 h-fit flex justify-center items-center bg-base-100'
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
 
@@ -619,7 +618,7 @@ const Experience = ({ data }) => {
 
 
 
-                                                        <div className='rounded-full border-2 border-secondary p-2 h-fit flex justify-center items-center bg-base-100'
+                                                        <div className='rounded-full border-2 border-secondary p-1.5 sm:p-2 shrink-0 h-fit flex justify-center items-center bg-base-100'
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
 
@@ -634,7 +633,7 @@ const Experience = ({ data }) => {
                                                         </div>
 
 
-                                                        <div className='rounded-full border-2 border-secondary p-2 h-fit flex justify-center items-center bg-base-100'
+                                                        <div className='rounded-full border-2 border-secondary p-1.5 sm:p-2 shrink-0 h-fit flex justify-center items-center bg-base-100'
                                                             onClick={async (e) => {
                                                                 e.stopPropagation();
 
