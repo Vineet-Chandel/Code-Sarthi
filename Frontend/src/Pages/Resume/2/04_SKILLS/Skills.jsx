@@ -185,10 +185,10 @@ const Education = ({ data }) => {
     return (
         <div className="min-h-[calc(100vh-4rem)] w-screen flex items-start justify-center p-4 md:p-6 bg-base-100">
             <ToastContainer toasts={toasts} removeToast={removeToast} />
-            <div className="w-full bg-base-100 rounded-3xl  overflow-hidden border border-slate-700" >
+            <div className="w-full bg-base-100 rounded-3xl  overflow-hidden border border-accent" >
 
                 {/* ── top bar ── */}
-                <div className="flex flex-col min-[480px]:flex-row items-center justify-around min-[480px]:justify-center gap-5 min-[480px]:gap-3 bg-base-200 px-2 py-3.5 border-b border-slate-700 sm:px-5">
+                <div className="flex flex-col min-[480px]:flex-row items-center justify-around min-[480px]:justify-center gap-5 min-[480px]:gap-3 bg-base-200 px-2 py-3.5 border-b border-accent sm:px-5">
                     {/* Step Counter */}
                     <span className="w-full flex justify-center min-[480px]:justify-start min-[480px]:w-1/5">
                         <Step index={3} />
@@ -228,17 +228,17 @@ const Education = ({ data }) => {
 
 
                     {/* ── LEFT: form ── */}
-                    <div className="p-6 md:p-10 border border-slate-700 ">
+                    <div className="p-6 md:p-10 border border-accent ">
                         <Header index={3} />
 
                         <div className="space-y-5 mt-8">
                             {skills.map((skill, index) => (
                                 <div
                                     key={skill.id}
-                                    className="bg-base-200 border border-slate-700 rounded-3xl p-5"
+                                    className="bg-base-200 border border-accent rounded-3xl p-5"
                                 >
 
-                                    {modalOpen && <div className='h-screen w-screen bg-black/70 fixed flex items-center justify-center z-30 inset-0 ' onClick={() => {
+                                    {modalOpen && <div className='h-screen w-screen bg-black/70 fixed flex items-center justify-center z-40 inset-0 ' onClick={() => {
                                         points.forEach((point) => {
                                             if (skills[index].skills.length >= 20) {
                                                 addToast({
@@ -252,12 +252,12 @@ const Education = ({ data }) => {
 
                                         }); setpoints([]); setSkillCategory(""); setModalOpen(false);
                                     }}>
-                                        <div className='w-[70%] h-[70%] bg-base-100 rounded-3xl p-10 flex flex-col gap-5 border-4 border-base-300' onClick={(e) => e.stopPropagation()}>
+                                        <div className='w-[70%] bg-base-100 rounded-3xl p-10 flex flex-col gap-5 border-4 border-base-300' onClick={(e) => e.stopPropagation()}>
                                             <div className='text-2xl font-bold'>Category <mark className='bg-secondary text-secondary-content p-2 rounded-xl px-5'>{SkillCategory}</mark> ,</div>
                                             <div className="flex h-full gap-3">
                                                 <div className="w-3/4 flex flex-col gap-5">
                                                     here is the list of common skills in this category :
-                                                    <div className='bg-base-200 w-full rounded-3xl h-full border-2 border-slate-700 p-5'>
+                                                    <div className='bg-base-200 w-full rounded-3xl h-full  border-accent p-5'>
 
                                                         {isAiworking ? (<div className='flex flex-col justify-center items-center h-full w-full  gap-2'>
                                                             <div className='flex justify-center items-center gap-2'>
@@ -285,22 +285,29 @@ const Education = ({ data }) => {
                                                                                 });
                                                                             } if (skill.skill.length > 0 && !points.includes(skill.skill)) { setpoints(prev => [...prev, skill.skill]); }
                                                                         }}
-                                                                        className='bg-base-300 border border-slate-700 rounded-2xl px-3.5 py-2.5 text-sm text-white hover:text-base-100 outline-none hover:border-secondary hover:ring-4 hover:ring-accent hover:bg-white transition-all duration-200 font-medium flex items-center gap-2 cursor-pointer'
+                                                                        className={` ${points.includes(skill.skill) ? 'bg-white text-black border-secondary' : 'bg-base-300 text-white'} border border-accent rounded-2xl px-3.5 py-2.5 text-sm group hover:text-base-100 outline-none  hover:bg-white transition-all duration-200 font-medium flex items-center gap-2 cursor-pointer`}
                                                                     >
-                                                                        <span className='p-2 bg-base-100 border border-slate-500 rounded-full'><svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 48 48" >
-                                                                            <path fill="#ffffff" d="M24 5a1.5 1.5 0 0 1 1.5 1.5v16h16a1.5 1.5 0 0 1 0 3h-16v16a1.5 1.5 0 0 1-3 0v-16h-16a1.5 1.5 0 0 1 0-3h16v-16A1.5 1.5 0 0 1 24 5"></path>
-                                                                        </svg></span> <span > {skill.skill}</span>
+                                                                        <span className='p-1 bg-base-100 border border-accent rounded-full'>
+                                                                            {points.includes(skill.skill) ? (<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 15 15">
+                                                                                <path fill="#20ff05" fillRule="evenodd" d="M0 7.5a7.5 7.5 0 1 1 15 0a7.5 7.5 0 0 1-15 0m7.072 3.21l4.318-5.398l-.78-.624l-3.682 4.601L4.32 7.116l-.64.768z" clipRule="evenodd"></path>
+                                                                            </svg>) : (<svg className='transition duration-700 ease-in-out group-hover:rotate-180' xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24">
+                                                                                <g fill="#fff" fillRule="evenodd" clipRule="evenodd">
+                                                                                    <path d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12m10-8a8 8 0 1 0 0 16a8 8 0 0 0 0-16"></path>
+                                                                                    <path d="M13 7a1 1 0 1 0-2 0v4H7a1 1 0 1 0 0 2h4v4a1 1 0 1 0 2 0v-4h4a1 1 0 1 0 0-2h-4z"></path>
+                                                                                </g>
+                                                                            </svg>)}
+                                                                        </span> <span > {skill.skill}</span>
                                                                     </button>
                                                                 ))}
                                                             </div>)}
                                                     </div>
                                                 </div>
-                                                <div className="w-1/4 bg-base-200 p-5 rounded-3xl border border-slate-700">
+                                                <div className="w-1/4 bg-base-200 p-5 rounded-3xl border border-accent">
                                                     <h1 className='text-lg font-bold'>Selected Skills</h1>
                                                     {points.map((point, index) => (
                                                         <div
                                                             key={skill.id}
-                                                            className="bg-base-300 border border-slate-700 rounded-2xl px-3 py-2 text-sm mt-2"
+                                                            className="bg-base-300 border border-accent rounded-2xl px-3 py-2 text-sm mt-2"
                                                         >
                                                             {point}
                                                         </div>
@@ -341,9 +348,9 @@ const Education = ({ data }) => {
 
                                                 handleChange2(index, "skillCategory", e.target.value)
                                             }
-                                            className="w-full  bg-base-100 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none
+                                            className="w-full  bg-base-100 border border-accent rounded-xl px-3.5 py-2.5 text-sm text-white outline-none
                  focus:border-info  focus:ring-info focus:bg-secondary
-                 transition-all duration-200 font-medium placeholder:text-slate-500"
+                 transition-all duration-200 font-medium placeholder:text-accent"
 
                                         />
                                         <button className=' border border-secondary bg-base-100 text-info  px-3 py-2 rounded-xl mt-3 flex justify-center items-center gap-2 hover:scale-105 transition-all duration-300 ease-in-out group' onClick={() => {
@@ -463,9 +470,9 @@ const Education = ({ data }) => {
                                             key={skill.id}
                                             type="text"
                                             placeholder="Press Enter to add skill"
-                                            className="w-full bg-base-100 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none
+                                            className="w-full bg-base-100 border border-accent rounded-xl px-3.5 py-2.5 text-sm text-white outline-none
                  focus:border-info focus:ring-info focus:bg-secondary
-                 transition-all duration-200 font-medium placeholder:text-slate-500"
+                 transition-all duration-200 font-medium placeholder:text-accent"
 
 
                                             value={skill.inputValue}
@@ -530,7 +537,7 @@ const Education = ({ data }) => {
 
 
                 {/* ── footer ── */}
-                <div className="flex items-center justify-end px-6 md:px-10 py-4 bg-base-200 border-t border-slate-700">
+                <div className="flex items-center justify-end px-6 md:px-10 py-4 bg-base-200 border-t border-accent">
 
                     <button
                         onClick={() => {
@@ -538,7 +545,7 @@ const Education = ({ data }) => {
                                 state: { resumeData: finalResumeData }
                             });
                         }}
-                        className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl bg-base-100 text-info border-2 border-secondary
+                        className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl bg-base-100 text-info  border-secondary
                         hover:text-secondary-content   active:scale-95 transition-all duration-200 "    >
                         Next : Profile Summary
                         <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">

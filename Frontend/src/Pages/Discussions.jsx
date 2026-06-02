@@ -28,7 +28,7 @@ import {
     symbols,
     flags
 } from "./CollectionEmojieData";
-import { motion, transform } from "framer-motion";
+import { motion } from "framer-motion";
 const emojis = {
     smileys_people,
     animals_nature,
@@ -84,6 +84,7 @@ const Discussions = () => {
     const chatMessages = useSelector(state => state.chats?.users || []);
     const [typingUsers, setTypingUsers] = useState(new Set());
     const [globalLoading, setGlobalLoading] = useState(false);
+    const [flyAeroPlane, setFlyAeroPlane] = useState(false)
     const Navigate = useNavigate();
     //fetching the connections 
     const connectionUser = async () => {
@@ -116,7 +117,7 @@ const Discussions = () => {
 
     //filtered chats list 
     const filteredChats = useMemo(() => {
-        setGlobalLoading(true);
+
         return chatMessages.filter(user =>
             user?.atFrontUser?.firstName
                 ?.toLowerCase()
@@ -246,7 +247,7 @@ const Discussions = () => {
 
     const add = [
         {
-            id: 0, tag: 'default', title: 'Default', icon: (<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#764b1aff" d="M11.288 20.713Q11 20.425 11 20v-7H4q-.425 0-.712-.288T3 12t.288-.712T4 11h7V4q0-.425.288-.712T12 3t.713.288T13 4v7h7q.425 0 .713.288T21 12t-.288.713T20 13h-7v7q0 .425-.288.713T12 21t-.712-.288"></path></svg>)
+            id: 0, tag: 'default', title: 'Default', icon: (<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#fff" d="M11.288 20.713Q11 20.425 11 20v-7H4q-.425 0-.712-.288T3 12t.288-.712T4 11h7V4q0-.425.288-.712T12 3t.713.288T13 4v7h7q.425 0 .713.288T21 12t-.288.713T20 13h-7v7q0 .425-.288.713T12 21t-.712-.288"></path></svg>)
         },
         { id: 1, tag: 'file', title: 'File', icon: (<svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 512 512"><path fill="currentColor" d="M16 420a28 28 0 0 0 28 28h424a28 28 0 0 0 28-28V208H16Zm480-296a28 28 0 0 0-28-28H212.84l-48-32H44a28 28 0 0 0-28 28v84h480Z"></path></svg>) },
         { id: 2, tag: 'video', title: 'Video', icon: (<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 32 32"><path fill="currentColor" d="M21 26H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h17a2 2 0 0 1 2 2v4.06l5.42-3.87A1 1 0 0 1 30 9v14a1 1 0 0 1-1.58.81L23 19.94V24a2 2 0 0 1-2 2"></path></svg>) },
@@ -726,7 +727,7 @@ const Discussions = () => {
                                             language: language
                                         })
                                     }}
-                                    className="px-4 py-2 border border-gray-300 hover:bg-gray-800/90  rounded-lg text-white text-sm font-medium flex items-center gap-2"
+                                    className="px-4 py-2 border border-gray-300 hover:bg-white/90  rounded-lg text-white text-sm font-medium flex items-center gap-2"
                                 >
                                     Send
                                     <span>➤</span>
@@ -745,49 +746,55 @@ const Discussions = () => {
                 {!profileOpen && !newGroupTabOpen && (
                     <div className="relative z-10">
                         <div className="flex items-center justify-between gap-2 px-1 md:px-2 py-2">
-                            <div>
-                                <div className="w-10 h-10 rounded-2xl bg-base-200 hover:bg-base-300  flex items-center justify-center " onClick={() => setShowCreateTab(!showCreateTab)}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 24 24"><path fill="#884f06" fillRule="evenodd" d="M20.75 7a.75.75 0 0 1-.75.75H4a.75.75 0 0 1 0-1.5h16a.75.75 0 0 1 .75.75m0 5a.75.75 0 0 1-.75.75H4a.75.75 0 0 1 0-1.5h16a.75.75 0 0 1 .75.75m0 5a.75.75 0 0 1-.75.75H4a.75.75 0 0 1 0-1.5h16a.75.75 0 0 1 .75.75" clipRule="evenodd"></path></svg>
-                                </div>
 
-                            </div>
                             {/* SEARCH BAR - Premium */}
                             <div
                                 onClick={focusInput}
-                                className="group w-full flex items-center gap-3 bg-base-100 border border-base-300 border-[3px] px-4 py-1 rounded-full  hover:border-blue-500/40 focus-within:border-blue-500/60 transition-all duration-300 "
+                                className="group w-full flex items-center gap-3 bg-base-100 border border-base-300 border-[2px] px-1 py-1 rounded-full  hover:border-info  transition-all duration-300 "
                             >
                                 {/*  */}
                                 {/* LEFT ICON */}
 
                                 {globalLoading ? (
-                                    <svg xmlns="http://www.w3.org/2000/svg" width={32} height={32} viewBox="0 0 24 24">
-                                        <g fill="none" stroke="#884f06" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.8}>
-                                            <path strokeDasharray={18} d="M12 3c4.97 0 9 4.03 9 9">
-                                                <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="18;0"></animate>
-                                                <animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform>
-                                            </path>
-                                            <path strokeDasharray={60} d="M12 3c4.97 0 9 4.03 9 9c0 4.97 -4.03 9 -9 9c-4.97 0 -9 -4.03 -9 -9c0 -4.97 4.03 -9 9 -9Z" opacity={0.3}>
-                                                <animate fill="freeze" attributeName="stroke-dashoffset" dur="1.2s" values="60;0"></animate>
-                                            </path>
-                                        </g>
-                                    </svg>
+                                    <span className=" bg-accent rounded-full p-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width={32} height={32} viewBox="0 0 24 24">
+                                            <g fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.8}>
+                                                <path strokeDasharray={18} d="M12 3c4.97 0 9 4.03 9 9">
+                                                    <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="18;0"></animate>
+                                                    <animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform>
+                                                </path>
+                                                <path strokeDasharray={60} d="M12 3c4.97 0 9 4.03 9 9c0 4.97 -4.03 9 -9 9c-4.97 0 -9 -4.03 -9 -9c0 -4.97 4.03 -9 9 -9Z" opacity={0.3}>
+                                                    <animate fill="freeze" attributeName="stroke-dashoffset" dur="1.2s" values="60;0"></animate>
+                                                </path>
+                                            </g>
+                                        </svg>
+
+                                    </span>
                                 ) : (
-                                    <svg xmlns="http://www.w3.org/2000/svg" width={32} height={32} viewBox="0 0 80 80">
+                                    <span className=" bg-accent rounded-full p-2">    <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 80 80">
                                         <g fill="none">
-                                            <path fill="#8c3f27" d="M65.368 67.848a2 2 0 0 0 2.828-2.829zm-9.634-15.29a2 2 0 0 0-2.828 2.828zm12.462 12.461L55.734 52.557l-2.828 2.829l12.462 12.462z"></path>
-                                            <path fill="#ff9d33" stroke="#370a00" strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M13.578 30.724a24.249 24.249 0 1 1 46.844 12.552a24.249 24.249 0 0 1-46.844-12.552"></path>
+                                            <path fill="#fff" d="M65.368 67.848a2 2 0 0 0 2.828-2.829zm-9.634-15.29a2 2 0 0 0-2.828 2.828zm12.462 12.461L55.734 52.557l-2.828 2.829l12.462 12.462z"></path>
+                                            <path fill="#807c79ff" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M13.578 30.724a24.249 24.249 0 1 1 46.844 12.552a24.249 24.249 0 0 1-46.844-12.552"></path>
                                         </g>
-                                    </svg>
+                                    </svg></span>
+
                                 )}
 
                                 <input
                                     ref={inputRef}
                                     type="text"
                                     placeholder="Search conversations..."
-                                    className="flex-1 bg-transparent outline-none text-sm placeholder-accent text-secondary"
+                                    className="flex-1 bg-transparent outline-none text-sm placeholder-accent text-white"
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
                                 />
+
+                                <div>
+                                    <div className="w-10 h-10 rounded-2xl bg-base-200 hover:bg-base-300  flex items-center justify-center " onClick={() => setShowCreateTab(!showCreateTab)}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 24 24"><path fill="#fff" fillRule="evenodd" d="M20.75 7a.75.75 0 0 1-.75.75H4a.75.75 0 0 1 0-1.5h16a.75.75 0 0 1 .75.75m0 5a.75.75 0 0 1-.75.75H4a.75.75 0 0 1 0-1.5h16a.75.75 0 0 1 .75.75m0 5a.75.75 0 0 1-.75.75H4a.75.75 0 0 1 0-1.5h16a.75.75 0 0 1 .75.75" clipRule="evenodd"></path></svg>
+                                    </div>
+
+                                </div>
 
                             </div>
 
@@ -799,7 +806,7 @@ const Discussions = () => {
                                 <div className="w-[320px] z-30 rounded-2xl bg-secondary border border-accent shadow-2xl absolute mt-2 left-4 overflow-hidden transition-all duration-200 ease-in-out">
                                     {/* Header */}
                                     <div className="px-4 py-3 border-b border-base-300 bg-secondary-content/30">
-                                        <h3 className="text-sm font-bold text-secondary-content flex items-center gap-2">
+                                        <h3 className="text-sm font-bold text-white-content flex items-center gap-2">
                                             <span className="w-2 h-2 rounded-full bg-secondary-content animate-pulse"></span>
                                             Quick Create
                                         </h3>
@@ -810,7 +817,7 @@ const Discussions = () => {
                                         <div className="px-2 pt-2 pb-1 text-[10px] uppercase font-bold text-base-content/50 tracking-wider">
                                             Intelligence
                                         </div>
-                                        <button className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-primary hover:text-secondary-content transition-colors group">
+                                        <button className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-primary hover:text-white-content transition-colors group">
                                             <div className="w-8 h-8 rounded-lg bg-base-100 flex items-center justify-center border border-base-300 group-hover:border-primary/30">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="#0f0f0f" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z" /></svg>
                                             </div>
@@ -824,7 +831,7 @@ const Discussions = () => {
                                         <div className="px-2 pt-2 pb-1 text-[10px] uppercase font-bold text-base-content/50 tracking-wider">
                                             Collaboration
                                         </div>
-                                        <button className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-primary hover:text-secondary-content transition-colors group">
+                                        <button className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-primary hover:text-white-content transition-colors group">
                                             <div className="w-8 h-8 rounded-lg bg-base-100 flex items-center justify-center border border-base-300 group-hover:border-secondary/30">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 48 48"><g fill="none"><path fill="url(#SVGJt7AAdxg)" d="M37.222 39.997a7 7 0 0 0 3.07-.818A7 7 0 0 0 44 33v-9.75a4.25 4.25 0 0 0-3.409-4.167A4.3 4.3 0 0 0 39.75 19h-5.5q-.433.001-.842.083A4.25 4.25 0 0 0 30 23.25V33c0 2.675 1.501 5 3.707 6.179a6.96 6.96 0 0 0 3.27.821H37q.111 0 .222-.004"></path><path fill="url(#SVG5GIxdeoi)" fillOpacity={0.25} d="M37.222 39.997a7 7 0 0 0 3.07-.818A7 7 0 0 0 44 33v-9.75a4.25 4.25 0 0 0-3.409-4.167A4.3 4.3 0 0 0 39.75 19h-5.5q-.433.001-.842.083A4.25 4.25 0 0 0 30 23.25V33c0 2.675 1.501 5 3.707 6.179a6.96 6.96 0 0 0 3.27.821H37q.111 0 .222-.004"></path><path fill="url(#SVGzsdx8dkW)" d="M11.222 39.997a7 7 0 0 0 3.07-.818A7 7 0 0 0 18 33v-9.75a4.25 4.25 0 0 0-3.409-4.167A4.3 4.3 0 0 0 13.75 19h-5.5q-.433.001-.842.083A4.25 4.25 0 0 0 4 23.25V33c0 2.675 1.501 5 3.707 6.179a6.96 6.96 0 0 0 3.27.821H11q.112 0 .222-.004"></path><path fill="url(#SVG4jxYpete)" fillOpacity={0.25} d="M11.222 39.997a7 7 0 0 0 3.07-.818A7 7 0 0 0 18 33v-9.75a4.25 4.25 0 0 0-3.409-4.167A4.3 4.3 0 0 0 13.75 19h-5.5q-.433.001-.842.083A4.25 4.25 0 0 0 4 23.25V33c0 2.675 1.501 5 3.707 6.179a6.96 6.96 0 0 0 3.27.821H11q.112 0 .222-.004"></path><path fill="url(#SVGLFOSlcNv)" d="M19.25 19A4.25 4.25 0 0 0 15 23.25V34a9 9 0 1 0 18 0V23.25A4.25 4.25 0 0 0 28.75 19z"></path><path fill="url(#SVG7WAmMdFt)" d="M19.25 19A4.25 4.25 0 0 0 15 23.25V34a9 9 0 1 0 18 0V23.25A4.25 4.25 0 0 0 28.75 19z"></path><path fill="url(#SVG604UPdmr)" d="M37 7a5 5 0 1 0 0 10a5 5 0 0 0 0-10"></path><path fill="url(#SVGDfOIBdeZ)" d="M11 7a5 5 0 1 0 0 10a5 5 0 0 0 0-10"></path><path fill="url(#SVGXiIdweKD)" d="M18 11a6 6 0 1 1 12 0a6 6 0 0 1-12 0"></path><defs><linearGradient id="SVGJt7AAdxg" x1={33.329} x2={45.202} y1={21.792} y2={34.43} gradientUnits="userSpaceOnUse"><stop offset={0.125} stopColor="#7a41dc"></stop><stop offset={1} stopColor="#5b2ab5"></stop></linearGradient><linearGradient id="SVGzsdx8dkW" x1={7.329} x2={19.202} y1={21.792} y2={34.43} gradientUnits="userSpaceOnUse"><stop offset={0.125} stopColor="#9c6cfe"></stop><stop offset={1} stopColor="#7a41dc"></stop></linearGradient><linearGradient id="SVGLFOSlcNv" x1={19.28} x2={32.658} y1={22.191} y2={38.211} gradientUnits="userSpaceOnUse"><stop offset={0.125} stopColor="#bd96ff"></stop><stop offset={1} stopColor="#9c6cfe"></stop></linearGradient><linearGradient id="SVG7WAmMdFt" x1={24} x2={44.557} y1={16.143} y2={44.95} gradientUnits="userSpaceOnUse"><stop stopColor="#885edb" stopOpacity={0}></stop><stop offset={1} stopColor="#e362f8"></stop></linearGradient><linearGradient id="SVG604UPdmr" x1={34.378} x2={39.474} y1={8.329} y2={16.467} gradientUnits="userSpaceOnUse"><stop offset={0.125} stopColor="#7a41dc"></stop><stop offset={1} stopColor="#5b2ab5"></stop></linearGradient><linearGradient id="SVGDfOIBdeZ" x1={8.378} x2={13.474} y1={8.329} y2={16.467} gradientUnits="userSpaceOnUse"><stop offset={0.125} stopColor="#9c6cfe"></stop><stop offset={1} stopColor="#7a41dc"></stop></linearGradient><linearGradient id="SVGXiIdweKD" x1={20.854} x2={26.969} y1={6.595} y2={16.36} gradientUnits="userSpaceOnUse"><stop offset={0.125} stopColor="#bd96ff"></stop><stop offset={1} stopColor="#9c6cfe"></stop></linearGradient><radialGradient id="SVG5GIxdeoi" cx={0} cy={0} r={1} gradientTransform="matrix(8.7001 -.00781 .01988 22.1392 27.8 29.008)" gradientUnits="userSpaceOnUse"><stop offset={0.433} stopColor="#3b148a"></stop><stop offset={1} stopColor="#3b148a" stopOpacity={0}></stop></radialGradient><radialGradient id="SVG4jxYpete" cx={0} cy={0} r={1} gradientTransform="rotate(180.041 11.273 14.5)scale(11.0348 28.0801)" gradientUnits="userSpaceOnUse"><stop offset={0.433} stopColor="#3b148a"></stop><stop offset={1} stopColor="#3b148a" stopOpacity={0}></stop></radialGradient></defs></g></svg>
                                             </div>
@@ -834,7 +841,7 @@ const Discussions = () => {
                                             </div>
                                         </button>
 
-                                        <button className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-primary hover:text-secondary-content transition-colors group">
+                                        <button className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-primary hover:text-white-content transition-colors group">
                                             <div className="w-8 h-8 rounded-lg bg-base-100 flex items-center justify-center border border-base-300 group-hover:border-secondary/30">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#874c04ff" d="M20 16a3 3 0 0 0-1.73.56l-2.45-1.45A3.7 3.7 0 0 0 16 14a4 4 0 0 0-3-3.86V7.82a3 3 0 1 0-2 0v2.32A4 4 0 0 0 8 14a3.7 3.7 0 0 0 .18 1.11l-2.45 1.45A3 3 0 0 0 4 16a3 3 0 1 0 3 3a3 3 0 0 0-.12-.8l2.3-1.37a4 4 0 0 0 5.64 0l2.3 1.37A3 3 0 1 0 20 16M4 20a1 1 0 1 1 1-1a1 1 0 0 1-1 1m8-16a1 1 0 1 1-1 1a1 1 0 0 1 1-1m0 12a2 2 0 1 1 2-2a2 2 0 0 1-2 2m8 4a1 1 0 1 1 1-1a1 1 0 0 1-1 1"></path></svg>
                                             </div>
@@ -848,7 +855,7 @@ const Discussions = () => {
                                         <div className="px-2 pt-2 pb-1 text-[10px] uppercase font-bold text-base-content/50 tracking-wider">
                                             Work Management
                                         </div>
-                                        <button className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-primary hover:text-secondary-content transition-colors group">
+                                        <button className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-primary hover:text-white-content transition-colors group">
                                             <div className="w-8 h-8 rounded-lg bg-base-100 flex items-center justify-center border border-base-300 group-hover:border-accent/30">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 16 16"><g fill="#874c04"><path d="M4 16s-1 0-1-1s1-4 5-4s5 3 5 4s-1 1-1 1zm4-5.95a2.5 2.5 0 1 0 0-5a2.5 2.5 0 0 0 0 5"></path><path d="M2 1a2 2 0 0 0-2 2v9.5A1.5 1.5 0 0 0 1.5 14h.653a5.4 5.4 0 0 1 1.066-2H1V3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v9h-2.219c.554.654.89 1.373 1.066 2h.653a1.5 1.5 0 0 0 1.5-1.5V3a2 2 0 0 0-2-2z"></path></g></svg>
                                             </div>
@@ -858,7 +865,7 @@ const Discussions = () => {
                                             </div>
                                         </button>
 
-                                        <button className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-primary hover:text-secondary-content transition-colors group mb-1">
+                                        <button className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-primary hover:text-white-content transition-colors group mb-1">
                                             <div className="w-8 h-8 rounded-lg bg-base-100 flex items-center justify-center border border-base-300 group-hover:border-accent/30">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 16 16"><g fill="none"><path fill="url(#SVG29yRxspP)" d="M3 3.5A1.5 1.5 0 0 1 4.5 2h7A1.5 1.5 0 0 1 13 3.5v10a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 3 13.5z"></path><path fill="url(#SVGIvgUMeep)" fillOpacity={0.7} d="M3 3.5A1.5 1.5 0 0 1 4.5 2h7A1.5 1.5 0 0 1 13 3.5v10a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 3 13.5z"></path><path fill="url(#SVGzO9hHdNE)" fillOpacity={0.4} d="M3 3.5A1.5 1.5 0 0 1 4.5 2h7A1.5 1.5 0 0 1 13 3.5v10a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 3 13.5z"></path><path fill="url(#SVG9Kp5ubdQ)" d="M5 2.5A1.5 1.5 0 0 0 6.5 4h3a1.5 1.5 0 0 0 0-3h-3A1.5 1.5 0 0 0 5 2.5"></path><path fill="url(#SVGyNacneTZ)" fillOpacity={0.9} d="M10.854 7.854a.5.5 0 0 0-.708-.708L7.5 9.793L6.354 8.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z"></path><defs><linearGradient id="SVG29yRxspP" x1={3} x2={13.44} y1={3.3} y2={14.593} gradientUnits="userSpaceOnUse"><stop stopColor="#36dff1"></stop><stop offset={1} stopColor="#0094f0"></stop></linearGradient><linearGradient id="SVG9Kp5ubdQ" x1={8} x2={8} y1={1} y2={4} gradientUnits="userSpaceOnUse"><stop stopColor="#ffe06b"></stop><stop offset={1} stopColor="#fab500"></stop></linearGradient><linearGradient id="SVGyNacneTZ" x1={12.833} x2={6.283} y1={13.667} y2={4.063} gradientUnits="userSpaceOnUse"><stop stopColor="#9deaff"></stop><stop offset={1} stopColor="#fff"></stop></linearGradient><radialGradient id="SVGIvgUMeep" cx={0} cy={0} r={1} gradientTransform="matrix(0 4.16204 -4.27976 0 8 1.278)" gradientUnits="userSpaceOnUse"><stop stopColor="#0a1852"></stop><stop offset={1} stopColor="#0a1852" stopOpacity={0}></stop></radialGradient><radialGradient id="SVGzO9hHdNE" cx={0} cy={0} r={1} gradientTransform="matrix(0 2.02381 -4.04762 0 8 2.69)" gradientUnits="userSpaceOnUse"><stop stopColor="#0a1852"></stop><stop offset={1} stopColor="#0a1852" stopOpacity={0}></stop></radialGradient></defs></g></svg>
                                             </div>
@@ -873,17 +880,17 @@ const Discussions = () => {
                         }
                         {/* SECTION TOGGLE - Premium Segmented Control */}
                         <div className="mt-5 w-full ">
-                            <div className="flex relative lg:w-full w-[80%] mx-auto border border-secondary border-[3px] rounded-2xl bg-white/[0.04] py-1 items-center">
-                                <div className={`absolute h-[96%]  w-1/2  bg-base-300 border border-secondary border-[3px] rounded-xl transition-transform duration-300  ${section === 2 ? "translate-x-full -left-1 " : "left-1"}`}></div>
+                            <div className="flex relative lg:w-full w-[80%] mx-auto border border-secondary  rounded-2xl bg-base-200 py-1 items-center">
+                                <div className={`absolute h-[96%]  w-1/2  bg-white border border-secondary  rounded-xl transition-transform duration-300  ${section === 2 ? "translate-x-full -left-1 " : "left-1"}`}></div>
                                 <button
                                     onClick={() => setSection(1)}
-                                    className={`flex-1 py-2.5 text-sm font-medium rounded-xl transition-all duration-300 relative z-10 ${section === 1 ? 'text-secondary' : 'text-accent hover:text-accent'}`}
+                                    className={`flex-1 py-1.5 text-md font-medium rounded-xl transition-all duration-300 relative z-10 ${section === 1 ? 'text-black' : 'text-info hover:text-info'}`}
                                 >
                                     Chats
                                 </button>
                                 <button
                                     onClick={() => setSection(2)}
-                                    className={`flex-1 py-2.5 text-sm font-medium rounded-xl transition-all duration-300 relative z-10 ${section === 2 ? 'text-secondary' : 'text-accent hover:text-accent'}`}
+                                    className={`flex-1 py-1.5 text-md font-medium rounded-xl transition-all duration-300 relative z-10 ${section === 2 ? 'text-black' : 'text-info hover:text-info'}`}
                                 >
                                     Teams
                                 </button>
@@ -1122,7 +1129,7 @@ const Discussions = () => {
 
                                     {connectionList.length > 0 && (
                                         <div className="mt-6 px-4 py-2 rounded-xl bg-base-300  border border-accent text-center group cursor-pointer ">
-                                            <div className="flex items-center justify-center gap-1 text-accent">
+                                            <div className="flex items-center justify-center gap-1 text-info">
                                                 <span className="text-lg font-medium">Start New Collab</span>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" className="group-hover:translate-x-1 transition-transform">
                                                     <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 12h16m-6-6l6 6-6 6" />
@@ -1160,11 +1167,11 @@ const Discussions = () => {
                                                 />
 
                                                 <div className="flex flex-col">
-                                                    <span className="text-accent text-xl font-medium">
+                                                    <span className="text-info text-xl font-medium">
                                                         {item.FirstName} {item.LastName}
                                                     </span>
 
-                                                    <span className="text-gray-800 text-sm pl-1">
+                                                    <span className="text-white text-sm pl-1">
                                                         {!item.lastMsg && <span>Hey! let's collab</span>}
                                                     </span>
                                                 </div>
@@ -1221,10 +1228,10 @@ const Discussions = () => {
 
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex justify-between items-center">
-                                                    <h3 className="text-accent font-semibold truncate">
+                                                    <h3 className="text-info font-semibold truncate">
                                                         Global Developers Community
                                                     </h3>
-                                                    <span className="text-xs text-accent">
+                                                    <span className="text-xs text-info">
                                                         {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                     </span>
                                                 </div>
@@ -1258,7 +1265,7 @@ const Discussions = () => {
 
                             <div className="hover:bg-base-300 hover:border hover:border-secondary bg-base-200 w-12 flex justify-center items-center rounded-full h-12 cursor-pointer" onClick={() => setIsProfileOpen(false)}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
-                                    <path fill="#bf630b" d="M20 11H7.83l5.59-5.59L12 4l-8 8l8 8l1.41-1.41L7.83 13H20z"></path>
+                                    <path fill="#fff" d="M20 11H7.83l5.59-5.59L12 4l-8 8l8 8l1.41-1.41L7.83 13H20z"></path>
                                 </svg>
                             </div>
 
@@ -1272,20 +1279,20 @@ const Discussions = () => {
                                 )}
                             </div>
                             <div className="flex flex-col items-center">
-                                <span className="text-accent text-4xl font-extrabold mt-3" >
+                                <span className="text-info text-4xl font-extrabold mt-3" >
                                     {chatingFirstName ? (
                                         <>{chatingFirstName} {chatingMiddleName} {chatingLastName} </>
                                     ) : (
                                         <>CodeSarthi User</>
                                     )}
                                 </span>
-                                <span className="text-gray-800 text-sm pl-1 flex justify-center items-center gap-1">
+                                <span className="text-info text-sm pl-1 flex justify-center items-center gap-1">
                                     {chatingUserId && (<div onClick={() => handleCopy(chatingUsername)}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24">
                                             <g fill="none">
-                                                <path fill="#bf630b" d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z" opacity={0.16}></path>
-                                                <path stroke="#bf630b" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 3H4v13"></path>
-                                                <path stroke="#bf630b" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z"></path>
+                                                <path fill="#fff" d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z" opacity={0.16}></path>
+                                                <path stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 3H4v13"></path>
+                                                <path stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z"></path>
                                             </g>
                                         </svg>
                                     </div>)}
@@ -1308,7 +1315,7 @@ const Discussions = () => {
 
                                 <div className="flex items-center gap-3  px-5 py-1 rounded-xl">
                                     {chatingUserId && (
-                                        <span className="text-lg text-accent font-medium flex justify-center items-center gap-3"><FaUniversity color="#370a00" />
+                                        <span className="text-lg text-info font-medium flex justify-center items-center gap-3"><FaUniversity color="#fff" />
                                             {chatingCollege}
                                         </span>
                                     )}
@@ -1316,7 +1323,7 @@ const Discussions = () => {
 
                                 <div className="flex items-center gap-3 px-5 py-1 rounded-xl">
                                     {chatingUserId && (
-                                        <span className="text-lg text-accent font-medium flex justify-center items-center gap-3"><BsPersonWorkspace color="#370a00" />
+                                        <span className="text-lg text-info font-medium flex justify-center items-center gap-3"><BsPersonWorkspace color="#fff" />
                                             {chatingProfession}
                                         </span>
                                     )}
@@ -1324,8 +1331,8 @@ const Discussions = () => {
 
                                 <div className="flex items-center gap-3 px-5 py-1 rounded-xl">
                                     {chatingUserId && (
-                                        <span className="text-lg text-accent font-medium flex justify-center items-center gap-3">
-                                            <IoBarChart color="#370a00" />
+                                        <span className="text-lg text-info font-medium flex justify-center items-center gap-3">
+                                            <IoBarChart color="#fff" />
                                             {chatingSkills?.join(", ")}
                                         </span>
                                     )}
@@ -1333,11 +1340,11 @@ const Discussions = () => {
                             </div>
                             {/* About */}
                             {chatingUserId && (
-                                <div className="mt-5 bg-base-100 border border-base-300 border-[3px] py-2 px-3 rounded-2xl m-3">
-                                    <h3 className="text-xl font-semibold mb-1 text-secondary">
+                                <div className="mt-5 bg-base-100 border border-base-300  py-2 px-3 rounded-2xl m-3">
+                                    <h3 className="text-xl font-semibold mb-1 text-white">
                                         About
                                     </h3>
-                                    <p className="text-accent leading-relaxed">
+                                    <p className="text-info leading-relaxed">
                                         {chatingAbout}
                                     </p>
                                 </div>
@@ -1345,11 +1352,11 @@ const Discussions = () => {
                             {chatingUserId && (
                                 <div>
 
-                                    <div className="text-gray-800 text-sm pl-1 flex justify-between px-3 pl-3 cursor-pointer items-center gap-1 bg-base-300  mx-10 border border-secondary border-[2px] py-2 rounded-2xl">
+                                    <div className="text-white text-sm pl-1 flex justify-between px-3 pl-3 cursor-pointer items-center gap-1 bg-base-300  mx-10 border border-secondary border-[2px] py-2 rounded-2xl">
                                         <div className="flex justify-center items-center gap-1 font-extrabold">
                                             <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 32 32">
-                                                <path fill="#bf630b" d="M26 20h-6v-2h6zm4 8h-6v-2h6zm-2-4h-6v-2h6z"></path>
-                                                <path fill="#bf630b" d="M17.003 20a4.9 4.9 0 0 0-2.404-4.173L22 3l-1.73-1l-7.577 13.126a5.7 5.7 0 0 0-5.243 1.503C3.706 20.24 3.996 28.682 4.01 29.04a1 1 0 0 0 1 .96h14.991a1 1 0 0 0 .6-1.8c-3.54-2.656-3.598-8.146-3.598-8.2m-5.073-3.003A3.11 3.11 0 0 1 15.004 20c0 .038.002.208.017.469l-5.9-2.624a3.8 3.8 0 0 1 2.809-.848M15.45 28A5.2 5.2 0 0 1 14 25h-2a6.5 6.5 0 0 0 .968 3h-2.223A16.6 16.6 0 0 1 10 24H8a17.3 17.3 0 0 0 .665 4H6c.031-1.836.29-5.892 1.803-8.553l7.533 3.35A13 13 0 0 0 17.596 28Z"></path>
+                                                <path fill="#fff" d="M26 20h-6v-2h6zm4 8h-6v-2h6zm-2-4h-6v-2h6z"></path>
+                                                <path fill="#fff" d="M17.003 20a4.9 4.9 0 0 0-2.404-4.173L22 3l-1.73-1l-7.577 13.126a5.7 5.7 0 0 0-5.243 1.503C3.706 20.24 3.996 28.682 4.01 29.04a1 1 0 0 0 1 .96h14.991a1 1 0 0 0 .6-1.8c-3.54-2.656-3.598-8.146-3.598-8.2m-5.073-3.003A3.11 3.11 0 0 1 15.004 20c0 .038.002.208.017.469l-5.9-2.624a3.8 3.8 0 0 1 2.809-.848M15.45 28A5.2 5.2 0 0 1 14 25h-2a6.5 6.5 0 0 0 .968 3h-2.223A16.6 16.6 0 0 1 10 24H8a17.3 17.3 0 0 0 .665 4H6c.031-1.836.29-5.892 1.803-8.553l7.533 3.35A13 13 0 0 0 17.596 28Z"></path>
                                             </svg> Clear chat
                                         </div>
                                         <div>
@@ -1358,19 +1365,19 @@ const Discussions = () => {
 
                                     </div>
 
-                                    <div className="text-gray-800 text-sm pl-1 flex justify-between px-3 pl-3 items-center gap-1  mt-2 bg-base-300 mx-10 border border-secondary border-[2px] py-2 rounded-2xl">
+                                    <div className="text-white text-sm pl-1 flex justify-between px-3 pl-3 items-center gap-1  mt-2 bg-base-300 mx-10 border border-secondary border-[2px] py-2 rounded-2xl">
                                         <div className="flex justify-center items-center gap-1">
                                             <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 16 16">
-                                                <path fill="#bf630b" d="M4 3a2 2 0 0 0-2 2v.201l6 3.231l6-3.23V5a2 2 0 0 0-2-2zm10 3.337L8.237 9.44a.5.5 0 0 1-.474 0L2 6.337V11a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2z"></path>
+                                                <path fill="#fff" d="M4 3a2 2 0 0 0-2 2v.201l6 3.231l6-3.23V5a2 2 0 0 0-2-2zm10 3.337L8.237 9.44a.5.5 0 0 1-.474 0L2 6.337V11a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2z"></path>
                                             </svg>   {chatingGmail}
                                         </div>
                                         <div>
                                             <div onClick={() => handleCopy(chatingGmail)}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24">
                                                     <g fill="none">
-                                                        <path fill="#bf630b" d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z" opacity={0.16}></path>
-                                                        <path stroke="#bf630b" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 3H4v13"></path>
-                                                        <path stroke="#bf630b" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z"></path>
+                                                        <path fill="#fff" d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z" opacity={0.16}></path>
+                                                        <path stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 3H4v13"></path>
+                                                        <path stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z"></path>
                                                     </g>
                                                 </svg>
                                             </div>
@@ -1379,16 +1386,18 @@ const Discussions = () => {
                                     </div>
 
 
-                                    <div className="text-gray-800 text-sm pl-1 flex justify-between px-3 pl-3 items-center gap-1 bg-base-300 mx-10 mt-2 border border-secondary border-[2px] py-2 rounded-2xl cursor-pointer ">
+                                    <div className="text-white text-sm  flex justify-between px-3 pl-3 items-center gap-1 bg-base-300 mx-10 mt-2 border border-secondary  py-2 rounded-2xl cursor-pointer ">
                                         <div className="flex justify-center items-center gap-1">
                                             <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
-                                                <path fill="#bf630b" d="M12 2c5.5 0 10 4.5 10 10s-4.5 10-10 10S2 17.5 2 12S6.5 2 12 2m0 2c-1.9 0-3.6.6-4.9 1.7l11.2 11.2c1-1.4 1.7-3.1 1.7-4.9c0-4.4-3.6-8-8-8m4.9 14.3L5.7 7.1C4.6 8.4 4 10.1 4 12c0 4.4 3.6 8 8 8c1.9 0 3.6-.6 4.9-1.7"></path>
-                                            </svg> <span className="font-extrabold">Block</span>  <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 12 24">
-                                                <defs>
-                                                    <path id="SVG1pzpbdYY" fill="#bf630b" d="m7.588 12.43l-1.061 1.06L.748 7.713a.996.996 0 0 1 0-1.413L6.527.52l1.06 1.06l-5.424 5.425z"></path>
-                                                </defs>
-                                                <use fillRule="evenodd" href="#SVG1pzpbdYY" transform="rotate(-180 5.02 9.505)"></use>
-                                            </svg>{chatingUsername}
+                                                <path fill="#fff" d="M12 2c5.5 0 10 4.5 10 10s-4.5 10-10 10S2 17.5 2 12S6.5 2 12 2m0 2c-1.9 0-3.6.6-4.9 1.7l11.2 11.2c1-1.4 1.7-3.1 1.7-4.9c0-4.4-3.6-8-8-8m4.9 14.3L5.7 7.1C4.6 8.4 4 10.1 4 12c0 4.4 3.6 8 8 8c1.9 0 3.6-.6 4.9-1.7"></path>
+                                            </svg> <span className="font-extrabold">Block</span>
+
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 12 24">
+                                                <path d="M0 0h12v24H0z" fill="none" />
+                                                <path fill="#fff" fill-rule="evenodd" d="M10.157 12.711L4.5 18.368l-1.414-1.414l4.95-4.95l-4.95-4.95L4.5 5.64l5.657 5.657a1 1 0 0 1 0 1.414" />
+                                            </svg>
+
+                                            {chatingUsername}
                                         </div>
                                         <div>
 
@@ -1397,19 +1406,24 @@ const Discussions = () => {
                                     </div>
 
 
-                                    <div className="text-gray-800 text-sm pl-1 flex justify-between px-3 pl-3 items-center gap-1 bg-base-300 mx-10 my-2 border border-secondary border-[2px] py-2 rounded-2xl cursor-pointer ">
+                                    <div className="text-white text-sm pl-1 flex justify-between px-3 pl-3 items-center gap-1 bg-base-300 mx-10 my-2 border border-secondary border-[2px] py-2 rounded-2xl cursor-pointer ">
                                         <div className="flex justify-center items-center gap-1">
                                             <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
                                                 <g fill="none" fillRule="evenodd">
                                                     <path d="m12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036q-.016-.004-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.016-.018m.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01z"></path>
-                                                    <path fill="#bf630b" d="M12 7a6 6 0 0 1 5.996 5.775L18 13v7h1a1 1 0 0 1 .117 1.993L19 22H5a1 1 0 0 1-.117-1.993L5 20h1v-7a6 6 0 0 1 6-6m-.857 4.986L9.652 14.47a1.01 1.01 0 0 0 .866 1.53h1.216l-.591.985a1 1 0 0 0 1.714 1.03l1.491-2.485a1.01 1.01 0 0 0-.866-1.53h-1.216l.591-.985a1 1 0 0 0-1.714-1.03ZM5.542 5.139l.094.083l.707.707a1 1 0 0 1-1.32 1.497l-.094-.083l-.707-.707a1 1 0 0 1 1.32-1.497m14.236.083a1 1 0 0 1 0 1.414l-.707.707a1 1 0 1 1-1.414-1.414l.707-.707a1 1 0 0 1 1.414 0M12 2a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1"></path>
+                                                    <path fill="#fff" d="M12 7a6 6 0 0 1 5.996 5.775L18 13v7h1a1 1 0 0 1 .117 1.993L19 22H5a1 1 0 0 1-.117-1.993L5 20h1v-7a6 6 0 0 1 6-6m-.857 4.986L9.652 14.47a1.01 1.01 0 0 0 .866 1.53h1.216l-.591.985a1 1 0 0 0 1.714 1.03l1.491-2.485a1.01 1.01 0 0 0-.866-1.53h-1.216l.591-.985a1 1 0 0 0-1.714-1.03ZM5.542 5.139l.094.083l.707.707a1 1 0 0 1-1.32 1.497l-.094-.083l-.707-.707a1 1 0 0 1 1.32-1.497m14.236.083a1 1 0 0 1 0 1.414l-.707.707a1 1 0 1 1-1.414-1.414l.707-.707a1 1 0 0 1 1.414 0M12 2a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1"></path>
                                                 </g>
-                                            </svg><span className="font-extrabold">Report</span>  <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 12 24">
-                                                <defs>
-                                                    <path id="SVG1pzpbdYY" fill="#bf630b" d="m7.588 12.43l-1.061 1.06L.748 7.713a.996.996 0 0 1 0-1.413L6.527.52l1.06 1.06l-5.424 5.425z"></path>
-                                                </defs>
-                                                <use fillRule="evenodd" href="#SVG1pzpbdYY" transform="rotate(-180 5.02 9.505)"></use>
-                                            </svg>{chatingUsername}
+                                            </svg><span className="font-extrabold">Report</span>
+
+
+
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 12 24">
+                                                <path d="M0 0h12v24H0z" fill="none" />
+                                                <path fill="#fff" fill-rule="evenodd" d="M10.157 12.711L4.5 18.368l-1.414-1.414l4.95-4.95l-4.95-4.95L4.5 5.64l5.657 5.657a1 1 0 0 1 0 1.414" />
+                                            </svg>
+
+
+                                            {chatingUsername}
                                         </div>
                                         <div>
 
@@ -1468,10 +1482,10 @@ const Discussions = () => {
 
                                 <div className="flex-1 min-w-0">
                                     <div className="flex justify-between items-center">
-                                        <h3 className="text-accent font-semibold truncate">
+                                        <h3 className="text-info font-semibold truncate">
                                             {item.atFrontUser?.firstName || "CodeSarthi"} {item.atFrontUser?.lastName || "User"}
                                         </h3>
-                                        <span className="text-xs text-accent">
+                                        <span className="text-xs text-info">
                                             {formatRelativeDate(item.lastMsgAt)}
 
                                         </span>
@@ -1543,11 +1557,11 @@ const Discussions = () => {
                                 />
 
                                 <div className="flex flex-col">
-                                    <span className="text-accent text-xl font-medium">
+                                    <span className="text-info text-xl font-medium">
                                         {item.FirstName} {item.LastName}
                                     </span>
 
-                                    <span className="text-gray-800 text-sm pl-1">
+                                    <span className="text-white text-sm pl-1">
                                         {!item.lastMsg && <span>Hey! let's collab</span>}
                                     </span>
                                 </div>
@@ -1566,18 +1580,21 @@ const Discussions = () => {
 
 
                 {!chatActive ? (
-                    <div className="w-full  h-[calc(100vh-75px)] rounded-3xl bg-base-100 border border-base-300 border-[3px] flex flex-col overflow-hidden  relative hidden lg:flex">
+                    <div className="w-full  h-[calc(100vh-75px)] rounded-3xl bg-base-100  border-base-300 border-[3px]  flex-col overflow-hidden  relative hidden lg:flex">
                         <div className="flex-1 flex items-center justify-center ">
                             <div className="text-center">
-                                <div className="w-[200px] h-[200px] mx-auto mb-4 rounded-full bg-base-300 border border-secondary border-[2px] flex items-center justify-center">
+                                <div className="w-[200px] h-[200px] mx-auto mb-4 rounded-full bg-base-300  border-secondary border-[2px] flex items-center justify-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" width={100} height={100} viewBox="0 0 24 24" >
-                                        <path fill="#523a1eff" d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2z" />
+                                        <path fill="#fff" d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2z" />
                                     </svg>
                                 </div>
-                                <h3 className="text-3xl font-light text-secondary">Select a conversation to start chatting</h3>
-                                <p className="text-xl text-accent mt-2">Choose from your existing connections</p>
+                                <h3 className="text-3xl font-light text-white">Select a conversation to start chatting</h3>
+                                <p className="text-xl text-info mt-2">Choose from your existing connections</p>
                             </div>
                         </div>
+
+
+
                     </div>
                 ) : isLoadingChats ? (
                     <div className="w-full  h-[calc(100vh-75px)] rounded-3xl bg-base-100 border border-base-300 border-[3px] flex flex-col overflow-hidden  relative">
@@ -1586,7 +1603,7 @@ const Discussions = () => {
                                 CodeSarthi
                             </h2>
                             <svg xmlns="http://www.w3.org/2000/svg" width={100} height={100} viewBox="0 0 24 24">
-                                <circle cx={4} cy={12} r={3} fill="#764b1aff"><animate id="SVGKiXXedfO" attributeName="cy" begin="0;SVGgLulOGrw.end+0.25s" calcMode="spline" dur="0.6s" keySplines=".33,.66,.66,1;.33,0,.66,.33" values="12;6;12"></animate></circle><circle cx={12} cy={12} r={3} fill="#764b1aff"><animate attributeName="cy" begin="SVGKiXXedfO.begin+0.1s" calcMode="spline" dur="0.6s" keySplines=".33,.66,.66,1;.33,0,.66,.33" values="12;6;12"></animate></circle><circle cx={20} cy={12} r={3} fill="#764b1aff"><animate id="SVGgLulOGrw" attributeName="cy" begin="SVGKiXXedfO.begin+0.2s" calcMode="spline" dur="0.6s" keySplines=".33,.66,.66,1;.33,0,.66,.33" values="12;6;12"></animate></circle></svg>
+                                <circle cx={4} cy={12} r={3} fill="#fff"><animate id="SVGKiXXedfO" attributeName="cy" begin="0;SVGgLulOGrw.end+0.25s" calcMode="spline" dur="0.6s" keySplines=".33,.66,.66,1;.33,0,.66,.33" values="12;6;12"></animate></circle><circle cx={12} cy={12} r={3} fill="#fff"><animate attributeName="cy" begin="SVGKiXXedfO.begin+0.1s" calcMode="spline" dur="0.6s" keySplines=".33,.66,.66,1;.33,0,.66,.33" values="12;6;12"></animate></circle><circle cx={20} cy={12} r={3} fill="#fff"><animate id="SVGgLulOGrw" attributeName="cy" begin="SVGKiXXedfO.begin+0.2s" calcMode="spline" dur="0.6s" keySplines=".33,.66,.66,1;.33,0,.66,.33" values="12;6;12"></animate></circle></svg>
 
                         </div >
                     </div>
@@ -1597,7 +1614,7 @@ const Discussions = () => {
                             <div className="sticky top-0 z-20 w-full border-b border-secondary flex items-center justify-between px-2 py-2 bg-base-100 lg:px-6 ">
                                 <div className="flex gap-2">
                                     <div onClick={() => { setchatActive(false) }} className="w-12 h-12 rounded-full object-cover bg-base-200 flex items-center justify-center lg:hidden" >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 512 512"><path fill="none" stroke="#884f06" strokeLinecap="round" strokeLinejoin="round" strokeWidth={48} d="M244 400L100 256l144-144M120 256h292"></path></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 512 512"><path fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={48} d="M244 400L100 256l144-144M120 256h292"></path></svg>
                                     </div>
 
 
@@ -1616,7 +1633,7 @@ const Discussions = () => {
                                             )}
                                         </div>
                                         <div>
-                                            <div className="text-secondary text-xl font-semibold">
+                                            <div className="text-white text-xl font-semibold">
 
                                                 {chatingUserId ? (chatingFirstName + " " + (chatingMiddleName ? chatingMiddleName : "") + " " + chatingLastName) : ("CodeSarthi User")}
                                             </div>
@@ -1647,15 +1664,15 @@ const Discussions = () => {
                                 {/* 3 DOT MENU - Premium */}
                                 <button onClick={() => { setIsProfileOpen(true); }} className="p-2 hover:bg-base-300 rounded-xl transition-all duration-300 group focus:outline-none focus:ring-0 z-">
                                     <svg xmlns="http://www.w3.org/2000/svg" width={25} height={25} viewBox="0 0 24 24" >
-                                        <circle cx="12" cy="5" r="3" fill="#764b1aff" />
-                                        <circle cx="12" cy="12" r="3" fill="#764b1aff" />
-                                        <circle cx="12" cy="19" r="3" fill="#764b1aff" />
+                                        <circle cx="12" cy="5" r="3" fill="#fff" />
+                                        <circle cx="12" cy="12" r="3" fill="#fff" />
+                                        <circle cx="12" cy="19" r="3" fill="#fff" />
                                     </svg>
                                 </button>
                             </div>
 
                             {/* MESSAGES AREA - Premium Bubbles */}
-                            <div className="flex-1 overflow-y-auto p-6 space-y-2 custom-scrollbar bg-base-100 " style={{ backgroundImage: "url('https://res.cloudinary.com/dggoaxqxl/image/upload/v1778990394/__f3g2d3.webp')", backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }} onClick={() => { setShowMenu(false) }}>
+                            <div className="flex-1 overflow-y-auto p-6 space-y-2 custom-scrollbar bg-base-100 " style={{ backgroundImage: "url('https://res.cloudinary.com/dj0ivep44/image/upload/v1780371583/ChatGPT_Image_Jun_2_2026_09_08_29_AM_txc0td.webp')", backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }} onClick={() => { setShowMenu(false) }}>
                                 {messages.map((msg, index) => {
                                     const isMe = msg?.sender?._id === currentUserId;
 
@@ -1665,7 +1682,7 @@ const Discussions = () => {
                                             {!(msg.deletedFor?.includes(user._id)) && (
                                                 <div className="relative max-w-[70%] group">
 
-                                                    <div className="bg-base-100 text-accent px-4 md:px-5 py-2.5 md:py-3 rounded-2xl rounded-br-md transition-all duration-300  hover:scale-[1.01] font-bold">
+                                                    <div className="bg-base-100 text-info px-4 md:px-5 py-2.5 md:py-3 rounded-2xl rounded-br-md transition-all duration-300  hover:scale-[1.01] font-bold">
 
                                                         <div className="relative flex items-center gap-2">
 
@@ -1720,7 +1737,7 @@ const Discussions = () => {
                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                                                         className="text-white/50 hover:text-white transition cursor-pointer "
                                                                     >
-                                                                        <path fill="#764b1aff" d="M12 17a1.72 1.72 0 0 1-1.33-.64l-4.21-5.1a2.1 2.1 0 0 1-.26-2.21A1.76 1.76 0 0 1 7.79 8h8.42a1.76 1.76 0 0 1 1.59 1.05a2.1 2.1 0 0 1-.26 2.21l-4.21 5.1A1.72 1.72 0 0 1 12 17" />
+                                                                        <path fill="#fff" d="M12 17a1.72 1.72 0 0 1-1.33-.64l-4.21-5.1a2.1 2.1 0 0 1-.26-2.21A1.76 1.76 0 0 1 7.79 8h8.42a1.76 1.76 0 0 1 1.59 1.05a2.1 2.1 0 0 1-.26 2.21l-4.21 5.1A1.72 1.72 0 0 1 12 17" />
                                                                     </svg>
                                                                 </button>
                                                             )}
@@ -1728,16 +1745,16 @@ const Discussions = () => {
 
                                                         {/* Time + Status */}
                                                         <div className="flex justify-end items-center gap-1 mt-1">
-                                                            <span className="text-[10px] text-accent font-light">
+                                                            <span className="text-[10px] text-info font-light">
                                                                 {new Date(msg.createdAt).toLocaleTimeString([], {
                                                                     hour: "2-digit",
                                                                     minute: "2-digit",
                                                                 })}
                                                             </span>
 
-                                                            <span className="text-accent flex items-center">
-                                                                {msg.status === "sending" && <span><svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24"><path fill="none" stroke="#764b1aff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="m5 14l3.5 3.5L19 6.5"></path></svg></span>}
-                                                                {msg.status === "sent" && <span><svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24"><path fill="none" stroke="#764b1aff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.5 13.833L6 17.5l1.024-1.073M16.5 6.5l-6.063 6.352m-2.937.981L11 17.5l10.5-11"></path></svg></span>}
+                                                            <span className="text-info flex items-center">
+                                                                {msg.status === "sending" && <span><svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24"><path fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="m5 14l3.5 3.5L19 6.5"></path></svg></span>}
+                                                                {msg.status === "sent" && <span><svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24"><path fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.5 13.833L6 17.5l1.024-1.073M16.5 6.5l-6.063 6.352m-2.937.981L11 17.5l10.5-11"></path></svg></span>}
                                                                 {msg.status === "failed" && <span><svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 16 16"><g fill="none"><path fill="url(#SVG46elwcsk)" d="M2 8a6 6 0 1 1 12 0A6 6 0 0 1 2 8"></path><path fill="url(#SVGQMDY1c6m)" d="M8 10a.75.75 0 1 0 0 1.5a.75.75 0 0 0 0-1.5m0-5.5a.5.5 0 0 0-.492.41L7.5 5v3.5l.008.09a.5.5 0 0 0 .984 0L8.5 8.5V5l-.008-.09A.5.5 0 0 0 8 4.5"></path><defs><linearGradient id="SVG46elwcsk" x1={3.875} x2={11.75} y1={0.125} y2={15.125} gradientUnits="userSpaceOnUse"><stop stopColor="#ffcd0f"></stop><stop offset={1} stopColor="#fe8401"></stop></linearGradient><linearGradient id="SVGQMDY1c6m" x1={6} x2={9.213} y1={4.5} y2={11.844} gradientUnits="userSpaceOnUse"><stop stopColor="#4a4a4a"></stop><stop offset={1} stopColor="#212121"></stop></linearGradient></defs></g></svg></span>}
                                                             </span>
                                                         </div>
@@ -1756,7 +1773,7 @@ const Discussions = () => {
                                             {!(msg.deletedFor?.includes(user._id)) && (
                                                 <div className="relative max-w-[70%] group">
 
-                                                    <div className="bg-base-300 text-accent px-4 py-2.5 rounded-2xl rounded-bl-md border border-white/5 transition-all duration-300 ">
+                                                    <div className="bg-base-300 text-info px-4 py-2.5 rounded-2xl rounded-bl-md border border-white/5 transition-all duration-300 ">
 
 
                                                         <div className="relative flex items-center gap-2">
@@ -1810,7 +1827,7 @@ const Discussions = () => {
                                                             }
                                                         </div>
                                                         <div className="text-left mt-1">
-                                                            <span className="text-[10px] text-accent">
+                                                            <span className="text-[10px] text-info">
                                                                 {new Date(msg.createdAt).toLocaleTimeString([], {
                                                                     hour: "2-digit",
                                                                     minute: "2-digit",
@@ -1890,7 +1907,7 @@ hover:bg-white/10 active:scale-95`} onClick={() => { setActiveEmojiFeild("smiley
                                             </button>
                                         </div>
 
-                                        <h2 className="text-white text-xl font-extrabold text-gray-800 m-3">{activeEFeild}</h2>
+                                        <h2 className="text-white text-xl font-extrabold text-white m-3">{activeEFeild}</h2>
 
                                         {/* Emoji Grid */}
                                         <div className="grid grid-cols-12 gap-2  h-[380px] overflow-y-auto pr-2 custom-scrollbar">
@@ -1911,20 +1928,20 @@ hover:bg-white/10 active:scale-95`} onClick={() => { setActiveEmojiFeild("smiley
                             {isMsgOptionTabOpen && (
                                 <div ref={pickerRef} className="border-t border-t-secondary border-[3px] p-3 md:p-4 bg-white/[0.03]  flex gap-[20px] items-center justify-center">
                                     <div className="flex items-center justify-center gap-2">
-                                        <h2 className="text-green-500 flex items-center gap-1"><span className="text-accent">{msgBY}</span>  </h2>
+                                        <h2 className="text-green-500 flex items-center gap-1"><span className="text-info">{msgBY}</span>  </h2>
                                         <div className="border border-gray-500  rounded-full ">
                                             <img src={msgProfile} alt="" className="w-[50px] rounded-full" />
                                         </div>
                                     </div>
                                     <div className="cursor-pointer" onClick={() => { setIsCopied(true); handleCopy(msg) }}>{isCopied ? (
-                                        <div className="border border-base-300 border-[3px] bg-base-100  px-4 py-2 rounded-3xl text-accent flex items-center jutify-center gap-1"> <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 16 16"><polyline fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} points="2.75 8.75 6.25 12.25 13.25 4.75"></polyline></svg> Copied</div>) : (<div className="border border-base-300 border-[3px] bg-base-100 px-4 py-2 rounded-3xl hover:bg-gray-400/30 flex items-center jutify-center gap-1 text-accent"> <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24"><g fill="none"><path fill="currentColor" d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z" opacity={0.16}></path><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 3H4v13"></path><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z"></path></g></svg>Copy</div>)}</div>
-                                    <div className="border border-base-300 border-[3px] bg-base-100 text-accent  px-4 py-2 rounded-3xl hover:bg-gray-400/30 flex items-center jutify-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 16 16"><path fill="currentColor" d="M13 7a6 6 0 1 0-5.746 5.995A4.5 4.5 0 0 1 7.027 12H7a5 5 0 1 1 5-5v.027q.518.06.995.227Q13 7.128 13 7m-5.888 3.498q.127-.554.38-1.046q-.24.047-.492.048c-.74 0-1.405-.321-1.864-.833a.5.5 0 0 0-.745.666a3.5 3.5 0 0 0 2.72 1.165M6 6a.75.75 0 1 1-1.5 0A.75.75 0 0 1 6 6m2.75.75a.75.75 0 1 0 0-1.5a.75.75 0 0 0 0 1.5M15 11.5a3.5 3.5 0 1 1-7 0a3.5 3.5 0 0 1 7 0m-3-2a.5.5 0 0 0-1 0V11H9.5a.5.5 0 0 0 0 1H11v1.5a.5.5 0 0 0 1 0V12h1.5a.5.5 0 0 0 0-1H12z"></path></svg>React</div>
-                                    <div className="border border-base-300 border-[3px] bg-base-100 text-accent px-4 py-2 rounded-3xl hover:bg-gray-400/30 flex items-center jutify-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24"><path fill="currentColor" d="M18.483 16.767A8.5 8.5 0 0 1 8.118 7.081a1 1 0 0 1-.113.097c-.28.213-.63.292-1.33.45l-.635.144c-2.46.557-3.69.835-3.983 1.776c-.292.94.546 1.921 2.223 3.882l.434.507c.476.557.715.836.822 1.18c.107.345.071.717-.001 1.46l-.066.677c-.253 2.617-.38 3.925.386 4.506s1.918.052 4.22-1.009l.597-.274c.654-.302.981-.452 1.328-.452s.674.15 1.329.452l.595.274c2.303 1.06 3.455 1.59 4.22 1.01c.767-.582.64-1.89.387-4.507z"></path><path fill="currentColor" d="m9.153 5.408l-.328.588c-.36.646-.54.969-.82 1.182q.06-.045.113-.097a8.5 8.5 0 0 0 10.366 9.686l-.02-.19c-.071-.743-.107-1.115 0-1.46c.107-.344.345-.623.822-1.18l.434-.507c1.677-1.96 2.515-2.941 2.222-3.882c-.292-.941-1.522-1.22-3.982-1.776l-.636-.144c-.699-.158-1.049-.237-1.33-.45c-.28-.213-.46-.536-.82-1.182l-.327-.588C13.58 3.136 12.947 2 12 2s-1.58 1.136-2.847 3.408" opacity={0.5}></path></svg>Star</div>
+                                        <div className="border border-base-300 border-[3px] bg-base-100  px-4 py-2 rounded-3xl text-info flex items-center jutify-center gap-1"> <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 16 16"><polyline fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} points="2.75 8.75 6.25 12.25 13.25 4.75"></polyline></svg> Copied</div>) : (<div className="border border-base-300 border-[3px] bg-base-100 px-4 py-2 rounded-3xl hover:bg-gray-400/30 flex items-center jutify-center gap-1 text-info"> <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24"><g fill="none"><path fill="currentColor" d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z" opacity={0.16}></path><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 3H4v13"></path><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z"></path></g></svg>Copy</div>)}</div>
+                                    <div className="border border-base-300 border-[3px] bg-base-100 text-info  px-4 py-2 rounded-3xl hover:bg-gray-400/30 flex items-center jutify-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 16 16"><path fill="currentColor" d="M13 7a6 6 0 1 0-5.746 5.995A4.5 4.5 0 0 1 7.027 12H7a5 5 0 1 1 5-5v.027q.518.06.995.227Q13 7.128 13 7m-5.888 3.498q.127-.554.38-1.046q-.24.047-.492.048c-.74 0-1.405-.321-1.864-.833a.5.5 0 0 0-.745.666a3.5 3.5 0 0 0 2.72 1.165M6 6a.75.75 0 1 1-1.5 0A.75.75 0 0 1 6 6m2.75.75a.75.75 0 1 0 0-1.5a.75.75 0 0 0 0 1.5M15 11.5a3.5 3.5 0 1 1-7 0a3.5 3.5 0 0 1 7 0m-3-2a.5.5 0 0 0-1 0V11H9.5a.5.5 0 0 0 0 1H11v1.5a.5.5 0 0 0 1 0V12h1.5a.5.5 0 0 0 0-1H12z"></path></svg>React</div>
+                                    <div className="border border-base-300 border-[3px] bg-base-100 text-info px-4 py-2 rounded-3xl hover:bg-gray-400/30 flex items-center jutify-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24"><path fill="currentColor" d="M18.483 16.767A8.5 8.5 0 0 1 8.118 7.081a1 1 0 0 1-.113.097c-.28.213-.63.292-1.33.45l-.635.144c-2.46.557-3.69.835-3.983 1.776c-.292.94.546 1.921 2.223 3.882l.434.507c.476.557.715.836.822 1.18c.107.345.071.717-.001 1.46l-.066.677c-.253 2.617-.38 3.925.386 4.506s1.918.052 4.22-1.009l.597-.274c.654-.302.981-.452 1.328-.452s.674.15 1.329.452l.595.274c2.303 1.06 3.455 1.59 4.22 1.01c.767-.582.64-1.89.387-4.507z"></path><path fill="currentColor" d="m9.153 5.408l-.328.588c-.36.646-.54.969-.82 1.182q.06-.045.113-.097a8.5 8.5 0 0 0 10.366 9.686l-.02-.19c-.071-.743-.107-1.115 0-1.46c.107-.344.345-.623.822-1.18l.434-.507c1.677-1.96 2.515-2.941 2.222-3.882c-.292-.941-1.522-1.22-3.982-1.776l-.636-.144c-.699-.158-1.049-.237-1.33-.45c-.28-.213-.46-.536-.82-1.182l-.327-.588C13.58 3.136 12.947 2 12 2s-1.58 1.136-2.847 3.408" opacity={0.5}></path></svg>Star</div>
 
                                     {msgById === user._id && (
 
 
-                                        <button className="border border-base-300 border-[3px] bg-base-100 text-accent px-4 py-2 rounded-3xl hover:bg-gray-400/30 flex items-center jutify-center gap-1 cursor-pointer" onClick={() => { setDeleteType("Everyone"); }}>
+                                        <button className="border border-base-300 border-[3px] bg-base-100 text-info px-4 py-2 rounded-3xl hover:bg-gray-400/30 flex items-center jutify-center gap-1 cursor-pointer" onClick={() => { setDeleteType("Everyone"); }}>
 
                                             {/* bin */}
                                             {deleteEveryoneStatus === "toDelete" && (
@@ -1934,8 +1951,8 @@ hover:bg-white/10 active:scale-95`} onClick={() => { setActiveEmojiFeild("smiley
                                             {/* Spinner for loading */}
                                             {deleteEveryoneStatus === "deleting" && (
                                                 <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
-                                                    <path fill="#bf630b" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path>
-                                                    <path fill="#bf630b" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z">
+                                                    <path fill="#fff" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path>
+                                                    <path fill="#fff" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z">
                                                         <animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform>
                                                     </path>
                                                 </svg>
@@ -1943,14 +1960,14 @@ hover:bg-white/10 active:scale-95`} onClick={() => { setActiveEmojiFeild("smiley
                                             {/* DELETED */}
                                             {deleteEveryoneStatus === "deleted" && (
                                                 <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 16 16">
-                                                    <polyline fill="none" stroke="#bf630b" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} points="2.75 8.75 6.25 12.25 13.25 4.75"></polyline>
+                                                    <polyline fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} points="2.75 8.75 6.25 12.25 13.25 4.75"></polyline>
                                                 </svg>
                                             )}
 
                                             Delete For Everyone
                                         </button>
                                     )}
-                                    <div className="border border-base-300 border-[3px] bg-base-100 text-accent px-4 py-2 rounded-3xl hover:bg-gray-400/30 flex items-center jutify-center gap-1 cursor-pointer" onClick={() => { setDeleteType("Me") }}>
+                                    <div className="border border-base-300 border-[3px] bg-base-100 text-info px-4 py-2 rounded-3xl hover:bg-gray-400/30 flex items-center jutify-center gap-1 cursor-pointer" onClick={() => { setDeleteType("Me") }}>
                                         {/* bin */}
                                         {deleteMeStatus === "toDelete" && (
                                             <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth={1.5} d="m19.5 5.5l-.62 10.025c-.158 2.561-.237 3.842-.88 4.763a4 4 0 0 1-1.2 1.128c-.957.584-2.24.584-4.806.584c-2.57 0-3.855 0-4.814-.585a4 4 0 0 1-1.2-1.13c-.642-.922-.72-2.205-.874-4.77L4.5 5.5M9 11.735h6m-4.5 3.919h3M3 5.5h18m-4.945 0l-.682-1.408c-.454-.936-.68-1.403-1.071-1.695a2 2 0 0 0-.275-.172C13.594 2 13.074 2 12.034 2c-1.065 0-1.598 0-2.039.234a2 2 0 0 0-.278.18c-.396.303-.617.788-1.059 1.757L8.053 5.5"></path></svg>
@@ -1959,8 +1976,8 @@ hover:bg-white/10 active:scale-95`} onClick={() => { setActiveEmojiFeild("smiley
                                         {/* Spinner for loading */}
                                         {deleteMeStatus === "deleting" && (
                                             <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
-                                                <path fill="#bf630b" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path>
-                                                <path fill="#bf630b" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z">
+                                                <path fill="#fff" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path>
+                                                <path fill="#fff" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z">
                                                     <animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform>
                                                 </path>
                                             </svg>
@@ -1968,7 +1985,7 @@ hover:bg-white/10 active:scale-95`} onClick={() => { setActiveEmojiFeild("smiley
                                         {/* DELETED */}
                                         {deleteMeStatus === "deleted" && (
                                             <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 16 16">
-                                                <polyline fill="none" stroke="#bf630b" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} points="2.75 8.75 6.25 12.25 13.25 4.75"></polyline>
+                                                <polyline fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} points="2.75 8.75 6.25 12.25 13.25 4.75"></polyline>
                                             </svg>
                                         )}
                                         Delete For Me
@@ -1989,7 +2006,7 @@ hover:bg-white/10 active:scale-95`} onClick={() => { setActiveEmojiFeild("smiley
                                                     return (
                                                         <div
                                                             key={item.tag + index}
-                                                            className="px-4 py-2 hover:bg-white/10 cursor-pointer text-secondary-content"
+                                                            className="px-4 py-2 hover:bg-white/10 cursor-pointer text-white-content"
                                                             onClick={() => {
                                                                 formatWithMonaco();
                                                                 setShowCodeEditor(true);
@@ -2008,7 +2025,7 @@ hover:bg-white/10 active:scale-95`} onClick={() => { setActiveEmojiFeild("smiley
                                                 return (
                                                     <div
                                                         key={item.tag + index}
-                                                        className="px-4 py-2 hover:bg-white/10 cursor-pointer text-secondary-content"
+                                                        className="px-4 py-2 hover:bg-white/10 cursor-pointer text-white-content"
                                                         onClick={() => {
                                                             setShowMenu(false);
                                                             setActiveMenuTag(item.tag);
@@ -2027,13 +2044,13 @@ hover:bg-white/10 active:scale-95`} onClick={() => { setActiveEmojiFeild("smiley
 
                                     <button
                                         onClick={() => setShowMenu(prev => !prev)}
-                                        className="p-1.5 hover:bg-base-300 rounded-xl transition-all duration-300 text-accent border-2 border-secondary"
+                                        className="p-1.5 hover:bg-base-300 rounded-xl transition-all duration-300 text-info border-2 border-secondary"
                                     >
                                         {activeItem.icon}
                                     </button>
                                     <button className="p-2.5 hover:bg-base-300 rounded-xl transition-all mr-3 duration-300 text-white/60 hover:text-white/90" onClick={() => { setShowPicker((prev) => !prev); setShowMenu(false) }}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width={25} height={25} viewBox="0 0 16 16">
-                                            <path fill="#764b1aff" d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16M2.31 5.243A1 1 0 0 1 3.28 4H6a1 1 0 0 1 1 1v.116A4.2 4.2 0 0 1 8 5c.35 0 .69.04 1 .116V5a1 1 0 0 1 1-1h2.72a1 1 0 0 1 .97 1.243l-.311 1.242A2 2 0 0 1 11.439 8H11a2 2 0 0 1-1.994-1.839A3 3 0 0 0 8 6c-.393 0-.74.064-1.006.161A2 2 0 0 1 5 8h-.438a2 2 0 0 1-1.94-1.515zM4.969 9.75A3.5 3.5 0 0 0 8 11.5a3.5 3.5 0 0 0 3.032-1.75a.5.5 0 1 1 .866.5A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1-3.898-2.25a.5.5 0 0 1 .866-.5z" />
+                                            <path fill="#fff" d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16M2.31 5.243A1 1 0 0 1 3.28 4H6a1 1 0 0 1 1 1v.116A4.2 4.2 0 0 1 8 5c.35 0 .69.04 1 .116V5a1 1 0 0 1 1-1h2.72a1 1 0 0 1 .97 1.243l-.311 1.242A2 2 0 0 1 11.439 8H11a2 2 0 0 1-1.994-1.839A3 3 0 0 0 8 6c-.393 0-.74.064-1.006.161A2 2 0 0 1 5 8h-.438a2 2 0 0 1-1.94-1.515zM4.969 9.75A3.5 3.5 0 0 0 8 11.5a3.5 3.5 0 0 0 3.032-1.75a.5.5 0 1 1 .866.5A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1-3.898-2.25a.5.5 0 0 1 .866-.5z" />
                                         </svg>
                                     </button>
                                     {/* INPUT */}
@@ -2045,7 +2062,7 @@ hover:bg-white/10 active:scale-95`} onClick={() => { setActiveEmojiFeild("smiley
                                             onKeyDown={handleKeyDown}
                                             type="text"
                                             placeholder="Type a message..."
-                                            className="w-full text-accent bg-white/5 border border-base-300 border-[3px]
+                                            className="w-full text-info bg-white/5 border border-base-300 border-[3px]
 focus:border-secondary focus:ring-1 focus:ring-secondary
 
 rounded-xl px-4 py-3 outline-none 
@@ -2059,11 +2076,11 @@ placeholder-accent "
                                     {/* SEND BUTTON - Premium */}
                                     <button
                                         onClick={() => { sendMessage(); setShowMenu(false); setShowPicker(false) }}
-                                        className="bg-base-300 border border-secondary border-[2px ] mr-5 px-5 py-3 rounded-xl text-accent text-sm font-medium transition-all duration-300   flex items-center gap-2 group"
+                                        className="bg-base-300 border border-secondary border-[2px ] mr-5 px-5 py-3 rounded-xl text-info text-sm font-medium transition-all duration-300   flex items-center gap-2 group"
                                     >
                                         <span>Send</span>
                                         <svg xmlns="http://www.w3.org/2000/svg" width={15} height={15} viewBox="0 0 20 20">
-                                            <path fill="#bf630b" d="m0 0l20 10L0 20zm0 8v4l10-2z"></path>
+                                            <path fill="#fff" d="m0 0l20 10L0 20zm0 8v4l10-2z"></path>
                                         </svg>
                                     </button>
                                 </div>
