@@ -53,9 +53,8 @@ const ProfileSummary = ({ data }) => {
     resumeData = {
         ...resumeData,
         summaryBody: summary
+
     };
-
-
 
     const Navigate = useNavigate();
 
@@ -263,10 +262,10 @@ const ProfileSummary = ({ data }) => {
                 <div className={`grid transition-all duration-500 ${sidebarOpen ? "lg:grid-cols-[1fr_500px]" : "grid-cols-1"}`}>
 
                     {/* ── LEFT: form ── */}
-                    <div className="p-6 md:p-10 border border-slate-700 ">
+                    <div className="p-3 min-[650px]:p-6 md:p-10 border border-gray-700 ">
                         <Header index={4} />
 
-                        <div className="bg-base-300 rounded-3xl shadow-inner p-7 mb-6 w-full">
+                        <div className="bg-base-300 rounded-3xl shadow-inner p-3 min-[650px]:p-6 mb-6 w-full">
                             <div className="flex items-center justify-between mb-4">
                                 <h3 className="text-lg font-bold text-white">Professional Summary </h3>
                             </div>
@@ -311,17 +310,17 @@ const ProfileSummary = ({ data }) => {
                                     Get Profile Summary With AI</button>
 
 
-                                <div className='bg-white w-[100%] mt-10 mx-auto rounded-xl border-2 p-5' onClick={(e) => { e.stopPropagation() }}>
+                                <div className='bg-white w-[100%] mt-10 mx-auto rounded-xl border-2 p-2' onClick={(e) => { e.stopPropagation() }}>
                                     <div className="overflow-y-auto h-fit">
 
-                                        <div className='  bg-black/20 z-30 rounded-xl p-5' onClick={() => {
+                                        <div className='  bg-black/20 z-30 rounded-xl  ' onClick={() => {
                                             setAiModalOpen(false);
                                             setGeneratedSummaries([]);
                                         }}>
 
 
-                                            <div className='w-full flex justify-center gap-5 p-5' >
-                                                <div className="w-[97%] bg-base-100   rounded-xl p-5" onClick={(e) => e.stopPropagation()}>
+                                            <div className='w-full flex justify-center gap-5 ' >
+                                                <div className="w-[100%] bg-base-100   rounded-xl p-4" onClick={(e) => e.stopPropagation()}>
                                                     <div className='mb-5'>
                                                         <h1 className="text-2xl text-center font-bold text-info mb-2 leading-tight  " >
                                                             Generating Professional Summary according to your qualifications and experience
@@ -346,11 +345,11 @@ const ProfileSummary = ({ data }) => {
                                                                 {generatedSummaries.map((item, index) => (
                                                                     <div
                                                                         key={index}
-                                                                        className="bg-base-200 border border-slate-300 rounded-2xl p-5 hover:border-secondary transition-all"
+                                                                        className="bg-base-200 border border-slate-300 rounded-2xl p-2 hover:border-secondary transition-all"
                                                                     >
                                                                         <div className="flex items-center justify-between mb-4">
-                                                                            <span className="bg-secondary text-base-100 text-xs px-3 py-1 rounded-full">
-                                                                                {item.tone}
+                                                                            <span className="bg-accent text-secondary-content text-sm px-3 py-1 rounded-full">
+                                                                                # {item.tone}
                                                                             </span>
 
                                                                             <button
@@ -364,13 +363,13 @@ const ProfileSummary = ({ data }) => {
                                                                                         message: "AI generated summary inserted.",
                                                                                     });
                                                                                 }}
-                                                                                className="bg-primary text-white px-4 py-2 rounded-xl text-sm hover:scale-105 transition-all"
+                                                                                className="bg-white text-black font-semibold px-4 py-2 rounded-xl text-sm hover:scale-105 transition-all"
                                                                             >
                                                                                 Use This
                                                                             </button>
                                                                         </div>
 
-                                                                        <p className="text-sm leading-relaxed text-slate-700">
+                                                                        <p className="text-sm leading-relaxed text-info">
                                                                             {item.summary}
                                                                         </p>
                                                                     </div>

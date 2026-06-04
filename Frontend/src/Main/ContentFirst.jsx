@@ -350,7 +350,8 @@ const ContentFirst = () => {
         "Enable personal chats, groups, communities, and AI-assisted interaction to keep everyone connected anytime.",
         "Move beyond slow, disconnected feedback loops with a workspace that allows real-time collaboration from anywhere.",
       ],
-      video: "/videos/feature-1.mp4",
+      videoMP4: "https://res.cloudinary.com/dj0ivep44/video/upload/v1780500551/feature-1_vvii1a.mp4",
+      videoWEBM: "https://res.cloudinary.com/dj0ivep44/video/upload/v1780547461/feature-1_ongnor.webm",
       label: "Collaboration",
     },
     {
@@ -363,7 +364,8 @@ const ContentFirst = () => {
         "Combine individual task tracking and shared project dashboards into one structured workspace.",
         "Identify blockers early and notify members instantly to keep every project on track.",
       ],
-      video: "/videos/feature-2.mp4",
+      videoMP4: "https://res.cloudinary.com/dj0ivep44/video/upload/v1780500571/feature-2_ql8mvb.mp4",
+      videoWEBM: "https://res.cloudinary.com/dj0ivep44/video/upload/v1780547497/feature-2_copy_qt0mzs.webm",
       label: "Project Management",
     },
     {
@@ -376,7 +378,8 @@ const ContentFirst = () => {
         "Individual accountability with personal dashboards and measurable contributions for every team member.",
         "A centralised workspace that highlights problems early and keeps teams aligned and on schedule.",
       ],
-      video: "/videos/feature-3.mp4",
+      videoMP4: "https://res.cloudinary.com/dj0ivep44/video/upload/v1780502298/feature-3_jsoaxr.mp4",
+      videoWEBM: "https://res.cloudinary.com/dj0ivep44/video/upload/v1780547468/feature-3_1_pvdghk.webm",
       label: "Productivity",
     },
   ];
@@ -481,10 +484,20 @@ const ContentFirst = () => {
               <div className="w-full lg:w-[55%] p-4 lg:p-6 flex items-center">
                 <div className="cs-video-wrap w-full">
                   <video
-                    src={item.video}
+                    // src={item.video}
                     autoPlay loop muted playsInline
                     className="w-full object-cover block"
-                  />
+                  >
+
+
+                    <source src={item.videoWEBM} type="video/webm; codecs=av01.0.05M.08" />
+
+                    <source src={item.videoWEBM} type="video/webm; codecs=vp9" />
+
+                    <source src={item.videoMP4} type="video/mp4" />
+
+
+                  </video>
                 </div>
               </div>
             </div>

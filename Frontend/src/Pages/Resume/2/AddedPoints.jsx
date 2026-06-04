@@ -2,7 +2,7 @@ import React from 'react'
 
 const AddedPoints = ({ feild, index, activeInputIndex, setActiveInputIndex, editingBulletIndex, setEditingBulletIndex, bulletInput, setBulletInput, enhancer, setExperiences, addToast, enhancerWorking, setEnhancerWorking }) => {
     return (
-        <div className='bg-white w-[100%] mt-10 mx-auto rounded-xl border-2 p-1 min-[650px]:p-5' onClick={(e) => { e.stopPropagation() }}>
+        <div className=' bg-white w-[100%] mt-10 mx-auto rounded-xl border-2 p-1 min-[650px]:p-5' onClick={(e) => { e.stopPropagation() }}>
             <div className="overflow-y-auto h-fit">
                 <div className='mb-5 flex items-center justify-between'>
                     <h1 className="text-2xl font-extrabold mx-auto text-slate-900  leading-tight text-start  " >

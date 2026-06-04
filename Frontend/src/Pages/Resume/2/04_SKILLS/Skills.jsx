@@ -10,6 +10,7 @@ import ProgressMeter from '../ProgressMeter';
 import Header from '../Header';
 import Step from '../Step';
 import Preview from '../Preview';
+import AiWorking2 from '../AiWorking2';
 
 // ─── reusable field ───────────────────────────────────────────────────────────
 const ToastContainer = ({ toasts, removeToast }) => {
@@ -63,19 +64,17 @@ const Education = ({ data }) => {
 
 
 
-
-    const finalResumeData = useMemo(() => ({
+    resumeData = {
         ...resumeData,
-
-
-
         skills: skills.map(s => ({
             skillCategory: s.skillCategory,
             skills: s.skills.join(", ")
         })),
+    };
 
 
-    }), [resumeData, skills]);
+
+
 
     const Navigate = useNavigate();
 
@@ -122,7 +121,12 @@ const Education = ({ data }) => {
 
 
         } catch (err) {
-            console.error(err?.message || err);
+
+            addToast({
+                type: "error",
+                title: "ERROR",
+                message: `${err?.message || err}`
+            });
         } finally {
             setIsAiworking(false);
         }
@@ -228,109 +232,36 @@ const Education = ({ data }) => {
 
 
                     {/* ── LEFT: form ── */}
-                    <div className="p-6 md:p-10 border border-accent ">
+                    <div className="p-3 min-[650px]:p-6 md:p-10 border border-gray-700 ">
                         <Header index={3} />
 
                         <div className="space-y-5 mt-8">
                             {skills.map((skill, index) => (
                                 <div
                                     key={skill.id}
-                                    className="bg-base-200 border border-accent rounded-3xl p-5"
+                                    className="bg-base-300 rounded-3xl shadow-inner p-4 md:p-7 mb-6"
                                 >
 
-                                    {modalOpen && <div className='h-screen w-screen bg-black/70 fixed flex items-center justify-center z-40 inset-0 ' onClick={() => {
-                                        points.forEach((point) => {
-                                            if (skills[index].skills.length >= 20) {
-                                                addToast({
-                                                    type: "error",
-                                                    title: "Exceeded Limit",
-                                                    message: "Could not add more skills."
-                                                });
-                                                return;
-                                            }
-                                            addSkillToCategory(skillIndex, point);
-
-                                        }); setpoints([]); setSkillCategory(""); setModalOpen(false);
-                                    }}>
-                                        <div className='w-[70%] bg-base-100 rounded-3xl p-10 flex flex-col gap-5 border-4 border-base-300' onClick={(e) => e.stopPropagation()}>
-                                            <div className='text-2xl font-bold'>Category <mark className='bg-secondary text-secondary-content p-2 rounded-xl px-5'>{SkillCategory}</mark> ,</div>
-                                            <div className="flex h-full gap-3">
-                                                <div className="w-3/4 flex flex-col gap-5">
-                                                    here is the list of common skills in this category :
-                                                    <div className='bg-base-200 w-full rounded-3xl h-full  border-accent p-5'>
-
-                                                        {isAiworking ? (<div className='flex flex-col justify-center items-center h-full w-full  gap-2'>
-                                                            <div className='flex justify-center items-center gap-2'>
-                                                                <h1 className="text-5xl font-bold text-[#ffffff] mb-2 leading-tight text-center ">Shastra</h1>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width={50} height={50} viewBox="0 0 24 24" className='mb-3'>
-                                                                    <path fill="#ffffff" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
-                                                                </svg>
-                                                            </div>
-                                                            <h1 className="text-xl font-medium text-[#ffffff] mb-2 leading-tight text-center ">AI Is Generating Your  Bullet Points, Please Wait...</h1>
-                                                            <div className="animate-pulse flex flex-col items-center gap-3">
-                                                                <div className="h-4 w-40 bg-[#ffffff]/30 rounded"></div>
-                                                                <div className="h-4 w-56 bg-[#ffffff]/20 rounded"></div>
-                                                            </div>
-                                                        </div>) : (
-                                                            <div className='grid grid-cols-3 gap-2 overflow-y-auto h-[100%] px-5 py-3'>
-                                                                {commonSkills.map((skill, index) => (
-                                                                    <button
-                                                                        key={skill.id}
-                                                                        onClick={() => {
-                                                                            if (points.includes(skill.skill)) {
-                                                                                addToast({
-                                                                                    type: "error",
-                                                                                    title: "Oh Snap!",
-                                                                                    message: "You already added this skill"
-                                                                                });
-                                                                            } if (skill.skill.length > 0 && !points.includes(skill.skill)) { setpoints(prev => [...prev, skill.skill]); }
-                                                                        }}
-                                                                        className={` ${points.includes(skill.skill) ? 'bg-white text-black border-secondary' : 'bg-base-300 text-white'} border border-accent rounded-2xl px-3.5 py-2.5 text-sm group hover:text-base-100 outline-none  hover:bg-white transition-all duration-200 font-medium flex items-center gap-2 cursor-pointer`}
-                                                                    >
-                                                                        <span className='p-1 bg-base-100 border border-accent rounded-full'>
-                                                                            {points.includes(skill.skill) ? (<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 15 15">
-                                                                                <path fill="#20ff05" fillRule="evenodd" d="M0 7.5a7.5 7.5 0 1 1 15 0a7.5 7.5 0 0 1-15 0m7.072 3.21l4.318-5.398l-.78-.624l-3.682 4.601L4.32 7.116l-.64.768z" clipRule="evenodd"></path>
-                                                                            </svg>) : (<svg className='transition duration-700 ease-in-out group-hover:rotate-180' xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24">
-                                                                                <g fill="#fff" fillRule="evenodd" clipRule="evenodd">
-                                                                                    <path d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12m10-8a8 8 0 1 0 0 16a8 8 0 0 0 0-16"></path>
-                                                                                    <path d="M13 7a1 1 0 1 0-2 0v4H7a1 1 0 1 0 0 2h4v4a1 1 0 1 0 2 0v-4h4a1 1 0 1 0 0-2h-4z"></path>
-                                                                                </g>
-                                                                            </svg>)}
-                                                                        </span> <span > {skill.skill}</span>
-                                                                    </button>
-                                                                ))}
-                                                            </div>)}
-                                                    </div>
-                                                </div>
-                                                <div className="w-1/4 bg-base-200 p-5 rounded-3xl border border-accent">
-                                                    <h1 className='text-lg font-bold'>Selected Skills</h1>
-                                                    {points.map((point, index) => (
-                                                        <div
-                                                            key={skill.id}
-                                                            className="bg-base-300 border border-accent rounded-2xl px-3 py-2 text-sm mt-2"
-                                                        >
-                                                            {point}
-                                                        </div>
-                                                    ))}
-
-                                                    {points.length === 0 && < div className='flex flex-col justify-center items-center h-full w-full  gap-2'>
-                                                        <div className='flex justify-center items-center gap-2'>
-                                                            <h1 className="text-5xl font-bold text-[#ffffff] mb-2 leading-tight text-center ">Shastra</h1>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width={50} height={50} viewBox="0 0 24 24" className='mb-3'>
-                                                                <path fill="#ffffff" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
-                                                            </svg>
-                                                        </div>
-                                                        <h1 className="text-xl font-medium text-[#ffffff] mb-2 leading-tight text-center ">AI Is Generating Your  Bullet Points, Please Wait...</h1>
-                                                        <div className="animate-pulse flex flex-col items-center gap-3">
-                                                            <div className="h-4 w-40 bg-[#ffffff]/30 rounded"></div>
-                                                            <div className="h-4 w-56 bg-[#ffffff]/20 rounded"></div>
-                                                        </div>
-                                                    </div>}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>}
+                                    {modalOpen && <AiWorking2
+                                        skillIndex={skillIndex}
+                                        setSkillIndex={setSkillIndex}
+                                        skills={skills}
+                                        skill={skill}
+                                        index={index}
+                                        setSkills={setSkills}
+                                        setCommonSkills={setCommonSkills}
+                                        commonSkills={commonSkills}
+                                        isAiworking={isAiworking}
+                                        setIsAiworking={setIsAiworking}
+                                        points={points}
+                                        setpoints={setpoints}
+                                        addSkillToCategory={addSkillToCategory}
+                                        SkillCategory={SkillCategory}
+                                        setSkillCategory={setSkillCategory}
+                                        setModalOpen={setModalOpen}
+                                        modalOpen={modalOpen}
+                                        addToast={addToast}
+                                    />}
                                     {/* Category Input */}
                                     <div className="flex justify-between items-start gap-2 flex-col ">
                                         <label
@@ -390,7 +321,8 @@ const Education = ({ data }) => {
                                         <div
                                             className="
     grid
-    grid-cols-2
+    grid-cols-1
+    min-[450px]:grid-cols-2
     sm:grid-cols-3
     md:grid-cols-4
     lg:grid-cols-5
@@ -542,7 +474,7 @@ const Education = ({ data }) => {
                     <button
                         onClick={() => {
                             Navigate("/app/build-resume/intro-summary-page", {
-                                state: { resumeData: finalResumeData }
+                                state: { resumeData: resumeData }
                             });
                         }}
                         className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl bg-base-100 text-info  border-secondary
