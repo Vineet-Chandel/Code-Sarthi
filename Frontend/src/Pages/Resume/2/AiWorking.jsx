@@ -46,7 +46,7 @@ transition" width="2em" height="2em" viewBox="0 0 24 24">
                 <div className=' w-full xl:w-1/2  bg-base-100 rounded-xl p-3 sm:p-5 ' onClick={(e) => e.stopPropagation()}>
                     <div className='mb-5'>
                         <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-info mb-2 leading-tight text-start  " >
-                            Bullet points about what you did as a <br /> <span className="text-accent-content">{role}</span>,
+                            Bullet points for<br /> <mark className='bg-secondary text-secondary-content p-1.5 sm:p-2 rounded-lg sm:rounded-xl px-3 sm:px-5'>{role}</mark>,
                         </h1>
                     </div>
 
