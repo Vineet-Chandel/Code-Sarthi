@@ -10,7 +10,7 @@ import ProgressMeter from '../ProgressMeter';
 import Header from '../Header';
 import Step from '../Step';
 import Preview from '../Preview';
-import AddedPoints from '../addedPoints';
+import AddedPoints from '../AddedPoints';
 import AiWorking from '../AiWorking';
 
 // ─── reusable field ───────────────────────────────────────────────────────────
