@@ -104,12 +104,12 @@ const DynamicResume = ({ data }) => {
                             Certification
                         </h2>
                         <div className="space-y-4">
-                            {data.certifications.map((cert, index) => (
+                            {/* {data.certifications.map((cert, index) => (
                                 <div key={index}>
                                     <p className="font-bold text-xs uppercase leading-tight">{cert}</p>
                                     <p className="text-xs text-slate-500">Professional Certification</p>
                                 </div>
-                            ))}
+                            ))} */}
                         </div>
                     </section>
                 </aside>

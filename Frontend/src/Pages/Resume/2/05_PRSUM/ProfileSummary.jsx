@@ -38,7 +38,7 @@ const ProfileSummary = ({ data }) => {
     const location = useLocation();
     let resumeData = location.state?.resumeData || {};
 
-    const [summary, setSummary] = useState("");
+    const [summary, setSummary] = useState(resumeData.summaryBody || "");
 
 
     const [activeTab, setActiveTab] = useState("preview"); // preview | tips | score
@@ -271,9 +271,9 @@ const ProfileSummary = ({ data }) => {
                             </div>
 
                             <div className="flex items-start flex-col gap-5 mb-6 ">
-                                <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 w-full">
+                                <div className="flex-1 grid grid-cols-1  gap-3 pt-1 w-full">
 
-                                    <div className="space-y-3 ">
+                                    <div className="space-y-3 w-full">
                                         <textarea
                                             id="summary"
                                             value={summary}
@@ -281,9 +281,25 @@ const ProfileSummary = ({ data }) => {
                                             placeholder="Frontend Developer with 3+ years of experience in building scalable web applications..."
                                             rows={10}
                                             maxLength={500}
-                                            className="w-full bg-base-100 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none
-                 focus:border-info  focus:ring-info focus:bg-secondary
-                 transition-all duration-200 font-medium placeholder:text-slate-500"
+                                            className="
+          w-full
+          bg-base-100
+          border border-accent
+          rounded-xl
+          px-4 py-3
+          text-white
+          text-sm sm:text-base
+          font-medium
+          outline-none
+          transition-all duration-300
+          hover:border-info
+          focus:border-info
+          focus:ring-2 focus:ring-info
+          focus:bg-base-200
+          shadow-md hover:shadow-lg
+          cursor-pointer
+          pr-10
+        "
 
                                         />
 
@@ -309,7 +325,6 @@ const ProfileSummary = ({ data }) => {
                                     </div>
                                     Get Profile Summary With AI</button>
 
-
                                 <div className='bg-white w-[100%] mt-10 mx-auto rounded-xl border-2 p-2' onClick={(e) => { e.stopPropagation() }}>
                                     <div className="overflow-y-auto h-fit">
 
@@ -323,7 +338,7 @@ const ProfileSummary = ({ data }) => {
                                                 <div className="w-[100%] bg-base-100   rounded-xl p-4" onClick={(e) => e.stopPropagation()}>
                                                     <div className='mb-5'>
                                                         <h1 className="text-2xl text-center font-bold text-info mb-2 leading-tight  " >
-                                                            Generating Professional Summary according to your qualifications and experience
+                                                            AI Generated Professional Summary
                                                         </h1>
                                                     </div>
 
@@ -388,6 +403,8 @@ const ProfileSummary = ({ data }) => {
                                     </div>
 
                                 </div>
+
+
 
                             </div>
 

@@ -4,6 +4,7 @@ import {
     Mail, Phone, Globe, Linkedin, Github, ExternalLink,
     Code, Terminal, Award, BookOpen, MapPin, Briefcase
 } from 'lucide-react';
+import language from 'react-syntax-highlighter/dist/esm/languages/hljs/1c';
 
 /* ─── A4 constants (96 dpi) ───────────────────────────────────────────────── */
 const A4_W = 794;   // 210 mm → px
@@ -312,9 +313,29 @@ const AmanGuptaDynamicResume = ({ data, scale = 1 }) => {
                                     ))}
                                     {certifications.map((c, i) => (
                                         <li key={i} style={{ display: 'flex', gap: 6, fontWeight: 600, color: '#0f172a', fontStyle: 'italic', textDecoration: 'underline', textDecorationColor: '#bae6fd' }}>
-                                            <span>•</span>{c}
+                                            <span>•</span>{c.about} {c.link}
                                         </li>
                                     ))}
+                                </ul>
+                            ) : <Empty>No recognition added yet.</Empty>}
+                        </section>
+                        <section>
+                            <IconHeading icon={<Award size={13} />} small>Languages</IconHeading>
+                            {(languages.length > 0) ? (
+                                <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 7, fontSize: 11, color: '#475569' }}>
+                                    {languages.map((a, i) => (
+                                        <li key={i} className="flex gap-2">
+                                            <span>•</span>
+                                            <span>
+                                                {a.langCategory} ({a.status})
+                                            </span>
+                                        </li>
+                                    ))}
+                                    {/* {language.map((c, i) => (
+                                        <li key={i} style={{ display: 'flex', gap: 6, fontWeight: 600, color: '#0f172a', fontStyle: 'italic', textDecoration: 'underline', textDecorationColor: '#bae6fd' }}>
+                                            <span>•</span>{c}
+                                        </li>
+                                    ))} */}
                                 </ul>
                             ) : <Empty>No recognition added yet.</Empty>}
                         </section>

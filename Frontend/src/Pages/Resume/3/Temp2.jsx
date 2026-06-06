@@ -136,7 +136,7 @@ const AmanGuptaDynamicClassic = ({ data }) => {
             <section className="mb-6">
                 <h2 className="text-center font-bold uppercase text-sm border-b border-gray-300 mb-3 py-1 bg-gray-50 tracking-widest">Languages</h2>
                 <div className="grid grid-cols-2 gap-8 px-4">
-                    {languages.map((lang, index) => (
+                    {/* {languages.map((lang, index) => (
                         <div key={index}>
                             <p className="text-[13px] font-bold">{lang.split(' ')[0]}</p>
                             <p className="text-[12px] text-gray-600">{lang.split(' ')[1] || 'Proficient'}</p>
@@ -144,7 +144,7 @@ const AmanGuptaDynamicClassic = ({ data }) => {
                                 <div className={`bg-black h-full ${index === 0 ? 'w-full' : 'w-[90%]'}`}></div>
                             </div>
                         </div>
-                    ))}
+                    ))} */}
                 </div>
             </section>
 
@@ -158,9 +158,9 @@ const AmanGuptaDynamicClassic = ({ data }) => {
                         ))}
                     </ul>
                     <ul className="list-disc ml-6 text-[12px] space-y-1 italic">
-                        {certifications.map((cert, idx) => (
+                        {/* {certifications.map((cert, idx) => (
                             <li key={idx}>{cert}</li>
-                        ))}
+                        ))} */}
                     </ul>
                 </div>
             </section>

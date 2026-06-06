@@ -279,9 +279,25 @@ const Education = ({ data }) => {
 
                                                 handleChange2(index, "skillCategory", e.target.value)
                                             }
-                                            className="w-full  bg-base-100 border border-accent rounded-xl px-3.5 py-2.5 text-sm text-white outline-none
-                 focus:border-info  focus:ring-info focus:bg-secondary
-                 transition-all duration-200 font-medium placeholder:text-accent"
+                                            className="
+          w-full
+          bg-base-100
+          border border-accent
+          rounded-xl
+          px-4 py-3
+          text-white
+          text-sm sm:text-base
+          font-medium
+          outline-none
+          transition-all duration-300
+          hover:border-info
+          focus:border-info
+          focus:ring-2 focus:ring-info
+          focus:bg-base-200
+          shadow-md hover:shadow-lg
+          cursor-pointer
+          pr-10
+        "
 
                                         />
                                         <button className=' border border-secondary bg-base-100 text-info  px-3 py-2 rounded-xl mt-3 flex justify-center items-center gap-2 hover:scale-105 transition-all duration-300 ease-in-out group' onClick={() => {
@@ -402,9 +418,25 @@ const Education = ({ data }) => {
                                             key={skill.id}
                                             type="text"
                                             placeholder="Press Enter to add skill"
-                                            className="w-full bg-base-100 border border-accent rounded-xl px-3.5 py-2.5 text-sm text-white outline-none
-                 focus:border-info focus:ring-info focus:bg-secondary
-                 transition-all duration-200 font-medium placeholder:text-accent"
+                                            className="
+          w-full
+          bg-base-100
+          border border-accent
+          rounded-xl
+          px-4 py-3
+          text-white
+          text-sm sm:text-base
+          font-medium
+          outline-none
+          transition-all duration-300
+          hover:border-info
+          focus:border-info
+          focus:ring-2 focus:ring-info
+          focus:bg-base-200
+          shadow-md hover:shadow-lg
+          cursor-pointer
+          pr-10
+        "
 
 
                                             value={skill.inputValue}

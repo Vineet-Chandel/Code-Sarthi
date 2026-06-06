@@ -26,7 +26,7 @@ const Left = ({
         '/app/build-resume/summary-content',
         '/app/build-resume/project-content',
         '/app/build-resume/additional-details',
-        '/app/build-resume/preview'
+        '/app/build-resume/preview-content'
     ];
 
 
@@ -387,7 +387,7 @@ w-full
                             color: 'var(--color-secondary-content)',
                         }}
                         onClick={() =>
-                            navigate(-1)
+                            navigate(Forward[step - 3], { state: { resumeData } })
                         }
                     >
                         <ArrowLeft size={16} />

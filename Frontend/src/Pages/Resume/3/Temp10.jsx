@@ -143,11 +143,11 @@ const DynamicResumeTemplate = ({ data }) => {
                         </div>
                         <div className="px-2">
                             <ul className="space-y-3">
-                                {data.certifications.map((cert, idx) => (
+                                {/* {data.certifications.map((cert, idx) => (
                                     <li key={idx} className="text-sm font-bold leading-tight flex items-start gap-2 italic">
                                         • {cert}
                                     </li>
-                                ))}
+                                ))} */}
                             </ul>
                             <p className="text-xs mt-4 text-slate-500 italic">
                                 Actively maintaining technical proficiency through industry-standard credentials and hands-on laboratory experience.

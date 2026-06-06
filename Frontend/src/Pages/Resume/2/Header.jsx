@@ -82,8 +82,21 @@ const Header = ({ index }) => {
 
             subLine:
                 "Highlight the projects that demonstrate your skills, creativity, and problem-solving abilities — and enhance them with AI-powered suggestions for maximum impact."
-        }
+        },
 
+        {
+            icon: (<svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
+                <path fill="#fff" d="M22 5a1 1 0 0 1-1 1h-8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1m-3 4a1 1 0 0 1-1 1h-5a1 1 0 0 1 0-2h5a1 1 0 0 1 1 1m3 6a1 1 0 0 1-1 1h-8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1m-3 4a1 1 0 0 1-1 1h-5a1 1 0 0 1 0-2h5a1 1 0 0 1 1 1M8 3a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2l.001-4.051l.004-.051A1.996 1.996 0 0 1 4 3zm0 10a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2l.001-4.051l.004-.051A1.996 1.996 0 0 1 4 13z"></path>
+            </svg>
+
+            ),
+
+            mainLine1: "Select (optional)",
+            mainLine2: "details to add",
+
+            subLine:
+                "Pick anything you’d like to highlight that’s not already on your resume."
+        }
     ];
 
 

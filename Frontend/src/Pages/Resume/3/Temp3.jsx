@@ -140,7 +140,7 @@ const AmanGuptaDynamicTimeline = ({ data }) => {
                 <div>
                     <h2 className="text-sm font-black mb-4 tracking-widest border-b-2 border-slate-900 pb-1 inline-block uppercase">Languages</h2>
                     <div className="space-y-4">
-                        {languages.map((lang, idx) => (
+                        {/* {languages.map((lang, idx) => (
                             <div key={idx} className="flex-1">
                                 <div className="flex justify-between items-center mb-1">
                                     <p className="text-[12px] font-bold">{lang.split(' ')[0]}</p>
@@ -153,7 +153,7 @@ const AmanGuptaDynamicTimeline = ({ data }) => {
                                     ></div>
                                 </div>
                             </div>
-                        ))}
+                        ))} */}
                     </div>
                 </div>
             </div>

@@ -89,8 +89,9 @@ text-xs sm:text-sm group hover:text-base-100 outline-none  hover:bg-white transi
                                 </div>)}
                         </div>
                     </div>
-                    <div className="w-full lg:w-1/4 bg-base-200 p-3 sm:p-5 rounded-2xl sm:rounded-3xl border border-accent overflow-y-auto max-h-[250px] lg:max-h-none">
+                    <div className="w-full lg:w-1/4 bg-base-100 p-3 sm:p-5 rounded-2xl sm:rounded-3xl border border-accent overflow-y-auto max-h-[250px] lg:max-h-none">
                         <h1 className='text-lg font-bold'>Selected Skills</h1>
+
                         {points.map((point, index) => (
                             <div
                                 key={skill.id}
@@ -99,20 +100,17 @@ text-xs sm:text-sm group hover:text-base-100 outline-none  hover:bg-white transi
                                 {point}
                             </div>
                         ))}
+                        <div className="h-full  flex items-center justify-center">
+                            <div className="bg-base-200 px-5 py-2 mt-10 mb-10 rounded-3xl flex items-center justify-center">
+                                {points.length === 0 && < div className='flex flex-col justify-center items-center h-full w-full  gap-2'>
 
-                        {points.length === 0 && < div className='flex flex-col justify-center items-center h-full w-full  gap-2'>
-                            <div className='flex justify-center items-center gap-2'>
-                                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#ffffff] mb-2 leading-tight text-center ">Shastra</h1>
-                                <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 mb-3" viewBox="0 0 24 24" >
-                                    <path fill="#ffffff" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
-                                </svg>
+                                    <h1 className="text-base sm:text-lg lg:text-xl font-medium text-[#ffffff] mb-2 leading-tight text-center ">No Skills Added yet</h1>
+
+                                </div>}
                             </div>
-                            <h1 className="text-base sm:text-lg lg:text-xl font-medium text-[#ffffff] mb-2 leading-tight text-center ">AI Is Generating Your  Bullet Points, Please Wait...</h1>
-                            <div className="animate-pulse flex flex-col items-center gap-3">
-                                <div className="h-4 w-40 bg-[#ffffff]/30 rounded"></div>
-                                <div className="h-4 w-56 bg-[#ffffff]/20 rounded"></div>
-                            </div>
-                        </div>}
+
+                        </div>
+
                     </div>
                 </div>
             </div>

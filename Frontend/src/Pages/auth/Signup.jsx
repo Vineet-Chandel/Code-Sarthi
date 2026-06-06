@@ -853,12 +853,13 @@ const Signup = () => {
 
               <div className='flex gap-3 items-center'>
                 <label className="toggle text-base-content bg-base-300">
-                  <input type="checkbox" onChange={(e) =>
-                    setFormData(prev => ({
-                      ...prev,
-                      termsAccepted: e.target.checked
-                    }))
-                  } checked={formData.termsAccepted} />
+                  <input type="checkbox"
+                    onChange={(e) =>
+                      setFormData(prev => ({
+                        ...prev,
+                        termsAccepted: e.target.checked
+                      }))
+                    } checked={formData.termsAccepted} />
                   <svg
                     aria-label="disabled"
                     xmlns="http://www.w3.org/2000/svg"

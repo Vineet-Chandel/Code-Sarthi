@@ -29,9 +29,25 @@ const InputField = ({ label, id, value, type = "text", placeholder, onChange }) 
             value={value}
             placeholder={placeholder}
             onChange={(e) => onChange(id, e.target.value)}
-            className="w-full bg-base-100 border border-slate-900 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none
-                 focus:border-info  focus:bg-secondary
-                 transition-all duration-200 font-medium placeholder:text-slate-500"
+            className="
+          w-full
+          bg-base-100
+          border border-accent
+          rounded-xl
+          px-4 py-3
+          text-white
+          text-sm sm:text-base
+          font-medium
+          outline-none
+          transition-all duration-300
+          hover:border-info
+          focus:border-info
+          focus:ring-2 focus:ring-info
+          focus:bg-base-200
+          shadow-md hover:shadow-lg
+          cursor-pointer
+          pr-10
+        "
         />
     </div>
 );
@@ -172,7 +188,7 @@ const Project = ({ data }) => {
         }
     };
     const [enhancerWorking, setEnhancerWorking] = useState("false");
-    const [enhancerData, setEnhancerData] = useState({});
+
     const enhancer = async (bullet, index, bulletIndex) => {
         try {
             setEnhancerWorking(`${index}-${bulletIndex}`);
@@ -343,14 +359,24 @@ const Project = ({ data }) => {
                                         }
                                         placeholder="Describe your project..."
                                         className="
-        w-full min-h-[120px]
-        rounded-2xl
-        border border-slate-700
-        bg-base-100
-        p-4
-        outline-none
-        focus:border-secondary
-    "
+          w-full
+          bg-base-100
+          border border-accent
+          rounded-xl
+          px-4 py-3
+          text-white
+          text-sm sm:text-base
+          font-medium
+          outline-none
+          transition-all duration-300
+          hover:border-info
+          focus:border-info
+          focus:ring-2 focus:ring-info
+          focus:bg-base-200
+          shadow-md hover:shadow-lg
+          cursor-pointer
+          pr-10
+        "
                                     />
                                 </div>
 
@@ -378,7 +404,8 @@ const Project = ({ data }) => {
                                             <path fill="#fff" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
                                         </svg>
                                     </div>
-                                    Generate Bullets for your Project</button>
+                                    Generate Bullets for your Project
+                                </button>
 
 
                                 <AddedPoints feild={projects} index={index} activeInputIndex={activeInputIndex} setActiveInputIndex={setActiveInputIndex} editingBulletIndex={editingBulletIndex} setEditingBulletIndex={setEditingBulletIndex} bulletInput={bulletInput} setBulletInput={setBulletInput} enhancer={enhancer} setExperiences={setProjects} addToast={addToast} enhancerWorking={enhancerWorking} setEnhancerWorking={setEnhancerWorking} />
@@ -413,7 +440,7 @@ const Project = ({ data }) => {
 
                     <button
                         onClick={() => {
-                            Navigate("/app/build-resume/intro-edu-page", {
+                            Navigate("/app/build-resume/intro-additionals-page", {
                                 state: { resumeData }
                             });
                         }}

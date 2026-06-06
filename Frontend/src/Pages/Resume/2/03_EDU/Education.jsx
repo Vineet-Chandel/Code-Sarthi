@@ -22,16 +22,7 @@ const InputField = ({ label, id, value, type = "text", placeholder, onChange }) 
         >
             {label}
         </label>
-        <div className='    flex items-center gap-2 w-full
-    bg-base-200 border border-slate-600
-    rounded-xl px-3.5 py-2.5
-    text-sm text-slate-800 outline-none
-    focus-within:border-secondary
-    focus-within:ring-1
-    focus-within:ring-accent-content
-    
-    transition-all duration-200
-    font-medium'>
+        <div className='relative'>
 
             <input
                 id={id}
@@ -40,12 +31,24 @@ const InputField = ({ label, id, value, type = "text", placeholder, onChange }) 
                 placeholder={placeholder}
                 onChange={(e) => onChange(id, e.target.value)}
                 className="
-
-        w-full bg-transparent
-        border-none outline-none
-h-full text-white
-        focus:ring-0 placeholder:text-info
-    "  /></div>
+          w-full
+          bg-base-100
+          border border-accent
+          rounded-xl
+          px-4 py-3
+          text-white
+          text-sm sm:text-base
+          font-medium
+          outline-none
+          transition-all duration-300
+          hover:border-info
+          focus:border-info
+          focus:ring-2 focus:ring-info
+          focus:bg-base-200
+          shadow-md hover:shadow-lg
+          cursor-pointer
+          pr-10
+        "  /></div>
     </div>
 );
 
@@ -233,7 +236,159 @@ const Education = ({ data }) => {
 
 
 
+    const options = [
+        {
+            heading: "School Education",
+            option: [
+                "High School Diploma",
+                "Secondary School Certificate (SSC)",
+                "Higher Secondary Certificate (HSC)",
+                "Intermediate",
+                "General Educational Development (GED)",
+                "International Baccalaureate (IB) Diploma",
+                "Cambridge O-Level",
+                "Cambridge A-Level",
+                "Matriculation"
+            ]
+        },
+        {
+            heading: "Diploma & Certifications",
+            option: [
+                "Diploma",
+                "Associate Degree",
+                "Postgraduate Diploma",
+                "Certification",
+                "Professional Certification",
+                "Vocational Training",
+                "Advanced Diploma",
+                "Graduate Certificate",
+                "National Certificate",
+                "Trade Certificate",
+                "Foundation Diploma",
+                "ITI (Industrial Training Institute)"
+            ]
+        },
+        {
+            heading: "Bachelor's Degrees",
+            option: [
+                "Bachelor of Arts (BA)",
+                "Bachelor of Science (BSc)",
+                "Bachelor of Commerce (BCom)",
+                "Bachelor of Technology (BTech)",
+                "Bachelor of Engineering (BE)",
+                "Bachelor of Computer Applications (BCA)",
+                "Bachelor of Business Administration (BBA)",
+                "Bachelor of Medicine, Bachelor of Surgery (MBBS)",
+                "Bachelor of Laws (LLB)",
+                "Bachelor of Education (BEd)",
+                "Bachelor of Architecture (BArch)",
+                "Bachelor of Fine Arts (BFA)",
+                "Bachelor of Design (BDes)",
+                "Bachelor of Pharmacy (BPharm)",
+                "Bachelor of Dental Surgery (BDS)",
+                "Bachelor of Physiotherapy (BPT)",
+                "Bachelor of Nursing (BNSc)",
+                "Bachelor of Social Work (BSW)",
+                "Bachelor of Hotel Management (BHM)",
+                "Bachelor of Mass Communication (BMC)",
+                "Bachelor of Journalism (BJ)",
+                "Bachelor of Economics (BEcon)",
+                "Bachelor of Psychology (BPsych)",
+                "Bachelor of Public Health (BPH)",
+                "Bachelor of Agricultural Science (BAgSc)"
+            ]
+        },
+        {
+            heading: "Master's Degrees",
+            option: [
+                "Master of Arts (MA)",
+                "Master of Science (MSc)",
+                "Master of Commerce (MCom)",
+                "Master of Technology (MTech)",
+                "Master of Engineering (ME)",
+                "Master of Computer Applications (MCA)",
+                "Master of Business Administration (MBA)",
+                "Master of Laws (LLM)",
+                "Master of Education (MEd)",
+                "Master of Architecture (MArch)",
+                "Master of Fine Arts (MFA)",
+                "Master of Design (MDes)",
+                "Master of Pharmacy (MPharm)",
+                "Master of Public Health (MPH)",
+                "Master of Social Work (MSW)",
+                "Master of Finance (MFin)",
+                "Master of Data Science (MDS)",
+                "Master of Artificial Intelligence (MAI)",
+                "Master of Nursing (MN)",
+                "Master of Psychology (MPsych)",
+                "Master of Public Administration (MPA)",
+                "Master of International Business (MIB)",
+                "Executive MBA (EMBA)"
+            ]
+        },
+        {
+            heading: "Doctorate",
+            option: [
+                "Doctor of Philosophy (PhD)",
+                "Doctorate",
+                "Doctor of Medicine (MD)",
+                "Doctor of Engineering (DEng)",
+                "Doctor of Business Administration (DBA)",
+                "Doctor of Education (EdD)",
+                "Doctor of Laws (LLD)",
+                "Doctor of Science (DSc)",
+                "Doctor of Pharmacy (PharmD)",
+                "Doctor of Psychology (PsyD)",
+                "Doctor of Public Health (DrPH)",
+                "Postdoctoral Research"
+            ]
+        },
+        {
+            heading: "Professional Qualifications",
+            option: [
+                "Chartered Accountant (CA)",
+                "Certified Public Accountant (CPA)",
+                "Chartered Financial Analyst (CFA)",
+                "Certified Management Accountant (CMA)",
+                "Company Secretary (CS)",
+                "Chartered Engineer (CEng)",
+                "Project Management Professional (PMP)",
+                "Certified Information Systems Security Professional (CISSP)",
+                "AWS Certified Solutions Architect",
+                "Google Cloud Professional",
+                "Microsoft Certified Professional",
+                "Cisco Certified Network Associate (CCNA)",
+                "Certified Financial Planner (CFP)",
+                "Bar Association Membership",
+                "Medical Council Registration"
+            ]
+        },
+        {
+            heading: "Online & Distance Learning",
+            option: [
+                "Online Bachelor's Degree",
+                "Online Master's Degree",
+                "MOOC Certificate (Coursera, edX, etc.)",
+                "Nanodegree (Udacity)",
+                "Bootcamp Certificate",
+                "Distance Education Degree",
+                "Open University Degree",
+                "E-Learning Certificate"
+            ]
+        },
+        {
+            heading: "Other",
+            option: [
+                "Homeschooling",
+                "Unschooling / Self-Taught",
+                "Apprenticeship",
+                "Other"
+            ]
+        }
+    ];
 
+    const [open, setOpen] = useState(false);
+    const [selected, setSelected] = useState("");
 
     return (
         <div className="min-h-[calc(100vh-4rem)] w-screen flex items-start justify-center p-4 md:p-6 bg-base-100">
@@ -336,68 +491,108 @@ const Education = ({ data }) => {
                                         />
                                     </div>
                                 </div>
-                                <div className='flex items-center justify-center gap-3'>
-                                    <div className='mb-2'>
+                                <div className='flex flex-col items-center justify-center gap-3 '>
+                                    <div className='mb-2 w-full'>
                                         <label className="text-sm font-medium text-info mb-2 block">
                                             Degree
                                         </label>
-                                        <select
-                                            className="input input-bordered border border-slate-600 text-white rounded-xl bg-base-200 w-full px-2 py-1"
-                                            value={form.degree}
-                                            required={true}
-                                            onChange={(e) =>
-                                                handleChange2(index, "degree", e.target.value)
-                                            }
-                                        >
-                                            <option value="">Select Degree</option>
-                                            <optgroup label="School Education">
-                                                <option>High School Diploma</option>
-                                                <option>Secondary School Certificate (SSC)</option>
-                                                <option>Higher Secondary Certificate (HSC)</option>
-                                                <option>Intermediate</option>
-                                            </optgroup>
 
-                                            <optgroup label="Diploma & Certifications">
-                                                <option>Diploma</option>
-                                                <option>Associate Degree</option>
-                                                <option>Postgraduate Diploma</option>
-                                                <option>Certification</option>
-                                                <option>Professional Certification</option>
-                                                <option>Vocational Training</option>
-                                            </optgroup>
+                                        <div className="relative w-full">
+                                            <button
+                                                onClick={() => setOpen(!open)}
+                                                className="
+      w-full
+      bg-base-100
+      border border-accent
+      rounded-xl
+      px-4 py-3
+      flex justify-between items-center
+      hover:border-info
+      transition-all
+    "
+                                            >
+                                                {selected || "Select Employment Type"}
 
-                                            <optgroup label="Bachelor's Degrees">
-                                                <option>Bachelor of Arts (BA)</option>
-                                                <option>Bachelor of Science (BSc)</option>
-                                                <option>Bachelor of Commerce (BCom)</option>
-                                                <option>Bachelor of Technology (BTech)</option>
-                                                <option>Bachelor of Engineering (BE)</option>
-                                                <option>Bachelor of Computer Applications (BCA)</option>
-                                                <option>Bachelor of Business Administration (BBA)</option>
-                                                <option>Bachelor of Medicine, Bachelor of Surgery (MBBS)</option>
-                                                <option>Bachelor of Laws (LLB)</option>
-                                            </optgroup>
+                                                <svg
+                                                    className={`transition-transform ${open ? "rotate-180" : ""}`}
+                                                    width="20"
+                                                    height="20"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        fill="currentColor"
+                                                        d="M7 10l5 5l5-5"
+                                                    />
+                                                </svg>
+                                            </button>
 
-                                            <optgroup label="Master's Degrees">
-                                                <option>Master of Arts (MA)</option>
-                                                <option>Master of Science (MSc)</option>
-                                                <option>Master of Commerce (MCom)</option>
-                                                <option>Master of Technology (MTech)</option>
-                                                <option>Master of Engineering (ME)</option>
-                                                <option>Master of Computer Applications (MCA)</option>
-                                                <option>Master of Business Administration (MBA)</option>
-                                                <option>Master of Laws (LLM)</option>
-                                            </optgroup>
+                                            {open && (
+                                                <div
+                                                    className="
+        absolute z-50
+        w-full
+        mt-2
+        bg-base-200
+        border border-accent
+        rounded-xl
+        max-h-80
+overflow-y-auto
+        shadow-2xl
+      "
+                                                >
+                                                    {options.map((group) => (
+                                                        <div key={group.heading}>
+                                                            <div className="px-4 py-2 bg-base-300 text-white text-sm font-bold flex items-center gap-1">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                                                    <path fill="#fff" fillRule="evenodd" d="M17.9 4.2A3 3 0 0 0 15.5 3h-11a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h11a3 3 0 0 0 2.4-1.2l4.5-6a3 3 0 0 0 0-3.6z" clipRule="evenodd"></path>
+                                                                </svg>   {group.heading}
+                                                            </div>
 
-                                            <optgroup label="Doctorate">
-                                                <option>Doctor of Philosophy (PhD)</option>
-                                                <option>Doctorate</option>
-                                            </optgroup>
+                                                            {group.option.map((degree) => (
+                                                                <button
+                                                                    key={degree}
+                                                                    onClick={() => {
+                                                                        setSelected(degree);
+                                                                        handleChange2(index, "degree", degree);
+                                                                        setOpen(false);
+                                                                    }}
+                                                                    className="
+                    w-full
+                    px-4 py-3
+                    text-left
+                    text-info
+                    flex items-center gap-2
+                    hover:bg-secondary
+                    hover:text-white
+                    transition-all
+                "
+                                                                >
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                                                        <g fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}>
+                                                                            <path d="M12.034 12.681a.498.498 0 0 1 .647-.647l9 3.5a.5.5 0 0 1-.033.943l-3.444 1.068a1 1 0 0 0-.66.66l-1.067 3.443a.5.5 0 0 1-.943.033zM5 17A12 12 0 0 1 17 5"></path>
+                                                                            <circle cx={19} cy={5} r={2}></circle>
+                                                                            <circle cx={5} cy={19} r={2}></circle>
+                                                                        </g>
+                                                                    </svg> {degree}
+                                                                </button>
+                                                            ))}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
 
-                                            <optgroup label="Other">
-                                                <option>Other</option>
-                                            </optgroup>
-                                        </select>
+
+
+
+
+
+
+
+
+
+
+
                                     </div>
                                     <InputField label="Field of Study" id="field" value={form.field}
                                         placeholder="Computer Science and Engineering"

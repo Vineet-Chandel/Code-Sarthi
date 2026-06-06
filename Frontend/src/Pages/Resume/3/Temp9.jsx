@@ -76,12 +76,12 @@ const AmanGuptaTimelineResume = ({ data }) => {
                 <section>
                     <h2 className="text-xl font-bold uppercase tracking-widest border-b border-slate-400 pb-1 mb-4">Language</h2>
                     <ul className="text-[14px] space-y-1">
-                        {languages.map((lang, idx) => (
+                        {/* {languages.map((lang, idx) => (
                             <li key={idx} className="flex items-center gap-2">
                                 <span className="w-1.5 h-1.5 bg-slate-900 rounded-full"></span>
                                 {lang}
                             </li>
-                        ))}
+                        ))} */}
                     </ul>
                 </section>
             </aside>

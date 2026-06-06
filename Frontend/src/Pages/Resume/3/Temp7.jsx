@@ -133,7 +133,7 @@ const AmanGuptaLayoutTemplate = ({ data }) => {
                     <section className="pb-10">
                         <h2 className="text-sm font-black uppercase tracking-widest text-gray-700 border-b border-gray-300 pb-1 mb-6">LANGUAGES</h2>
                         <div className="grid grid-cols-2 gap-x-12 gap-y-8">
-                            {languages.map((lang, idx) => (
+                            {/* {languages.map((lang, idx) => (
                                 <div key={idx}>
                                     <div className="flex justify-between text-[12px] font-bold mb-1">
                                         <span>{lang.split(' ')[0]}:</span>
@@ -148,7 +148,7 @@ const AmanGuptaLayoutTemplate = ({ data }) => {
                                         ></div>
                                     </div>
                                 </div>
-                            ))}
+                            ))} */}
                         </div>
                     </section>
                 </div>

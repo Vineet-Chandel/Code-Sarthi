@@ -101,9 +101,12 @@ const resumeData1 = {
             percentage: "92%",
         },
     ],
-    certifications: ["AWS Certified Cloud Practitioner", "Meta Frontend Developer Certification"],
+
+
+    certifications: [{ about: "AWS Certified Cloud Practitioner", link: "" }, { about: "Meta Frontend Developer Certification", link: "" }],
     achievements: ["Ranked Top 5% in LeetCode contests", "Winner of Hackathon XYZ", "Solved 500+ DSA problems"],
-    languages: ["English (Fluent)", "Hindi (Native)"],
+    languages: [{ langCategory: "English ", status: "Fluent" }, { langCategory: "Hindi ", status: "Native" },],
+    Social_Links: ["www.insta.com", "www.protfolio.com"]
 };
 
 // ============================================================

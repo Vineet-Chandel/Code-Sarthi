@@ -120,18 +120,18 @@ const AmanGuptaDynamicMinimalist = ({ data }) => {
                         <h2 className="text-sm font-black uppercase tracking-widest border-b border-slate-200 mb-3">Recognition</h2>
                         <ul className="list-disc ml-5 space-y-1 text-[13px]">
                             {achievements.map((ach, idx) => <li key={idx}>{ach}</li>)}
-                            {certifications.map((cert, idx) => <li key={idx} className="italic">{cert}</li>)}
+                            {/* {certifications.map((cert, idx) => <li key={idx} className="italic">{cert}</li>)} */}
                         </ul>
                     </div>
                     <div>
                         <h2 className="text-sm font-black uppercase tracking-widest border-b border-slate-200 mb-3">Languages</h2>
                         <div className="space-y-2 text-[13px]">
-                            {languages.map((lang, idx) => (
+                            {/* {languages.map((lang, idx) => (
                                 <div key={idx} className="flex justify-between border-b border-slate-50 pb-1">
                                     <span className="font-bold">{lang.split(' ')[0]}</span>
                                     <span className="italic text-slate-500">{lang.split(' ').slice(1).join(' ')}</span>
                                 </div>
-                            ))}
+                            ))} */}
                         </div>
                     </div>
                 </section>

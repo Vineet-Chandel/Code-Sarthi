@@ -36,9 +36,10 @@ const Welcome = () => {
     return (
 
         <div
-            className={`fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-hidden bg-[#050505] px-4 transition-all duration-[1200ms] ease-in-out ${visible
-                ? "opacity-100 scale-100"
-                : "opacity-0 scale-95 pointer-events-none"
+            className={`fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-hidden bg-[#050505] px-4 transition-all duration-[1200ms] ease-in-out 
+        ${visible
+                    ? "opacity-100 scale-100"
+                    : "opacity-0 scale-95 pointer-events-none"
                 }`}
         >
             {/* Ambient Background */}
@@ -103,31 +104,47 @@ const Welcome = () => {
 
                 {/* Tagline */}
                 <p
-                    className={`mt-5 md:mt-6 text-[9px] sm:text-[10px] md:text-[11px] uppercase tracking-[0.25em] sm:tracking-[0.35em] md:tracking-[0.4em] text-gray-500 transition-all duration-1000 delay-500 ${visible
-                        ? "opacity-100 translate-y-0"
-                        : "opacity-0 translate-y-2"
+                    className={`mt-5 md:mt-6 text-[9px] sm:text-[10px] md:text-[11px] uppercase tracking-[0.25em] sm:tracking-[0.35em] md:tracking-[0.4em] text-gray-500 transition-all duration-1000 delay-500 
+      ${visible
+                            ? "opacity-100 translate-y-0"
+                            : "opacity-0 translate-y-2"
                         }`}
                 >
                     Architecting the Future
                 </p>
 
                 {/* Loader */}
-                <div
-                    className="
-                            relative mt-12 md:mt-16
-                            h-[2px]
-                            w-48
-                            sm:w-60
-                            md:w-72
-                            bg-white/5
-                            overflow-hidden
-                            rounded-full
-                        "
-                >
+                <div className="relative w-[80%] h-1 mt-10 rounded-3xl">
+                    {/* Outer glow */}
                     <div
-                        className="absolute left-0 top-0 h-full bg-gradient-to-r from-transparent via-blue-500 to-transparent transition-all duration-300 ease-out"
+                        className="absolute left-0 top-1/2 -translate-y-1/2 h-2 rounded-full
+               bg-cyan-400/40 blur-xl pointer-events-none"
                         style={{ width: `${progress}%` }}
                     />
+
+                    {/* Track */}
+                    <div className="relative w-full h-full bg-slate-800/50 rounded-full overflow-hidden">
+                        <div
+                            className="
+        absolute left-0 top-0 h-full rounded-full
+        bg-gradient-to-r from-sky-900 via-sky-600 to-cyan-500
+        transition-all duration-500 ease-out
+        shadow-[0_0_10px_#3b82f6,0_0_20px_#3b82f6,0_0_40px_#60a5fa]
+      "
+                            style={{ width: `${progress}%` }}
+                        >
+                            {/* Pulse */}
+                            <div className="absolute inset-0 bg-white/10 animate-pulse" />
+
+                            {/* Shimmer */}
+                            <div className="absolute inset-0 overflow-hidden">
+                                <div className="absolute left-[-100%] h-full w-1/3 bg-gradient-to-r from-transparent via-white/50 to-transparent animate-[shimmer_2s_linear_infinite]" />
+                            </div>
+
+                            {/* Bright head */}
+                            <div className="absolute right-0 top-1/2 h-5 w-5 -translate-y-1/2 rounded-full bg-cyan-200 blur-sm" />
+                        </div>
+                    </div>
                 </div>
 
                 {/* Counter */}
@@ -187,8 +204,7 @@ const Welcome = () => {
                     </svg>
                 </span>
             </div>
-        </div>
-
+        </div >
 
 
 

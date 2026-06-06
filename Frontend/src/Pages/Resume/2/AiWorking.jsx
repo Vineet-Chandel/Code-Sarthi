@@ -27,7 +27,7 @@ const AiWorking = ({
 
 
     return (
-        <div className=' fixed inset-0 z-40 bg-black/50 overflow-y-auto flex flex-col items-center px-2 sm:px-4 ' onClick={() => { setAiModalOpen(false); setBullets([]), setpoints([]), setRole(""), setSelectedEntity(""), setSelectedFeildType(""), setFeildIndex(null) }}>
+        <div className=' fixed inset-0 z-40 bg-black/90 overflow-y-auto flex flex-col items-center px-2 sm:px-4 ' onClick={() => { setAiModalOpen(false); setBullets([]), setpoints([]), setRole(""), setSelectedEntity(""), setSelectedFeildType(""), setFeildIndex(null) }}>
             <div className='
 self-end
 w-12 h-12
@@ -44,9 +44,9 @@ transition" width="2em" height="2em" viewBox="0 0 24 24">
 
             <div className=' w-full max-w-[1800px] flex flex-col xl:flex-row gap-3 sm:gap-5 p-2 sm:p-5 '>
                 <div className=' w-full xl:w-1/2  bg-base-100 rounded-xl p-3 sm:p-5 ' onClick={(e) => e.stopPropagation()}>
-                    <div className='mb-5'>
-                        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-info mb-2 leading-tight text-start  " >
-                            Bullet points for<br /> <mark className='bg-secondary text-secondary-content p-1.5 sm:p-2 rounded-lg sm:rounded-xl px-3 sm:px-5'>{role}</mark>,
+                    <div className='mb-5 '>
+                        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-info mb-2 leading-tight text-start flex flex-col justify-start items-start " >
+                            <span> Bullet points for</span> <mark className=' mt-2 bg-secondary  text-secondary-content p-1.5 sm:p-2 rounded-lg sm:rounded-xl px-3 sm:px-5 '>{role},</mark>
                         </h1>
                     </div>
 

@@ -8,12 +8,12 @@ import Step from "../Step";
 // CONFIGURATION ACCENTS
 // ─────────────────────────────────────────────────────────────────────────────
 const ACCENTS = {
-    summary: { stripe: "#1d9e75", dot: "#1d9e75", bg: "rgba(29, 158, 117, 0.1)", text: "#1d9e75" },
-    exp: { stripe: "#378add", dot: "#378add", bg: "rgba(55, 138, 221, 0.1)", text: "#378add" },
-    edu: { stripe: "#ba7517", dot: "#ba7517", bg: "rgba(186, 117, 23, 0.1)", text: "#ba7517" },
-    skills: { stripe: "#7f77dd", bg: "rgba(127, 119, 221, 0.1)", text: "#7f77dd" },
-    proj: { stripe: "#d85a30", bg: "rgba(216, 90, 48, 0.1)", text: "#d85a30" },
-    extra: { stripe: "#d4537e", bg: "rgba(212, 83, 126, 0.1)", text: "#d4537e" },
+    summary: { stripe: "#fff", dot: "#fff", bg: "rgba(255, 255, 255, 0.1)", text: "#fff" },
+    exp: { stripe: "#fff", dot: "#fff", bg: "rgba(255, 255, 255, 0.1)", text: "#fff" },
+    edu: { stripe: "#fff", dot: "#fff", bg: "rgba(255, 255, 255, 0.1)", text: "#fff" },
+    skills: { stripe: "#fff", bg: "rgba(255, 255, 255, 0.1)", text: "#fff" },
+    proj: { stripe: "#fff", bg: "rgba(255, 255, 255, 0.1)", text: "#fff" },
+    extra: { stripe: "#fff", bg: "rgba(255, 255, 255, 0.1)", text: "#fff" },
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -54,7 +54,7 @@ const Icon = ({ d, size = 14 }) => (
 function Toast({ message, visible }) {
     return (
         <div
-            className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs py-2 px-4 rounded-lg shadow-lg pointer-events-none z-50 transition-all duration-200 flex items-center gap-2 whitespace-nowrap"
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-white text-white text-xs py-2 px-4 rounded-lg shadow-lg pointer-events-none z-50 transition-all duration-200 flex items-center gap-2 whitespace-nowrap"
             style={{
                 transform: `translateX(-50%) translateY(${visible ? "0px" : "12px"})`,
                 opacity: visible ? 1 : 0,
@@ -71,8 +71,8 @@ function Toast({ message, visible }) {
 // ─────────────────────────────────────────────────────────────────────────────
 function ActionBtn({ icon, label, onClick, active = false, success = false }) {
 
-
-    let bgClass = " bg-transparent hover:bg-slate-100 text-slate-500 hover:text-slate-800";
+    const [hov, setHov] = useState(false);
+    let bgClass = " bg-transparent hover:bg-slate-100 text-info hover:text-white";
     if (success) bgClass = "bg-emerald-50 text-emerald-600";
     else if (active) bgClass = "bg-blue-50 text-blue-600";
 
@@ -97,7 +97,7 @@ function ActionBtn({ icon, label, onClick, active = false, success = false }) {
 // ─────────────────────────────────────────────────────────────────────────────
 function Tag({ label }) {
     return (
-        <span className="inline-block px-2.5 py-1 text-xs font-mono border border-slate-200 bg-slate-50 hover:bg-white hover:border-slate-400 text-slate-600 hover:text-slate-900 rounded-md transition-all duration-150 cursor-default mr-1.5 mb-1.5">
+        <span className="inline-block px-2.5 py-1 text-xs font-mono border border-gray-500 bg-slate-50 hover:bg-accent hover:border-slate-400 text-white hover:text-white rounded-md transition-all duration-150 cursor-default mr-1.5 mb-1.5">
             {label}
         </span>
     );
@@ -131,7 +131,7 @@ function SectionCard({ id, title, icon, stripeColor, copyText, onShare, children
             id={`section-${id}`}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
-            className={`bg-white rounded-xl border flex flex-col overflow-hidden mb-4 transition-all duration-200 relative ${hovered ? "border-slate-400 shadow-sm" : "border-slate-200"
+            className={`bg-accent rounded-xl border flex flex-col overflow-hidden mb-4 transition-all duration-200 relative ${hovered ? "border-slate-400 shadow-sm" : "border-gray-500"
                 }`}
         >
             {/* Dynamic top brand accent line */}
@@ -142,7 +142,7 @@ function SectionCard({ id, title, icon, stripeColor, copyText, onShare, children
 
             {/* Header Module */}
             <div className="flex items-center justify-between px-4 pt-4 pb-3">
-                <h2 className="font-bold text-slate-800 flex items-center gap-2.5 text-sm tracking-wider uppercase">
+                <h2 className="font-bold text-white flex items-center gap-2.5 text-sm tracking-wider uppercase">
                     <span style={{ color: stripeColor }} className="flex items-center">
                         <Icon d={icon} size={18} />
                     </span>
@@ -151,7 +151,7 @@ function SectionCard({ id, title, icon, stripeColor, copyText, onShare, children
 
                 {/* Floating Controls Context Group */}
                 <div
-                    className={` flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-lg p-1 transition-all duration-200 ${hovered ? "opacity-100 translate-y-0" : "lg:opacity-0 lg:-translate-y-1 opacity-100"
+                    className={` flex items-center gap-1 bg-slate-50 border border-gray-500 rounded-lg p-1 transition-all duration-200 ${hovered ? "opacity-100 translate-y-0" : "lg:opacity-0 lg:-translate-y-1 opacity-100"
                         }`}
                 >
                     <ActionBtn
@@ -163,7 +163,7 @@ function SectionCard({ id, title, icon, stripeColor, copyText, onShare, children
                     />
                     {copyText && (
                         <>
-                            <div className="w-[1px] h-4 bg-slate-200 mx-0.5" />
+                            <div className="w-[1px] h-4 bg-black mx-0.5" />
                             <ActionBtn
                                 icon={<Icon d={copied ? IC.check : IC.copy} size={13} />}
 
@@ -172,7 +172,7 @@ function SectionCard({ id, title, icon, stripeColor, copyText, onShare, children
                             />
                         </>
                     )}
-                    <div className="w-[1px] h-4 bg-slate-200 mx-0.5" />
+                    <div className="w-[1px] h-4 bg-black mx-0.5" />
                     <ActionBtn
                         icon={<Icon d={collapsed ? IC.chevDown : IC.chevUp} size={13} />}
 
@@ -236,10 +236,10 @@ function ContactItem({ icon, text, href }) {
     const Component = href ? "a" : "span";
     return (
         <Component
-            href={href}
+            href={href ? href : "#"}
             target={href ? "_blank" : undefined}
             rel={href ? "noopener noreferrer" : undefined}
-            className={`flex items-center gap-1.5 text-xs text-slate-500 px-2 py-1 rounded-md border border-transparent transition-all duration-150 ${href ? "cursor-pointer hover:border-slate-200 hover:bg-slate-50 hover:text-slate-800 no-underline" : "cursor-default"
+            className={`flex items-center gap-1.5 text-xs text-info px-2 py-1 rounded-md border border-transparent transition-all duration-150 ${href ? "cursor-pointer hover:border-gray-500 hover:bg-slate-50 hover:text-white no-underline" : "cursor-default"
                 }`}
         >
             <span className="text-blue-500 flex items-center">
@@ -309,14 +309,18 @@ export default function ResumeViewer() {
             .join("\n\n"),
 
         extra: [
-            ...(data?.certifications ?? []),
+            ...(data?.certifications?.map(
+                c => `${c.about} ${c.link || ""}`
+            ) ?? []),
             ...(data?.achievements ?? []),
-            ...(data?.languages ?? []),
+            ...(data?.languages?.map(
+                l => `${l.langCategory} (${l.status})`
+            ) ?? [])
         ].join("\n"),
     };
 
     return (
-        <div className="max-w-6xl mx-auto px-4 py-6 antialiased text-slate-800 font-sans">
+        <div className="max-w-6xl mx-auto px-4 py-6 antialiased text-white font-sans">
             <Toast message={toast.message} visible={toast.visible} />
 
             {/* ══════════════════════════════════════════════════════════
@@ -346,22 +350,22 @@ export default function ResumeViewer() {
             </div>
 
 
-            <header className="bg-white border border-slate-200 rounded-xl p-5 md:p-6 mb-4 shadow-sm">
+            <header className="bg-accent border border-gray-500 rounded-xl p-5 md:p-6 mb-4 shadow-sm">
                 <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                     <div className="flex items-start gap-4">
                         {/* Structural Monogram Avatar */}
                         <div className="w-14 h-14 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-lg font-bold shrink-0 border border-blue-100">
-                            {data?.fname[0]}{data?.lname[0]}
+                            {data?.fname?.[0]}{data?.lname?.[0]}
                         </div>
 
                         <div>
-                            <h1 className="text-2xl font-bold tracking-tight text-slate-900 leading-none">
+                            <h1 className="text-2xl font-bold tracking-tight text-white leading-none">
                                 {data?.fname} <span className="text-blue-600">{data?.lname}</span>
                             </h1>
-                            <p className="text-sm font-medium text-slate-500 mt-1.5">{data?.summaryTitle}</p>
-                            <div className="flex items-center gap-1.5 mt-2.5 text-xs text-slate-400 font-medium">
+                            <p className="text-sm font-medium text-info mt-1.5">{data?.summaryTitle}</p>
+                            <div className="flex items-center gap-1.5 mt-2.5 text-xs text-info font-medium">
                                 <Icon d={IC.map} size={13} />
-                                {data?.location} <span className="text-slate-300">·</span> {data?.pincode}
+                                {data?.location} <span className="text-info">·</span> {data?.pincode}
                             </div>
                         </div>
                     </div>
@@ -369,8 +373,8 @@ export default function ResumeViewer() {
                     <button
                         onClick={handleHeaderCopy}
                         className={`flex items-center justify-center gap-1.5 h-8 px-3 rounded-lg text-xs font-medium border transition-colors self-start w-full md:w-auto ${headerCopied
-                            ? "bg-emerald-50 border-emerald-200 text-emerald-600"
-                            : "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-800"
+                            ? "bg-emerald-50 border-emerald-200 text-base-100"
+                            : "bg-slate-50 border-gray-500 text-base-200 hover:bg-base-100 hover:text-white"
                             }`}
                     >
                         <Icon d={headerCopied ? IC.check : IC.copy} size={13} />
@@ -391,14 +395,14 @@ export default function ResumeViewer() {
             </header>
 
             {/* ── SEGMENT CONTROLLER FILTER BAR ─────────────────────────── */}
-            <nav className="flex flex-wrap gap-1 p-1 bg-slate-100 border border-slate-200 rounded-xl mb-4 overflow-hidden">
+            <nav className="flex flex-wrap gap-1 p-1 bg-slate-100 border border-gray-500 rounded-xl mb-4 overflow-hidden">
                 {filters.map(f => (
                     <button
                         key={f}
                         onClick={() => setActiveFilter(f)}
                         className={`px-4 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all duration-150 border ${activeFilter === f
-                            ? "bg-white border-slate-200 text-slate-900 shadow-sm"
-                            : "bg-transparent border-transparent text-slate-500 hover:text-slate-800"
+                            ? "bg-accent border-gray-500 text-white shadow-sm"
+                            : "bg-transparent border-transparent text-black hover:text-white"
                             }`}
                     >
                         {f === "all" ? "All Sections" : f.charAt(0).toUpperCase() + f.slice(1)}
@@ -422,8 +426,8 @@ export default function ResumeViewer() {
                             copyText={copyTexts.summary}
                             onShare={handleShare}
                         >
-                            <p className="text-xs text-slate-600 leading-relaxed">
-                                <strong className="font-semibold text-slate-900">{data?.fname}</strong> is {data?.summaryBody}
+                            <p className="text-xs text-white leading-relaxed">
+                                <strong className="font-semibold text-white">{data?.fname}</strong> is {data?.summaryBody}
                             </p>
                             <div className="flex flex-wrap gap-1.5 mt-3.5">
                                 {["MERN Stack", "UI / UX", "Full-Stack"].map(t => (
@@ -447,7 +451,7 @@ export default function ResumeViewer() {
                         >
                             {Object.entries(data?.skills || {}).map(([category, items]) => (
                                 <div key={category} className="mb-3.5 last:mb-0">
-                                    <h3 className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5 font-mono">
+                                    <h3 className="text-[10px] font-bold uppercase tracking-wider text-info mb-1.5 font-mono">
                                         {category}
                                     </h3>
                                     <div className="flex flex-wrap">
@@ -468,7 +472,7 @@ export default function ResumeViewer() {
                         >
                             <SubLabel>Certifications</SubLabel>
                             {data?.certifications?.map((cert, idx) => (
-                                <ListItem key={idx} icon={IC.award} iconColor="#eab308">{cert}</ListItem>
+                                <ListItem key={idx} icon={IC.award} iconColor="#eab308">{cert.about} {cert.link}</ListItem>
                             ))}
 
                             <SubLabel>Achievements</SubLabel>
@@ -479,7 +483,10 @@ export default function ResumeViewer() {
                             <SubLabel>Languages</SubLabel>
                             <div className="flex flex-wrap mt-1">
                                 {data?.languages?.map((lang, idx) => (
-                                    <Tag key={idx} label={lang} />
+                                    <Tag
+                                        key={idx}
+                                        label={`${lang.langCategory} (${lang.status})`}
+                                    />
                                 ))}
                             </div>
                         </SectionCard>
@@ -498,15 +505,15 @@ export default function ResumeViewer() {
                             copyText={copyTexts.exp}
                             onShare={handleShare}
                         >
-                            {data?.experience.map((exp, idx) => (
+                            {data?.experience?.map((exp, idx) => (
                                 <TimelineEntry
                                     key={idx}
                                     dotColor={ACCENTS.exp.dot}
                                     topLeft={
                                         <>
-                                            <h3 className="text-sm font-semibold text-slate-900">{exp.role}</h3>
-                                            <p className="text-xs text-slate-500 mt-0.5 font-medium">
-                                                {exp.company} <span className="text-slate-300">·</span> {exp.location}
+                                            <h3 className="text-sm font-semibold text-white">{exp.role}</h3>
+                                            <p className="text-xs text-white mt-0.5 font-medium">
+                                                {exp.company} <span className="text-info">·</span> {exp.location}
                                             </p>
                                         </>
                                     }
@@ -518,7 +525,7 @@ export default function ResumeViewer() {
                                             >
                                                 {exp.employmentType}
                                             </span>
-                                            <p className="text-[11px] font-mono font-medium text-slate-400">
+                                            <p className="text-[11px] font-mono font-medium text-info">
                                                 {exp.startDate} — {exp.currentlyWorking ? "Present" : exp.endDate}
                                             </p>
                                         </div>
@@ -526,8 +533,8 @@ export default function ResumeViewer() {
                                 >
                                     <ul className="space-y-1.5 mt-2.5">
                                         {exp.bullets.map((bullet, bIdx) => (
-                                            <li key={bIdx} className="flex gap-2 text-xs text-slate-600 leading-relaxed items-start">
-                                                <span className="text-slate-300 select-none text-sm leading-none pt-0.5">›</span>
+                                            <li key={bIdx} className="flex gap-2 text-xs text-white leading-relaxed items-start">
+                                                <span className="text-info select-none text-sm leading-none pt-0.5">›</span>
                                                 <span dangerouslySetInnerHTML={{ __html: bullet }} />
                                             </li>
                                         ))}
@@ -545,15 +552,15 @@ export default function ResumeViewer() {
                             copyText={copyTexts.edu}
                             onShare={handleShare}
                         >
-                            {data?.education.map((edu, idx) => (
+                            {data?.education?.map((edu, idx) => (
                                 <TimelineEntry
                                     key={idx}
                                     dotColor={ACCENTS.edu.dot}
                                     topLeft={
                                         <>
-                                            <h3 className="text-sm font-semibold text-slate-900">{edu.degree}</h3>
+                                            <h3 className="text-sm font-semibold text-white">{edu.degree}</h3>
                                             <p className="text-xs text-blue-600 font-medium mt-0.5">{edu.field}</p>
-                                            <p className="text-xs text-slate-400 font-medium mt-0.5">{edu.institution}</p>
+                                            <p className="text-xs text-info font-medium mt-0.5">{edu.institution}</p>
                                         </>
                                     }
                                     topRight={
@@ -566,8 +573,8 @@ export default function ResumeViewer() {
                                                     {edu.cgpa ? `CGPA ${edu.cgpa}` : edu.percentage}
                                                 </span>
                                             )}
-                                            <p className="text-[11px] font-mono font-medium text-slate-400">{edu.startDate} — {edu.endDate}</p>
-                                            <p className="text-[11px] font-medium text-slate-400 hidden sm:block">{edu.location}</p>
+                                            <p className="text-[11px] font-mono font-medium text-info">{edu.startDate} — {edu.endDate}</p>
+                                            <p className="text-[11px] font-medium text-info hidden sm:block">{edu.location}</p>
                                         </div>
                                     }
                                 >
@@ -610,7 +617,7 @@ export default function ResumeViewer() {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 {Object.entries(data?.skills ?? {}).map(([category, items]) => (
                                     <div key={category} className="mb-3.5 last:mb-0">
-                                        <h3 className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5 font-mono">
+                                        <h3 className="text-[10px] font-bold uppercase tracking-wider text-info mb-1.5 font-mono">
                                             {category}
                                         </h3>
 
@@ -635,11 +642,11 @@ export default function ResumeViewer() {
 // ─────────────────────────────────────────────────────────────────────────────
 function ProjectCard({ project: p }) {
     return (
-        <div className="border border-slate-200 rounded-xl p-4 transition-all duration-150 hover:border-slate-300 hover:bg-slate-50 group">
+        <div className="border border-gray-500 rounded-xl p-4 transition-all duration-150 hover:border-slate-300 hover:bg-slate-50 group">
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-2">
                 <div>
-                    <h3 className="text-sm font-semibold text-slate-900">{p.name}</h3>
-                    <p className="text-xs font-mono font-medium text-slate-400 mt-1">{p.stack}</p>
+                    <h3 className="text-sm font-semibold text-white">{p.name}</h3>
+                    <p className="text-xs font-mono font-medium text-info mt-1">{p.stack}</p>
                 </div>
 
                 {/* Secondary Navigation Anchors — Flex-reveal layer */}
@@ -648,7 +655,7 @@ function ProjectCard({ project: p }) {
                         href={p.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:border-slate-300 text-slate-600 hover:text-slate-900 transition-all no-underline"
+                        className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-lg border border-gray-500 bg-accent hover:border-slate-300 text-white hover:text-white transition-all no-underline"
                     >
                         <Icon d={IC.github} size={12} />
                         Code
@@ -657,7 +664,7 @@ function ProjectCard({ project: p }) {
                         href={p.live}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:border-slate-300 text-slate-600 hover:text-slate-900 transition-all no-underline"
+                        className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-lg border border-gray-500 bg-accent hover:border-slate-300 text-white hover:text-white transition-all no-underline"
                     >
                         <Icon d={IC.external} size={12} />
                         Live
@@ -665,14 +672,14 @@ function ProjectCard({ project: p }) {
                 </div>
             </div>
 
-            <p className="text-xs font-medium text-slate-500 italic mb-3 leading-relaxed">
+            <p className="text-xs font-medium text-white italic mb-3 leading-relaxed">
                 {p.description}
             </p>
 
             <ul className="space-y-1.5">
                 {p.bullets.map((bullet, idx) => (
-                    <li key={idx} className="flex gap-2 text-xs text-slate-600 leading-relaxed items-start">
-                        <span className="text-slate-300 select-none text-sm leading-none pt-0.5">›</span>
+                    <li key={idx} className="flex gap-2 text-xs text-white leading-relaxed items-start">
+                        <span className="text-info select-none text-sm leading-none pt-0.5">›</span>
                         <span dangerouslySetInnerHTML={{ __html: bullet }} />
                     </li>
                 ))}
@@ -686,7 +693,7 @@ function ProjectCard({ project: p }) {
 // ─────────────────────────────────────────────────────────────────────────────
 function SubLabel({ children }) {
     return (
-        <h3 className="text-[10px] font-bold tracking-wider text-slate-400 uppercase mt-4 mb-2 first:mt-0 font-mono">
+        <h3 className="text-[10px] font-bold tracking-wider text-info uppercase mt-4 mb-2 first:mt-0 font-mono">
             {children}
         </h3>
     );
@@ -694,7 +701,7 @@ function SubLabel({ children }) {
 
 function ListItem({ icon, iconColor = "rgb(148, 163, 184)", children }) {
     return (
-        <div className="flex gap-2.5 text-xs text-slate-600 mb-2 last:mb-0 leading-relaxed items-start">
+        <div className="flex gap-2.5 text-xs text-white mb-2 last:mb-0 leading-relaxed items-start">
             <span style={{ color: iconColor }} className="shrink-0 pt-0.5 flex items-center">
                 <Icon d={icon} size={13} />
             </span>

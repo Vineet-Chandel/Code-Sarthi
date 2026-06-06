@@ -135,7 +135,7 @@ const ResumeTemplate = ({ data }) => {
                     Languages
                 </h2>
                 <div className="grid grid-cols-2 gap-8 px-4">
-                    {data.languages.map((lang, idx) => (
+                    {/* {data.languages.map((lang, idx) => (
                         <div key={idx}>
                             <p className="text-[13px] font-bold">{lang.split(' ')[0]}:</p>
                             <p className="text-[12px] text-gray-600 italic mb-1">{lang.split(' ')[1] || "Proficient"}</p>
@@ -146,7 +146,7 @@ const ResumeTemplate = ({ data }) => {
                                 ></div>
                             </div>
                         </div>
-                    ))}
+                    ))} */}
                 </div>
             </section >
 
@@ -162,9 +162,9 @@ const ResumeTemplate = ({ data }) => {
                         ))}
                     </ul>
                     <ul className="list-disc space-y-1 italic">
-                        {data.certifications.map((cert, idx) => (
+                        {/* {data.certifications.map((cert, idx) => (
                             <li key={idx}>{cert}</li>
-                        ))}
+                        ))} */}
                     </ul>
                 </div>
             </section >

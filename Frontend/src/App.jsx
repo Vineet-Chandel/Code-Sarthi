@@ -82,6 +82,8 @@ import PageNotFound from "./ErrorSaver/PageNotFound";
 import Summary from "./Pages/Resume/2/05_PRSUM/ProfileSummary";
 import Project from "./Pages/Resume/2/06_PROJECT/Project";
 import Preview from "./Pages/Resume/2/08_PREVIEW/Preview";
+import IntroAdditional from "./Pages/Resume/2/07_ADDITIONAL/IntroAdditonals";
+import FeildsAdditionals from "./Pages/Resume/2/07_ADDITIONAL/FeildsAdditionals";
 
 
 const App = () => {
@@ -159,6 +161,9 @@ const App = () => {
               <Route path="credentials-analyser" element={<CredentialsAnalyser />} />
               <Route path="build-resume/header-content" element={<HeaderContent />} />
               <Route path="build-resume/project-content" element={<Project />} />
+              <Route path="build-resume/intro-additionals-page" element={<IntroAdditional />} />
+              <Route path="build-resume/additional-details" element={<FeildsAdditionals />} />
+
               <Route path="build-resume/intro-exp-page" element={<IntroEXP />} />
               <Route path="build-resume/intro-edu-page" element={< IntroEdu />} />
               <Route path="build-resume/intro-preview-page" element={< IntroPreview />} />

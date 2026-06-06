@@ -89,7 +89,7 @@ const AmanGuptaCleanTemplate = ({ data }) => {
                     <section>
                         <h2 className="text-xl font-black uppercase tracking-widest text-gray-700 mb-6">Languages</h2>
                         <div className="grid grid-cols-2 gap-x-12 gap-y-6">
-                            {languages.map((lang, idx) => (
+                            {/* {languages.map((lang, idx) => (
                                 <div key={idx}>
                                     <div className="flex justify-between text-[13px] font-bold mb-1">
                                         <span>{lang.split(' ')[0]}</span>
@@ -100,7 +100,7 @@ const AmanGuptaCleanTemplate = ({ data }) => {
                                     </div>
                                     <p className="text-[11px] text-gray-400 mt-1 italic">Proficient / Native</p>
                                 </div>
-                            ))}
+                            ))} */}
                         </div>
                     </section>
                 </div>

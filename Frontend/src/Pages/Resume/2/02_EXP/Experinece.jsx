@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { use, useCallback, useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import Temp1 from "../../3/Temp1";
+
 import axios from "axios";
 import BASE_URL from '../../../auth/baseURL';
-import { Slice } from 'lucide-react';
+
 import Toast from '../Toast';
 import { AnimatePresence } from "framer-motion";
 import ProgressMeter from '../ProgressMeter';
@@ -16,44 +16,90 @@ import AiWorking from '../AiWorking';
 
 
 // ─── reusable field ───────────────────────────────────────────────────────────
-const InputField = ({ label, id, value, type = "text", placeholder, onChange }) => (
-    <div className="flex flex-col gap-1 w-full group">
+const InputField = ({
+    label,
+    id,
+    value,
+    type = "text",
+    placeholder,
+    onChange
+}) => {
+    const monthRef = useRef(null);
+    return (<div className="flex flex-col gap-1 w-full group">
         <label
             htmlFor={id}
-            className="text-[13px] font-semibold uppercase tracking-widest text-info group-focus-within:text-white transition-colors ml-0.5"
+            className="
+        text-[13px]
+        font-semibold
+        uppercase
+        tracking-widest
+        text-info
+        group-focus-within:text-white
+        transition-colors
+        ml-0.5
+      "
         >
             {label}
         </label>
-        <div className='    flex items-center gap-2 w-full
-    bg-base-200 border border-slate-600
-    rounded-xl px-3.5 py-2.5
-    text-sm text-slate-800 outline-none
-    focus-within:border-secondary
-    focus-within:ring-1
-    focus-within:ring-accent-content
-    
-    transition-all duration-200
-    font-medium'>
 
+        <div className="relative">
             <input
+                ref={monthRef}
                 id={id}
                 type={type}
                 value={value}
                 placeholder={placeholder}
                 onChange={(e) => onChange(id, e.target.value)}
                 className="
+          w-full
+          bg-base-100
+          border border-accent
+          rounded-xl
+          px-4 py-3
+          text-white
+          text-sm sm:text-base
+          font-medium
+          outline-none
+          transition-all duration-300
+          hover:border-info
+          focus:border-info
+          focus:ring-2 focus:ring-info
+          focus:bg-base-200
+          shadow-md hover:shadow-lg
+          cursor-pointer
+          pr-10
+        "
+            />
 
-        w-full bg-transparent
-        border-none outline-none
-h-full text-white
-        focus:ring-0 placeholder:text-info
-    "  /></div>
-    </div>
-);
+            {type === "month" && (
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="
+            absolute
+            right-3
+            top-1/2
+            -translate-y-1/2
+            text-info
+            pointer-events-none
+          "
+                    width="30"
+                    height="30"
+                    onClick={() => {
+                        monthRef.current?.showPicker?.(); // Chrome/Edge
+                        monthRef.current?.focus();
 
-
-
-
+                        // fallback
+                        monthRef.current?.click();
+                    }}
+                    viewBox="0 0 24 24"
+                >
+                    <path fill="#fff" d="M22 10H2v9a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3zM7 8a1 1 0 0 1-1-1V3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1m10 0a1 1 0 0 1-1-1V3a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1" opacity={0.5}></path>
+                    <path fill="#fff" d="M19 4h-1v3a1 1 0 0 1-2 0V4H8v3a1 1 0 0 1-2 0V4H5a3 3 0 0 0-3 3v3h20V7a3 3 0 0 0-3-3"></path>
+                </svg>
+            )}
+        </div>
+    </div>)
+};
 const ToastContainer = ({ toasts, removeToast }) => {
     return (
         <div className="fixed bottom-5 right-5 flex flex-col gap-3 z-50">
@@ -69,7 +115,24 @@ const ToastContainer = ({ toasts, removeToast }) => {
         </div>
     );
 };
+const DateCompare = (startDate, endDate, addToast) => {
+    if (!startDate || !endDate || startDate === "" || endDate === "") return true;
 
+    const start = Number(startDate.replace("-", ""));
+    const end = Number(endDate.replace("-", ""));
+
+    if (start > end) {
+        addToast({
+            type: "warning",
+            title: "Error",
+            message: "Start Date can't be after the End Date"
+        });
+
+        return false;
+    }
+
+    return true;
+};
 
 const Experience = ({ data }) => {
     const location = useLocation();
@@ -214,6 +277,17 @@ const Experience = ({ data }) => {
 
 
 
+
+
+    const options = [
+        "Internship",
+        "Full-time",
+        "Freelance"
+    ];
+
+    const [open, setOpen] = useState(false);
+    const [selected, setSelected] = useState("");
+
     return (
         <div className="min-h-[calc(100vh-4rem)] w-screen flex items-start justify-center p-4 md:p-6 bg-base-100">
             <ToastContainer toasts={toasts} removeToast={removeToast} />
@@ -322,19 +396,71 @@ const Experience = ({ data }) => {
                                 <label className="text-[13px] font-medium text-info mb-2 block">
                                     Type of Employment
                                 </label>
-                                <select
-                                    className="input input-bordered border border-slate-900 text-white rounded-xl bg-base-200 w-full px-2 py-1"
-                                    value={form.employmentType}
-                                    required={true}
-                                    onChange={(e) =>
-                                        handleChange2(index, "employmentType", e.target.value)
-                                    }
-                                >
-                                    <option value="">Select Type</option>
-                                    <option>Internship</option>
-                                    <option>Full-time</option>
-                                    <option>Freelance</option>
-                                </select>
+                                <div className="relative">
+                                    <button
+                                        onClick={() => setOpen(!open)}
+                                        className="
+      w-full
+      bg-base-100
+      border border-accent
+      rounded-xl
+      px-4 py-3
+      flex justify-between items-center
+      hover:border-info
+      transition-all
+    "
+                                    >
+                                        {selected || "Select Employment Type"}
+
+                                        <svg
+                                            className={`transition-transform ${open ? "rotate-180" : ""}`}
+                                            width="20"
+                                            height="20"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                fill="currentColor"
+                                                d="M7 10l5 5l5-5"
+                                            />
+                                        </svg>
+                                    </button>
+
+                                    {open && (
+                                        <div
+                                            className="
+        absolute z-50
+        w-full
+        mt-2
+        bg-base-200
+        border border-accent
+        rounded-xl
+        overflow-hidden
+        shadow-2xl
+      "
+                                        >
+                                            {options.map((option) => (
+                                                <button
+                                                    key={option}
+                                                    onClick={() => {
+                                                        setSelected(option)
+                                                        handleChange2(index, "employmentType", option)
+                                                        setOpen(false);
+                                                    }}
+                                                    className="
+            w-full
+            px-4 py-3
+            text-left
+            hover:bg-secondary
+            hover:text-white
+            transition-all
+          "
+                                                >
+                                                    {option}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                                     <InputField label="Location" id="location" value={form.location}
@@ -343,35 +469,73 @@ const Experience = ({ data }) => {
                                     />
 
                                     <InputField type="month" label="Start Date" id="startDate" value={form.startDate}
-                                        onChange={(id, value) => handleChange2(index, id, value)} />
+                                        onChange={(id, value) => {
+                                            setTimeout(() => {
+                                                DateCompare(form.startDate, form.endDate, addToast)
+                                            }, 3000); handleChange2(index, id, value)
+                                        }} />
                                     <InputField type="month" label="End Date" id="endDate" value={form.endDate}
 
-                                        onChange={(id, value) => handleChange2(index, id, value)} />
+                                        onChange={(id, value) => {
+                                            setTimeout(() => {
+                                                DateCompare(form.startDate, form.endDate, addToast)
+                                            }, 3000); handleChange2(index, id, value)
+                                        }} />
 
-                                    <label className="flex items-center gap-2">
-                                        <input
-                                            type="checkbox"
-                                            checked={form.currentlyWorking}
-                                            onChange={(e) => {
-                                                const updated = [...experiences];
-                                                updated[index].currentlyWorking = e.target.checked;
 
-                                                if (e.target.checked) {
-                                                    updated[index].endDate = "";
-                                                }
 
-                                                setExperiences(updated);
-                                            }}
-                                        />
+                                    <span className='flex items-center gap-2'>
+                                        <label className="toggle text-base-content bg-base-100">
+                                            <input type="checkbox"
+                                                onChange={(e) => {
+                                                    const updated = [...experiences];
+                                                    updated[index].currentlyWorking = e.target.checked;
+
+                                                    if (e.target.checked) {
+                                                        updated[index].endDate = "";
+                                                    }
+
+                                                    setExperiences(updated);
+                                                }}
+                                                checked={form.currentlyWorking} />
+                                            <svg
+                                                aria-label="disabled"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                strokeWidth="4"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                            >
+                                                <path d="M18 6 6 18" />
+                                                <path d="m6 6 12 12" />
+                                            </svg>
+                                            <svg aria-label="enabled" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                <g
+                                                    strokeLinejoin="round"
+                                                    strokeLinecap="round"
+                                                    strokeWidth="4"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                >
+                                                    <path d="M20 6 9 17l-5-5"></path>
+                                                </g>
+                                            </svg>
+
+                                        </label>
                                         Currently working here
-                                    </label>
+
+                                    </span>
                                 </div>
 
 
 
                                 <button className=' border border-accent bg-base-100 text-info  px-3 py-2 rounded-xl mt-3 flex justify-center items-center gap-2 hover:scale-105 transition-all duration-300 ease-in-out group' onClick={() => {
 
-
+                                    if (!DateCompare(form.startDate, form.endDate, addToast)) {
+                                        return;
+                                    }
                                     if (experiences[index].role === '' || experiences[index].company === '' || experiences[index].employmentType === '') {
 
                                         addToast({
@@ -425,6 +589,7 @@ const Experience = ({ data }) => {
 
                     <button
                         onClick={() => {
+
                             Navigate("/app/build-resume/intro-edu-page", {
                                 state: { resumeData }
                             });

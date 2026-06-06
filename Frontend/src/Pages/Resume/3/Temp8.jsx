@@ -123,7 +123,7 @@ const AmanGuptaAcademicTemplate = ({ data }) => {
                 <section className="pb-8">
                     <h2 className="text-lg font-bold uppercase tracking-widest mb-6 border-b border-gray-200 pb-1">Languages</h2>
                     <div className="grid grid-cols-2 gap-x-16 gap-y-8">
-                        {languages.map((lang, idx) => (
+                        {/* {languages.map((lang, idx) => (
                             <div key={idx}>
                                 <div className="flex justify-between text-[13px] font-bold mb-1">
                                     <span>{lang.split(' ')[0]}</span>
@@ -139,7 +139,7 @@ const AmanGuptaAcademicTemplate = ({ data }) => {
                                 </div>
                                 <p className="text-[11px] text-slate-500 mt-1 italic">Native or Professional Proficiency</p>
                             </div>
-                        ))}
+                        ))} */}
                     </div>
                 </section>
             </div>
