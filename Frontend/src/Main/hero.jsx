@@ -13,36 +13,36 @@ import Devs from "./Devs";
 import Lines from "./Lines";
 
 const Hero = () => {
-    const [loading, setLoading] = useState(true);
+    // const [loading, setLoading] = useState(true);
 
-    // ✅ Run once
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setLoading(false);
-        }, 2000);
+    // // ✅ Run once
+    // useEffect(() => {
+    //     const timer = setTimeout(() => {
+    //         setLoading(false);
+    //     }, 2000);
 
-        return () => clearTimeout(timer);
-    }, []);
+    //     return () => clearTimeout(timer);
+    // }, []);
 
 
-    useEffect(() => {
-        if (loading) {
-            document.body.style.overflow = "hidden";
-            document.documentElement.style.overflow = "hidden"; // mobile fix
-        } else {
-            document.body.style.overflow = "";
-            document.documentElement.style.overflow = "";
-        }
+    // useEffect(() => {
+    //     if (loading) {
+    //         document.body.style.overflow = "hidden";
+    //         document.documentElement.style.overflow = "hidden"; // mobile fix
+    //     } else {
+    //         document.body.style.overflow = "";
+    //         document.documentElement.style.overflow = "";
+    //     }
 
-        return () => {
-            document.body.style.overflow = "";
-            document.documentElement.style.overflow = "";
-        };
-    }, [loading]);
+    //     return () => {
+    //         document.body.style.overflow = "";
+    //         document.documentElement.style.overflow = "";
+    //     };
+    // }, [loading]);
 
     return (
         <div>
-            {loading && <Preloader />}
+            {/* {loading && <Preloader />} */}
             <Nav />
             <Mainhero />
 
