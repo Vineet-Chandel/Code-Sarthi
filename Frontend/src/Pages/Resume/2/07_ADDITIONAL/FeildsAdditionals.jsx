@@ -354,7 +354,7 @@ rounded-xl sm:rounded-2xl
                                                 <input
                                                     id='languages-category'
                                                     type="text"
-                                                    placeholder="language Category (Frontend, Backend...)"
+                                                    placeholder="Language"
                                                     value={language.langCategory}
                                                     onChange={(e) =>
 
@@ -364,7 +364,7 @@ rounded-xl sm:rounded-2xl
 py-2.5 sm:py-3
 text-sm sm:text-base text-white outline-none
                  focus:border-info  focus:ring-info focus:bg-secondary
-                 transition-all duration-200 font-medium placeholder:text-accent"
+                 transition-all duration-200 font-medium placeholder:text-accent focus:placeholder:text-gray-400"
 
                                                 />
 
@@ -520,9 +520,9 @@ rounded-xl sm:rounded-2xl
                                                 </label>
 
                                                 <input
-                                                    id='languages-category'
+                                                    id='achievement-category'
                                                     type="text"
-                                                    placeholder="language Category (Frontend, Backend...)"
+                                                    placeholder="Achievement"
                                                     value={achievement.achievement}
                                                     onChange={(e) =>
 
@@ -532,7 +532,7 @@ rounded-xl sm:rounded-2xl
 py-2.5 sm:py-3
 text-sm sm:text-base text-white outline-none
                  focus:border-info  focus:ring-info focus:bg-secondary
-                 transition-all duration-200 font-medium placeholder:text-accent"
+                 transition-all duration-200 font-medium placeholder:text-accent focus:placeholder:text-gray-400"
 
                                                 />
                                                 <button className="
@@ -683,7 +683,7 @@ rounded-xl sm:rounded-2xl
                                                 <input
                                                     id={`certification-about-${index}`}
                                                     type="text"
-                                                    placeholder="Google Data Analytics Certificate"
+                                                    placeholder="Certificate Name"
                                                     value={certification.about}
                                                     onChange={(e) =>
 
@@ -692,8 +692,8 @@ rounded-xl sm:rounded-2xl
                                                     className="w-full  bg-base-100 border border-accent rounded-xl px-3 sm:px-4
 py-2.5 sm:py-3
 text-sm sm:text-base text-white outline-none
-                 focus:border-info  focus:ring-info focus:bg-secondary
-                 transition-all duration-200 font-medium placeholder:text-accent"
+                 focus:border-info  focus:ring-info focus:bg-secondary 
+                 transition-all duration-200 font-medium placeholder:text-accent focus:placeholder:text-gray-400"
 
                                                 />
 
@@ -705,7 +705,7 @@ text-sm sm:text-base text-white outline-none
                                                     htmlFor="languages-category"
                                                     className="text-[13px] font-semibold uppercase tracking-widest text-info group-focus-within:text-white transition-colors ml-0.5"
                                                 >
-                                                    Add Status
+                                                    Add Link
                                                 </label>
                                                 <div
                                                     className="
@@ -731,6 +731,7 @@ text-sm sm:text-base text-white outline-none
                                                     onChange={(e) =>
                                                         handleChange4(index, "link", e.target.value)
                                                     }
+                                                    placeholder='Add Url'
                                                     className="w-full bg-base-100 border border-accent rounded-xl px-3 sm:px-4
 py-2.5 sm:py-3
 text-sm sm:text-base text-white outline-none

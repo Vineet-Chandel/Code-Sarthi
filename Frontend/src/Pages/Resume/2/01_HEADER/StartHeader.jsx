@@ -46,17 +46,19 @@ const InputField = ({ label, id, value, type = "text", placeholder, onChange, on
 
             className="
     flex items-center gap-2 w-full
-    bg-base-200 border border-slate-600
-    rounded-xl px-3.5 py-2.5
-    text-sm text-slate-800 outline-none
-    focus-within:border-secondary
-    focus-within:ring-1
-    focus-within:ring-accent-content
-    
-    transition-all duration-200
-    font-medium
-    
-">
+    bg-base-100 border border-accent
+    rounded-xl px-4 py-3
+    text-white text-sm sm:text-base font-medium
+    shadow-md hover:shadow-lg
+    hover:border-info
+    focus-within:border-info
+    focus-within:ring-2
+    focus-within:ring-info
+    focus-within:bg-base-200
+    cursor-text
+    transition-all duration-300
+  "
+        >
 
             {id === 'phone' && (
 

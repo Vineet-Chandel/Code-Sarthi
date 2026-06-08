@@ -14,7 +14,7 @@ const Block = () => {
                 <path fill="#fff" d="M256 29c-17.3 0-34.7 1.98-48.1 5.68c-13.4 3.69-22 9.64-23.8 13.35c-29 57.97-30.9 130.57-31 178.97h205.8c-.1-48.4-2-121-31-178.97c-1.8-3.71-10.4-9.66-23.8-13.35C290.7 30.98 273.3 29 256 29M48 167v18h48v-18zm368 0v18h48v-18zM71 204v68.8l31.2 20.8c1.6-6 4.2-11.6 7.3-16.7L89 263.2V204zm352 0v59.2l-20.5 13.7c3.1 5.1 5.7 10.7 7.3 16.7l31.2-20.8V204zm-190 41v14h46v-14zm-100.9 32c-6.2 6.9-11.9 16.4-13.2 24.5c-1.5 8.7-.2 15.1 11.4 21.5h251.4c11.6-6.4 12.9-12.8 11.4-21.5c-1.3-8.1-7-17.6-13.2-24.5zM247 341v32l-121.2 30.3l4.4 17.4L247 391.5V420c2.9-.6 5.9-1 9-1s6.1.4 9 1v-28.5l116.8 29.2l4.4-17.4L265 373v-32zm-119 96c-12.8 0-23 10.2-23 23s10.2 23 23 23s23-10.2 23-23s-10.2-23-23-23m128 0c-12.8 0-23 10.2-23 23s10.2 23 23 23s23-10.2 23-23s-10.2-23-23-23m128 0c-12.8 0-23 10.2-23 23s10.2 23 23 23s23-10.2 23-23s-10.2-23-23-23"></path>
             </svg>),
             title: "Built by career experts",
-            step1: "Resume Now is built on the expertise of our team of professional resume writers, career advisors, and experts."
+            step1: "CodeSarthi is built on the expertise of our team of professional resume writers, career advisors, and experts."
 
         },
 
@@ -34,7 +34,7 @@ const Block = () => {
                 <path fill="#fff" d="M121.72 32a4 4 0 0 0-3.72 5.56l2.3 5.43l40.7 94.9a4 4 0 0 0 6.88.82L243 38.4a4 4 0 0 0-3.2-6.4Zm298.21 26.06l-41.28 96.37a4 4 0 0 0 3.68 5.57h101a4 4 0 0 0 3.4-6.11L427 57.53a4 4 0 0 0-7.07.53M85 57.57l-59.71 96.32a4 4 0 0 0 3.4 6.11h101a4 4 0 0 0 3.67-5.58L92 58.1a4 4 0 0 0-7-.53M393.27 32H267.82a1.94 1.94 0 0 0-1.56 3.11l79.92 106.46a1.94 1.94 0 0 0 3.34-.4L391.6 43l3.4-8.34a1.92 1.92 0 0 0-1.7-2.66ZM239 448l-89.43-253.49A3.78 3.78 0 0 0 146 192H25.7a3.72 3.72 0 0 0-2.95 6l216 279.81a5.06 5.06 0 0 0 6.39 1.37a5 5 0 0 0 2.39-6.08Zm247.3-256H366a3.75 3.75 0 0 0-3.54 2.51l-98.2 278.16a5.21 5.21 0 0 0 2.42 6.31a5.22 5.22 0 0 0 6.61-1.39L489.25 198a3.72 3.72 0 0 0-2.95-6M259.2 78.93l56 74.67a4 4 0 0 1-3.2 6.4H200a4 4 0 0 1-3.2-6.4l56-74.67a4 4 0 0 1 6.4 0m-7 310.31l-67.7-191.91a4 4 0 0 1 3.77-5.33h135.46a4 4 0 0 1 3.77 5.33l-67.73 191.91a4 4 0 0 1-7.54 0Z"></path>
             </svg>),
             title: "Committed to quality",
-            step1: "All of Resume Now’s content follows a rigorous editorial process to ensure quality, accessibility, and credibility",
+            step1: "All of our’s content follows a rigorous editorial process to ensure quality, accessibility, and credibility",
         },
 
 
@@ -43,12 +43,7 @@ const Block = () => {
         <div className='w-full  mt-20 mb-20 bg-base-100  font-sans flex justify-center items-center'>
 
             <div className='w-[95%] h-full bg-base-100 rounded-xl '>
-                <div className="max-w-4xl mx-auto text-center mb-16">
-                    <h1 className="text-3xl md:text-5xl font-black tracking-tight text-info">
-                        Resume Now Brings Expert-Driven Insight to <span className='text-white underline underline-offset-8'>Your Job Search</span>
-                    </h1>
-                    <p className="text-lg text-info mt-3">Explore our recently updated guides to help you refine and modernize your resume. Discover valuable tips and strategies for today’s job market.</p>
-                </div>
+
 
                 {/* Steps Grid */}
                 <div className='max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-4'>

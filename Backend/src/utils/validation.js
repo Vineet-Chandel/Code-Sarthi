@@ -4,8 +4,11 @@ const validateSignUpData = (data) => {
     const { firstName, lastName, gmail, age, password, username, profession, college, termsAccepted, gender } = data;
     if (!firstName || !lastName) {
         throw new Error("Name is not valid!");
-    } else if (!validator.isEmail(gmail)) {
-        throw new Error("Email is not valid!");
+    } else if (data.email && typeof data.email === "string") {
+
+        if (!validator.isEmail(gmail)) {
+            throw new Error("Email is not valid!");
+        }
     } else if (!validator.isStrongPassword(password)) {
         throw new Error("Please enter a strong Password!");
     } else if (!validator.matches(username, /^[a-z0-9._]{3,20}$/)) {

@@ -5,6 +5,7 @@ import ResumeGetHired from './ResumeGetHired';
 import WhyWe from './WhyWe';
 import Example from './Example';
 import Choose from './Choose';
+import ComparisonSection from './ComparisonSection';
 import HowToCreate from './HowToCreate';
 import Block from './Block';
 import { AppleCardsCarouselDemo } from '../AppleCardsCarouselDemo';
@@ -19,8 +20,9 @@ const Resume = () => {
             <HowToCreate />
             <ResumeGetHired />
             <Block />
+            <ComparisonSection />
             <Example />
-            <Choose />
+
             <WhyWe />
 
 

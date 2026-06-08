@@ -9,60 +9,51 @@ const ResumeGetHired = () => {
     const data = [
         {
             icon: (<Layout className="text-white w-8 h-8" />),
-            title: "Choose a Template",
-            step1: "ATS-friendly and recruiter-approved",
-            step2: "Modern and flexible layouts",
-            step3: "Tailored for your job and industry"
+            title: "Career Profile Builder",
+            step1: "Build your profile once, generate resumes forever",
+            step2: "Store projects, skills, experience & achievements",
+            step3: "AI understands your complete career journey"
         },
 
         {
             icon: (
-                <svg xmlns="http://www.w3.org/2000/svg" width="2.2em" height="2.2em" viewBox="0 0 24 24">
-                    <path fill="#fff" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="2.2em" height="2.2em" viewBox="0 0 24 24"> <path fill="#fff" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path> </svg>
             ),
-            title: "Enhance with AI",
-            step1: "Overcome writer’s block instantly",
-            step2: "Improve resume bullet points with AI",
-            step3: "Update your experience effortlessly"
-        },
-
-        {
-            icon: (<Download className="text-white w-8 h-8" />),
-            title: "Download & Apply",
-            step1: "Export in PDF and Word formats",
-            step2: "Create unlimited resume versions",
-            step3: "Ready to use in under 5 minutes"
+            title: "AI Resume Builder",
+            step1: "Paste any Job Description",
+            step2: "Generate ATS-optimized resumes instantly",
+            step3: "Highlight the most relevant experience automatically"
         },
 
         {
             icon: (
-                <svg xmlns="http://www.w3.org/2000/svg" width="2.2em" height="2.2em" viewBox="0 0 24 24">
-                    <path d="M0 0h24v24H0z" fill="none" />
-                    <path
-                        fill="#fff"
-                        d="M13 9h5.5L13 3.5zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m8 18v-1c0-1.33-2.67-2-4-2s-4 .67-4 2v1zm-4-8a2 2 0 0 0-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2"
-                    />
-                </svg>
-            ),
+                <svg xmlns="http://www.w3.org/2000/svg" width="2.2em" height="2.2em" viewBox="0 0 24 24"> <path fill="#fff" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path> </svg>),
+            title: "Resume Defense AI™",
+            step1: "Practice questions based on YOUR resume",
+            step2: "Defend every project, metric & achievement",
+            step3: "Prepare for real interviews before applying"
+        },
 
-            title: "Why Choose Only Resume?",
-            step1: "Get a professionally written cover letter",
-            step2: "Receive detailed resume analysis",
-            step3: "Get personalized improvement suggestions"
+        {
+            icon: (
+
+                <svg width="2.2em" height="2.2em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 20L4.6797 10.8496C4.34718 10.434 4.18092 10.2262 4.13625 9.9757C4.09159 9.72524 4.17575 9.47276 4.34407 8.96778L5.0883 6.73509C5.52832 5.41505 5.74832 4.75503 6.2721 4.37752C6.79587 4 7.49159 4 8.88304 4H15.117C16.5084 4 17.2041 4 17.7279 4.37752C18.2517 4.75503 18.4717 5.41505 18.9117 6.73509L19.6559 8.96778C19.8243 9.47276 19.9084 9.72524 19.8637 9.9757C19.8191 10.2262 19.6528 10.434 19.3203 10.8496L12 20Z" fill="#fff" fill-opacity="0.25" />
+                    <path d="M12 20L4.6797 10.8496C4.34718 10.434 4.18092 10.2262 4.13625 9.9757C4.09159 9.72524 4.17575 9.47276 4.34407 8.96778L5.0883 6.73509C5.52832 5.41505 5.74832 4.75503 6.2721 4.37752C6.79587 4 7.49159 4 8.88304 4H15.117C16.5084 4 17.2041 4 17.7279 4.37752C18.2517 4.75503 18.4717 5.41505 18.9117 6.73509L19.6559 8.96778C19.8243 9.47276 19.9084 9.72524 19.8637 9.9757C19.8191 10.2262 19.6528 10.434 19.3203 10.8496L12 20ZM12 20L15.5 9M12 20L8.5 9M19.5 10L15.5 9M15.5 9L14 5M15.5 9H8.5M10 5L8.5 9M8.5 9L4.5 10" stroke="#fff" stroke-width="1.4" stroke-linecap="round" />
+                </svg>
+
+            ),
+            title: "Interview Ready",
+            step1: "Generate tailored cover letters instantly",
+            step2: "Receive personalized interview preparation",
+            step3: "Apply with confidence, not guesswork"
         }
     ];
     return (
-        <div className='w-full  bg-base-100  font-sans flex justify-center items-center'>
+        <div className='w-full  bg-base-100 mb-10 font-sans flex justify-center items-center'>
 
             <div className='w-[95%] h-full bg-base-100 rounded-xl '>
-                {/* Header Section */}
-                <div className="max-w-4xl mx-auto text-center mb-16">
-                    <h1 className="text-3xl md:text-5xl font-black tracking-tight text-info mb-4">
-                        Make a Resume That Gets   <span className="text-accent-content underline underline-offset-8"> You Hired </span> .
-                    </h1>
 
-                </div>
 
                 {/* Steps Grid */}
                 <div className='max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 px-4'>

@@ -3,7 +3,7 @@ import CTAcreateResume from "./CTAcreateResume";
 
 const Landing = () => {
     return (
-        <div className="w-full min-h-screen px-4 sm:px-6 lg:px-10 overflow-hidden">
+        <div className="w-full  px-4 sm:px-6 lg:px-10 overflow-hidden">
             <link
                 href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap"
                 rel="stylesheet"
@@ -12,7 +12,7 @@ const Landing = () => {
             <div className="flex flex-col lg:flex-row rounded-t-3xl bg-base-100 overflow-hidden">
 
                 {/* LEFT SECTION */}
-                <div className="w-full lg:w-1/2 px-2 sm:px-6 lg:pl-10 py-8 lg:py-12 flex flex-col justify-center">
+                <div className="w-full lg:w-1/2 px-2 sm:px-6 lg:pl-10 pt-8 lg:pt-12 flex flex-col justify-center">
 
                     {/* Badge */}
                     <div
@@ -47,15 +47,13 @@ const Landing = () => {
                         style={{ fontFamily: "'DM Sans', sans-serif" }}
                         className="text-sm sm:text-base lg:text-xl text-info max-w-2xl leading-relaxed"
                     >
-                        Create a standout resume in minutes with our
-                        AI-powered builder. Use professional templates,
-                        add optimized content in one click, and apply
-                        with confidence from any device.
-                        Millions trust it — because it works.
+                        <p className="text-white/45  mx-auto leading-relaxed" style={{ fontSize: "1.05rem" }}>
+                            Turn your career history into a job-winning resume and an interview-ready strategy. Our AI not only crafts role-specific resumes but also prepares you to confidently explain every achievement, metric, and project before recruiters ask.
+                        </p>
                     </p>
 
                     {/* CTA */}
-                    <div className="mt-8">
+                    <div >
                         <CTAcreateResume />
                     </div>
 

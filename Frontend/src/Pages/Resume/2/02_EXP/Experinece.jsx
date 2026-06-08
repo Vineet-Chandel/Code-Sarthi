@@ -470,16 +470,28 @@ const Experience = ({ data }) => {
 
                                     <InputField type="month" label="Start Date" id="startDate" value={form.startDate}
                                         onChange={(id, value) => {
-                                            setTimeout(() => {
-                                                DateCompare(form.startDate, form.endDate, addToast)
-                                            }, 3000); handleChange2(index, id, value)
+                                            handleChange2(index, id, value);
+
+                                            const start =
+                                                id === "startDate" ? value : form.startDate;
+
+                                            const end =
+                                                id === "endDate" ? value : form.endDate;
+
+                                            DateCompare(start, end, addToast);
                                         }} />
                                     <InputField type="month" label="End Date" id="endDate" value={form.endDate}
 
                                         onChange={(id, value) => {
-                                            setTimeout(() => {
-                                                DateCompare(form.startDate, form.endDate, addToast)
-                                            }, 3000); handleChange2(index, id, value)
+                                            handleChange2(index, id, value);
+
+                                            const start =
+                                                id === "startDate" ? value : form.startDate;
+
+                                            const end =
+                                                id === "endDate" ? value : form.endDate;
+
+                                            DateCompare(start, end, addToast);
                                         }} />
 
 

@@ -106,8 +106,8 @@ function GlassCard({ id, title, icon, children, copyText, index = 0 }) {
             {/* Header */}
             <div className="flex items-center justify-between px-5 pt-4 pb-3">
                 <motion.h2
-                    className="flex items-center gap-2.5 text-xs font-bold tracking-widest uppercase"
-                    style={{ color: "#fff", fontFamily: "'Space Mono', monospace" }}
+                    className="flex items-center gap-2.5 text-md font-bold tracking-widest uppercase"
+                    style={{ color: "#fff", }}
                 >
                     <Icon name={icon} size={15} />
                     {title}
@@ -161,24 +161,51 @@ function GlassCard({ id, title, icon, children, copyText, index = 0 }) {
 // ── SKILL TAG ──────────────────────────────────────────────────────────────
 function SkillTag({ label, index = 0 }) {
     return (
-        <motion.span
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: index * 0.04, type: "spring", stiffness: 400 }}
-            whileHover={{ scale: 1.08, borderColor: "#c8c6c6", color: "rgba(99,179,237,1)" }}
-            className="inline-block px-2.5 py-1 text-xs font-mono rounded-md mr-1.5 mb-1.5 cursor-default"
+        <span className="flex  items-center gap-1.5">
+            <motion.span
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: index * 0.04, type: "spring", stiffness: 400 }}
+                whileHover={{ scale: 1.08, borderColor: "#c8c6c6", color: "rgba(99,179,237,1)" }}
+                className=" px-2.5 py-1 text-lg  font-poppins rounded-md flex gap-2 items-center cursor-default"
+                style={{
+                    border: "1px solid rgba(255,255,255,0.14)",
+                    background: "rgba(255,255,255,0.04)",
+                    color: "rgba(255,255,255,0.7)",
+
+                    fontSize: "10px",
+                }}
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
+                    <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}>
+                        <path d="M12.034 12.681a.498.498 0 0 1 .647-.647l9 3.5a.5.5 0 0 1-.033.943l-3.444 1.068a1 1 0 0 0-.66.66l-1.067 3.443a.5.5 0 0 1-.943.033zM5 17A12 12 0 0 1 17 5"></path>
+                        <circle cx={19} cy={5} r={2}></circle>
+                        <circle cx={5} cy={19} r={2}></circle>
+                    </g>
+                </svg> {label}
+            </motion.span>
+        </span>
+    );
+}
+function SkillSkills({ label, index = 0 }) {
+    return (
+        <span
+            className="inline-block  text-md font-poppins rounded-md cursor-default"
             style={{
-                border: "1px solid rgba(255,255,255,0.14)",
-                background: "rgba(255,255,255,0.04)",
+
+
                 color: "rgba(255,255,255,0.7)",
-                fontFamily: "'Space Mono', monospace",
+
                 fontSize: "10px",
             }}
         >
-            {label}
-        </motion.span>
+            {label.split(",").map((item, index) => (
+                <span key={index}>{item}{", "}</span>
+            ))}
+        </span>
     );
 }
+
 
 // ── CONTACT ITEM ───────────────────────────────────────────────────────────
 function ContactItem({ icon, text, href }) {
@@ -190,12 +217,12 @@ function ContactItem({ icon, text, href }) {
                 href={href}
                 target={href ? "_blank" : undefined}
                 rel={href ? "noopener noreferrer" : undefined}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs no-underline"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-md no-underline"
                 style={{
                     color: "rgba(255,255,255,0.55)",
                     background: "rgba(255,255,255,0.04)",
                     border: "1px solid rgba(255,255,255,0.08)",
-                    fontFamily: "'Space Mono', monospace",
+
                     fontSize: "10px",
                 }}
             >
@@ -220,10 +247,10 @@ function FilterBar({ active, onChange }) {
                 <motion.button
                     key={t}
                     onClick={() => onChange(t)}
-                    className="relative px-4 py-1.5 rounded-xl text-xs font-semibold capitalize transition-colors"
+                    className="relative px-4 py-1.5 rounded-xl text-md font-semibold capitalize transition-colors"
                     style={{
                         color: active === t ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.38)",
-                        fontFamily: "'Space Mono', monospace",
+
                         fontSize: "10px",
                     }}
                     whileHover={{ color: "rgba(255,255,255,0.8)" }}
@@ -249,12 +276,12 @@ function Badge({ children }) {
     if (!children) return null;
     return (
         <span
-            className="text-[9px] px-2 py-0.5 rounded-md font-bold tracking-wider uppercase"
+            className="text-md px-2 py-0.5 rounded-md font-bold tracking-wider uppercase"
             style={{
                 background: "rgba(99,179,237,0.12)",
                 border: "1px solid rgba(99,179,237,0.25)",
                 color: "#fff",
-                fontFamily: "'Space Mono', monospace",
+
             }}
         >
             {children}
@@ -281,7 +308,7 @@ function ProjectCard({ project: p, index = 0 }) {
                 <div>
                     <h3 className="text-sm font-semibold text-white">{p.name}</h3>
                     {p.stack && (
-                        <p className="text-[10px] mt-0.5 font-mono" style={{ color: "rgba(99,179,237,0.7)", fontFamily: "'Space Mono', monospace" }}>
+                        <p className="text-[10px] mt-0.5 font-poppins" style={{ color: "rgba(99,179,237,0.7)", }}>
                             {p.stack}
                         </p>
                     )}
@@ -313,7 +340,7 @@ function ProjectCard({ project: p, index = 0 }) {
             </div>
 
             {p.description && (
-                <p className="text-xs italic mb-3 leading-relaxed" style={{ color: "rgba(255,255,255,0.5)" }}>
+                <p className="text-md italic mb-3 leading-relaxed" style={{ color: "rgba(255,255,255,0.5)" }}>
                     {p.name} {p.description}
                 </p>
             )}
@@ -323,7 +350,7 @@ function ProjectCard({ project: p, index = 0 }) {
                     {p.bullets.map((b, i) => (
                         <motion.li
                             key={i}
-                            className="flex gap-2 text-xs leading-relaxed items-start"
+                            className="flex gap-2 text-md leading-relaxed items-start"
                             style={{ color: "rgba(255,255,255,0.65)" }}
                             initial={{ opacity: 0, x: -8 }}
                             animate={{ opacity: 1, x: 0 }}
@@ -423,7 +450,7 @@ export default function ResumeViewer({ resumeData }) {
                                     background: "#fff",
                                     border: "1px solid rgba(99,179,237,0.3)",
                                     color: "#000",
-                                    fontFamily: "'Space Mono', monospace",
+
                                 }}
                                 whileHover={{ scale: 1.05, rotate: 3 }}
                                 transition={{ type: "spring", stiffness: 300 }}
@@ -457,8 +484,8 @@ export default function ResumeViewer({ resumeData }) {
                                 )}
                                 {(data.location || data.pincode) && (
                                     <motion.div
-                                        className="flex items-center gap-1.5 mt-2 text-xs"
-                                        style={{ color: "rgba(255,255,255,0.38)", fontFamily: "'Space Mono', monospace" }}
+                                        className="flex items-center gap-1.5 mt-2 text-md"
+                                        style={{ color: "rgba(255,255,255,0.38)", }}
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                         transition={{ delay: 0.4 }}
@@ -497,7 +524,7 @@ export default function ResumeViewer({ resumeData }) {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.55 }}
                         >
-                            <p className="text-xs leading-relaxed" style={{ color: "rgba(255,255,255,0.58)" }}>
+                            <p className="text-md leading-relaxed" style={{ color: "rgba(255,255,255,0.58)" }}>
                                 <strong className="font-semibold" style={{ color: "rgba(255,255,255,0.85)" }}>{data.fname}</strong> is {data.summaryBody}
                             </p>
                         </motion.div>
@@ -518,14 +545,16 @@ export default function ResumeViewer({ resumeData }) {
                                     copyText={copySkills}
                                 >
                                     {Object.entries(data.skills).map(([cat, items], ci) => (
-                                        <div key={cat} className="mb-3.5 last:mb-0">
-                                            <p className="text-[9px] font-bold uppercase tracking-widest mb-1.5" style={{ color: "#c8c6c6", fontFamily: "'Space Mono', monospace" }}>
-                                                {cat}
-                                            </p>
+                                        <div key={cat} className="mb-3.5 last:mb-0 flex items-center gap-2">
+
                                             <div className="flex flex-wrap">
-                                                {String(items).split(", ").map((item, si) => (
-                                                    <SkillTag key={item} label={item.trim()} index={ci * 5 + si} />
-                                                ))}
+                                                <div className="flex gap-2 flex-wrap items-center">
+                                                    {String(items.skillCategory).split(", ").map((item, si) => (
+                                                        <SkillTag key={item.skill} label={item.trim()} index={ci * 5 + si} />
+                                                    ))} :  {String(items.skills).split(", ").map((item, si) => (
+                                                        <SkillSkills key={item.skill} label={item.trim()} index={ci * 5 + si} />
+                                                    ))}
+                                                </div>
                                             </div>
                                         </div>
                                     ))}
@@ -538,13 +567,13 @@ export default function ResumeViewer({ resumeData }) {
 
                                     {data.certifications?.length > 0 && (
                                         <>
-                                            <p className="text-[9px] font-bold uppercase tracking-widest mb-2" style={{ color: "#c8c6c6", fontFamily: "'Space Mono', monospace" }}>
+                                            <p className="text-md font-bold uppercase tracking-widest mb-2" style={{ color: "#c8c6c6", }}>
                                                 Certifications
                                             </p>
                                             {data.certifications.map((cert, i) => (
                                                 <motion.div
                                                     key={i}
-                                                    className="flex gap-2 text-xs mb-2 last:mb-3 items-start leading-relaxed"
+                                                    className="flex gap-2 text-md mb-2 last:mb-3 items-start leading-relaxed"
                                                     style={{ color: "rgba(255,255,255,0.6)" }}
                                                     initial={{ opacity: 0, x: -8 }}
                                                     animate={{ opacity: 1, x: 0 }}
@@ -561,13 +590,13 @@ export default function ResumeViewer({ resumeData }) {
 
                                     {data.achievements?.length > 0 && (
                                         <>
-                                            <p className="text-[9px] font-bold uppercase tracking-widest mb-2 mt-2" style={{ color: "#c8c6c6", fontFamily: "'Space Mono', monospace" }}>
+                                            <p className="text-md font-bold uppercase tracking-widest mb-2 mt-2" style={{ color: "#c8c6c6", }}>
                                                 Achievements
                                             </p>
                                             {data.achievements.map((ach, i) => (
                                                 <motion.div
                                                     key={i}
-                                                    className="flex gap-2 text-xs mb-2 last:mb-3 items-start leading-relaxed"
+                                                    className="flex gap-2 text-md mb-2 last:mb-3 items-start leading-relaxed"
                                                     style={{ color: "rgba(255,255,255,0.6)" }}
                                                     initial={{ opacity: 0, x: -8 }}
                                                     animate={{ opacity: 1, x: 0 }}
@@ -584,7 +613,7 @@ export default function ResumeViewer({ resumeData }) {
 
                                     {data.languages?.length > 0 && (
                                         <>
-                                            <p className="text-[9px] font-bold uppercase tracking-widest mb-2 mt-2" style={{ color: "#c8c6c6", fontFamily: "'Space Mono', monospace" }}>
+                                            <p className="text-md font-bold uppercase tracking-widest mb-2 mt-2" style={{ color: "#c8c6c6", }}>
                                                 Languages
                                             </p>
                                             <div className="flex flex-wrap">
@@ -611,13 +640,13 @@ export default function ResumeViewer({ resumeData }) {
                                         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 mb-2">
                                             <div>
                                                 <h3 className="text-sm font-semibold text-white">{exp.role}</h3>
-                                                <p className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.5)" }}>
+                                                <p className="text-md mt-0.5" style={{ color: "rgba(255,255,255,0.5)" }}>
                                                     {exp.company}{exp.location ? ` · ${exp.location}` : ""}
                                                 </p>
                                             </div>
                                             <div className="flex flex-row sm:flex-col items-start sm:items-end gap-2 shrink-0">
                                                 {exp.employmentType && <Badge>{exp.employmentType}</Badge>}
-                                                <p className="text-[10px] font-mono" style={{ color: "rgba(255,255,255,0.38)", fontFamily: "'Space Mono', monospace" }}>
+                                                <p className="text-[10px] font-poppins" style={{ color: "rgba(255,255,255,0.38)", }}>
                                                     {exp.startDate}{exp.startDate || exp.endDate ? " — " : ""}{exp.currentlyWorking ? "Present" : exp.endDate}
                                                 </p>
                                             </div>
@@ -625,7 +654,7 @@ export default function ResumeViewer({ resumeData }) {
                                         {Array.isArray(exp.bullets) && exp.bullets.length > 0 && (
                                             <ul className="space-y-1.5 mt-2">
                                                 {exp.bullets.map((b, bi) => (
-                                                    <li key={bi} className="flex gap-2 text-xs leading-relaxed items-start" style={{ color: "rgba(255,255,255,0.6)" }}>
+                                                    <li key={bi} className="flex gap-2 text-md leading-relaxed items-start" style={{ color: "rgba(255,255,255,0.6)" }}>
                                                         <span className="shrink-0 pt-0.5" style={{ color: "rgba(99,179,237,0.55)" }}>›</span>
                                                         <span dangerouslySetInnerHTML={{ __html: b }} />
                                                     </li>
@@ -646,10 +675,10 @@ export default function ResumeViewer({ resumeData }) {
                                             <div>
                                                 <h3 className="text-sm font-semibold text-white">{edu.degree}</h3>
                                                 {edu.field && (
-                                                    <p className="text-xs mt-0.5 font-medium" style={{ color: "rgba(99,179,237,0.75)" }}>{edu.field}</p>
+                                                    <p className="text-md mt-0.5 font-medium" style={{ color: "rgba(99,179,237,0.75)" }}>{edu.field}</p>
                                                 )}
                                                 {edu.institution && (
-                                                    <p className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.5)" }}>{edu.institution}</p>
+                                                    <p className="text-md mt-0.5" style={{ color: "rgba(255,255,255,0.5)" }}>{edu.institution}</p>
                                                 )}
                                             </div>
                                             <div className="flex flex-row sm:flex-col items-start sm:items-end gap-2 shrink-0">
@@ -657,7 +686,7 @@ export default function ResumeViewer({ resumeData }) {
                                                     <Badge>{edu.cgpa ? `CGPA ${edu.cgpa}` : edu.percentage}</Badge>
                                                 )}
                                                 {(edu.startDate || edu.endDate) && (
-                                                    <p className="text-[10px] font-mono" style={{ color: "rgba(255,255,255,0.38)", fontFamily: "'Space Mono', monospace" }}>
+                                                    <p className="text-[10px] font-poppins" style={{ color: "rgba(255,255,255,0.38)", }}>
                                                         {edu.startDate} — {edu.endDate}
                                                     </p>
                                                 )}
@@ -693,7 +722,7 @@ export default function ResumeViewer({ resumeData }) {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     {Object.entries(data.skills).map(([cat, items], ci) => (
                                         <div key={cat}>
-                                            <p className="text-[9px] font-bold uppercase tracking-widest mb-2" style={{ color: "#c8c6c6", fontFamily: "'Space Mono', monospace" }}>
+                                            <p className="text-md font-bold uppercase tracking-widest mb-2" style={{ color: "#c8c6c6", }}>
                                                 {cat}
                                             </p>
                                             <div className="flex flex-wrap">
@@ -710,7 +739,7 @@ export default function ResumeViewer({ resumeData }) {
                 </div>
             </div>
             <div className="w-full flex items-center justify-center text-1xl ">
-                <span className=" px-10 py-2.5 bg-accent rounded-full hover:bg-white hover:text-black cursor-pointer">
+                <span className=" px-10 py-2.5 mb-10 bg-accent rounded-full hover:bg-white hover:text-black cursor-pointer">
                     Save Data & Continue
                 </span>
 

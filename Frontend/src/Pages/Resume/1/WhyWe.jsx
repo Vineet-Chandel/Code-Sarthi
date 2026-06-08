@@ -7,18 +7,30 @@ import HighlighterResume from "./HighlighterResume"
 const FEATURES = [
   {
     num: "01",
-    tag: "Design",
-    title: "New, professional designs",
-    color: "orange",
+    tag: "Foundation",
+    color: "purple",
+    title: "Build Your Career Profile",
     description:
-      "Choose from a wide range of styles for every job level and type. From fun and creative to simple and modern, we offer designs for all types of job seekers.",
-    pill: "Explore templates",
-    badge: "180+ Templates",
+      "Create a single source of truth for your career by adding projects, skills, experience, certifications, and achievements once.",
+    pill: "Create Profile",
+    badge: "Career Memory",
     image:
-      "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1779851789/Create_your_RESUME_3_wfdm4s.png",
+      "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1780898776/Create_your_RESUME_3_wfdm4s.webp",
   },
   {
+    color: "blue",
     num: "02",
+    tag: "Intelligence",
+    title: "AI-powered content",
+    description:
+      "Get AI-generated content suggestions, refined by our career experts, for maximum impact on your resume.",
+    pill: "Try AI writer",
+    badge: "Powered by AI",
+    image:
+      "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1780910852/AI_Resume_Content_n72qco.webp",
+  },
+  {
+    num: "03",
     tag: "Compatibility",
     color: "yellow",
     title: "ATS-friendly formats",
@@ -27,20 +39,9 @@ const FEATURES = [
     pill: "Check compatibility",
     badge: "ATS Optimised",
     image:
-      "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1777480743/ats-friendly-resume_cjelzm.avif",
+      "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1780912937/ats-friendly-resume_cjelzm.webp",
   },
-  {
-    color: "blue",
-    num: "03",
-    tag: "Intelligence",
-    title: "AI-powered content",
-    description:
-      "Get AI-generated content suggestions, refined by our career experts, for maximum impact on your resume.",
-    pill: "Try AI writer",
-    badge: "Powered by AI",
-    image:
-      "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1777482374/AI_Resume_Content_n72qco.avif",
-  },
+
   {
     color: "green",
     num: "04",
@@ -94,7 +95,7 @@ const CSS = `
   }
 
   .ww-container {
-    max-width: 1100px;
+    width:95%;
     margin: 0 auto;
     padding: 0 32px;
   }
@@ -259,11 +260,7 @@ const CSS = `
   .ww-img-sheen {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      135deg,
-      rgba(255,255,255,0.04) 0%,
-      transparent 55%
-    );
+
     pointer-events: none;
     z-index: 1;
     border-radius: inherit;
@@ -490,9 +487,7 @@ const WhyWe = () => {
               >
                 {/* Text */}
                 <div className="ww-text">
-                  <span className="ww-num text-info">
-                    {f.num}&nbsp;&nbsp;—&nbsp;&nbsp;{f.tag}
-                  </span>
+
                   <h3 className="ww-ftitle">
                     <HighlighterResume text2={f.title} color={f.color} /></h3>
                   <p className="ww-fdesc">{f.description}</p>
@@ -507,7 +502,7 @@ const WhyWe = () => {
                   <div className="">
 
                     <div className="ww-img-sheen " />
-                    <span className="block overflow-hidden rounded-[40px]">
+                    <span className="block  overflow-hidden rounded-t-[60px]">
                       <img
                         src={f.image}
                         alt={f.title}
@@ -522,7 +517,7 @@ const WhyWe = () => {
                       />
                     </span>
 
-                    <div className="ww-img-badge">{f.badge}</div>
+
                   </div>
                 </div>
               </div>

@@ -42,7 +42,7 @@ transition" width="2em" height="2em" viewBox="0 0 24 24">
                 </svg>
             </div>
 
-            <div className=' w-full max-w-[1800px] flex flex-col xl:flex-row gap-3 sm:gap-5 p-2 sm:p-5 '>
+            <div className=' w-full max-w-[1800px] bg-accent rounded-xl flex flex-col xl:flex-row gap-3 sm:gap-5 p-2 sm:p-5 '>
                 <div className=' w-full xl:w-1/2  bg-base-100 rounded-xl p-3 sm:p-5 ' onClick={(e) => e.stopPropagation()}>
                     <div className='mb-5 '>
                         <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-info mb-2 leading-tight text-start flex flex-col justify-start items-start " >
