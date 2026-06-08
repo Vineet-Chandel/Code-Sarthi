@@ -32,14 +32,32 @@ const resumeData1 = {
         "passionate about crafting high-performance web applications using the MERN stack. Expert in translating complex business requirements into elegant, scalable code with a focus on user-centric design and efficient backend architecture.",
     location: "Kanpur,India",
     pincode: "208024",
-    skills: {
-        frontend: "React.js, Next.js, TypeScript, Tailwind CSS, Framer Motion",
-        backend: "Node.js, Express.js, GraphQL, Socket.io",
-        authentication: "NextAuth.js, Firebase Auth, OAuth 2.0",
-        database: "PostgreSQL, MongoDB, Redis, Prisma ORM",
-        tools: "Docker, Git, Vercel, Postman, Figma",
-        deployment: "AWS S3, Netlify, Render, Vercel",
-    },
+    skills: [
+        {
+            skillCategory: "Frontend",
+            skills: "React.js, Next.js, TypeScript, Tailwind CSS, Framer Motion"
+        },
+        {
+            skillCategory: "Backend",
+            skills: "Node.js, Express.js, GraphQL, Socket.io"
+        },
+        {
+            skillCategory: "Authentication",
+            skills: "NextAuth.js, Firebase Auth, OAuth 2.0"
+        },
+        {
+            skillCategory: "Database",
+            skills: "PostgreSQL, MongoDB, Redis, Prisma ORM"
+        },
+        {
+            skillCategory: "Tools",
+            skills: "Docker, Git, Vercel, Postman, Figma"
+        },
+        {
+            skillCategory: "Deployment",
+            skills: "AWS S3, Netlify, Render, Vercel"
+        }
+    ],
     projects: [
         {
             name: "RollZone!",

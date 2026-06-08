@@ -1,11 +1,73 @@
 import mongoose from "mongoose";
 
+
+
+const HeaderSchema = new mongoose.Schema({
+    fname: {
+        type: String,
+        required: true,
+        minLength: 3,
+        maxLength: 50,
+        trim: true
+    },
+
+    lname: {
+        type: String,
+        required: true,
+        minLength: 3,
+        maxLength: 50,
+        trim: true
+    },
+
+    email: {
+        type: String,
+        lowercase: true,
+        trim: true
+    },
+    phone: String,
+    summaryTitle: {
+        type: String,
+        minLength: 5,
+        maxLength: 150,
+        trim: true
+    },
+    summaryBody: {
+        type: String,
+        minLength: 5,
+        maxLength: 1500,
+        trim: true,
+    },
+
+    github: String,
+    linkedin: String,
+    portfolio: String,
+
+    location: String,
+    pincode: String,
+
+}, { _id: false });
+
 const ProjectSchema = new mongoose.Schema({
-    name: String,
-    stack: String,
+    name: {
+        type: String,
+        minLength: 3,
+        maxLength: 50,
+        trim: true
+    },
+    stack: {
+        type: String,
+        minLength: 3,
+        maxLength: 50,
+        trim: true
+    },
     github: String,
     live: String,
-    description: String,
+    description: {
+        type: String,
+        minLength: 5,
+        maxLength: 4000,
+        trim: true
+    },
     bullets: [String],
 }, { _id: false });
 
@@ -35,6 +97,20 @@ const EducationSchema = new mongoose.Schema({
     bullets: [String],
 }, { _id: false });
 
+
+
+const SkillSchema = new mongoose.Schema({
+    skillCategory: {
+        type: String,
+    },
+    skills: {
+        type: [String],
+    },
+}, { _id: false });
+
+
+
+
 const CertificationSchema = new mongoose.Schema({
     about: String,
     link: String,
@@ -54,58 +130,9 @@ const ResumeProfileSchema = new mongoose.Schema(
             index: true,
         },
 
-        fname: {
-            type: String,
-            required: true,
-            minLength: 3,
-            maxLength: 50,
-            trim: true
-        },
+        header: HeaderSchema,
 
-        lname: {
-            type: String,
-            required: true,
-            minLength: 3,
-            maxLength: 50,
-            trim: true
-        },
-
-        email: {
-            type: String,
-            lowercase: true,
-            trim: true
-        },
-        phone: String,
-        summaryTitle: {
-            type: String,
-            minLength: 5,
-            maxLength: 150,
-            trim: true
-        },
-        summaryBody: {
-            type: String,
-            minLength: 5,
-            maxLength: 1500,
-            trim: true,
-        },
-
-        github: String,
-        linkedin: String,
-        portfolio: String,
-
-        location: String,
-        pincode: String,
-
-
-
-        skills: {
-            frontend: String,
-            backend: String,
-            authentication: String,
-            database: String,
-            tools: String,
-            deployment: String,
-        },
+        skills: [SkillSchema],
 
         projects: [ProjectSchema],
 
