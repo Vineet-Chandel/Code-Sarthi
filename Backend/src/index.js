@@ -33,6 +33,7 @@ const cloudinary = require("cloudinary").v2;
 const reviewRouter = require("./routes/review");
 const aiWorkRouter = require("./routes/aiWork");
 const newsletterRouter = require("./routes/newsLetterAPI");
+const resRouter = require("./routes/resumeAPI");
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
     api_key: process.env.CLOUD_KEY,
@@ -51,6 +52,7 @@ app.use("/api", feedbackRouter);
 app.use("/api", reviewRouter);
 app.use("/api", aiWorkRouter);
 app.use("/api", newsletterRouter);
+app.use("/api", resRouter);
 
 // app.use("/", authRouter);
 // app.use("/", profileRouter);
@@ -63,6 +65,7 @@ app.use("/api", newsletterRouter);
 // app.use("/", reviewRouter);
 // app.use("/", aiWorkRouter);
 // app.use("/", newsletterRouter);
+// app.use("/", resRouter);
 const PORT = process.env.PORT || 8000;
 
 (async () => {

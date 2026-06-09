@@ -46,7 +46,6 @@ const HeaderSchema = new mongoose.Schema({
     pincode: String,
 
 }, { _id: false });
-
 const ProjectSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -70,7 +69,6 @@ const ProjectSchema = new mongoose.Schema({
     },
     bullets: [String],
 }, { _id: false });
-
 const ExperienceSchema = new mongoose.Schema({
     role: String,
     company: String,
@@ -84,7 +82,6 @@ const ExperienceSchema = new mongoose.Schema({
     employmentType: String,
     bullets: [String],
 }, { _id: false });
-
 const EducationSchema = new mongoose.Schema({
     degree: String,
     field: String,
@@ -96,9 +93,6 @@ const EducationSchema = new mongoose.Schema({
     percentage: String,
     bullets: [String],
 }, { _id: false });
-
-
-
 const SkillSchema = new mongoose.Schema({
     skillCategory: {
         type: String,
@@ -107,20 +101,14 @@ const SkillSchema = new mongoose.Schema({
         type: [String],
     },
 }, { _id: false });
-
-
-
-
 const CertificationSchema = new mongoose.Schema({
     about: String,
     link: String,
 }, { _id: false });
-
 const LanguageSchema = new mongoose.Schema({
     langCategory: String,
     status: String,
 }, { _id: false });
-
 const ResumeProfileSchema = new mongoose.Schema(
     {
         userId: {
@@ -154,10 +142,7 @@ const ResumeProfileSchema = new mongoose.Schema(
         lastGeneratedResume: {
             type: Date,
         },
-    },
-    {
-        timestamps: true,
-    }
+    }, { timestamps: true }
 );
 
 module.exports = mongoose.model(
