@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Temp1 from "../../3/Temp1";
 import { useLocation, useNavigate } from "react-router-dom";
-import IntroEXP from "../02_EXP/IntroEXP";
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 import validator from "validator";
@@ -10,8 +9,11 @@ import ProgressMeter from "../ProgressMeter";
 import Header from "../Header";
 import Step from "../Step";
 import { isValidPhoneNumber } from "react-phone-number-input";
-
-
+import axios from "axios";
+import BASE_URL from "@/Pages/auth/baseURL";
+import Toast from '../Toast';
+import { AnimatePresence } from "framer-motion";
+import { setRes } from "@/utils/resStore";
 
 // ─── tiny hook ────────────────────────────────────────────────────────────────
 function useIntersectionObserver(options = {}) {
@@ -31,7 +33,21 @@ function useIntersectionObserver(options = {}) {
         return () => observer.disconnect();
     }, []);
     return [ref, isVisible];
-}
+} const ToastContainer = ({ toasts, removeToast }) => {
+    return (
+        <div className="fixed bottom-5 right-5 flex flex-col gap-3 z-50">
+            <AnimatePresence>
+                {toasts.map((t) => (
+                    <Toast
+                        key={t.id}
+                        {...t}
+                        onClose={() => removeToast(t.id)}
+                    />
+                ))}
+            </AnimatePresence>
+        </div>
+    );
+};
 
 // ─── reusable field ───────────────────────────────────────────────────────────
 const InputField = ({ label, id, value, type = "text", placeholder, onChange, onBlur, onFocus, emailSucess, phoneSucess }) => (
@@ -181,29 +197,80 @@ const TipItem = ({ emoji, title, body }) => (
 
 // ─── main component ───────────────────────────────────────────────────────────
 const StartHeader = ({ data }) => {
-
-    const user = useSelector(store => store.user.user.DATA);
+    const Navigate = useNavigate();
+    const user = useSelector(store => store.user?.user?.DATA || {});
     const location = useLocation();
-    let resumeData = location.state?.resumeData || {};
+
+    const resData = useSelector((state) => state.res);
+
+    let resumeData = resData || location.state?.resumeData || {};
+    // const data = resumeData?.header || {};
+
+    const dispatch = useDispatch();
+    const getResumeIfExist = async () => {
+        try {
+            const res = await axios.get(`${BASE_URL}/build-resume/get-resume`, {
+                withCredentials: true,
+            })
+
+            if (res.data.success === true) {
+                dispatch(setRes(res.data.data));
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    const header = resData?.header;
     const [form, setForm] = useState({
-        fname: data?.fname || `${user.firstName}`,
-        lname: data?.lname || `${user.lastName}`,
-        summaryTitle: data?.summaryTitle || `${user.profession}`,
-        email: data?.email || `${user.gmail}`,
-        phone: data?.phone || "",
-        location: data?.location || "",
-        pincode: data?.pincode || "",
-        linkedin: data?.linkedin || "",
-        github: data?.github || "",
-        portfolio: data?.portfolio || "",
+        fname: header?.fname || data?.fname || `${user.firstName}`,
+        lname: header?.lname || data?.lname || `${user.lastName}`,
+        summaryTitle: header?.summaryTitle || data?.summaryTitle || `${user.profession}`,
+        email: header?.email || data?.email || `${user.gmail}`,
+        phone: header?.phone || data?.phone || "",
+        location: header?.location || data?.location || "",
+        pincode: header?.pincode || data?.pincode || "",
+        linkedin: header?.linkedin || data?.linkedin || "",
+        github: header?.github || data?.github || "",
+        portfolio: header?.portfolio || data?.portfolio || "",
 
     });
+
+    useEffect(() => {
+        if (!resData?.header) {
+            getResumeIfExist();
+        }
+    }, [resData?.header]);
+    useEffect(() => {
+        if (header) {
+            setForm({
+                fname: header?.fname || data?.fname || user.firstName,
+                lname: header?.lname || data?.lname || user.lastName,
+                summaryTitle: header?.summaryTitle || data?.summaryTitle || user.profession,
+                email: header?.email || data?.email || user.gmail,
+                phone: header?.phone || data?.phone || "",
+                location: header?.location || data?.location || "",
+                pincode: header?.pincode || data?.pincode || "",
+                linkedin: header?.linkedin || data?.linkedin || "",
+                github: header?.github || data?.github || "",
+                portfolio: header?.portfolio || data?.portfolio || "",
+            });
+        }
+    }, [header, data, user]);
+
 
     const [activeTab, setActiveTab] = useState("preview"); // preview | tips | score
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [hoveringImg, setHoveringImg] = useState(false);
-    const [hoveringCard, setHoveringCard] = useState(false);
-    const [cardRef, isCardVisible] = useIntersectionObserver();
+    const [toasts, setToasts] = useState([]);
+
+    const addToast = ({ type = "success", title, message }) => {
+        const id = Date.now();
+        setToasts((prev) => [...prev, { id, type, title, message }]);
+    };
+
+    const removeToast = (id) => {
+        setToasts((prev) => prev.filter((t) => t.id !== id));
+    };
 
     const handleChange = useCallback((id, val) => {
         setForm((prev) => ({ ...prev, [id]: val }));
@@ -237,20 +304,74 @@ const StartHeader = ({ data }) => {
 
 
     };
-    const Navigate = useNavigate();
+
     const [isVisible] = useIntersectionObserver();
-    const [hovered, setHovered] = useState(false);
+
 
     const [emailSucess, setEmailSucess] = useState(false);
     const [phoneSucess, setPhoneSucess] = useState(false);
 
+    const payload = {
+        fname: form.fname,
+        lname: form.lname,
+        phone: form.phone,
+        github: form.github,
+        linkedin: form.linkedin,
+        portfolio: form.portfolio,
+        email: form.email,
+        summaryTitle: form.summaryTitle,
+        location: form.location,
+        pincode: form.pincode,
+    }
+    const saveHeader = async () => {
+        try {
+            if (header?.fname === form.fname &&
+                header?.lname === form.lname &&
+                header?.phone === form.phone &&
+                header?.github === form.github &&
+                header?.linkedin === form.linkedin &&
+                header?.portfolio === form.portfolio &&
+                header?.email === form.email &&
+                header?.summaryTitle === form.summaryTitle &&
+                header?.location === form.location &&
+                header?.pincode === form.pincode) {
+                addToast({
+                    type: "warning",
+                    title: "already Saved",
+                    message: "no changes found"
+                });
+                return;
+            }
+
+
+            const res = await axios.post(`${BASE_URL}/build-resume/header-info-save`,
+                payload, { withCredentials: true })
+
+            dispatch(setRes({
+                ...resData,
+                header: payload
+            }));
+            addToast({
+                type: "success",
+                title: "Saved",
+                message: "Information Updated Successfully"
+            });
+        } catch (error) {
+            addToast({
+                type: "error",
+                title: "Error",
+                message: "Something went wrong"
+            });
+        }
+
+    }
 
 
 
 
-    const navigate = useNavigate();
     return (
         <div className="min-h-[calc(100vh-4rem)] w-screen flex items-start justify-center p-4 md:p-6 bg-base-100">
+            <ToastContainer toasts={toasts} removeToast={removeToast} />
             <div className="w-full bg-base-100 rounded-3xl border border-slate-700 overflow-hidden " >
 
                 {/* ── top bar ── */}
@@ -320,7 +441,7 @@ const StartHeader = ({ data }) => {
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                                             <path d="M0 0h24v24H0z" fill="none" />
-                                            <path fill="currentColor" fill-rule="evenodd" d="M12 15.75a.75.75 0 0 0 .75-.75V4.027l1.68 1.961a.75.75 0 1 0 1.14-.976l-3-3.5a.75.75 0 0 0-1.14 0l-3 3.5a.75.75 0 1 0 1.14.976l1.68-1.96V15c0 .414.336.75.75.75" clip-rule="evenodd" />
+                                            <path fill="currentColor" fillRule="evenodd" d="M12 15.75a.75.75 0 0 0 .75-.75V4.027l1.68 1.961a.75.75 0 1 0 1.14-.976l-3-3.5a.75.75 0 0 0-1.14 0l-3 3.5a.75.75 0 1 0 1.14.976l1.68-1.96V15c0 .414.336.75.75.75" clipRule="evenodd" />
                                             <path fill="currentColor" d="M16 9c-.702 0-1.053 0-1.306.169a1 1 0 0 0-.275.275c-.169.253-.169.604-.169 1.306V15a2.25 2.25 0 1 1-4.5 0v-4.25c0-.702 0-1.053-.169-1.306a1 1 0 0 0-.275-.275C9.053 9 8.702 9 8 9c-2.828 0-4.243 0-5.121.879C2 10.757 2 12.17 2 14.999v1c0 2.83 0 4.243.879 5.122C3.757 22 5.172 22 8 22h8c2.828 0 4.243 0 5.121-.879S22 18.828 22 16v-1c0-2.829 0-4.243-.879-5.121C20.243 9 18.828 9 16 9" />
                                         </svg>
 
@@ -483,7 +604,7 @@ py-1
                                                 pointerEvents: "none",
                                                 userSelect: "none",
                                                 transformOrigin: "top center",
-                                                transform: hovered ? "scale(1.06)" : "scale(1)",   // subtle zoom on hover
+
                                                 transition: "transform 0.5s cubic-bezier(.4,0,.2,1)",
                                             }}
                                         >
@@ -495,7 +616,7 @@ py-1
                                             position: "absolute", inset: 0,
                                             display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 12,
                                             // background: `linear-gradient(160deg, ${item.color}18 0%, ${item.color}50 100%)`,
-                                            opacity: hovered ? 1 : 0,
+
                                             transition: "opacity 0.3s ease",
                                         }}>
                                             <button
@@ -505,7 +626,7 @@ py-1
                                                     fontWeight: 800, fontSize: 13, color: "#fff",
                                                     // background: item.color,
                                                     border: "none", cursor: "pointer",
-                                                    transform: hovered ? "translateY(0)" : "translateY(14px)",
+
                                                     transition: "transform 0.35s cubic-bezier(.4,0,.2,1) 0.05s",
                                                     letterSpacing: "0.02em",
                                                     fontFamily: "'DM Sans', sans-serif",
@@ -597,16 +718,17 @@ py-1
                 </div>
 
                 {/* ── footer ── */}
-                <div className="flex items-center justify-end px-6 md:px-10 py-4 bg-base-200 border-t border-slate-700">
-
+                <div className="flex items-center gap-3 justify-end px-6 md:px-10 py-4 bg-base-200 border-t border-slate-700">
+                    <button className="bg-base-100 px-10 py-2.5 rounded-xl text-info font-bold border-2 border-secondary hover:text-secondary-content hover:border-secondary-content active:scale-95 transition-all duration-200" onClick={saveHeader}>
+                        Save
+                    </button>
                     <button
                         onClick={() => {
                             Navigate("/app/build-resume/intro-exp-page", {
                                 state: { resumeData }
                             });
                         }}
-                        className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl bg-base-100 text-info border-2 border-secondary
-                        hover:text-secondary-content   active:scale-95 transition-all duration-200 " >
+                        className="bg-base-100 px-10 py-2.5 rounded-xl text-info font-bold border-2 border-secondary hover:text-secondary-content hover:border-secondary-content active:scale-95 transition-all duration-200 flex items-center gap-2">
                         Next: Experience
                         <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
                             <path fill="currentColor" d="M2 5v14c0 .86 1.012 1.318 1.659.753l8-7a1 1 0 0 0 0-1.506l-8-7C3.012 3.682 2 4.141 2 5m11 0v14c0 .86 1.012 1.318 1.659.753l8-7a1 1 0 0 0 0-1.506l-8-7C14.012 3.682 13 4.141 13 5"></path>

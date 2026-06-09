@@ -1,3 +1,8 @@
+import BASE_URL from "@/Pages/auth/baseURL";
+import { setRes } from "@/utils/resStore";
+import axios from "axios";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const STEPS = [
@@ -8,7 +13,12 @@ const STEPS = [
             "Add skills, projects, experience, and achievements once",
             "Create a permanent AI-powered career knowledge base",
             "Generate unlimited resumes from a single profile"
-        ]
+        ],
+        icon: (
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 7V12L14 16L3 12V7L10 3L21 7ZM3 7L14 11L21 7" stroke="#fff" stroke-width="2" stroke-linejoin="round" />
+                <path d="M3 12V17L14 21L21 17V12" stroke="#fff" stroke-width="2" stroke-linejoin="round" />
+            </svg>)
     },
 
     {
@@ -85,6 +95,24 @@ const STEPS = [
 
 export default function HowItWorks() {
     const Navigate = useNavigate();
+    const dispatch = useDispatch();
+    const getResumeIfExist = async () => {
+        try {
+            const res = await axios.get(`${BASE_URL}/build-resume/get-resume`, {
+                withCredentials: true,
+            })
+
+            if (res.data.success === true) {
+                dispatch(setRes(res.data.data));
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    useEffect(() => {
+        getResumeIfExist();
+    }, [])
     return (
         <div className="bg-base-100 px-6">
 

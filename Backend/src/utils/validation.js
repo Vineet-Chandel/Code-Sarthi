@@ -93,11 +93,7 @@ const validateHeaderData = (data) => {
         if (/<[^>]*>/.test(data.summaryTitle)) { throw new Error("Unnecessary stuff detected in summary title!") }
     }
 
-    if (data.summaryBody && typeof data.summaryBody === "string") {
-        if (validator.isEmpty(data.summaryBody)) { throw new Error("Summary body is required") }
-        if (data.summaryBody.length < 5 || data.summaryBody.length > 1500) { throw new Error("Summary body is not valid") }
-        if (/<[^>]*>/.test(data.summaryBody)) { throw new Error("Unnecessary stuff detected in summary body!") }
-    }
+
 
     if (data.github) {
         if (!validator.isURL(data.github)) { throw new Error("Invalid GitHub URL") };
@@ -356,6 +352,14 @@ const validateLanguagesData = (data) => {
         }
     }
 }
+const validateSummaryBodyData = (data) => {
+
+    if (data.summaryBody && typeof data.summaryBody === "string") {
+        if (validator.isEmpty(data.summaryBody)) { throw new Error("Summary body is required") }
+        if (data.summaryBody.length < 5 || data.summaryBody.length > 1500) { throw new Error("Summary body is not valid") }
+        if (/<[^>]*>/.test(data.summaryBody)) { throw new Error("Unnecessary stuff detected in summary body!") }
+    }
+}
 
 module.exports = {
     validateSignUpData,
@@ -367,5 +371,6 @@ module.exports = {
     validateEducationData,
     validateCertificatesData,
     validateAchievementsData,
-    validateLanguagesData
+    validateLanguagesData,
+    validateSummaryBodyData
 };

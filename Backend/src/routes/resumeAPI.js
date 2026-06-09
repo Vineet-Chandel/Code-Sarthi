@@ -1,7 +1,9 @@
-import express from "express";
-import { userAuth } from "../middlewares/userAuth.js";
-import ResumeProfileSchema from "../models/ResumeProfile.js";
-import {
+const express = require("express");
+const { userAuth } = require("../middlewares/userAuth.js");
+const ResumeProfileSchema = require("../models/ResumeProfileSchema.js");
+const {
+    validateSignUpData,
+    validateEditProfileData,
     validateHeaderData,
     validateSkillsData,
     validateProjectsData,
@@ -10,7 +12,8 @@ import {
     validateCertificatesData,
     validateAchievementsData,
     validateLanguagesData,
-} from "../utils/validators.js";
+    validateSummaryBodyData
+} = require("../utils/validation");
 
 const resRouter = express.Router();
 
@@ -31,20 +34,21 @@ resRouter.post("/build-resume/header-info-save", userAuth, async (req, res) => {
         if (!req.user) {
             return res.status(401).json({ success: false, message: "Please Re-Login" });
         }
-
+        console.log("BODY:", req.body);
+        console.log("USER:", req.user);
         validateHeaderData(req.body);
 
         const user = req.user;
         const {
             fname, lname, email, phone,
-            summaryTitle, summaryBody,
+            summaryTitle,
             github, linkedin, portfolio,
             location, pincode,
         } = req.body;
 
         const headerData = {
             fname, lname, email, phone,
-            summaryTitle, summaryBody,
+            summaryTitle,
             github, linkedin, portfolio,
             location, pincode,
         };
@@ -200,7 +204,6 @@ resRouter.post("/build-resume/education-info-save", userAuth, async (req, res) =
             message: "Education updated successfully",
             data: resume,
         });
-
     } catch (err) {
         return handleRouteError(err, res);
     }
@@ -333,4 +336,33 @@ resRouter.get("/build-resume/get-resume", userAuth, async (req, res) => {
     }
 });
 
-export default resRouter;
+
+resRouter.post("/build-resume/summary-body", userAuth, async (req, res) => {
+
+    try {
+        if (!req.user) {
+            return res.status(401).json({ success: false, message: "Please Re-Login" });
+        }
+        validateSummaryBodyData(req.body);
+        const resume = await ResumeProfileSchema.findOne({ userId: req.user._id });
+
+        if (!resume) {
+            return res.status(404).json({
+                success: false,
+                message: "Resume not found. Please complete header info first.",
+            });
+        }
+        resume.summaryBody = req.body.summaryBody;
+        await resume.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Summary Body updated successfully",
+            data: resume,
+        });
+
+    } catch (err) {
+        return handleRouteError(err, res);
+    }
+})
+module.exports = resRouter;

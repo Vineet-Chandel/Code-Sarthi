@@ -1,8 +1,8 @@
 import React, { use, useCallback, useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import axios from "axios";
-import BASE_URL from '../../../auth/baseURL';
+
+
 
 import Toast from '../Toast';
 import { AnimatePresence } from "framer-motion";
@@ -14,7 +14,10 @@ import Preview from '../Preview';
 import AddedPoints from '../AddedPoints';
 import AiWorking from '../AiWorking';
 
-
+import { setRes } from "@/utils/resStore";
+import axios from "axios";
+import BASE_URL from "@/Pages/auth/baseURL";
+import { useDispatch, useSelector } from 'react-redux';
 // ─── reusable field ───────────────────────────────────────────────────────────
 const InputField = ({
     label,
@@ -137,24 +140,105 @@ const DateCompare = (startDate, endDate, addToast) => {
 const Experience = ({ data }) => {
     const location = useLocation();
     let resumeData = location.state?.resumeData || {};
+    const resData = useSelector((state) => state.res);
+    const user = useSelector(store => store.user?.user?.DATA || {});
+    const dispatch = useDispatch();
+    const getResumeIfExist = async () => {
+        try {
+            const res = await axios.get(`${BASE_URL}/build-resume/get-resume`, {
+                withCredentials: true,
+            })
 
+            if (res.data.success === true) {
+                dispatch(setRes(res.data.data));
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    useEffect(() => {
+        if (!resData?.experience?.experience) {
+            getResumeIfExist();
+            return;
+        }
+    }, [resData?.experience?.experience]);
+
+    useEffect(() => {
+        if (resData.experience?.experience) {
+            setExperiences(resData.experience?.experience?.length > 0 ? resData.experience?.experience :
+                data?.length > 0 ? data :
+                    [{
+                        role: "",
+                        company: "",
+                        location: "",
+                        startDate: "",
+                        endDate: "",
+                        currentlyWorking: false,
+                        bullets: [],
+                        employmentType: ""
+                    }]);
+        }
+    }, [resData.experience, data, user]);
     const [experiences, setExperiences] = useState(
-        resumeData?.experience?.length > 0
-            ? resumeData.experience
-            : [
-                {
-                    role: "",
-                    company: "",
-                    location: "",
-                    startDate: "",
-                    endDate: "",
-                    currentlyWorking: false,
-                    bullets: [],
-                    employmentType: ""
-                }
-            ]
+
+        resData?.experience?.length > 0
+            ? resData.experience
+            : resumeData?.experience?.length > 0
+                ? resumeData.experience
+                : [
+                    {
+                        role: "",
+                        company: "",
+                        location: "",
+                        startDate: "",
+                        endDate: "",
+                        currentlyWorking: false,
+                        bullets: [],
+                        employmentType: ""
+                    }
+                ]
     );
 
+
+    const saveExperience = async () => {
+        try {
+
+            if (
+                JSON.stringify(resData?.experience || []) ===
+                JSON.stringify(experiences)
+            ) {
+                addToast({
+                    type: "warning",
+                    title: "already Saved",
+                    message: "no changes found"
+                });
+                return;
+            }
+
+            const payload = {
+                experience: experiences
+            };
+            const res = await axios.post(`${BASE_URL}/build-resume/experience-info-save`,
+                payload, { withCredentials: true })
+
+            dispatch(setRes({
+                ...resData,
+                experience: experiences
+            }));
+            addToast({
+                type: "success",
+                title: "Saved",
+                message: "Information Updated Successfully"
+            });
+        } catch (error) {
+            addToast({
+                type: "error",
+                title: "Error",
+                message: "Something went wrong"
+            });
+        }
+
+    }
 
     const [activeTab, setActiveTab] = useState("preview"); // preview | tips | score
     const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -362,7 +446,7 @@ const Experience = ({ data }) => {
                         <Header index={1} />
 
 
-                        {experiences.map((form, index) => (
+                        {experiences?.map((form, index) => (
                             <div key={index} className="bg-base-300 rounded-3xl shadow-inner p-4 md:p-7 mb-6">
                                 <div className="flex items-center justify-between mb-4">
                                     <h3 className="text-lg font-bold text-white">Experience #{index + 1}</h3>
@@ -597,8 +681,10 @@ const Experience = ({ data }) => {
 
 
                 {/* ── footer ── */}
-                <div className="flex items-center justify-end px-6 md:px-10 py-4 bg-base-200 border-t border-gray-700">
-
+                <div className="flex gap-3 items-center justify-end px-6 md:px-10 py-4 bg-base-200 border-t border-gray-700">
+                    <button className="bg-base-100 px-10 py-2.5 rounded-xl text-info font-bold border-2 border-secondary hover:text-secondary-content hover:border-secondary-content active:scale-95 transition-all duration-200" onClick={saveExperience}>
+                        Save
+                    </button>
                     <button
                         onClick={() => {
 
