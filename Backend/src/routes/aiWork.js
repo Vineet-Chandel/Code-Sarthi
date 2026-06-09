@@ -198,13 +198,13 @@ aiWorkRouter.post("/generate-exp-pointer", async (req, res) => {
 
 
 aiWorkRouter.post("/generate-edu-pointer", async (req, res) => {
-    const { degree, feild, cgpa, college, graduationYear } = req.body;
+    const { degree, field, cgpa, college, graduationYear } = req.body;
     console.log(process.env.XAI_API_KEY);
     // Validation
-    if (!degree || !feild || !cgpa || !college) {
+    if (!degree || !field || !cgpa || !college) {
         return res.status(400).json({
             error: "Incomplete Data",
-            message: "degree, feild, cgpa, and college are required.",
+            message: "degree, field, cgpa, and college are required.",
         });
     }
 
@@ -220,7 +220,7 @@ aiWorkRouter.post("/generate-edu-pointer", async (req, res) => {
         
         EDUCATION DETAILS:
         - Degree: ${degree}
-        - Field of Study: ${feild}
+        - Field of Study: ${field}
         - Institution: ${college}
         - CGPA: ${cgpa}
         - Graduation Year: ${graduationYear}

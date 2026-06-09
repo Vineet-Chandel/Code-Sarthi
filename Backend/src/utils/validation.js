@@ -119,28 +119,45 @@ const validateHeaderData = (data) => {
 
 }
 
+
+
 const validateSkillsData = (data) => {
+    if (!data.skills || !Array.isArray(data.skills)) {
+        throw new Error("Skills array is required");
+    }
 
-    if (data.skills && Array.isArray(data.skills)) {
-        for (const skill of data.skills) {
-            if (!skill.skillCategory || typeof skill.skillCategory !== "string") {
-                throw new Error("Skill category is required")
-            }
-            if (skill.skillCategory.length < 3) {
-                throw new Error("Skill category is too short")
-            }
-            if (/<[^>]*>/.test(skill.skillCategory)) { throw new Error("Unnecessary stuff detected in Skill category!") }
+    for (const skill of data.skills) {
+        if (!skill.skillCategory || typeof skill.skillCategory !== "string") {
+            throw new Error("Skill category is required");
+        }
 
-            if (!skill.skills || typeof skill.skills !== "string") {
-                throw new Error("Skills is required")
+        if (/<[^>]*>/.test(skill.skillCategory)) {
+            throw new Error("Unnecessary stuff detected in Skill category!");
+        }
+
+        if (!Array.isArray(skill.skills)) {
+            throw new Error("Skills must be an array");
+        }
+
+        if (skill.skills.length === 0) {
+            throw new Error("At least one skill is required");
+        }
+
+        for (const item of skill.skills) {
+            if (typeof item !== "string") {
+                throw new Error("Skill must be a string");
             }
-            if (skill.skills.length < 3) {
-                throw new Error("Skills is too short")
+
+            if (item.trim().length === 0) {
+                throw new Error("Skill cannot be empty");
             }
-            if (/<[^>]*>/.test(skill.skills)) { throw new Error("Unnecessary stuff detected in Skills!") }
+
+            if (/<[^>]*>/.test(item)) {
+                throw new Error("Unnecessary stuff detected in Skills!");
+            }
         }
     }
-}
+};
 // projects validation
 const validateProjectsData = (data) => {
 

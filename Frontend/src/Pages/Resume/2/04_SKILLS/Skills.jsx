@@ -12,6 +12,8 @@ import Step from '../Step';
 import Preview from '../Preview';
 import AiWorking2 from '../AiWorking2';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { setRes } from '@/utils/resStore';
 // ─── reusable field ───────────────────────────────────────────────────────────
 const ToastContainer = ({ toasts, removeToast }) => {
     return (
@@ -32,28 +34,139 @@ const ToastContainer = ({ toasts, removeToast }) => {
 
 
 
-const Education = ({ data }) => {
+const Skills = ({ data }) => {
     const location = useLocation();
     let resumeData = location.state?.resumeData || {};
 
 
+    const resData = useSelector((state) => state.res);
+    const user = useSelector(store => store.user?.user?.DATA || {});
+    const dispatch = useDispatch();
+    const getResumeIfExist = async () => {
+        try {
+            const res = await axios.get(`${BASE_URL}/build-resume/get-resume`, {
+                withCredentials: true,
+            })
+
+            if (res.data.success === true) {
+                dispatch(setRes(res.data.data));
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+
+
+
+
+
+
     const [skills, setSkills] = useState(
-        resumeData?.skills?.length > 0
-            ? resumeData.skills.map((s) => ({
+        resData?.skills?.length > 0
+            ? resData.skills.map((s) => ({
                 id: crypto.randomUUID(),
                 skillCategory: s.skillCategory,
-                skills: s.skills.split(", "),
+                skills: Array.isArray(s.skills)
+                    ? s.skills
+                    : (s.skills || "").split(", ").filter(Boolean),
                 inputValue: "",
             }))
-            : [
-                {
+            : resumeData?.skills?.length > 0
+                ? resumeData.skills.map((s) => ({
                     id: crypto.randomUUID(),
-                    skillCategory: "",
-                    skills: [],
+                    skillCategory: s.skillCategory,
+                    skills: s.skills.split(", "),
                     inputValue: "",
-                }
-            ]
+                }))
+                : [
+                    {
+                        id: crypto.randomUUID(),
+                        skillCategory: "",
+                        skills: [],
+                        inputValue: "",
+                    }
+                ]
     );
+
+    const normalizedSkills = skills.map(skill => ({
+        skillCategory: skill.skillCategory,
+        skills: skill.skills
+    }));
+
+
+
+
+
+    useEffect(() => {
+        if (!resData?.skills?.skills) {
+            getResumeIfExist();
+            return;
+        }
+    }, [resData?.skills?.skills]);
+
+    useEffect(() => {
+        if (Array.isArray(resData.skills)) {
+            setSkills(
+                resData.skills.map(skill => ({
+                    id: crypto.randomUUID(),
+                    skillCategory: skill.skillCategory,
+                    skills: Array.isArray(skill.skills)
+                        ? skill.skills
+                        : [],
+                    inputValue: ""
+                }))
+            );
+        }
+    }, [resData.skills]);
+
+
+    const saveSkills = async () => {
+        try {
+
+            if (
+                JSON.stringify(resData?.skills || []) ===
+                JSON.stringify(normalizedSkills)
+            ) {
+                addToast({
+                    type: "warning",
+                    title: "already Saved",
+                    message: "no changes found"
+                });
+                return;
+            }
+
+            const payload = {
+                skills: normalizedSkills
+            };
+            const res = await axios.post(`${BASE_URL}/build-resume/skills-info-save`,
+                payload, { withCredentials: true })
+
+            dispatch(setRes({
+                ...resData,
+                skills: normalizedSkills
+            }));
+            addToast({
+                type: "success",
+                title: "Saved",
+                message: "Information Updated Successfully"
+            });
+        } catch (err) {
+            addToast({
+                type: "error",
+                title: "Error",
+                message: err.message
+            });
+        }
+
+    }
+
+
+
+
+
+
+
 
     const [activeTab, setActiveTab] = useState("preview"); // preview | tips | score
     const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -501,8 +614,10 @@ const Education = ({ data }) => {
 
 
                 {/* ── footer ── */}
-                <div className="flex items-center justify-end px-6 md:px-10 py-4 bg-base-200 border-t border-accent">
-
+                <div className="flex gap-3 items-center justify-end px-6 md:px-10 py-4 bg-base-200 border-t border-accent">
+                    <button className="bg-base-100  px-10 py-2.5 rounded-xl text-info font-bold border-2 border-secondary hover:text-secondary-content hover:border-secondary-content active:scale-95 transition-all duration-200" onClick={saveSkills}>
+                        Save
+                    </button>
                     <button
                         onClick={() => {
                             Navigate("/app/build-resume/intro-summary-page", {
@@ -522,4 +637,4 @@ const Education = ({ data }) => {
     )
 }
 
-export default Education;
+export default Skills;
