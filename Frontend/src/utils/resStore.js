@@ -9,7 +9,7 @@ const initialState = {
     education: [],
 
     certifications: [],
-
+    summaryBody: "",
     achievements: [],
     languages: [],
 };
@@ -19,16 +19,19 @@ export const resSlice = createSlice({
     initialState,
     reducers: {
         setRes: (state, action) => {
-            state.userId = action.payload.userId;
-            state.header = action.payload.header;
-            state.skills = action.payload.skills;
-            state.projects = action.payload.projects;
-            state.experience = action.payload.experience;
-            state.education = action.payload.education;
-            state.certifications = action.payload.certifications;
-            state.achievements = action.payload.achievements;
-            state.languages = action.payload.languages;
-        },
+            Object.assign(state, {
+                userId: action.payload.userId ?? null,
+                header: action.payload.header ?? null,
+                skills: action.payload.skills ?? [],
+                projects: action.payload.projects ?? [],
+                experience: action.payload.experience ?? [],
+                education: action.payload.education ?? [],
+                certifications: action.payload.certifications ?? [],
+                achievements: action.payload.achievements ?? [],
+                languages: action.payload.languages ?? [],
+                summaryBody: action.payload.summaryBody ?? "",
+            });
+        }
     },
 });
 

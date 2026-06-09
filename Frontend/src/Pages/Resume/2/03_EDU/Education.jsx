@@ -12,6 +12,8 @@ import Step from '../Step';
 import Preview from '../Preview';
 import AddedPoints from '../AddedPoints';
 import AiWorking from '../AiWorking';
+import { useDispatch, useSelector } from 'react-redux';
+import { setRes } from '@/utils/resStore';
 
 // ─── reusable field ───────────────────────────────────────────────────────────
 const InputField = ({ label, id, value, type = "text", placeholder, onChange }) => (
@@ -79,24 +81,127 @@ const Education = ({ data }) => {
     const location = useLocation();
     let resumeData = location.state?.resumeData || {};
 
+    const resData = useSelector((state) => state.res);
+    const user = useSelector(store => store.user?.user?.DATA || {});
+    const dispatch = useDispatch();
+    const getResumeIfExist = async () => {
+        try {
+            const res = await axios.get(`${BASE_URL}/build-resume/get-resume`, {
+                withCredentials: true,
+            })
+
+            if (res.data.success === true) {
+                dispatch(setRes(res.data.data));
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    useEffect(() => {
+        if (!resData?.education?.education) {
+            getResumeIfExist();
+            return;
+        }
+    }, [resData?.education?.education]);
+
+    useEffect(() => {
+        if (resData.education?.education) {
+            setEducation(resData.education?.education?.length > 0 ? resData.education?.education :
+                data?.length > 0 ? data :
+                    [{
+                        institution: "",
+                        location: "",
+                        degree: "",
+                        field: "",
+                        startDate: "",
+                        endDate: "",
+                        cgpa: "",
+                        bullets: [],
+                    }]);
+        }
+    }, [resData.education, data, user]);
+
+
+
+
+
+
+
+
+
+
+
+
     const [education, setEducation] = useState(
-        resumeData?.education?.length > 0
-            ? resumeData.education
-            : [
-                {
 
-                    institution: "",
-                    location: "",
-                    degree: "",
-                    field: "",
-                    startDate: "",
-                    endDate: "",
-                    cgpa: "",
-                    bullets: [],
+        resData?.education?.length > 0
+            ? resData.education
+            : resumeData?.education?.length > 0
+                ? resumeData.education
+                : [
+                    {
 
-                }
-            ]
+                        institution: "",
+                        location: "",
+                        degree: "",
+                        field: "",
+                        startDate: "",
+                        endDate: "",
+                        cgpa: "",
+                        bullets: [],
+
+                    }
+                ]
     );
+
+
+    const saveEducation = async () => {
+        try {
+
+            if (
+                JSON.stringify(resData?.education || []) ===
+                JSON.stringify(education)
+            ) {
+                addToast({
+                    type: "warning",
+                    title: "already Saved",
+                    message: "no changes found"
+                });
+                return;
+            }
+
+            const payload = {
+                education: education
+            };
+            const res = await axios.post(`${BASE_URL}/build-resume/education-info-save`,
+                payload, { withCredentials: true })
+
+            dispatch(setRes({
+                ...resData,
+                education: education
+            }));
+            addToast({
+                type: "success",
+                title: "Saved",
+                message: "Information Updated Successfully"
+            });
+        } catch (err) {
+            addToast({
+                type: "error",
+                title: "Error",
+                message: err.message
+            });
+        }
+
+    }
+
+
+
+
+
+
+
+
 
     const [activeTab, setActiveTab] = useState("preview"); // preview | tips | score
     const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -194,7 +299,7 @@ const Education = ({ data }) => {
             setIsAiworking(true);
             const response = await axios.post(
                 `${BASE_URL}/generate-edu-pointer`,
-                { degree: selectedDegree, college: selectedInstitution, feild: selectedField, cgpa: selectedCgpa, graduationYear: education }
+                { degree: selectedDegree, college: selectedInstitution, feild: selectedField, cgpa: selectedCgpa, graduationYear: selectedEndData }
             );
 
             setBullets(response.data.data);
@@ -511,7 +616,7 @@ const Education = ({ data }) => {
       transition-all
     "
                                             >
-                                                {selected || "Select Employment Type"}
+                                                {selected || "Select Degree"}
 
                                                 <svg
                                                     className={`transition-transform ${open ? "rotate-180" : ""}`}
@@ -670,8 +775,10 @@ overflow-y-auto
 
 
                 {/* ── footer ── */}
-                <div className="flex items-center justify-end px-6 md:px-10 py-4 bg-base-200 border-t border-gray-700">
-
+                <div className="flex items-center gap-3 justify-end px-6 md:px-10 py-4 bg-base-200 border-t border-gray-700">
+                    <button className="bg-base-100  px-10 py-2.5 rounded-xl text-info font-bold border-2 border-secondary hover:text-secondary-content hover:border-secondary-content active:scale-95 transition-all duration-200" onClick={saveEducation}>
+                        Save
+                    </button>
                     <button
                         onClick={() => {
                             Navigate("/app/build-resume/intro-skill-page", {

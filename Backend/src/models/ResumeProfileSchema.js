@@ -31,12 +31,7 @@ const HeaderSchema = new mongoose.Schema({
         maxLength: 150,
         trim: true
     },
-    summaryBody: {
-        type: String,
-        minLength: 5,
-        maxLength: 1500,
-        trim: true,
-    },
+
 
     github: String,
     linkedin: String,
@@ -133,7 +128,12 @@ const ResumeProfileSchema = new mongoose.Schema(
         achievements: [String],
 
         languages: [LanguageSchema],
-
+        summaryBody: {
+            type: String,
+            minLength: 5,
+            maxLength: 1500,
+            trim: true,
+        },
         isProfileCompleted: {
             type: Boolean,
             default: false,

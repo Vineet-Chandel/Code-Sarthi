@@ -11,6 +11,8 @@ import Header from '../Header';
 import Step from '../Step';
 import { useEffect } from 'react';
 import Preview from '../Preview';
+import { useDispatch, useSelector } from 'react-redux';
+import { setRes } from '@/utils/resStore';
 
 
 
@@ -38,12 +40,102 @@ const ProfileSummary = ({ data }) => {
     const location = useLocation();
     let resumeData = location.state?.resumeData || {};
 
-    const [summary, setSummary] = useState(resumeData.summaryBody || "");
+
+    const resData = useSelector((state) => state.res);
+    const user = useSelector(store => store.user?.user?.DATA || {});
+    const dispatch = useDispatch();
+    const getResumeIfExist = async () => {
+        try {
+            const res = await axios.get(`${BASE_URL}/build-resume/get-resume`, {
+                withCredentials: true,
+            })
+
+            if (res.data.success === true) {
+                dispatch(setRes(res.data.data));
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    useEffect(() => {
+        if (!resData?.summaryBody) {
+            getResumeIfExist();
+            return;
+        }
+    }, [resData?.summaryBody]);
+
+    useEffect(() => {
+        if (resData.summaryBody) {
+            setSummary(resData.summaryBody?.length > 0 ? resData.summaryBody :
+                data?.length > 0 ? data :
+                    "");
+        }
+    }, [resData.summaryBody, data, user]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+    const [summary, setSummary] = useState(
+
+        resData?.summaryBody?.length > 0
+            ? resData.summaryBody
+            : resumeData.summaryBody || "");
 
 
     const [activeTab, setActiveTab] = useState("preview"); // preview | tips | score
     const [sidebarOpen, setSidebarOpen] = useState(true);
 
+
+
+
+
+    const saveSummary = async () => {
+        try {
+
+            if (
+                resData?.summaryBody === summary
+            ) {
+                addToast({
+                    type: "warning",
+                    title: "already Saved",
+                    message: "no changes found"
+                });
+                return;
+            }
+
+            const payload = {
+                summaryBody: summary
+            };
+            const res = await axios.post(`${BASE_URL}/build-resume/summary-body`,
+                payload, { withCredentials: true })
+
+            dispatch(setRes({
+                ...resData,
+                summaryBody: summary
+            }));
+            addToast({
+                type: "success",
+                title: "Saved",
+                message: "Information Updated Successfully"
+            });
+        } catch (err) {
+            addToast({
+                type: "error",
+                title: "Error",
+                message: err.message
+            });
+        }
+
+    }
 
 
 
@@ -424,8 +516,10 @@ const ProfileSummary = ({ data }) => {
 
 
                 {/* ── footer ── */}
-                <div className="flex items-center justify-end px-6 md:px-10 py-4 bg-base-200 border-t border-slate-700">
-
+                <div className="flex gap-3 items-center justify-end px-6 md:px-10 py-4 bg-base-200 border-t border-slate-700">
+                    <button className="bg-base-100  px-10 py-2.5 rounded-xl text-info font-bold border-2 border-secondary hover:text-secondary-content hover:border-secondary-content active:scale-95 transition-all duration-200" onClick={saveSummary}>
+                        Save
+                    </button>
                     <button
                         onClick={() => {
                             Navigate("/app/build-resume/intro-project-page", {

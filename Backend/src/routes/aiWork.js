@@ -60,7 +60,7 @@ STRICT OUTPUT RULES:
 `;
 aiWorkRouter.post("/generate-exp-pointer", async (req, res) => {
     const { jobRole, company, employmentType } = req.body;
-    console.log(process.env.XAI_API_KEY);
+
     // Validation
     if (!jobRole || !company || !employmentType) {
         return res.status(400).json({
@@ -199,7 +199,7 @@ aiWorkRouter.post("/generate-exp-pointer", async (req, res) => {
 
 aiWorkRouter.post("/generate-edu-pointer", async (req, res) => {
     const { degree, field, cgpa, college, graduationYear } = req.body;
-    console.log(process.env.XAI_API_KEY);
+
     // Validation
     if (!degree || !field || !cgpa || !college) {
         return res.status(400).json({
@@ -326,7 +326,7 @@ aiWorkRouter.post("/generate-edu-pointer", async (req, res) => {
 
 aiWorkRouter.post("/generate-skills", async (req, res) => {
     const { category } = req.body;
-    console.log(process.env.XAI_API_KEY);
+
     // Validation
     if (!category) {
         return res.status(400).json({
@@ -563,13 +563,11 @@ Requirements:
                 max_tokens: 2200,
             });
 
-        // console.log(
-        //     JSON.stringify(completion, null, 2)
-        // );
+
         const rawText =
             completion?.choices?.[0]?.message?.content || "";
 
-        // console.log("RAW AI RESPONSE:\n", rawText);
+
         if (!rawText) {
             return res.status(500).json({
                 success: false,
@@ -582,8 +580,7 @@ Requirements:
 
 
         let parsedData;
-        console.log(typeof rawText);
-        console.log(rawText);
+
         try {
             parsedData = JSON.parse(rawText);
         } catch (err) {
@@ -638,7 +635,7 @@ Requirements:
 
 aiWorkRouter.post("/improve-pointer", async (req, res) => {
     const { bullet } = req.body;
-    console.log(process.env.XAI_API_KEY);
+
     // Validation
     if (!bullet) {
         return res.status(400).json({
@@ -761,7 +758,7 @@ aiWorkRouter.post("/improve-pointer", async (req, res) => {
 
 aiWorkRouter.post("/generate-project-pointer", async (req, res) => {
     const { name, stack, description } = req.body;
-    console.log(process.env.XAI_API_KEY);
+
     // Validation
     if (!name || !stack || !description) {
         return res.status(400).json({
