@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { AiOutlineLoading } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { addConnectionUser } from "../utils/connectionSlice";
-import Toast from '../Pages/Resume/2/Toast';
+import Toast from '../Pages/CARRER-PROFILE-CREATION/2/Toast';
 import { AnimatePresence } from "framer-motion";
 import { useNavigate } from 'react-router-dom';
 

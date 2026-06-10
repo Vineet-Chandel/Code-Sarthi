@@ -41,14 +41,14 @@ import Dashboard from "./Pages/Dashboard";
 import Discussions from "./Pages/Discussions";
 import Meeting from "./Pages/Meeting";
 import Explore from "./Pages/Explore";
-import Resume from "./Pages/Resume/1/Resume";
-import Templates from "./Pages/Resume/2/Templates";
-import HeaderContent from "./Pages/Resume/2/01_HEADER/StartHeader"
-import HowResume from "./Pages/Resume/4/HowResume";
-import HowCv from "./Pages/Resume/4/HowCv";
-import HowCoverLetter from "./Pages/Resume/4/HowCoverLetter";
-import CredentialsAnalyser from "./Pages/Resume/4/ConditionalAnlyz";
-import BuildResume from "./Pages/Resume/2/01_HEADER/BuildResume";
+import Resume from "./Pages/CARRER-PROFILE-CREATION/1/Resume";
+import Templates from "./Pages/CARRER-PROFILE-CREATION/2/Templates";
+import HeaderContent from "./Pages/CARRER-PROFILE-CREATION/2/01_HEADER/StartHeader"
+import HowResume from "./Pages/CARRER-PROFILE-CREATION/4/HowResume";
+import HowCv from "./Pages/CARRER-PROFILE-CREATION/4/HowCv";
+import HowCoverLetter from "./Pages/CARRER-PROFILE-CREATION/4/HowCoverLetter";
+import CredentialsAnalyser from "./Pages/CARRER-PROFILE-CREATION/4/ConditionalAnlyz";
+import BuildResume from "./Pages/CARRER-PROFILE-CREATION/2/01_HEADER/BuildResume";
 import Shastra from "./Pages/Shastra";
 import Projects from "./Pages/Projects";
 import ProjectManager from "./Pages/Project-Manager";
@@ -68,22 +68,22 @@ import RequestedUser from "./personalPages/RequestedUser";
 import ReceivedRequests from "./personalPages/ReceivedRequests";
 import SmartSchedulerLakshya from "./Main/PagesMain/Sub-Category/Blog-Category/SmartSchedulerLakshya";
 import PrivacyPolicyHub from "./Main/PagesMain/Sub-Category/Safety-Category/Hub/PrivacyPolicyHub";
-import IntroProject from "./Pages/Resume/2/06_PROJECT/IntroProject"
-import IntroEXP from "./Pages/Resume/2/02_EXP/IntroEXP";
-import IntroPreview from "./Pages/Resume/2/08_PREVIEW/IntroPreview";
+import IntroProject from "./Pages/CARRER-PROFILE-CREATION/2/06_PROJECT/IntroProject"
+import IntroEXP from "./Pages/CARRER-PROFILE-CREATION/2/02_EXP/IntroEXP";
+import IntroPreview from "./Pages/CARRER-PROFILE-CREATION/2/08_PREVIEW/IntroPreview";
 
-import IntroSummary from "./Pages/Resume/2/05_PRSUM/IntroProfileSummary";
-import Experience from "./Pages/Resume/2/02_EXP/Experinece";
-import IntroEdu from "./Pages/Resume/2/03_EDU/IntroEdu";
-import Education from "./Pages/Resume/2/03_EDU/Education";
-import IntroSkill from "./Pages/Resume/2/04_SKILLS/IntroSkills";
-import Skills from "./Pages/Resume/2/04_SKILLS/Skills";
+import IntroSummary from "./Pages/CARRER-PROFILE-CREATION/2/05_PRSUM/IntroProfileSummary";
+import Experience from "./Pages/CARRER-PROFILE-CREATION/2/02_EXP/Experinece";
+import IntroEdu from "./Pages/CARRER-PROFILE-CREATION/2/03_EDU/IntroEdu";
+import Education from "./Pages/CARRER-PROFILE-CREATION/2/03_EDU/Education";
+import IntroSkill from "./Pages/CARRER-PROFILE-CREATION/2/04_SKILLS/IntroSkills";
+import Skills from "./Pages/CARRER-PROFILE-CREATION/2/04_SKILLS/Skills";
 import PageNotFound from "./ErrorSaver/PageNotFound";
-import Summary from "./Pages/Resume/2/05_PRSUM/ProfileSummary";
-import Project from "./Pages/Resume/2/06_PROJECT/Project";
-import Preview from "./Pages/Resume/2/08_PREVIEW/Preview";
-import IntroAdditional from "./Pages/Resume/2/07_ADDITIONAL/IntroAdditonals";
-import FeildsAdditionals from "./Pages/Resume/2/07_ADDITIONAL/FeildsAdditionals";
+import Summary from "./Pages/CARRER-PROFILE-CREATION/2/05_PRSUM/ProfileSummary";
+import Project from "./Pages/CARRER-PROFILE-CREATION/2/06_PROJECT/Project";
+import Preview from "./Pages/CARRER-PROFILE-CREATION/2/08_PREVIEW/Preview";
+import IntroAdditional from "./Pages/CARRER-PROFILE-CREATION/2/07_ADDITIONAL/IntroAdditonals";
+import FeildsAdditionals from "./Pages/CARRER-PROFILE-CREATION/2/07_ADDITIONAL/FeildsAdditionals";
 
 
 const App = () => {

@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Step from "../Step";
 import ProgressMeter from "../ProgressMeter";
+import { setRes } from "@/utils/resStore";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import BASE_URL from "@/Pages/auth/baseURL";
 
 // ── SVG ICON SYSTEM ────────────────────────────────────────────────────────
 const PATHS = {
@@ -79,14 +83,45 @@ function GlassCard({ id, title, icon, children, copyText, index = 0 }) {
             setTimeout(() => setCopied(false), 1600);
         });
     }
+    const navigate = useNavigate();
+    function handleClick(title) {
+        switch (title) {
+            case "Tech Stack":
+                navigate("/app/build-resume/skill-content");
+                break;
 
+            case ("Additional"):
+                navigate("/app/build-resume/additional-details");
+                break;
+
+            case ("Education"):
+                navigate("/app/build-resume/education-content");
+                break;
+            case ("Projects"):
+                navigate("/app/build-resume/project-content");
+                break;
+
+            case ("Experience"):
+                navigate("/app/build-resume/experience-content");
+                break;
+
+            case ("Summary"):
+                navigate("/app/build-resume/summary-content");
+                break;
+            case ("Skills"):
+                navigate("/app/build-resume/skill-content");
+                break;
+            default:
+                break;
+        }
+    }
     return (
         <motion.section
             id={`section-${id}`}
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.07, duration: 0.5, ease: "easeOut" }}
-            className="relative rounded-2xl overflow-hidden mb-4"
+            className="relative group rounded-2xl overflow-hidden mb-4"
             style={{
                 background: "rgba(255,255,255,0.04)",
                 border: "1px solid rgba(255,255,255,0.10)",
@@ -106,11 +141,19 @@ function GlassCard({ id, title, icon, children, copyText, index = 0 }) {
             {/* Header */}
             <div className="flex items-center justify-between px-5 pt-4 pb-3">
                 <motion.h2
-                    className="flex items-center gap-2.5 text-md font-bold tracking-widest uppercase"
+                    className="flex  cursor-pointer group-hover:underline underline-offset-4 items-center gap-2.5 text-md font-bold tracking-widest uppercase"
                     style={{ color: "#fff", }}
+
+                    onClick={() => handleClick(title)}
                 >
                     <Icon name={icon} size={15} />
-                    {title}
+
+                    {title} <span className=" group-hover:flex  hidden ">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                            <path fill="#fff" d="M9.88 18.36a3 3 0 0 1-4.24 0a3 3 0 0 1 0-4.24l2.83-2.83l-1.41-1.41l-2.83 2.83a5.003 5.003 0 0 0 0 7.07c.98.97 2.25 1.46 3.54 1.46s2.56-.49 3.54-1.46l2.83-2.83l-1.41-1.41l-2.83 2.83Zm2.83-14.14L9.88 7.05l1.41 1.41l2.83-2.83a3 3 0 0 1 4.24 0a3 3 0 0 1 0 4.24l-2.83 2.83l1.41 1.41l2.83-2.83a5.003 5.003 0 0 0 0-7.07a5.003 5.003 0 0 0-7.07 0Z"></path>
+                            <path fill="#fff" d="m16.95 8.46l-.71-.7l-.7-.71l-4.25 4.24l-4.24 4.25l.71.7l.7.71l4.25-4.24z"></path>
+                        </svg>
+                    </span>
                 </motion.h2>
 
                 <div className="flex items-center gap-1">
@@ -371,7 +414,39 @@ function ProjectCard({ project: p, index = 0 }) {
 // ── MAIN COMPONENT ─────────────────────────────────────────────────────────
 export default function ResumeViewer({ resumeData }) {
     const location = useLocation();
+    const dispatch = useDispatch();
+    const resData = useSelector((state) => state.res);
+    const user = useSelector(store => store.user?.user?.DATA || {});
+    const Navigate = useNavigate()
     let data = location.state?.resumeData || {};
+    data = {
+        ...data,
+        ...resData,
+        ...resData.header
+    }
+
+
+
+    const getResumeIfExist = async () => {
+        try {
+            setGlobalProfileLoading(true)
+            const res = await axios.get(`${BASE_URL}/build-resume/get-resume`, { withCredentials: true })
+
+            if (res.data.success === true) {
+                dispatch(setRes(res.data.data));
+            }
+            console.log(data);
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setGlobalProfileLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        getResumeIfExist();
+    }, [])
+
 
     const [activeFilter, setActiveFilter] = useState("all");
 
@@ -392,12 +467,36 @@ export default function ResumeViewer({ resumeData }) {
     const copyProj = (data.projects ?? [])
         .map(p => `${p.name} [${p.stack}]\n${p.description}`).join("\n\n");
 
+    const [globalProfileLoading, setGlobalProfileLoading] = useState(false);
     return (
         <div
             className="min-h-screen relative font-poppins bg-base-100"
 
         >
+            {globalProfileLoading && <div className='fixed bg-black/80 h-screen w-screen z-50 inset-0 flex items-center justify-center'>
+                <motion.svg
+                    animate={{
+                        scale: [2, 1, 1, 1, 2, 2, 1, 1, 1, 2],
+                        rotate: [0, 0, 0, 0, 180, 180, 0, 0, 0, 0],
+                    }}
+                    transition={{
+                        duration: 2,
+                        ease: "easeInOut",
+                        times: [0, 0.2, 0.5, 0.8, 1],
+                        repeat: Infinity,
+                        repeatDelay: 1,
+                    }}
+                    width="100" height="100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11.1056 3.44721L5.78885 6.10557C5.00831 6.49585 4.61803 6.69098 4.61803 7C4.61803 7.30902 5.00831 7.50415 5.78885 7.89443L11.1056 10.5528C11.5445 10.7722 11.7639 10.882 12 10.882C12.2361 10.882 12.4555 10.7722 12.8944 10.5528L18.2111 7.89443C18.9917 7.50415 19.382 7.30902 19.382 7C19.382 6.69098 18.9917 6.49585 18.2111 6.10557L12.8944 3.44721C12.4555 3.22776 12.2361 3.11803 12 3.11803C11.7639 3.11803 11.5445 3.22776 11.1056 3.44721Z" fill="#fff" />
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M7.02217 10.4893C7.62603 10.8135 8.33716 11.169 9.15554 11.5782L10.2113 12.1061C11.0891 12.545 11.528 12.7644 12.0001 12.7644C12.4723 12.7644 12.9112 12.545 13.789 12.1061L14.8447 11.5782C15.6631 11.169 16.3742 10.8135 16.9781 10.4893L18.2113 11.1059C18.9918 11.4961 19.3821 11.6913 19.3821 12.0003C19.3821 12.3093 18.9918 12.5044 18.2113 12.8947L12.8946 15.5531C12.4557 15.7725 12.2362 15.8822 12.0001 15.8822C11.7641 15.8822 11.5446 15.7725 11.1057 15.5531L11.1057 15.5531L5.78898 12.8947C5.00844 12.5044 4.61816 12.3093 4.61816 12.0003C4.61816 11.6913 5.00844 11.4961 5.78898 11.1059L7.02217 10.4893Z" fill="#fff" />
+                    <path
 
+
+
+
+                        fill-rule="evenodd" clip-rule="evenodd" d="M7.02169 15.4893C7.62567 15.8135 8.33696 16.1692 9.15557 16.5785L10.2113 17.1063C11.0891 17.5452 11.528 17.7647 12.0001 17.7647C12.4723 17.7647 12.9112 17.5452 13.789 17.1063L14.8447 16.5785C15.6633 16.1692 16.3746 15.8135 16.9786 15.4893L18.2113 16.1056C18.9918 16.4959 19.3821 16.691 19.3821 17C19.3821 17.3091 18.9918 17.5042 18.2113 17.8945L12.8946 20.5528C12.4557 20.7723 12.2362 20.882 12.0001 20.882C11.7641 20.882 11.5446 20.7723 11.1057 20.5528L11.1057 20.5528L5.78898 17.8945C5.00844 17.5042 4.61816 17.3091 4.61816 17C4.61816 16.691 5.00844 16.4959 5.78898 16.1056L7.02169 15.4893Z" fill="#fff" />
+                </motion.svg>
+            </div>}
             <div className="border rounded-3xl mb-4 mx-20 relative top-5">
                 <div className=" rounded-3xl flex flex-col min-[480px]:flex-row items-center justify-around min-[480px]:justify-center gap-5 min-[480px]:gap-3 bg-base-200 px-2 py-3.5 border-b border-slate-700 sm:px-5">
                     {/* Step Counter */}
@@ -431,15 +530,15 @@ export default function ResumeViewer({ resumeData }) {
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, ease: "easeOut" }}
-                    className="rounded-3xl p-6  mb-5"
+                    className="rounded-3xl group p-6  mb-5"
                     style={{
                         background: "rgba(255,255,255,0.04)",
                         border: "1px solid rgba(255,255,255,0.10)",
 
                     }}
                 >
-                    <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
-                        <div className="flex items-start gap-4">
+                    <div className="flex  flex-col md:flex-row md:items-start justify-between gap-4">
+                        <div className="flex w-full  items-start gap-4">
 
                             <motion.div
                                 className="w-16 h-16 rounded-2xl flex items-center justify-center text-lg font-bold shrink-0"
@@ -455,43 +554,56 @@ export default function ResumeViewer({ resumeData }) {
                                 {initials || <Icon name="user" size={22} />}
                             </motion.div>
 
-                            <div>
-                                {fullName && (
-                                    <motion.h1
-                                        className="text-2xl font-bold tracking-tight leading-none"
-                                        style={{ color: "rgba(255,255,255,0.95)" }}
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        transition={{ delay: 0.2 }}
-                                    >
-                                        {data.fname}{" "}
-                                        <span style={{ color: "#fff" }}>{data.lname}</span>
-                                    </motion.h1>
-                                )}
-                                {data.summaryTitle && (
-                                    <motion.p
-                                        className="text-sm font-medium mt-1.5"
-                                        style={{ color: "rgba(255,255,255,0.5)" }}
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        transition={{ delay: 0.3 }}
-                                    >
-                                        {data.summaryTitle}
-                                    </motion.p>
-                                )}
-                                {(data.location || data.pincode) && (
-                                    <motion.div
-                                        className="flex items-center gap-1.5 mt-2 text-md"
-                                        style={{ color: "rgba(255,255,255,0.38)", }}
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        transition={{ delay: 0.4 }}
-                                    >
-                                        <Icon name="map" size={12} />
-                                        {[data.location, data.pincode].filter(Boolean).join(" · ")}
-                                    </motion.div>
-                                )}
+                            <div className="w-full  flex justify-between">
+                                <div>
+                                    {fullName && (
+                                        <motion.h1
+                                            className="text-2xl font-bold tracking-tight leading-none"
+                                            style={{ color: "rgba(255,255,255,0.95)" }}
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            transition={{ delay: 0.2 }}
+                                        >
+                                            {data.fname}{" "}
+                                            <span style={{ color: "#fff" }}>{data.lname}</span>
+
+                                        </motion.h1>
+                                    )}
+                                    {data.summaryTitle && (
+                                        <motion.p
+                                            className="text-sm font-medium mt-1.5"
+                                            style={{ color: "rgba(255,255,255,0.5)" }}
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            transition={{ delay: 0.3 }}
+                                        >
+                                            {data.summaryTitle}
+                                        </motion.p>
+                                    )}
+                                    {(data.location || data.pincode) && (
+                                        <motion.div
+                                            className="flex items-center gap-1.5 mt-2 text-md"
+                                            style={{ color: "rgba(255,255,255,0.38)", }}
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            transition={{ delay: 0.4 }}
+                                        >
+                                            <Icon name="map" size={12} />
+                                            {[data.location, data.pincode].filter(Boolean).join(" · ")}
+                                        </motion.div>
+                                    )}
+                                </div>
+
+                                <div className=" cursor-pointer" onClick={() => { Navigate("/app/build-resume/header-content") }}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 24 24">
+                                        <g fill="#fff">
+                                            <path d="M8 7a1 1 0 0 1-1 1H6a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-1a1 1 0 0 1 2 0v1a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3h1a1 1 0 0 1 1 1"></path>
+                                            <path d="m14.596 5.011l4.392 4.392l-6.28 6.303A1 1 0 0 1 12 16H9a1 1 0 0 1-1-1v-3a1 1 0 0 1 .294-.708zm6.496-2.103a3.097 3.097 0 0 1 .165 4.203l-.164.18l-.693.694l-4.387-4.387l.695-.69a3.1 3.1 0 0 1 4.384 0"></path>
+                                        </g>
+                                    </svg>
+                                </div>
                             </div>
+
                         </div>
                     </div>
 
@@ -535,7 +647,7 @@ export default function ResumeViewer({ resumeData }) {
 
                     {/* ── LEFT SIDEBAR ── */}
                     {activeFilter === "all" && (
-                        <aside>
+                        <aside >
                             {/* SKILLS */}
                             {data.skills && Object.keys(data.skills).length > 0 && (
                                 <GlassCard id="skills" title="Tech Stack" icon="code" index={1}
@@ -736,8 +848,8 @@ export default function ResumeViewer({ resumeData }) {
                 </div>
             </div>
             <div className="w-full flex items-center justify-center text-1xl ">
-                <span className=" px-10 py-2.5 mb-10 bg-accent rounded-full hover:bg-white hover:text-black cursor-pointer">
-                    Save Data & Continue
+                <span className=" px-10 py-2.5 mb-10 bg-accent rounded-full hover:bg-white hover:text-black cursor-pointer " onClick={() => { Navigate("/interview-arena") }}>
+                    Continue
                 </span>
 
             </div>

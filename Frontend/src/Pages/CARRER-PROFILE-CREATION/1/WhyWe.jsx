@@ -209,8 +209,8 @@ const CSS = `
     font-size: 15px;
     font-weight: 300;
     line-height: 1.75;
-    color: rgba(255,255,255,0.44);
-    max-width: 400px;
+    color: rgba(255, 255, 255, 0.73);
+    max-width: 500px;
     margin-bottom: 28px;
   }
 

@@ -5,7 +5,7 @@ import axios from 'axios';
 import BASE_URL from "../Pages/auth/baseURL";
 
 import { MdEdit } from "react-icons/md";
-import Toast from '../Pages/Resume/2/Toast';
+import Toast from '../Pages/CARRER-PROFILE-CREATION/2/Toast';
 import { AnimatePresence } from "framer-motion";
 import { addNewUser } from "@/utils/userSlice";
 

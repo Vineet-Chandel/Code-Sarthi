@@ -8,7 +8,7 @@ import BASE_URL from "./baseURL";
 import Welcome from './Welcome';
 import { motion } from "framer-motion";
 import { AnimatePresence } from "framer-motion";
-import Toast from '../Resume/2/Toast';
+import Toast from '../CARRER-PROFILE-CREATION/2/Toast';
 import { useEffect, useRef, useState, createElement, useMemo, useCallback } from 'react';
 import { gsap } from 'gsap';
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Toast from '../Pages/Resume/2/Toast';
+import Toast from '../Pages/CARRER-PROFILE-CREATION/2/Toast';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 const STYLES = `

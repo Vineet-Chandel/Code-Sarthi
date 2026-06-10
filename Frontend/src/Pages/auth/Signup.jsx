@@ -7,7 +7,7 @@ import BASE_URL from "./baseURL";
 import { Link } from "react-router-dom";
 import Welcome from './Welcome';
 import { motion } from "framer-motion";
-import Toast from '../Resume/2/Toast';
+import Toast from '../CARRER-PROFILE-CREATION/2/Toast';
 
 import { AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState, createElement, useMemo, useCallback } from 'react';
