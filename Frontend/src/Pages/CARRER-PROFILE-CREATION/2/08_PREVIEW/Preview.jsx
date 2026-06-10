@@ -848,7 +848,7 @@ export default function ResumeViewer({ resumeData }) {
                 </div>
             </div>
             <div className="w-full flex items-center justify-center text-1xl ">
-                <span className=" px-10 py-2.5 mb-10 bg-accent rounded-full hover:bg-white hover:text-black cursor-pointer " onClick={() => { Navigate("/interview-arena") }}>
+                <span className=" px-10 py-2.5 mb-10 bg-accent rounded-full hover:bg-white hover:text-black cursor-pointer " onClick={() => { Navigate("/app/interview-arena") }}>
                     Continue
                 </span>
 

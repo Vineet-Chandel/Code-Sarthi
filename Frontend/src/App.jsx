@@ -84,6 +84,7 @@ import Project from "./Pages/CARRER-PROFILE-CREATION/2/06_PROJECT/Project";
 import Preview from "./Pages/CARRER-PROFILE-CREATION/2/08_PREVIEW/Preview";
 import IntroAdditional from "./Pages/CARRER-PROFILE-CREATION/2/07_ADDITIONAL/IntroAdditonals";
 import FeildsAdditionals from "./Pages/CARRER-PROFILE-CREATION/2/07_ADDITIONAL/FeildsAdditionals";
+import InterViewArena from "./Pages/INTERVIEW-ARENA/InterViewArena";
 
 
 const App = () => {
@@ -175,6 +176,7 @@ const App = () => {
               <Route path="build-resume/skill-content" element={<Skills />} />
               <Route path="build-resume/experience-content" element={<Experience />} />
               <Route path="build-resume/education-content" element={<Education />} />
+              <Route path="interview-arena" element={<InterViewArena />} />
               <Route path="editProfile" element={<EditProfile />} />
               <Route path="connections" element={<Connections />} />
               <Route path="settings" element={<Settings />} />
