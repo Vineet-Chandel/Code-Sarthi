@@ -312,8 +312,8 @@ const validateEducationData = (data) => {
 
 // certifications validation
 const validateCertificatesData = (data) => {
-    if (data.certifications && Array.isArray(data.certifications)) {
-        for (const cert of data.certifications) {
+    if (data.certificates && Array.isArray(data.certificates)) {
+        for (const cert of data.certificates) {
             if (!cert.about || typeof cert.about !== "string") {
                 throw new Error("Certification about is required")
             }
@@ -336,18 +336,23 @@ const validateCertificatesData = (data) => {
 const validateAchievementsData = (data) => {
 
     if (data.achievements && Array.isArray(data.achievements)) {
+
         for (const ach of data.achievements) {
-            if (!ach || typeof ach !== "string") {
-                throw new Error("Achievement is required")
+
+            if (typeof ach !== "string") {
+                throw new Error("Achievement is required");
             }
-            if (ach.length < 5) {
-                throw new Error("Achievement is too short")
+
+            if (ach.trim().length < 5) {
+                throw new Error("Achievement is too short");
             }
-            if (/<[^>]*>/.test(ach)) { throw new Error("Unnecessary stuff detected in Achievement!") }
+
+            if (/<[^>]*>/.test(ach)) {
+                throw new Error("Unnecessary stuff detected in Achievement!");
+            }
         }
     }
-}
-
+};
 // languages validation
 const validateLanguagesData = (data) => {
 

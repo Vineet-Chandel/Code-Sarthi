@@ -431,11 +431,7 @@ const ContentFirst = () => {
 
       <div className="cs-BOSSCONT cs-section w-screen flex flex-col justify-center items-center pb-24  pt-[0px]">
         <Lines />
-        {/* Ambient background */}
-        <div className="cs-grid" />
-        <div className="cs-orb cs-orb-1" />
-        <div className="cs-orb cs-orb-2" />
-        <div className="cs-orb cs-orb-3" />
+
 
         {/* ───── Hero ───── */}
         <div className="relative z-10 flex flex-col justify-center items-center w-full gap-7 pt-20 pb-6 px-6">

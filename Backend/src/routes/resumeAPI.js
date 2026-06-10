@@ -229,7 +229,7 @@ resRouter.post("/build-resume/certifications-info-save", userAuth, async (req, r
             });
         }
 
-        resume.certifications = req.body.certifications;
+        resume.certifications = req.body.certificates;
         await resume.save();
         return res.status(200).json({
             success: true,

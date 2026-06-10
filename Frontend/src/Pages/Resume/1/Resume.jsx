@@ -17,13 +17,14 @@ const Resume = () => {
         <div>
             <Top />
             <Landing />
+            <WhyWe />
+
             <HowToCreate />
-            <ResumeGetHired />
-            <Block />
+
             <ComparisonSection />
             <Example />
 
-            <WhyWe />
+
 
 
 

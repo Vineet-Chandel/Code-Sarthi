@@ -33,7 +33,8 @@ function useIntersectionObserver(options = {}) {
         return () => observer.disconnect();
     }, []);
     return [ref, isVisible];
-} const ToastContainer = ({ toasts, removeToast }) => {
+}
+const ToastContainer = ({ toasts, removeToast }) => {
     return (
         <div className="fixed bottom-5 right-5 flex flex-col gap-3 z-50">
             <AnimatePresence>

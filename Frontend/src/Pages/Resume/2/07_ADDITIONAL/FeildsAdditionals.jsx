@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import axios from "axios";
@@ -10,6 +10,8 @@ import ProgressMeter from '../ProgressMeter';
 import Header from '../Header';
 import Step from '../Step';
 import Preview from '../Preview';
+import { useDispatch, useSelector } from 'react-redux';
+import { setRes } from '@/utils/resStore';
 
 
 // ─── reusable field ───────────────────────────────────────────────────────────
@@ -45,6 +47,212 @@ const statusOptions = [
 const FieldsAdditionals = ({ data }) => {
     const location = useLocation();
     let resumeData = location.state?.resumeData || {};
+
+    const resData = useSelector((state) => state.res);
+    const user = useSelector(store => store.user?.user?.DATA || {});
+    const dispatch = useDispatch();
+    const getResumeIfExist = async () => {
+        try {
+            const res = await axios.get(`${BASE_URL}/build-resume/get-resume`, {
+                withCredentials: true,
+            })
+
+            if (res.data.success === true) {
+                dispatch(setRes(res.data.data));
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    useEffect(() => {
+        if (!resData?.certifications?.certifications || !resData?.languages?.languages || !resData?.achievements?.achievements) {
+            getResumeIfExist();
+            return;
+        }
+    }, [resData?.certifications?.certifications, resData?.languages?.languages, resData?.achievements?.achievements]);
+
+    useEffect(() => {
+        if (!resData?.languages?.languages) {
+            setlanguages(resData.languages?.length > 0 ? resData.languages.map(item => ({
+                id: crypto.randomUUID(),
+                ...item
+            })) :
+                data?.length > 0 ? data :
+                    [{
+                        langCategory: "",
+                        status: "",
+                    }]);
+
+        }
+        if (!resData?.achievements?.achievements) {
+            setAchievements(resData?.achievements?.length > 0 ? resData.achievements.map(item => ({
+                id: crypto.randomUUID(),
+                achievement: item
+            }))
+                :
+                data?.length > 0 ? data :
+                    [{
+                        achievement: "",
+                    }]);
+        }
+
+        if (!resData?.certifications?.certifications) {
+            setCertifications(resData.certifications?.length > 0 ? resData.certifications.map(item => ({
+                id: crypto.randomUUID(),
+                ...item
+            })) :
+                data?.length > 0 ? data :
+                    [{
+                        about: "",
+                        link: ""
+                    }]);
+        }
+
+    }, [resData.languages, resData.achievements, resData.certifications, user]);
+
+
+
+
+
+
+    const saveLanguage = async () => {
+        try {
+            const formattedLanguages = languages.map(({ langCategory, status }) => ({
+                langCategory,
+                status
+            }));
+
+            if (
+                JSON.stringify(resData?.languages || []) ===
+                JSON.stringify(formattedLanguages)
+            ) {
+                addToast({
+                    type: "warning",
+                    title: "already Saved",
+                    message: "no changes found"
+                });
+                return;
+            }
+
+            const payload = {
+                languages: languages.map(({ langCategory, status }) => ({
+                    langCategory,
+                    status
+                }))
+            };
+            const res = await axios.post(`${BASE_URL}/build-resume/languages-info-save`,
+                payload, { withCredentials: true })
+
+            dispatch(setRes({
+                ...resData,
+                languages: formattedLanguages
+            }));
+            addToast({
+                type: "success",
+                title: "Saved",
+                message: "Information Updated Successfully"
+            });
+        } catch (err) {
+            addToast({
+                type: "error",
+                title: "Error",
+                message: err.message
+            });
+        }
+
+    }
+    const saveCertifications = async () => {
+        try {
+
+            if (
+                JSON.stringify(resData?.certifications || []) ===
+                JSON.stringify(certifications)
+            ) {
+                addToast({
+                    type: "warning",
+                    title: "already Saved",
+                    message: "no changes found"
+                });
+                return;
+            }
+
+            const payload = {
+                certificates: certifications
+            };
+            const res = await axios.post(
+                `${BASE_URL}/build-resume/certifications-info-save`,
+                payload,
+                { withCredentials: true }
+            );
+
+            dispatch(setRes({
+                ...resData,
+                certifications: certifications
+            }));
+            addToast({
+                type: "success",
+                title: "Saved",
+                message: "Information Updated Successfully"
+            });
+        } catch (err) {
+            addToast({
+                type: "error",
+                title: "Error",
+                message: err.message
+            });
+        }
+
+    }
+    const saveAchievements = async () => {
+        try {
+            const formattedAchievements = achievements
+                .map(item => item.achievement.trim())
+                .filter(Boolean);
+
+            if (
+                JSON.stringify(resData?.achievements || []) ===
+                JSON.stringify(formattedAchievements)
+            ) {
+                addToast({
+                    type: "warning",
+                    title: "already Saved",
+                    message: "no changes found"
+                });
+                return;
+            }
+
+            const payload = {
+                achievements: achievements
+                    .map(item => item.achievement.trim())
+                    .filter(Boolean)
+            };
+
+            console.log("ACHIEVEMENT PAYLOAD:", payload);
+            const res = await axios.post(`${BASE_URL}/build-resume/achievements-info-save`,
+                payload, { withCredentials: true })
+
+            dispatch(setRes({
+                ...resData,
+                achievements: formattedAchievements
+            }));
+            addToast({
+                type: "success",
+                title: "Saved",
+                message: "Information Updated Successfully"
+            });
+        } catch (err) {
+            addToast({
+                type: "error",
+                title: "Error",
+                message: err.message
+            });
+        }
+
+    }
+
+
+
+
     const [activeTab, setActiveTab] = useState("preview"); // preview | tips | score
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const Navigate = useNavigate();
@@ -64,19 +272,22 @@ const FieldsAdditionals = ({ data }) => {
 
 
     const [languages, setlanguages] = useState(
-        resumeData?.languages?.length > 0
-            ? resumeData.languages.map((s) => ({
-                id: crypto.randomUUID(),
-                langCategory: s.langCategory,
-                status: s.status || "",
-            }))
-            : [
-                {
+
+        resData?.languages?.length > 0
+            ? resData.languages
+            : resumeData?.languages?.length > 0
+                ? resumeData.languages.map((s) => ({
                     id: crypto.randomUUID(),
-                    langCategory: "",
-                    status: "",
-                },
-            ]
+                    langCategory: s.langCategory,
+                    status: s.status || "",
+                }))
+                : [
+                    {
+                        id: crypto.randomUUID(),
+                        langCategory: "",
+                        status: "",
+                    },
+                ]
     );
     resumeData = {
         ...resumeData,
@@ -100,10 +311,11 @@ const FieldsAdditionals = ({ data }) => {
             ]
     );
 
+
     resumeData = {
         ...resumeData,
         achievements: achievements
-            .map((a) => a.achievement.trim())
+            .map((a) => a.achievement?.trim())
             .filter(Boolean),
     };
 
@@ -293,6 +505,11 @@ const FieldsAdditionals = ({ data }) => {
                                     <path fill="#fff" d="M0 128c0-35.3 28.7-64 64-64h512c35.3 0 64 28.7 64 64v256c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64zm320 0v256h256V128zm-141.7 47.9c-3.2-7.2-10.4-11.9-18.3-11.9s-15.1 4.7-18.3 11.9l-64 144c-4.5 10.1.1 21.9 10.2 26.4s21.9-.1 26.4-10.2l8.9-20.1h73.6l8.9 20.1c4.5 10.1 16.3 14.6 26.4 10.2s14.6-16.3 10.2-26.4zM160 233.2l19 42.8h-38zM448 164c11 0 20 9 20 20v4h60c11 0 20 9 20 20s-9 20-20 20h-2l-1.6 4.5c-8.9 24.4-22.4 46.6-39.6 65.4c.9.6 1.8 1.1 2.7 1.6l18.9 11.3c9.5 5.7 12.5 18 6.9 27.4s-18 12.5-27.4 6.9L467 333.8c-4.5-2.7-8.8-5.5-13.1-8.5c-10.6 7.5-21.9 14-34 19.4l-3.6 1.6c-10.1 4.5-21.9-.1-26.4-10.2s.1-21.9 10.2-26.4l3.6-1.6c6.4-2.9 12.6-6.1 18.5-9.8L410 286.1c-7.8-7.8-7.8-20.5 0-28.3s20.5-7.8 28.3 0l14.6 14.6l.5.5c12.4-13.1 22.5-28.3 29.8-45l-35.2.1h-72c-11 0-20-9-20-20s9-20 20-20h52v-4c0-11 9-20 20-20"></path>
                                 </svg> Languages
                             </span>
+                            <button className="bg-base-100  px-10 py-2.5 rounded-xl text-info font-bold border-2 border-secondary hover:text-secondary-content hover:border-secondary-content active:scale-95 transition-all duration-200" onClick={saveLanguage}>
+                                Save
+                            </button>
+
+
 
                             <button
                                 onClick={addlanguages}
@@ -460,6 +677,11 @@ text-sm sm:text-base text-white outline-none
                                 Achievements
                             </span>
 
+
+
+                            <button className="bg-base-100  px-10 py-2.5 rounded-xl text-info font-bold border-2 border-secondary hover:text-secondary-content hover:border-secondary-content active:scale-95 transition-all duration-200" onClick={saveAchievements}>
+                                Save
+                            </button>
                             <button
                                 onClick={addAchievements}
                                 className="
@@ -623,6 +845,11 @@ group
                                 </svg>
                                 Certifications
                             </span>
+
+
+                            <button className="bg-base-100  px-10 py-2.5 rounded-xl text-info font-bold border-2 border-secondary hover:text-secondary-content hover:border-secondary-content active:scale-95 transition-all duration-200" onClick={saveCertifications}>
+                                Save
+                            </button>
 
                             <button
                                 onClick={addCertifications}

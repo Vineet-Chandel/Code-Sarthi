@@ -90,7 +90,7 @@ function GlassCard({ id, title, icon, children, copyText, index = 0 }) {
             style={{
                 background: "rgba(255,255,255,0.04)",
                 border: "1px solid rgba(255,255,255,0.10)",
-                backdropFilter: "blur(20px)",
+
             }}
             whileHover={{ borderColor: "rgba(99,179,237,0.3)" }}
         >
@@ -423,27 +423,24 @@ export default function ResumeViewer({ resumeData }) {
 
 
 
-            {/* Ambient glow blobs */}
-            <div className="fixed pointer-events-none" style={{ top: "-10%", left: "-5%", width: 400, height: 400, background: "radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%)", zIndex: 0 }} />
-            <div className="fixed pointer-events-none" style={{ bottom: "10%", right: "5%", width: 350, height: 350, background: "radial-gradient(circle, rgba(99,179,237,0.05) 0%, transparent 70%)", zIndex: 0 }} />
 
-            <div className="relative z-10 w-full mx-auto px-4 py-8">
+            <div className="relative z-10 w-[95%] mx-auto px-4 py-8">
 
-                {/* ── HERO HEADER ── */}
+
                 <motion.header
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, ease: "easeOut" }}
-                    className="rounded-3xl p-6 mb-5"
+                    className="rounded-3xl p-6  mb-5"
                     style={{
                         background: "rgba(255,255,255,0.04)",
                         border: "1px solid rgba(255,255,255,0.10)",
-                        backdropFilter: "blur(30px)",
+
                     }}
                 >
                     <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                         <div className="flex items-start gap-4">
-                            {/* Avatar */}
+
                             <motion.div
                                 className="w-16 h-16 rounded-2xl flex items-center justify-center text-lg font-bold shrink-0"
                                 style={{

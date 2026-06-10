@@ -298,9 +298,6 @@ const ContentSecond = () => {
       <style>{STYLES}</style>
 
       <section className="gs-section w-full py-24 px-4 md:px-10 flex flex-col items-center gap-14 mt-[-100px]">
-        {/* Background elements */}
-        <div className="gs-grid" />
-        <div className="gs-bg-orb" style={{ width: 800, height: 800, background: "rgba(0,255,135,0.04)", top: -200, left: "50%", transform: "translateX(-50%)" }} />
 
         {/* ── Header ── */}
         <div className="relative z-10 flex flex-col items-center gap-5">

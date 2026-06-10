@@ -29,8 +29,21 @@ const FEATURES = [
     image:
       "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1780910852/AI_Resume_Content_n72qco.webp",
   },
+
   {
+    color: "green",
     num: "03",
+    tag: "Showcase",
+    title: "Digital Carrer Profile",
+    description:
+      "Create a dynamic digital career profile that adapts across devices, ensuring you make a lasting impression whether offline or online.",
+    pill: "View your digital profile",
+    badge: "Digital Profile",
+    image:
+      "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1781101211/Unlimited_Resumes_xk6vkx.webp",
+  },
+  {
+    num: "04",
     tag: "Compatibility",
     color: "yellow",
     title: "ATS-friendly formats",
@@ -39,21 +52,10 @@ const FEATURES = [
     pill: "Check compatibility",
     badge: "ATS Optimised",
     image:
-      "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1780912937/ats-friendly-resume_cjelzm.webp",
+      "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1781101530/ats-friendly-resume_cjelzm.webp",
   },
 
-  {
-    color: "green",
-    num: "04",
-    tag: "Flexibility",
-    title: "Unlimited resumes",
-    description:
-      "Make and edit unlimited resumes, experiment with multiple templates, and download your resumes in various file formats.",
-    pill: "Start building",
-    badge: "No limits",
-    image:
-      "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1777482551/Unlimited_Resumes_xk6vkx.avif",
-  },
+
   {
     color: "red",
     num: "05",
@@ -88,8 +90,6 @@ const CSS = `
 
   .ww-root {
     background: #0a0a0a;
-    padding: 100px 0 120px;
-
     overflow: hidden;
     width: 100%;
   }
@@ -160,7 +160,7 @@ const CSS = `
     grid-template-columns: 1fr 1fr;
     align-items: center;
     gap: 72px;
-    padding: 80px 0;
+    padding: 50px 0;
     border-bottom: 1px solid rgba(255,255,255,0.06);
     opacity: 0;
     transform: translateY(28px);
@@ -242,7 +242,7 @@ const CSS = `
 
   .ww-img-frame {
     position: relative;
-    border-radius: 20px;
+    // border-radius: 20px;
     overflow: hidden;
     border: 1px solid rgba(255,255,255,0.09);
     background: rgba(255,255,255,0.025);
@@ -263,7 +263,7 @@ const CSS = `
 
     pointer-events: none;
     z-index: 1;
-    border-radius: inherit;
+    // border-radius: inherit;
   }
 
   .ww-img-frame img {
@@ -449,83 +449,71 @@ const WhyWe = () => {
     <div className="w-screen">
       <section className="ww-root" aria-label="Why choose our resume builder">
         <div className="ww-container">
-
-          {/* ── HEADER ── */}
-          <header className="ww-header">
-            <div
-              className="inline-flex w-fit items-center gap-2 px-4 py-2 rounded-full text-[10px] sm:text-xs border border-[#5a5a5a] font-bold uppercase tracking-widest mb-5"
-              style={{
-                background: "#242424",
-                color: "#ffffff",
-              }}
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse inline-block" />
-              Why CodeSarthi Resume Builder ?
-            </div>
-            <div className="max-w-4xl mx-auto text-center ">
-              <h1 className="font-extrabold text-4xl md:text-6xl flex flex-col  tracking-tight text-info mb-4">
-                Everything you need<span className="text-white underline underline-offset-8">to land the job. </span>
-              </h1>
-
-            </div>
-            <p className="ww-subtitle text-info">
-              Six powerful features, one seamless builder — built for every job seeker at every stage.
-            </p>
-          </header>
-
-          <div className="ww-divider" />
-
           {/* ── FEATURES ── */}
           {FEATURES.map((f, i) => {
             const isReversed = i % 2 !== 0;
             return (
-              <div
-                key={i}
-                className={`ww-feature ${isReversed ? " rev" : ""}`}
-                ref={(el) => (featureRefs.current[i] = el)}
-                style={{ transitionDelay: `${i * 0.06}s` }}
-              >
-                {/* Text */}
-                <div className="ww-text">
+              <div>
+                <div
+                  key={i}
+                  className={`ww-feature ${isReversed ? " rev" : ""}`}
+                  ref={(el) => (featureRefs.current[i] = el)}
+                  style={{ transitionDelay: `${i * 0.06}s` }}
+                >
+                  {/* Text */}
+                  <div className="ww-text">
 
-                  <h3 className="ww-ftitle">
-                    <HighlighterResume text2={f.title} color={f.color} /></h3>
-                  <p className="ww-fdesc">{f.description}</p>
-                  <span className="ww-pill">
-                    <PillIcon />
-                    {f.pill}
-                  </span>
-                </div>
+                    <h3 className="ww-ftitle">
+                      <HighlighterResume text2={f.title} color={f.color} /></h3>
+                    <p className="ww-fdesc">{f.description}</p>
+                    <span className="ww-pill">
+                      <PillIcon />
+                      {f.pill}
+                    </span>
+                  </div>
 
-                {/* Image */}
-                <div className="ww-img-wrap">
-                  <div className="">
+                  {/* Image */}
+                  <div className="ww-img-wrap">
+                    <div className="">
 
-                    <div className="ww-img-sheen " />
-                    <span className="block  overflow-hidden rounded-t-[60px]">
-                      <img
-                        src={f.image}
-                        alt={f.title}
-                        loading="lazy"
-                        className="
+                      <div className="ww-img-sheen " />
+                      <span className="block  overflow-hidden rounded-[30px]">
+                        <img
+                          src={f.image}
+                          alt={f.title}
+                          loading="lazy"
+                          className="
       w-full h-full object-cover
-      rounded-[40px]
+
       transition-transform duration-500 ease-out
-      hover:scale-105
+
       will-change-transform
     "
-                      />
-                    </span>
+                        />
+                      </span>
+
+                    </div>
 
 
                   </div>
+
+
+                </div>
+                <div className="w-full  flex gap-2 items-center">
+                  <span className="w-1/2 h-0.5 bg-[#5a5a5a]"></span>
+                  <span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="#fff" d="m6.4 18.308l-.708-.708l5.6-5.6l-5.6-5.6l.708-.708l5.6 5.6l5.6-5.6l.708.708l-5.6 5.6l5.6 5.6l-.708.708l-5.6-5.6z"></path></svg>
+                  </span>
+                  <span className="w-1/2 h-0.5 bg-[#5a5a5a]"></span>
                 </div>
               </div>
+
+
             );
           })}
 
           {/* ── CTA ── */}
-          <div className=" flex flex-col items-center justify-center w-full">
+          <div className=" flex flex-col items-center justify-center w-full mt-10">
             <div className="ww-cta-title">Ready to get started?</div>
             <span>
               <CTAcreateResume />

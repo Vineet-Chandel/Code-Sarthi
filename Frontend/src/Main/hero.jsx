@@ -10,7 +10,7 @@ import ContentSecond from "./ContentSecond";
 import ContentThird from "./ContentThird";
 import Mainhero from "./main-hero";
 import Devs from "./Devs";
-import Lines from "./Lines";
+
 
 const Hero = () => {
     const [loading, setLoading] = useState(true);
