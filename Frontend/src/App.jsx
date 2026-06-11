@@ -84,7 +84,7 @@ import Project from "./Pages/CARRER-PROFILE-CREATION/2/06_PROJECT/Project";
 import Preview from "./Pages/CARRER-PROFILE-CREATION/2/08_PREVIEW/Preview";
 import IntroAdditional from "./Pages/CARRER-PROFILE-CREATION/2/07_ADDITIONAL/IntroAdditonals";
 import FeildsAdditionals from "./Pages/CARRER-PROFILE-CREATION/2/07_ADDITIONAL/FeildsAdditionals";
-import InterViewArena from "./Pages/INTERVIEW-ARENA/InterViewArena";
+import InterViewArena from "./Pages/INTERVIEW-ARENA/HERO-PAGE-IA/InterviewArena";
 
 
 const App = () => {
@@ -146,8 +146,8 @@ const App = () => {
               <Route path="management" element={<Collab />} />
               <Route path="meeting" element={<Meeting />} />
               <Route path="explore" element={<Explore />} />
-              <Route path="resume" element={<Resume />} />
-              <Route path="build-resume" element={<BuildResume />} />
+              <Route path="build-resume" element={<Resume />} />
+              <Route path="build-resume/buildresume" element={<BuildResume />} />
               <Route path="build-resume/resume-templates" element={<Templates />} />
               <Route path="shastraAI" element={<Shastra />} />
               <Route path="projects" element={<Projects />} />

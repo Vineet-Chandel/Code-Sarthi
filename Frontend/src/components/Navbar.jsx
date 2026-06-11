@@ -1,7 +1,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { gsap } from "gsap";
-import { useNavigate } from "react-router-dom";
+import { matchPath, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
     Pages,
@@ -16,8 +16,11 @@ import { removeUser } from "../utils/userSlice";
 import axios from "axios";
 import BASE_URL from "../Pages/auth/baseURL";
 import Search from "./navSearch";
-
+import { useLocation } from "react-router-dom";
 const NavBar = () => {
+    const location = useLocation();
+
+
     const [showSidebar, setShowSidebar] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
     const [open, setOpen] = useState(false);
@@ -130,6 +133,33 @@ const NavBar = () => {
         }
         catch (err) { console.error("Logout failed:", err); }
     }
+    const allPages = [
+        ...Pages,
+        ...NextPages,
+        ...ProfilePlace,
+        ...SettingPlace,
+    ];
+
+    const getActivePage = () => {
+        const path = location.pathname;
+
+        const matched = [...allPages]
+            .sort((a, b) => b.path.length - a.path.length)
+            .find((item) => {
+                const fullPath = `/app${item.path}`;
+
+                return (
+                    path === fullPath ||
+                    path.startsWith(`${fullPath}/`)
+                );
+            });
+
+        return matched?.name || "Dashboard";
+    };
+
+    useEffect(() => {
+        setActivePage(getActivePage());
+    }, [location]);
 
 
 
@@ -296,6 +326,70 @@ group-hover:after:w-full">
 
 
                 </div >
+
+
+                {activePage === "Interview Arena" && <div className="flex gap-10 justify-center items-center">
+                    <div className="cursor-pointer">
+                        <div
+                            className="font-semibold text-xl text-white relative w-fit
+            after:absolute after:left-0 after:-bottom-1
+            after:h-[2px] after:w-0
+            after:bg-white
+            after:transition-all after:duration-300 after:ease-out
+            hover:after:w-full"
+                            onClick={() => { navigate("/app/build-resume/preview-content"); }}
+                        >
+                            Career Profile
+                        </div>
+                    </div>
+
+                    <div className="cursor-pointer">
+                        <div
+                            className="font-semibold text-xl text-white relative w-fit
+            after:absolute after:left-0 after:-bottom-1
+            after:h-[2px] after:w-0
+            after:bg-white
+            after:transition-all after:duration-300 after:ease-out
+            hover:after:w-full"
+
+                            onClick={() => navigate("/app/interview-arena/documents")}
+                        >
+                            Documents
+                        </div>
+                    </div>
+                </div>}
+
+                {activePage === "Resume" && <div className="flex gap-10 justify-center items-center">
+                    <div className="cursor-pointer">
+                        <div
+                            className="font-semibold text-xl text-white relative w-fit
+            after:absolute after:left-0 after:-bottom-1
+            after:h-[2px] after:w-0
+            after:bg-white
+            after:transition-all after:duration-300 after:ease-out
+            hover:after:w-full"
+                            onClick={() => navigate("/app/interview-arena")}
+                        >
+                            Interview Arena
+                        </div>
+                    </div>
+
+                    <div className="cursor-pointer">
+                        <div
+                            className="font-semibold text-xl text-white relative w-fit
+            after:absolute after:left-0 after:-bottom-1
+            after:h-[2px] after:w-0
+            after:bg-white
+            after:transition-all after:duration-300 after:ease-out
+            hover:after:w-full"
+
+                            onClick={() => navigate("/app/interview-arena/documents")}
+                        >
+                            Documents
+                        </div>
+                    </div>
+                </div>}
+
                 {/* Right side - Profile button */}
                 < div className="NavEnd relative flex justify-end  items-center " >
                     <div className="md:flex hidden"><Search height={45} displayType={"nav"} /></div>
@@ -440,16 +534,14 @@ group-hover:after:w-full">
                 </div >
 
 
-                <div className="h-[1.5px] absolute w-[97%]       left-1/2  -translate-x-1/2 bg-white/50 bottom-0 rounded-full "></div>
+
 
 
 
             </div >
 
 
-            <div
-                className=" absolute top-10 left-1/2 -translate-x-1/2 w-full h-[50px] bg-white/20 blur-3xl rounded-full pointer-events-none "
-            />
+
 
         </div>
 

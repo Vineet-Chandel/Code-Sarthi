@@ -435,7 +435,7 @@ export default function ResumeViewer({ resumeData }) {
             if (res.data.success === true) {
                 dispatch(setRes(res.data.data));
             }
-            console.log(data);
+
         } catch (err) {
             console.log(err);
         } finally {

@@ -2,7 +2,7 @@ import React from 'react'
 import { Sparkles } from 'lucide-react'
 const InterviewArenaLanding = () => {
     return (
-        <div className="flex flex-col items-center text-center gap-2 relative">
+        <div className="flex  flex-col items-center text-center gap-2 relative">
 
             <div
                 className="
@@ -18,6 +18,7 @@ const InterviewArenaLanding = () => {
             justify-center
             gap-2
 
+         
             px-4
             sm:px-6
             md:px-8
@@ -79,10 +80,6 @@ const InterviewArenaLanding = () => {
             lg:mt-[300px]
             xl:mt-[350px]
 
-            max-h-[300px]
-            sm:max-h-[400px]
-            md:max-h-[500px]
-            lg:max-h-[700px]
         "
                 src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1781118196/123Z_2101.w020.n001.946B.p15_1_nweqqi.webp"
                 alt=""
