@@ -85,6 +85,7 @@ import Preview from "./Pages/CARRER-PROFILE-CREATION/2/08_PREVIEW/Preview";
 import IntroAdditional from "./Pages/CARRER-PROFILE-CREATION/2/07_ADDITIONAL/IntroAdditonals";
 import FeildsAdditionals from "./Pages/CARRER-PROFILE-CREATION/2/07_ADDITIONAL/FeildsAdditionals";
 import InterViewArena from "./Pages/INTERVIEW-ARENA/HERO-PAGE-IA/InterviewArena";
+import Chakra from "./Pages/INTERVIEW-ARENA/CHAKRA/Chakra";
 
 
 const App = () => {
@@ -177,6 +178,8 @@ const App = () => {
               <Route path="build-resume/experience-content" element={<Experience />} />
               <Route path="build-resume/education-content" element={<Education />} />
               <Route path="interview-arena" element={<InterViewArena />} />
+              <Route path="interview-arena/chakra" element={<Chakra />} />
+
               <Route path="editProfile" element={<EditProfile />} />
               <Route path="connections" element={<Connections />} />
               <Route path="settings" element={<Settings />} />
