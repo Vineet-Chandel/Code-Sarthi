@@ -928,7 +928,7 @@ const Discussions = () => {
                                                     setRotate(prev => !prev);
                                                 }}
                                             >
-                                                {/* Online indicator */}
+
                                                 <div className="relative">
                                                     {item.atFrontUser?.photoUrl?.url ? (
                                                         (isHoveredChats.has(item.atFrontUser._id) ||

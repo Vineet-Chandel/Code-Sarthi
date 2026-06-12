@@ -10,6 +10,9 @@ import ContentSecond from "./ContentSecond";
 import ContentThird from "./ContentThird";
 import Mainhero from "./main-hero";
 import Devs from "./Devs";
+import Main2 from "./Main2";
+import Lines from "./Lines";
+import SecondLanding from "./SecondLanding";
 
 
 const Hero = () => {
@@ -44,7 +47,10 @@ const Hero = () => {
         <div>
             {loading && <Preloader />}
             <Nav />
-            <Mainhero />
+            <Main2 />
+
+            <SecondLanding />
+            {/* <Mainhero /> */}
 
             <ContentFirst />
             <ContentSecond />

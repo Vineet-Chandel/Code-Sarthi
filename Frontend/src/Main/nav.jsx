@@ -227,7 +227,7 @@ const Nav = () => {
 
 
                         <img className="w-[35px] h-[35px] group-hover:animate-bounce text-white" src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1779801993/Untitled_design_3_-Photoroom_hkidic.webp" alt="" />
-                        CodeSarthi
+
                     </div>
 
                     {/* MENU */}

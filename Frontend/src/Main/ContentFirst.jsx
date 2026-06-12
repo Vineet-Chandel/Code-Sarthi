@@ -1,7 +1,7 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lines from './Lines';
+import Lines from './Lines2';
 
 /* ─────────────────────────────────────────────────────────
    Inline styles injected once at module level
