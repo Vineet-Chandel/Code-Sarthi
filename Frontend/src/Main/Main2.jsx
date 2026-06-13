@@ -2,19 +2,19 @@ import React from 'react'
 
 const Main2 = () => {
     return (
-        <div className='h-screen w-screen bg-white p-1.5'>
+        <div className=' w-screen bg-white p-1.5'>
             <div className='w-full h-full  bg-black  
 
 
     bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)]
-    bg-[size:40px_40px] rounded-xl flex flex-col items-starts justify-center pl-[200px]' >
+    bg-[size:40px_40px] rounded-xl flex flex-col items-starts justify-center ' >
 
-                <div className='w-2/3'>
-                    <div className='text-[#f9f9f9] font-poppins font-semibold text-5xl  justify-start'>
+                <div className='w-full text-center mt-[200px] flex flex-col items-center justify-center'>
+                    <div className='text-[#f9f9f9] font-poppins font-extrabold text-7xl  justify-start'>
                         An Ecosystem that do your works <br />Approvals that keep you safe
                     </div>
-                    <div className='text-[#939393] mt-9 text-xl w-3/4 '>
-                        From real-time collaboration and project management to interview preparation, we've got everything you need—all under one roof.
+                    <div className='text-[#939393] mt-9 text-xl w-2/4 '>
+                        From real-time collaboration and project management to interview preparation, we've got everything you need— <b className='text-white/80'>All under one roof !</b>
                     </div>
                     <div className='h-[40px] group font-bold text-sm relative top-5 border-transparent  px-5 bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300 text-black rounded-3xl flex justify-center items-center inline-flex gap-1 px-3 py-1 cursor-pointer' onClick={() => navigate("/login")} >
 
@@ -25,6 +25,11 @@ const Main2 = () => {
                     </div>
                 </div>
 
+
+
+                <div className='h-auto w-fit p-5  rounded-3xl border border-gray-800 bg-white/20 m-20'>
+                    <img className="w-full h-full rounded-3xl" src="https://res.cloudinary.com/dj0ivep44/image/upload/v1781375977/Screenshot_2026-06-13_at_11.29.26_PM_iintuq.webp" alt="" />
+                </div>
             </div>
         </div>
     )

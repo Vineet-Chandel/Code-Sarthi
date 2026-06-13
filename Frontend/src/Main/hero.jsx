@@ -50,13 +50,15 @@ const Hero = () => {
             <Main2 />
 
             <SecondLanding />
+
+            <Devs />
             {/* <Mainhero /> */}
 
             <ContentFirst />
             <ContentSecond />
 
             <ContentThird />
-            <Devs />
+
 
         </div>
     );
