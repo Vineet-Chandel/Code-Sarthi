@@ -92,30 +92,32 @@ const Dashboard = () => {
     return (
         <div data-theme="caramellatte" className="min-h-[90vh] h-auto bg-white  p-2 ">
 
-            <div className="w-full mx-auto flex gap-2">
+            <div className="w-full mx-auto flex xl:flex-row flex-col gap-2">
 
                 {/* LEFT PROFILE CARD */}
                 <div
                     className="
-w-1/4 
+w-full xl:w-1/4 
 min-w-0
 overflow-hidden
 bg-base-100
 border
 border-base-300
 rounded-3xl
-px-4
-md:px-6
-lg:px-8
+px-3
+gap-2
 py-8
 flex
 flex-col
-min-h-[90vh]
+md:flex-row
+xl:flex-col
+xl:min-h-[90vh]
+h-auto
 "
                 >
 
                     {/* Profile Image */}
-                    <div className="w-full flex justify-center">
+                    <div className="w-full flex flex-col items-center justify-center">
                         <div className="h-56 w-56 rounded-full overflow-hidden border border-secondary hover:scale-105 transition duration-300">
                             <img
                                 src={user.photoUrl?.url || "/default-avatar.png"}
@@ -123,18 +125,15 @@ min-h-[90vh]
                                 className="w-full h-full object-cover"
                             />
                         </div>
-                    </div>
 
-                    {/* Name */}
 
-                    <span className="w-full">
                         <div className="text-center mt-6 space-y-2">
                             <h1 className="text-2xl
 md:text-3xl font-bold tracking-wide text-secondary-content">
                                 {user.firstName} {user.middleName} {user.lastName}
                             </h1>
 
-                            <div className="flex justify-center items-center gap-2 text-info text-lg">
+                            <div className="flex justify-center items-center gap-2 text-info text-md">
                                 <span>@{user.username}</span>
                                 <span onClick={() => {
                                     handleCopy(user.username); setCopied1(true); setCopied2(false); setTimeout(() => {
@@ -191,7 +190,7 @@ md:text-3xl font-bold tracking-wide text-secondary-content">
 
                         </div>
                         {/* About */}
-                        <div className="mt-2 bg-base-200 border border-base-300 p-5 rounded-2xl">
+                        <div className="w-full mt-2 bg-base-200 border border-base-300 p-5 rounded-2xl">
                             <h3 className="text-xl font-semibold mb-3 text-secondary-content">
                                 About
                             </h3>
@@ -199,54 +198,72 @@ md:text-3xl font-bold tracking-wide text-secondary-content">
                                 {user.about}
                             </p>
                         </div>
-                        <div className="mt-2 bg-base-200 border border-base-300 p-5 rounded-2xl flex gap-2">
+                    </div>
 
-                            <span className="w-1/2 bg-white/20 p-2 rounded-xl" >
-                                <h3 className="text-md font-semibold mb-1 text-secondary-content">
-                                    CONNECTIONS
-                                </h3>
-                                <p className="text-info leading-relaxed font-extrabold text-4xl  flex justify-center items-center">
-                                    {connections.total}
-                                </p>
-                            </span>
+                    {/* Name */}
 
-                            <span className="w-1/2 bg-white/20 p-2 rounded-xl" >
-                                <h3 className="text-md font-semibold mb-1 text-secondary-content">
-                                    PROJECTS
-                                </h3>
-                                <p className="text-info leading-relaxed font-extrabold text-4xl  flex justify-center items-center">
-                                    {connections.total}
-                                </p>
-                            </span>
+                    <span className="w-full">
 
-                        </div>
 
-                        <div className="min-h-[250px] flex p-3 w-full flex-col bg-white rounded-3xl border border-base-300">
-                            <div className="flex">
-                                <h1 className="text-3xl font-light w-3/4 text-black">
+                        <div className="w-full h-full  xl:min-h-[250px]   rounded-3xl border border-base-300 bg-white p-4 sm:p-5 lg:p-6 flex flex-col">
+
+                            {/* Heading */}
+                            <div className="flex items-center justify-between">
+                                <h1 className="w-full text-lg sm:text-xl lg:text-2xl font-light text-black">
                                     Time Contributing
                                 </h1>
-
-
                             </div>
 
-                            <h1 className="text-7xl font-extrabold w-full  h-full flex items-center justify-center mt-3 text-black">
-                                01:24:08
-                            </h1>
-                            <span className='text-black/80 mt-3 self-center text-sm font-light'> Contributing on : DeepFake</span>
+                            {/* Timer */}
+                            <div className="flex flex-1 items-center justify-center py-4">
+                                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-black text-center">
+                                    01:24:08
+                                </h1>
+                            </div>
 
+                            {/* Project */}
+                            <span className="text-center text-xs sm:text-sm lg:text-base font-light text-black/70">
+                                Contributing on :
+                                <span className="font-medium text-black ml-1">
+                                    DeepFake
+                                </span>
+                            </span>
 
-                            <div className="flex justify-center gap-2 items-center mt-3">
-                                <span className='text-black/80 mt-3 self-center text-sm font-light border border-black p-1.5 rounded-full'>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
-                                        <path fill="#000" d="M21.409 9.353a2.998 2.998 0 0 1 0 5.294L8.597 21.614C6.534 22.737 4 21.277 4 18.968V5.033c0-2.31 2.534-3.769 4.597-2.648z"></path>
+                            {/* Controls */}
+                            <div className="mt-4 flex justify-center items-center gap-1">
+
+                                {/* Play */}
+                                <button className="flex h-9 w-9 sm:h-9 sm:w-9 items-center justify-center rounded-full border border-black transition-all duration-300 hover:scale-105 hover:bg-black/5 active:scale-95">
+
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="h-3 w-3 sm:h-4 sm:w-4"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            fill="#000"
+                                            d="M21.409 9.353a2.998 2.998 0 0 1 0 5.294L8.597 21.614C6.534 22.737 4 21.277 4 18.968V5.033c0-2.31 2.534-3.769 4.597-2.648z"
+                                        />
                                     </svg>
-                                </span>
-                                <span className='text-black/80 mt-3 self-center text-sm font-light border border-black p-1.5 rounded-full bg-base-100'>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
-                                        <path fill="#fff" d="M8 19c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2s-2 .9-2 2v10c0 1.1.9 2 2 2m6-12v10c0 1.1.9 2 2 2s2-.9 2-2V7c0-1.1-.9-2-2-2s-2 .9-2 2"></path>
+
+                                </button>
+
+                                {/* Pause */}
+                                <button className="flex h-9 w-9 sm:h-9 sm:w-9 items-center justify-center rounded-full border border-black bg-base-100 transition-all duration-300 hover:scale-105 hover:bg-black active:scale-95">
+
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="h-3 w-3 sm:h-4 sm:w-4"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            fill="white"
+                                            d="M8 19c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2s-2 .9-2 2v10c0 1.1.9 2 2 2m6-12v10c0 1.1.9 2 2 2s2-.9 2-2V7c0-1.1-.9-2-2-2s-2 .9-2 2"
+                                        />
                                     </svg>
-                                </span>
+
+                                </button>
+
                             </div>
                         </div>
                     </span>
@@ -257,7 +274,7 @@ md:text-3xl font-bold tracking-wide text-secondary-content">
 
                 {/* RIGHT SIDE DASHBOARD */}
 
-                <div className="flex flex-col gap-2 w-3/4">
+                <div className="flex flex-col gap-2 w-full xl:w-3/4">
                     <div className="lg:col-span-2 space-y-8">
 
                         {/* Stats Cards */}
@@ -265,10 +282,10 @@ md:text-3xl font-bold tracking-wide text-secondary-content">
 
 
                         {/* Projects Section */}
-                        <div className={` relative overflow-y-scroll  group transition-all duration-500 ease-in-out min-h-[400px] bg-base-100 border border-base-300 rounded-3xl p-8 shadow-xl`}>
+                        <div className={` relative overflow-y-scroll  group transition-all duration-500 ease-in-out min-h-[400px] bg-base-100 border border-base-300 rounded-3xl p-3 shadow-xl`}>
 
                             <div className="flex flex-col justify-between items-start mb-2  ">
-                                <h2 className="text-2xl flex gap-1 items-center font-bold text-secondary-content">
+                                <h2 className="text-2xl flex gap-1 items-center font-bold text-secondary-content ml-1 mt-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
                                         <rect width={8} height={10} x={13} y={11} fill="#fff" rx={1} ry={1}></rect>
                                         <rect width={8} height={6} x={3} y={15} fill="#fff" rx={1} ry={1}></rect>
@@ -276,10 +293,10 @@ md:text-3xl font-bold tracking-wide text-secondary-content">
                                         <rect width={8} height={10} x={3} y={3} fill="#fff" rx={1} ry={1}></rect>
                                     </svg>
                                     Project Dashboard</h2>
-                                <div className='flex gap-3  w-full  h-full mt-5'>
+                                <div className='grid md:grid-cols-2 xl:grid-cols-4 grid-cols-1 gap-3  w-full  h-full mt-5'>
 
                                     {data.map((item, idx) => (
-                                        <div key={idx} className="min-h-[250px] flex p-3 w-1/4 flex-col bg-white rounded-3xl border border-base-300">
+                                        <div key={idx} className="min-h-[250px]  flex p-3 w-full flex-col bg-white rounded-3xl border border-base-300">
                                             <div className="flex">
                                                 <h1 className="text-3xl font-light w-3/4 text-black">
                                                     {item.title}
@@ -303,8 +320,8 @@ md:text-3xl font-bold tracking-wide text-secondary-content">
 
                                 </div>
 
-                                <div className="w-full flex gap-3">
-                                    <div className="max-h-[300px] overflow-y-scroll flex flex-col p-3 w-2/4  bg-white rounded-3xl border border-base-300 mt-3">
+                                <div className="w-full md:flex-row flex-col  flex gap-3">
+                                    <div className="max-h-[300px] overflow-y-scroll flex flex-col p-3 md:w-2/4 w-full  bg-white rounded-3xl border border-base-300 mt-3">
 
                                         <span className="w-full flex justify-between items-center" >
                                             <h1 className="text-3xl font-light w-3/4 text-black">
@@ -314,7 +331,7 @@ md:text-3xl font-bold tracking-wide text-secondary-content">
                                             <span className='flex   gap-2 h-fit border border-black  px-4 py-2  rounded-full justify-center items-center bg-white/20'>
 
                                                 <button className="text-sm font-extrabold w-auto text-black">
-                                                    + Add Team
+                                                    + Team
                                                 </button>
                                             </span>
                                         </span>
@@ -410,113 +427,8 @@ md:text-3xl font-bold tracking-wide text-secondary-content">
 
                                         </div>
                                     </div>
-                                    <div className="max-h-[300px] overflow-y-scroll flex flex-col p-3 w-1/4  bg-white rounded-3xl border border-base-300 mt-3">
 
-                                        <span className="w-full flex justify-between items-center" >
-                                            <h1 className="text-3xl font-light w-3/4 text-black">
-                                                Team Collabration
-                                            </h1>
-
-                                            <span className='flex   gap-2 h-fit border border-black  px-4 py-2  rounded-full justify-center items-center bg-white/20'>
-
-                                                <button className="text-sm font-extrabold w-auto text-black">
-                                                    + Add Team
-                                                </button>
-                                            </span>
-                                        </span>
-
-                                        <div className="w-full mt-2 rounded-xl flex justify-start items-center text-black  bg-black/20">
-                                            <img className='w-12 h-12 rounded-full' src="https://bluemoji.io/cdn-proxy/646218c67da47160c64a84d5/66b3e58387f7cb984dde9eb7_92.png" alt="" />
-
-                                            <div className="flex p-2 justify-between items-center w-full">
-                                                <div className="flex flex-col">
-                                                    <span className='font-extrabold'>Team Axonic</span>
-                                                    <span className='text-sm font-light'> working on : GitHub Repository</span>
-                                                </div>
-                                                <span className='flex   gap-2 h-fit border border-black  px-2 py-1  rounded-xl justify-center items-center bg-white/20'>
-
-                                                    <button className="text-xs font-light w-auto text-black">
-                                                        Completed
-                                                    </button>
-                                                </span>
-
-                                            </div>
-
-                                        </div>
-                                        <div className="w-full mt-2 rounded-xl flex justify-start items-center text-black  bg-black/20">
-                                            <img className='w-12 h-12 rounded-full' src="https://bluemoji.io/cdn-proxy/646218c67da47160c64a84d5/66b3e58387f7cb984dde9eb7_92.png" alt="" />
-
-                                            <div className="flex p-2 justify-between items-center w-full">
-                                                <div className="flex flex-col">
-                                                    <span className='font-extrabold'>Team Axonic</span>
-                                                    <span className='text-sm font-light'> working on : GitHub Repository</span>
-                                                </div>
-                                                <span className='flex   gap-2 h-fit border border-black  px-2 py-1  rounded-xl justify-center items-center bg-white/20'>
-
-                                                    <button className="text-xs font-light w-auto text-black">
-                                                        Completed
-                                                    </button>
-                                                </span>
-
-                                            </div>
-
-                                        </div>
-                                        <div className="w-full mt-2 rounded-xl flex justify-start items-center text-black  bg-black/20">
-                                            <img className='w-12 h-12 rounded-full' src="https://bluemoji.io/cdn-proxy/646218c67da47160c64a84d5/66b3e58387f7cb984dde9eb7_92.png" alt="" />
-
-                                            <div className="flex p-2 justify-between items-center w-full">
-                                                <div className="flex flex-col">
-                                                    <span className='font-extrabold'>Team Axonic</span>
-                                                    <span className='text-sm font-light'> working on : GitHub Repository</span>
-                                                </div>
-                                                <span className='flex   gap-2 h-fit border border-black  px-2 py-1  rounded-xl justify-center items-center bg-white/20'>
-
-                                                    <button className="text-xs font-light w-auto text-black">
-                                                        Completed
-                                                    </button>
-                                                </span>
-
-                                            </div>
-
-                                        </div>
-                                        <div className="w-full mt-2 rounded-xl flex justify-start items-center text-black  bg-black/20">
-                                            <img className='w-12 h-12 rounded-full' src="https://bluemoji.io/cdn-proxy/646218c67da47160c64a84d5/66b3e58387f7cb984dde9eb7_92.png" alt="" />
-
-                                            <div className="flex p-2 justify-between items-center w-full">
-                                                <div className="flex flex-col">
-                                                    <span className='font-extrabold'>Team Axonic</span>
-                                                    <span className='text-sm font-light'> working on : GitHub Repository</span>
-                                                </div>
-                                                <span className='flex   gap-2 h-fit border border-black  px-2 py-1  rounded-xl justify-center items-center bg-white/20'>
-
-                                                    <button className="text-xs font-light w-auto text-black">
-                                                        Completed
-                                                    </button>
-                                                </span>
-
-                                            </div>
-
-                                        </div>
-                                        <div className="w-full mt-2 rounded-xl flex justify-start items-center text-black  bg-black/20">
-                                            <img className='w-12 h-12 rounded-full' src="https://bluemoji.io/cdn-proxy/646218c67da47160c64a84d5/66b3e58387f7cb984dde9eb7_92.png" alt="" />
-
-                                            <div className="flex p-2 justify-between items-center w-full">
-                                                <div className="flex flex-col">
-                                                    <span className='font-extrabold'>Team Axonic</span>
-                                                    <span className='text-sm font-light'> working on : GitHub Repository</span>
-                                                </div>
-                                                <span className='flex   gap-2 h-fit border border-black  px-2 py-1  rounded-xl justify-center items-center bg-white/20'>
-
-                                                    <button className="text-xs font-light w-auto text-black">
-                                                        Completed
-                                                    </button>
-                                                </span>
-
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <div className="max-h-[300px] overflow-y-scroll flex flex-col p-3 w-1/4  bg-white rounded-3xl border border-base-300 mt-3">
+                                    <div className="max-h-[300px] overflow-y-scroll flex flex-col p-3 md:w-2/4 w-full  bg-white rounded-3xl border border-base-300 mt-3">
 
                                         <span className="w-full flex justify-between items-center" >
                                             <h1 className="text-3xl font-light w-3/4 text-black">
@@ -636,7 +548,7 @@ max-h-[400px]
     border
     border-base-300
     rounded-3xl
-    p-8
+    p-3
     shadow-xl
   `}>
 
