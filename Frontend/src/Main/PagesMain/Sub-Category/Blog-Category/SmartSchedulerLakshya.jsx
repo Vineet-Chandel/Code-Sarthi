@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSelector } from "react-redux";
 import FeaturesCarousel from "./components/FeaturesCarousel";
 import StartHero from "./components/StartHero";
-import Nav from '../../../nav';
+import Nav from '../../../Nav';
 
 const SmartSchedulerLakshya = () => {
     const user = useSelector((store) => store.user);

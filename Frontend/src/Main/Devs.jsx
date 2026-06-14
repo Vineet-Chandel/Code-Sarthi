@@ -44,11 +44,11 @@ const Devs = () => {
             The Founder's Desk
           </div>
 
-          <div className='h-[300px] w-[400px] border border-white/10 backdrop-blur-xs flex flex-col items-center mt-10  ml-10 justify-center rounded-3xl'>
-            <div className='text-[#f9f9f9] font-poppins font-extrabold text-5xl  justify-start'>
-              Vineet Singh
-            </div>
-            <div className='text-[#f9f9f9] font-poppins font-extrabold text-5xl  justify-start'>Chandel</div>
+          <div className='h-[450px]  border border-white/10 backdrop-blur-xs flex flex-col items-center mt-10  ml-10 justify-center rounded-3xl'>
+
+            <img className="h-full object-cover rounded-3xl border border-white/10" src="https://res.cloudinary.com/dj0ivep44/image/upload/v1781411185/IMG_20260508_081110_lhmrvn.jpg" alt="" />
+
+
 
           </div>
         </div>

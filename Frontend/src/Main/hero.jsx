@@ -2,7 +2,7 @@
 
 
 import { useState, useEffect } from "react";
-import Nav from "./nav";
+import Nav from "./Nav";
 import Preloader from "./preloader";
 import Footer from "./Footer";
 import ContentFirst from "./ContentFirst";
@@ -13,6 +13,7 @@ import Devs from "./Devs";
 import Main2 from "./Main2";
 import Lines from "./Lines";
 import SecondLanding from "./SecondLanding";
+import ContentFirst2 from "./ContentFirst2";
 
 
 const Hero = () => {
@@ -46,15 +47,20 @@ const Hero = () => {
     return (
         <div>
             {loading && <Preloader />}
-            <Nav />
+
             <Main2 />
 
-            <SecondLanding />
 
-            <Devs />
+
+
             {/* <Mainhero /> */}
+            <ContentFirst2 />
+
 
             <ContentFirst />
+
+            <SecondLanding />
+            <Devs />
             <ContentSecond />
 
             <ContentThird />

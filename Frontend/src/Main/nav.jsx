@@ -217,7 +217,7 @@ const Nav = () => {
     return (
         <div className="relative w-full">
             {/* NAVBAR */}
-            <div className="fixed top-5 z-30  2xl:px-7 xl:px-6 sm:px-4 px-2   w-screen text-white">
+            <div className=" top-5 z-30  2xl:px-7 xl:px-6 sm:px-4 px-2   w-screen text-white">
                 <div className="flex items-center  justify-between">
 
                     {/* LOGO */}
@@ -231,7 +231,7 @@ const Nav = () => {
                     </div>
 
                     {/* MENU */}
-                    <div className="lg:flex hidden gap-4 lg:gap-6 2xl:gap-8  text-lg font-semibold">
+                    <div className="relative z-30 lg:flex hidden gap-4 lg:gap-6 2xl:gap-8  text-lg font-semibold">
                         {navItems.map((item) => (
                             <div
                                 key={item.id}
@@ -362,7 +362,7 @@ const Nav = () => {
 
             {/* OVERLAY */}
             <div
-                className={`fixed inset-0 z-20 bg-black/70  transition-all duration-300
+                className={`fixed inset-0 z-10 bg-black/70  transition-all duration-300
                 ${hoveredItem ? "opacity-100" : "opacity-0 pointer-events-none"}`}
             />
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Nav from '../../../nav';
+import Nav from '../../../Nav';
 import Footer from '../../../Footer';
 
 // ─── DATA ─────────────────────────────────────────────────────────────────────

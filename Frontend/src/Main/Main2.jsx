@@ -1,15 +1,17 @@
 import React from 'react'
+import Nav from './nav'
 
 const Main2 = () => {
     return (
-        <div className=' w-screen bg-white p-1.5'>
+        <div className=' w-screen bg-gray-200 p-1.5'>
+
             <div className='w-full h-full  bg-black  
 
 
     bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)]
-    bg-[size:40px_40px] rounded-xl flex flex-col items-starts justify-center ' >
-
-                <div className='w-full text-center mt-[200px] flex flex-col items-center justify-center'>
+    bg-[size:40px_40px] rounded-xl flex flex-col items-starts justify-center pt-5' >
+                <Nav />
+                <div className='w-full text-center mt-[100px] flex flex-col items-center justify-center'>
                     <div className='text-[#f9f9f9] font-poppins font-extrabold text-7xl  justify-start'>
                         An Ecosystem that do your works <br />Approvals that keep you safe
                     </div>
