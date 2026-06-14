@@ -58,7 +58,7 @@ import Assignment from "./Pages/Assignment";
 import Notes from "./Pages/Notes";
 import EditProfile from "./personalPages/editProfile";
 import Connections from "./personalPages/Connections";
-import Collab from "./Pages/Collab";
+import Collab from "./Pages/DISCUSSION/Collab";
 import HTML from "./Pages/Toolkit/Htmlw";
 import Css from "./Pages/Toolkit/Css";
 import Toolkit from "./Pages/Toolkit/Toolkitw";

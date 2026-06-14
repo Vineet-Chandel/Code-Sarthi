@@ -10,7 +10,7 @@ const { Server } = require("socket.io");
 
 //Mongoose models created in past
 const User = require("../models/user");
-const Msg = require("../models/Msg");
+const message = require("../models/message");
 
 ///in-memory data structures ... Why This Is Called In-Memory Storage?
 // Because the data exists only in the server’s RAM.

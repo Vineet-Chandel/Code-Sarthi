@@ -1,5 +1,5 @@
-const Convo = require("../models/Convo");
-const Msg = require("../models/Msg");
+const conversation = require("../models/conversation");
+const message = require("../models/message");
 const upload = require("../middlewares/multerConvoImgVideo");
 const uploadToCloud = require("./convoImgVideo");
 const express = require("express");
@@ -8,14 +8,25 @@ const { userAuth } = require("../middlewares/userAuth");
 const User = require("../models/user");
 const { connection } = require("mongoose");
 
+
 chatRouter.get("/chats", userAuth, async (req, res) => {
     try {
+
+        //take the loginned user id 
         const userId = req.user._id;
 
         // all the chats of the user
-        const chats = await Convo.find({
-            Participants: userId
-        });
+        const chats = await conversation.find({
+            members: userId
+        }).sort({ updatedAt: -1 }).populate([
+            { path: "members", select: "firstName lastName gmail username profession photoUrl" },
+            { path: "admins", select: "firstName lastName gmail username profession photoUrl" },
+            { path: "createdBy", select: "firstName lastName gmail username profession photoUrl" },
+            { path: "lastMessage", populate: { path: "sender_id", select: "firstName lastName photoUrl gmail username profession" } }
+        ])
+
+
+
 
         if (!chats || chats.length === 0) {
             return res.status(200).json({
@@ -24,32 +35,11 @@ chatRouter.get("/chats", userAuth, async (req, res) => {
                 data: []
             });
         }
-        const formattedChats = await Promise.all(
-            chats.map(async (chat) => {
-
-                //find other user
-                const otherUserId = chat.Participants.find(
-                    id => id.toString() !== userId.toString()
-                );
-                //get other user credentials
-                const credentials = await User.findById(otherUserId).select("firstName lastName photoUrl isVerified gmail username age gender about college skills profession");
-
-                const lastMsg = chat.LastMsg;
-                //get last message
-                const findLastMsg = await Msg.findById({ _id: lastMsg });
-                return {
-                    chatId: chat._id,
-                    otherUser: credentials,
-                    lastMsg: findLastMsg.content,
-                    unReadCount: chat.unReadCount
-                };
-            })
-        );
 
         res.status(200).json({
             success: true,
             total: chats.length,
-            data: formattedChats
+            data: chats
         });
 
     } catch (error) {
@@ -60,59 +50,56 @@ chatRouter.get("/chats", userAuth, async (req, res) => {
     }
 });
 
-// this API will Send a message to another user
-chatRouter.post("/send-message", userAuth, upload.single("file"), async (req, res) => {
+// // this API will Send a message to another user
+chatRouter.post("/send-message", userAuth, async (req, res) => {
     try {
 
-        //Get sender (यह logged-in user है।)
-        const senderId = req.user._id;
+        // THIS WILL GET THE LOGGED IN PERSON's ID
+        const sender_id = req.user._id;
 
 
         const {
             //Get receiver (यह वह user है जिसे message भेजना है।)
-            receiverId,
+            receiver_ids,
             content,
             type,
-            language
+
         } = req.body;
-        const file = req.file;
+        // const file = req.file;
         //senderId , receiverId ----> dono hi ka hona essential hai 
-        if (!senderId || !receiverId) {
+        if (!sender_id || !receiver_ids) {
             return res.status(400).json({
                 success: false,
-                message: "Sender and Receiver are required",
-                senderId, receiverId
+                message: "Invalid Attempt",
             });
         }
-        const messageStatus = "sent";
+
+        //User cannot message themselves
+        if (receiver_ids.includes(sender_id.toString())) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid Attempt"
+            })
+        }
+
         // sort karne ka reason taki duplicate convo na bane
         // to prevent this -- if the convo is in between [A,B]
         // A-B conversation 1
         // B-A conversation 2
-        const Participants = [
-            senderId.toString(),
-            receiverId.toString()
-        ].sort();
+        const members = [sender_id.toString(), receiver_ids.toString()].sort();
 
-
-        //User cannot message themselves
-        if (senderId.toString() === receiverId.toString()) {
-            return res.status(400).json({
-                success: false,
-                message: "You cannot message yourself"
-            })
-        }
+        const messageStatus = "sent";
 
         //Find conversation
         let conversation = await Convo.findOne({
-            Participants: { $all: Participants },
+            members: { $all: members },
         })
 
 
         //If convo doesn't exist -- Create new chat room
         if (!conversation) {
             conversation = new Convo({
-                Participants
+                members: members
             });
             conversation.lastMsgAt = Date.now();
             await conversation.save()
@@ -202,233 +189,233 @@ chatRouter.post("/send-message", userAuth, upload.single("file"), async (req, re
         });
     }
 })
-//Fetch all chats of a user
-chatRouter.post("/get-convo", userAuth, async (req, res) => {
-    const userId = req.user._id;
+// //Fetch all chats of a user
+// chatRouter.post("/get-convo", userAuth, async (req, res) => {
+//     const userId = req.user._id;
 
-    try {
-        let conversations = await Convo.find({
-            Participants: userId,
-        })
-            .populate({
-                path: "LastMsg",
-                populate: {
-                    path: "sender receiver",
-                    select: "username photoUrl firstName lastName gmail college profession gender age isVerified skills college profession about"
-                }
-            })
-            .sort({ updatedAt: -1 });
+//     try {
+//         let conversations = await Convo.find({
+//             Participants: userId,
+//         })
+//             .populate({
+//                 path: "LastMsg",
+//                 populate: {
+//                     path: "sender receiver",
+//                     select: "username photoUrl firstName lastName gmail college profession gender age isVerified skills college profession about"
+//                 }
+//             })
+//             .sort({ updatedAt: -1 });
 
-        // Add front user to each conversation
-        const updatedConversations = conversations.map(convo => {
-            let atFrontUser = null;
+//         // Add front user to each conversation
+//         const updatedConversations = conversations.map(convo => {
+//             let atFrontUser = null;
 
-            if (convo.LastMsg) {
-                if (convo.LastMsg.sender?._id.toString() === userId.toString()) {
-                    atFrontUser = convo.LastMsg.receiver;
-                } else {
-                    atFrontUser = convo.LastMsg.sender;
-                }
-            }
+//             if (convo.LastMsg) {
+//                 if (convo.LastMsg.sender?._id.toString() === userId.toString()) {
+//                     atFrontUser = convo.LastMsg.receiver;
+//                 } else {
+//                     atFrontUser = convo.LastMsg.sender;
+//                 }
+//             }
 
-            return {
-                ...convo.toObject(),
-                atFrontUser
-            };
-        });
+//             return {
+//                 ...convo.toObject(),
+//                 atFrontUser
+//             };
+//         });
 
-        res.status(200).json({
-            success: true,
-            message: "Conversations fetched successfully",
-            conversation: updatedConversations,
+//         res.status(200).json({
+//             success: true,
+//             message: "Conversations fetched successfully",
+//             conversation: updatedConversations,
 
-        });
+//         });
 
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message,
-        });
-    }
-});
-//Load chat messages
-chatRouter.post("/get-message/:conversationId", userAuth, async (req, res) => {
-    const { conversationId } = req.params;
-    const userId = req.user._id;
+//     } catch (error) {
+//         res.status(500).json({
+//             success: false,
+//             message: error.message,
+//         });
+//     }
+// });
+// //Load chat messages
+// chatRouter.post("/get-message/:conversationId", userAuth, async (req, res) => {
+//     const { conversationId } = req.params;
+//     const userId = req.user._id;
 
-    try {
-        let conversation = await Convo.findById(conversationId);
+//     try {
+//         let conversation = await Convo.findById(conversationId);
 
-        if (!conversation) {
-            return res.status(404).json({
-                success: false,
-                message: "Convo not found"
-            });
-        }
+//         if (!conversation) {
+//             return res.status(404).json({
+//                 success: false,
+//                 message: "Convo not found"
+//             });
+//         }
 
-        if (!conversation.Participants.some(
-            p => p.toString() === userId.toString()
-        )) {
-            return res.status(403).json({
-                success: false,
-                message: "Not Authorized"
-            });
-        }
+//         if (!conversation.Participants.some(
+//             p => p.toString() === userId.toString()
+//         )) {
+//             return res.status(403).json({
+//                 success: false,
+//                 message: "Not Authorized"
+//             });
+//         }
 
-        // ✅ FIXED
-        const messages = await Msg.find({ conversationId: conversationId })
-            .populate("sender", "username photoUrl")
-            .populate("receiver", "username photoUrl")
-            .sort({ createdAt: 1 });
+//         // ✅ FIXED
+//         const messages = await Msg.find({ conversationId: conversationId })
+//             .populate("sender", "username photoUrl")
+//             .populate("receiver", "username photoUrl")
+//             .sort({ createdAt: 1 });
 
-        // ✅ FIXED
-        await Msg.updateMany(
-            {
-                conversationId: conversationId,
-                receiver: userId,
-                messageStatus: { $in: ["sent", "delivered"] }
-            },
-            { $set: { messageStatus: "read" } }
-        );
+//         // ✅ FIXED
+//         await Msg.updateMany(
+//             {
+//                 conversationId: conversationId,
+//                 receiver: userId,
+//                 messageStatus: { $in: ["sent", "delivered"] }
+//             },
+//             { $set: { messageStatus: "read" } }
+//         );
 
-        conversation.unReadCount = 0;
-        await conversation.save();
+//         conversation.unReadCount = 0;
+//         await conversation.save();
 
-        res.status(200).json({
-            success: true,
-            message: "Messages Retrieved",
-            messages
-        });
+//         res.status(200).json({
+//             success: true,
+//             message: "Messages Retrieved",
+//             messages
+//         });
 
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message,
-        });
-    }
-});
-//mannually marking as read
-chatRouter.post("/mark-read", userAuth, async (req, res) => {
-    const { messageIds } = req.body;
-    const userId = req.user.userId;
+//     } catch (error) {
+//         res.status(500).json({
+//             success: false,
+//             message: error.message,
+//         });
+//     }
+// });
+// //mannually marking as read
+// chatRouter.post("/mark-read", userAuth, async (req, res) => {
+//     const { messageIds } = req.body;
+//     const userId = req.user.userId;
 
-    try {
-        let message = await Msg.find({
-            _id: { $in: messageIds },
-            receiver: userId
-        })
+//     try {
+//         let message = await Msg.find({
+//             _id: { $in: messageIds },
+//             receiver: userId
+//         })
 
-        await Msg.updateMany(
-            { _id: { $in: messageIds }, receiver: userId },
-            { $set: { messageStatus: "read" } }
-        )
+//         await Msg.updateMany(
+//             { _id: { $in: messageIds }, receiver: userId },
+//             { $set: { messageStatus: "read" } }
+//         )
 
-        if (req.io && req.socketUserMap) {
-            for (const message of messages) {
-                const senderSocketId = req.socketUserMap.get(message.sender.toString());
+//         if (req.io && req.socketUserMap) {
+//             for (const message of messages) {
+//                 const senderSocketId = req.socketUserMap.get(message.sender.toString());
 
-                if (senderSocketId) {
-                    const updatedMessage = {
-                        _id: message._id,
-                        messageStatus: "read",
-                    };
+//                 if (senderSocketId) {
+//                     const updatedMessage = {
+//                         _id: message._id,
+//                         messageStatus: "read",
+//                     };
 
-                    req.io.to(senderSocketId).emit("message_read", updatedMessage);
-                    await message.save();
-                }
-            }
-        }
-        res.status(200).json({
-            success: true,
-            message: "Message Mark as read", message
-        })
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message,
-        });
-    }
-})
-//delete for everyone message
-chatRouter.delete("/delete-for-everyone/:messageId", userAuth, async (req, res) => {
-    try {
+//                     req.io.to(senderSocketId).emit("message_read", updatedMessage);
+//                     await message.save();
+//                 }
+//             }
+//         }
+//         res.status(200).json({
+//             success: true,
+//             message: "Message Mark as read", message
+//         })
+//     } catch (error) {
+//         res.status(500).json({
+//             success: false,
+//             message: error.message,
+//         });
+//     }
+// })
+// //delete for everyone message
+// chatRouter.delete("/delete-for-everyone/:messageId", userAuth, async (req, res) => {
+//     try {
 
-        const { messageId } = req.params;
-        const userId = req.user._id;
+//         const { messageId } = req.params;
+//         const userId = req.user._id;
 
-        const message = await Msg.findById(messageId);
+//         const message = await Msg.findById(messageId);
 
-        if (!message) {
-            return res.status(404).json({
-                success: false,
-                message: "Message not found"
-            });
-        }
+//         if (!message) {
+//             return res.status(404).json({
+//                 success: false,
+//                 message: "Message not found"
+//             });
+//         }
 
-        // only sender can delete for everyone
-        if (message.sender.toString() !== userId.toString()) {
-            return res.status(403).json({
-                success: false,
-                message: "Not allowed to delete this message"
-            });
-        }
+//         // only sender can delete for everyone
+//         if (message.sender.toString() !== userId.toString()) {
+//             return res.status(403).json({
+//                 success: false,
+//                 message: "Not allowed to delete this message"
+//             });
+//         }
 
-        message.deletedForEveryone = true;
-        await message.save();
+//         message.deletedForEveryone = true;
+//         await message.save();
 
-        res.status(200).json({
-            success: true,
-            message: "Message deleted for everyone"
-        });
+//         res.status(200).json({
+//             success: true,
+//             message: "Message deleted for everyone"
+//         });
 
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
-    }
-});
-//delete for me 
-chatRouter.delete("/delete-for-me/:messageId", userAuth, async (req, res) => {
+//     } catch (error) {
+//         res.status(500).json({
+//             success: false,
+//             message: error.message
+//         });
+//     }
+// });
+// //delete for me 
+// chatRouter.delete("/delete-for-me/:messageId", userAuth, async (req, res) => {
 
-    try {
+//     try {
 
-        const { messageId } = req.params;
-        const userId = req.user._id;
+//         const { messageId } = req.params;
+//         const userId = req.user._id;
 
-        const message = await Msg.findById(messageId);
+//         const message = await Msg.findById(messageId);
 
-        if (!message) {
-            return res.status(404).json({
-                success: false,
-                message: "Message not found"
-            });
-        }
+//         if (!message) {
+//             return res.status(404).json({
+//                 success: false,
+//                 message: "Message not found"
+//             });
+//         }
 
-        // check if already deleted
-        if (message.deletedFor.includes(userId)) {
-            return res.status(400).json({
-                success: false,
-                message: "Message already deleted for this user"
-            });
-        }
+//         // check if already deleted
+//         if (message.deletedFor.includes(userId)) {
+//             return res.status(400).json({
+//                 success: false,
+//                 message: "Message already deleted for this user"
+//             });
+//         }
 
-        message.deletedFor.push(userId);
-        await message.save();
+//         message.deletedFor.push(userId);
+//         await message.save();
 
-        res.status(200).json({
-            success: true,
-            message: "Message deleted for you"
-        });
+//         res.status(200).json({
+//             success: true,
+//             message: "Message deleted for you"
+//         });
 
-    } catch (error) {
+//     } catch (error) {
 
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
+//         res.status(500).json({
+//             success: false,
+//             message: error.message
+//         });
 
-    }
+//     }
 
-});
+// });
 module.exports = chatRouter;
