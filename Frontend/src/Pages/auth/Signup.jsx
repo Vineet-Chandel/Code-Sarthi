@@ -507,10 +507,7 @@ const Signup = () => {
             </h1>
             <p className="text-info text-lg md:text-xl pl-2 flex items-center gap-2">
               Enter your details to join the smart developers community!
-              <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 24 24">
-                <path fill="currentColor" fillRule="evenodd" d="m15.502 14.367l5.03-5.014c.724-.722 1.087-1.083 1.277-1.543C22 7.351 22 6.84 22 5.82v-.49c0-1.57 0-2.355-.49-2.843C21.022 2 20.235 2 18.659 2h-.489c-1.024 0-1.537 0-1.997.19s-.823.551-1.547 1.274l-5.03 5.014c-.846.844-1.371 1.367-1.574 1.873c-.064.16-.097.317-.097.483c0 .69.557 1.245 1.671 2.356l.15.149l1.754-1.78a.645.645 0 0 1 .919.906l-1.76 1.785l.119.117c1.114 1.11 1.67 1.666 2.362 1.666q.228 0 .447-.081c.519-.191 1.048-.72 1.916-1.585m2.363-5.888c-.652.65-1.71.65-2.363 0a1.66 1.66 0 0 1 0-2.356c.653-.65 1.71-.65 2.363 0s.653 1.705 0 2.356M2.774 12.481a.76.76 0 0 1 0 1.074l-.156.155a.34.34 0 0 0 0 .48a.34.34 0 0 0 .483 0l1.713-1.71a.76.76 0 0 1 1.072 1.075l-1.712 1.71a1.86 1.86 0 0 1-2.629 0a1.857 1.857 0 0 1 0-2.629l.156-.155a.76.76 0 0 1 1.073 0m4.523 4.215c.293.3.288.78-.012 1.073l-1.73 1.692a.759.759 0 0 1-1.061-1.085l1.73-1.692a.76.76 0 0 1 1.073.012m4.184 1.422a.76.76 0 0 1 0 1.074l-1.713 1.71a.34.34 0 0 0 0 .48c.134.133.35.133.484 0l.156-.155A.759.759 0 0 1 11.48 22.3l-.155.155a1.86 1.86 0 0 1-2.63 0a1.857 1.857 0 0 1 0-2.629l1.713-1.71a.76.76 0 0 1 1.073.001" clipRule="evenodd"></path>
-                <path fill="currentColor" d="M10.846 5.41L8.658 7.59c-.402.401-.77.769-1.062 1.101a5 5 0 0 0-.532.706l-.022-.021l-.08-.08a4.2 4.2 0 0 0-1.319-.865l-.106-.042l-.325-.13a.658.658 0 0 1-.223-1.077c.963-.96 2.12-2.114 2.679-2.346a2.9 2.9 0 0 1 1.537-.197c.47.07.915.311 1.641.77m3.736 11.484c.176.18.293.306.399.44q.21.268.373.567c.123.223.218.462.408.939c.155.388.67.491.968.193l.073-.072c.963-.96 2.12-2.114 2.353-2.67a2.9 2.9 0 0 0 .197-1.534c-.07-.468-.312-.912-.772-1.636l-2.195 2.189c-.411.41-.789.786-1.13 1.08a5 5 0 0 1-.674.504m-6.896-2.33a.759.759 0 1 0-1.073-1.073L4.47 15.632a.759.759 0 1 0 1.074 1.074zm2.809 2.806a.759.759 0 1 0-1.073-1.073l-2.128 2.127a.76.76 0 0 0 1.074 1.074z" opacity={0.5}></path>
-              </svg>
+
 
             </p>
           </div>
@@ -907,34 +904,82 @@ const Signup = () => {
                 whileHover={{ scale: 1.1 }}
                 type="submit"
                 disabled={isSubmitting}
-                className={`w-full  bg-base-200 border border-secondary   py-3 sm:py-4  rounded-2xl sm:rounded-3xl transition-all duration-300   sm:text-xl md:text-2xl  font-semibold  ${isSubmitting ? "opacity-70 cursor-not-allowed" : "hover:from-blue-700 hover:to-blue-800"}`}
+                className={`w-full  bg-white border border-secondary   py-2 sm:py-3  rounded-2xl sm:rounded-3xl transition-all duration-300   sm:text-xl md:text-2xl  font-semibold  ${isSubmitting ? "opacity-70 cursor-not-allowed" : "hover:from-blue-700 hover:to-blue-800"}`}
               >
                 {isSubmitting ? (
-                  <div className="flex justify-center items-center gap-2 sm:gap-3 px-2 md:px-3">
+                  <div className="flex justify-center items-center gap-1 sm:gap-2 px-2 md:px-3">
 
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 animate-spin"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        fill="#ffffff"
-                        d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Z"
-                        opacity={0.25}
-                      />
-                      <path
-                        fill="#ffffff"
-                        d="M12 2a10 10 0 0 1 10 10h-4a6 6 0 0 0-6-6V2z"
-                      />
-                    </svg>
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-white/10 blur-3xl rounded-full" />
 
-                    <span className="text-center text-accent-content-content text-sm md:text-base lg:text-xl xl:text-2xl ">
-                      Setting up your workspace...
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="relative w-4 h-4 sm:w-6 sm:h-6 text-black"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <circle cx={4} cy={12} r={2.5} className="opacity-70">
+                          <animate
+                            id="dot1"
+                            attributeName="cy"
+                            begin="0;dot3.end+0.2s"
+                            calcMode="spline"
+                            dur="0.6s"
+                            keySplines=".33,.66,.66,1;.33,0,.66,.33"
+                            values="12;7;12"
+                          />
+                          <animate
+                            attributeName="opacity"
+                            begin="0;dot3.end+0.2s"
+                            dur="0.6s"
+                            values="0.4;1;0.4"
+                          />
+                        </circle>
+
+                        <circle cx={12} cy={12} r={2.5}>
+                          <animate
+                            attributeName="cy"
+                            begin="dot1.begin+0.1s"
+                            calcMode="spline"
+                            dur="0.6s"
+                            keySplines=".33,.66,.66,1;.33,0,.66,.33"
+                            values="12;7;12"
+                          />
+                          <animate
+                            attributeName="opacity"
+                            begin="dot1.begin+0.1s"
+                            dur="0.6s"
+                            values="0.4;1;0.4"
+                          />
+                        </circle>
+
+                        <circle cx={20} cy={12} r={2.5} className="opacity-70">
+                          <animate
+                            id="dot3"
+                            attributeName="cy"
+                            begin="dot1.begin+0.2s"
+                            calcMode="spline"
+                            dur="0.6s"
+                            keySplines=".33,.66,.66,1;.33,0,.66,.33"
+                            values="12;7;12"
+                          />
+                          <animate
+                            attributeName="opacity"
+                            begin="dot1.begin+0.2s"
+                            dur="0.6s"
+                            values="0.4;1;0.4"
+                          />
+                        </circle>
+                      </svg>
+                    </div>
+
+                    <span className="text-center text-black text-sm md:text-base lg:text-xl xl:text-2xl ">
+                      CodeSarthi welcomes you
                     </span>
 
                   </div>
                 ) : (
-                  <span className="text-center text-sm md:text-base text-accent-content-content lg:text-xl xl:text-2xl ">Create Account</span>
+                  <span className="text-center text-sm md:text-base text-black lg:text-xl xl:text-2xl ">Create Account</span>
                 )}
               </motion.button>
             </div>
@@ -963,11 +1008,11 @@ const Signup = () => {
 
               {/* Heading */}
               <div className="space-y-2">
-                <h1 className="text-3xl text-accent-content-content md:text-4xl lg:text-5xl font-bold leading-tight font-generalbold">
+                <h1 className="text-3xl text-info md:text-4xl lg:text-5xl font-bold leading-tight font-generalbold">
                   What Developers Say
                 </h1>
-                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-accent-content-content">
-                  About <span className="text-secondary font-extrabold font-generalbold bg-yellow-300 px-2">CodeSarthi</span> ,
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-info">
+                  About <span className="text-white font-extrabold font-generalbold  px-2">CodeSarthi</span>,
                 </h1>
               </div>
 

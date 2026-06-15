@@ -57,13 +57,13 @@ const Hero = () => {
             <ContentFirst2 />
 
 
-            <ContentFirst />
+            {/* <ContentFirst />
 
             <SecondLanding />
             <Devs />
             <ContentSecond />
 
-            <ContentThird />
+            <ContentThird /> */}
 
 
         </div>

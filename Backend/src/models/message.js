@@ -36,7 +36,7 @@ const MsgSchema = new mongoose.Schema({
     attachments: [
         {
             type: {
-                String,
+                type: String,
                 enum: ["image", "video", "file", "audio"]
             },
             url: String,
@@ -111,6 +111,14 @@ const MsgSchema = new mongoose.Schema({
             "system"
         ],
         default: "text"
+    },
+    status: {
+        type: String,
+        enum: [
+            "sending",
+            "sent",
+        ],
+        default: "sending"
     },
     seenBy: [
         {

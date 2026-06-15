@@ -25,9 +25,7 @@ chatRouter.get("/chats", userAuth, async (req, res) => {
             { path: "lastMessage", populate: { path: "sender_id", select: "firstName lastName photoUrl gmail username profession" } }
         ])
 
-
-
-
+        //chats are there not 
         if (!chats || chats.length === 0) {
             return res.status(200).json({
                 success: true,
@@ -50,145 +48,299 @@ chatRouter.get("/chats", userAuth, async (req, res) => {
     }
 });
 
-// // this API will Send a message to another user
+
+//send the message
 chatRouter.post("/send-message", userAuth, async (req, res) => {
+
+    let session;
     try {
 
-        // THIS WILL GET THE LOGGED IN PERSON's ID
-        const sender_id = req.user._id;
-
-
-        const {
-            //Get receiver (यह वह user है जिसे message भेजना है।)
-            receiver_ids,
-            content,
-            type,
-
-        } = req.body;
-        // const file = req.file;
-        //senderId , receiverId ----> dono hi ka hona essential hai 
-        if (!sender_id || !receiver_ids) {
+        //LOGINNED USER KI USER ID
+        const userId = req.user._id
+        if (!userId) {
             return res.status(400).json({
                 success: false,
-                message: "Invalid Attempt",
-            });
+                message: "Please Re-Login"
+            })
         }
+        const { convId, messageType, content, forwarded, edited, reactions, replyTo, name, members, type } = req.body
 
-        //User cannot message themselves
-        if (receiver_ids.includes(sender_id.toString())) {
+        if (!convId) {
             return res.status(400).json({
                 success: false,
                 message: "Invalid Attempt"
             })
         }
-
-        // sort karne ka reason taki duplicate convo na bane
-        // to prevent this -- if the convo is in between [A,B]
-        // A-B conversation 1
-        // B-A conversation 2
-        const members = [sender_id.toString(), receiver_ids.toString()].sort();
-
-        const messageStatus = "sent";
-
-        //Find conversation
-        let conversation = await Convo.findOne({
-            members: { $all: members },
-        })
-
-
-        //If convo doesn't exist -- Create new chat room
-        if (!conversation) {
-            conversation = new Convo({
-                members: members
-            });
-            conversation.lastMsgAt = Date.now();
-            await conversation.save()
-        } else {
-            conversation.lastMsgAt = Date.now();
-            await conversation.save()
-        }
-
-
-        let ImgOrVideoUrl = null;
-        let contentType = null;
-
-
-        if (file) {
-            const UploadVideoImageFile = await uploadToCloud(file);
-            if (!UploadVideoImageFile) {
-                return res.status(400).json({
-                    success: false,
-                    message: "File failed to upload",
-                });
-            }
-            ImgOrVideoUrl = UploadVideoImageFile?.getDataUrl;
-
-            if (file.mimetype.startsWith('image')) {
-                contentType = "image"
-            } else if (file.mimetype.startsWith('video')) {
-                contentType = "video"
-            } else {
-                return res.status(400).json({
-                    success: false,
-                    message: "File failed to upload",
-                });
-            }
-        } else if (content?.trim()) {
-            contentType = "text"
-        } else {
+        if (!content) {
             return res.status(400).json({
                 success: false,
-                message: "Message content is required",
+                message: "Message cannot be empty"
+            });
+        }
+
+        session = await mongoose.startSession();
+        session.startTransaction();
+
+
+        let convoContainer = await conversation.findById(convId).session(session)
+
+        if (!convoContainer) {
+            if (!members || !type) {
+                await session.abortTransaction();
+                await session.endSession();
+
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid Attempt"
+                })
+
+            }
+            const uniqueMembers = [...new Set([
+                ...members.map(String),
+                userId.toString()
+            ])];
+            convoContainer = new conversation({
+                members: uniqueMembers,
+                type: type,
+                createdBy: userId,
+                name: name,
+                admin: [userId]
+
+            })
+        }
+
+        const isMember = convoContainer.members.some(member =>
+            member.equals(userId)
+        );
+
+        if (!isMember) {
+            await session.abortTransaction();
+            await session.endSession();
+
+            return res.status(403).json({
+                success: false,
+                message: "Invalid Attempt"
             });
         }
 
 
-
-        //Store message in database
         const message = new Msg({
-            conversationId: conversation._id,
-            sender: senderId,
-            receiver: receiverId,
-            content,
-            contentType,
-            ImgOrVideoUrl,
-            messageStatus,
-            type,
-            language
+            conversation_id: convoContainer._id,
+            sender_id: userId,
+            content: content,
+            forwarded,
+            edited,
+            editedAt: edited ? new Date() : undefined,
+            messageType: messageType,
+            reactions: reactions,
+            replyTo: replyTo,
+            status: "sent"
         })
 
-        await message.save();
-
-        //show latest message
-        //update unread counter
-        conversation.LastMsg = message._id;
-        conversation.unReadCount += 1;
-        await conversation.save();
 
 
 
-        const populatedMessage = await Msg.findById(message._id)
-            .populate("sender", "username photoUrl")
-            .populate("receiver", "username photoUrl");
+        await message.save({ session });
+
+        convoContainer.lastMessage = message._id;
+        convoContainer.updatedAt = new Date();
+        convoContainer.unreadCounts += 1
+
+        await convoContainer.save({ session });
+
+        await session.commitTransaction();
+
+        await session.endSession();
 
 
 
 
-        res.status(200).json({
+
+        return res.status(500).json({
             success: true,
-            populatedMessage,
+            message: "Message sent successfully",
+            data: message
         });
 
 
-    } catch (error) {
-        console.error(error);
 
-        res.status(500).json({
+
+
+
+
+    } catch (err) {
+        if (session) {
+            await session.abortTransaction();
+            await session.endSession();
+        }
+        return res.status(400).json({
             success: false,
-            message: "Server error",
+            message: "Message failed to sent",
+            error: err
         });
     }
 })
+
+
+
+// // // this API will Send a message to another user
+// chatRouter.post("/send-message", userAuth, async (req, res) => {
+//     try {
+
+//         // THIS WILL GET THE LOGGED IN PERSON's ID
+//         const sender_id = req.user._id;
+
+
+//         const {
+//             //Get receiver (यह वह user है जिसे message भेजना है।)
+//             conversation_id,
+//             content,
+//             type,
+//             forwarded,
+//             edited,
+//             messageType,
+//             reactions
+
+//         } = req.body;
+//         // const file = req.file;
+//         //senderId , receiverId ----> dono hi ka hona essential hai 
+//         if (!sender_id || !conversation_id) {
+//             return res.status(400).json({
+//                 success: false,
+//                 message: "Invalid Attempt",
+//             });
+//         }
+
+//         let convo = await conversation.findById(conversation_id);
+
+
+//         if (convo && !convo.members.includes(sender_id.toString())) {
+//             return res.status(400).json({
+//                 success: false,
+//                 message: "Invalid Attempt"
+//             })
+//         }
+//         // sort karne ka reason taki duplicate convo na bane
+//         // to prevent this -- if the convo is in between [A,B]
+//         // A-B conversation 1
+//         // B-A conversation 2
+//         const members = [sender_id.toString(), convo.members].sort();
+
+
+//         if (!convo && type === 'private') {
+//             convo = new conversation({
+//                 members: [members],
+//                 lastMessage: content,
+//                 lastActivity: "text"
+
+//             });
+//             convo.updatedAt = Date.now();
+//             await convo.save()
+//         } else {
+//             convo.updatedAt = Date.now();
+//             await convo.save()
+//         }
+
+
+
+
+
+
+
+//         //If convo doesn't exist -- Create new chat room
+
+
+
+//         let ImgOrVideoUrl = null;
+//         let contentType = null;
+
+
+//         // if (file) {
+//         //     const UploadVideoImageFile = await uploadToCloud(file);
+//         //     if (!UploadVideoImageFile) {
+//         //         return res.status(400).json({
+//         //             success: false,
+//         //             message: "File failed to upload",
+//         //         });
+//         //     }
+//         //     ImgOrVideoUrl = UploadVideoImageFile?.getDataUrl;
+
+//         //     if (file.mimetype.startsWith('image')) {
+//         //         contentType = "image"
+//         //     } else if (file.mimetype.startsWith('video')) {
+//         //         contentType = "video"
+//         //     } else {
+//         //         return res.status(400).json({
+//         //             success: false,
+//         //             message: "File failed to upload",
+//         //         });
+//         //     }
+//         // } else if (content?.trim()) {
+//         //     contentType = "text"
+//         // } else {
+//         //     return res.status(400).json({
+//         //         success: false,
+//         //         message: "Message content is required",
+//         //     });
+//         // }
+
+//         let isForwarded;
+//         if (forwarded) {
+//             isForwarded = true;
+//         } else {
+//             isForwarded = false;
+//         }
+//         let isEdited;
+//         if (edited) {
+//             isEdited = true;
+//         } else {
+//             isEdited = false;
+//         }
+
+
+//         //Store message in database
+//         const message = new Msg({
+//             conversationId: convo._id,
+//             sender: sender_id,
+//             content: content,
+//             forwarded: isForwarded,
+//             edited: isEdited,
+//             messageType: messageType,
+//             reactions: reactions
+
+//         })
+
+//         await message.save();
+
+//         //show latest message
+//         //update unread counter
+//         convo.lastMessage = message._id;
+//         convo.unreadCounts += 1;
+//         await convo.save();
+
+
+
+//         const populatedMessage = await message.findById(message._id)
+//             .populate("sender", "username photoUrl")
+
+
+
+
+//         res.status(200).json({
+//             success: true,
+//             populatedMessage,
+//         });
+
+
+//     } catch (error) {
+//         console.error(error);
+
+//         res.status(500).json({
+//             success: false,
+//             message: "Server error",
+//         });
+//     }
+// })
 // //Fetch all chats of a user
 // chatRouter.post("/get-convo", userAuth, async (req, res) => {
 //     const userId = req.user._id;

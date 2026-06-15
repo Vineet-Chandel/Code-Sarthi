@@ -498,40 +498,83 @@ const Login = () => {
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.4 }}
                                 disabled={isLoginStart}
-                                className={`w-full  bg-base-200 border border-secondary  text-white  py-3 sm:py-4  rounded-2xl sm:rounded-3xl transition-all duration-300  text-base sm:text-xl md:text-2xl  font-semibold  ${isLoginStart ? "opacity-70 cursor-not-allowed" : "hover:from-blue-700 hover:to-blue-800"}`}
+                                className={`w-full  bg-white border border-secondary  text-black  py-3 sm:py-4  rounded-2xl sm:rounded-3xl transition-all duration-300  text-base sm:text-xl md:text-2xl  font-semibold  ${isLoginStart ? "opacity-70 cursor-not-allowed" : "hover:from-blue-700 hover:to-blue-800"}`}
                             >
                                 {isLoginStart ? (
                                     <div className="flex justify-center items-center gap-2 sm:gap-3 px-2 md:px-3">
 
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 animate-spin"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                fill="#ffffff"
-                                                d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Z"
-                                                opacity={0.25}
-                                            />
-                                            <path
-                                                fill="#ffffff"
-                                                d="M12 2a10 10 0 0 1 10 10h-4a6 6 0 0 0-6-6V2z"
-                                            />
-                                        </svg>
+                                        <div className="relative">
+                                            <div className="absolute inset-0 bg-white/10 blur-3xl rounded-full" />
 
-                                        <span className="text-center text-sm md:text-base lg:text-xl xl:text-2xl text-accent-content ">
-                                            Welcome to CodeSarthi — Let’s Build!
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                className="relative w-4 h-4 sm:w-6 sm:h-6 text-white"
+                                                viewBox="0 0 24 24"
+                                                fill="currentColor"
+                                            >
+                                                <circle cx={4} cy={12} r={2.5} className="opacity-70">
+                                                    <animate
+                                                        id="dot1"
+                                                        attributeName="cy"
+                                                        begin="0;dot3.end+0.2s"
+                                                        calcMode="spline"
+                                                        dur="0.6s"
+                                                        keySplines=".33,.66,.66,1;.33,0,.66,.33"
+                                                        values="12;7;12"
+                                                    />
+                                                    <animate
+                                                        attributeName="opacity"
+                                                        begin="0;dot3.end+0.2s"
+                                                        dur="0.6s"
+                                                        values="0.4;1;0.4"
+                                                    />
+                                                </circle>
+
+                                                <circle cx={12} cy={12} r={2.5}>
+                                                    <animate
+                                                        attributeName="cy"
+                                                        begin="dot1.begin+0.1s"
+                                                        calcMode="spline"
+                                                        dur="0.6s"
+                                                        keySplines=".33,.66,.66,1;.33,0,.66,.33"
+                                                        values="12;7;12"
+                                                    />
+                                                    <animate
+                                                        attributeName="opacity"
+                                                        begin="dot1.begin+0.1s"
+                                                        dur="0.6s"
+                                                        values="0.4;1;0.4"
+                                                    />
+                                                </circle>
+
+                                                <circle cx={20} cy={12} r={2.5} className="opacity-70">
+                                                    <animate
+                                                        id="dot3"
+                                                        attributeName="cy"
+                                                        begin="dot1.begin+0.2s"
+                                                        calcMode="spline"
+                                                        dur="0.6s"
+                                                        keySplines=".33,.66,.66,1;.33,0,.66,.33"
+                                                        values="12;7;12"
+                                                    />
+                                                    <animate
+                                                        attributeName="opacity"
+                                                        begin="dot1.begin+0.2s"
+                                                        dur="0.6s"
+                                                        values="0.4;1;0.4"
+                                                    />
+                                                </circle>
+                                            </svg>
+                                        </div>
+
+                                        <span className="text-center text-sm md:text-base lg:text-xl xl:text-2xl text-black ">
+                                            CodeSarthi welcomes you
                                         </span>
 
                                     </div>
                                 ) : (
-                                    <span className="flex text-xl  items-center  justify-center gap-3 text-accent-content">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 16 16">
-                                            <g fill="#ffffff">
-                                                <path d="M4 16s-1 0-1-1s1-4 5-4s5 3 5 4s-1 1-1 1zm4-5.95a2.5 2.5 0 1 0 0-5a2.5 2.5 0 0 0 0 5"></path>
-                                                <path d="M2 1a2 2 0 0 0-2 2v9.5A1.5 1.5 0 0 0 1.5 14h.653a5.4 5.4 0 0 1 1.066-2H1V3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v9h-2.219c.554.654.89 1.373 1.066 2h.653a1.5 1.5 0 0 0 1.5-1.5V3a2 2 0 0 0-2-2z"></path>
-                                            </g>
-                                        </svg>Enter Workspace</span>
+                                    <span className="flex text-xl  items-center  justify-center gap-3 text-black">
+                                        Enter Workspace</span>
                                 )}
                             </motion.button>
                         </div>
@@ -552,11 +595,11 @@ const Login = () => {
 
                             {/* Heading */}
                             <div className="space-y-2">
-                                <h1 className="text-3xl text-accent-content md:text-4xl lg:text-5xl font-bold leading-tight font-generalbold">
+                                <h1 className="text-3xl text-info md:text-4xl lg:text-5xl font-bold leading-tight font-generalbold">
                                     What Developers Say
                                 </h1>
-                                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-accent-content">
-                                    About <span className="text-secondary font-extrabold font-generalbold bg-yellow-300 px-2">CodeSarthi</span> ,
+                                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-info">
+                                    About <span className="text-white font-extrabold font-generalbold px-2">CodeSarthi</span>,
                                 </h1>
                             </div>
 
