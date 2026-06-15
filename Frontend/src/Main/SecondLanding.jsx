@@ -53,7 +53,7 @@ const SecondLanding = () => {
     };
     return (
         <div
-            className="w-full  bg-gray-200 flex flex-col items-center justify-between gap-3 py-10  ">
+            className="w-screen  bg-gray-200 flex flex-col items-center justify-between gap-3 py-10  ">
             <div className='w-full text-center  flex flex-col items-center justify-center mb-5'>
                 <div className='text-[#000] font-poppins font-extrabold text-7xl  justify-start'>
                     From Simple Resume Generation,
@@ -62,7 +62,7 @@ const SecondLanding = () => {
 
             </div>
 
-            <div className="w-[1600px] mx-auto h-full  px-5 flex  lg:flex-row flex-col gap-2">
+            <div className="w-full mx-auto h-full  px-5 flex  lg:flex-row flex-col gap-2">
                 <div
 
                     className="     bg-[#080808]
@@ -135,7 +135,7 @@ const SecondLanding = () => {
 
 
             </div>
-            <div className="w-[1600px] mx-auto h-full  px-5 flex  lg:flex-row flex-col gap-2">
+            <div className="w-full mx-auto h-full  px-5 flex  lg:flex-row flex-col gap-2">
 
                 <div className="flex lg:w-2/3 w-full h-full flex-col gap-2">
                     <div className="flex md:flex-row flex-col h-1/2 w-full gap-2">

@@ -56,10 +56,10 @@ const Hero = () => {
             {/* <Mainhero /> */}
             <ContentFirst2 />
 
-
+            <SecondLanding />
             {/* <ContentFirst />
 
-            <SecondLanding />
+       
             <Devs />
             <ContentSecond />
 
