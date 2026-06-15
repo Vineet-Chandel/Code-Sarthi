@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import Nav from './nav'
+import Nav from './Nav'
 import { useNavigate } from 'react-router-dom';
 import { motion, useMotionValueEvent, useScroll, useSpring, useTransform } from 'framer-motion';
 
