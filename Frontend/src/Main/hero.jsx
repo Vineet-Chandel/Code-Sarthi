@@ -2,7 +2,7 @@
 
 
 import { useState, useEffect } from "react";
-import Nav from "./Nav";
+
 import Preloader from "./preloader";
 import Footer from "./Footer";
 import ContentFirst from "./ContentFirst";
