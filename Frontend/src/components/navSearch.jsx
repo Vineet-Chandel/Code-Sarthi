@@ -115,7 +115,7 @@ const Search = ({ height, displayType }) => {
             marginRight: 0
         },
         expand: {
-            width: 300,
+            width: 250,
             marginLeft: 20,
             marginRight: 10
 
@@ -175,9 +175,9 @@ const Search = ({ height, displayType }) => {
 
     return (
 
-        <div className='relative w-[90%] z-30 flex flex-col gap-3 items-center justify-center mr-3' >
+        <div className='relative w-auto z-30 flex flex-col gap-3 items-center justify-center ' >
             <ToastContainer toasts={toasts} removeToast={removeToast} />
-            <div className='relative h-[45px] flex items-center justify-center '>
+            <div className='relative h-[35px] flex items-center justify-center '>
 
 
 
@@ -187,7 +187,7 @@ const Search = ({ height, displayType }) => {
                     animate={isExpanded ? "expand" : "collapse"}
                     transition={TRANSITION}
 
-                    className='h-10 w-10 flex items-center justify-center ml-2 ' >
+                    className='h-[35px] w-[35px] flex items-center justify-center ml-2 ' >
 
                     <span className='h-full flex items-center justify-center ml-2 bg-base-100 p-2 rounded-full border-[2px] border-secondary-content'>
                         <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
@@ -200,8 +200,8 @@ const Search = ({ height, displayType }) => {
                     initial="collapse"
                     animate={isExpanded ? "expand" : "collapse"}
                     transition={TRANSITION}
-                    className='h-[45px] flex items-center justify-center outline-none border-none focus:ring-0 focus:border-0 '>
-                    <button onClick={() => { setIsExpanded(true); inputRef.current.focus() }} className='h-[45px] w-full cursor-pointer items-center justify-center flex gap-2 rounded-full bg-base-100 text-white font-medium border-[2px] border-secondary-content'>
+                    className='h-[35px] flex items-center justify-center outline-none border-none focus:ring-0 focus:border-0 '>
+                    <button onClick={() => { setIsExpanded(true); inputRef.current.focus() }} className='h-[35px] w-full cursor-pointer items-center justify-center flex gap-2 rounded-full bg-base-100 text-white font-medium border-[2px] border-secondary-content'>
                         {!isExpanded && (
                             <span className='h-full w-[30px] flex items-center justify-center ml-2 '>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
@@ -230,54 +230,12 @@ const Search = ({ height, displayType }) => {
                             style={isExpanded ? { marginLeft: "20px" } : {}}
                         />
 
-                        {!isExpanded && ((isSearching) ? (
 
-                            <span className='h-full flex items-center justify-center ml-2  p-2'>
-                                <div className="h-full w-[30px] flex items-center justify-center ml-2 text-primary">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                                        <path fill="currentColor" d="M11.5 14c4.14 0 7.5 1.57 7.5 3.5V20H4v-2.5c0-1.93 3.36-3.5 7.5-3.5m6.5 3.5c0-1.38-2.91-2.5-6.5-2.5S5 16.12 5 17.5V19h13zM11.5 5A3.5 3.5 0 0 1 15 8.5a3.5 3.5 0 0 1-3.5 3.5A3.5 3.5 0 0 1 8 8.5A3.5 3.5 0 0 1 11.5 5m0 1A2.5 2.5 0 0 0 9 8.5a2.5 2.5 0 0 0 2.5 2.5A2.5 2.5 0 0 0 14 8.5A2.5 2.5 0 0 0 11.5 6"></path>
-                                    </svg>
-                                </div>
-                            </span>
-                        ) : (
 
-                            <span className='h-10 w-10 flex items-center justify-center rounded-full justify-self-end mr-3'>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="1.7em" height="1.7em" viewBox="0 0 24 24">
-                                    <path fill="currentColor" d="M11.5 14c4.14 0 7.5 1.57 7.5 3.5V20H4v-2.5c0-1.93 3.36-3.5 7.5-3.5m6.5 3.5c0-1.38-2.91-2.5-6.5-2.5S5 16.12 5 17.5V19h13zM11.5 5A3.5 3.5 0 0 1 15 8.5a3.5 3.5 0 0 1-3.5 3.5A3.5 3.5 0 0 1 8 8.5A3.5 3.5 0 0 1 11.5 5m0 1A2.5 2.5 0 0 0 9 8.5a2.5 2.5 0 0 0 2.5 2.5A2.5 2.5 0 0 0 14 8.5A2.5 2.5 0 0 0 11.5 6"></path>
-                                </svg>
-                            </span>
-                        ))}
 
                     </button>
                 </motion.div>
 
-                <motion.div
-                    variants={iconBubbleVariant}
-                    initial="collapse"
-                    animate={isExpanded ? "expand" : "collapse"}
-                    transition={TRANSITION}
-
-                    className='h-[45px] w-[30px] flex items-center justify-center ml-2 ' >
-
-                    <span className='absolute    h-full flex items-center justify-center ml-2 bg-base-100 p-2 rounded-full border-[2px] border-secondary-content' onClick={() => Navigate("/app/explore")}>
-                        {isSearching ? (
-                            <div className="h-full w-[30px] flex items-center justify-center] text-primary">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24">
-                                    <path fill="currentColor" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity="0.3" />
-                                    <path fill="currentColor" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z">
-                                        <animateTransform attributeName="transform" dur="1s" from="0 12 12" repeatCount="indefinite" to="360 12 12" type="rotate" />
-                                    </path>
-                                </svg>
-                            </div>
-                        ) : (
-                            <span className='h-10 w-10 flex items-center justify-center rounded-full cursor-pointer'>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="1.7em" height="1.7em" viewBox="0 0 24 24">
-                                    <path fill="currentColor" d="M11.5 14c4.14 0 7.5 1.57 7.5 3.5V20H4v-2.5c0-1.93 3.36-3.5 7.5-3.5m6.5 3.5c0-1.38-2.91-2.5-6.5-2.5S5 16.12 5 17.5V19h13zM11.5 5A3.5 3.5 0 0 1 15 8.5a3.5 3.5 0 0 1-3.5 3.5A3.5 3.5 0 0 1 8 8.5A3.5 3.5 0 0 1 11.5 5m0 1A2.5 2.5 0 0 0 9 8.5a2.5 2.5 0 0 0 2.5 2.5A2.5 2.5 0 0 0 14 8.5A2.5 2.5 0 0 0 11.5 6"></path>
-                                </svg>
-                            </span>
-                        )}
-                    </span>
-                </motion.div>
             </div>
             {showcard && (
                 <div
@@ -343,7 +301,7 @@ const Search = ({ height, displayType }) => {
                                 <div className="flex flex-col items-end gap-3">
                                     <button
                                         type="button"
-                                        className="w-10 h-[45px] flex items-center justify-center border border-secondary-content rounded-full transition-colors duration-200 hover:bg-white/10"
+                                        className="w-10 h-[35px] flex items-center justify-center border border-secondary-content rounded-full transition-colors duration-200 hover:bg-white/10"
                                         onClick={() => { setShowCard(false); setShowRequestModal(false) }}
                                         aria-label="Close profile menu"
                                     >

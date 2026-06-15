@@ -17,8 +17,13 @@ import axios from "axios";
 import BASE_URL from "../Pages/auth/baseURL";
 import Search from "./navSearch";
 import { useLocation } from "react-router-dom";
-const NavBar = () => {
+
+const NavBar = ({ setSelectedChatUser2, selectedChatUser2 }) => {
     const location = useLocation();
+    useEffect(() => {
+        console.log(selectedChatUser2)
+    }, [selectedChatUser2])
+
 
 
     const [showSidebar, setShowSidebar] = useState(false);
@@ -29,7 +34,7 @@ const NavBar = () => {
     const sidebarOverlayRef = useRef(null);
     const profileRef = useRef(null);
     const profileOverlayRef = useRef(null);
-    const user = useSelector((store) => store.user.user.DATA);
+    const user = useSelector((store) => store?.user?.user?.DATA);
     const navigate = useNavigate();
 
     // Sidebar functions
@@ -166,7 +171,7 @@ const NavBar = () => {
 
     return (
         <div>
-            <div data-theme="caramellatte" className=" relative z-40 navbar h-[70px] bg-base-100 border border-secondary flex items-center justify-between rounded-b-2xl sm:rounded-b-3xl px-3 sm:px-4 lg:px-6 py-1.5 sm:py-2  ">
+            <div data-theme="caramellatte" className=" relative z-40   bg-base-100 border border-secondary flex items-center justify-between rounded-b-xl px-1 sm:px-2 lg:px-4 py-1.5  ">
 
                 {/* Left side - Menu button */}
                 <div className="NavStart flex justify-center items-center gap-2.5">
@@ -201,7 +206,7 @@ const NavBar = () => {
 
                                             </div>
                                             <div className='flex flex-col items-start gap-2'>
-                                                <span className="text-lg sm:text-xl lg:text-2xl font-bold text-info">CodeSarthi</span>
+                                                <span className="text-md sm:text-lg lg:text-xl font-bold text-info">CodeSarthi</span>
                                                 <p className=" text-xs sm:text-sm text-gray-500 mt-[-10px]">Empowering Dev Workflows</p>
                                             </div>
                                         </div>
@@ -277,19 +282,6 @@ const NavBar = () => {
 
 
 
-                                    {/* Footer section */}
-                                    <div className=" bottom-0 left-0 right-0 p-3">
-                                        <span className="text-rotate text-3xl text-white ">
-                                            <span className="justify-items-center">
-                                                <span>COLLAB</span>
-                                                <span>CODE</span>
-                                                <span>DEVELOP</span>
-                                                <span>DEPLOY</span>
-                                                <span>SCALE</span>
-                                                <span>CodeSarthi</span>
-                                            </span>
-                                        </span>
-                                    </div>
                                 </div>
                             </div>
                         )
@@ -299,7 +291,7 @@ const NavBar = () => {
                     <div className="logo flex justify-center items-center  border px-3 py-1 rounded-xl border-base-300  bg-white group" >
 
                         <button
-                            className="Nav_svg border border-secondary p-[5px] h-8 w-8 sm:h-9 sm:w-9 rounded cursor-pointer  bg-black transition-colors duration-200 flex justify-center items-center"
+                            className="Nav_svg border border-secondary p-[5px] h-6 w-6 rounded cursor-pointer  bg-black transition-colors duration-200 flex justify-center items-center"
                             onClick={openSidebar}
                             aria-label="Open navigation menu"
 
@@ -308,15 +300,15 @@ const NavBar = () => {
 
 
 
-                                <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" viewBox="0 0 24 24">
                                     <path fill="currentColor" d="M2 6.21c0-1.984 0-2.977.659-3.593S4.379 2 6.5 2s3.182 0 3.841.617C11 3.233 11 4.226 11 6.21v11.58c0 1.984 0 2.977-.659 3.593S8.621 22 6.5 22s-3.182 0-3.841-.617C2 20.767 2 19.774 2 17.79z" opacity={0.5}></path>
                                     <path fill="currentColor" d="M13 15.4c0-2.074 0-3.111.659-3.756S15.379 11 17.5 11s3.182 0 3.841.644C22 12.29 22 13.326 22 15.4v2.2c0 2.074 0 3.111-.659 3.756S19.621 22 17.5 22s-3.182 0-3.841-.644C13 20.71 13 19.674 13 17.6zm0-9.9c0-1.087 0-1.63.171-2.06a2.3 2.3 0 0 1 1.218-1.262C14.802 2 15.327 2 16.375 2h2.25c1.048 0 1.573 0 1.986.178c.551.236.99.69 1.218 1.262c.171.43.171.973.171 2.06s0 1.63-.171 2.06a2.3 2.3 0 0 1-1.218 1.262C20.198 9 19.673 9 18.625 9h-2.25c-1.048 0-1.573 0-1.986-.178a2.3 2.3 0 0 1-1.218-1.262C13 7.13 13 6.587 13 5.5"></path>
                                 </svg>
 
                             </div>
                         </button>
-                        <svg xmlns="http://www.w3.org/2000/svg" width={40} height={40} className="text-info " viewBox="0 0 12 24"><defs><path id="SVG1pzpbdYY" fill="#000" d="m7.588 12.43l-1.061 1.06L.748 7.713a.996.996 0 0 1 0-1.413L6.527.52l1.06 1.06l-5.424 5.425z"></path></defs><use fillRule="evenodd" href="#SVG1pzpbdYY" transform="rotate(-180 5.02 9.505)"></use></svg>
-                        <div className="name font-semibold text-3xl ml-[-8px] text-black relative w-fit after:absolute after:left-0 after:bottom-0 
+                        <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} className="text-info " viewBox="0 0 12 24"><defs><path id="SVG1pzpbdYY" fill="#000" d="m7.588 12.43l-1.061 1.06L.748 7.713a.996.996 0 0 1 0-1.413L6.527.52l1.06 1.06l-5.424 5.425z"></path></defs><use fillRule="evenodd" href="#SVG1pzpbdYY" transform="rotate(-180 5.02 9.505)"></use></svg>
+                        <div className="name font-semibold text-xl ml-[-8px] text-black relative w-fit after:absolute after:left-0 after:bottom-0 
 after:h-[2px] after:w-0 after:bg-black after:transition-all decoration-[3px]
 group-hover:after:w-full">
                             {activePage}
@@ -391,23 +383,75 @@ group-hover:after:w-full">
                 </div>}
 
                 {/* Right side - Profile button */}
-                < div className="NavEnd relative flex justify-end  items-center " >
-                    <div className="md:flex hidden"><Search height={45} displayType={"nav"} /></div>
+                < div className="NavEnd relative flex gap-3 justify-center items-center w-auto " >
+                    <div className="md:flex hidden">
+                        <Search height={35} displayType={"nav"} />
+                    </div>
+                    {(activePage !== "Code Collab" || selectedChatUser2.info === null) && (
+                        <button
+                            onClick={openProfile}
+                            className="h-10 rounded-full overflow-hidden bg-black cursor-pointer transition-all duration-300  relative group"
+                            aria-label="Open profile menu"
+                        >
+                            <div className="h-full w-full rounded-full overflow-hidden  ">
+                                <img
+                                    src={user?.photoUrl?.url}
+                                    alt="Profile"
+                                    className="h-full w-full object-cover transition-all duration-500   "
+                                />
+                            </div>
 
-                    <button
-                        onClick={openProfile}
-                        className="h-14 rounded-full overflow-hidden bg-gradient-to-br from-gray-400 to-gray-100 cursor-pointer transition-all duration-300  relative group"
-                        aria-label="Open profile menu"
-                    >
-                        <div className="h-full w-full rounded-full overflow-hidden  border-info border-[3px]">
-                            <img
-                                src={user?.photoUrl?.url}
-                                alt="Profile"
-                                className="h-full w-full object-cover transition-all duration-500 group-hover:scale-125 group-hover:brightness-110 group-active:scale-100"
-                            />
+                        </button>
+
+                    )}
+
+
+                    {activePage === "Code Collab" && selectedChatUser2.info !== null && (
+
+                        <div className="bg-white/10 h-full flex gap-1 rounded-full p-1">
+                            <button
+                                onClick={() => setSelectedChatUser2({ ...selectedChatUser2, isOpenTab: true })}
+                                className={`h-10 rounded-full overflow-hidden bg-black cursor-pointer transition-all duration-300 border-2  ${selectedChatUser2?.info?.isOnline ? "border-green-500" : "border-red-500"} relative group`}
+                                aria-label="Open profile menu"
+                            >
+                                <div className="h-full w-full rounded-full overflow-hidden  ">
+                                    <img
+                                        src={selectedChatUser2?.info?.photoUrl}
+                                        alt="Profile"
+                                        className="h-full w-full object-cover transition-all duration-500   "
+                                    />
+                                </div>
+
+                            </button>
+
+                            <span className="h-10 flex items-center animate-pulse ">
+                                <svg className="rotate-[270deg]" xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 24 24">
+                                    <path fill="#fff" d="M16.21 16H7.79a1.76 1.76 0 0 1-1.59-1a2.1 2.1 0 0 1 .26-2.21l4.21-5.1a1.76 1.76 0 0 1 2.66 0l4.21 5.1A2.1 2.1 0 0 1 17.8 15a1.76 1.76 0 0 1-1.59 1"></path>
+                                </svg>
+                                <svg className="rotate-[270deg]" xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 24 24">
+                                    <path fill="#fff" d="M16.21 16H7.79a1.76 1.76 0 0 1-1.59-1a2.1 2.1 0 0 1 .26-2.21l4.21-5.1a1.76 1.76 0 0 1 2.66 0l4.21 5.1A2.1 2.1 0 0 1 17.8 15a1.76 1.76 0 0 1-1.59 1"></path>
+                                </svg>
+                                <svg className="rotate-[270deg]" xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 24 24">
+                                    <path fill="#fff" d="M16.21 16H7.79a1.76 1.76 0 0 1-1.59-1a2.1 2.1 0 0 1 .26-2.21l4.21-5.1a1.76 1.76 0 0 1 2.66 0l4.21 5.1A2.1 2.1 0 0 1 17.8 15a1.76 1.76 0 0 1-1.59 1"></path>
+                                </svg>
+                            </span>
+
+                            <button
+                                onClick={openProfile}
+                                className="h-10 rounded-full overflow-hidden bg-black cursor-pointer transition-all duration-300  relative group border-2 border-green-500"
+                                aria-label="Open profile menu"
+                            >
+                                <div className="h-full w-full rounded-full overflow-hidden  ">
+                                    <img
+                                        src={user?.photoUrl?.url}
+                                        alt="Profile"
+                                        className="h-full w-full object-cover transition-all duration-500   "
+                                    />
+                                </div>
+
+                            </button>
                         </div>
-
-                    </button>
+                    )}
 
                     {/* Profile modal */}
                     {

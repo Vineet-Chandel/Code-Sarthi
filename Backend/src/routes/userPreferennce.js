@@ -23,7 +23,7 @@ userPreference.get("/user/connections", userAuth, async (req, res) => {
             })
             .populate(
                 "requesterId receiverId",
-                "firstName lastName username skills about profession college photoUrl isVerified age gender"
+                "firstName lastName username skills about profession college photoUrl isVerified age gender gmail"
             )
 
 
@@ -56,6 +56,7 @@ userPreference.get("/user/connections", userAuth, async (req, res) => {
                     photoUrl: otherUser.photoUrl.url,
                     isVerified: otherUser.isVerified,
                     age: otherUser.age,
+                    gmail: otherUser.gmail,
                     gender: otherUser.gender
                 };
             })

@@ -21,14 +21,14 @@ const SearchChats = ({ loading, setLoading }) => {
 
         <div
             onClick={focusInput}
-            className="group w-full flex items-center gap-3 bg-base-100 border border-base-300 border-[2px] px-1 py-1 rounded-full  hover:border-info  transition-all duration-300 "
+            className="group w-full flex items-center gap-3 bg-base-100 border border-base-300 border px-1 py-1 rounded-full    transition-all duration-300 "
         >
             <SearchDrawer showCreateTab={showCreateTab} setShowCreateTab={setShowCreateTab} />
             {/* LEFT ICON */}
-            <span className=" bg-accent rounded-full p-2">
+            <span className=" bg-accent rounded-full p-1.5">
 
 
-                {loading ? (<svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
+                {loading ? (<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                     <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}>
                         <path strokeDasharray={32} d="M12 21c-4.97 0 -9 -4.03 -9 -9c0 -4.97 4.03 -9 9 -9">
                             <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.6s" values="32;0"></animate>
@@ -68,8 +68,8 @@ const SearchChats = ({ loading, setLoading }) => {
             />
 
             <div>
-                <div className="w-10 h-10 rounded-2xl bg-base-200 hover:bg-base-300  flex items-center justify-center " onClick={() => setShowCreateTab(prev => !prev)}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 24 24"><path fill="#fff" fillRule="evenodd" d="M20.75 7a.75.75 0 0 1-.75.75H4a.75.75 0 0 1 0-1.5h16a.75.75 0 0 1 .75.75m0 5a.75.75 0 0 1-.75.75H4a.75.75 0 0 1 0-1.5h16a.75.75 0 0 1 .75.75m0 5a.75.75 0 0 1-.75.75H4a.75.75 0 0 1 0-1.5h16a.75.75 0 0 1 .75.75" clipRule="evenodd"></path></svg>
+                <div className="w-9 h-9 rounded-2xl bg-base-200 hover:bg-base-300  flex items-center justify-center " onClick={() => setShowCreateTab(prev => !prev)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="#fff" fillRule="evenodd" d="M20.75 7a.75.75 0 0 1-.75.75H4a.75.75 0 0 1 0-1.5h16a.75.75 0 0 1 .75.75m0 5a.75.75 0 0 1-.75.75H4a.75.75 0 0 1 0-1.5h16a.75.75 0 0 1 .75.75m0 5a.75.75 0 0 1-.75.75H4a.75.75 0 0 1 0-1.5h16a.75.75 0 0 1 .75.75" clipRule="evenodd"></path></svg>
                 </div>
 
             </div>

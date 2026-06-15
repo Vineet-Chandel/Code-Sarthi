@@ -13,7 +13,7 @@ const Body = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate(); // ✅ rename
     const [isLoading, setIsLoading] = useState(true);
-
+    const [selectedChatUser2, setSelectedChatUser2] = useState({ idx: null, info: null, isOpenTab: false });
     const fetchUserData = async () => {
         try {
             const response = await axios.get(
@@ -123,13 +123,20 @@ const Body = () => {
         );
     }
 
+
+
     return (
-        <div data-theme="caramellatte" className="bg-base-100">
+        <div data-theme="caramellatte" className="bg-base-200">
             <InternetPopup />
 
-            <NavBar />
+            <NavBar selectedChatUser2={selectedChatUser2} setSelectedChatUser2={setSelectedChatUser2} />
 
-            <Outlet />
+            <Outlet
+                context={{
+                    selectedChatUser2,
+                    setSelectedChatUser2,
+                }}
+            />
         </div>
     );
 };

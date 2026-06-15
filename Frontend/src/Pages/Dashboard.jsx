@@ -209,14 +209,14 @@ md:text-3xl font-bold tracking-wide text-secondary-content">
 
                             {/* Heading */}
                             <div className="flex items-center justify-between">
-                                <h1 className="w-full text-lg sm:text-xl lg:text-2xl font-light text-black">
+                                <h1 className="w-full text-lg sm:text-xl md:text-4xl lg:text-2xl font-light text-black">
                                     Time Contributing
                                 </h1>
                             </div>
 
                             {/* Timer */}
                             <div className="flex flex-1 items-center justify-center py-4">
-                                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-black text-center">
+                                <h1 className="text-md sm:text-lg md:text-1xl lg:text-3xl font-extrabold tracking-tight text-black text-center">
                                     01:24:08
                                 </h1>
                             </div>
@@ -308,7 +308,7 @@ md:text-3xl font-bold tracking-wide text-secondary-content">
 
                                             </div>
 
-                                            <h1 className="text-7xl font-extrabold w-full  h-full flex items-center justi text-black">
+                                            <h1 className="text-4xl font-extrabold w-full  h-full flex items-center justi text-black">
                                                 {item.count}
                                             </h1>
 
