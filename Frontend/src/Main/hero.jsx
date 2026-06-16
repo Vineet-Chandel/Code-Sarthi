@@ -13,7 +13,7 @@ import Devs from "./Devs";
 import Main2 from "./Main2";
 import Lines from "./Lines";
 import SecondLanding from "./SecondLanding";
-import ContentFirst2 from "./ContentFirst2";
+
 
 
 const Hero = () => {
@@ -53,17 +53,18 @@ const Hero = () => {
 
 
 
-            {/* <Mainhero /> */}
-            <ContentFirst2 />
 
-            <SecondLanding />
-            {/* <ContentFirst />
 
-       
+            {/* <SecondLanding /> */}
             <Devs />
-            <ContentSecond />
+            <ContentFirst />
+            {/* {/*  */}
 
-            <ContentThird /> */}
+
+            {/*  */}
+            {/* <ContentSecond /> */}
+
+            {/* <ContentThird /> */}
 
 
         </div>

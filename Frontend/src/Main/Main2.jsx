@@ -86,14 +86,29 @@ const Main2 = () => {
             ref={container} className=' w-full bg-gray-200 p-1.5 [perspective:800px]
 md:[perspective:1200px]
 xl:[perspective:1800px] overflow-hidden'>
+            <div
+                className="
+absolute
+inset-0
+bg-[radial-gradient(circle_at_top_right,rgba(99,102,241,.18),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(168,85,247,.15),transparent_35%)]
+"
+            />
 
+            <div
+                className="
+absolute
+inset-0
+bg-[linear-gradient(rgba(255,255,255,.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.04)_1px,transparent_1px)]
+bg-[size:40px_40px]
+"
+            />
             <div className='w-full h-full  bg-black  
 
 
     bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)]
     bg-[size:40px_40px] rounded-xl flex flex-col items-start justify-center py-5'  >
                 <Nav />
-                <div className='w-full text-center pt-16 sm:pt-20 lg:pt-28 flex flex-col items-center justify-center'>
+                <div className='w-full text-center py-10 sm:py-15  flex flex-col items-center justify-center'>
                     <div className='text-[#f9f9f9] font-poppins font-extrabold min-[450px]:text-2xl  sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl  justify-start'>
                         An Ecosystem that do your works <br />Approvals that keep you safe
                     </div>
