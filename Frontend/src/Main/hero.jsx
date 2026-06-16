@@ -52,9 +52,6 @@ const Hero = () => {
 
             <ContentFirst />
 
-
-
-
             <SecondLanding />
             <Devs />
 

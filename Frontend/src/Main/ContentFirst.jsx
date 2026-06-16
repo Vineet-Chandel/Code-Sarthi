@@ -41,8 +41,10 @@ const ContentFirst = () => {
                     <div className="w-full lg:w-1/2 rounded-3xl bg-white p-4 flex flex-col sm:flex-row lg:flex-col gap-4">
 
                         {/* Stats */}
-                        <div className="w-full sm:w-1/2 lg:w-full flex-[2] rounded-3xl bg-black/10 flex items-center justify-center p-8">
+                        <div className="relative overflow-hidden w-full sm:w-1/2 lg:w-full min-h-[320px] rounded-2xl bg-base-300 flex items-center justify-center">
 
+
+                            <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.15)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.15)_1px,transparent_1px)] bg-[size:36px_36px]" />
                             <div className="text-center lg:text-left">
                                 <h2 className="text-5xl sm:text-6xl lg:text-8xl xl:text-9xl font-bold font-general tracking-wide">
                                     100+
@@ -102,12 +104,11 @@ const ContentFirst = () => {
                     <div className="relative overflow-hidden w-full lg:w-1/2 rounded-3xl bg-black p-4 flex flex-col sm:flex-row lg:flex-col gap-4">
 
                         {/* Background */}
+
                         <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_right,rgba(99,102,241,.18),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(168,85,247,.15),transparent_35%)]" />
 
-                        <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(255,255,255,.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.04)_1px,transparent_1px)] bg-[size:40px_40px]" />
-
                         {/* Illustration */}
-                        <div className="relative z-10 w-full sm:w-1/2 lg:w-full flex-[2] rounded-3xl bg-white/10 flex items-center justify-center p-6">
+                        <div className="relative z-10 w-full sm:w-1/2 lg:w-full flex rounded-3xl bg-white/10 flex items-center justify-center p-6">
 
 
                             <svg className="w-32 h-32 sm:w-40 sm:h-40 lg:w-52 lg:h-52 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"> <path fill="#fff" fillRule="evenodd" d="M280.4 68.995c26.79-29.767 76.077-15.992 83.552 23.35l14.88 78.321h-245.67l14.881-78.32c7.475-39.343 56.762-53.118 83.552-23.351c13.041 14.49 35.764 14.49 48.805 0M129.109 191.999l-8.106 42.667h-35.67v42.666h341.334v-42.666h-35.675l-8.106-42.667zm41.558 234.667L128 405.332l-42.667-21.333v85.333h341.334v-85.333L384 405.332l-42.667 21.334L256 469.332zm213.333-128H128v21.333h.062c1.392 29.69 25.904 53.333 55.938 53.333h8c22.679 0 34.959-14.259 39.955-32.235c3.155-11.352 12.263-21.098 24.045-21.098s20.89 9.746 24.045 21.098c4.996 17.976 17.276 32.235 39.955 32.235h8c30.034 0 54.546-23.643 55.938-53.333H384z" clipRule="evenodd"></path> </svg>
@@ -165,16 +166,22 @@ const ContentFirst = () => {
                 <div className="w-full rounded-3xl bg-white p-4 flex flex-col sm:flex-row gap-4">
 
                     {/* Image */}
-                    <div className="w-full sm:w-1/2 aspect-[4/3] sm:aspect-auto sm:min-h-[320px]  overflow-hidden">
-                        {/* <img
-      src="..."
-      className="w-full h-full object-cover rounded-3xl"
-      alt=""
-    /> */}
+                    <div className="relative overflow-hidden w-full sm:w-1/2 min-h-[320px] rounded-2xl bg-base-300 flex items-center justify-center">
+                        {/* Background */}
+                        <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_right,rgba(99,102,241,.18),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(168,85,247,.15),transparent_35%)]" />
+
+                        <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(255,255,255,.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.04)_1px,transparent_1px)] bg-[size:40px_40px]" />
+
+
+
+                        <svg className=" w-40 sm:w-56 md:w-64 lg:w-72 xl:w-80 h-auto relative z-10
+  " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path fill="#000" d="M255.656 22.75c-131.173 0-237.72 33.326-237.72 74.344c.002 22.39 32.41 42.59 82.564 56.22c-17.407-8.91-27.53-19.216-27.53-30.47c0-32.128 81.75-58.53 182.686-58.53s183.25 26.4 183.25 58.53c0 11.194-10.3 21.59-27.53 30.47c49.843-13.627 81.968-33.91 81.968-56.22c0-41.018-106.514-74.344-237.688-74.344M147.47 103.094v30.094h216.28v-30.094zm4.374 48.78V361.94h18.687V151.875h-18.686zm39.125 0c.698 61.812 25.325 96.435 52.81 103.814c-27.847 7.475-52.776 42.9-52.843 106.25h128.188c-.066-63.353-24.952-98.766-52.78-106.25c27.468-7.386 52.05-41.998 52.75-103.813H190.968zm147.936 0V361.94h18.688V151.875h-18.688zM100.5 360.72c-50.153 13.626-82.563 33.827-82.563 56.217c0 41.018 106.546 74.344 237.72 74.344s237.687-33.325 237.687-74.342c0-22.31-32.125-42.593-81.97-56.22c17.232 8.88 27.532 19.244 27.532 30.438c0 32.13-82.313 58.563-183.25 58.563S72.97 423.283 72.97 391.155c0-11.254 10.123-21.528 27.53-30.437zm46.97 19.905v30.063h216.28v-30.063z"></path>
+                        </svg>
                     </div>
 
                     {/* Content */}
-                    <div className="w-full sm:w-1/2 flex flex-col justify-center rounded-3xl bg-gray-100 px-4">
+                    <div className="w-full sm:w-1/2 flex flex-col justify-center rounded-3xl bg-gray-100 px-4 py-4">
                         <h1 className="text-2xl md:text-3xl font-extrabold font-poppins">
                             Time is Precious
                         </h1>
