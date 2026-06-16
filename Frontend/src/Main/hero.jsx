@@ -45,19 +45,19 @@ const Hero = () => {
     }, [loading]);
 
     return (
-        <div>
+        <div className="bg-gray-200">
             {loading && <Preloader />}
 
             <Main2 />
 
-
-
-
-
-
-            {/* <SecondLanding /> */}
-            <Devs />
             <ContentFirst />
+
+
+
+
+            <SecondLanding />
+            <Devs />
+
             {/* {/*  */}
 
 

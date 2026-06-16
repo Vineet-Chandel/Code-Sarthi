@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-
-
-const ConvoSchema = new mongoose.Schema({
+const ConvoSchema = new Schema({
   //Name of the group if it is the group
   name: {
     type: String,

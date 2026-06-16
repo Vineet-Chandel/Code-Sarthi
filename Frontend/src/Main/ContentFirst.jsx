@@ -6,314 +6,219 @@ const ContentFirst = () => {
 
 
     return (
-        <section className=" w-full bg-gray-200 flex flex-col items-center justify-center  py-10 px-1 sm:px-6">
+        <section className="mt-20 w-full bg-gray-200 flex flex-col items-center justify-center  py-10 px-1 sm:px-6">
 
             <div
 
-                className="max-w-6xl mx-auto flex flex-col items-center text-center mb-4"
+                className="w-[90%] mx-auto flex flex-col items-start text-center mb-4"
             >
 
                 <h2
                     className="
                     font-poppins
-                    font-extrabold
+                    font-semibold
                     text-2xl
                     sm:text-3xl
                     lg:text-5xl
                     leading-tight
                     text-black
+
+                    ml-1
                 "
                 >
-                    A Platform for Endless Possibilities
+                    Scaling Successful Teams
                 </h2>
 
-                <p
-                    className="
-                    mt-1
-                    max-w-3xl
-                    text-gray-600
-                    text-base
-                    sm:text-sm
-                    lg:text-lg
-                    leading-relaxed
-                "
-                >
-                    CodeSarthi connects you with a global developer community
-                    to build and scale. Designed to boost productivity while
-                    keeping workflows fast and efficient.
-                </p>
+
 
             </div>
 
-            <div className="w-full flex flex-col items-center gap-2">
+            <div className="w-[90%] flex flex-col items-center gap-2">
                 {/* Top Cards */}
                 <div className="w-full flex flex-col lg:flex-row gap-2">
 
                     {/* Left Card */}
-                    <div className="w-full lg:w-1/2 h-[700px] sm:h-[345px] lg:h-[700px] bg-white rounded-3xl p-3 flex flex-col sm:flex-row lg:flex-col gap-1 sm:gap-3">
+                    <div className="w-full lg:w-1/2 rounded-3xl bg-white p-4 flex flex-col sm:flex-row lg:flex-col gap-4">
 
-                        <div className="w-full sm:w-1/2 lg:w-full h-[70%]  sm:h-full lg:h-[70%] lg:flex-[7] bg-black/20 rounded-3xl" >
-                            <img className="h-full object-cover rounded-3xl" src="https://res.cloudinary.com/dj0ivep44/image/upload/v1781592039/Untitled_design_4_olwich.webp" alt="" />
+                        {/* Stats */}
+                        <div className="w-full sm:w-1/2 lg:w-full flex-[2] rounded-3xl bg-black/10 flex items-center justify-center p-8">
+
+                            <div className="text-center lg:text-left">
+                                <h2 className="text-5xl sm:text-6xl lg:text-8xl xl:text-9xl font-bold font-general tracking-wide">
+                                    100+
+                                </h2>
+
+                                <p className="mt-2 text-sm sm:text-base text-gray-600 font-poppins">
+                                    Teams Served
+                                </p>
+                            </div>
+
                         </div>
 
+                        {/* Content */}
+                        <div className="w-full sm:w-1/2 lg:w-full flex-1 flex flex-col justify-center">
 
-                        <div className="w-full sm:w-1/2 lg:w-full h-[30%]  sm:h-full lg:h-[30%] lg:flex-[3]" >
-                            <h1 className="text-xl sm:text-2xl font-extrabold font-poppins pb-1 sm:pb-3">Keep Developers Engaged</h1>
-                            <div className="flex lg:flex-row sm:flex-col min-[400px]:flex-row flex-col justify-between">
-                                <div>
-                                    <div className=" flex gap-1.5 min-[400px]:text-sm text-xs pb-1 sm:pb-2 font-poppins items-center text-black/55">
-                                        <span className="">
+                            <h1 className="text-xl sm:text-2xl font-extrabold font-poppins mb-4">
+                                Keep Developers Engaged
+                            </h1>
 
-                                            ●
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
 
-                                        </span>
-                                        <span> Everything in one place.</span>
-                                    </div>
-                                    <div className=" flex gap-1.5 min-[400px]:text-sm text-xs pb-1 sm:pb-2 font-poppins items-center text-black/55">
-                                        <span className="">
-
-                                            ●
-
-                                        </span>
-                                        <span>Chat without boundaries.</span>
-                                    </div>
-                                    <div className=" flex gap-1.5 min-[400px]:text-sm text-xs pb-1 sm:pb-2 font-poppins items-center text-black/55">
-                                        <span className="">
-
-                                            ●
-
-                                        </span>
-                                        <span>Collaborate in real time.</span>
-                                    </div>
-                                    <div className=" flex gap-1.5 min-[400px]:text-sm text-xs pb-1 sm:pb-2 font-poppins items-center text-black/55">
-                                        <span className="">
-
-                                            ●
-
-                                        </span>
-                                        <span>AI that keeps work moving.</span>
-                                    </div>
+                                <div className="flex gap-2">
+                                    <span className="text-black/30 font-bold">●</span>
+                                    <span className="text-sm text-black/60 font-poppins">
+                                        One workspace. Endless possibilities.
+                                    </span>
                                 </div>
 
-
-                                <div>
-                                    <div className=" flex gap-1.5 min-[400px]:text-sm text-xs pb-1 sm:pb-2 font-poppins items-center text-black/55">
-                                        <span className="">
-
-                                            ●
-
-                                        </span>
-                                        <span>Communities built to connect.</span>
-                                    </div>
-                                    <div className=" flex gap-1.5 min-[400px]:text-sm text-xs pb-1 sm:pb-2 font-poppins items-center text-black/55">
-                                        <span className="">
-
-                                            ●
-
-                                        </span>
-                                        <span>Meet, message, and create together.</span>
-                                    </div>
-                                    <div className=" flex gap-1.5 min-[400px]:text-sm text-xs pb-1 sm:pb-2 font-poppins items-center text-black/55">
-                                        <span className="">
-
-                                            ●
-
-                                        </span>
-                                        <span>Instant feedback. Faster decisions.</span>
-                                    </div>
-                                    <div className=" flex gap-1.5 min-[400px]:text-sm text-xs pb-1 sm:pb-2 font-poppins items-center text-black/55">
-                                        <span className="">
-
-                                            ●
-
-                                        </span>
-                                        <span>One workspace. Endless possibilities.</span>
-                                    </div>
+                                <div className="flex gap-2">
+                                    <span className="text-black/30 font-bold">●</span>
+                                    <span className="text-sm text-black/60 font-poppins">
+                                        Communities built to connect.
+                                    </span>
                                 </div>
 
+                                <div className="flex gap-2">
+                                    <span className="text-black/30 font-bold">●</span>
+                                    <span className="text-sm text-black/60 font-poppins">
+                                        Collaborate in real time.
+                                    </span>
+                                </div>
+
+                                <div className="flex gap-2">
+                                    <span className="text-black/30 font-bold">●</span>
+                                    <span className="text-sm text-black/60 font-poppins">
+                                        Meet, message, and create together.
+                                    </span>
+                                </div>
 
                             </div>
+
                         </div>
 
                     </div>
 
                     {/* Right Card */}
-                    <div className="w-full lg:w-1/2 h-[700px] sm:h-[345px] lg:h-[700px] bg-black rounded-3xl p-3 flex flex-col sm:flex-row lg:flex-col gap-1 sm:gap-3">
+                    <div className="relative overflow-hidden w-full lg:w-1/2 rounded-3xl bg-black p-4 flex flex-col sm:flex-row lg:flex-col gap-4">
 
-                        <div className="w-full sm:w-1/2 lg:w-full h-[70%]  sm:h-full lg:h-[70%] lg:flex-[7] bg-white/20 rounded-3xl" >
+                        {/* Background */}
+                        <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_right,rgba(99,102,241,.18),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(168,85,247,.15),transparent_35%)]" />
 
-                            <img className="rounded-3xl object-cover h-full " src="https://res.cloudinary.com/dj0ivep44/image/upload/v1781591010/Untitled_design_3_jisimz.webp" alt="" />
+                        <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(255,255,255,.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.04)_1px,transparent_1px)] bg-[size:40px_40px]" />
+
+                        {/* Illustration */}
+                        <div className="relative z-10 w-full sm:w-1/2 lg:w-full flex-[2] rounded-3xl bg-white/10 flex items-center justify-center p-6">
+
+
+                            <svg className="w-32 h-32 sm:w-40 sm:h-40 lg:w-52 lg:h-52 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"> <path fill="#fff" fillRule="evenodd" d="M280.4 68.995c26.79-29.767 76.077-15.992 83.552 23.35l14.88 78.321h-245.67l14.881-78.32c7.475-39.343 56.762-53.118 83.552-23.351c13.041 14.49 35.764 14.49 48.805 0M129.109 191.999l-8.106 42.667h-35.67v42.666h341.334v-42.666h-35.675l-8.106-42.667zm41.558 234.667L128 405.332l-42.667-21.333v85.333h341.334v-85.333L384 405.332l-42.667 21.334L256 469.332zm213.333-128H128v21.333h.062c1.392 29.69 25.904 53.333 55.938 53.333h8c22.679 0 34.959-14.259 39.955-32.235c3.155-11.352 12.263-21.098 24.045-21.098s20.89 9.746 24.045 21.098c4.996 17.976 17.276 32.235 39.955 32.235h8c30.034 0 54.546-23.643 55.938-53.333H384z" clipRule="evenodd"></path> </svg>
+
                         </div>
 
-                        <div className="w-full sm:w-1/2 lg:w-full h-[30%]  sm:h-full lg:h-[30%] lg:flex-[3]" >
-                            <h1 className="text-xl sm:text-2xl text-white font-extrabold font-poppins pb-1 sm:pb-3">Eliminate PM Dependency</h1>
+                        {/* Content */}
+                        <div className="relative z-10 w-full sm:w-1/2 lg:w-full flex-1">
 
-                            <div className="flex lg:flex-row sm:flex-col min-[400px]:flex-row flex-col justify-between">
-                                <div>
-                                    <div className=" flex gap-1.5 min-[400px]:text-sm text-xs pb-1 sm:pb-2 font-poppins items-center text-white/55">
-                                        <span className="">
+                            <h2 className="text-xl sm:text-2xl font-extrabold text-white font-poppins mb-4">
+                                Eliminate PM Dependency
+                            </h2>
 
-                                            ●
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
 
-                                        </span>
-                                        <span>Self-managed teams. Better outcomes.</span>
-                                    </div>
-                                    <div className=" flex gap-1.5 min-[400px]:text-sm text-xs pb-1 sm:pb-2 font-poppins items-center text-white/55">
-                                        <span className="">
-
-                                            ●
-
-                                        </span>
-                                        <span>Real-time visibility into every project.</span>
-                                    </div>
-                                    <div className=" flex gap-1.5 min-[400px]:text-sm text-xs pb-1 sm:pb-2 font-poppins items-center text-white/55">
-                                        <span className="">
-
-                                            ●
-
-                                        </span>
-                                        <span>Tasks, timelines, and dashboards in one place.</span>
-                                    </div>
-                                    <div className=" flex gap-1.5 min-[400px]:text-sm text-xs pb-1 sm:pb-2 font-poppins items-center text-white/55">
-                                        <span className="">
-
-                                            ●
-
-                                        </span>
-                                        <span>Track progress as it happens.</span>
-                                    </div>
+                                <div className="flex gap-2">
+                                    <span className="text-white/40">●</span>
+                                    <span className="text-sm text-white/70">
+                                        Self-managed teams. Better outcomes.
+                                    </span>
                                 </div>
 
-
-                                <div>
-                                    <div className=" flex gap-1.5 min-[400px]:text-sm text-xs pb-1 sm:pb-2 font-poppins items-center text-white/55">
-                                        <span className="">
-
-                                            ●
-
-                                        </span>
-                                        <span>Identify blockers before they become delays.</span>
-                                    </div>
-                                    <div className=" flex gap-1.5 min-[400px]:text-sm text-xs pb-1 sm:pb-2 font-poppins items-center text-white/55">
-                                        <span className="">
-
-                                            ●
-
-                                        </span>
-                                        <span>Keep every teammate aligned and accountable.</span>
-                                    </div>
-                                    <div className=" flex gap-1.5 min-[400px]:text-sm text-xs pb-1 sm:pb-2 font-poppins items-center text-white/55">
-                                        <span className="">
-
-                                            ●
-
-                                        </span>
-                                        <span>Plan smarter. Execute faster.</span>
-                                    </div>
-                                    <div className=" flex gap-1.5 min-[400px]:text-sm text-xs pb-1 sm:pb-2 font-poppins items-center text-white/55">
-                                        <span className="">
-
-                                            ●
-
-                                        </span>
-                                        <span>Deliver projects with confidence.</span>
-                                    </div>
+                                <div className="flex gap-2">
+                                    <span className="text-white/40">●</span>
+                                    <span className="text-sm text-white/70">
+                                        Tasks, timelines, and dashboards in one place.
+                                    </span>
                                 </div>
 
+                                <div className="flex gap-2">
+                                    <span className="text-white/40">●</span>
+                                    <span className="text-sm text-white/70">
+                                        Real-time visibility and team alignment.
+                                    </span>
+                                </div>
+
+                                <div className="flex gap-2">
+                                    <span className="text-white/40">●</span>
+                                    <span className="text-sm text-white/70">
+                                        Identify blockers before they become delays.
+                                    </span>
+                                </div>
 
                             </div>
 
                         </div>
 
                     </div>
+
+
 
                 </div>
 
                 {/* Bottom Card */}
-                <div className="w-full min-h-[400px] sm:min-h-[345px] bg-white rounded-3xl p-3 flex flex-col sm:flex-row  gap-3">
+                <div className="w-full rounded-3xl bg-white p-4 flex flex-col sm:flex-row gap-4">
 
-                    <div className="w-full sm:w-1/2 min-h-[70%] sm:min-h-full  lg:flex-[3]  rounded-3xl" >
-                        <img className="rounded-3xl h-full object-cover" src="https://res.cloudinary.com/dj0ivep44/image/upload/v1781588006/Untitled_design_2_d6ewiv.webp" alt="" />
+                    {/* Image */}
+                    <div className="w-full sm:w-1/2 aspect-[4/3] sm:aspect-auto sm:min-h-[320px]  overflow-hidden">
+                        {/* <img
+      src="..."
+      className="w-full h-full object-cover rounded-3xl"
+      alt=""
+    /> */}
                     </div>
 
-                    <div className="w-full sm:w-1/2 lg:w-full h-[30%]  sm:h-full lg:h-[30%] lg:flex-[3]" >
-                        <h1 className="text-xl sm:text-2xl text-black font-extrabold font-poppins pb-1 sm:pb-3">Time is Precious</h1>
+                    {/* Content */}
+                    <div className="w-full sm:w-1/2 flex flex-col justify-center rounded-3xl bg-gray-100 px-4">
+                        <h1 className="text-2xl md:text-3xl font-extrabold font-poppins">
+                            Time is Precious
+                        </h1>
 
-                        <div className="flex lg:flex-row sm:flex-col min-[400px]:flex-row flex-col justify-between">
-                            <div>
-                                <div className=" flex gap-1.5 min-[400px]:text-sm text-xs pb-1 sm:pb-2 font-poppins items-center text-black/55">
-                                    <span className="">
 
-                                        ●
 
-                                    </span>
-                                    <span> One workspace for work that matters..</span>
-                                </div>
-                                <div className=" flex gap-1.5 min-[400px]:text-sm text-xs pb-1 sm:pb-2 font-poppins items-center text-black/55">
-                                    <span className="">
-
-                                        ●
-
-                                    </span>
-                                    <span>Real-time visibility into every project.</span>
-                                </div>
-                                <div className=" flex gap-1.5 min-[400px]:text-sm text-xs pb-1 sm:pb-2 font-poppins items-center text-black/55">
-                                    <span className="">
-
-                                        ●
-
-                                    </span>
-                                    <span>Track tasks, time, and progress effortlessly.</span>
-                                </div>
-                                <div className=" flex gap-1.5 min-[400px]:text-sm text-xs pb-1 sm:pb-2 font-poppins items-center text-black/55">
-                                    <span className="">
-
-                                        ●
-
-                                    </span>
-                                    <span>Empower every teammate with clear ownership.</span>
-                                </div>
+                        {/* Features */}
+                        <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-3">
+                            <div className="flex gap-2 text-black/60">
+                                <span>●</span>
+                                <span>Everything in one workspace.</span>
                             </div>
 
-
-                            <div>
-                                <div className=" flex gap-1.5 min-[400px]:text-sm text-xs pb-1 sm:pb-2 font-poppins items-center text-black/55">
-                                    <span className="">
-
-                                        ●
-
-                                    </span>
-                                    <span>Identify blockers before they impact delivery.</span>
-                                </div>
-                                <div className=" flex gap-1.5 min-[400px]:text-sm text-xs pb-1 sm:pb-2 font-poppins items-center text-black/55">
-                                    <span className="">
-
-                                        ●
-
-                                    </span>
-                                    <span>Turn productivity into measurable results.</span>
-                                </div>
-                                <div className=" flex gap-1.5 min-[400px]:text-sm text-xs pb-1 sm:pb-2 font-poppins items-center text-black/55">
-                                    <span className="">
-
-                                        ●
-
-                                    </span>
-                                    <span>Keep teams aligned with shared dashboards.</span>
-                                </div>
-                                <div className=" flex gap-1.5 min-[400px]:text-sm text-xs pb-1 sm:pb-2 font-poppins items-center text-black/55">
-                                    <span className="">
-
-                                        ●
-
-                                    </span>
-                                    <span>Execute with confidence, every single day.</span>
-                                </div>
+                            <div className="flex gap-2 text-black/60">
+                                <span>●</span>
+                                <span>See every task. Track every hour.</span>
                             </div>
 
+                            <div className="flex gap-2 text-black/60">
+                                <span>●</span>
+                                <span>Accountability made effortless.</span>
+                            </div>
 
+                            <div className="flex gap-2 text-black/60">
+                                <span>●</span>
+                                <span>Visibility that keeps projects moving.</span>
+                            </div>
+                            <div className="flex gap-2 text-black/60">
+                                <span>●</span>
+                                <span>Insights that drive better decisions.</span>
+                            </div>
+                            <div className="flex gap-2 text-black/60">
+                                <span>●</span>
+                                <span>Stay aligned from start to finish.</span>
+                            </div>
+                            <div className="flex gap-2 text-black/60">
+                                <span>●</span>
+                                <span>Identify issues before they grow.</span>
+                            </div>
+                            <div className="flex gap-2 text-black/60">
+                                <span>●</span>
+                                <span>Built for teams that move fast.</span>
+                            </div>
                         </div>
-
                     </div>
 
                 </div>

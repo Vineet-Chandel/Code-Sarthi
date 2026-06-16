@@ -272,7 +272,7 @@ const Nav = () => {
                     </div>
 
                     {/* CTA */}
-                    <div className="flex justify-center items-center gap-3 ">
+                    <div className="flex justify-center items-center gap-3 pr-3">
 
                         <MainCTAbutton className="lg:flex hidden" />
                         <div className="lg:hidden bg-white/30 p-1 border border-transparent rounded-lg" onClick={handleClickHamburger}>

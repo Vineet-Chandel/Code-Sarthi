@@ -7,7 +7,7 @@ const chatRouter = express.Router();
 const { userAuth } = require("../middlewares/userAuth");
 const User = require("../models/user");
 const { connection } = require("mongoose");
-
+const mongoose = require("mongoose");
 
 chatRouter.get("/chats", userAuth, async (req, res) => {
     try {
@@ -48,7 +48,6 @@ chatRouter.get("/chats", userAuth, async (req, res) => {
     }
 });
 
-
 //send the message
 chatRouter.post("/send-message", userAuth, async (req, res) => {
 
@@ -65,12 +64,7 @@ chatRouter.post("/send-message", userAuth, async (req, res) => {
         }
         const { convId, messageType, content, forwarded, edited, reactions, replyTo, name, members, type } = req.body
 
-        if (!convId) {
-            return res.status(400).json({
-                success: false,
-                message: "Invalid Attempt"
-            })
-        }
+
         if (!content) {
             return res.status(400).json({
                 success: false,
@@ -82,7 +76,11 @@ chatRouter.post("/send-message", userAuth, async (req, res) => {
         session.startTransaction();
 
 
-        let convoContainer = await conversation.findById(convId).session(session)
+        let convoContainer = null;
+
+        if (convId) {
+            convoContainer = await conversation.findById(convId).session(session)
+        }
 
         if (!convoContainer) {
             if (!members || !type) {
@@ -91,7 +89,7 @@ chatRouter.post("/send-message", userAuth, async (req, res) => {
 
                 return res.status(400).json({
                     success: false,
-                    message: "Invalid Attempt"
+                    message: "Invalid Attempt 1"
                 })
 
             }
@@ -104,9 +102,15 @@ chatRouter.post("/send-message", userAuth, async (req, res) => {
                 type: type,
                 createdBy: userId,
                 name: name,
-                admin: [userId]
-
+                admin: [userId],
+                unreadCounts: uniqueMembers.map(member => ({
+                    user: member,
+                    count: member.toString() === userId.toString() ? 0 : 1
+                }))
             })
+
+            await convoContainer.save({ session });
+
         }
 
         const isMember = convoContainer.members.some(member =>
@@ -119,12 +123,12 @@ chatRouter.post("/send-message", userAuth, async (req, res) => {
 
             return res.status(403).json({
                 success: false,
-                message: "Invalid Attempt"
+                message: "Invalid Attempt 2"
             });
         }
 
 
-        const message = new Msg({
+        const messageStored = new message({
             conversation_id: convoContainer._id,
             sender_id: userId,
             content: content,
@@ -140,11 +144,15 @@ chatRouter.post("/send-message", userAuth, async (req, res) => {
 
 
 
-        await message.save({ session });
+        await messageStored.save({ session });
 
-        convoContainer.lastMessage = message._id;
+        convoContainer.lastMessage = messageStored._id;
         convoContainer.updatedAt = new Date();
-        convoContainer.unreadCounts += 1
+        convoContainer.unreadCounts.forEach(item => {
+            if (item.user.toString() !== userId.toString()) {
+                item.count++;
+            }
+        });
 
         await convoContainer.save({ session });
 
@@ -156,10 +164,10 @@ chatRouter.post("/send-message", userAuth, async (req, res) => {
 
 
 
-        return res.status(500).json({
+        return res.status(200).json({
             success: true,
             message: "Message sent successfully",
-            data: message
+            data: messageStored
         });
 
 
@@ -176,220 +184,13 @@ chatRouter.post("/send-message", userAuth, async (req, res) => {
         return res.status(400).json({
             success: false,
             message: "Message failed to sent",
-            error: err
+            error: err.message
         });
     }
 })
 
 
 
-// // // this API will Send a message to another user
-// chatRouter.post("/send-message", userAuth, async (req, res) => {
-//     try {
-
-//         // THIS WILL GET THE LOGGED IN PERSON's ID
-//         const sender_id = req.user._id;
-
-
-//         const {
-//             //Get receiver (यह वह user है जिसे message भेजना है।)
-//             conversation_id,
-//             content,
-//             type,
-//             forwarded,
-//             edited,
-//             messageType,
-//             reactions
-
-//         } = req.body;
-//         // const file = req.file;
-//         //senderId , receiverId ----> dono hi ka hona essential hai 
-//         if (!sender_id || !conversation_id) {
-//             return res.status(400).json({
-//                 success: false,
-//                 message: "Invalid Attempt",
-//             });
-//         }
-
-//         let convo = await conversation.findById(conversation_id);
-
-
-//         if (convo && !convo.members.includes(sender_id.toString())) {
-//             return res.status(400).json({
-//                 success: false,
-//                 message: "Invalid Attempt"
-//             })
-//         }
-//         // sort karne ka reason taki duplicate convo na bane
-//         // to prevent this -- if the convo is in between [A,B]
-//         // A-B conversation 1
-//         // B-A conversation 2
-//         const members = [sender_id.toString(), convo.members].sort();
-
-
-//         if (!convo && type === 'private') {
-//             convo = new conversation({
-//                 members: [members],
-//                 lastMessage: content,
-//                 lastActivity: "text"
-
-//             });
-//             convo.updatedAt = Date.now();
-//             await convo.save()
-//         } else {
-//             convo.updatedAt = Date.now();
-//             await convo.save()
-//         }
-
-
-
-
-
-
-
-//         //If convo doesn't exist -- Create new chat room
-
-
-
-//         let ImgOrVideoUrl = null;
-//         let contentType = null;
-
-
-//         // if (file) {
-//         //     const UploadVideoImageFile = await uploadToCloud(file);
-//         //     if (!UploadVideoImageFile) {
-//         //         return res.status(400).json({
-//         //             success: false,
-//         //             message: "File failed to upload",
-//         //         });
-//         //     }
-//         //     ImgOrVideoUrl = UploadVideoImageFile?.getDataUrl;
-
-//         //     if (file.mimetype.startsWith('image')) {
-//         //         contentType = "image"
-//         //     } else if (file.mimetype.startsWith('video')) {
-//         //         contentType = "video"
-//         //     } else {
-//         //         return res.status(400).json({
-//         //             success: false,
-//         //             message: "File failed to upload",
-//         //         });
-//         //     }
-//         // } else if (content?.trim()) {
-//         //     contentType = "text"
-//         // } else {
-//         //     return res.status(400).json({
-//         //         success: false,
-//         //         message: "Message content is required",
-//         //     });
-//         // }
-
-//         let isForwarded;
-//         if (forwarded) {
-//             isForwarded = true;
-//         } else {
-//             isForwarded = false;
-//         }
-//         let isEdited;
-//         if (edited) {
-//             isEdited = true;
-//         } else {
-//             isEdited = false;
-//         }
-
-
-//         //Store message in database
-//         const message = new Msg({
-//             conversationId: convo._id,
-//             sender: sender_id,
-//             content: content,
-//             forwarded: isForwarded,
-//             edited: isEdited,
-//             messageType: messageType,
-//             reactions: reactions
-
-//         })
-
-//         await message.save();
-
-//         //show latest message
-//         //update unread counter
-//         convo.lastMessage = message._id;
-//         convo.unreadCounts += 1;
-//         await convo.save();
-
-
-
-//         const populatedMessage = await message.findById(message._id)
-//             .populate("sender", "username photoUrl")
-
-
-
-
-//         res.status(200).json({
-//             success: true,
-//             populatedMessage,
-//         });
-
-
-//     } catch (error) {
-//         console.error(error);
-
-//         res.status(500).json({
-//             success: false,
-//             message: "Server error",
-//         });
-//     }
-// })
-// //Fetch all chats of a user
-// chatRouter.post("/get-convo", userAuth, async (req, res) => {
-//     const userId = req.user._id;
-
-//     try {
-//         let conversations = await Convo.find({
-//             Participants: userId,
-//         })
-//             .populate({
-//                 path: "LastMsg",
-//                 populate: {
-//                     path: "sender receiver",
-//                     select: "username photoUrl firstName lastName gmail college profession gender age isVerified skills college profession about"
-//                 }
-//             })
-//             .sort({ updatedAt: -1 });
-
-//         // Add front user to each conversation
-//         const updatedConversations = conversations.map(convo => {
-//             let atFrontUser = null;
-
-//             if (convo.LastMsg) {
-//                 if (convo.LastMsg.sender?._id.toString() === userId.toString()) {
-//                     atFrontUser = convo.LastMsg.receiver;
-//                 } else {
-//                     atFrontUser = convo.LastMsg.sender;
-//                 }
-//             }
-
-//             return {
-//                 ...convo.toObject(),
-//                 atFrontUser
-//             };
-//         });
-
-//         res.status(200).json({
-//             success: true,
-//             message: "Conversations fetched successfully",
-//             conversation: updatedConversations,
-
-//         });
-
-//     } catch (error) {
-//         res.status(500).json({
-//             success: false,
-//             message: error.message,
-//         });
-//     }
-// });
 // //Load chat messages
 // chatRouter.post("/get-message/:conversationId", userAuth, async (req, res) => {
 //     const { conversationId } = req.params;
@@ -446,6 +247,9 @@ chatRouter.post("/send-message", userAuth, async (req, res) => {
 //         });
 //     }
 // });
+
+
+
 // //mannually marking as read
 // chatRouter.post("/mark-read", userAuth, async (req, res) => {
 //     const { messageIds } = req.body;
