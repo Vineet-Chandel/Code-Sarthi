@@ -8,7 +8,7 @@ import Footer from "./Footer";
 import ContentFirst from "./ContentFirst";
 import ContentSecond from "./ContentSecond";
 import ContentThird from "./ContentThird";
-import Mainhero from "./main-hero";
+
 import Devs from "./Devs";
 import Main2 from "./Main2";
 import Lines from "./Lines";
