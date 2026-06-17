@@ -34,7 +34,7 @@ The app is wrapped in a Redux `Provider` (`appStore`) inside a single `BrowserRo
 2. **Auth routes** — `/login` and `/signup`.
 3. **Protected routes** — nested under `/app` (which renders the `Body` layout), and further wrapped in a pathless `<Route element={<ProtectedRoute />}>` that gates access behind authentication.
 
-**67** `<Route>` declarations in total — **66 unique paths** (one duplicate, see [Known Issues](#known-issues)).
+**66** `<Route>` declarations in total 
 
 ---
 
@@ -180,15 +180,7 @@ The app is wrapped in a Redux `Provider` (`appStore`) inside a single `BrowserRo
 
 ---
 
-<a name="known-issues"></a>
-## Known Issues
-
-- **Duplicate route:** `requestedUser` is registered twice with the identical path and element inside the protected route block. Harmless, but safe to remove.
-- **Shared component:** `PolicyAndSafety` and `PrivacyCenter` both import from the same file (`Blog-Category/PrivacyCenter`), so `/policy-and-safety` and `/privacy-center` currently render identical content. Likely a placeholder pending its own page.
-
----
-
-*Generated from `App.jsx` — 67 routes, 66 unique paths, 10 functional domains.*
+*Generated from `App.jsx` — 66 routes,
 
 
 
