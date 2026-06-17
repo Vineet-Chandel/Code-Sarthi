@@ -446,8 +446,8 @@ const WhyWe = () => {
   }, []);
 
   return (
-    <div className="w-screen">
-      <section className="ww-root" aria-label="Why choose our resume builder">
+    <div className="w-full  bg-gray-200 p-2">
+      <section className="ww-root py-20 rounded-3xl" aria-label="Why choose our resume builder">
         <div className="ww-container">
           {/* ── FEATURES ── */}
           {FEATURES.map((f, i) => {

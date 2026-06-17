@@ -86,6 +86,8 @@ import IntroAdditional from "./Pages/CARRER-PROFILE-CREATION/2/07_ADDITIONAL/Int
 import FeildsAdditionals from "./Pages/CARRER-PROFILE-CREATION/2/07_ADDITIONAL/FeildsAdditionals";
 import InterViewArena from "./Pages/INTERVIEW-ARENA/HERO-PAGE-IA/InterviewArena";
 import Chakra from "./Pages/INTERVIEW-ARENA/CHAKRA/Chakra";
+import MockInterview from "./Main/PagesMain/Sub-Category/Developers-Category/MockInterview";
+import ResumeBuilder from "./Main/PagesMain/Sub-Category/Developers-Category/RESUME-BUILDER/ResumeBuilder";
 
 
 const App = () => {
@@ -112,6 +114,10 @@ const App = () => {
           {/*  <Route path="/feedback" element={<Feedback />} />
            this lines means connect the route "/feedback" to the "Feedback component"
            So when i will type "/feedback" in the URL, it will open the Feedback component.*/}
+
+          <Route path="/mock-interview" element={<MockInterview />} />
+          <Route path="/resume-builder" element={<ResumeBuilder />} />
+
 
 
           <Route path="/feedback" element={<Feedback />} />
@@ -147,9 +153,7 @@ const App = () => {
               <Route path="management" element={<Collab />} />
               <Route path="meeting" element={<Meeting />} />
               <Route path="explore" element={<Explore />} />
-              <Route path="build-resume" element={<Resume />} />
-              <Route path="build-resume/buildresume" element={<BuildResume />} />
-              <Route path="build-resume/resume-templates" element={<Templates />} />
+
               <Route path="shastraAI" element={<Shastra />} />
               <Route path="projects" element={<Projects />} />
               <Route path="manager" element={<ProjectManager />} />
@@ -161,11 +165,15 @@ const App = () => {
               <Route path="how-cv" element={<HowCv />} />
               <Route path="how-cover-letter" element={<HowCoverLetter />} />
               <Route path="credentials-analyser" element={<CredentialsAnalyser />} />
+
+
+              <Route path="build-resume" element={<Resume />} />
+              <Route path="build-resume/buildresume" element={<BuildResume />} />
+              <Route path="build-resume/resume-templates" element={<Templates />} />
               <Route path="build-resume/header-content" element={<HeaderContent />} />
               <Route path="build-resume/project-content" element={<Project />} />
               <Route path="build-resume/intro-additionals-page" element={<IntroAdditional />} />
               <Route path="build-resume/additional-details" element={<FeildsAdditionals />} />
-
               <Route path="build-resume/intro-exp-page" element={<IntroEXP />} />
               <Route path="build-resume/intro-edu-page" element={< IntroEdu />} />
               <Route path="build-resume/intro-preview-page" element={< IntroPreview />} />
@@ -177,6 +185,7 @@ const App = () => {
               <Route path="build-resume/skill-content" element={<Skills />} />
               <Route path="build-resume/experience-content" element={<Experience />} />
               <Route path="build-resume/education-content" element={<Education />} />
+
               <Route path="interview-arena" element={<InterViewArena />} />
               <Route path="interview-arena/chakra" element={<Chakra />} />
 
@@ -184,7 +193,7 @@ const App = () => {
               <Route path="connections" element={<Connections />} />
               <Route path="settings" element={<Settings />} />
               <Route path="requestedUser" element={<RequestedUser />} />
-              <Route path="requestedUser" element={<RequestedUser />} />
+
               <Route path="requestreceived" element={<ReceivedRequests />} />
 
               <Route path="toolkit" element={<Toolkit />} />

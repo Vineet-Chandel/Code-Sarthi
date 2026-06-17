@@ -1,12 +1,13 @@
+
 import React from 'react'
 
 const HowToCreate = () => {
     return (
-        <div className='w-full bg-base-100 font-sans flex justify-center items-center py-10 sm:py-14 lg:py-20'>
+        <div className='w-full p-2 bg-gray-200 font-sans flex justify-center items-center '>
 
-            <div className='w-[95%] bg-base-100 rounded-xl'>
+            <div className='w-full bg-black rounded-[24px] sm:rounded-[32px] lg:rounded-[40px]'>
 
-                <div className='bg-secondary rounded-[24px] sm:rounded-[32px] lg:rounded-[40px] overflow-hidden'>
+                <div className='bg-black rounded-[24px] sm:rounded-[32px] lg:rounded-[40px] overflow-hidden'>
 
                     <div className='flex flex-col lg:flex-row w-full h-full'>
 
@@ -31,7 +32,7 @@ const HowToCreate = () => {
                                     xl:text-6xl 
                                     font-extrabold 
                                     leading-tight 
-                                    text-secondary-content
+                                    text-white
                                     w-full
                                 '
                             >

@@ -98,6 +98,8 @@ const Nav = () => {
                         "Developer Toolkit",
                         "Global Developers Community",
                         "Developers Help Center",
+                        "Resume Builder",
+                        "Mock Interview"
                     ]}
                 />
             ),

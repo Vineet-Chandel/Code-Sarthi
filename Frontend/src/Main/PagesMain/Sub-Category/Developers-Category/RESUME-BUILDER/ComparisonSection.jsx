@@ -1,4 +1,5 @@
 import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
+
 import { useRef, useEffect, useState } from "react";
 
 /* ─────────────────────────────────────────────
@@ -8,6 +9,7 @@ function useCounter(target, duration = 1.8) {
     const [count, setCount] = useState(0);
     const ref = useRef(null);
     const inView = useInView(ref, { once: true, margin: "-80px" });
+
 
     useEffect(() => {
         if (!inView) return;
@@ -38,9 +40,26 @@ function MetricCard({ prefix = "", value, suffix = "", label, delay }) {
             transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
             whileHover={{ y: -4, transition: { duration: 0.2 } }}
             className="relative group overflow-hidden rounded-2xl border border-white/[0.07] p-7"
-            style={{ background: "rgba(255,255,255,0.03)", }}
+            style={{ background: "rgba(0, 0, 0, 1)", }}
         >
             {/* animated gradient border on hover */}
+
+            <div
+                className="
+absolute
+inset-0
+bg-[radial-gradient(circle_at_top_right,rgba(99,102,241,.30),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(168,85,247,.15),transparent_35%)]
+"
+            />
+
+            <div
+                className="
+absolute
+inset-0
+bg-[linear-gradient(rgba(255,255,255,.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.04)_1px,transparent_1px)]
+bg-[size:40px_40px]
+"
+            />
             <div
                 className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                 style={{
@@ -50,11 +69,11 @@ function MetricCard({ prefix = "", value, suffix = "", label, delay }) {
             <div className="relative z-10">
                 <div
                     className="font-black tracking-tight leading-none mb-3 text-7xl"
-
+                    style={{ color: "white" }}
                 >
                     {prefix}{count}{suffix}
                 </div>
-                <p className="text-sm font-medium text-white/50 leading-snug tracking-wide uppercase" style={{ letterSpacing: "0.08em" }}>{label}</p>
+                <p className="text-sm font-medium text-black/70 leading-snug tracking-wide uppercase" style={{ letterSpacing: "0.08em" }}>{label}</p>
             </div>
             {/* bottom glow */}
             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2/3 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent)" }} />
@@ -69,7 +88,7 @@ const features = [
     { name: "Resume Generation", traditional: { type: "check" }, ours: { type: "check" } },
     { name: "ATS Optimization", traditional: { type: "text", text: "Basic keyword matching" }, ours: { type: "text", text: "AI-powered role-specific optimization", accent: true } },
     { name: "Multiple Resume Versions", traditional: { type: "text", text: "Manual editing" }, ours: { type: "text", text: "Auto-generated for every job", accent: true } },
-    { name: "Career Knowledge Graph", traditional: { type: "cross" }, ours: { type: "check", note: "Skills, projects & experience linked" } },
+    { name: "Career Knowledge Graph", traditional: { type: "cross", text: "Not available" }, ours: { type: "check", note: "Skills, projects & experience linked" } },
     { name: "JD Deep Analysis", traditional: { type: "text", text: "Basic keyword scan" }, ours: { type: "text", text: "Contextual understanding of requirements", accent: true } },
     { name: "Skill Gap Detection", traditional: { type: "cross" }, ours: { type: "check", note: "Missing skills identified instantly" } },
     { name: "Proof-Based Writing", traditional: { type: "cross" }, ours: { type: "check", note: "Projects become evidence" } },
@@ -90,39 +109,39 @@ function Cell({ data, highlight = false }) {
 
     if (type === "check")
         return (
-            <div className="flex flex-col items-center gap-1">
-                <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: highlight ? "rgba(52,211,153,0.18)" : "rgba(255,255,255,0.06)" }}>
-                    <svg width="20" height="20" viewBox="0 0 13 13" fill="none">
-                        <path d="M2.5 6.5L5 9L10.5 3.5" stroke={highlight ? "rgba(0, 255, 162, 1)" : "rgba(255,255,255,0.35)"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+            <div className="flex  gap-2 items-center gap-1 text-black">
+                <div className="w-5 h-5 rounded-full flex items-center justify-center text-black bg-green-700" >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="0.6em" height="0.6em" viewBox="0 0 48 48">
+                        <path fill="#fff" fillRule="evenodd" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="m4 24l5-5l10 10L39 9l5 5l-25 25z" clipRule="evenodd"></path>
                     </svg>
                 </div>
-                {note && <span className="text-md text-center leading-snug" style={{ color: highlight ? "rgba(52,211,153,0.75)" : "rgba(255,255,255,0.35)", maxWidth: 140 }}>{note}</span>}
+                {note && <span className="text-md text leading-snug text-black" >{note}</span>}
             </div>
         );
 
     if (type === "star")
         return (
-            <div className="flex flex-col items-center gap-1">
-                <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: "rgba(250,204,21,0.15)" }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l7.1-1.01L12 2z" fill="#facc15" />
+            <div className="flex  items-center gap-1">
+                <div className="w-5 h-5 rounded-full flex items-center justify-center bg-yellow-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="0.7em" height="0.7em" viewBox="0 0 24 24">
+                        <path fill="#fff" d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937l-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39l3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36z"></path>
                     </svg>
                 </div>
-                {note && <span className="text-md text-center leading-snug" style={{ color: "rgba(250,204,21,0.7)", maxWidth: 140 }}>{note}</span>}
+                {note && <span className="text-md  leading-snug text-black" >{note}</span>}
             </div>
         );
 
     if (type === "cross")
         return (
-            <div className="w-9 h-9 rounded-full flex items-center justify-center mx-auto" style={{ background: "rgba(239,68,68,0.08)" }}>
-                <svg width="20" height="20" viewBox="0 0 10 10" fill="none">
-                    <path d="M2 2L8 8M8 2L2 8" stroke="rgba(255, 0, 0, 1)" strokeWidth="1.6" strokeLinecap="round" />
+            <div className="w-5 h-5 rounded-full flex items-center justify-center  text-black bg-red-700" >
+                <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 24 24">
+                    <path fill="none" stroke="#fff" strokeLinecap="round" strokeWidth={1.5} d="m8.464 15.535l7.072-7.07m-7.072 0l7.072 7.07"></path>
                 </svg>
             </div>
         );
 
     return (
-        <span className="text-md text-center leading-snug block" style={{ color: accent ? "rgba(52,211,153,0.8)" : "rgba(255, 255, 255, 0.78)" }}>{text}</span>
+        <span className="text-md leading-snug block text-black" >{text}</span>
     );
 }
 
@@ -151,13 +170,20 @@ function DefenseCard() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="relative mt-16 rounded-3xl overflow-hidden border border-white/[0.08]"
-            style={{ background: "rgba(255,255,255,0.025)" }}
+            className="relative mt-16 rounded-3xl overflow-hidden border border-white/[0.08] bg-black"
+
         >
             {/* Ambient glow behind card */}
-            <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(52,211,153,0.15) 0%, transparent 70%)", }} />
-            <div className="absolute -bottom-16 -left-16 w-56 h-56 rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(129,140,248,0.12) 0%, transparent 70%)", }} />
-
+            <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(33, 246, 168, 0.23) 0%, transparent 70%)", }} />
+            <div className="absolute -bottom-16 -left-16 w-56 h-56 rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(129,140,248,0.23) 0%, transparent 70%)", }} />
+            <div
+                className="
+absolute
+inset-0
+bg-[linear-gradient(rgba(255,255,255,.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.04)_1px,transparent_1px)]
+bg-[size:40px_40px]
+"
+            />
             {/* Animated top gradient border */}
             <div className="absolute top-0 left-0 right-0 h-px" style={{ background: "linear-gradient(90deg, transparent 0%, rgba(52,211,153,0.6) 30%, rgba(129,140,248,0.6) 70%, transparent 100%)" }} />
 
@@ -285,42 +311,37 @@ function DefenseCard() {
    MAIN COMPONENT
 ───────────────────────────────────────────── */
 export default function ComparisonSection() {
+
+    const [clickedIndex, setClickedIndex] = useState(null);
     return (
         <section
-            className="relative overflow-hidden mb-[100px] px-4 font-poppins bg-base-100"
+            className="relative overflow-hidden  px-4 font-poppins bg-gray-200"
 
         >
 
 
-            <div className="relative z-10 w-[90%] mt-10 mx-auto">
+            <div className="relative z-10 w-full  mt-10 mx-auto">
 
                 {/* Section header */}
                 <motion.div
-                    className="text-center mb-16"
+                    className="text-start mb-2 "
                     initial={{ opacity: 0, y: 24 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-80px" }}
                     transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
                 >
-                    <div
-                        className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border mb-6 text-md font-semibold tracking-widest "
-                        style={{ borderColor: "rgba(237, 255, 248, 0.25)", background: "rgba(52,211,153,0.06)", color: "#fff", letterSpacing: "0.12em" }}
-                    >
-                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                        CodeSarthi Resume Builder
-                    </div>
+
                     <h2
-                        className="font-black leading-[1.1] mb-5 mx-auto font-head text-[30px] text-info"
+                        className="text-black leading-[1.1]  mx-auto font-poppins text-[30px] "
 
                     >
-                        Why Builders Stop at Resumes —<br />
-                        <span className="text-white text-5xl md:text-6xl lg:text-7xl" >
-                            We Build Career Readiness
+                        <span className="text-black font-bold text-3xl md:text-4xl lg:text-5xl" >
+                            We Build Career Readiness,
                         </span>
                     </h2>
 
 
-                    <p className="text-lg underline underline-offset-8 text-info mt-4 tracking-wide">Designed for candidates who want offers, not just resumes.</p>
+
                 </motion.div>
 
                 {/* Metric cards */}
@@ -331,78 +352,154 @@ export default function ComparisonSection() {
                 </div>
 
                 {/* Comparison Table */}
-                <motion.div
-                    initial={{ opacity: 0, y: 32 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-60px" }}
-                    transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                    className="rounded-3xl overflow-hidden border border-white/[0.07]"
-                    style={{ background: "rgba(255,255,255,0.02)" }}
-                >
-                    {/* Table header */}
-                    <div className="grid grid-cols-[1fr_1fr_1fr] border-b border-white/[0.07]">
-                        {/* Feature column header */}
-                        <div className="p-5 md:p-6">
-                            <span className="text-md font-semibold uppercase tracking-widest text-white" style={{ letterSpacing: "0.1em" }}>Feature</span>
-                        </div>
+                <div className="p-3 border   border-gray-400 bg-white rounded-3xl" >
+                    <motion.div
+                        initial={{ opacity: 0, y: 32 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-60px" }}
+                        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                        className="rounded-3xl overflow-hidden border border-white/[0.07] max-[900px]:hidden"
+                        style={{ background: "rgba(255,255,255,0.02)" }}
+                    >
+                        {/* Table header */}
+                        <div className="grid grid-cols-[1fr_1fr_1fr] border-b border-white/[0.07]">
+                            {/* Feature column header */}
+                            <div className="p-5 md:p-6 bg-black/5 rounded-t-3xl">
+                                <span className="text-xl font-extrabold uppercase tracking-widest text-black" style={{ letterSpacing: "0.1em" }}>Feature</span>
+                            </div>
 
-                        {/* Traditional column header */}
-                        <div className="p-5 md:p-6 border-l border-white/[0.07] text-center">
-                            <span className="text-md font-semibold text-white">Traditional Builders</span>
-                        </div>
+                            {/* Traditional column header */}
+                            <div className="p-5 text-black md:p-6   text-center">
+                                <span className="text-xl font-extrabold text-black">Traditional Builders</span>
+                            </div>
 
-                        {/* Our platform column header — highlighted */}
-                        <div
-                            className="p-5 md:p-6 border-l bg-secondary text-center relative border-accent"
+                            {/* Our platform column header — highlighted */}
+                            <div
+                                className="p-5 md:p-6   text-center relative "
 
-                        >
-                            <div className="absolute top-0 left-0 right-0 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(52,211,153,0.5), transparent)" }} />
-                            <motion.div
-                                animate={{ opacity: [0.6, 1, 0.6] }}
-                                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                             >
-                                <span
-                                    className="text-md font-bold"
+
+                                <div>
+                                    <span
+                                        className="text-xl font-extrabold"
+
+                                    >
+                                        CodeSarthi Resume Builder
+                                    </span>
+                                </div>
+                                <div className="absolute inset-0 rounded-none pointer-events-none" style={{ boxShadow: "inset 0 0 40px rgba(52,211,153,0.03)" }} />
+                            </div>
+                        </div>
+
+                        {/* Feature rows */}
+                        {features.map((feature, i) => (
+                            <motion.div
+                                key={feature.name}
+                                className="grid grid-cols-[1fr_1fr_1fr] border-b border-white/[0.04] group"
+                                initial={{ opacity: 0 }}
+                                whileInView={{ opacity: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.04, duration: 0.4 }}
+                                whileHover={{ background: "rgba(255,255,255,0.015)" }}
+                            >
+                                {/* Feature name */}
+                                <div className={`p-4 md:p-5 flex items-center bg-black/5 ${i === features.length - 1 ? "rounded-b-3xl" : ""}`}>
+                                    <span className="text-lg text-black font-medium leading-snug">{feature.name}</span>
+                                </div>
+
+                                {/* Traditional */}
+                                <div className="p-4 md:p-5  border-white/[0.04] flex  items-center justify-start text-black">
+                                    <Cell data={feature.traditional} highlight={false} />
+                                </div>
+
+                                {/* Our platform */}
+                                <div
+                                    className="p-4 md:p-5   flex items-center justify-start relative border-accent "
 
                                 >
-                                    CodeSarthi Resume Builder
-                                </span>
+                                    <Cell data={feature.ours} highlight={true} />
+                                </div>
                             </motion.div>
-                            <div className="absolute inset-0 rounded-none pointer-events-none" style={{ boxShadow: "inset 0 0 40px rgba(52,211,153,0.03)" }} />
-                        </div>
-                    </div>
+                        ))}
+                    </motion.div>
 
-                    {/* Feature rows */}
-                    {features.map((feature, i) => (
-                        <motion.div
-                            key={feature.name}
-                            className="grid grid-cols-[1fr_1fr_1fr] border-b border-white/[0.04] group"
-                            initial={{ opacity: 0 }}
-                            whileInView={{ opacity: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: i * 0.04, duration: 0.4 }}
-                            whileHover={{ background: "rgba(255,255,255,0.015)" }}
-                        >
-                            {/* Feature name */}
-                            <div className="p-4 md:p-5 flex items-center">
-                                <span className="text-lg text-info font-medium leading-snug">{feature.name}</span>
-                            </div>
 
-                            {/* Traditional */}
-                            <div className="p-4 md:p-5 border-l border-white/[0.04] flex items-center justify-center">
-                                <Cell data={feature.traditional} highlight={false} />
-                            </div>
 
-                            {/* Our platform */}
-                            <div
-                                className="p-4 md:p-5 border-l flex items-center justify-center relative border-accent bg-secondary"
+                    <motion.div
+                        initial={{ opacity: 0, y: 32 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-60px" }}
+                        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                        className="rounded-3xl overflow-hidden border border-white/[0.07] min-[900px]:hidden flex flex-col gap-1"
+                        style={{ background: "rgba(255,255,255,0.02)" }}
 
-                            >
-                                <Cell data={feature.ours} highlight={true} />
-                            </div>
-                        </motion.div>
-                    ))}
-                </motion.div>
+                    >
+
+                        {features.map((items, idx) => (
+                            <motion.div key={idx}
+
+                                animate={{
+                                    height: clickedIndex === idx ? "auto" : 60
+                                }}
+                                transition={{ duration: 1.3, ease: [0.22, 1, 0.36, 1] }}
+
+                                onClick={() => {
+
+                                    if (clickedIndex === idx) {
+                                        setClickedIndex(null);
+                                        return;
+                                    }
+
+                                    setClickedIndex(idx)
+                                }
+
+                                }
+                                className="overflow-hidden text-black border p-4 bg-base-300 border-gray-300 rounded-3xl flex flex-col justify-between items-start ">
+                                <div className="flex justify-between items-start w-full ">
+                                    <span className="sm:text-lg text-md font-light">
+                                        {items.name}
+                                    </span>
+
+                                    <span>
+
+                                        <svg className={`${clickedIndex === idx ? "rotate-[270deg]" : "rotate-90"}`} xmlns="http://www.w3.org/2000/svg" width="0.6em" viewBox="0 0 12 24">
+                                            <defs>
+                                                <path id="SVG1pzpbdYY" fill="#000" d="m7.588 12.43l-1.061 1.06L.748 7.713a.996.996 0 0 1 0-1.413L6.527.52l1.06 1.06l-5.424 5.425z"></path>
+                                            </defs>
+                                            <use fillRule="evenodd" href="#SVG1pzpbdYY" transform="rotate(-180 5.02 9.505)"></use>
+                                        </svg>
+
+                                    </span>
+
+
+                                </div>
+
+                                <span className={` w-full flex flex-col mt-4 `}>
+
+                                    <div className="p-4 md:p-5  border-white/[0.04] flex flex-col bg-white w-full rounded-t-xl items-start gap-2 justify-start text-black">
+                                        <div className="text-black font-bold">Traditional Builders</div>
+                                        <Cell data={items.traditional} highlight={false} />
+                                    </div>
+
+                                    {/* Our platform */}
+                                    <div
+                                        className="p-4 md:p-5  bg-white w-full rounded-b-xl flex-col flex items-start gap-2 justify-start relative border-accent "
+
+                                    >
+                                        <div className="text-black font-bold">CodeSarthi Resume Builder </div>
+                                        <Cell data={items.ours} highlight={true} />
+                                    </div>
+                                </span>
+
+                            </motion.div>
+                        ))}
+
+
+                    </motion.div>
+
+
+                </div>
+
 
                 {/* Defense Card */}
                 <DefenseCard />
