@@ -4,7 +4,7 @@ import Nav from "@/Main/Nav";
 
 const Landing = () => {
     return (
-        <div className="w-full min-h-screen bg-gray-200 p-1 sm:p-2 md:p-3 lg:p-4 overflow-hidden">
+        <div className="w-full min-h-screen bg-gray-200 p-2 overflow-hidden">
             <link
                 href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap"
                 rel="stylesheet"
