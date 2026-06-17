@@ -111,16 +111,14 @@ sm:text-md
 
 text-white
   justify-start'>
-            Hi, I'm Manu. I've been building web applications for over 8 years. I've worked with startups, small businesses, and large enterprises to build and scale their web applications. People call me a "Full Stack" engineer but I prefer to call myself a problem solver :)
+            Hi, I'm <b>Vineet</b> , a full-stack developer and AI enthusiast passionate about building products that create real impact. I believe great software isn't just about writing code—it's about solving meaningful problems and delivering experiences people genuinely trust.
           </p>
           <p className='text-[#f9f9f9] font-poppins font-extralight text-sm
 sm:text-md
 
 text-white
   justify-start'>
-            I started CodeSarthi to help businesses build their web presence, providing unique web apps that stand out and scale well.
-            Also, I post relevant web development snippets and tips on my twitter and occassionally shitpost
-          </p>
+            CodeSarthi is my vision of an AI-powered ecosystem that brings together real-time collaboration, career acceleration, and intelligent productivity. From messaging, voice/video meetings, and collaborative workspaces to AI-powered resume building, ATS optimization, interview preparation, and Shastra, every feature is designed to help individuals and teams work smarter. Beyond careers, CodeSarthi leverages AI to streamline planning, automate workflows, and reduce dependency on traditional project management—creating a single platform where people can collaborate, grow, and build without limits.     </p>
 
           <div className='w-full flex justify-start'>
             <div className="flex  justify-center  w-fit 

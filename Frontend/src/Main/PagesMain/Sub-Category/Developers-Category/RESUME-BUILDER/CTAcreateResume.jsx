@@ -6,7 +6,7 @@ const CTAcreateResume = () => {
     const Navigate = useNavigate()
 
     return (
-        <div className='flex flex-col sm:flex-row gap-4 sm:gap-5 mt-8 sm:mt-10 w-full'>
+        <div className='flex flex-col sm:flex-row gap-4 sm:gap-5 mt-8 sm:mt-10 w-full relative z-10'>
 
             {/* Create Resume Button */}
 

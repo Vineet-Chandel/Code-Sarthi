@@ -1,10 +1,14 @@
 import { useSelector } from "react-redux";
-import { Navigate, Outlet, useOutletContext } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
 const ProtectedRoute = () => {
-    const context = useOutletContext();
-    const user = useSelector((store) => store.user);
-    return user ? <Outlet context={context} /> : <Navigate to="/login" />;
+    const { user, loading } = useSelector((store) => store.user);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    return user ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 export default ProtectedRoute;

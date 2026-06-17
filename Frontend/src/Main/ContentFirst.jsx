@@ -6,11 +6,11 @@ const ContentFirst = () => {
 
 
     return (
-        <section className="mt-20 w-full bg-gray-200 flex flex-col items-center justify-center  py-10 px-1 sm:px-6">
+        <section className="mt-5 lg:mt-20 w-full bg-gray-200 flex flex-col items-center justify-center  p-1.5 ">
 
             <div
 
-                className="w-[90%] mx-auto flex flex-col items-start text-center mb-4"
+                className="w-[95%] sm:w-[90%] mx-auto flex flex-col items-start text-center m-2 lg:mb-4"
             >
 
                 <h2
@@ -33,7 +33,7 @@ const ContentFirst = () => {
 
             </div>
 
-            <div className="w-[90%] flex flex-col items-center gap-2">
+            <div className="w-full sm:w-[90%] flex flex-col items-center gap-2">
                 {/* Top Cards */}
                 <div className="w-full flex flex-col lg:flex-row gap-2">
 

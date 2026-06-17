@@ -13,10 +13,35 @@ import Devs from "./Devs";
 import Main2 from "./Main2";
 import Lines from "./Lines";
 import SecondLanding from "./SecondLanding";
+import { useNavigate } from "react-router-dom";
+import BASE_URL from "@/Pages/auth/baseURL";
+import axios from "axios";
+import ContentSecond2 from "./ContentSecond2";
 
 
 
 const Hero = () => {
+    const navigate = useNavigate();
+    useEffect(() => {
+        const checkAuth = async () => {
+            try {
+                const res = await axios.get(
+                    `${BASE_URL}/profile/me`,
+                    {
+                        withCredentials: true,
+                    }
+                );
+
+                if (res.data.success) {
+                    navigate("/app", { replace: true });
+                }
+            } catch (err) {
+                // Not logged in
+            }
+        };
+
+        checkAuth();
+    }, []);
     const [loading, setLoading] = useState(true);
 
     // ✅ Run once
@@ -54,6 +79,7 @@ const Hero = () => {
 
             <SecondLanding />
             <Devs />
+            <ContentSecond2 />
 
             {/* {/*  */}
 
