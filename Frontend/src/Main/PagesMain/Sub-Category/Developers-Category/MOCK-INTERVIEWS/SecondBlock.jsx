@@ -38,7 +38,7 @@ function DefenseCard() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="relative mt-16 rounded-3xl overflow-hidden border border-white/[0.08] bg-black flex sm:flex-row flex-col "
+            className="relative  rounded-3xl overflow-hidden border border-white/[0.08] bg-black flex sm:flex-row flex-col "
 
         >
             {/* Ambient glow behind card */}

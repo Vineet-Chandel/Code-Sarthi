@@ -3,7 +3,7 @@ import React from 'react'
 
 const Landing = () => {
     return (
-        <div className="w-full min-h-screen bg-gray-200 p-2 overflow-hidden">
+        <div className="w-full  bg-gray-200 p-2 overflow-hidden">
 
             <div className="relative flex  flex-col rounded-2xl sm:rounded-3xl bg-black overflow-hidden py-4 sm:py-5 lg:py-6 items-center justify-center">
                 <div className='relative z-30'>
