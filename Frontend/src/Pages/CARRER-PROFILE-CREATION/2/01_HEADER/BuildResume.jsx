@@ -4,8 +4,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import ResumeGetHired from "../../1/ResumeGetHired";
-import Block from "../../1/Block";
+import ResumeGetHired from "../ResumeGetHired";
+import Block from "../Block";
 import { motion } from "framer-motion";
 
 const STEPS = [
@@ -171,7 +171,7 @@ export default function HowItWorks() {
             {/* eyebrow */}
 
             <div className="w-full mt-10 pb-10 flex justify-center items-center gap-3">
-                <div className="justify-self-center text-xl rounded-3xl text-white bg-secondary px-[40px] py-[10px] font-extrabold cursor-pointer" onClick={() => Navigate("/app/resume")}>Back</div>
+                <div className="justify-self-center text-xl rounded-3xl text-white bg-secondary px-[40px] py-[10px] font-extrabold cursor-pointer" onClick={() => Navigate(-1)}>Back</div>
                 <div className="justify-self-center text-xl rounded-3xl text-black bg-white px-[40px] py-[10px] font-extrabold flex items-center gap-2 group cursor-pointer" onClick={() => Navigate("/app/build-resume/header-content")}>Continue <svg className="origin-left  group-hover:translate-x-2 transition-transform duration-500" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 15 15">
                     <path fill="#000" d="M8.293 2.293a1 1 0 0 1 1.414 0l4.5 4.5a1 1 0 0 1 0 1.414l-4.5 4.5a1 1 0 0 1-1.414-1.414L11 8.5H1.5a1 1 0 0 1 0-2H11L8.293 3.707a1 1 0 0 1 0-1.414"></path>
                 </svg></div>

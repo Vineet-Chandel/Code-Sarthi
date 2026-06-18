@@ -320,67 +320,6 @@ group-hover:after:w-full">
                 </div >
 
 
-                {activePage === "Interview Arena" && <div className="flex gap-10 justify-center items-center">
-                    <div className="cursor-pointer">
-                        <div
-                            className="font-semibold text-xl text-white relative w-fit
-            after:absolute after:left-0 after:-bottom-1
-            after:h-[2px] after:w-0
-            after:bg-white
-            after:transition-all after:duration-300 after:ease-out
-            hover:after:w-full"
-                            onClick={() => { navigate("/app/build-resume/preview-content"); }}
-                        >
-                            Career Profile
-                        </div>
-                    </div>
-
-                    <div className="cursor-pointer">
-                        <div
-                            className="font-semibold text-xl text-white relative w-fit
-            after:absolute after:left-0 after:-bottom-1
-            after:h-[2px] after:w-0
-            after:bg-white
-            after:transition-all after:duration-300 after:ease-out
-            hover:after:w-full"
-
-                            onClick={() => navigate("/app/interview-arena/documents")}
-                        >
-                            Documents
-                        </div>
-                    </div>
-                </div>}
-
-                {activePage === "Resume" && <div className="flex gap-10 justify-center items-center">
-                    <div className="cursor-pointer">
-                        <div
-                            className="font-semibold text-xl text-white relative w-fit
-            after:absolute after:left-0 after:-bottom-1
-            after:h-[2px] after:w-0
-            after:bg-white
-            after:transition-all after:duration-300 after:ease-out
-            hover:after:w-full"
-                            onClick={() => navigate("/app/interview-arena")}
-                        >
-                            Interview Arena
-                        </div>
-                    </div>
-
-                    <div className="cursor-pointer">
-                        <div
-                            className="font-semibold text-xl text-white relative w-fit
-            after:absolute after:left-0 after:-bottom-1
-            after:h-[2px] after:w-0
-            after:bg-white
-            after:transition-all after:duration-300 after:ease-out
-            hover:after:w-full"
-
-                            onClick={() => navigate("/app/interview-arena/documents")}
-                        >
-                            Documents
-                        </div>
-                    </div>
-                </div>}
 
                 {/* Right side - Profile button */}
                 < div className="NavEnd relative flex gap-3 justify-center items-center w-auto " >

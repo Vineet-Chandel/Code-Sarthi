@@ -20,8 +20,8 @@ const ThirdBlock = () => {
             title: "Analyse Carrer Profile",
             step1: "Takes the Job Role & Job Description",
             step2: "Get AI Analysis & Suggestions for the profile",
-            step2: "Analyse your created profile & add the more structured content and keywords in the resume",
-            step3: "Get Resume & CoverLetter for the dedicated Job Roles",
+            step3: "Analyse your created profile & add the more structured content and keywords in the resume",
+            step4: "Get Resume & CoverLetter for the dedicated Job Roles",
 
         },
 

@@ -41,7 +41,7 @@ import Dashboard from "./Pages/Dashboard";
 import Discussions from "./Pages/Discussions";
 import Meeting from "./Pages/Meeting";
 import Explore from "./Pages/Explore";
-import Resume from "./Pages/CARRER-PROFILE-CREATION/1/Resume";
+
 import Templates from "./Pages/CARRER-PROFILE-CREATION/2/Templates";
 import HeaderContent from "./Pages/CARRER-PROFILE-CREATION/2/01_HEADER/StartHeader"
 import HowResume from "./Pages/CARRER-PROFILE-CREATION/4/HowResume";
@@ -85,7 +85,7 @@ import Preview from "./Pages/CARRER-PROFILE-CREATION/2/08_PREVIEW/Preview";
 import IntroAdditional from "./Pages/CARRER-PROFILE-CREATION/2/07_ADDITIONAL/IntroAdditonals";
 import FeildsAdditionals from "./Pages/CARRER-PROFILE-CREATION/2/07_ADDITIONAL/FeildsAdditionals";
 import InterViewArena from "./Pages/INTERVIEW-ARENA/HERO-PAGE-IA/InterviewArena";
-import Chakra from "./Pages/INTERVIEW-ARENA/CHAKRA/Chakra";
+
 import MockInterview from "./Main/PagesMain/Sub-Category/Developers-Category/MOCK-INTERVIEWS/MockInterview";
 import ResumeBuilder from "./Main/PagesMain/Sub-Category/Developers-Category/RESUME-BUILDER/ResumeBuilder";
 
@@ -167,8 +167,8 @@ const App = () => {
               <Route path="credentials-analyser" element={<CredentialsAnalyser />} />
 
 
-              <Route path="build-resume" element={<Resume />} />
-              <Route path="build-resume/buildresume" element={<BuildResume />} />
+
+              <Route path="build-resume" element={<BuildResume />} />
               <Route path="build-resume/resume-templates" element={<Templates />} />
               <Route path="build-resume/header-content" element={<HeaderContent />} />
               <Route path="build-resume/project-content" element={<Project />} />
@@ -186,8 +186,10 @@ const App = () => {
               <Route path="build-resume/experience-content" element={<Experience />} />
               <Route path="build-resume/education-content" element={<Education />} />
 
+
+
               <Route path="interview-arena" element={<InterViewArena />} />
-              <Route path="interview-arena/chakra" element={<Chakra />} />
+
 
               <Route path="editProfile" element={<EditProfile />} />
               <Route path="connections" element={<Connections />} />
