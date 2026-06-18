@@ -84,7 +84,7 @@ import Project from "./Pages/CARRER-PROFILE-CREATION/2/06_PROJECT/Project";
 import Preview from "./Pages/CARRER-PROFILE-CREATION/2/08_PREVIEW/Preview";
 import IntroAdditional from "./Pages/CARRER-PROFILE-CREATION/2/07_ADDITIONAL/IntroAdditonals";
 import FeildsAdditionals from "./Pages/CARRER-PROFILE-CREATION/2/07_ADDITIONAL/FeildsAdditionals";
-import InterViewArena from "./Pages/INTERVIEW-ARENA/HERO-PAGE-IA/InterviewArena";
+import InterViewArena from "./Pages/INTERVIEW-ARENA/InterviewArena";
 
 import MockInterview from "./Main/PagesMain/Sub-Category/Developers-Category/MOCK-INTERVIEWS/MockInterview";
 import ResumeBuilder from "./Main/PagesMain/Sub-Category/Developers-Category/RESUME-BUILDER/ResumeBuilder";
