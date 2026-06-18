@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const Landing = () => {
     const navigate = useNavigate()
+
     return (
         <div className="bg-black w-full h-screen flex items-center justify-center">
             <div className="w-[80%] flex justify-center items-center">

@@ -6,11 +6,11 @@ const FirstBlock = () => {
 
 
     return (
-        <section className="mt-5 lg:mt-20 w-full bg-gray-200 flex flex-col items-center justify-center  p-1.5 ">
+        <section className="mt-5 lg:mt-20 w-full bg-gray-200 flex flex-col items-center justify-center  p-1.5 bg-gray-200">
 
             <div
 
-                className="w-[95%] sm:w-[90%] mx-auto flex flex-col items-start text-center m-2 lg:mb-4"
+                className="w-[95%] sm:w-[90%] mx-auto flex flex-col items-start text-center m-2 lg:mb-4 bg-gray-200"
             >
 
                 <h2

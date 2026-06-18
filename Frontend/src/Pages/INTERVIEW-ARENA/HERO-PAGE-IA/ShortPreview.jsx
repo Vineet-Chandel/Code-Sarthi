@@ -1,5 +1,5 @@
 import React from 'react'
-import Preview from '../2/08_PREVIEW/Preview'
+import Preview from '../../CARRER-PROFILE-CREATION/2/08_PREVIEW/Preview'
 import { useNavigate } from 'react-router-dom'
 
 const ShortPreview = () => {

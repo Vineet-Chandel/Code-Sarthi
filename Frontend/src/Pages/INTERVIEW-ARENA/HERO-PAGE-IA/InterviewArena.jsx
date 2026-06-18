@@ -1,13 +1,13 @@
-
-import Blocks from './Blocks'
-import InterviewArenaLanding from './InterviewArenaLanding'
 import React from 'react'
+import Landing from './Landing'
+import ShortPreview from './ShortPreview'
 
 const InterViewArena = () => {
     return (
         <>
-            <InterviewArenaLanding />
-            <Blocks />
+
+            <Landing />
+
         </>
 
     )
