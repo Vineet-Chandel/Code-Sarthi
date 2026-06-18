@@ -59,7 +59,7 @@ bg-[size:40px_40px]
                     </div>
                 </div>
 
-                <div className="relative flex justify-center mt-8 sm:mt-12 md:mt-16 lg:mt-20 xl:mt-24 [perspective:1200px] lg:[perspective:1800px]">
+                <div className="relative flex justify-center mt-1 sm:mt-1 md:mt-1 lg:mt-1 xl:mt-2 [perspective:1200px] lg:[perspective:1800px]">
 
                     {/* Glow */}
                     <div

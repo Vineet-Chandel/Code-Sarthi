@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout, Sparkles, Download, } from 'lucide-react'; // Optional: icon library
 import { useNavigate } from 'react-router-dom';
-import CTAcreateResume from './CTAcreateResume';
+
 
 const Block = () => {
     const Navigate = useNavigate();

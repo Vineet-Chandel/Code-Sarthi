@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { addConnectionUser } from "../utils/connectionSlice";
 import BASE_URL from "../Pages/auth/baseURL";
-import { FaUniversity } from "react-icons/fa";
-import { BsPersonWorkspace } from "react-icons/bs";
+
+
 import { useNavigate } from "react-router-dom";
-import { IoBarChart } from "react-icons/io5";
+
 import Preview from "./CARRER-PROFILE-CREATION/2/08_PREVIEW/Preview";
+import ShortPreview from "./CARRER-PROFILE-CREATION/1/ShortPreview";
 
 const Dashboard = () => {
 
@@ -534,46 +535,7 @@ md:text-3xl font-bold tracking-wide text-secondary-content">
 
 
                         {/* Projects Section */}
-                        <div className={`
-    relative
-    overflow-y-scroll
-    cursor-pointer
-    group
-    transition-all
-    duration-500
-    ease-in-out
-max-h-[400px]
-
-    bg-base-100
-    border
-    border-base-300
-    rounded-3xl
-    p-3
-    shadow-xl
-  `}>
-
-                            <div className="flex justify-between items-center mb-5">
-                                <h2 className="text-2xl font-bold text-secondary-content">Career Profile</h2>
-                                <span onClick={() => navigate('/app/build-resume/preview-content')} className="cursor-pointer">
-
-
-                                    {!openCarrerProfile && <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 48 48">
-                                        <path fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="m6 6l10 9.9m-10 26L16 32m26 9.9L32.1 32m9.8-26L32 15.9M33 6h9v9m0 18v9h-9m-18 0H6v-9m0-18V6h9"></path>
-                                    </svg>}
-
-                                    {openCarrerProfile &&
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
-                                            <path fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="m20 20l-5-5m0 0v4m0-4h4M4 20l5-5m0 0v4m0-4H5M20 4l-5 5m0 0V5m0 4h4M4 4l5 5m0 0V5m0 4H5"></path>
-                                        </svg>
-                                    }
-
-                                </span>
-
-                            </div>
-
-
-                            <Preview />
-                        </div>
+                        <ShortPreview />
 
 
 

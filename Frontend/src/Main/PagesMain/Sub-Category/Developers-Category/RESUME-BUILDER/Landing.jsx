@@ -5,10 +5,6 @@ import Nav from "@/Main/Nav";
 const Landing = () => {
     return (
         <div className="w-full min-h-screen bg-gray-200 p-2 overflow-hidden">
-            <link
-                href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap"
-                rel="stylesheet"
-            />
 
             <div className="relative flex min-h-[98vh] flex-col rounded-2xl sm:rounded-3xl bg-black overflow-hidden py-4 sm:py-5 lg:py-6">
                 <Nav />

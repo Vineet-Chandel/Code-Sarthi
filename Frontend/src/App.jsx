@@ -86,7 +86,7 @@ import IntroAdditional from "./Pages/CARRER-PROFILE-CREATION/2/07_ADDITIONAL/Int
 import FeildsAdditionals from "./Pages/CARRER-PROFILE-CREATION/2/07_ADDITIONAL/FeildsAdditionals";
 import InterViewArena from "./Pages/INTERVIEW-ARENA/HERO-PAGE-IA/InterviewArena";
 import Chakra from "./Pages/INTERVIEW-ARENA/CHAKRA/Chakra";
-import MockInterview from "./Main/PagesMain/Sub-Category/Developers-Category/MockInterview";
+import MockInterview from "./Main/PagesMain/Sub-Category/Developers-Category/MOCK-INTERVIEWS/MockInterview";
 import ResumeBuilder from "./Main/PagesMain/Sub-Category/Developers-Category/RESUME-BUILDER/ResumeBuilder";
 
 

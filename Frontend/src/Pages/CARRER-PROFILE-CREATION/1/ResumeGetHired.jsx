@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout, Download } from 'lucide-react'; // Optional: icon library
 import { useNavigate } from 'react-router-dom';
-import CTAcreateResume from './CTAcreateResume';
+
 
 const ResumeGetHired = () => {
     const Navigate = useNavigate();
@@ -33,8 +33,8 @@ const ResumeGetHired = () => {
         {
             icon: (
                 <svg xmlns="http://www.w3.org/2000/svg" width="2.2em" height="2.2em" viewBox="0 0 24 24"> <path fill="#fff" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path> </svg>),
-            title: "Resume Defense AI™",
-            step1: "Practice questions based on YOUR resume",
+            title: "Mock Interviews",
+            step1: "Practice questions & interviews based on your resume",
             step2: "Defend every project, metric & achievement",
             step3: "Prepare for real interviews before applying"
         },
@@ -79,37 +79,19 @@ const ResumeGetHired = () => {
 
                             <ul className='space-y-1 text-info flex-grow'>
                                 <li className="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
-                                        <g fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}>
-                                            <circle cx={18.5} cy={4.5} r={2}></circle>
-                                            <circle cx={4.5} cy={18.5} r={2}></circle>
-                                            <path d="M4.5 16.5c0-6.627 5.373-12 12-12m-3.459 14.805l-1.792-5.15c-.674-1.936-1.011-2.905-.505-3.411c.507-.506 1.476-.17 3.414.504l5.143 1.788c1.075.373 1.613.56 1.729.922a.8.8 0 0 1 .032.31c-.039.377-.526.671-1.5 1.26c-.27.163-.483.29-.643.407c-.125.09-.187.135-.206.365s.07.32.248.497l2.127 2.127a1.406 1.406 0 0 1 0 1.988l-.166.166a1.44 1.44 0 0 1-2.039 0l-2.1-2.1c-.179-.18-.268-.27-.5-.25c-.23.02-.276.084-.368.212c-.112.157-.236.362-.393.623c-.58.963-.87 1.445-1.244 1.487a.8.8 0 0 1-.326-.034c-.356-.118-.54-.649-.91-1.711"></path>
-                                        </g>
-                                    </svg>
+                                    <span>⟢</span>
 
                                     {e.step1}
                                 </li>
 
                                 <li className="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
-                                        <g fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}>
-                                            <circle cx={18.5} cy={4.5} r={2}></circle>
-                                            <circle cx={4.5} cy={18.5} r={2}></circle>
-                                            <path d="M4.5 16.5c0-6.627 5.373-12 12-12m-3.459 14.805l-1.792-5.15c-.674-1.936-1.011-2.905-.505-3.411c.507-.506 1.476-.17 3.414.504l5.143 1.788c1.075.373 1.613.56 1.729.922a.8.8 0 0 1 .032.31c-.039.377-.526.671-1.5 1.26c-.27.163-.483.29-.643.407c-.125.09-.187.135-.206.365s.07.32.248.497l2.127 2.127a1.406 1.406 0 0 1 0 1.988l-.166.166a1.44 1.44 0 0 1-2.039 0l-2.1-2.1c-.179-.18-.268-.27-.5-.25c-.23.02-.276.084-.368.212c-.112.157-.236.362-.393.623c-.58.963-.87 1.445-1.244 1.487a.8.8 0 0 1-.326-.034c-.356-.118-.54-.649-.91-1.711"></path>
-                                        </g>
-                                    </svg>
+                                    <span>⟢</span>
 
                                     {e.step2}
                                 </li>
 
                                 <li className="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
-                                        <g fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}>
-                                            <circle cx={18.5} cy={4.5} r={2}></circle>
-                                            <circle cx={4.5} cy={18.5} r={2}></circle>
-                                            <path d="M4.5 16.5c0-6.627 5.373-12 12-12m-3.459 14.805l-1.792-5.15c-.674-1.936-1.011-2.905-.505-3.411c.507-.506 1.476-.17 3.414.504l5.143 1.788c1.075.373 1.613.56 1.729.922a.8.8 0 0 1 .032.31c-.039.377-.526.671-1.5 1.26c-.27.163-.483.29-.643.407c-.125.09-.187.135-.206.365s.07.32.248.497l2.127 2.127a1.406 1.406 0 0 1 0 1.988l-.166.166a1.44 1.44 0 0 1-2.039 0l-2.1-2.1c-.179-.18-.268-.27-.5-.25c-.23.02-.276.084-.368.212c-.112.157-.236.362-.393.623c-.58.963-.87 1.445-1.244 1.487a.8.8 0 0 1-.326-.034c-.356-.118-.54-.649-.91-1.711"></path>
-                                        </g>
-                                    </svg>
+                                    <span>⟢</span>
 
                                     {e.step3}
                                 </li>

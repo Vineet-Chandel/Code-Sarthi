@@ -145,24 +145,24 @@ export default function HowItWorks() {
                         fill-rule="evenodd" clip-rule="evenodd" d="M7.02169 15.4893C7.62567 15.8135 8.33696 16.1692 9.15557 16.5785L10.2113 17.1063C11.0891 17.5452 11.528 17.7647 12.0001 17.7647C12.4723 17.7647 12.9112 17.5452 13.789 17.1063L14.8447 16.5785C15.6633 16.1692 16.3746 15.8135 16.9786 15.4893L18.2113 16.1056C18.9918 16.4959 19.3821 16.691 19.3821 17C19.3821 17.3091 18.9918 17.5042 18.2113 17.8945L12.8946 20.5528C12.4557 20.7723 12.2362 20.882 12.0001 20.882C11.7641 20.882 11.5446 20.7723 11.1057 20.5528L11.1057 20.5528L5.78898 17.8945C5.00844 17.5042 4.61816 17.3091 4.61816 17C4.61816 16.691 5.00844 16.4959 5.78898 16.1056L7.02169 15.4893Z" fill="#fff" />
                 </motion.svg>
             </div>}
-            <div className="flex items-center justify-center gap-3 mt-10 ">
+            <div className="flex items-center justify-center gap-3 pt-10 ">
                 <span
                     className="
-    text-[42px]
+    text-2xl
     leading-tight
-    sm:text-[52px]
-    md:text-[64px]
-    lg:text-[78px]
-    xl:text-[92px]
-    2xl:text-[100px]
+    sm:text-3xl
+    md:text-4xl
+    lg:text-5xl
+    xl:text-6xl
+    2xl:text-7xl
     font-extrabold
     text-info
     tracking-tight
   "
                 >
-                    Here's how we get{" "}
+                    Your Resume Starts With <br />
                     <span className="text-white">
-                        You Hired
+                        Career Profile Generation
                     </span>
                 </span>
 

@@ -79,6 +79,58 @@ const faqs3 = [
             "Yes. Access CodeSarthi from any modern browser and continue working, collaborating, or preparing for your career anytime, anywhere."
     }
 ];
+
+
+const cards = [
+    {
+        unit: "UNIT-01",
+        title: "ASTRA",
+        role: "Verification Guardian",
+        quote: "Trust is verified in silence",
+        img: "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778989004/CS_Verification_Manager_uohza5.webp",
+        color: "#00e5ff",        // ice-cyan
+        glow: "rgba(0,229,255,0.22)",
+        dimGlow: "rgba(0,229,255,0.07)",
+        status: "ACTIVE",
+        tag: "VERIFICATION",
+    },
+    {
+        unit: "UNIT-02",
+        title: "NOVA",
+        role: "Identity Guardian",
+        quote: "Your digital identity, reconstructed",
+        img: "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778989004/CS_Identity_Manager_amyjyi.webp",
+        color: "#ffb830",        // amber-gold
+        glow: "rgba(255,184,48,0.22)",
+        dimGlow: "rgba(255,184,48,0.07)",
+        status: "ACTIVE",
+        tag: "IDENTITY",
+    },
+    {
+        unit: "UNIT-03",
+        title: "ORION",
+        role: "Community & AI Guardian",
+        quote: "Every developer is a signal",
+        img: "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778989003/CS_Community_AI_Manager_z664dg.webp",
+        color: "#bf7fff",        // violet
+        glow: "rgba(191,127,255,0.22)",
+        dimGlow: "rgba(191,127,255,0.07)",
+        status: "ACTIVE",
+        tag: "COMMUNITY",
+    },
+    {
+        unit: "UNIT-04",
+        title: "ZENITH",
+        role: "Help & Support Guardian",
+        quote: "No noise. Only solutions",
+        img: "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778989005/CS_Help_Support_onbjoi.webp",
+        color: "#00ff87",        // brand-green
+        glow: "rgba(0,255,135,0.22)",
+        dimGlow: "rgba(0,255,135,0.07)",
+        status: "ACTIVE",
+        tag: "SUPPORT",
+    },
+];
 const ContentSecond2 = () => {
     return (
         <div className='w-full flex flex-col items-center  bg-black' >
@@ -164,6 +216,20 @@ mt-10
 
 
             </div>
+
+            <div className=' w-[90%] xl:w-[70%] ml-5 mb-10'>
+
+                <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
+                    {cards.map((items, index) => (<>
+
+                        <div className='h-[400px] w-full bg-white/10 border border-white/20 rounded-3xl'>
+                        </div>
+                    </>))}
+
+                </div>
+
+            </div>
+
 
 
 
