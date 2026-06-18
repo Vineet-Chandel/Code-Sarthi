@@ -85,21 +85,21 @@ const Nav = () => {
         },
 
         {
-            id: "developers",
-            label: "Developers",
-            path: "/developers",
+            id: "features",
+            label: "Features",
+            path: "/features",
             hasDropdown: true,
             isSmall: true,
             dropdown: (
                 <Dropdown
                     title="Featured"
                     items={[
-
+                        "Resume Builder",
+                        "Mock Interview",
                         "Developer Toolkit",
                         "Global Developers Community",
                         "Developers Help Center",
-                        "Resume Builder",
-                        "Mock Interview"
+
                     ]}
                 />
             ),
