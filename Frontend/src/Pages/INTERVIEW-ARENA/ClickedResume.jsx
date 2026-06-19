@@ -1,9 +1,33 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Landing from './Landing'
-
+import Toast from '../CARRER-PROFILE-CREATION/2/Toast';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const ClickedResume = ({ clicked, setClicked }) => {
-
+    const [toasts, setToasts] = useState([]);
+    const ToastContainer = ({ toasts, removeToast }) => {
+        return (
+            <div className="fixed bottom-5 right-5 flex flex-col gap-3 z-50">
+                <AnimatePresence>
+                    {toasts.map((t) => (
+                        <Toast
+                            key={t.id}
+                            {...t}
+                            onClose={() => removeToast(t.id)}
+                        />
+                    ))}
+                </AnimatePresence>
+            </div>
+        );
+    };
+    const addToast = ({ type = "success", title, message }) => {
+        const id = Date.now();
+        setToasts((prev) => [...prev, { id, type, title, message }]);
+    };
+    const removeToast = (id) => {
+        setToasts((prev) => prev.filter((t) => t.id !== id));
+    };
     const [jd, setJD] = useState({
         ResumeType: "",
         BroadRole: "",
@@ -11,7 +35,6 @@ const ClickedResume = ({ clicked, setClicked }) => {
         SpecificRole: "",
         JobDescription: ""
     });
-
     const BroadRole = [
         {
             category: "software_engineering_resume",
@@ -105,11 +128,23 @@ const ClickedResume = ({ clicked, setClicked }) => {
             ]
         }
     ];
+    const navigate = useNavigate();
+
+    // first page of the modal to select broad role
     const [broadRoleOpen, setBroadRoleopen] = useState(true);
+
+    //second page of the modal to enter the form of JD Job role company 
     const [specificRoleOpen, setSpecificRoleOpen] = useState(false);
+
+
+
+
+
+
     return (
         <>
-            <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center">
+            <ToastContainer toasts={toasts} removeToast={removeToast} />
+            <div className="fixed inset-0 bg-black/60 z-[40] flex items-center justify-center">
                 <div
                     className="
     relative
@@ -172,7 +207,7 @@ transition
     md:text-2xl
   "
                                     >
-                                        Resume Category : <span className='text-[#7268f1] font-bold text-lg sm:text-xl md:text-2xl'>{item.label}</span>
+                                        Resume Category : <span className='text-[#000] font-bold text-lg sm:text-xl md:text-2xl'>{item.label}</span>
                                     </h1>
 
                                     <div className="
@@ -207,8 +242,8 @@ transition-all
 border
 
 ${jd.BroadRole === subRole
-                                                        ? "bg-[#A7A0F8] text-white border-[#A7A0F8]"
-                                                        : "bg-black text-white border-black hover:bg-[#A7A0F8]"
+                                                        ? "bg-[#fff] text-white border-[#fff]"
+                                                        : "bg-black text-white border-black hover:bg-[#fff] hover:text-black"
                                                     }
 `}
                                             >
@@ -280,9 +315,9 @@ transition
           px-4
           py-3
           outline-none
-          focus:border-[#A7A0F8]
+          focus:border-black/20
           focus:ring-2
-          focus:ring-[#A7A0F8]/20
+          focus:ring-[#fff]/20
           text-black
         "
                                         />
@@ -314,10 +349,10 @@ transition
           py-3
           resize-none
           outline-none
-          focus:border-[#A7A0F8]
+          focus:border-black/20
           focus:ring-2
           text-black
-          focus:ring-[#A7A0F8]/20
+          focus:ring-[#fff]/20
         "
                                         />
                                     </div>
@@ -338,20 +373,20 @@ transition
                                                 }))
                                             }
                                             placeholder="Google"
-                                            className="w-full text-black rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-[#A7A0F8]"
+                                            className="w-full text-black rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-black/20"
                                         />
                                     </div>
 
                                     {/* Selected Details */}
 
-                                    <div className="rounded-xl bg-[#A7A0F8]/10 p-4 border border-[#A7A0F8]/20">
+                                    <div className="rounded-xl bg-black/10 p-4 border border-[#fff]/20">
                                         <div className="flex flex-col gap-2">
 
                                             <div>
                                                 <span className="font-semibold text-black">
                                                     Resume Category:
                                                 </span>{" "}
-                                                <span className='text-[#7268f1]'>
+                                                <span className='text-[#000]'>
                                                     {jd.ResumeType}
                                                 </span>
 
@@ -361,7 +396,7 @@ transition
                                                 <span className="font-semibold text-black">
                                                     Selected Role:
                                                 </span>{" "}
-                                                <span className='text-[#7268f1]'>
+                                                <span className='text-[#000]'>
                                                     {jd.BroadRole}
                                                 </span>
 
@@ -397,11 +432,37 @@ transition
           px-6
           py-3
           rounded-xl
-          bg-[#A7A0F8]
+          bg-[#000]
           text-white
           font-semibold
           disabled:opacity-50
         "
+                                            onClick={() => {
+                                                if (jd.SpecificRole.length == 0 || jd.JobDescription.length === 0 || jd.Company.length === 0) {
+                                                    addToast({
+                                                        type: "error",
+                                                        title: "Error",
+                                                        message: "Please Fill All The Details"
+                                                    });
+                                                    return;
+                                                }
+
+                                                setBroadRoleopen(false);
+
+                                                setSpecificRoleOpen(false);
+
+                                                navigate("/app/scheduler",
+                                                    {
+                                                        state: {
+                                                            resume: jd.ResumeType,
+                                                            broadRole: jd.BroadRole,
+                                                            company: jd.Company,
+                                                            specificRole: jd.SpecificRole,
+                                                            jobDescription: jd.JobDescription
+                                                        }
+                                                    }
+                                                );
+                                            }}
                                         >
                                             Generate Resume
                                         </button>
@@ -411,11 +472,16 @@ transition
 
                         </div>}
 
+
                     </div>
                 </div>
             </div>
         </>
     )
+
+
+
+
 }
 
 

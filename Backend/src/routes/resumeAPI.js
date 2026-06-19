@@ -365,4 +365,6 @@ resRouter.post("/build-resume/summary-body", userAuth, async (req, res) => {
         return handleRouteError(err, res);
     }
 })
+
+
 module.exports = resRouter;
