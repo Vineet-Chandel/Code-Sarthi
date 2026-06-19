@@ -3,6 +3,13 @@ import Landing from './Landing'
 import Toast from '../CARRER-PROFILE-CREATION/2/Toast';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import ResumeAiWorking from './ResumeAiWorking';
+
+
+
+
+
+
 
 const ClickedResume = ({ clicked, setClicked }) => {
     const [toasts, setToasts] = useState([]);
@@ -137,7 +144,7 @@ const ClickedResume = ({ clicked, setClicked }) => {
     const [specificRoleOpen, setSpecificRoleOpen] = useState(false);
 
 
-
+    const [resumeWorkingOn, setResumeWorkingOn] = useState(false)
 
 
 
@@ -450,18 +457,21 @@ transition
                                                 setBroadRoleopen(false);
 
                                                 setSpecificRoleOpen(false);
+                                                setResumeWorkingOn(true)
+                                                // navigate("/app/scheduler",
+                                                //     {
+                                                //         state: {
+                                                //             resume: jd.ResumeType,
+                                                //             broadRole: jd.BroadRole,
+                                                //             company: jd.Company,
+                                                //             specificRole: jd.SpecificRole,
+                                                //             jobDescription: jd.JobDescription
+                                                //         }
+                                                //     }
+                                                // );
 
-                                                navigate("/app/scheduler",
-                                                    {
-                                                        state: {
-                                                            resume: jd.ResumeType,
-                                                            broadRole: jd.BroadRole,
-                                                            company: jd.Company,
-                                                            specificRole: jd.SpecificRole,
-                                                            jobDescription: jd.JobDescription
-                                                        }
-                                                    }
-                                                );
+
+
                                             }}
                                         >
                                             Generate Resume
@@ -472,6 +482,8 @@ transition
 
                         </div>}
 
+
+                        {resumeWorkingOn && (<ResumeAiWorking />)}
 
                     </div>
                 </div>
