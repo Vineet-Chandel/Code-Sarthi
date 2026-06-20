@@ -602,7 +602,13 @@ transition
                         </div>}
 
 
-                        {resumeWorkingOn && (<ResumeAiWorking />)}
+                        {resumeWorkingOn && (<ResumeAiWorking addToast={addToast} SpecificRole={jd.SpecificRole}
+                            BroadRole={jd.BroadRole}
+                            Company={jd.Company}
+                            JobDescription={jd.JobDescription}
+                            ResumeType={jd.ResumeType}
+
+                        />)}
 
                     </div>
                 </div>
