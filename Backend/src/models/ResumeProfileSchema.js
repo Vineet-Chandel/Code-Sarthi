@@ -146,6 +146,6 @@ const ResumeProfileSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model(
-    "ResumeProfile",
-    ResumeProfileSchema
+    "resumeprofiles",
+    ResumeProfileSchema, "resumeprofiles"
 );
