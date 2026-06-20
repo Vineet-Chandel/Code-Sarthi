@@ -306,7 +306,212 @@ Follow this EXACT shape:
 });
 
 
+aiWorkRouter.post("/resume/strategy", userAuth, async (req, res) => {
+    try {
+        const { SpecificRole, ResumeType, BroadRole, JobDescription, Company, auditResult } = req.body;
 
+        const user = req.user;
+        if (!user) {
+            return res.status(401).json({ success: false, message: "Please re-login" });
+        }
+
+        // ✅ removed redundant User.findOne — userAuth already verified
+
+        const Profile = await resume.findOne({ userId: user._id });
+        if (!Profile) {
+            return res.status(404).json({ success: false, message: "Career profile not found" });
+        }
+
+        // ✅ only ResumeType is hard-required — rest are optional for standalone audit
+        if (!ResumeType) {
+            return res.status(400).json({ success: false, message: "ResumeType is required" });
+        }
+
+        // ✅ strip Mongoose internals before sending to AI
+        const profileClean = Profile.toObject();
+        delete profileClean.__v;
+        delete profileClean._id;
+        delete profileClean.userId;
+        delete profileClean.createdAt;
+        delete profileClean.updatedAt;
+        delete profileClean.isProfileCompleted;
+        const prompt = `
+You are a senior resume strategist and technical hiring consultant with deep expertise in ${ResumeType} hiring pipelines.
+
+Your job is NOT to rewrite anything yet. You are building a precise targeting strategy that will guide the rewrite of every section of this candidate's resume for a specific role.
+
+Every instruction you produce will be consumed by specialized AI rewriters for summary, experience, projects, and skills. Be surgical, specific, and grounded in the actual profile data — no generic advice.
+
+## TARGET
+- Resume Category: ${ResumeType}
+- Broad Role Type: ${BroadRole}
+- Specific Role: ${SpecificRole}
+- Company: ${Company ?? "Not specified — write for a mid-to-large product company"}
+- Job Description:
+${JobDescription ? `"""${JobDescription}"""` : "Not provided. Infer from role, category, and industry norms."}
+
+## CANDIDATE PROFILE
+${JSON.stringify(profileClean)}
+
+## AUDIT FINDINGS (from Stage 0 — use these to inform strategy, avoid rewriting flagged content)
+${JSON.stringify(auditResult)}
+
+---
+
+## YOUR TASK
+
+Return ONLY a valid JSON object. No prose. No markdown fences.
+
+{
+  "positioningStatement": "One precise sentence: who this person IS for this role, grounded in their actual experience. Not aspirational — factual. E.g. 'A full-stack engineer with 2 years building React/Node.js products at CodeSarthi, targeting a mid-level SDE role at Microsoft with strong DSA fundamentals and backend experience.'",
+
+  "coreNarrative": "2–3 sentences: the through-line story connecting their background to this role. What journey does their profile tell? What makes this application coherent, not random? Grounded in real data only.",
+
+  "mustIncludeKeywords": [
+    "exact ATS keyword strings the resume must contain for this role — include both full forms and abbreviations where both are scanned e.g. 'React', 'React.js', 'REST API', 'RESTful API'"
+  ],
+
+  "niceToIncludeKeywords": [
+    "keywords that strengthen the resume but are not make-or-break for ATS"
+  ],
+
+  "keywordsToAvoid": [
+    "words or phrases that dilute ATS signal for this specific role — e.g. skills from a different domain that the candidate listed but shouldn't appear on this version"
+  ],
+
+  "strengthsToAmplify": [
+    "specific things in this candidate's actual profile that are genuinely strong for this target role — be concrete, not generic. Reference real projects, roles, or metrics from the profile."
+  ],
+
+  "weaknessesToDownplay": [
+    "real gaps or mismatches between the profile and the role — don't delete, just de-emphasize. E.g. 'Short experience duration', 'Missing TypeScript in explicit skills (though implied in bullets)'"
+  ],
+
+  "sectionPriority": ["summary", "experience", "projects", "skills", "education", "certifications"],
+
+  "summaryStrategy": {
+    "openWith": "Exactly what the summary should open with — e.g. 'Lead with the React + Node.js full-stack experience at CodeSarthi and the LeetCode top 5% ranking as proof of DSA strength'",
+    "keywordsToFrontload": ["keywords that must appear in the first 1–2 sentences"],
+    "toneInstruction": "Specific tone directive — e.g. 'Technical and confident, not modest. Avoid buzzwords like results-driven or passionate.'",
+    "avoid": ["things the summary must NOT say or do — e.g. 'Do not open with I', 'Do not mention Java or Spring Boot — not relevant for this role'"]
+  },
+
+  "experienceStrategy": {
+    "general": "Overall instruction for all experience bullet rewrites — what angle, what to emphasize, what verb style, what to avoid across all roles",
+    "perRole": [
+      {
+        "company": "exact company name as it appears in the profile",
+        "role": "exact role title as it appears in the profile",
+        "relevanceToTarget": "high | medium | low",
+        "instruction": "Specific rewrite instruction for this role's bullets — what to emphasize, what keywords to weave in, which bullets are strongest and should anchor the section, which are weak and should be tightened or cut"
+      }
+    ]
+  },
+
+  "projectStrategy": {
+    "general": "Overall instruction for all project bullet rewrites — what angle, what technical depth to show, what to emphasize for this specific role",
+    "perProject": [
+      {
+        "name": "exact project name as it appears in the profile",
+        "relevanceToTarget": "high | medium | low",
+        "shouldInclude": true,
+        "instruction": "Specific rewrite instruction — what technical decisions to surface, what metrics to keep, what to reframe, what to ignore. If the project has placeholder/gibberish content, note that and instruct the rewriter to work from bullets only."
+      }
+    ]
+  },
+
+  "skillsStrategy": {
+    "categoriesToUse": ["category names that match ATS expectations for this role — e.g. 'Languages', 'Frameworks', 'Databases', 'Tools', 'Cloud'"],
+    "skillsToKeep": ["skills from the profile that have strong ATS signal for this role"],
+    "skillsToRemove": ["skills in the profile that dilute the resume for this role"],
+    "skillsToSurface": ["skills NOT in the explicit skills section but clearly present in experience/project bullets — should be added"],
+    "orderBy": "Instruction on how to order skills within each category — e.g. 'Most relevant to Microsoft SDE role first'"
+  },
+
+  "toneGuidance": {
+    "overall": "professional | technical | confident | conversational — pick the right blend for this role and company",
+    "verbStyle": "e.g. 'Strong past-tense action verbs — Built, Engineered, Architected, Reduced, Improved. Avoid: Leveraged, Utilized, Synergized, Assisted'",
+    "formality": "e.g. 'Formal but not stiff — this is Microsoft, not a startup'"
+  },
+
+  "redFlagsToAddress": [
+    "Issues flagged in the audit that the rewriters must work around — e.g. 'projects[1].description is placeholder text — rewriters must work from bullets only for that project', 'experience[1].startDate is 2029 — do not reference dates in bullets'"
+  ],
+
+  "versionLabel": "Short human-readable label for this tailored version — e.g. 'Microsoft SDE — Full Stack Focus' or 'Razorpay Backend Engineer — Java/Spring Boot'"
+}
+`;
+
+        const completion = await client.chat.completions.create({
+            model: "llama-3.3-70b-versatile",
+            messages: [
+                { role: "system", content: JSON_SYSTEM_PROMPT },
+                { role: "user", content: prompt }
+            ],
+            temperature: 0.2,   // ✅ low temp for structured JSON
+            max_tokens: 3000,   // ✅ audit is large — give it room
+        });
+
+
+
+
+        const rawText = completion?.choices?.[0]?.message?.content;
+
+        // ✅ catch empty/null content before attempting parse
+        if (!rawText || rawText.trim() === "") {
+            console.error("Empty AI response. Full completion:", JSON.stringify(completion, null, 2));
+            throw new Error(`AI returned empty content. finish_reason: ${completion?.choices?.[0]?.finish_reason ?? "unknown"}`);
+        }
+
+
+        // ✅ clean first, then parse the cleaned version
+        const cleanedText = rawText
+            .replace(/```json/gi, "")
+            .replace(/```/g, "")
+            .trim();
+
+        let parsedData;
+        try {
+            parsedData = JSON.parse(cleanedText); // ✅ parse cleanedText, not rawText
+        } catch (err) {
+            throw new Error(`AI returned unparseable JSON: ${err.message} — raw: ${cleanedText.slice(0, 200)}`);
+        }
+
+
+
+
+        const normalizeStrategy = (data) => ({
+            positioningStatement: data.positioningStatement ?? "",
+            coreNarrative: data.coreNarrative ?? "",
+            mustIncludeKeywords: data.mustIncludeKeywords ?? [],
+            niceToIncludeKeywords: data.niceToIncludeKeywords ?? [],
+            keywordsToAvoid: data.keywordsToAvoid ?? [],
+            strengthsToAmplify: data.strengthsToAmplify ?? [],
+            weaknessesToDownplay: data.weaknessesToDownplay ?? [],
+            sectionPriority: data.sectionPriority ?? [],
+            summaryStrategy: data.summaryStrategy ?? { openWith: "", keywordsToFrontload: [], toneInstruction: "", avoid: [] },
+            experienceStrategy: data.experienceStrategy ?? { general: "", perRole: [] },
+            projectStrategy: data.projectStrategy ?? { general: "", perProject: [] },
+            skillsStrategy: data.skillsStrategy ?? { categoriesToUse: [], skillsToKeep: [], skillsToRemove: [], skillsToSurface: [], orderBy: "" },
+            toneGuidance: data.toneGuidance ?? { overall: "", verbStyle: "", formality: "" },
+            redFlagsToAddress: data.redFlagsToAddress ?? [],
+            versionLabel: data.versionLabel ?? `${SpecificRole} — ${Company ?? ResumeType}`,
+        });
+
+        res.status(200).json({
+            success: true,
+            data: normalizeStrategy(parsedData),  // ✅ correct normalizer
+        });
+
+    } catch (error) {
+        console.error("Strategy API Error:", error);  // ✅ correct error label
+        res.status(500).json({
+            success: false,
+            error: "Strategy generation failed",
+            message: error.message,
+        });
+    }
+});
 
 
 
