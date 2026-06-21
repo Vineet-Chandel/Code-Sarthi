@@ -18,6 +18,7 @@ import { setRes } from "@/utils/resStore";
 import axios from "axios";
 import BASE_URL from "@/Pages/auth/baseURL";
 import { useDispatch, useSelector } from 'react-redux';
+import CTA from '../CTA';
 // ─── reusable field ───────────────────────────────────────────────────────────
 const InputField = ({
     label,
@@ -712,26 +713,7 @@ const Experience = ({ data }) => {
 
 
                 {/* ── footer ── */}
-                <div className="flex gap-3 items-center justify-end px-6 md:px-10 py-4 bg-base-200 border-t border-gray-700">
-                    <button className="bg-base-100 px-10 py-2.5 rounded-xl text-info font-bold border-2 border-secondary hover:text-secondary-content hover:border-secondary-content active:scale-95 transition-all duration-200" onClick={saveExperience}>
-                        Save
-                    </button>
-                    <button
-                        onClick={() => {
-
-                            Navigate("/app/build-resume/intro-edu-page", {
-                                state: { resumeData }
-                            });
-                        }}
-                        className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl bg-base-100 text-info border-2 border-secondary
- hover:text-secondary-content   active:scale-95 transition-all duration-200 "
-                    >
-                        Next: Education
-                        <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
-                            <path fill="currentColor" d="M2 5v14c0 .86 1.012 1.318 1.659.753l8-7a1 1 0 0 0 0-1.506l-8-7C3.012 3.682 2 4.141 2 5m11 0v14c0 .86 1.012 1.318 1.659.753l8-7a1 1 0 0 0 0-1.506l-8-7C14.012 3.682 13 4.141 13 5"></path>
-                        </svg>
-                    </button>
-                </div>
+                <CTA type="experience" saveHandler={saveExperience} resumeData={resumeData} />
             </div>
         </div >
     )

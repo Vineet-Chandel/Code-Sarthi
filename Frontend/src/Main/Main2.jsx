@@ -24,39 +24,68 @@ const Main2 = () => {
         <div
             className='relative  w-full bg-gray-200 p-1.5 
 '>
-            <div
-                className="
+
+            <div className='w-full h-full relative bg-black  
+ overflow-hidden
+ rounded-xl flex flex-col items-start justify-center py-5'  >
+
+
+                <div
+                    className="
 absolute
 inset-0
 bg-[radial-gradient(circle_at_top_right,rgba(99,102,241,.18),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(168,85,247,.15),transparent_35%)]
 "
-            />
+                />
 
-            <div
-                className="
+                <div
+                    className="
 absolute
 inset-0
 bg-[linear-gradient(rgba(255,255,255,.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.04)_1px,transparent_1px)]
 bg-[size:40px_40px]
 "
-            />
-            <div className='w-full h-full  bg-black  
- overflow-hidden
-
- rounded-xl flex flex-col items-start justify-center py-5'  >
+                />
                 <Nav />
                 <div className='w-full text-center p-6   flex flex-col items-center justify-center'>
                     <div className='text-[#f9f9f9] font-poppins font-extrabold min-[450px]:text-2xl  sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl  justify-start'>
                         An Ecosystem that do your works <br />Approvals that keep you safe
                     </div>
 
-                    <div className='h-[30px] lg:h-[40px] mt-3  group font-bold text-sm  border-transparent mt-2 py-1 px-3 lg:px-5 bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300 text-black rounded-3xl flex justify-center items-center inline-flex gap-1  cursor-pointer relative z-20' onClick={() => navigate("/login")} >
 
-                        <svg className="rotate-45 group-hover:rotate-90 transition-all duration-500" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fillRule="evenodd" clipRule="evenodd" d="M9.00977 12.093C8.73643 11.8978 8.59976 11.8002 8.46411 11.7881C8.34513 11.7776 8.22631 11.81 8.12915 11.8795C8.01837 11.9587 7.95016 12.1121 7.81373 12.4191L4.77518 19.2559L4.77517 19.2559C4.53163 19.8038 4.40986 20.0778 4.46172 20.2541C4.50672 20.4071 4.62199 20.5294 4.77202 20.5834C4.9449 20.6457 5.22564 20.5404 5.7871 20.3298L5.78712 20.3298L11.7191 18.1053C11.823 18.0664 11.875 18.0469 11.9285 18.0391C11.9759 18.0323 12.0241 18.0323 12.0715 18.0391C12.125 18.0469 12.177 18.0664 12.2809 18.1053L18.2129 20.3298L18.2129 20.3298C18.7744 20.5404 19.0551 20.6457 19.228 20.5834C19.378 20.5294 19.4933 20.4071 19.5383 20.2541C19.5901 20.0778 19.4684 19.8038 19.2248 19.2559L16.1863 12.4191C16.0498 12.1121 15.9816 11.9587 15.8708 11.8795C15.7737 11.81 15.6549 11.7776 15.5359 11.7881C15.4002 11.8002 15.2636 11.8978 14.9902 12.093L12.5812 13.8137C12.2335 14.0621 11.7665 14.0621 11.4188 13.8137L9.00977 12.093ZM9.06112 9.61248C9.04945 9.63873 9.05786 9.66957 9.08124 9.68627L11.535 11.439C11.7023 11.5585 11.786 11.6182 11.8772 11.6413C11.9578 11.6617 12.0422 11.6617 12.1228 11.6413C12.214 11.6182 12.2977 11.5585 12.465 11.439L14.9188 9.68627C14.9421 9.66957 14.9505 9.63873 14.9389 9.61248L12.731 4.64486C12.4995 4.12391 12.3837 3.86344 12.2224 3.78331C12.0823 3.71371 11.9177 3.71371 11.7776 3.78331C11.6162 3.86344 11.5005 4.12391 11.2689 4.64486L9.06112 9.61248Z" fill="#222222" />
-                        </svg>
-                        Get Started !
+                    <div className='flex mt-5 gap-2'>
+                        <div onClick={() => navigate("/login")} className={`relative z-10 flex items-center justify-between cursor-pointer text-black  font-bold `}>
+
+                            <span className="text-white">
+                                <svg height="40" viewBox="0 0 15 40" width="15" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" transform="matrix(-1,0,0,1,0,0)">
+                                    <path d="M0 .5h11A3.5 3.5 0 0 1 14.5 4v20.523a5.5 5.5 0 0 1-1.416 3.684l-8.547 9.477A5.5 5.5 0 0 1 .453 39.5H0" data-stroke="true"
+                                        fill="#fff"
+                                    ></path>
+                                </svg>
+                            </span>
+                            <button className="bg-white  px-4 py-[7.5px] ">Open CodeSarthi</button>
+
+                        </div>
+
+
+
+                        <div onClick={() => navigate("/login")} className={`relative z-10 flex items-center justify-between cursor-pointer text-black  font-bold `}>
+
+
+                            <button className="bg-white  px-4 py-[7.5px] ">Talk To Us</button>
+                            <span className="text-white">
+                                <svg height="40" viewBox="0 0 15 40" width="15" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M0 .5h11A3.5 3.5 0 0 1 14.5 4v20.523a5.5 5.5 0 0 1-1.416 3.684l-8.547 9.477A5.5 5.5 0 0 1 .453 39.5H0"
+                                        fill="#fff"
+                                    />
+                                </svg>
+                            </span>
+                        </div>
                     </div>
+
+
+
                 </div>
 
                 <div className="relative flex justify-center mt-1 sm:mt-1 md:mt-1 lg:mt-1 xl:mt-2 [perspective:1200px] lg:[perspective:1800px]">

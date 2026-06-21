@@ -391,22 +391,16 @@ const Login = () => {
     }
 
     return (
-        <div data-theme="caramellatte" className="min-h-screen w-full flex items-center justify-center bg-base-300 p-[10px]  md:p-[15px]">
+        <div data-theme="caramellatte" className="min-h-screen w-full flex items-center justify-center bg-gray-300 p-[10px]  p-1">
             <ToastContainer toasts={toasts} removeToast={removeToast} />
-            <div className="w-full bg-base-100  rounded-2xl  flex flex-col md:flex-row gap-6 overflow-hidden border border-accent   ">
+            <div className="w-full min-h-[98vh] bg-base-100  rounded-2xl  flex flex-col md:flex-row gap-6 overflow-hidden border border-accent   ">
 
                 {/* LEFT - Login Form */}
                 <div className="flex flex-col gap-6 p-5 md:p-12 w-full md:w-[50%] text-white">
                     <div className="space-y-2">
                         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-secondary-content to-accent leading-tight ">
 
-                            <TextType
-                                text={["Welcome Back Developers !", "Let's Collaborate!",]}
-                                typingSpeed={75}
-                                pauseDuration={1500}
-                                showCursor={true}
-                                cursorCharacter="|"
-                            />
+                            Welcome Back!
                         </h1>
                         <p className="text-info text-lg md:text-xl pl-2">Continue your journey with CodeSarthi — where developers grow smarter every day.</p>
                     </div>

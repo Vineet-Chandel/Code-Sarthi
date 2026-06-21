@@ -14,6 +14,7 @@ import BASE_URL from "@/Pages/auth/baseURL";
 import Toast from '../Toast';
 import { AnimatePresence, motion } from "framer-motion";
 import { setRes } from "@/utils/resStore";
+import CTA from "../CTA";
 
 // ─── tiny hook ────────────────────────────────────────────────────────────────
 function useIntersectionObserver(options = {}) {
@@ -749,23 +750,7 @@ py-1
                 </div>
 
                 {/* ── footer ── */}
-                <div className="flex items-center gap-3 justify-end px-6 md:px-10 py-4 bg-base-200 border-t border-slate-700">
-                    <button className="bg-base-100 px-10 py-2.5 rounded-xl text-info font-bold border-2 border-secondary hover:text-secondary-content hover:border-secondary-content active:scale-95 transition-all duration-200" onClick={saveHeader}>
-                        Save
-                    </button>
-                    <button
-                        onClick={() => {
-                            Navigate("/app/build-resume/intro-exp-page", {
-                                state: { resumeData }
-                            });
-                        }}
-                        className="bg-base-100 px-10 py-2.5 rounded-xl text-info font-bold border-2 border-secondary hover:text-secondary-content hover:border-secondary-content active:scale-95 transition-all duration-200 flex items-center gap-2">
-                        Next: Experience
-                        <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
-                            <path fill="currentColor" d="M2 5v14c0 .86 1.012 1.318 1.659.753l8-7a1 1 0 0 0 0-1.506l-8-7C3.012 3.682 2 4.141 2 5m11 0v14c0 .86 1.012 1.318 1.659.753l8-7a1 1 0 0 0 0-1.506l-8-7C14.012 3.682 13 4.141 13 5"></path>
-                        </svg>
-                    </button>
-                </div>
+                <CTA type="header" saveHandler={saveHeader} resumeData={resumeData} />
             </div >
         </div >
     );

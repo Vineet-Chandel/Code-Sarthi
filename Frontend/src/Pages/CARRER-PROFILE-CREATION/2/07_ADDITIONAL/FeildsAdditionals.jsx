@@ -1043,26 +1043,32 @@ text-sm sm:text-base text-white outline-none
 
 
                 {/* ── footer ── */}
-                <div className="flex flex-col sm:flex-row
-items-center
-justify-end
-gap-3
-px-4 sm:px-6 md:px-10
-py-4 bg-base-200 border-t border-accent">
 
-                    <button
-                        onClick={() => {
-                            Navigate("/app/build-resume/intro-preview-page", {
-                                state: { resumeData: resumeData }
-                            });
-                        }}
-                        className="flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-xl bg-base-100 text-info  border-secondary
-                        hover:text-secondary-content   active:scale-95 transition-all duration-200 "    >
-                        Next : Finalise Your Details
-                        <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
-                            <path fill="currentColor" d="M2 5v14c0 .86 1.012 1.318 1.659.753l8-7a1 1 0 0 0 0-1.506l-8-7C3.012 3.682 2 4.141 2 5m11 0v14c0 .86 1.012 1.318 1.659.753l8-7a1 1 0 0 0 0-1.506l-8-7C14.012 3.682 13 4.141 13 5"></path>
-                        </svg>
-                    </button>
+                <div className="flex  items-center gap-3 justify-end px-6 md:px-10 py-4 bg-base-200 border-t border-slate-700">
+
+                    <div onClick={() => {
+                        Navigate("/app/build-resume/intro-preview-page", {
+                            state: { resumeData: resumeData }
+                        });
+                    }} className={` flex items-center justify-between cursor-pointer text-black  font-bold `}>
+
+                        <span className="text-white">
+                            <svg height="40" viewBox="0 0 15 40" width="15" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" transform="matrix(-1,0,0,1,0,0)">
+                                <path d="M0 .5h11A3.5 3.5 0 0 1 14.5 4v20.523a5.5 5.5 0 0 1-1.416 3.684l-8.547 9.477A5.5 5.5 0 0 1 .453 39.5H0" data-stroke="true"
+                                    fill="#fff"
+                                ></path>
+                            </svg>
+                        </span>
+                        <button className="bg-white flex px-4 py-[7.5px] "><p className='font-extrabold'>Next:</p>  Finalise Your Details </button>
+                        <span className="text-white">
+                            <svg height="40" viewBox="0 0 15 40" width="15" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M0 .5h11A3.5 3.5 0 0 1 14.5 4v20.523a5.5 5.5 0 0 1-1.416 3.684l-8.547 9.477A5.5 5.5 0 0 1 .453 39.5H0"
+                                    fill="#fff"
+                                />
+                            </svg>
+                        </span>
+                    </div>
                 </div>
             </div >
         </div >
