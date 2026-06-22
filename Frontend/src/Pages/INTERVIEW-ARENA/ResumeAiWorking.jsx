@@ -4,10 +4,9 @@ import { useEffect, useState } from "react";
 import BASE_URL from "../auth/baseURL";
 import {
     CheckCircle,
-    BadgeCheck,
+
     AlertTriangle,
     XCircle,
-    CheckCheck,
 } from "lucide-react";
 
 const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, BroadRole, ResumeType }) => {
@@ -309,6 +308,10 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
     ];
 
     const [resumePipelineStages, setResumePipelineStages] = useState(RESUME_PIPELINE_STAGES);
+
+
+
+
     const [auditData, setAuditData] = useState({
         data: null
     });
@@ -316,8 +319,8 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
         data: null
     });
 
-    const skillGap = auditData?.data?.data?.skillGapAnalysis;
-    const DEV_MODE = false;
+    const DEV_MODE = true;
+
 
     const mockAuditData = {
         "success": true,
@@ -449,133 +452,139 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
     }
 
     const mockStrategyData = {
-        "SpecificRole": "SDE",
-        "Company": "microsoft",
-        "JobDescription": "As a Software Development Engineer at Microsoft, you will design, develop, test, and maintain scalable software solutions that power products used by millions of customers worldwide. You'll collaborate with engineers, product managers, designers, and researchers to build reliable, secure, and high-performance systems while following Microsoft's engineering best practices.",
-        "BroadRole": "Software Engineer",
-        "ResumeType": "Software Engineer Resume",
-        "auditResult": {
-            "overallHealthScore": {
-                "score": 72,
-                "outOf": 100,
-                "verdict": "Solid foundation, but several critical fields are missing and content quality needs cleanup before applying."
-            },
-            "contentIssues": [
-                {
-                    "severity": "critical",
-                    "section": "projects",
-                    "field": "projects[1].description",
-                    "issue": "Project description is unclear and seems to be a placeholder",
-                    "flaggedText": "KUCHH TOOO TABHAII HAII BHAII",
-                    "fix": "Rewrite the project description to clearly explain the project's purpose and your role in it"
-                },
-                {
-                    "severity": "warning",
-                    "section": "experience",
-                    "field": "experience[1].startDate",
-                    "issue": "Start date is in the future, which is unlikely",
-                    "flaggedText": "2029-06",
-                    "fix": "Correct the start date to a plausible value"
-                }
+        "success": true,
+        "data": {
+            "positioningStatement": "A full-stack engineer with experience building React and Node.js products at CodeSarthi, targeting a mid-level SDE role at Microsoft with strong DSA fundamentals and backend experience.",
+            "coreNarrative": "His experience in optimizing RESTful API endpoints, implementing JWT authentication, and designing microservices architecture showcases his technical expertise. Vineet's achievements, such as achieving a top 5% ranking on LeetCode and securing a high CGPA in his academic pursuits, demonstrate his commitment to excellence and problem-solving skills.",
+            "mustIncludeKeywords": [
+                "React",
+                "Node.js",
+                "REST API",
+                "RESTful API",
+                "TypeScript",
+                "Azure",
+                "Cloud Computing",
+                "Machine Learning",
+                "JavaScript",
+                "Backend Development",
+                "Full Stack Development"
             ],
-            "missingFields": [
-                {
-                    "section": "certifications",
-                    "field": "certification name and issuing organization",
-                    "importance": "recommended",
-                    "whyItMatters": "Certifications can demonstrate expertise and commitment to the field",
-                    "prompt": "Add a certification related to software development, such as AWS Certified Developer or Microsoft Certified: Azure Developer Associate"
-                },
-                {
-                    "section": "experience",
-                    "field": "achievements or accomplishments",
-                    "importance": "critical",
-                    "whyItMatters": "Achievements and accomplishments help demonstrate the impact of your work",
-                    "prompt": "Add specific achievements or accomplishments for each experience entry, such as 'Improved code quality by 25% through rigorous testing and refactoring'"
-                }
+            "niceToIncludeKeywords": [
+                "Agile Development",
+                "Scrum",
+                "Kanban",
+                "Test-Driven Development",
+                "Continuous Integration",
+                "Continuous Deployment"
             ],
-            "dataInconsistencies": [
-                {
-                    "type": "date_anomaly",
-                    "section": "experience",
-                    "field": "experience[1].startDate",
-                    "description": "Start date is in the future",
-                    "flaggedValue": "2029-06",
-                    "suggestedFix": "Correct the start date to a plausible value, such as '2022-06'"
-                },
-                {
-                    "type": "duplicate",
-                    "section": "achievements",
-                    "field": "achievements[0] and achievements[1]",
-                    "description": "Duplicate achievement entries",
-                    "flaggedValue": "Achieved top 5% ranking on LeetCode, demonstrating advanced algorithmic proficiency.",
-                    "suggestedFix": "Remove the duplicate entry"
-                }
+            "keywordsToAvoid": [
+                "Vue",
+                "Java",
+                "Spring Boot",
+                "Python"
             ],
-            "skillGapAnalysis": {
-                "roleRequiresSkills": [
-                    "TypeScript",
-                    "Azure",
-                    "Cloud Computing",
-                    "Machine Learning"
-                ],
-                "candidateHasSkills": [
-                    "Java",
-                    "Spring Boot",
-                    "Python",
-                    "PostgreSQL",
+            "strengthsToAmplify": [
+                "Strong DSA fundamentals",
+                "Experience with React and Node.js",
+                "Backend development expertise",
+                "Achievements in coding challenges and hackathons",
+                "Experience with microservices architecture and RESTful APIs"
+            ],
+            "weaknessesToDownplay": [
+                "Limited experience with TypeScript and Azure",
+                "Short duration of experience in some roles"
+            ],
+            "sectionPriority": [
+                "summary",
+                "experience",
+                "projects",
+                "skills",
+                "education",
+                "certifications"
+            ],
+            "summaryStrategy": {
+                "openWith": "Lead with the React and Node.js full-stack experience at CodeSarthi and the LeetCode top 5% ranking as proof of DSA strength",
+                "keywordsToFrontload": [
                     "React",
-                    "MongoDB"
+                    "Node.js",
+                    "Full Stack Development",
+                    "DSA"
                 ],
-                "matchedSkills": [
-                    "Python",
-                    "PostgreSQL"
-                ],
-                "missingCriticalSkills": [
+                "toneInstruction": "Technical and confident, not modest. Avoid buzzwords like results-driven or passionate.",
+                "avoid": [
+                    "Do not open with I",
+                    "Do not mention Java or Spring Boot — not relevant for this role"
+                ]
+            },
+            "experienceStrategy": {
+                "general": "Emphasize technical skills, achievements, and impact in each role. Use strong past-tense action verbs like Built, Engineered, and Architected.",
+                "perRole": [
                     {
-                        "skill": "TypeScript",
-                        "importance": "critical",
-                        "reason": "TypeScript is a key skill for software development at Microsoft"
+                        "company": "CodeSarthi",
+                        "role": "Frontend Developer",
+                        "relevanceToTarget": "high",
+                        "instruction": "Emphasize experience with React, Node.js, and RESTful APIs. Highlight achievements in optimizing API endpoints and implementing JWT authentication."
                     },
                     {
-                        "skill": "Azure",
-                        "importance": "critical",
-                        "reason": "Azure is a key technology used at Microsoft"
+                        "company": "CodeSarthi",
+                        "role": "Backend Developer",
+                        "relevanceToTarget": "high",
+                        "instruction": "Emphasize experience with Node.js, RESTful APIs, and microservices architecture. Highlight achievements in optimizing database queries and implementing OAuth2 flow."
                     }
-                ],
-                "irrelevantSkills": [
-                    {
-                        "skill": "Vue",
-                        "suggestion": "Remove from this resume version or move to lower priority"
-                    }
-                ],
-                "skillCoveragePercent": 30
+                ]
             },
-            "growthRecommendations": [
-                {
-                    "priority": 1,
-                    "category": "skill",
-                    "title": "Learn TypeScript to depth",
-                    "why": "TypeScript is a key skill for software development at Microsoft",
-                    "howTo": "Take the TypeScript course on Microsoft Learn and practice building projects with TypeScript",
-                    "estimatedImpact": "high",
-                    "timeToAchieve": "2-3 months"
-                },
-                {
-                    "priority": 2,
-                    "category": "certification",
-                    "title": "Get Azure Certified",
-                    "why": "Azure is a key technology used at Microsoft",
-                    "howTo": "Study for the Azure Certified: Azure Developer Associate exam and take the exam",
-                    "estimatedImpact": "high",
-                    "timeToAchieve": "3-6 months"
-                }
+            "projectStrategy": {
+                "general": "Emphasize technical decisions, metrics, and impact in each project. Use strong past-tense action verbs like Built, Engineered, and Architected.",
+                "perProject": [
+                    {
+                        "name": "code sarhti",
+                        "relevanceToTarget": "high",
+                        "shouldInclude": true,
+                        "instruction": "Emphasize experience with React, Node.js, and MongoDB. Highlight achievements in optimizing React rendering pipeline and implementing JWT authentication."
+                    },
+                    {
+                        "name": "DEV CONNECT",
+                        "relevanceToTarget": "low",
+                        "shouldInclude": false,
+                        "instruction": "Do not include this project as it has placeholder content and is not relevant to the target role."
+                    }
+                ]
+            },
+            "skillsStrategy": {
+                "categoriesToUse": [
+                    "Programming Languages",
+                    "Frameworks",
+                    "Databases",
+                    "Cloud Platforms"
+                ],
+                "skillsToKeep": [
+                    "JavaScript",
+                    "React",
+                    "Node.js",
+                    "MongoDB"
+                ],
+                "skillsToRemove": [
+                    "Vue",
+                    "Java",
+                    "Spring Boot",
+                    "Python"
+                ],
+                "skillsToSurface": [
+                    "TypeScript",
+                    "Azure"
+                ],
+                "orderBy": "Most relevant to Microsoft SDE role first"
+            },
+            "toneGuidance": {
+                "overall": "Professional and technical, with a confident tone.",
+                "verbStyle": "Strong past-tense action verbs like Built, Engineered, and Architected.",
+                "formality": "Formal but not stiff — this is Microsoft, not a startup."
+            },
+            "redFlagsToAddress": [
+                "projects[1].description is placeholder text — rewriters must work from bullets only for that project",
+                "experience[1].startDate is 2029 — do not reference dates in bullets"
             ],
-            "quickWins": [
-                "Fix the start date on your Backend Developer role at CodeSarthi (currently shows 2029, likely a typo)",
-                "Remove duplicate LeetCode achievement — you have it listed twice word-for-word"
-            ],
-            "auditSummary": "This profile has a solid foundation, but there are several critical fields missing and content quality needs cleanup before applying. The biggest strength is the candidate's experience with Java, Spring Boot, and Python, but the most urgent thing to fix is the lack of relevant skills for the target role, such as TypeScript and Azure. With some focused effort on skill development and content refinement, this profile can become much stronger."
+            "versionLabel": "Microsoft SDE — Full Stack Focus"
         }
     }
     const audit = async () => {
@@ -593,6 +602,15 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
 
             if (DEV_MODE) {
                 setAuditData(mockAuditData);
+                setResumePipelineStages(prev =>
+                    prev.map((stage, index) =>
+                        index === 0
+                            ? { ...stage, status: "SUCCESS" }
+                            : stage
+                    )
+                );
+
+
                 return 1;
             }
             const res = await axios.post(`${BASE_URL}/resume/audit`, {
@@ -606,13 +624,24 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
             setAuditData({
                 data: res.data
             })
+
+
+            setResumePipelineStages(prev =>
+                prev.map((stage, index) =>
+                    index === 0
+                        ? { ...stage, status: "SUCCESS" }
+                        : stage
+                )
+            );
             return 1;
         } catch (err) {
             addToast(({
                 type: "error",
                 title: "Error",
                 message: "error in auditing"
-            }))
+            }));
+
+
 
             return 0;
         }
@@ -623,6 +652,14 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
 
             if (DEV_MODE) {
                 setStrategyData(mockStrategyData);
+                setResumePipelineStages(prev =>
+                    prev.map((stage, index) =>
+                        index === 1
+                            ? { ...stage, status: "SUCCESS" }
+                            : stage
+                    )
+                );
+                console.log(strategyData);
                 return 1;
             }
             setResumePipelineStages(prev =>
@@ -646,6 +683,14 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
             setStrategyData({
                 data: res.data
             })
+
+            setResumePipelineStages(prev =>
+                prev.map((stage, index) =>
+                    index === 1
+                        ? { ...stage, status: "SUCCESS" }
+                        : stage
+                )
+            );
             return 1;
         } catch (err) {
             addToast(({
@@ -658,23 +703,11 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
         }
     }
 
+    const RESUME_PIPELINE_STAGES_API_SEGMENT = async () => {
+        try {
+            const run1 = await audit();
 
-
-
-
-    useEffect(() => {
-        const run = async () => {
-
-            const result = await audit();
-            if (result) {
-                setResumePipelineStages(prev =>
-                    prev.map((stage, index) =>
-                        index === 0
-                            ? { ...stage, status: "SUCCESS" }
-                            : stage
-                    )
-                );
-            } else {
+            if (!run1) {
                 setResumePipelineStages(prev =>
                     prev.map((stage, index) =>
                         index >= 0
@@ -682,24 +715,12 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
                             : stage
                     )
                 );
+                return
             }
 
-        }
+            const run2 = await strategy();
+            if (!run2) {
 
-        run();
-    }, [])
-    useEffect(() => {
-        const run = async () => {
-            const result = await strategy();
-            if (result) {
-                setResumePipelineStages(prev =>
-                    prev.map((stage, index) =>
-                        index === 1
-                            ? { ...stage, status: "SUCCESS" }
-                            : stage
-                    )
-                );
-            } else {
                 setResumePipelineStages(prev =>
                     prev.map((stage, index) =>
                         index >= 1
@@ -707,18 +728,31 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
                             : stage
                     )
                 );
+                return
             }
+
+
+
+        }
+        catch (err) {
+
         }
 
-        run();
-    }, [auditData])
+    }
+
+    useEffect(() => {
+        RESUME_PIPELINE_STAGES_API_SEGMENT()
+    }, [])
+
+
+
 
 
 
     const [stageOpen, setStageOpen] = useState(null);
 
     return (
-        <div className=" w-full flex flex-col justify-start  gap-5 px-2 items-center ">
+        <div className=" w-full flex flex-col justify-start  gap-5  items-center ">
 
 
             <h1 className="text-7xl text-black font-extrabold tracking-tight">Creating Carrer Profile </h1>
@@ -1042,7 +1076,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
 
                                                         Skill Gap Analysis :</p>
 
-                                                    {skillGap && (
+                                                    {auditData?.data?.data?.skillGapAnalysis && (
                                                         <div className="space-y-6">
 
                                                             {/* Coverage */}
@@ -1053,13 +1087,13 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
                                                                     <div
                                                                         className="bg-black h-4 rounded-full"
                                                                         style={{
-                                                                            width: `${skillGap.skillCoveragePercent}%`,
+                                                                            width: `${auditData?.data?.data?.skillGapAnalysis.skillCoveragePercent}%`,
                                                                         }}
                                                                     />
                                                                 </div>
 
                                                                 <p className="mt-2 font-semibold">
-                                                                    {skillGap.skillCoveragePercent}%
+                                                                    {auditData?.data?.data?.skillGapAnalysis.skillCoveragePercent}%
                                                                 </p>
                                                             </div>
 
@@ -1070,7 +1104,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
                                                                 </h2>
 
                                                                 <div className="flex flex-wrap gap-2">
-                                                                    {skillGap.roleRequiresSkills.map((skill, idx) => (
+                                                                    {auditData?.data?.data?.skillGapAnalysis?.roleRequiresSkills.map((skill, idx) => (
                                                                         <span
                                                                             key={idx}
                                                                             className="px-3 py-1 bg-black/10 border border-black/40  rounded-full"
@@ -1088,7 +1122,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
                                                                 </h2>
 
                                                                 <div className="flex flex-wrap gap-2">
-                                                                    {skillGap.candidateHasSkills.map((skill, idx) => (
+                                                                    {auditData?.data?.data?.skillGapAnalysis?.candidateHasSkills.map((skill, idx) => (
                                                                         <span
                                                                             key={idx}
                                                                             className="px-3 py-1 bg-black/10 border border-black/40  rounded-full"
@@ -1108,7 +1142,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
                                                                 </h2>
 
                                                                 <div className="flex flex-wrap gap-2">
-                                                                    {skillGap.matchedSkills.map((skill, idx) => (
+                                                                    {auditData?.data?.data?.skillGapAnalysis?.matchedSkills.map((skill, idx) => (
                                                                         <span
                                                                             key={idx}
                                                                             className="px-3 py-1 bg-black/10 border border-black/40  rounded-full"
@@ -1128,7 +1162,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
                                                                 </h2>
 
                                                                 <div className="space-y-3">
-                                                                    {skillGap.missingCriticalSkills.map((item, idx) => (
+                                                                    {auditData?.data?.data?.skillGapAnalysis?.missingCriticalSkills.map((item, idx) => (
                                                                         <div
                                                                             key={idx}
                                                                             className="border border-red-300 rounded-lg p-3"
@@ -1159,7 +1193,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
                                                                 </h2>
 
                                                                 <div className="space-y-3">
-                                                                    {skillGap.irrelevantSkills.map((item, idx) => (
+                                                                    {auditData?.data?.data?.skillGapAnalysis?.irrelevantSkills.map((item, idx) => (
                                                                         <div
                                                                             key={idx}
                                                                             className="border border-yellow-300 rounded-lg p-3"
@@ -1392,9 +1426,9 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
 
                                     }
 
-                                    {idx === 1 && items?.status == "REJECTED" &&
+                                    {idx === 1 && items?.status == "SUCCESS" &&
 
-                                        <div className="mt-7 px-2 grid grid-cols-2  gap-2">
+                                        <div className="mt-7 px-2 grid grid-cols-1  gap-2">
 
 
 
@@ -1408,279 +1442,9 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
 
                                                         Positioning Statement :</p>
 
-                                                    {strategyData?.data?.data?.positioningStatement}
+                                                    {strategyData?.data?.positioningStatement}
 
                                                 </span>
-
-
-
-                                            </div>
-
-                                            <div className="w-full bg-white/10 rounded-3xl flex">
-                                                <div className="w-1/2 text-black bg-white px-3 py-3 rounded-3xl">
-                                                    <p className="flex text-xl mb-1 items-center justify-start gap-2 font-extrabold">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 24 24">
-                                                            <path fill="#000" d="M7.375 21.025q-.9-.025-1.713-.462t-1.537-1.288q-1-1.2-1.562-2.862T2 13q0-2.075.788-3.9t2.137-3.175T8.1 3.788T12 3t3.9.8t3.175 2.175T21.213 9.2T22 13.175q0 1.925-.625 3.6T19.6 19.6q-.7.7-1.475 1.063t-1.575.362q-.45 0-.9-.112t-.9-.338l-1.4-.7q-.3-.15-.638-.225T12 19.575t-.712.075t-.638.225l-1.4.7q-.475.25-.937.363t-.938.087m6.038-6.612Q14 13.825 14 13q0-.2-.038-.4t-.112-.4l1.25-1.675q.25.325.438.687t.312.788h2.05q-.375-2.2-2.037-3.6T12 7T8.125 8.413T6.1 12h2.05q.35-1.35 1.425-2.175T12 9q.425 0 .8.075t.725.225l-1.275 1.725q-.05 0-.125-.013T12 11q-.825 0-1.412.588T10 13t.588 1.413T12 15t1.413-.587"></path>
-                                                        </svg>
-
-                                                        Audit Score :</p>
-
-
-
-                                                    <div className="h-[200px] w-[200px] ml-2 mt-3 border border-l-black border-b-black border-transparent flex justify-around items-end">
-                                                        <div className="h-full flex flex-col justify-end">
-
-                                                            <span className="text-center ">{auditData?.data?.data?.overallHealthScore?.score || 0}</span>
-                                                            <motion.div
-                                                                initial={{ height: 0 }}
-                                                                animate={{ height: `${auditData?.data?.data?.overallHealthScore?.score || 0}%` }}
-                                                                transition={{ duration: 1, ease: "easeInOut", type: "spring" }}
-                                                                // style={{
-                                                                //     height: `${auditData?.data?.data?.overallHealthScore?.score || 0}%`
-                                                                // }}
-                                                                className="bg-black  flex items-center justify-center " ><span className="rotate-[270deg]  text-white font-extrabold">    SCORE</span>
-                                                            </motion.div>
-
-                                                        </div>
-                                                        <motion.div
-                                                            initial={{ height: 0 }}
-                                                            animate={{ height: `100%` }}
-                                                            transition={{ duration: 1, ease: "easeInOut", type: "spring" }}
-
-                                                            className=" flex flex-col justify-end">
-
-                                                            <span className="text-center ">100</span>
-                                                            <div className="bg-black  h-full font-extrabold flex items-center justify-center text-white px-3"><span className="rotate-[270deg]">IDEAL</span> </div>
-
-                                                        </motion.div>
-
-                                                    </div>
-
-
-
-                                                </div>
-
-                                                <div className="h-full flex px-4  flex-col items-start  justify-start py-5">
-                                                    <p className="flex text-xl mb-1  items-center justify-start gap-2 font-extrabold">
-                                                        Verdict : <span className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center">
-                                                            {auditData?.data?.data?.overallHealthScore?.score >= 60 && <CheckCircle />}
-                                                            {auditData?.data?.data?.overallHealthScore?.score < 60 && auditData?.data?.data?.overallHealthScore?.score >= 30 && <AlertTriangle />}
-                                                            {auditData?.data?.data?.overallHealthScore?.score < 30 && auditData?.data?.data?.overallHealthScore?.score >= 0 && <XCircle />}
-                                                        </span>
-
-                                                    </p>
-                                                    <p> {auditData?.data?.data?.overallHealthScore?.verdict}</p>
-
-                                                </div>
-
-                                            </div>
-                                            <div className="w-full bg-white p-5 rounded-3xl">
-
-                                            </div>
-                                            <div className="w-full  bg-white px-3 py-3 rounded-3xl">
-
-                                                <span className=" text-black  text-md">
-                                                    <p className="flex text-xl mb-1 items-center justify-start gap-2 font-extrabold">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 16 16">
-                                                            <path fill="currentColor" d="M6 1v3H1V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1zm14 12v3h-5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1zM6 8v7H1V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1zm14-6v7h-5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1z"></path>
-                                                        </svg>
-
-                                                        Skill Gap Analysis :</p>
-
-                                                    {skillGap && (
-                                                        <div className="space-y-6">
-
-                                                            {/* Coverage */}
-                                                            <div className="bg-white p-4 rounded-xl ">
-                                                                <h2 className="text-xl font-bold mb-2">Skill Coverage</h2>
-
-                                                                <div className="w-full bg-gray-300 rounded-full h-4">
-                                                                    <div
-                                                                        className="bg-black h-4 rounded-full"
-                                                                        style={{
-                                                                            width: `${skillGap.skillCoveragePercent}%`,
-                                                                        }}
-                                                                    />
-                                                                </div>
-
-                                                                <p className="mt-2 font-semibold">
-                                                                    {skillGap.skillCoveragePercent}%
-                                                                </p>
-                                                            </div>
-
-                                                            {/* Required Skills */}
-                                                            <div className="bg-white p-4 rounded-xl shadow">
-                                                                <h2 className="text-lg font-bold mb-3">
-                                                                    Required Skills
-                                                                </h2>
-
-                                                                <div className="flex flex-wrap gap-2">
-                                                                    {skillGap.roleRequiresSkills.map((skill, idx) => (
-                                                                        <span
-                                                                            key={idx}
-                                                                            className="px-3 py-1 bg-black/10 border border-black/40  rounded-full"
-                                                                        >
-                                                                            {skill}
-                                                                        </span>
-                                                                    ))}
-                                                                </div>
-                                                            </div>
-
-                                                            {/* Candidate Skills */}
-                                                            <div className="bg-white p-4 rounded-xl shadow">
-                                                                <h2 className="text-lg font-bold mb-3">
-                                                                    Your Skills
-                                                                </h2>
-
-                                                                <div className="flex flex-wrap gap-2">
-                                                                    {skillGap.candidateHasSkills.map((skill, idx) => (
-                                                                        <span
-                                                                            key={idx}
-                                                                            className="px-3 py-1 bg-black/10 border border-black/40  rounded-full"
-                                                                        >
-                                                                            {skill}
-                                                                        </span>
-                                                                    ))}
-                                                                </div>
-                                                            </div>
-
-                                                            {/* Matched Skills */}
-                                                            <div className="bg-white p-4 rounded-xl shadow">
-                                                                <h2 className="flex items-center gap-2 text-lg font-bold mb-3">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 24 24">
-                                                                        <path fill="currentColor" d="m3 19l5.5-7L3 4.98h12.462L21 12l-.183.214q-.663-.326-1.369-.491T18 11.558q-2.708 0-4.613 1.867T11.442 18q0 .256.017.506t.072.494zm15 3.289q-1.748 0-2.96-1.213t-1.213-2.96t1.213-2.961T18 13.942t2.96 1.213t1.213 2.96t-1.213 2.961T18 22.288m-.629-2.461l2.84-2.796l-.626-.627l-2.214 2.182l-.955-.975l-.627.633z"></path>
-                                                                    </svg>   Matched Skills
-                                                                </h2>
-
-                                                                <div className="flex flex-wrap gap-2">
-                                                                    {skillGap.matchedSkills.map((skill, idx) => (
-                                                                        <span
-                                                                            key={idx}
-                                                                            className="px-3 py-1 bg-black/10 border border-black/40  rounded-full"
-                                                                        >
-                                                                            {skill}
-                                                                        </span>
-                                                                    ))}
-                                                                </div>
-                                                            </div>
-
-                                                            {/* Missing Skills */}
-                                                            <div className="bg-white p-4 rounded-xl shadow">
-                                                                <h2 className="flex items-center gap-2 text-lg font-bold mb-3">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 16 16">
-                                                                        <path fill="#000" fillRule="evenodd" d="m7.493.015l-.386.04c-1.873.187-3.76 1.153-5.036 2.579C.66 4.211-.057 6.168.009 8.253c.115 3.601 2.59 6.65 6.101 7.518a8.03 8.03 0 0 0 6.117-.98a8 8 0 0 0 3.544-4.904c.172-.701.212-1.058.212-1.887s-.04-1.186-.212-1.887C14.979 2.878 12.315.498 9 .064C8.716.027 7.683-.006 7.493.015m1.36 1.548a6.3 6.3 0 0 1 1.987.597c.698.34 1.18.686 1.747 1.253A6 6 0 0 1 13.84 5.16c.445.915.646 1.798.646 2.84a6.2 6.2 0 0 1-.66 2.867c-.172.351-.519.914-.681 1.105l-.055.065l-4.563-4.564L3.963 2.91l.065-.055c.191-.162.754-.509 1.105-.681a6.44 6.44 0 0 1 3.72-.611M7.48 8.534l4.56 4.561l-.067.053a7.7 7.7 0 0 1-1.106.68a6.8 6.8 0 0 1-1.987.616c-.424.065-1.336.065-1.76 0c-1.948-.296-3.592-1.359-4.627-2.993a7.5 7.5 0 0 1-.634-1.332a6.6 6.6 0 0 1-.189-3.584a6.8 6.8 0 0 1 1.096-2.388c.07-.095.133-.173.141-.173s2.065 2.052 4.573 4.56"></path>
-                                                                    </svg> Missing Critical Skills
-                                                                </h2>
-
-                                                                <div className="space-y-3">
-                                                                    {skillGap.missingCriticalSkills.map((item, idx) => (
-                                                                        <div
-                                                                            key={idx}
-                                                                            className="border border-red-300 rounded-lg p-3"
-                                                                        >
-                                                                            <p>
-                                                                                <strong>Skill:</strong> {item.skill}
-                                                                            </p>
-
-                                                                            <p>
-                                                                                <strong>Importance:</strong>{" "}
-                                                                                <span className="text-red-600 font-semibold">
-                                                                                    {item.importance}
-                                                                                </span>
-                                                                            </p>
-
-                                                                            <p>
-                                                                                <strong>Reason:</strong> {item.reason}
-                                                                            </p>
-                                                                        </div>
-                                                                    ))}
-                                                                </div>
-                                                            </div>
-
-                                                            {/* Irrelevant Skills */}
-                                                            <div className="bg-white p-4 rounded-xl shadow">
-                                                                <h2 className="text-lg font-bold mb-3">
-                                                                    Irrelevant Skills
-                                                                </h2>
-
-                                                                <div className="space-y-3">
-                                                                    {skillGap.irrelevantSkills.map((item, idx) => (
-                                                                        <div
-                                                                            key={idx}
-                                                                            className="border border-yellow-300 rounded-lg p-3"
-                                                                        >
-                                                                            <p>
-                                                                                <strong>Skill:</strong> {item.skill}
-                                                                            </p>
-
-                                                                            <p>
-                                                                                <strong>Suggestion:</strong> {item.suggestion}
-                                                                            </p>
-                                                                        </div>
-                                                                    ))}
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-                                                    )}
-
-                                                </span>
-
-
-
-                                            </div>
-                                            <div className="flex flex-col gap-2">
-                                                <div className="w-full  bg-white px-3 py-3 rounded-3xl">
-
-                                                    <span className=" text-black  text-md">
-                                                        <p className="flex text-xl mb-1 items-center justify-start gap-2 font-extrabold">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 24 24">
-                                                                <path fill="currentColor" d="M9 18h5.5q.425 0 .788-.213t.512-.587l2.1-4.9q.05-.125.075-.25T18 11.8V11q0-.425-.288-.713T17 10h-4.6l.6-3.4q.05-.25-.025-.475t-.25-.4L12 5l-4.6 5q-.2.2-.3.45T7 11v5q0 .825.588 1.413T9 18m3 4q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"></path>
-                                                            </svg>
-
-                                                            Strengths To Amplify :</p>
-
-                                                        {strategyData?.data?.data?.strengthsToAmplify?.map((bullet, idx) => {
-
-
-                                                            return (
-                                                                <div
-                                                                    key={idx}
-                                                                    className="mb-3  rounded-2xl"
-
-                                                                >
-                                                                    <span className="font-semibold text-gray-500">● </span>
-                                                                    <span className="text-gray-500"> {bullet}</span>
-
-                                                                </div>
-                                                            );
-                                                        })}
-
-                                                    </span>
-                                                </div>
-                                                <div className="w-full  bg-blue-300 px-3 py-3 rounded-3xl">
-
-                                                    <span className=" text-black  text-md">
-                                                        <p className="flex text-xl mb-1 items-center justify-start gap-2 font-extrabold">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 24 24">
-                                                                <path fill="#000" d="m12 8l3 5.2l3-2.7l-.7 3.5H6.7L6 10.5l3 2.7zm0-4l-3.5 6L3 5l2 11h14l2-11l-5.5 5zm7 14H5v1c0 .6.4 1 1 1h12c.6 0 1-.4 1-1z"></path>
-                                                            </svg>
-
-                                                            Quick Wins :</p>
-
-                                                        {auditData?.data?.data?.quickWins.map((bullets, idx) => {
-                                                            return (
-                                                                <p key={idx}>
-
-                                                                    {bullets}
-                                                                </p>
-                                                            )
-                                                        })}
-
-                                                    </span>
-                                                </div>
-
-
 
 
 
@@ -1696,40 +1460,515 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
 
                                                         Core Narrative :</p>
 
-                                                    {strategyData?.data?.data?.coreNarrative}
+                                                    {strategyData?.data?.coreNarrative}
 
 
 
                                                 </span>
+                                            </div>
+                                            <div className="w-full rounded-3xl bg-green-100 text-black p-4">
+                                                <div className="flex items-center gap-2 text-xl font-extrabold mb-3">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 48 48">
+                                                        <defs>
+                                                            <mask id="SVGdMjhMbPE">
+                                                                <g fill="none">
+                                                                    <path stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M38.142 38.142c7.81-7.81 7.81-20.474 0-28.284s-20.474-7.81-28.284 0s-7.81 20.474 0 28.284m22.627-5.657c4.687-4.686 4.687-12.284 0-16.97c-4.686-4.687-12.284-4.687-16.97 0c-4.687 4.686-4.687 12.284 0 16.97"></path>
+                                                                    <path fill="#555" d="M28 24a4 4 0 1 1-8 0a4 4 0 0 1 8 0"></path>
+                                                                    <path stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M24 28a4 4 0 1 0 0-8a4 4 0 0 0 0 8m0 0v16m0 0h4m-4 0h-4"></path>
+                                                                </g>
+                                                            </mask>
+                                                        </defs>
+                                                        <path fill="#000" d="M0 0h48v48H0z" mask="url(#SVGdMjhMbPE)"></path>
+                                                    </svg>
+
+                                                    <span>Strengths To Amplify</span>
+                                                </div>
+
+                                                <div className="space-y-2">
+                                                    {strategyData?.data?.strengthsToAmplify.map((item, idx) => (
+                                                        <p key={idx} className="text-sm md:text-base break-words">
+                                                            ● {item}
+                                                        </p>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            <div className="w-full grid grid-cols-2  gap-2 rounded-3xl">
+
+                                                <div className=" text-black bg-green-100 p-3 rounded-3xl text-md">
+                                                    <p className="flex text-xl mb-1 items-center justify-start gap-2 font-extrabold">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 24 24">
+                                                            <path fill="#000" d="M4.472 4.75c-.597 0-1.293.166-1.862.519c-.58.358-1.11.974-1.11 1.856v9.75c0 .882.53 1.497 1.11 1.856c.57.353 1.265.519 1.862.519H14.77a2.75 2.75 0 0 0 1.92-.781l5.35-5.216a1.75 1.75 0 0 0 0-2.506l-5.35-5.216a2.75 2.75 0 0 0-1.92-.781z"></path>
+                                                        </svg>
+
+                                                        Must Include Keywords :</p>
+                                                    <div className="flex flex-wrap gap-2">
+                                                        {strategyData?.data?.mustIncludeKeywords.map((item, idx) => (
+                                                            <span
+                                                                key={idx}
+                                                                className="rounded-full bg-black/20 px-3 py-2 text-sm break-words"
+                                                            >
+                                                                {item}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                                <div className=" text-black bg-green-100 p-3 rounded-3xl text-md">
+                                                    <p className="flex text-xl mb-1 items-center justify-start gap-2 font-extrabold">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 24 24">
+                                                            <path fill="#000" d="M4.472 4.75c-.597 0-1.293.166-1.862.519c-.58.358-1.11.974-1.11 1.856v9.75c0 .882.53 1.497 1.11 1.856c.57.353 1.265.519 1.862.519H14.77a2.75 2.75 0 0 0 1.92-.781l5.35-5.216a1.75 1.75 0 0 0 0-2.506l-5.35-5.216a2.75 2.75 0 0 0-1.92-.781z"></path>
+                                                        </svg>
+
+                                                        Nice To Include Keywords :</p>
+                                                    <div className="flex flex-wrap gap-2">
+                                                        {strategyData?.data?.niceToIncludeKeywords.map((item, idx) => (
+                                                            <span
+                                                                key={idx}
+                                                                className="rounded-full bg-black/20 px-3 py-2 text-sm break-words"
+                                                            >
+                                                                {item}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="w-full grid grid-cols-2  gap-2 rounded-3xl">
+
+                                                <div className=" text-black bg-red-100 p-3 rounded-3xl text-md">
+                                                    <p className="flex text-xl mb-1 items-center justify-start gap-2 font-extrabold">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 24 24">
+                                                            <path fill="#000" d="M4.472 4.75c-.597 0-1.293.166-1.862.519c-.58.358-1.11.974-1.11 1.856v9.75c0 .882.53 1.497 1.11 1.856c.57.353 1.265.519 1.862.519H14.77a2.75 2.75 0 0 0 1.92-.781l5.35-5.216a1.75 1.75 0 0 0 0-2.506l-5.35-5.216a2.75 2.75 0 0 0-1.92-.781z"></path>
+                                                        </svg>
+                                                        Keywords To Avoid :</p>
+                                                    <div className="flex flex-wrap gap-2">
+                                                        {strategyData?.data?.keywordsToAvoid.map((item, idx) => (
+                                                            <span
+                                                                key={idx}
+                                                                className="rounded-full bg-black/20 px-3 py-2 text-sm break-words"
+                                                            >
+                                                                {item}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                                <div className=" text-black bg-red-100 p-3 rounded-3xl text-md">
+                                                    <p className="flex text-xl mb-1 items-center justify-start gap-2 font-extrabold">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 24 24">
+                                                            <path fill="#000" d="M5 19V8h2v9h9v2zm5-5V3h2v9h9v2z"></path>
+                                                        </svg>
+                                                        Weaknesses To Downplay :</p>
+
+                                                    <div className="space-y-2">
+                                                        {strategyData?.data?.weaknessesToDownplay.map((item, idx) => (
+                                                            <p key={idx} className="text-sm md:text-base break-words">
+                                                                ● {item}
+                                                            </p>
+                                                        ))}
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div className="w-full grid grid-cols-2  gap-2 rounded-3xl">
+
+                                                <div className=" text-black bg-white p-3 rounded-3xl text-md">
+                                                    <p className="flex text-xl mb-1 items-center justify-start gap-2 font-extrabold">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 24 24">
+                                                            <g fill="none">
+                                                                <path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"></path>
+                                                                <path fill="#000" d="M19.07 12.01a1 1 0 0 1 .85 1.132A8.004 8.004 0 0 1 13 19.938V21a1 1 0 1 1-2 0v-1.062a8.005 8.005 0 0 1-6.919-6.796a1 1 0 0 1 1.98-.284a6.001 6.001 0 0 0 11.878 0a1 1 0 0 1 1.132-.848ZM12 2a5 5 0 0 1 5 5v5a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5"></path>
+                                                            </g>
+                                                        </svg>
+
+                                                        Tone Guidance :</p>
+                                                    <div className="flex flex-col gap-3">
+                                                        <p><b>Overall</b>: {strategyData?.data?.toneGuidance?.overall}</p>
+                                                        <p><b>Verb Style</b>: {strategyData?.data?.toneGuidance?.verbStyle}</p>
+                                                        <p><b>Formality</b>: {strategyData?.data?.toneGuidance?.formality}</p>
+
+                                                    </div>
+                                                </div>
+                                                <div className=" text-black bg-white p-3 rounded-3xl text-md">
+                                                    <p className="flex text-xl mb-1 items-center justify-start gap-2 font-extrabold">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 32 32">
+                                                            <path fill="#000" d="M16 3.667C9.19 3.667 3.667 9.187 3.667 16S9.19 28.333 16 28.333c6.812 0 12.333-5.52 12.333-12.333S22.813 3.667 16 3.667m0 3c1.85 0 3.572.548 5.024 1.48L8.147 21.024A9.26 9.26 0 0 1 6.667 16c0-5.146 4.187-9.333 9.333-9.333m0 18.666a9.27 9.27 0 0 1-5.024-1.48l12.876-12.877A9.26 9.26 0 0 1 25.332 16c0 5.146-4.186 9.333-9.332 9.333"></path>
+                                                        </svg>
+                                                        Red Flags To Address :</p>
+
+                                                    <div className="space-y-2">
+                                                        {strategyData?.data?.redFlagsToAddress.map((item, idx) => (
+                                                            <p key={idx} className="text-sm md:text-base break-words">
+                                                                ● {item}
+                                                            </p>
+                                                        ))}
+                                                    </div>
+
+                                                </div>
                                             </div>
                                             <div className="w-full  bg-white px-3 py-3 rounded-3xl">
 
                                                 <span className=" text-black  text-md">
                                                     <p className="flex text-xl mb-1 items-center justify-start gap-2 font-extrabold">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 24 24">
-                                                            <path fill="currentColor" d="M9 18h5.5q.425 0 .788-.213t.512-.587l2.1-4.9q.05-.125.075-.25T18 11.8V11q0-.425-.288-.713T17 10h-4.6l.6-3.4q.05-.25-.025-.475t-.25-.4L12 5l-4.6 5q-.2.2-.3.45T7 11v5q0 .825.588 1.413T9 18m3 4q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"></path>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 16 16">
+                                                            <path fill="currentColor" d="M6 1v3H1V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1zm14 12v3h-5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1zM6 8v7H1V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1zm14-6v7h-5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1z"></path>
                                                         </svg>
 
-                                                        Weaknesses To Downplay :</p>
+                                                        Section Wise Strategy : {strategyData?.data?.versionLabel}</p>
 
-                                                    {strategyData?.data?.data?.weaknessesToDownplay?.map((bullet, idx) => {
+                                                    <div className="underline underline-offset-4 flex items-center gap-2 mt-5 ml-5 text-lg font-bold">
+
+                                                        #1  PROFILE SUMMARY</div>
+                                                    <div className="grid grid-cols-2 gap-2">
 
 
-                                                        return (
-                                                            <div
-                                                                key={idx}
-                                                                className="mb-3  rounded-2xl"
+                                                        <div className="rounded-2xl  p-5">
+                                                            <h3 className="mb-2 flex items-center gap-2 text-lg font-bold">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 16 16">
+                                                                    <path fill="#000" d="M8.407 14.93a.5.5 0 0 1-.814 0L5.5 12H4a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v4a3 3 0 0 1-3 3h-1.5z"></path>
+                                                                </svg> Open With
+                                                            </h3>
+                                                            <p className="text-sm md:text-base leading-relaxed">
+                                                                {strategyData?.data?.summaryStrategy?.openWith}
+                                                            </p>
+                                                        </div>
 
-                                                            >
-                                                                <span className="font-semibold text-gray-500">● </span>
-                                                                <span className="text-gray-500"> {bullet}</span>
 
+                                                        <div className="rounded-2xl bg-green-100 p-5">
+                                                            <h3 className="mb-3 flex items-center gap-2 text-lg font-bold">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 24 24">
+                                                                    <path fill="#000" d="M4.472 4.75c-.597 0-1.293.166-1.862.519c-.58.358-1.11.974-1.11 1.856v9.75c0 .882.53 1.497 1.11 1.856c.57.353 1.265.519 1.862.519H14.77a2.75 2.75 0 0 0 1.92-.781l5.35-5.216a1.75 1.75 0 0 0 0-2.506l-5.35-5.216a2.75 2.75 0 0 0-1.92-.781z"></path>
+                                                                </svg> Keywords To Frontload
+                                                            </h3>
+
+                                                            <div className="flex flex-wrap gap-2">
+                                                                {strategyData?.data?.summaryStrategy?.keywordsToFrontload.map((item, idx) => (
+                                                                    <span
+                                                                        key={idx}
+                                                                        className="rounded-full bg-black/20 px-3 py-2 text-sm font-medium text-black"
+                                                                    >
+                                                                        {item}
+                                                                    </span>
+                                                                ))}
                                                             </div>
-                                                        );
-                                                    })}
+                                                        </div>
 
+
+                                                        <div className="rounded-2xl  p-5">
+                                                            <h3 className="mb-2 flex items-center gap-2 text-lg font-bold">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 24 24">
+                                                                    <g fill="none">
+                                                                        <path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"></path>
+                                                                        <path fill="#000" d="M19.07 12.01a1 1 0 0 1 .85 1.132A8.004 8.004 0 0 1 13 19.938V21a1 1 0 1 1-2 0v-1.062a8.005 8.005 0 0 1-6.919-6.796a1 1 0 0 1 1.98-.284a6.001 6.001 0 0 0 11.878 0a1 1 0 0 1 1.132-.848ZM12 2a5 5 0 0 1 5 5v5a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5"></path>
+                                                                    </g>
+                                                                </svg> Tone Instruction
+                                                            </h3>
+
+                                                            <p className="text-sm md:text-base leading-relaxed">
+                                                                {strategyData?.data?.summaryStrategy?.toneInstruction}
+                                                            </p>
+                                                        </div>
+
+
+                                                        <div className="rounded-2xl bg-red-100 p-5">
+                                                            <h3 className="mb-3 flex items-center gap-2 text-lg font-bold">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 512 512">
+                                                                    <path fill="#000" d="M323.9 45.2C269.6 171.8 229.2 213.1 114 258.1l-4.4-11.8l-8.4-22.5l-76.26 82.1l111.56 11.8l-12.1-32.1c119.5-46.5 171-99 226.6-228.84zm51.7 149l12 32.1c-119.5 46.6-171 99.1-226.6 228.8l27.1 11.7c54.3-126.7 94.7-167.9 209.9-212.9l4.4 11.8l8.4 22.4l76.3-82.1z"></path>
+                                                                </svg> Avoid
+                                                            </h3>
+
+                                                            <div className="space-y-2">
+                                                                {strategyData?.data?.summaryStrategy?.avoid.map((item, idx) => (
+                                                                    <p
+                                                                        key={idx}
+                                                                        className="flex items-start gap-2 text-sm md:text-base"
+                                                                    >
+                                                                        <span className="font-bold text-red-600">•</span>
+                                                                        <span>{item}</span>
+                                                                    </p>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div className="bg-gray-500 w-full h-[1px] mt-4"></div>
+                                                    <div className="underline underline-offset-4 flex items-center gap-2 mt-5 ml-5 text-lg font-bold">
+
+                                                        #2 EXPERIENCE
+
+                                                    </div>
+
+                                                    <div className="w-full">
+
+
+                                                        <div className="w-full rounded-2xl  p-5">
+                                                            <h3 className="mb-2 flex items-center gap-2 text-lg font-bold">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 48 48">
+                                                                    <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={4}>
+                                                                        <path d="M24 9h18M24 19h18M6 29h36M6 39h36"></path>
+                                                                        <circle cx={12} cy={14} r={5} fill="currentColor"></circle>
+                                                                    </g>
+                                                                </svg> General Instruction
+                                                            </h3>
+                                                            <p className="text-sm md:text-base leading-relaxed">
+                                                                {strategyData?.data?.experienceStrategy?.general}
+                                                            </p>
+                                                        </div>
+
+                                                        <h3 className=" mb-3 ml-3 flex items-center gap-2 text-lg font-bold">
+                                                            Per Role Strategy
+                                                        </h3>
+
+
+
+
+
+
+                                                        <div className="w-full grid grid-cols-2 gap-4">
+                                                            {strategyData?.data?.experienceStrategy?.perRole.map((item, idx) => (
+                                                                <div
+                                                                    key={idx}
+                                                                    className="w-full rounded-2xl bg-green-100 p-5 shadow-sm"
+                                                                >
+                                                                    <h3 className="mb-4 text-lg font-bold text-green-900">
+                                                                        {item?.company}
+                                                                    </h3>
+
+                                                                    <div className="space-y-3 text-sm md:text-base">
+
+                                                                        <div >
+                                                                            <span className="font-semibold flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 512 512">
+                                                                                <path fill="#000" fillRule="evenodd" d="m213.33 28.445l72.568 96.757l106.085-26.521l-25.985 103.942c-20.742-2.159-42.612 4.795-58.788 22.769c-4.567 5.075-12.525 5.075-17.092 0c-38.594-42.882-109.598-23.038-120.366 33.64l-11.584 60.969H90.007l-55.33-221.32l106.085 26.521zm193.288 234.569c-7.475-39.342-56.761-53.117-83.551-23.351c-13.042 14.491-35.764 14.491-48.806 0c-26.789-29.766-76.076-15.991-83.551 23.351l-18.934 99.654h253.777zm22.988 120.987H167.723l-4.054 21.333H128v42.667h341.333v-42.667h-35.674z" clipRule="evenodd"></path>
+                                                                            </svg> Role:</span>
+                                                                            <p className="mt-1 text-gray-700">{item?.role}</p>
+                                                                        </div>
+
+                                                                        <div>
+                                                                            <span className="font-semibold flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 32 32">
+                                                                                <path fill="#000" d="M22 26.59L19.41 24L18 25.41l4 4l8-8L28.59 20z"></path>
+                                                                                <circle cx={16} cy={16} r={2} fill="#000"></circle>
+                                                                                <path fill="#000" d="M16 22a6 6 0 1 1 6-6a6.007 6.007 0 0 1-6 6m0-10a4 4 0 1 0 4 4a4.005 4.005 0 0 0-4-4"></path>
+                                                                                <path fill="#000" d="M28 16a12 12 0 1 0-12 12v-2a10 10 0 1 1 10-10Z"></path>
+                                                                            </svg> Relevance:</span>
+                                                                            <p className="mt-1 text-gray-700">
+                                                                                {item?.relevanceToTarget}
+                                                                            </p>
+                                                                        </div>
+
+                                                                        <div>
+                                                                            <span className="font-semibold flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 48 48">
+                                                                                <g fill="none" stroke="#000" strokeLinecap="round" strokeLinejoin="round" strokeWidth={4}>
+                                                                                    <path d="M24 9h18M24 19h18M6 29h36M6 39h36"></path>
+                                                                                    <circle cx={12} cy={14} r={5} fill="#000"></circle>
+                                                                                </g>
+                                                                            </svg> Instruction:</span>
+                                                                            <p className="mt-1 text-gray-700 leading-relaxed">
+                                                                                {item?.instruction}
+                                                                            </p>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+
+
+
+
+
+
+                                                    </div>
+
+                                                    <div className="bg-gray-500 w-full h-[1px] mt-4"></div>
+                                                    <div className="underline underline-offset-4 flex items-center gap-2 mt-5 ml-5 text-lg font-bold">
+
+                                                        #3 PROJECT
+
+                                                    </div>
+
+
+                                                    <div className="w-full">
+
+
+                                                        <div className="w-full rounded-2xl  p-5">
+                                                            <h3 className="mb-2 flex items-center gap-2 text-lg font-bold">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 48 48">
+                                                                    <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={4}>
+                                                                        <path d="M24 9h18M24 19h18M6 29h36M6 39h36"></path>
+                                                                        <circle cx={12} cy={14} r={5} fill="currentColor"></circle>
+                                                                    </g>
+                                                                </svg> General Instruction
+                                                            </h3>
+                                                            <p className="text-sm md:text-base leading-relaxed">
+                                                                {strategyData?.data?.experienceStrategy?.general}
+                                                            </p>
+                                                        </div>
+
+                                                        <h3 className=" mb-3 ml-3 flex items-center gap-2 text-lg font-bold">
+                                                            Per Project Strategy
+                                                        </h3>
+
+
+
+
+
+
+                                                        <div className="w-full grid grid-cols-2 gap-4">
+                                                            {strategyData?.data?.projectStrategy?.perProject.map((item, idx) => (
+                                                                <div
+                                                                    key={idx}
+                                                                    className="w-full rounded-2xl bg-green-100 p-5 shadow-sm"
+                                                                >
+                                                                    <h3 className="mb-4 text-lg font-bold text-green-900">
+                                                                        {item?.name}
+                                                                    </h3>
+
+                                                                    <div className="space-y-3 text-sm md:text-base">
+
+
+
+                                                                        <div className="flex items-center gap-2">
+                                                                            <span className="font-semibold flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 32 32">
+                                                                                <path fill="#000" d="M22 26.59L19.41 24L18 25.41l4 4l8-8L28.59 20z"></path>
+                                                                                <circle cx={16} cy={16} r={2} fill="#000"></circle>
+                                                                                <path fill="#000" d="M16 22a6 6 0 1 1 6-6a6.007 6.007 0 0 1-6 6m0-10a4 4 0 1 0 4 4a4.005 4.005 0 0 0-4-4"></path>
+                                                                                <path fill="#000" d="M28 16a12 12 0 1 0-12 12v-2a10 10 0 1 1 10-10Z"></path>
+                                                                            </svg> Relevance:</span>
+                                                                            <p className="mt-1 text-gray-700 flex items-center">
+                                                                                {item?.relevanceToTarget} {item?.relevanceToTarget === "high" ? (<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 80 80">
+                                                                                    <path d="M0 0h80v80H0z" fill="none" />
+                                                                                    <g fill="none">
+                                                                                        <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z" />
+                                                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6" d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177" />
+                                                                                    </g>
+                                                                                </svg>
+                                                                                ) : (
+
+                                                                                    <svg className="rotate-[180deg]" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 80 80">
+                                                                                        <path d="M0 0h80v80H0z" fill="none" />
+                                                                                        <g fill="none">
+                                                                                            <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z" />
+                                                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6" d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177" />
+                                                                                        </g>
+                                                                                    </svg>
+                                                                                )}
+                                                                            </p>
+
+                                                                        </div>
+
+                                                                        <div>
+                                                                            <span className="font-semibold flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 48 48">
+                                                                                <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={4}>
+                                                                                    <path d="M24 9h18M24 19h18M6 29h36M6 39h36"></path>
+                                                                                    <circle cx={12} cy={14} r={5} fill="currentColor"></circle>
+                                                                                </g>
+                                                                            </svg> Instruction:</span>
+                                                                            <p className="mt-1 text-gray-700 leading-relaxed">
+                                                                                {item?.instruction}
+                                                                            </p>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+
+
+
+
+
+
+                                                    </div>
+                                                    <div className="bg-gray-500 w-full h-[1px] mt-4"></div>
+                                                    <div className="underline underline-offset-4 flex items-center gap-2 mt-5 ml-5 text-lg font-bold">
+
+                                                        #4 SKILLS
+
+                                                    </div>
+                                                    <div className="w-full grid grid-cols-2 mt-2 gap-2 rounded-3xl">
+
+                                                        <div className=" text-black bg-green-100 p-3 rounded-3xl text-md">
+                                                            <p className="flex text-xl mb-1 items-center justify-start gap-2 font-extrabold">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 32 32">
+                                                                    <path fill="#000" d="M14 25h14v2H14zm-6.83 1l-2.58 2.58L6 30l4-4l-4-4l-1.42 1.41zM14 15h14v2H14zm-6.83 1l-2.58 2.58L6 20l4-4l-4-4l-1.42 1.41zM14 5h14v2H14zM7.17 6L4.59 8.58L6 10l4-4l-4-4l-1.42 1.41z"></path>
+                                                                </svg>
+
+                                                                Categories To Use :</p>
+                                                            <div className="flex flex-wrap gap-2">
+                                                                {strategyData?.data?.skillsStrategy?.categoriesToUse.map((item, idx) => (
+                                                                    <span
+                                                                        key={idx}
+                                                                        className="rounded-full bg-black/20 px-3 py-2 text-sm break-words"
+                                                                    >
+                                                                        {item}
+                                                                    </span>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                        <div className=" text-black bg-green-100 p-3 rounded-3xl text-md">
+                                                            <p className="flex text-xl mb-1 items-center justify-start gap-2 font-extrabold">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 32 32">
+                                                                    <path d="m16 2l12.12 7v14L16 30L3.88 23V9z"></path>
+                                                                    <path stroke="#fff" strokeWidth={2.71} d="m16 6.97l7.82 4.51v9.04L16 25.03l-7.82-4.51v-9.04z"></path>
+                                                                </svg>
+
+                                                                Skills To Keep :</p>
+                                                            <div className="flex flex-wrap gap-2">
+                                                                {strategyData?.data?.skillsStrategy?.skillsToKeep.map((item, idx) => (
+                                                                    <span
+                                                                        key={idx}
+                                                                        className="rounded-full bg-black/20 px-3 py-2 text-sm break-words"
+                                                                    >
+                                                                        {item}
+                                                                    </span>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="w-full grid grid-cols-2 mt-2 gap-2 rounded-3xl">
+
+                                                        <div className=" text-black bg-red-100 p-3 rounded-3xl text-md">
+                                                            <p className="flex text-xl mb-1 items-center justify-start gap-2 font-extrabold">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 32 32">
+                                                                    <path d="m16 2l12.12 7v14L16 30L3.88 23V9z"></path>
+                                                                    <path stroke="#fff" strokeWidth={2.71} d="m16 6.97l7.82 4.51v9.04L16 25.03l-7.82-4.51v-9.04z"></path>
+                                                                </svg>
+
+                                                                Skills To Remove :</p>
+                                                            <div className="flex flex-wrap gap-2">
+                                                                {strategyData?.data?.skillsStrategy?.skillsToRemove.map((item, idx) => (
+                                                                    <span
+                                                                        key={idx}
+                                                                        className="rounded-full bg-black/20 px-3 py-2 text-sm break-words"
+                                                                    >
+                                                                        {item}
+                                                                    </span>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                        <div className=" text-black bg-purple-100 p-3 rounded-3xl text-md">
+                                                            <p className="flex text-xl mb-1 items-center justify-start gap-2 font-extrabold">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 32 32">
+                                                                    <path d="m16 2l12.12 7v14L16 30L3.88 23V9z"></path>
+                                                                    <path stroke="#fff" strokeWidth={2.71} d="m16 6.97l7.82 4.51v9.04L16 25.03l-7.82-4.51v-9.04z"></path>
+                                                                </svg>
+
+                                                                Skills To Surface :</p>
+
+                                                            <div className="space-y-2">
+                                                                {strategyData?.data?.skillsStrategy?.skillsToSurface.map((item, idx) => (
+                                                                    <p key={idx} className="text-sm md:text-base break-words">
+                                                                        ● {item}
+                                                                    </p>
+                                                                ))}
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
                                                 </span>
+
+
+
                                             </div>
+
                                         </div>
 
                                     }

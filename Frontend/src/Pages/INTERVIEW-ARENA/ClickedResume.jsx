@@ -243,14 +243,10 @@ ${jd.compensationSignals?.note ?? ""}
     relative
     bg-white
     rounded-2xl
-    w-[95vw]
-    sm:w-[92vw]
-    md:w-[88vw]
-    lg:w-[80vw]
-    xl:w-[70vw]
+    w-[98vw]
 
-    h-[95vh]
-    sm:h-[92vh]
+
+    h-[98vh]
 
     shadow-2xl
     overflow-hidden
