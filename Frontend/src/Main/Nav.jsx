@@ -56,7 +56,7 @@ const Nav = () => {
 
             <div onClick={() => navigate("/login")} className={` flex items-center justify-between cursor-pointer text-black  font-bold ${ClassName}`}>
 
-                <span className="text-white">
+                <span className="text-white relative -right-[1px]" >
                     <svg height="40" viewBox="0 0 15 40" width="15" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" transform="matrix(-1,0,0,1,0,0)">
                         <path d="M0 .5h11A3.5 3.5 0 0 1 14.5 4v20.523a5.5 5.5 0 0 1-1.416 3.684l-8.547 9.477A5.5 5.5 0 0 1 .453 39.5H0" data-stroke="true"
                             fill="#fff"
@@ -64,7 +64,7 @@ const Nav = () => {
                     </svg>
                 </span>
                 <button className="bg-white  px-4 py-[7.5px] ">Open CodeSarthi</button>
-                <span className="text-white">
+                <span className="text-white relative -left-[1px]">
                     <svg height="40" viewBox="0 0 15 40" width="15" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M0 .5h11A3.5 3.5 0 0 1 14.5 4v20.523a5.5 5.5 0 0 1-1.416 3.684l-8.547 9.477A5.5 5.5 0 0 1 .453 39.5H0"
@@ -233,7 +233,7 @@ const Nav = () => {
     return (
         <div className="relative w-full">
             {/* NAVBAR */}
-            <div className=" top-5 z-30  2xl:px-7 xl:px-6 sm:px-4 px-2   w-screen text-white">
+            <div className=" top-5 z-30  2xl:px-7 xl:px-6 px-4   w-screen text-white">
                 <div className="flex items-center  justify-between">
 
                     {/* LOGO */}

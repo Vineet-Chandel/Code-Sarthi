@@ -4,8 +4,8 @@ const User = require("../models/user");
 const resume = require("../models/ResumeProfileSchema");
 const OpenAI = require("openai");
 const client = new OpenAI({
-    apiKey: process.env.GROQ_API_KEY,
-    baseURL: "https://api.groq.com/openai/v1",
+  apiKey: process.env.GROQ_API_KEY,
+  baseURL: "https://api.groq.com/openai/v1",
 });
 const { userAuth } = require("../middlewares/userAuth");
 const JSON_SYSTEM_PROMPT = `
@@ -96,37 +96,232 @@ Return ONLY a valid JSON object. No prose. No markdown fences.
   }
 }
 `;
+// ─── STAGE 2A — SUMMARY REWRITE ──────────────────────────────────────────────
+const buildSummaryPrompt = ({ profile, strategy }) => `
+You are an expert resume writer specializing in ${strategy.toneGuidance?.overall ?? "professional"} resumes.
+
+Your ONLY job is to rewrite the professional summary section of this resume.
+Do NOT rewrite anything else. Do NOT explain your choices. Return only the JSON object.
+
+## STRATEGY CONTEXT
+Positioning Statement: ${strategy.positioningStatement}
+Core Narrative: ${strategy.coreNarrative}
+Open With: ${strategy.summaryStrategy?.openWith}
+Keywords to Frontload: ${strategy.summaryStrategy?.keywordsToFrontload?.join(", ")}
+Tone Instruction: ${strategy.summaryStrategy?.toneInstruction}
+Avoid: ${strategy.summaryStrategy?.avoid?.join(" | ")}
+Must Include Keywords: ${strategy.mustIncludeKeywords?.join(", ")}
+Tone Guidance: ${strategy.toneGuidance?.verbStyle}
+Formality: ${strategy.toneGuidance?.formality}
+
+## ORIGINAL SUMMARY
+Title: ${profile.header?.summaryTitle}
+Body: ${profile.summaryBody}
+
+## FULL PROFILE CONTEXT (for grounding — do not invent claims not present here)
+Name: ${profile.header?.fname} ${profile.header?.lname}
+Experience: ${JSON.stringify(profile.experience)}
+Projects: ${JSON.stringify(profile.projects)}
+Skills: ${JSON.stringify(profile.skills)}
+Education: ${JSON.stringify(profile.education)}
+Achievements: ${JSON.stringify(profile.achievements)}
+
+## RULES
+- 3–4 sentences MAX. No bullet points. No lists.
+- Open with the strongest proof point from their real experience — not a generic opener
+- Do NOT start with "I"
+- Embed 3–5 must-include keywords naturally — never stuff them
+- Do NOT mention any keywords from this list: ${strategy.keywordsToAvoid?.join(", ")}
+- Every claim must be traceable to the profile data above — no invented achievements
+- Sound like a human wrote it for this specific person, not a template
+- Align the title to the target role — not the original title if it doesn't match
+
+Return ONLY this JSON shape:
+{
+  "summaryTitle": "rewritten title aligned to target role",
+  "summaryBody": "rewritten 3–4 sentence summary"
+}
+`;
+
+
+// ─── STAGE 2B — EXPERIENCE BULLETS REWRITE ───────────────────────────────────
+const buildExperiencePrompt = ({ experienceEntry, roleStrategy, strategy }) => `
+You are an expert resume writer specializing in ${strategy.toneGuidance?.overall ?? "professional"} resumes.
+
+Your ONLY job is to rewrite the bullet points for ONE experience entry.
+Do NOT rewrite any other section. Do NOT explain anything. Return only the JSON object.
+
+## STRATEGY CONTEXT
+General Experience Instruction: ${strategy.experienceStrategy?.general}
+Role-Specific Instruction: ${roleStrategy?.instruction ?? strategy.experienceStrategy?.general}
+Relevance to Target: ${roleStrategy?.relevanceToTarget ?? "medium"}
+Must Include Keywords: ${strategy.mustIncludeKeywords?.join(", ")}
+Nice to Include Keywords: ${strategy.niceToIncludeKeywords?.join(", ")}
+Tone: ${strategy.toneGuidance?.overall}
+Verb Style: ${strategy.toneGuidance?.verbStyle}
+Formality: ${strategy.toneGuidance?.formality}
+Red Flags to Avoid: ${strategy.redFlagsToAddress?.join(" | ")}
+
+## EXPERIENCE ENTRY TO REWRITE
+Role: ${experienceEntry.role}
+Company: ${experienceEntry.company}
+Location: ${experienceEntry.location}
+Employment Type: ${experienceEntry.employmentType}
+Start Date: ${experienceEntry.startDate}
+End Date: ${experienceEntry.endDate}
+Currently Working: ${experienceEntry.currentlyWorking}
+
+Original Bullets:
+${experienceEntry.bullets?.map((b, i) => `${i + 1}. ${b}`).join("\n")}
+
+## RULES
+- Return EXACTLY ${experienceEntry.bullets?.length} bullets — same count as original
+- Start EVERY bullet with a strong action verb — vary them, never repeat the same verb twice
+- Format: [Action Verb] + [what you built/did] + [measurable result or impact]
+- Preserve real metrics — if a metric exists in the original, keep it or soften it if implausible
+- Do NOT invent new metrics that don't exist in the original bullets
+- Embed 1–2 target keywords per bullet naturally — never forced
+- Do NOT use: leveraged, utilized, synergized, assisted, helped, worked on
+- Do NOT reference dates in the bullets — dates are in the header fields
+- If relevance to target is "low" — still rewrite cleanly but don't over-engineer keyword placement
+
+Return ONLY this JSON shape:
+{
+  "company": "${experienceEntry.company}",
+  "role": "${experienceEntry.role}",
+  "bullets": ["rewritten bullet 1", "rewritten bullet 2", ...]
+}
+`;
+
+
+// ─── STAGE 2C — PROJECTS BULLETS REWRITE ─────────────────────────────────────
+const buildProjectPrompt = ({ project, projectStrategy, strategy }) => `
+You are an expert resume writer specializing in ${strategy.toneGuidance?.overall ?? "professional"} resumes.
+
+Your ONLY job is to rewrite the bullet points for ONE project entry.
+Do NOT rewrite any other section. Do NOT explain anything. Return only the JSON object.
+
+## STRATEGY CONTEXT
+General Project Instruction: ${strategy.projectStrategy?.general}
+Project-Specific Instruction: ${projectStrategy?.instruction ?? strategy.projectStrategy?.general}
+Relevance to Target: ${projectStrategy?.relevanceToTarget ?? "medium"}
+Must Include Keywords: ${strategy.mustIncludeKeywords?.join(", ")}
+Nice to Include Keywords: ${strategy.niceToIncludeKeywords?.join(", ")}
+Tone: ${strategy.toneGuidance?.overall}
+Verb Style: ${strategy.toneGuidance?.verbStyle}
+Red Flags to Avoid: ${strategy.redFlagsToAddress?.join(" | ")}
+
+## PROJECT ENTRY TO REWRITE
+Name: ${project.name}
+Stack: ${project.stack}
+GitHub: ${project.github}
+Live: ${project.live}
+Description: ${project.description}
+
+Original Bullets:
+${project.bullets?.map((b, i) => `${i + 1}. ${b}`).join("\n")}
+
+## RULES
+- Maximum 4 bullets — trim the weakest if original has more
+- If description contains placeholder or gibberish text, IGNORE it entirely — work from bullets only
+- Lead with the most impressive technical decision, architecture choice, or measurable outcome
+- Make the tech stack appear organically inside bullets — do NOT just list it
+- Ground every claim in the original bullet data — no hallucinated metrics
+- Start every bullet with a strong action verb
+- Embed 1–2 target keywords per bullet naturally
+- Surface architecture, scale decisions, and engineering judgment — not just task descriptions
+- Do NOT use: leveraged, utilized, built using, worked on, responsible for
+
+Return ONLY this JSON shape:
+{
+  "name": "${project.name}",
+  "bullets": ["rewritten bullet 1", "rewritten bullet 2", ...]
+}
+`;
+
+
+// ─── STAGE 2D — SKILLS CURATION ──────────────────────────────────────────────
+const buildSkillsPrompt = ({ profile, strategy }) => `
+You are an expert resume writer and ATS optimization specialist.
+
+Your ONLY job is to curate and reorganize the skills section of this resume for maximum ATS signal for the target role.
+Do NOT rewrite any other section. Do NOT explain anything. Return only the JSON object.
+
+## STRATEGY CONTEXT
+Target Role Keywords: ${strategy.mustIncludeKeywords?.join(", ")}
+Nice to Include: ${strategy.niceToIncludeKeywords?.join(", ")}
+Skills to Keep: ${strategy.skillsStrategy?.skillsToKeep?.join(", ")}
+Skills to Remove: ${strategy.skillsStrategy?.skillsToRemove?.join(", ")}
+Skills to Surface: ${strategy.skillsStrategy?.skillsToSurface?.join(", ")}
+Categories to Use: ${strategy.skillsStrategy?.categoriesToUse?.join(", ")}
+Order By: ${strategy.skillsStrategy?.orderBy}
+
+## CURRENT SKILLS SECTION
+${JSON.stringify(profile.skills)}
+
+## EXPERIENCE BULLETS (source of truth for surfacing implied skills)
+${JSON.stringify(profile.experience?.map(e => ({ role: e.role, company: e.company, bullets: e.bullets })))}
+
+## PROJECT BULLETS (secondary source for implied skills)
+${JSON.stringify(profile.projects?.map(p => ({ name: p.name, stack: p.stack, bullets: p.bullets })))}
+
+## RULES
+- Use ONLY the category names from the strategy: ${strategy.skillsStrategy?.categoriesToUse?.join(", ")}
+- Remove every skill in the "skills to remove" list — they dilute ATS signal for this role
+- Surface implied skills ONLY if they appear explicitly in experience or project bullets above
+- Do NOT add skills that cannot be verified from the profile data above
+- Order categories by relevance to the target role — most important first
+- Within each category, order skills by relevance to the target role — most important first
+- Eliminate redundant entries (e.g. "Node.js" and "NodeJS" — keep one)
+- Optimize for ATS keyword matching AND clean human readability
+
+Return ONLY this JSON shape:
+{
+  "skills": [
+    {
+      "skillCategory": "category name",
+      "skills": ["skill1", "skill2", "skill3"]
+    }
+  ]
+}
+`;
+
+
+
+
+
+
 
 aiWorkRouter.post("/resume/audit", userAuth, async (req, res) => {
-    try {
-        const { SpecificRole, ResumeType, BroadRole, JobDescription, Company } = req.body;
+  try {
+    const { SpecificRole, ResumeType, BroadRole, JobDescription, Company } = req.body;
 
-        const user = req.user;
-        if (!user) {
-            return res.status(401).json({ success: false, message: "Please re-login" });
-        }
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({ success: false, message: "Please re-login" });
+    }
 
-        // ✅ removed redundant User.findOne — userAuth already verified
+    // ✅ removed redundant User.findOne — userAuth already verified
 
-        const Profile = await resume.findOne({ userId: user._id });
-        if (!Profile) {
-            return res.status(404).json({ success: false, message: "Career profile not found" });
-        }
+    const Profile = await resume.findOne({ userId: user._id });
+    if (!Profile) {
+      return res.status(404).json({ success: false, message: "Career profile not found" });
+    }
 
-        // ✅ only ResumeType is hard-required — rest are optional for standalone audit
-        if (!ResumeType) {
-            return res.status(400).json({ success: false, message: "ResumeType is required" });
-        }
+    // ✅ only ResumeType is hard-required — rest are optional for standalone audit
+    if (!ResumeType) {
+      return res.status(400).json({ success: false, message: "ResumeType is required" });
+    }
 
-        // ✅ strip Mongoose internals before sending to AI
-        const profileClean = Profile.toObject();
-        delete profileClean.__v;
-        delete profileClean._id;
-        delete profileClean.userId;
-        delete profileClean.createdAt;
-        delete profileClean.updatedAt;
-        delete profileClean.isProfileCompleted;
-        const prompt = `
+    // ✅ strip Mongoose internals before sending to AI
+    const profileClean = Profile.toObject();
+    delete profileClean.__v;
+    delete profileClean._id;
+    delete profileClean.userId;
+    delete profileClean.createdAt;
+    delete profileClean.updatedAt;
+    delete profileClean.isProfileCompleted;
+    const prompt = `
 You are a senior technical recruiter and career coach with 10+ years of experience hiring for ${ResumeType} roles.
 
 Your job is to AUDIT a candidate's raw career profile before it gets tailored for a job application.
@@ -232,110 +427,110 @@ Follow this EXACT shape:
 
 `;
 
-        const completion = await client.chat.completions.create({
-            model: "llama-3.3-70b-versatile",
-            messages: [
-                { role: "system", content: JSON_SYSTEM_PROMPT },
-                { role: "user", content: prompt }
-            ],
-            temperature: 0.2,   // ✅ low temp for structured JSON
-            max_tokens: 3000,   // ✅ audit is large — give it room
-        });
+    const completion = await client.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+      messages: [
+        { role: "system", content: JSON_SYSTEM_PROMPT },
+        { role: "user", content: prompt }
+      ],
+      temperature: 0.2,   // ✅ low temp for structured JSON
+      max_tokens: 3000,   // ✅ audit is large — give it room
+    });
 
 
 
 
-        const rawText = completion?.choices?.[0]?.message?.content;
+    const rawText = completion?.choices?.[0]?.message?.content;
 
-        // ✅ catch empty/null content before attempting parse
-        if (!rawText || rawText.trim() === "") {
-            console.error("Empty AI response. Full completion:", JSON.stringify(completion, null, 2));
-            throw new Error(`AI returned empty content. finish_reason: ${completion?.choices?.[0]?.finish_reason ?? "unknown"}`);
-        }
-
-
-        // ✅ clean first, then parse the cleaned version
-        const cleanedText = rawText
-            .replace(/```json/gi, "")
-            .replace(/```/g, "")
-            .trim();
-
-        let parsedData;
-        try {
-            parsedData = JSON.parse(cleanedText); // ✅ parse cleanedText, not rawText
-        } catch (err) {
-            throw new Error(`AI returned unparseable JSON: ${err.message} — raw: ${cleanedText.slice(0, 200)}`);
-        }
-
-
-
-
-        const normalizeAuditResponse = (data) => ({
-            overallHealthScore: data.overallHealthScore ?? { score: 0, outOf: 100, verdict: "Audit incomplete" },
-            contentIssues: data.contentIssues ?? [],
-            missingFields: data.missingFields ?? [],
-            dataInconsistencies: data.dataInconsistencies ?? [],
-            skillGapAnalysis: data.skillGapAnalysis ?? {
-                roleRequiresSkills: [],
-                candidateHasSkills: [],
-                matchedSkills: [],
-                missingCriticalSkills: [],
-                irrelevantSkills: [],
-                skillCoveragePercent: 0
-            },
-            growthRecommendations: data.growthRecommendations ?? [],
-            quickWins: data.quickWins ?? [],
-            auditSummary: data.auditSummary ?? "",
-        });
-
-        // in the route, replace the res.json call with:
-        res.status(200).json({
-            success: true,
-            data: normalizeAuditResponse(parsedData),
-        });
-
-
-    } catch (error) {
-        console.error("Audit API Error:", error);
-        res.status(500).json({
-            success: false,
-            error: "AI audit failed",
-            message: error.message,
-        });
+    // ✅ catch empty/null content before attempting parse
+    if (!rawText || rawText.trim() === "") {
+      console.error("Empty AI response. Full completion:", JSON.stringify(completion, null, 2));
+      throw new Error(`AI returned empty content. finish_reason: ${completion?.choices?.[0]?.finish_reason ?? "unknown"}`);
     }
+
+
+    // ✅ clean first, then parse the cleaned version
+    const cleanedText = rawText
+      .replace(/```json/gi, "")
+      .replace(/```/g, "")
+      .trim();
+
+    let parsedData;
+    try {
+      parsedData = JSON.parse(cleanedText); // ✅ parse cleanedText, not rawText
+    } catch (err) {
+      throw new Error(`AI returned unparseable JSON: ${err.message} — raw: ${cleanedText.slice(0, 200)}`);
+    }
+
+
+
+
+    const normalizeAuditResponse = (data) => ({
+      overallHealthScore: data.overallHealthScore ?? { score: 0, outOf: 100, verdict: "Audit incomplete" },
+      contentIssues: data.contentIssues ?? [],
+      missingFields: data.missingFields ?? [],
+      dataInconsistencies: data.dataInconsistencies ?? [],
+      skillGapAnalysis: data.skillGapAnalysis ?? {
+        roleRequiresSkills: [],
+        candidateHasSkills: [],
+        matchedSkills: [],
+        missingCriticalSkills: [],
+        irrelevantSkills: [],
+        skillCoveragePercent: 0
+      },
+      growthRecommendations: data.growthRecommendations ?? [],
+      quickWins: data.quickWins ?? [],
+      auditSummary: data.auditSummary ?? "",
+    });
+
+    // in the route, replace the res.json call with:
+    res.status(200).json({
+      success: true,
+      data: normalizeAuditResponse(parsedData),
+    });
+
+
+  } catch (error) {
+    console.error("Audit API Error:", error);
+    res.status(500).json({
+      success: false,
+      error: "AI audit failed",
+      message: error.message,
+    });
+  }
 });
 
 
 aiWorkRouter.post("/resume/strategy", userAuth, async (req, res) => {
-    try {
-        const { SpecificRole, ResumeType, BroadRole, JobDescription, Company, auditResult } = req.body;
+  try {
+    const { SpecificRole, ResumeType, BroadRole, JobDescription, Company, auditResult } = req.body;
 
-        const user = req.user;
-        if (!user) {
-            return res.status(401).json({ success: false, message: "Please re-login" });
-        }
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({ success: false, message: "Please re-login" });
+    }
 
-        // ✅ removed redundant User.findOne — userAuth already verified
+    // ✅ removed redundant User.findOne — userAuth already verified
 
-        const Profile = await resume.findOne({ userId: user._id });
-        if (!Profile) {
-            return res.status(404).json({ success: false, message: "Career profile not found" });
-        }
+    const Profile = await resume.findOne({ userId: user._id });
+    if (!Profile) {
+      return res.status(404).json({ success: false, message: "Career profile not found" });
+    }
 
-        // ✅ only ResumeType is hard-required — rest are optional for standalone audit
-        if (!ResumeType) {
-            return res.status(400).json({ success: false, message: "ResumeType is required" });
-        }
+    // ✅ only ResumeType is hard-required — rest are optional for standalone audit
+    if (!ResumeType) {
+      return res.status(400).json({ success: false, message: "ResumeType is required" });
+    }
 
-        // ✅ strip Mongoose internals before sending to AI
-        const profileClean = Profile.toObject();
-        delete profileClean.__v;
-        delete profileClean._id;
-        delete profileClean.userId;
-        delete profileClean.createdAt;
-        delete profileClean.updatedAt;
-        delete profileClean.isProfileCompleted;
-        const prompt = `
+    // ✅ strip Mongoose internals before sending to AI
+    const profileClean = Profile.toObject();
+    delete profileClean.__v;
+    delete profileClean._id;
+    delete profileClean.userId;
+    delete profileClean.createdAt;
+    delete profileClean.updatedAt;
+    delete profileClean.isProfileCompleted;
+    const prompt = `
 You are a senior resume strategist and technical hiring consultant with deep expertise in ${ResumeType} hiring pipelines.
 
 Your job is NOT to rewrite anything yet. You are building a precise targeting strategy that will guide the rewrite of every section of this candidate's resume for a specific role.
@@ -442,80 +637,311 @@ Return ONLY a valid JSON object. No prose. No markdown fences.
 }
 `;
 
-        const completion = await client.chat.completions.create({
-            model: "llama-3.3-70b-versatile",
-            messages: [
-                { role: "system", content: JSON_SYSTEM_PROMPT },
-                { role: "user", content: prompt }
-            ],
-            temperature: 0.2,   // ✅ low temp for structured JSON
-            max_tokens: 3000,   // ✅ audit is large — give it room
-        });
+    const completion = await client.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+      messages: [
+        { role: "system", content: JSON_SYSTEM_PROMPT },
+        { role: "user", content: prompt }
+      ],
+      temperature: 0.2,   // ✅ low temp for structured JSON
+      max_tokens: 3000,   // ✅ audit is large — give it room
+    });
 
 
 
 
-        const rawText = completion?.choices?.[0]?.message?.content;
+    const rawText = completion?.choices?.[0]?.message?.content;
 
-        // ✅ catch empty/null content before attempting parse
-        if (!rawText || rawText.trim() === "") {
-            console.error("Empty AI response. Full completion:", JSON.stringify(completion, null, 2));
-            throw new Error(`AI returned empty content. finish_reason: ${completion?.choices?.[0]?.finish_reason ?? "unknown"}`);
-        }
-
-
-        // ✅ clean first, then parse the cleaned version
-        const cleanedText = rawText
-            .replace(/```json/gi, "")
-            .replace(/```/g, "")
-            .trim();
-
-        let parsedData;
-        try {
-            parsedData = JSON.parse(cleanedText); // ✅ parse cleanedText, not rawText
-        } catch (err) {
-            throw new Error(`AI returned unparseable JSON: ${err.message} — raw: ${cleanedText.slice(0, 200)}`);
-        }
-
-
-
-
-        const normalizeStrategy = (data) => ({
-            positioningStatement: data.positioningStatement ?? "",
-            coreNarrative: data.coreNarrative ?? "",
-            mustIncludeKeywords: data.mustIncludeKeywords ?? [],
-            niceToIncludeKeywords: data.niceToIncludeKeywords ?? [],
-            keywordsToAvoid: data.keywordsToAvoid ?? [],
-            strengthsToAmplify: data.strengthsToAmplify ?? [],
-            weaknessesToDownplay: data.weaknessesToDownplay ?? [],
-            sectionPriority: data.sectionPriority ?? [],
-            summaryStrategy: data.summaryStrategy ?? { openWith: "", keywordsToFrontload: [], toneInstruction: "", avoid: [] },
-            experienceStrategy: data.experienceStrategy ?? { general: "", perRole: [] },
-            projectStrategy: data.projectStrategy ?? { general: "", perProject: [] },
-            skillsStrategy: data.skillsStrategy ?? { categoriesToUse: [], skillsToKeep: [], skillsToRemove: [], skillsToSurface: [], orderBy: "" },
-            toneGuidance: data.toneGuidance ?? { overall: "", verbStyle: "", formality: "" },
-            redFlagsToAddress: data.redFlagsToAddress ?? [],
-            versionLabel: data.versionLabel ?? `${SpecificRole} — ${Company ?? ResumeType}`,
-        });
-
-        res.status(200).json({
-            success: true,
-            data: normalizeStrategy(parsedData),  // ✅ correct normalizer
-        });
-
-    } catch (error) {
-        console.error("Strategy API Error:", error);  // ✅ correct error label
-        res.status(500).json({
-            success: false,
-            error: "Strategy generation failed",
-            message: error.message,
-        });
+    // ✅ catch empty/null content before attempting parse
+    if (!rawText || rawText.trim() === "") {
+      console.error("Empty AI response. Full completion:", JSON.stringify(completion, null, 2));
+      throw new Error(`AI returned empty content. finish_reason: ${completion?.choices?.[0]?.finish_reason ?? "unknown"}`);
     }
+
+
+    // ✅ clean first, then parse the cleaned version
+    const cleanedText = rawText
+      .replace(/```json/gi, "")
+      .replace(/```/g, "")
+      .trim();
+
+    let parsedData;
+    try {
+      parsedData = JSON.parse(cleanedText); // ✅ parse cleanedText, not rawText
+    } catch (err) {
+      throw new Error(`AI returned unparseable JSON: ${err.message} — raw: ${cleanedText.slice(0, 200)}`);
+    }
+
+
+
+
+    const normalizeStrategy = (data) => ({
+      positioningStatement: data.positioningStatement ?? "",
+      coreNarrative: data.coreNarrative ?? "",
+      mustIncludeKeywords: data.mustIncludeKeywords ?? [],
+      niceToIncludeKeywords: data.niceToIncludeKeywords ?? [],
+      keywordsToAvoid: data.keywordsToAvoid ?? [],
+      strengthsToAmplify: data.strengthsToAmplify ?? [],
+      weaknessesToDownplay: data.weaknessesToDownplay ?? [],
+      sectionPriority: data.sectionPriority ?? [],
+      summaryStrategy: data.summaryStrategy ?? { openWith: "", keywordsToFrontload: [], toneInstruction: "", avoid: [] },
+      experienceStrategy: data.experienceStrategy ?? { general: "", perRole: [] },
+      projectStrategy: data.projectStrategy ?? { general: "", perProject: [] },
+      skillsStrategy: data.skillsStrategy ?? { categoriesToUse: [], skillsToKeep: [], skillsToRemove: [], skillsToSurface: [], orderBy: "" },
+      toneGuidance: data.toneGuidance ?? { overall: "", verbStyle: "", formality: "" },
+      redFlagsToAddress: data.redFlagsToAddress ?? [],
+      versionLabel: data.versionLabel ?? `${SpecificRole} — ${Company ?? ResumeType}`,
+    });
+
+    res.status(200).json({
+      success: true,
+      data: normalizeStrategy(parsedData),  // ✅ correct normalizer
+    });
+
+  } catch (error) {
+    console.error("Strategy API Error:", error);  // ✅ correct error label
+    res.status(500).json({
+      success: false,
+      error: "Strategy generation failed",
+      message: error.message,
+    });
+  }
 });
 
 
 
 
+
+
+
+// ─── STAGE 2A ROUTE ───────────────────────────────────────────────────────────
+aiWorkRouter.post("/resume/rewrite/summary", userAuth, async (req, res) => {
+  try {
+    const { strategy } = req.body;
+    const user = req.user;
+    if (!user) return res.status(401).json({ success: false, message: "Please re-login" });
+    if (!strategy) return res.status(400).json({ success: false, message: "strategy is required" });
+
+  const Profile = await resume.findOne({ userId: user._id });
+    if (!Profile) {
+      return res.status(404).json({ success: false, message: "Career profile not found" });
+    }
+
+
+
+    // ✅ strip Mongoose internals before sending to AI
+    const profileClean = Profile.toObject();
+    delete profileClean.__v;
+    delete profileClean._id;
+    delete profileClean.userId;
+    delete profileClean.createdAt;
+    delete profileClean.updatedAt;
+    delete profileClean.isProfileCompleted;
+     const completion = await client.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+      messages: [
+        { role: "system", content: JSON_SYSTEM_PROMPT },
+        { role: "user", content: buildSummaryPrompt({ profile: profileClean, strategy }) }
+      ],
+      temperature: 0.4,  // slightly higher — summary benefits from natural language variation
+      max_tokens: 500,
+    });
+
+    const parsedData = parseAIResponse(completion);
+
+    res.status(200).json({
+      success: true,
+      data: {
+        summaryTitle: parsedData.summaryTitle ?? profileClean.header?.summaryTitle ?? "",
+        summaryBody: parsedData.summaryBody ?? profileClean.summaryBody ?? "",
+      }
+    });
+
+  } catch (error) {
+    console.error("Summary Rewrite Error:", error);
+    res.status(500).json({ success: false, error: "Summary rewrite failed", message: error.message });
+  }
+});
+
+
+// ─── STAGE 2B ROUTE ───────────────────────────────────────────────────────────
+aiWorkRouter.post("/resume/rewrite/experience", userAuth, async (req, res) => {
+  try {
+    const { strategy } = req.body;
+    const user = req.user;
+    if (!user) return res.status(401).json({ success: false, message: "Please re-login" });
+    if (!strategy) return res.status(400).json({ success: false, message: "strategy is required" });
+
+  const Profile = await resume.findOne({ userId: user._id });
+    if (!Profile) {
+      return res.status(404).json({ success: false, message: "Career profile not found" });
+    }
+
+
+
+    // ✅ strip Mongoose internals before sending to AI
+    const profileClean = Profile.toObject();
+    delete profileClean.__v;
+    delete profileClean._id;
+    delete profileClean.userId;
+    delete profileClean.createdAt;
+    delete profileClean.updatedAt;
+    delete profileClean.isProfileCompleted;
+     // one AI call per experience entry — all parallel
+    const results = await Promise.all(
+      profileClean.experience.map(async (entry) => {
+        const roleStrategy = strategy.experienceStrategy?.perRole?.find(
+          r => r.company === entry.company && r.role === entry.role
+        );
+
+        const completion = await client.chat.completions.create({
+          model: "llama-3.3-70b-versatile",
+          messages: [
+            { role: "system", content: JSON_SYSTEM_PROMPT },
+            { role: "user", content: buildExperiencePrompt({ experienceEntry: entry, roleStrategy, strategy }) }
+          ],
+          temperature: 0.3,
+          max_tokens: 800,
+        });
+
+        const parsed = parseAIResponse(completion);
+        return {
+          ...entry,                                          // preserve all original fields
+          bullets: parsed.bullets ?? entry.bullets,          // swap in rewritten bullets
+        };
+      })
+    );
+
+    res.status(200).json({ success: true, data: results });
+
+  } catch (error) {
+    console.error("Experience Rewrite Error:", error);
+    res.status(500).json({ success: false, error: "Experience rewrite failed", message: error.message });
+  }
+});
+
+
+// ─── STAGE 2C ROUTE ───────────────────────────────────────────────────────────
+aiWorkRouter.post("/resume/rewrite/projects", userAuth, async (req, res) => {
+  try {
+    const { strategy } = req.body;
+    const user = req.user;
+    if (!user) return res.status(401).json({ success: false, message: "Please re-login" });
+    if (!strategy) return res.status(400).json({ success: false, message: "strategy is required" });
+
+  const Profile = await resume.findOne({ userId: user._id });
+    if (!Profile) {
+      return res.status(404).json({ success: false, message: "Career profile not found" });
+    }
+
+
+
+    // ✅ strip Mongoose internals before sending to AI
+    const profileClean = Profile.toObject();
+    delete profileClean.__v;
+    delete profileClean._id;
+    delete profileClean.userId;
+    delete profileClean.createdAt;
+    delete profileClean.updatedAt;
+    delete profileClean.isProfileCompleted;
+     // filter out projects strategy flagged as shouldInclude: false
+    const projectsToRewrite = profileClean.projects.filter(proj => {
+      const ps = strategy.projectStrategy?.perProject?.find(p => p.name === proj.name);
+      return ps?.shouldInclude !== false;
+    });
+
+    const results = await Promise.all(
+      projectsToRewrite.map(async (project) => {
+        const projectStrategy = strategy.projectStrategy?.perProject?.find(
+          p => p.name === project.name
+        );
+
+        const completion = await client.chat.completions.create({
+          model: "llama-3.3-70b-versatile",
+          messages: [
+            { role: "system", content: JSON_SYSTEM_PROMPT },
+            { role: "user", content: buildProjectPrompt({ project, projectStrategy, strategy }) }
+          ],
+          temperature: 0.3,
+          max_tokens: 700,
+        });
+
+        const parsed = parseAIResponse(completion);
+        return {
+          ...project,
+          bullets: parsed.bullets ?? project.bullets,
+        };
+      })
+    );
+
+    res.status(200).json({ success: true, data: results });
+
+  } catch (error) {
+    console.error("Projects Rewrite Error:", error);
+    res.status(500).json({ success: false, error: "Projects rewrite failed", message: error.message });
+  }
+});
+
+
+// ─── STAGE 2D ROUTE ───────────────────────────────────────────────────────────
+aiWorkRouter.post("/resume/rewrite/skills", userAuth, async (req, res) => {
+  try {
+    const { strategy } = req.body;
+    const user = req.user;
+    if (!user) return res.status(401).json({ success: false, message: "Please re-login" });
+    if (!strategy) return res.status(400).json({ success: false, message: "strategy is required" });
+
+  const Profile = await resume.findOne({ userId: user._id });
+    if (!Profile) {
+      return res.status(404).json({ success: false, message: "Career profile not found" });
+    }
+
+
+
+    // ✅ strip Mongoose internals before sending to AI
+    const profileClean = Profile.toObject();
+    delete profileClean.__v;
+    delete profileClean._id;
+    delete profileClean.userId;
+    delete profileClean.createdAt;
+    delete profileClean.updatedAt;
+    delete profileClean.isProfileCompleted;
+     const completion = await client.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+      messages: [
+        { role: "system", content: JSON_SYSTEM_PROMPT },
+        { role: "user", content: buildSkillsPrompt({ profile: profileClean, strategy }) }
+      ],
+      temperature: 0.2,  // low — skills curation should be deterministic
+      max_tokens: 600,
+    });
+
+    const parsedData = parseAIResponse(completion);
+
+    res.status(200).json({
+      success: true,
+      data: {
+        skills: parsedData.skills ?? profileClean.skills
+      }
+    });
+
+  } catch (error) {
+    console.error("Skills Rewrite Error:", error);
+    res.status(500).json({ success: false, error: "Skills rewrite failed", message: error.message });
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+// Pointers 
 const MASTER_SYSTEM_PROMPT = `
 You are an elite FAANG-level resume strategist, ATS optimization expert,
 technical recruiter, hiring manager, and career coach.
@@ -556,18 +982,18 @@ STRICT OUTPUT RULES:
 10. Keep outputs ATS-friendly and recruiter-optimized
 `;
 aiWorkRouter.post("/generate-exp-pointer", userAuth, async (req, res) => {
-    const { jobRole, company, employmentType } = req.body;
+  const { jobRole, company, employmentType } = req.body;
 
-    // Validation
-    if (!jobRole || !company || !employmentType) {
-        return res.status(400).json({
-            error: "Incomplete Data",
-            message: "jobRole, company, and employmentType are required.",
-        });
-    }
+  // Validation
+  if (!jobRole || !company || !employmentType) {
+    return res.status(400).json({
+      error: "Incomplete Data",
+      message: "jobRole, company, and employmentType are required.",
+    });
+  }
 
-    try {
-        const prompt = `
+  try {
+    const prompt = `
         ${MASTER_SYSTEM_PROMPT}
         
         ROLE:
@@ -658,55 +1084,55 @@ aiWorkRouter.post("/generate-exp-pointer", userAuth, async (req, res) => {
         }
         `;
 
-        const completion = await client.chat.completions.create({
-            model: "llama-3.3-70b-versatile",
-            messages: [
-                { role: "system", content: JSON_SYSTEM_PROMPT },
-                { role: "user", content: prompt }
-            ],
-            temperature: 0.7,
-        });
+    const completion = await client.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+      messages: [
+        { role: "system", content: JSON_SYSTEM_PROMPT },
+        { role: "user", content: prompt }
+      ],
+      temperature: 0.7,
+    });
 
-        const rawText = completion.choices[0].message.content;
+    const rawText = completion.choices[0].message.content;
 
-        // Safe JSON parsing
-        let parsedData;
-        try {
-            parsedData = JSON.parse(rawText);
-        } catch (err) {
-            throw new Error("Invalid JSON response from Grok");
-        }
-
-        res.status(200).json({
-            success: true,
-            data: parsedData.data,
-            type: parsedData.type,
-        });
-
-    } catch (error) {
-        console.error("Grok API Error:", error);
-        res.status(500).json({
-            success: false,
-            error: "AI generation failed",
-            message: error.message
-        });
+    // Safe JSON parsing
+    let parsedData;
+    try {
+      parsedData = JSON.parse(rawText);
+    } catch (err) {
+      throw new Error("Invalid JSON response from Grok");
     }
+
+    res.status(200).json({
+      success: true,
+      data: parsedData.data,
+      type: parsedData.type,
+    });
+
+  } catch (error) {
+    console.error("Grok API Error:", error);
+    res.status(500).json({
+      success: false,
+      error: "AI generation failed",
+      message: error.message
+    });
+  }
 });
 
 
 aiWorkRouter.post("/generate-edu-pointer", userAuth, async (req, res) => {
-    const { degree, field, cgpa, college, graduationYear } = req.body;
+  const { degree, field, cgpa, college, graduationYear } = req.body;
 
-    // Validation
-    if (!degree || !field || !cgpa || !college) {
-        return res.status(400).json({
-            error: "Incomplete Data",
-            message: "degree, field, cgpa, and college are required.",
-        });
-    }
+  // Validation
+  if (!degree || !field || !cgpa || !college) {
+    return res.status(400).json({
+      error: "Incomplete Data",
+      message: "degree, field, cgpa, and college are required.",
+    });
+  }
 
-    try {
-        const prompt = `
+  try {
+    const prompt = `
         ${MASTER_SYSTEM_PROMPT}
         
         ROLE:
@@ -786,54 +1212,54 @@ aiWorkRouter.post("/generate-edu-pointer", userAuth, async (req, res) => {
           ]
         }
         `;
-        const completion = await client.chat.completions.create({
-            model: "llama-3.3-70b-versatile",
-            messages: [
-                { role: "system", content: JSON_SYSTEM_PROMPT },
-                { role: "user", content: prompt }
-            ],
-            temperature: 0.7,
-        });
+    const completion = await client.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+      messages: [
+        { role: "system", content: JSON_SYSTEM_PROMPT },
+        { role: "user", content: prompt }
+      ],
+      temperature: 0.7,
+    });
 
-        const rawText = completion.choices[0].message.content;
+    const rawText = completion.choices[0].message.content;
 
-        // Safe JSON parsing
-        let parsedData;
-        try {
-            parsedData = JSON.parse(rawText);
-        } catch (err) {
-            throw new Error("Invalid JSON response from Grok");
-        }
-
-        res.status(200).json({
-            success: true,
-            data: parsedData.data,
-            type: parsedData.type,
-        });
-
-    } catch (error) {
-        console.error("Grok API Error:", error);
-        res.status(500).json({
-            success: false,
-            error: "AI generation failed",
-            message: error.message
-        });
+    // Safe JSON parsing
+    let parsedData;
+    try {
+      parsedData = JSON.parse(rawText);
+    } catch (err) {
+      throw new Error("Invalid JSON response from Grok");
     }
+
+    res.status(200).json({
+      success: true,
+      data: parsedData.data,
+      type: parsedData.type,
+    });
+
+  } catch (error) {
+    console.error("Grok API Error:", error);
+    res.status(500).json({
+      success: false,
+      error: "AI generation failed",
+      message: error.message
+    });
+  }
 });
 
 aiWorkRouter.post("/generate-skills", userAuth, async (req, res) => {
-    const { category } = req.body;
+  const { category } = req.body;
 
-    // Validation
-    if (!category) {
-        return res.status(400).json({
-            error: "Incomplete Data",
-            message: "category is required.",
-        });
-    }
+  // Validation
+  if (!category) {
+    return res.status(400).json({
+      error: "Incomplete Data",
+      message: "category is required.",
+    });
+  }
 
-    try {
-        const prompt = `
+  try {
+    const prompt = `
         ${MASTER_SYSTEM_PROMPT}
         
         ROLE:
@@ -928,88 +1354,88 @@ aiWorkRouter.post("/generate-skills", userAuth, async (req, res) => {
           ]
         }
         `;
-        const completion = await client.chat.completions.create({
-            model: "llama-3.3-70b-versatile",
-            messages: [
-                { role: "system", content: JSON_SYSTEM_PROMPT },
-                { role: "user", content: prompt }
-            ],
-            temperature: 0.7,
-        });
+    const completion = await client.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+      messages: [
+        { role: "system", content: JSON_SYSTEM_PROMPT },
+        { role: "user", content: prompt }
+      ],
+      temperature: 0.7,
+    });
 
-        const rawText = completion.choices[0].message.content;
+    const rawText = completion.choices[0].message.content;
 
-        // Safe JSON parsing
-        let parsedData;
-        try {
-            parsedData = JSON.parse(rawText);
-        } catch (err) {
-            throw new Error("Invalid JSON response from Grok");
-        }
-
-        res.status(200).json({
-            success: true,
-            data: parsedData.data,
-            type: parsedData.type,
-        });
-
-    } catch (error) {
-        console.error("Grok API Error:", error);
-        res.status(500).json({
-            success: false,
-            error: "AI generation failed",
-            message: error.message
-        });
+    // Safe JSON parsing
+    let parsedData;
+    try {
+      parsedData = JSON.parse(rawText);
+    } catch (err) {
+      throw new Error("Invalid JSON response from Grok");
     }
+
+    res.status(200).json({
+      success: true,
+      data: parsedData.data,
+      type: parsedData.type,
+    });
+
+  } catch (error) {
+    console.error("Grok API Error:", error);
+    res.status(500).json({
+      success: false,
+      error: "AI generation failed",
+      message: error.message
+    });
+  }
 });
 
 aiWorkRouter.post("/generate-summary", userAuth, async (req, res) => {
-    const {
-        skills,
-        experience,
-        education,
-        summaryTitle,
-    } = req.body;
+  const {
+    skills,
+    experience,
+    education,
+    summaryTitle,
+  } = req.body;
 
-    const hasSkills =
-        Array.isArray(skills) && skills.length > 0;
+  const hasSkills =
+    Array.isArray(skills) && skills.length > 0;
 
-    const hasExperience =
-        Array.isArray(experience) &&
-        experience.length > 0;
+  const hasExperience =
+    Array.isArray(experience) &&
+    experience.length > 0;
 
-    const hasEducation =
-        Array.isArray(education) &&
-        education.length > 0;
+  const hasEducation =
+    Array.isArray(education) &&
+    education.length > 0;
 
-    const hasTitle =
-        typeof summaryTitle === "string" &&
-        summaryTitle.trim().length > 0;
+  const hasTitle =
+    typeof summaryTitle === "string" &&
+    summaryTitle.trim().length > 0;
 
-    if (
-        !hasSkills &&
-        !hasExperience &&
-        !hasEducation &&
-        !hasTitle
-    ) {
-        return res.status(400).json({
-            success: false,
-            error: "At least one field is required",
-        });
-    }
+  if (
+    !hasSkills &&
+    !hasExperience &&
+    !hasEducation &&
+    !hasTitle
+  ) {
+    return res.status(400).json({
+      success: false,
+      error: "At least one field is required",
+    });
+  }
 
-    try {
-        const completion =
-            await client.chat.completions.create({
-                model: "llama-3.3-70b-versatile",
-                response_format: {
-                    type: "json_object",
-                },
+  try {
+    const completion =
+      await client.chat.completions.create({
+        model: "llama-3.3-70b-versatile",
+        response_format: {
+          type: "json_object",
+        },
 
-                messages: [
-                    {
-                        role: "system",
-                        content: `
+        messages: [
+          {
+            role: "system",
+            content: `
 You are a professional ATS resume summary generator.
 
 Return ONLY valid JSON.
@@ -1025,11 +1451,11 @@ Required structure:
   ]
 }
                         `,
-                    },
+          },
 
-                    {
-                        role: "user",
-                        content: `
+          {
+            role: "user",
+            content: `
 Generate 6 ATS-optimized resume summaries.
 
 Candidate Title:
@@ -1053,96 +1479,96 @@ Requirements:
 - No markdown
 - No explanations
                         `,
-                    },
-                ],
+          },
+        ],
 
-                temperature: 0.2,
-                max_tokens: 2200,
-            });
-
-
-        const rawText =
-            completion?.choices?.[0]?.message?.content || "";
+        temperature: 0.2,
+        max_tokens: 2200,
+      });
 
 
-        if (!rawText) {
-            return res.status(500).json({
-                success: false,
-                error: "Empty AI response",
-            });
-        }
+    const rawText =
+      completion?.choices?.[0]?.message?.content || "";
 
 
-
-
-
-        let parsedData;
-
-        try {
-            parsedData = JSON.parse(rawText);
-        } catch (err) {
-            console.error(
-                "JSON Parse Error:",
-                rawText
-            );
-
-            return res.status(500).json({
-                success: false,
-                error: "Invalid AI JSON response",
-            });
-        }
-
-        const isValidData =
-            parsedData?.type ===
-            "generated_summaries" &&
-            Array.isArray(parsedData?.data) &&
-            parsedData.data.length === 6 &&
-            parsedData.data.every(
-                (item) =>
-                    typeof item?.tone === "string" &&
-                    typeof item?.summary === "string"
-            );
-
-        if (!isValidData) {
-            return res.status(500).json({
-                success: false,
-                error: "Malformed AI response",
-            });
-        }
-
-        return res.status(200).json({
-            success: true,
-            type: parsedData.type,
-            data: parsedData.data,
-        });
-
-    } catch (error) {
-        console.error(
-            "AI Summary Generation Error:",
-            error
-        );
-
-        return res.status(500).json({
-            success: false,
-            error: "Summary generation failed",
-            message: error.message,
-        });
+    if (!rawText) {
+      return res.status(500).json({
+        success: false,
+        error: "Empty AI response",
+      });
     }
+
+
+
+
+
+    let parsedData;
+
+    try {
+      parsedData = JSON.parse(rawText);
+    } catch (err) {
+      console.error(
+        "JSON Parse Error:",
+        rawText
+      );
+
+      return res.status(500).json({
+        success: false,
+        error: "Invalid AI JSON response",
+      });
+    }
+
+    const isValidData =
+      parsedData?.type ===
+      "generated_summaries" &&
+      Array.isArray(parsedData?.data) &&
+      parsedData.data.length === 6 &&
+      parsedData.data.every(
+        (item) =>
+          typeof item?.tone === "string" &&
+          typeof item?.summary === "string"
+      );
+
+    if (!isValidData) {
+      return res.status(500).json({
+        success: false,
+        error: "Malformed AI response",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      type: parsedData.type,
+      data: parsedData.data,
+    });
+
+  } catch (error) {
+    console.error(
+      "AI Summary Generation Error:",
+      error
+    );
+
+    return res.status(500).json({
+      success: false,
+      error: "Summary generation failed",
+      message: error.message,
+    });
+  }
 });
 
 aiWorkRouter.post("/improve-pointer", userAuth, async (req, res) => {
-    const { bullet } = req.body;
+  const { bullet } = req.body;
 
-    // Validation
-    if (!bullet) {
-        return res.status(400).json({
-            error: "Incomplete Data",
-            message: "bullet is required.",
-        });
-    }
+  // Validation
+  if (!bullet) {
+    return res.status(400).json({
+      error: "Incomplete Data",
+      message: "bullet is required.",
+    });
+  }
 
-    try {
-        const prompt = `
+  try {
+    const prompt = `
         ${MASTER_SYSTEM_PROMPT}
         
         ROLE:
@@ -1213,59 +1639,59 @@ aiWorkRouter.post("/improve-pointer", userAuth, async (req, res) => {
           }
         }
         `;
-        const completion = await client.chat.completions.create({
-            model: "llama-3.3-70b-versatile",
-            messages: [
-                { role: "system", content: JSON_SYSTEM_PROMPT },
-                { role: "user", content: prompt }
-            ],
-            temperature: 0.7,
-        });
+    const completion = await client.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+      messages: [
+        { role: "system", content: JSON_SYSTEM_PROMPT },
+        { role: "user", content: prompt }
+      ],
+      temperature: 0.7,
+    });
 
-        const rawText =
-            completion?.choices?.[0]?.message?.content || "";
+    const rawText =
+      completion?.choices?.[0]?.message?.content || "";
 
-        const cleanedText = rawText
-            .replace(/```json/gi, "")
-            .replace(/```/g, "")
-            .trim();
-        // Safe JSON parsing
-        let parsedData;
-        try {
-            parsedData = JSON.parse(rawText);
-        } catch (err) {
-            throw new Error("Invalid JSON response from Grok");
-        }
-
-        res.status(200).json({
-            success: true,
-            data: parsedData.data,
-            type: parsedData.type,
-        });
-
-    } catch (error) {
-        console.error("Grok API Error:", error);
-        res.status(500).json({
-            success: false,
-            error: "AI generation failed",
-            message: error.message
-        });
+    const cleanedText = rawText
+      .replace(/```json/gi, "")
+      .replace(/```/g, "")
+      .trim();
+    // Safe JSON parsing
+    let parsedData;
+    try {
+      parsedData = JSON.parse(rawText);
+    } catch (err) {
+      throw new Error("Invalid JSON response from Grok");
     }
+
+    res.status(200).json({
+      success: true,
+      data: parsedData.data,
+      type: parsedData.type,
+    });
+
+  } catch (error) {
+    console.error("Grok API Error:", error);
+    res.status(500).json({
+      success: false,
+      error: "AI generation failed",
+      message: error.message
+    });
+  }
 });
 
 aiWorkRouter.post("/generate-project-pointer", userAuth, async (req, res) => {
-    const { name, stack, description } = req.body;
+  const { name, stack, description } = req.body;
 
-    // Validation
-    if (!name || !stack || !description) {
-        return res.status(400).json({
-            error: "Incomplete Data",
-            message: "name, stack, and description are required.",
-        });
-    }
+  // Validation
+  if (!name || !stack || !description) {
+    return res.status(400).json({
+      error: "Incomplete Data",
+      message: "name, stack, and description are required.",
+    });
+  }
 
-    try {
-        const prompt = `
+  try {
+    const prompt = `
         ${MASTER_SYSTEM_PROMPT}
         
         ROLE:
@@ -1333,121 +1759,121 @@ aiWorkRouter.post("/generate-project-pointer", userAuth, async (req, res) => {
           ]
         }
         `;
-        const completion = await client.chat.completions.create({
-            model: "llama-3.3-70b-versatile",
-            messages: [
-                { role: "system", content: JSON_SYSTEM_PROMPT },
-                { role: "user", content: prompt }
-            ],
-            temperature: 0.7,
-        });
+    const completion = await client.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+      messages: [
+        { role: "system", content: JSON_SYSTEM_PROMPT },
+        { role: "user", content: prompt }
+      ],
+      temperature: 0.7,
+    });
 
-        const rawText = completion.choices[0].message.content;
+    const rawText = completion.choices[0].message.content;
 
-        // Safe JSON parsing
-        let parsedData;
-        try {
-            parsedData = JSON.parse(rawText);
-        } catch (err) {
-            throw new Error("Invalid JSON response from Grok");
-        }
-
-        res.status(200).json({
-            success: true,
-            data: parsedData.data,
-            type: parsedData.type,
-        });
-
-    } catch (error) {
-        console.error("Grok API Error:", error);
-        res.status(500).json({
-            success: false,
-            error: "AI generation failed",
-            message: error.message
-        });
+    // Safe JSON parsing
+    let parsedData;
+    try {
+      parsedData = JSON.parse(rawText);
+    } catch (err) {
+      throw new Error("Invalid JSON response from Grok");
     }
+
+    res.status(200).json({
+      success: true,
+      data: parsedData.data,
+      type: parsedData.type,
+    });
+
+  } catch (error) {
+    console.error("Grok API Error:", error);
+    res.status(500).json({
+      success: false,
+      error: "AI generation failed",
+      message: error.message
+    });
+  }
 });
 
 
 aiWorkRouter.post("/resume/generate-jd", userAuth, async (req, res) => {
-    try {
-        const { specificRole, company, resumeCategory, broadRole } = req.body;
+  try {
+    const { specificRole, company, resumeCategory, broadRole } = req.body;
 
-        const user = req.user;
-        if (!user) {
-            return res.status(401).json({ success: false, message: "Please re-login" });
-        }
-
-        if (!specificRole || !resumeCategory || !broadRole || !company) {
-            return res.status(400).json({
-                success: false,
-                message: "specificRole, resumeCategory, and broadRole are required"
-            });
-        }
-
-        const prompt = buildJobDescriptionPrompt({
-            specificRole,
-            company,
-            resumeCategory,
-            broadRole,
-
-        });
-
-        const completion = await client.chat.completions.create({
-            model: "llama-3.3-70b-versatile",
-            messages: [
-                { role: "system", content: JSON_SYSTEM_PROMPT },
-                { role: "user", content: prompt }
-            ],
-            temperature: 0.4,
-            max_tokens: 2000,
-        });
-
-        const rawText = completion?.choices?.[0]?.message?.content;
-
-        if (!rawText || rawText.trim() === "") {
-            throw new Error(`AI returned empty content. finish_reason: ${completion?.choices?.[0]?.finish_reason ?? "unknown"}`);
-        }
-
-        const cleanedText = rawText
-            .replace(/```json/gi, "")
-            .replace(/```/g, "")
-            .trim();
-
-        let parsedData;
-        try {
-            parsedData = JSON.parse(cleanedText);
-        } catch (err) {
-            throw new Error(`AI returned unparseable JSON: ${err.message} — raw: ${cleanedText.slice(0, 200)}`);
-        }
-
-        const normalizeJD = (data) => ({
-            jobTitle: data.jobTitle ?? specificRole,
-            companySummary: data.companySummary ?? "",
-            roleSummary: data.roleSummary ?? "",
-            responsibilities: data.responsibilities ?? [],
-            requiredSkills: data.requiredSkills ?? [],
-            niceToHaveSkills: data.niceToHaveSkills ?? [],
-            experienceLevel: data.experienceLevel ?? {},
-            keywordsForATS: data.keywordsForATS ?? [],
-            interviewFocus: data.interviewFocus ?? [],
-            redFlagsForThisRole: data.redFlagsForThisRole ?? [],
-            compensationSignals: data.compensationSignals ?? {},
-        });
-
-        res.status(200).json({
-            success: true,
-            data: normalizeJD(parsedData),
-        });
-
-    } catch (error) {
-        console.error("JD Generation Error:", error);
-        res.status(500).json({
-            success: false,
-            error: "JD generation failed",
-            message: error.message,
-        });
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({ success: false, message: "Please re-login" });
     }
+
+    if (!specificRole || !resumeCategory || !broadRole || !company) {
+      return res.status(400).json({
+        success: false,
+        message: "specificRole, resumeCategory, and broadRole are required"
+      });
+    }
+
+    const prompt = buildJobDescriptionPrompt({
+      specificRole,
+      company,
+      resumeCategory,
+      broadRole,
+
+    });
+
+    const completion = await client.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+      messages: [
+        { role: "system", content: JSON_SYSTEM_PROMPT },
+        { role: "user", content: prompt }
+      ],
+      temperature: 0.4,
+      max_tokens: 2000,
+    });
+
+    const rawText = completion?.choices?.[0]?.message?.content;
+
+    if (!rawText || rawText.trim() === "") {
+      throw new Error(`AI returned empty content. finish_reason: ${completion?.choices?.[0]?.finish_reason ?? "unknown"}`);
+    }
+
+    const cleanedText = rawText
+      .replace(/```json/gi, "")
+      .replace(/```/g, "")
+      .trim();
+
+    let parsedData;
+    try {
+      parsedData = JSON.parse(cleanedText);
+    } catch (err) {
+      throw new Error(`AI returned unparseable JSON: ${err.message} — raw: ${cleanedText.slice(0, 200)}`);
+    }
+
+    const normalizeJD = (data) => ({
+      jobTitle: data.jobTitle ?? specificRole,
+      companySummary: data.companySummary ?? "",
+      roleSummary: data.roleSummary ?? "",
+      responsibilities: data.responsibilities ?? [],
+      requiredSkills: data.requiredSkills ?? [],
+      niceToHaveSkills: data.niceToHaveSkills ?? [],
+      experienceLevel: data.experienceLevel ?? {},
+      keywordsForATS: data.keywordsForATS ?? [],
+      interviewFocus: data.interviewFocus ?? [],
+      redFlagsForThisRole: data.redFlagsForThisRole ?? [],
+      compensationSignals: data.compensationSignals ?? {},
+    });
+
+    res.status(200).json({
+      success: true,
+      data: normalizeJD(parsedData),
+    });
+
+  } catch (error) {
+    console.error("JD Generation Error:", error);
+    res.status(500).json({
+      success: false,
+      error: "JD generation failed",
+      message: error.message,
+    });
+  }
 });
 
 

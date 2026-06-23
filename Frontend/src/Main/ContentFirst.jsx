@@ -12,22 +12,37 @@ const ContentFirst = () => {
 
                 className="w-[95%] sm:w-[90%] mx-auto flex flex-col items-start text-center m-2 lg:mb-4"
             >
-
-                <h2
-                    className="
+                <div className="flex sm:flex-row flex-col">
+                    <h2
+                        className="
                     font-poppins
                     font-semibold
-                    text-2xl
-                    sm:text-3xl
+                   text-4xl
                     lg:text-5xl
                     leading-tight
                     text-black
-
+text-start
                     ml-1
                 "
-                >
-                    Scaling Successful Teams
-                </h2>
+                    >
+                        Scaling
+                    </h2>
+                    <h2
+                        className="
+                    font-poppins
+                    font-semibold
+                   text-4xl
+                    lg:text-5xl
+                    leading-tight
+                    text-black
+text-start
+                    ml-1
+                "
+                    >
+                        Successful Teams
+                    </h2>
+                </div>
+
 
 
 

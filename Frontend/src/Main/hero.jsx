@@ -11,7 +11,7 @@ import ContentThird from "./ContentThird";
 
 import Devs from "./Devs";
 import Main2 from "./Main2";
-import Lines from "./Lines";
+import Lines2 from "./Lines2";
 import SecondLanding from "./SecondLanding";
 import { useNavigate } from "react-router-dom";
 import BASE_URL from "@/Pages/auth/baseURL";
@@ -21,26 +21,31 @@ import ContentSecond2 from "./ContentSecond2";
 
 
 const Hero = () => {
+
+    const [ctaData, seCtaData] = useState("Sign Up")
     const navigate = useNavigate();
     useEffect(() => {
+        const controller = new AbortController();
+
         const checkAuth = async () => {
             try {
                 const res = await axios.get(
                     `${BASE_URL}/profile/me`,
                     {
                         withCredentials: true,
+                        signal: controller.signal,
                     }
                 );
 
                 if (res.data.success) {
-                    navigate("/app", { replace: true });
+                    seCtaData("Open Codesarthi");
                 }
-            } catch (err) {
-                // Not logged in
-            }
+            } catch (err) { }
         };
 
         checkAuth();
+
+        return () => controller.abort();
     }, []);
     const [loading, setLoading] = useState(true);
 
@@ -73,13 +78,15 @@ const Hero = () => {
         <div className="bg-gray-200">
             {loading && <Preloader />}
 
-            <Main2 />
+            <Main2 ctaData={ctaData} />
 
             <ContentFirst />
 
             <SecondLanding />
-            <Devs />
+            <Lines2 />
             <ContentSecond2 />
+            <Devs />
+
 
             {/* {/*  */}
 

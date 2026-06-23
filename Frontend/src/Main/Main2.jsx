@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-const Main2 = () => {
+const Main2 = ({ ctaData }) => {
 
     const navigate = useNavigate();
 
@@ -22,12 +22,12 @@ const Main2 = () => {
 
     return (
         <div
-            className='relative  w-full bg-gray-200 p-1.5 
+            className='relative w-full bg-gray-200 p-1.5 
 '>
 
-            <div className='w-full h-full relative bg-black  
+            <div className='w-full  relative bg-black  
  overflow-hidden
- rounded-xl flex flex-col items-start justify-center py-5'  >
+ rounded-[40px] flex flex-col items-start justify-center py-5'  >
 
 
                 <div
@@ -46,7 +46,10 @@ bg-[linear-gradient(rgba(255,255,255,.04)_1px,transparent_1px),linear-gradient(9
 bg-[size:40px_40px]
 "
                 />
+
+
                 <Nav />
+
                 <div className='w-full text-center p-6   flex flex-col items-center justify-center'>
                     <div className='text-[#f9f9f9] font-poppins font-extrabold min-[450px]:text-2xl  sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl  justify-start'>
                         An Ecosystem that do your works <br />Approvals that keep you safe
@@ -54,26 +57,17 @@ bg-[size:40px_40px]
 
 
                     <div className='flex mt-5 gap-2'>
-                        <div onClick={() => navigate("/login")} className={`relative z-10 flex items-center justify-between cursor-pointer text-black  font-bold `}>
+                        <div onClick={() => navigate("/login")} className={`relative z-10 flex items-center justify-between cursor-pointer text-black  font-bold flex gap-0`}>
 
-                            <span className="text-white">
+                            <span className="text-white relative -right-[1px]">
                                 <svg height="40" viewBox="0 0 15 40" width="15" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" transform="matrix(-1,0,0,1,0,0)">
                                     <path d="M0 .5h11A3.5 3.5 0 0 1 14.5 4v20.523a5.5 5.5 0 0 1-1.416 3.684l-8.547 9.477A5.5 5.5 0 0 1 .453 39.5H0" data-stroke="true"
                                         fill="#fff"
                                     ></path>
                                 </svg>
                             </span>
-                            <button className="bg-white  px-4 py-[7.5px] ">Open CodeSarthi</button>
-
-                        </div>
-
-
-
-                        <div onClick={() => navigate("/login")} className={`relative z-10 flex items-center justify-between cursor-pointer text-black  font-bold `}>
-
-
-                            <button className="bg-white  px-4 py-[7.5px] ">Talk To Us</button>
-                            <span className="text-white">
+                            <button className="bg-white  px-4 py-[7.539px] ">{ctaData}</button>
+                            <span className="text-white relative -left-[1px]">
                                 <svg height="40" viewBox="0 0 15 40" width="15" xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="M0 .5h11A3.5 3.5 0 0 1 14.5 4v20.523a5.5 5.5 0 0 1-1.416 3.684l-8.547 9.477A5.5 5.5 0 0 1 .453 39.5H0"
@@ -82,6 +76,9 @@ bg-[size:40px_40px]
                                 </svg>
                             </span>
                         </div>
+
+
+
                     </div>
 
 

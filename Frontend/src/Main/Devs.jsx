@@ -40,23 +40,17 @@ const Devs = () => {
         className="
 relative
 overflow-hidden
-bg-black flex lg:flex-row flex-col items-center gap-8
+bg-black flex lg:flex-row flex-col items-center gap-8 py-10
 "
       >
-        <div
-          className="
-absolute
-inset-0
-bg-[radial-gradient(circle_at_top_right,rgba(99,102,241,.18),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(168,85,247,.15),transparent_35%)]
-"
-        />
+
 
         <div
           className="
 absolute
 inset-0
-bg-[linear-gradient(rgba(255,255,255,.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.04)_1px,transparent_1px)]
-bg-[size:40px_40px]
+bg-[linear-gradient(rgba(255,255,255,.09)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.09)_1px,transparent_1px)]
+bg-[size:90px_90px]
 "
         />
 

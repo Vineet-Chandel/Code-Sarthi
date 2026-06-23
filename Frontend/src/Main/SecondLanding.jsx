@@ -29,40 +29,41 @@ const SecondLanding = () => {
 
         <div className="w-full flex flex-col items-center justify-center">
             < div
-                className="w-[90%] mt-10  bg-gray-200 flex flex-col items-center justify-between  py-10  " >
-                <div className='w-full text-center  flex flex-col items-center justify-center mb-2'>
-                    <div
-
-                        className="w-full flex flex-col items-start text-center ml-12"
-                    >
-
-                        <h2
-                            className="
+                className="sm:max-w-[1520px] w-full mt-10  bg-gray-200 flex flex-col items-center justify-between    " >
+                <div className="w-full justify-start pl-7 flex sm:flex-row flex-col">
+                    <h2
+                        className="
                     font-poppins
                     font-semibold
-                    text-2xl
-                    sm:text-3xl
-                    lg:text-5xl
+                   text-3xl
+                    lg:text-4xl
                     leading-tight
                     text-black
-
-                    ml-1
+text-start
+                    lg:ml-1
                 "
-                        >
-                            From Simple Resume Generation,
-                        </h2>
+                    >
 
-
-
-                    </div>
-
-
-
+                        The Smartest Way to
+                    </h2>
+                    <h2
+                        className="
+                    font-poppins
+                    font-semibold
+               text-3xl
+                    lg:text-4xl
+                    leading-tight
+                    text-black
+text-start
+                    lg:ml-1
+                "
+                    >
+                        Prepare for Every Job.
+                    </h2>
                 </div>
-
-                <div className="w-full mx-auto h-full  px-5 flex   flex-col gap-2">
-                    <div className="flex h-[600px]  w-full gap-5">
-                        <div className="h-full w-2/3 group bg-white relative   rounded-3xl p-10">
+                <div className="w-full mx-auto h-full px-2 sm:px-5 flex py-3 lg:py-10 flex-col gap-2">
+                    <div className="flex lg:flex-row flex-col   w-full gap-5">
+                        <div className="h-full lg:w-2/3 w-full group bg-white relative   rounded-3xl p-2">
                             <div
 
                                 className="  text-white text-2xl font-bold group-hover:flex flex-col px-10 py-10 hidden bg-black/50 absolute z-30 left-0 top-0 rounded-3xl backdrop-blur-md w-full h-full">
@@ -111,7 +112,118 @@ const SecondLanding = () => {
                         </div>
 
 
-                        <div className="h-full w-1/3 bg-white rounded-3xl relative group p-3">
+
+                        <div className="h-full lg:w-1/3 w-full bg-white rounded-3xl relative group pt-10 pl-[65px]">
+
+
+
+                            <div
+
+                                className="  text-white text-2xl font-bold group-hover:flex flex-col px-10 py-10 hidden bg-black/50 absolute z-30 left-0 top-0 rounded-3xl backdrop-blur-md w-full h-full">
+
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{
+                                        opacity: 1,
+                                        y: 0,
+                                        transition: {
+                                            duration: 0.5,
+                                            ease: "easeOut",
+                                        },
+                                    }}
+                                    className="flex flex-col h-full justify-between "
+                                >
+
+
+                                    <div>
+                                        <h1 className="mb-2 text-gray-100">Carrer Profile</h1>
+                                        <p className="text-[15px] leading-relaxed font-medium text-gray-200">A profile containing all the informations about your carrer, education, skills, projects, summary, additionals and more.</p>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <p className="text-[15px] cursor-pointer flex items-center  gap-2 leading-relaxed font-medium text-gray-200">Create Profile
+
+                                            <svg className="rotate-45 group-hover:rotate-90 transition-all duration-1000 " xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                                <g fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}>
+                                                    <path strokeDasharray={20} d="M12 21l0 -17.5">
+                                                        <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="20;0"></animate>
+                                                    </path>
+                                                    <path strokeDasharray={12} strokeDashoffset={12} d="M12 3l7 7M12 3l-7 7">
+                                                        <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.3s" dur="0.2s" to={0}></animate>
+                                                    </path>
+                                                </g>
+                                            </svg>
+                                        </p>
+
+                                    </div>
+                                </motion.div>
+                            </div>
+                            <img className="w-full h-full object-cover rounded-3xl" src="https://res.cloudinary.com/dj0ivep44/image/upload/v1782240454/copy_of_codesarthi-removebg-preview_lezrbb.webp" alt="" /></div>
+                    </div>
+
+                    <div className="flex lg:flex-row flex-col  w-full gap-5">
+                        <div className="relative overflow-hidden w-full lg:w-1/2 rounded-3xl bg-black p-4 flex flex-col sm:flex-row lg:flex-col gap-4">
+
+                            {/* Background */}
+
+                            <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_right,rgba(99,102,241,.18),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(168,85,247,.15),transparent_35%)]" />
+
+                            {/* Illustration */}
+                            <div className="relative z-10 w-full sm:w-1/2 lg:w-full flex rounded-3xl bg-white/10 flex items-center justify-center p-6">
+
+
+
+
+
+                                <svg className="w-32 h-32 sm:w-40 sm:h-40 lg:w-52 lg:h-52 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14 16V8c0-.943 0-1.414-.293-1.707S12.943 6 12 6s-1.414 0-1.707.293S10 7.057 10 8v8c0 .943 0 1.414.293 1.707S11.057 18 12 18s1.414 0 1.707-.293S14 16.943 14 16m7-7V7c0-.943 0-1.414-.293-1.707S19.943 5 19 5s-1.414 0-1.707.293S17 6.057 17 7v2c0 .943 0 1.414.293 1.707S18.057 11 19 11s1.414 0 1.707-.293S21 9.943 21 9M7 14v-2c0-.943 0-1.414-.293-1.707S5.943 10 5 10s-1.414 0-1.707.293S3 11.057 3 12v2c0 .943 0 1.414.293 1.707S4.057 16 5 16s1.414 0 1.707-.293S7 14.943 7 14m5 7v-3m7-5v-2m-7-5V3m7 2V3M5 18v-2m0-6V8"></path>
+                                </svg>
+                            </div>
+
+                            {/* Content */}
+                            <div className="relative z-10 w-full sm:w-1/2 lg:w-full flex-1">
+
+                                <h2 className="text-xl sm:text-2xl font-extrabold text-white font-poppins mb-4">
+                                    Deep Analysis
+                                </h2>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
+
+                                    <div className="flex gap-2">
+                                        <span className="text-white/40">●</span>
+                                        <span className="text-sm text-white/70">
+                                            Auditing your career profile at several levels
+                                        </span>
+                                    </div>
+
+                                    <div className="flex gap-2">
+                                        <span className="text-white/40">●</span>
+                                        <span className="text-sm text-white/70">
+                                            Generating the deep analysis report
+                                        </span>
+                                    </div>
+
+                                    <div className="flex gap-2">
+                                        <span className="text-white/40">●</span>
+                                        <span className="text-sm text-white/70">
+                                            Instant feedback for the strengths and weakness
+                                        </span>
+                                    </div>
+
+                                    <div className="flex gap-2">
+                                        <span className="text-white/40">●</span>
+                                        <span className="text-sm text-white/70">
+                                            Plan a strategy to re-write your resume
+                                        </span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div className="h-full lg:w-[60%] w-full bg-black rounded-xl relative group p-2">
 
 
 
@@ -156,216 +268,141 @@ const SecondLanding = () => {
                                     </div>
                                 </motion.div>
                             </div>
-                            <img className="w-full h-full object-cover rounded-3xl" src="https://res.cloudinary.com/dj0ivep44/image/upload/v1782033591/Screenshot_2026-06-21_at_2.49.36_PM_mcguqo.png" alt="" /></div>
+                            <img className="w-full h-full object-contain rounded-xl" src="https://res.cloudinary.com/dj0ivep44/image/upload/v1782162312/Screenshot_2026-06-23_at_2.31.53_AM_wesi5p.png" alt="" /></div>
                     </div>
-                    <div className="flex h-[400px] relative  w-full gap-5">
-                        <div className="h-full w-1/2 relative group bg-white  rounded-3xl ">
 
-                            <div
+                    <div className="w-full flex flex-col lg:flex-row gap-2">
 
-                                className="  text-white text-2xl font-bold group-hover:flex flex-col px-10 py-10 hidden bg-black/50 absolute z-30 left-0 top-0 rounded-3xl backdrop-blur-md w-full h-full">
+                        {/* Left Card */}
+                        <div className="w-full lg:w-1/2 rounded-3xl bg-white p-4 flex flex-col sm:flex-row lg:flex-col gap-4">
 
-                                <motion.div
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{
-                                        opacity: 1,
-                                        y: 0,
-                                        transition: {
-                                            duration: 0.5,
-                                            ease: "easeOut",
-                                        },
-                                    }}
-                                    className="flex flex-col h-full justify-between "
-                                >
+                            {/* Stats */}
+                            <div className="relative overflow-hidden w-full sm:w-1/2 lg:w-full min-h-[320px] rounded-2xl bg-base-300 flex items-center justify-center">
 
 
-                                    <div>
-                                        <h1 className="mb-2 text-gray-100"> ATS Friendly Resume   </h1>
-                                        <p className="text-[15px] leading-relaxed font-medium text-gray-200">Automatically generate ATS-friendly resumes with AI-optimized formatting, recruiter-approved layouts, and keyword-rich content to maximize interview opportunities.</p>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <p className="text-[15px] cursor-pointer flex items-center  gap-2 leading-relaxed font-medium text-gray-200">Create Profile
+                                <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.15)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.15)_1px,transparent_1px)] bg-[size:36px_36px]" />
+                                <div className="text-center lg:text-left">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="20em" viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path>
+                                    </svg>
 
-                                            <svg className="rotate-45 group-hover:rotate-90 " xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                                                <g fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}>
-                                                    <path strokeDasharray={20} d="M12 21l0 -17.5">
-                                                        <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="20;0"></animate>
-                                                    </path>
-                                                    <path strokeDasharray={12} strokeDashoffset={12} d="M12 3l7 7M12 3l-7 7">
-                                                        <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.3s" dur="0.2s" to={0}></animate>
-                                                    </path>
-                                                </g>
-                                            </svg>
-                                        </p>
 
-                                    </div>
-                                </motion.div>
+                                </div>
+
                             </div>
 
-                            <h1 className="absolute pt-5 pl-5 z-10 text-2xl flex items-center gap-2  font-extrabold text-white">
+                            {/* Content */}
+                            <div className="w-full sm:w-1/2 lg:w-full flex-1 flex flex-col justify-center">
 
-                                <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 24 24">
-                                    <path fill="#fff" d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13A2.5 2.5 0 0 0 5 15.5A2.5 2.5 0 0 0 7.5 18a2.5 2.5 0 0 0 2.5-2.5A2.5 2.5 0 0 0 7.5 13m9 0a2.5 2.5 0 0 0-2.5 2.5a2.5 2.5 0 0 0 2.5 2.5a2.5 2.5 0 0 0 2.5-2.5a2.5 2.5 0 0 0-2.5-2.5"></path>
-                                </svg>
-                                ATS Friendly Resume
-                            </h1>
+                                <h1 className="text-xl sm:text-2xl font-extrabold font-poppins mb-4">
+                                    AI Recommended Context
+                                </h1>
 
-                            <img className="w-full h-full object-cover  rounded-3xl" src="https://res.cloudinary.com/dj0ivep44/image/upload/v1781377190/Black_and_Gray_Minimalist_Creative_Portfolio_Presentation_3_osusk0.webp" alt="" /></div>
-                        <div className="h-full w-1/2 relative group bg-white  rounded-3xl ">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
 
-                            <div
-
-                                className="  text-white text-2xl font-bold group-hover:flex flex-col px-10 py-10 hidden bg-black/50 absolute z-30 left-0 top-0 rounded-3xl backdrop-blur-md w-full h-full">
-
-                                <motion.div
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{
-                                        opacity: 1,
-                                        y: 0,
-                                        transition: {
-                                            duration: 0.5,
-                                            ease: "easeOut",
-                                        },
-                                    }}
-                                    className="flex flex-col h-full justify-between "
-                                >
-
-
-                                    <div>
-                                        <h1 className="mb-2 text-gray-100"> ATS Optimized Recomendation   </h1>
-                                        <p className="text-[15px] leading-relaxed font-medium text-gray-200">Get AI-powered recommendations to optimize your resume for ATS and maximize interview opportunities.</p>
+                                    <div className="flex gap-2">
+                                        <span className="text-black/30 font-bold">●</span>
+                                        <span className="text-sm text-black/60 font-poppins">
+                                            AI-Generated Content Enhancements
+                                        </span>
                                     </div>
-                                    <div className="flex justify-between">
-                                        <p className="text-[15px] cursor-pointer flex items-center  gap-2 leading-relaxed font-medium text-gray-200">Create Profile
 
-                                            <svg className="rotate-45 group-hover:rotate-90 " xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                                                <g fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}>
-                                                    <path strokeDasharray={20} d="M12 21l0 -17.5">
-                                                        <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="20;0"></animate>
-                                                    </path>
-                                                    <path strokeDasharray={12} strokeDashoffset={12} d="M12 3l7 7M12 3l-7 7">
-                                                        <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.3s" dur="0.2s" to={0}></animate>
-                                                    </path>
-                                                </g>
-                                            </svg>
-                                        </p>
-
+                                    <div className="flex gap-2">
+                                        <span className="text-black/30 font-bold">●</span>
+                                        <span className="text-sm text-black/60 font-poppins">
+                                            AI-Powered Professional Summary
+                                        </span>
                                     </div>
-                                </motion.div>
+
+                                    <div className="flex gap-2">
+                                        <span className="text-black/30 font-bold">●</span>
+                                        <span className="text-sm text-black/60 font-poppins">
+                                            Skills Recommendations
+                                        </span>
+                                    </div>
+
+                                    <div className="flex gap-2">
+                                        <span className="text-black/30 font-bold">●</span>
+                                        <span className="text-sm text-black/60 font-poppins">
+                                            Tone Enhancements
+                                        </span>
+                                    </div>
+
+                                </div>
+
                             </div>
 
-                            <h1 className="absolute pt-5 pl-5 z-10 text-2xl flex items-center gap-2  font-extrabold text-white">
+                        </div>
 
-                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                                    <g fill="none">
-                                        <path d="m12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036q-.016-.004-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.016-.018m.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01z"></path>
-                                        <path fill="#fff" d="M9.107 5.448c.598-1.75 3.016-1.803 3.725-.159l.06.16l.807 2.36a4 4 0 0 0 2.276 2.411l.217.081l2.36.806c1.75.598 1.803 3.016.16 3.725l-.16.06l-2.36.807a4 4 0 0 0-2.412 2.276l-.081.216l-.806 2.361c-.598 1.75-3.016 1.803-3.724.16l-.062-.16l-.806-2.36a4 4 0 0 0-2.276-2.412l-.216-.081l-2.36-.806c-1.751-.598-1.804-3.016-.16-3.724l.16-.062l2.36-.806A4 4 0 0 0 8.22 8.025l.081-.216zM19 2a1 1 0 0 1 .898.56l.048.117l.35 1.026l1.027.35a1 1 0 0 1 .118 1.845l-.118.048l-1.026.35l-.35 1.027a1 1 0 0 1-1.845.117l-.048-.117l-.35-1.026l-1.027-.35a1 1 0 0 1-.118-1.845l.118-.048l1.026-.35l.35-1.027A1 1 0 0 1 19 2"></path>
+                        {/* Right Card */}
+                        <div className="relative overflow-hidden w-full lg:w-1/2 rounded-3xl bg-black p-4 flex flex-col sm:flex-row lg:flex-col gap-4">
+
+                            {/* Background */}
+
+                            <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_right,rgba(99,102,241,.18),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(168,85,247,.15),transparent_35%)]" />
+
+                            {/* Illustration */}
+                            <div className="relative z-10 w-full sm:w-1/2 lg:w-full flex rounded-3xl bg-white/10 flex items-center justify-center p-6">
+
+
+
+                                <svg className="w-32 h-32 sm:w-40 sm:h-40 lg:w-52 lg:h-52 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                    <g fill="#fff">
+                                        <path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5M3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.6 26.6 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.93.93 0 0 1-.765.935c-.845.147-2.34.346-4.235.346s-3.39-.2-4.235-.346A.93.93 0 0 1 3 9.219zm4.542-.827a.25.25 0 0 0-.217.068l-.92.9a25 25 0 0 1-1.871-.183a.25.25 0 0 0-.068.495c.55.076 1.232.149 2.02.193a.25.25 0 0 0 .189-.071l.754-.736l.847 1.71a.25.25 0 0 0 .404.062l.932-.97a25 25 0 0 0 1.922-.188a.25.25 0 0 0-.068-.495c-.538.074-1.207.145-1.98.189a.25.25 0 0 0-.166.076l-.754.785l-.842-1.7a.25.25 0 0 0-.182-.135"></path>
+                                        <path d="M8.5 1.866a1 1 0 1 0-1 0V3h-2A4.5 4.5 0 0 0 1 7.5V8a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1v1a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1v-.5A4.5 4.5 0 0 0 10.5 3h-2zM14 7.5V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7.5A3.5 3.5 0 0 1 5.5 4h5A3.5 3.5 0 0 1 14 7.5"></path>
                                     </g>
                                 </svg>
-                                AI Recommendations
-                            </h1><img className="w-full h-full object-cover  rounded-3xl" src="https://res.cloudinary.com/dj0ivep44/image/upload/v1781380067/Black_and_Gray_Minimalist_Creative_Portfolio_Presentation_4_cothdc.jpg" alt="" /></div>
-
-                    </div>
-                    <div className="flex h-[600px]  w-full gap-5">
-                        <div className="h-full w-2/3 group bg-white relative   rounded-3xl p-10">
-                            <div
-
-                                className="  text-white text-2xl font-bold group-hover:flex flex-col px-10 py-10 hidden bg-black/50 absolute z-30 left-0 top-0 rounded-3xl backdrop-blur-md w-full h-full">
-
-                                <motion.div
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{
-                                        opacity: 1,
-                                        y: 0,
-                                        transition: {
-                                            duration: 0.5,
-                                            ease: "easeOut",
-                                        },
-                                    }}
-                                    className="flex flex-col h-full justify-between "
-                                >
-
-
-                                    <div>
-                                        <h1 className="mb-2 text-gray-100">AI Powered Resume Generation  </h1>
-                                        <p className="text-[15px] leading-relaxed font-medium text-gray-200">First Step of the resume generation where you fill all the information you want to add in the resume rest leave everything on SHASTRA AI.   </p>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <p className="text-[15px] cursor-pointer flex items-center  gap-2 leading-relaxed font-medium text-gray-200">Create Profile
-
-                                            <svg className="rotate-45 group-hover:rotate-90 " xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                                                <g fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}>
-                                                    <path strokeDasharray={20} d="M12 21l0 -17.5">
-                                                        <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="20;0"></animate>
-                                                    </path>
-                                                    <path strokeDasharray={12} strokeDashoffset={12} d="M12 3l7 7M12 3l-7 7">
-                                                        <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.3s" dur="0.2s" to={0}></animate>
-                                                    </path>
-                                                </g>
-                                            </svg>
-                                        </p>
-                                        <p className="text-[15px] flex items-center  gap-2 leading-relaxed font-medium text-gray-200">
-                                            Header, Experience, Education, Skills, Summary, Projects, Additionals
-
-                                        </p>
-                                    </div>
-                                </motion.div>
                             </div>
 
-                            <img className="w-full h-full object-contain" src="https://res.cloudinary.com/dj0ivep44/image/upload/v1782033191/Untitled_design_5_gde6oa.png" alt="" />
+                            {/* Content */}
+                            <div className="relative z-10 w-full sm:w-1/2 lg:w-full flex-1">
+
+                                <h2 className="text-xl sm:text-2xl font-extrabold text-white font-poppins mb-4">
+                                    ATS Optimized Content Generation
+                                </h2>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
+
+                                    <div className="flex gap-2">
+                                        <span className="text-white/40">●</span>
+                                        <span className="text-sm text-white/70">
+                                            Keyword Optimization
+                                        </span>
+                                    </div>
+
+                                    <div className="flex gap-2">
+                                        <span className="text-white/40">●</span>
+                                        <span className="text-sm text-white/70">
+                                            Achievement-Driven Content
+                                        </span>
+                                    </div>
+
+                                    <div className="flex gap-2">
+                                        <span className="text-white/40">●</span>
+                                        <span className="text-sm text-white/70">
+                                            Better ATS Score & Focused on Results.
+                                        </span>
+                                    </div>
+
+                                    <div className="flex gap-2">
+                                        <span className="text-white/40">●</span>
+                                        <span className="text-sm text-white/70">
+                                            Role-Specific Tailoring
+                                        </span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
                         </div>
 
 
-                        <div className="h-full w-1/3 bg-white rounded-3xl relative group p-3">
 
-
-
-
-                            <div
-
-                                className="  text-white text-2xl font-bold group-hover:flex flex-col px-10 py-10 hidden bg-black/50 absolute z-30 left-0 top-0 rounded-3xl backdrop-blur-md w-full h-full">
-
-                                <motion.div
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{
-                                        opacity: 1,
-                                        y: 0,
-                                        transition: {
-                                            duration: 0.5,
-                                            ease: "easeOut",
-                                        },
-                                    }}
-                                    className="flex flex-col h-full justify-between "
-                                >
-
-
-                                    <div>
-                                        <h1 className="mb-2 text-gray-100">Carrer Profile</h1>
-                                        <p className="text-[15px] leading-relaxed font-medium text-gray-200">A profile containing all the informations about your carrer, education, skills, projects, summary, additionals and more.</p>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <p className="text-[15px] cursor-pointer flex items-center  gap-2 leading-relaxed font-medium text-gray-200">Create Profile
-
-                                            <svg className="rotate-45 group-hover:rotate-90 transition-all duration-1000 " xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                                                <g fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}>
-                                                    <path strokeDasharray={20} d="M12 21l0 -17.5">
-                                                        <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="20;0"></animate>
-                                                    </path>
-                                                    <path strokeDasharray={12} strokeDashoffset={12} d="M12 3l7 7M12 3l-7 7">
-                                                        <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.3s" dur="0.2s" to={0}></animate>
-                                                    </path>
-                                                </g>
-                                            </svg>
-                                        </p>
-
-                                    </div>
-                                </motion.div>
-                            </div>
-                            <img className="w-full h-full object-cover rounded-3xl" src="https://res.cloudinary.com/dj0ivep44/image/upload/v1782033591/Screenshot_2026-06-21_at_2.49.36_PM_mcguqo.png" alt="" /></div>
                     </div>
                 </div>
 
-                <div className='w-full text-center  flex  items-center justify-center mt-10'>
+                {/* <div className='w-full text-center  flex  items-center justify-center mt-10'>
                     <div className='w-full text-center  flex flex-col items-center justify-center mb-2'>
                         <div
 
@@ -398,7 +435,7 @@ const SecondLanding = () => {
 
 
                 </div>
-                <div className="w-full  h-full  px-5 flex  lg:flex-row flex-col gap-2">
+                <div className="w-full  h-full px-2 sm:px-5 flex  lg:flex-row flex-col gap-2">
 
                     <div className="flex lg:w-2/3 w-full h-full flex-col gap-2">
                         <div className="flex md:flex-row flex-col h-1/2 w-full gap-2">
@@ -463,7 +500,7 @@ const SecondLanding = () => {
                         </div>
 
                     </div>
-                </div>
+                </div> */}
             </div >
 
         </div>

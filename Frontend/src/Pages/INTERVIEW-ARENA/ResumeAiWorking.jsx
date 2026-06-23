@@ -454,137 +454,139 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
     const mockStrategyData = {
         "success": true,
         "data": {
-            "positioningStatement": "A full-stack engineer with experience building React and Node.js products at CodeSarthi, targeting a mid-level SDE role at Microsoft with strong DSA fundamentals and backend experience.",
-            "coreNarrative": "His experience in optimizing RESTful API endpoints, implementing JWT authentication, and designing microservices architecture showcases his technical expertise. Vineet's achievements, such as achieving a top 5% ranking on LeetCode and securing a high CGPA in his academic pursuits, demonstrate his commitment to excellence and problem-solving skills.",
-            "mustIncludeKeywords": [
-                "React",
-                "Node.js",
-                "REST API",
-                "RESTful API",
-                "TypeScript",
-                "Azure",
-                "Cloud Computing",
-                "Machine Learning",
-                "JavaScript",
-                "Backend Development",
-                "Full Stack Development"
-            ],
-            "niceToIncludeKeywords": [
-                "Agile Development",
-                "Scrum",
-                "Kanban",
-                "Test-Driven Development",
-                "Continuous Integration",
-                "Continuous Deployment"
-            ],
-            "keywordsToAvoid": [
-                "Vue",
-                "Java",
-                "Spring Boot",
-                "Python"
-            ],
-            "strengthsToAmplify": [
-                "Strong DSA fundamentals",
-                "Experience with React and Node.js",
-                "Backend development expertise",
-                "Achievements in coding challenges and hackathons",
-                "Experience with microservices architecture and RESTful APIs"
-            ],
-            "weaknessesToDownplay": [
-                "Limited experience with TypeScript and Azure",
-                "Short duration of experience in some roles"
-            ],
-            "sectionPriority": [
-                "summary",
-                "experience",
-                "projects",
-                "skills",
-                "education",
-                "certifications"
-            ],
-            "summaryStrategy": {
-                "openWith": "Lead with the React and Node.js full-stack experience at CodeSarthi and the LeetCode top 5% ranking as proof of DSA strength",
-                "keywordsToFrontload": [
+            "data": {
+                "positioningStatement": "A full-stack engineer with experience building React and Node.js products at CodeSarthi, targeting a mid-level SDE role at Microsoft with strong DSA fundamentals and backend experience.",
+                "coreNarrative": "His experience in optimizing RESTful API endpoints, implementing JWT authentication, and designing microservices architecture showcases his technical expertise. Vineet's achievements, such as achieving a top 5% ranking on LeetCode and securing a high CGPA in his academic pursuits, demonstrate his commitment to excellence and problem-solving skills.",
+                "mustIncludeKeywords": [
                     "React",
                     "Node.js",
-                    "Full Stack Development",
-                    "DSA"
-                ],
-                "toneInstruction": "Technical and confident, not modest. Avoid buzzwords like results-driven or passionate.",
-                "avoid": [
-                    "Do not open with I",
-                    "Do not mention Java or Spring Boot — not relevant for this role"
-                ]
-            },
-            "experienceStrategy": {
-                "general": "Emphasize technical skills, achievements, and impact in each role. Use strong past-tense action verbs like Built, Engineered, and Architected.",
-                "perRole": [
-                    {
-                        "company": "CodeSarthi",
-                        "role": "Frontend Developer",
-                        "relevanceToTarget": "high",
-                        "instruction": "Emphasize experience with React, Node.js, and RESTful APIs. Highlight achievements in optimizing API endpoints and implementing JWT authentication."
-                    },
-                    {
-                        "company": "CodeSarthi",
-                        "role": "Backend Developer",
-                        "relevanceToTarget": "high",
-                        "instruction": "Emphasize experience with Node.js, RESTful APIs, and microservices architecture. Highlight achievements in optimizing database queries and implementing OAuth2 flow."
-                    }
-                ]
-            },
-            "projectStrategy": {
-                "general": "Emphasize technical decisions, metrics, and impact in each project. Use strong past-tense action verbs like Built, Engineered, and Architected.",
-                "perProject": [
-                    {
-                        "name": "code sarhti",
-                        "relevanceToTarget": "high",
-                        "shouldInclude": true,
-                        "instruction": "Emphasize experience with React, Node.js, and MongoDB. Highlight achievements in optimizing React rendering pipeline and implementing JWT authentication."
-                    },
-                    {
-                        "name": "DEV CONNECT",
-                        "relevanceToTarget": "low",
-                        "shouldInclude": false,
-                        "instruction": "Do not include this project as it has placeholder content and is not relevant to the target role."
-                    }
-                ]
-            },
-            "skillsStrategy": {
-                "categoriesToUse": [
-                    "Programming Languages",
-                    "Frameworks",
-                    "Databases",
-                    "Cloud Platforms"
-                ],
-                "skillsToKeep": [
+                    "REST API",
+                    "RESTful API",
+                    "TypeScript",
+                    "Azure",
+                    "Cloud Computing",
+                    "Machine Learning",
                     "JavaScript",
-                    "React",
-                    "Node.js",
-                    "MongoDB"
+                    "Backend Development",
+                    "Full Stack Development"
                 ],
-                "skillsToRemove": [
+                "niceToIncludeKeywords": [
+                    "Agile Development",
+                    "Scrum",
+                    "Kanban",
+                    "Test-Driven Development",
+                    "Continuous Integration",
+                    "Continuous Deployment"
+                ],
+                "keywordsToAvoid": [
                     "Vue",
                     "Java",
                     "Spring Boot",
                     "Python"
                 ],
-                "skillsToSurface": [
-                    "TypeScript",
-                    "Azure"
+                "strengthsToAmplify": [
+                    "Strong DSA fundamentals",
+                    "Experience with React and Node.js",
+                    "Backend development expertise",
+                    "Achievements in coding challenges and hackathons",
+                    "Experience with microservices architecture and RESTful APIs"
                 ],
-                "orderBy": "Most relevant to Microsoft SDE role first"
-            },
-            "toneGuidance": {
-                "overall": "Professional and technical, with a confident tone.",
-                "verbStyle": "Strong past-tense action verbs like Built, Engineered, and Architected.",
-                "formality": "Formal but not stiff — this is Microsoft, not a startup."
-            },
-            "redFlagsToAddress": [
-                "projects[1].description is placeholder text — rewriters must work from bullets only for that project",
-                "experience[1].startDate is 2029 — do not reference dates in bullets"
-            ],
-            "versionLabel": "Microsoft SDE — Full Stack Focus"
+                "weaknessesToDownplay": [
+                    "Limited experience with TypeScript and Azure",
+                    "Short duration of experience in some roles"
+                ],
+                "sectionPriority": [
+                    "summary",
+                    "experience",
+                    "projects",
+                    "skills",
+                    "education",
+                    "certifications"
+                ],
+                "summaryStrategy": {
+                    "openWith": "Lead with the React and Node.js full-stack experience at CodeSarthi and the LeetCode top 5% ranking as proof of DSA strength",
+                    "keywordsToFrontload": [
+                        "React",
+                        "Node.js",
+                        "Full Stack Development",
+                        "DSA"
+                    ],
+                    "toneInstruction": "Technical and confident, not modest. Avoid buzzwords like results-driven or passionate.",
+                    "avoid": [
+                        "Do not open with I",
+                        "Do not mention Java or Spring Boot — not relevant for this role"
+                    ]
+                },
+                "experienceStrategy": {
+                    "general": "Emphasize technical skills, achievements, and impact in each role. Use strong past-tense action verbs like Built, Engineered, and Architected.",
+                    "perRole": [
+                        {
+                            "company": "CodeSarthi",
+                            "role": "Frontend Developer",
+                            "relevanceToTarget": "high",
+                            "instruction": "Emphasize experience with React, Node.js, and RESTful APIs. Highlight achievements in optimizing API endpoints and implementing JWT authentication."
+                        },
+                        {
+                            "company": "CodeSarthi",
+                            "role": "Backend Developer",
+                            "relevanceToTarget": "high",
+                            "instruction": "Emphasize experience with Node.js, RESTful APIs, and microservices architecture. Highlight achievements in optimizing database queries and implementing OAuth2 flow."
+                        }
+                    ]
+                },
+                "projectStrategy": {
+                    "general": "Emphasize technical decisions, metrics, and impact in each project. Use strong past-tense action verbs like Built, Engineered, and Architected.",
+                    "perProject": [
+                        {
+                            "name": "code sarhti",
+                            "relevanceToTarget": "high",
+                            "shouldInclude": true,
+                            "instruction": "Emphasize experience with React, Node.js, and MongoDB. Highlight achievements in optimizing React rendering pipeline and implementing JWT authentication."
+                        },
+                        {
+                            "name": "DEV CONNECT",
+                            "relevanceToTarget": "low",
+                            "shouldInclude": false,
+                            "instruction": "Do not include this project as it has placeholder content and is not relevant to the target role."
+                        }
+                    ]
+                },
+                "skillsStrategy": {
+                    "categoriesToUse": [
+                        "Programming Languages",
+                        "Frameworks",
+                        "Databases",
+                        "Cloud Platforms"
+                    ],
+                    "skillsToKeep": [
+                        "JavaScript",
+                        "React",
+                        "Node.js",
+                        "MongoDB"
+                    ],
+                    "skillsToRemove": [
+                        "Vue",
+                        "Java",
+                        "Spring Boot",
+                        "Python"
+                    ],
+                    "skillsToSurface": [
+                        "TypeScript",
+                        "Azure"
+                    ],
+                    "orderBy": "Most relevant to Microsoft SDE role first"
+                },
+                "toneGuidance": {
+                    "overall": "Professional and technical, with a confident tone.",
+                    "verbStyle": "Strong past-tense action verbs like Built, Engineered, and Architected.",
+                    "formality": "Formal but not stiff — this is Microsoft, not a startup."
+                },
+                "redFlagsToAddress": [
+                    "projects[1].description is placeholder text — rewriters must work from bullets only for that project",
+                    "experience[1].startDate is 2029 — do not reference dates in bullets"
+                ],
+                "versionLabel": "Microsoft SDE — Full Stack Focus"
+            }
         }
     }
     const audit = async () => {
@@ -1442,7 +1444,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
 
                                                         Positioning Statement :</p>
 
-                                                    {strategyData?.data?.positioningStatement}
+                                                    {strategyData?.data?.data?.positioningStatement}
 
                                                 </span>
 
@@ -1460,7 +1462,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
 
                                                         Core Narrative :</p>
 
-                                                    {strategyData?.data?.coreNarrative}
+                                                    {strategyData?.data?.data?.coreNarrative}
 
 
 
@@ -1485,7 +1487,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
                                                 </div>
 
                                                 <div className="space-y-2">
-                                                    {strategyData?.data?.strengthsToAmplify.map((item, idx) => (
+                                                    {strategyData?.data?.data?.strengthsToAmplify.map((item, idx) => (
                                                         <p key={idx} className="text-sm md:text-base break-words">
                                                             ● {item}
                                                         </p>
@@ -1503,7 +1505,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
 
                                                         Must Include Keywords :</p>
                                                     <div className="flex flex-wrap gap-2">
-                                                        {strategyData?.data?.mustIncludeKeywords.map((item, idx) => (
+                                                        {strategyData?.data?.data?.mustIncludeKeywords.map((item, idx) => (
                                                             <span
                                                                 key={idx}
                                                                 className="rounded-full bg-black/20 px-3 py-2 text-sm break-words"
@@ -1521,7 +1523,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
 
                                                         Nice To Include Keywords :</p>
                                                     <div className="flex flex-wrap gap-2">
-                                                        {strategyData?.data?.niceToIncludeKeywords.map((item, idx) => (
+                                                        {strategyData?.data?.data?.niceToIncludeKeywords.map((item, idx) => (
                                                             <span
                                                                 key={idx}
                                                                 className="rounded-full bg-black/20 px-3 py-2 text-sm break-words"
@@ -1541,7 +1543,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
                                                         </svg>
                                                         Keywords To Avoid :</p>
                                                     <div className="flex flex-wrap gap-2">
-                                                        {strategyData?.data?.keywordsToAvoid.map((item, idx) => (
+                                                        {strategyData?.data?.data?.keywordsToAvoid.map((item, idx) => (
                                                             <span
                                                                 key={idx}
                                                                 className="rounded-full bg-black/20 px-3 py-2 text-sm break-words"
@@ -1559,7 +1561,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
                                                         Weaknesses To Downplay :</p>
 
                                                     <div className="space-y-2">
-                                                        {strategyData?.data?.weaknessesToDownplay.map((item, idx) => (
+                                                        {strategyData?.data?.data?.weaknessesToDownplay.map((item, idx) => (
                                                             <p key={idx} className="text-sm md:text-base break-words">
                                                                 ● {item}
                                                             </p>
@@ -1581,9 +1583,9 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
 
                                                         Tone Guidance :</p>
                                                     <div className="flex flex-col gap-3">
-                                                        <p><b>Overall</b>: {strategyData?.data?.toneGuidance?.overall}</p>
-                                                        <p><b>Verb Style</b>: {strategyData?.data?.toneGuidance?.verbStyle}</p>
-                                                        <p><b>Formality</b>: {strategyData?.data?.toneGuidance?.formality}</p>
+                                                        <p><b>Overall</b>: {strategyData?.data?.data?.toneGuidance?.overall}</p>
+                                                        <p><b>Verb Style</b>: {strategyData?.data?.data?.toneGuidance?.verbStyle}</p>
+                                                        <p><b>Formality</b>: {strategyData?.data?.data?.toneGuidance?.formality}</p>
 
                                                     </div>
                                                 </div>
@@ -1595,7 +1597,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
                                                         Red Flags To Address :</p>
 
                                                     <div className="space-y-2">
-                                                        {strategyData?.data?.redFlagsToAddress.map((item, idx) => (
+                                                        {strategyData?.data?.data?.redFlagsToAddress.map((item, idx) => (
                                                             <p key={idx} className="text-sm md:text-base break-words">
                                                                 ● {item}
                                                             </p>
@@ -1612,7 +1614,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
                                                             <path fill="currentColor" d="M6 1v3H1V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1zm14 12v3h-5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1zM6 8v7H1V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1zm14-6v7h-5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1z"></path>
                                                         </svg>
 
-                                                        Section Wise Strategy : {strategyData?.data?.versionLabel}</p>
+                                                        Section Wise Strategy : {strategyData?.data?.data?.versionLabel}</p>
 
                                                     <div className="underline underline-offset-4 flex items-center gap-2 mt-5 ml-5 text-lg font-bold">
 
@@ -1627,7 +1629,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
                                                                 </svg> Open With
                                                             </h3>
                                                             <p className="text-sm md:text-base leading-relaxed">
-                                                                {strategyData?.data?.summaryStrategy?.openWith}
+                                                                {strategyData?.data?.data?.summaryStrategy?.openWith}
                                                             </p>
                                                         </div>
 
@@ -1640,7 +1642,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
                                                             </h3>
 
                                                             <div className="flex flex-wrap gap-2">
-                                                                {strategyData?.data?.summaryStrategy?.keywordsToFrontload.map((item, idx) => (
+                                                                {strategyData?.data?.data?.summaryStrategy?.keywordsToFrontload.map((item, idx) => (
                                                                     <span
                                                                         key={idx}
                                                                         className="rounded-full bg-black/20 px-3 py-2 text-sm font-medium text-black"
@@ -1663,7 +1665,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
                                                             </h3>
 
                                                             <p className="text-sm md:text-base leading-relaxed">
-                                                                {strategyData?.data?.summaryStrategy?.toneInstruction}
+                                                                {strategyData?.data?.data?.summaryStrategy?.toneInstruction}
                                                             </p>
                                                         </div>
 
@@ -1676,7 +1678,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
                                                             </h3>
 
                                                             <div className="space-y-2">
-                                                                {strategyData?.data?.summaryStrategy?.avoid.map((item, idx) => (
+                                                                {strategyData?.data?.data?.summaryStrategy?.avoid.map((item, idx) => (
                                                                     <p
                                                                         key={idx}
                                                                         className="flex items-start gap-2 text-sm md:text-base"
@@ -1709,7 +1711,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
                                                                 </svg> General Instruction
                                                             </h3>
                                                             <p className="text-sm md:text-base leading-relaxed">
-                                                                {strategyData?.data?.experienceStrategy?.general}
+                                                                {strategyData?.data?.data?.experienceStrategy?.general}
                                                             </p>
                                                         </div>
 
@@ -1723,7 +1725,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
 
 
                                                         <div className="w-full grid grid-cols-2 gap-4">
-                                                            {strategyData?.data?.experienceStrategy?.perRole.map((item, idx) => (
+                                                            {strategyData?.data?.data?.experienceStrategy?.perRole.map((item, idx) => (
                                                                 <div
                                                                     key={idx}
                                                                     className="w-full rounded-2xl bg-green-100 p-5 shadow-sm"
@@ -1798,7 +1800,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
                                                                 </svg> General Instruction
                                                             </h3>
                                                             <p className="text-sm md:text-base leading-relaxed">
-                                                                {strategyData?.data?.experienceStrategy?.general}
+                                                                {strategyData?.data?.data?.experienceStrategy?.general}
                                                             </p>
                                                         </div>
 
@@ -1812,7 +1814,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
 
 
                                                         <div className="w-full grid grid-cols-2 gap-4">
-                                                            {strategyData?.data?.projectStrategy?.perProject.map((item, idx) => (
+                                                            {strategyData?.data?.data?.projectStrategy?.perProject.map((item, idx) => (
                                                                 <div
                                                                     key={idx}
                                                                     className="w-full rounded-2xl bg-green-100 p-5 shadow-sm"
@@ -1893,7 +1895,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
 
                                                                 Categories To Use :</p>
                                                             <div className="flex flex-wrap gap-2">
-                                                                {strategyData?.data?.skillsStrategy?.categoriesToUse.map((item, idx) => (
+                                                                {strategyData?.data?.data?.skillsStrategy?.categoriesToUse.map((item, idx) => (
                                                                     <span
                                                                         key={idx}
                                                                         className="rounded-full bg-black/20 px-3 py-2 text-sm break-words"
@@ -1912,7 +1914,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
 
                                                                 Skills To Keep :</p>
                                                             <div className="flex flex-wrap gap-2">
-                                                                {strategyData?.data?.skillsStrategy?.skillsToKeep.map((item, idx) => (
+                                                                {strategyData?.data?.data?.skillsStrategy?.skillsToKeep.map((item, idx) => (
                                                                     <span
                                                                         key={idx}
                                                                         className="rounded-full bg-black/20 px-3 py-2 text-sm break-words"
@@ -1934,7 +1936,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
 
                                                                 Skills To Remove :</p>
                                                             <div className="flex flex-wrap gap-2">
-                                                                {strategyData?.data?.skillsStrategy?.skillsToRemove.map((item, idx) => (
+                                                                {strategyData?.data?.data?.skillsStrategy?.skillsToRemove.map((item, idx) => (
                                                                     <span
                                                                         key={idx}
                                                                         className="rounded-full bg-black/20 px-3 py-2 text-sm break-words"
@@ -1954,7 +1956,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
                                                                 Skills To Surface :</p>
 
                                                             <div className="space-y-2">
-                                                                {strategyData?.data?.skillsStrategy?.skillsToSurface.map((item, idx) => (
+                                                                {strategyData?.data?.data?.skillsStrategy?.skillsToSurface.map((item, idx) => (
                                                                     <p key={idx} className="text-sm md:text-base break-words">
                                                                         ● {item}
                                                                     </p>

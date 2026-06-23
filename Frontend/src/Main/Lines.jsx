@@ -97,7 +97,7 @@ export default function Lines() {
     return (
         <div className="z-10 w-[100%] flex justify-center">
             <section className="bg-transparent text-white flex flex-col  overflow-hidden  font-poppins">
-                <ParallaxText baseVelocity={-1} >
+                <ParallaxText baseVelocity={-0.3} >
 
                     <div className="flex items-center  py-3">
                         <span className=" gap-2 text-md  font-extralight mx-[10px] flex items-center border border-gray-200 px-4 shadow-[0_8px_32px_rgba(0,0,0,0.12)]  p-1 rounded-xl  ">
