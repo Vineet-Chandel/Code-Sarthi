@@ -125,7 +125,8 @@ const ContentSecond2 = () => {
                 <div
                     key={currentId}
                     onClick={() => toggleFaq(currentId)}
-                    className="group rounded-2xl border border-white/10 bg-white/[0.03] p-5 lg:p-6 hover:bg-white/[0.06] hover:border-white/20 transition-all duration-300 h-fit cursor-pointer select-none"
+
+                    className=" group rounded-2xl border border-white/10 bg-white/[0.03] p-5 lg:p-6 hover:bg-white/[0.06] hover:border-white/20 transition-all duration-300 h-fit cursor-pointer select-none"
                 >
                     <div className="flex justify-between items-start gap-4">
                         <h3 className="text-lg lg:text-xl text-white font-semibold group-hover:text-blue-400 transition-colors duration-200">
@@ -166,7 +167,9 @@ const ContentSecond2 = () => {
     };
 
     return (
-        <div className="w-full bg-black flex flex-col items-center py-20 px-4 md:px-8 font-poppins">
+        <div
+            id="faqs"
+            className="w-full bg-black flex flex-col items-center py-20 px-4 md:px-8 font-poppins">
 
             {/* FAQ Header */}
             <div className="w-full max-w-[1500px] mb-14 text-center md:text-start">

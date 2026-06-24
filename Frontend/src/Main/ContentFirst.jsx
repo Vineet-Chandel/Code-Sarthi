@@ -6,7 +6,7 @@ const ContentFirst = () => {
 
 
     return (
-        <section className="mt-5 lg:mt-20 w-full bg-gray-200 flex flex-col items-center justify-center  p-1.5 ">
+        <section id="scaling" className="mt-5 lg:mt-20 w-full bg-gray-200 flex flex-col items-center justify-center  p-1.5 ">
 
             <div
 

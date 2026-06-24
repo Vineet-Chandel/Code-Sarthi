@@ -35,24 +35,18 @@ const Devs = () => {
     },
   };
   return (
-    <div className='bg-black p-1.5'>
+    <div
+      id="founder"
+      className='bg-black  p-1.5'>
       <div
         className="
-relative
+
 overflow-hidden
 bg-black flex lg:flex-row flex-col items-center gap-8 py-10
 "
       >
 
 
-        <div
-          className="
-absolute
-inset-0
-bg-[linear-gradient(rgba(255,255,255,.09)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.09)_1px,transparent_1px)]
-bg-[size:90px_90px]
-"
-        />
 
         <div className='w-full lg:w-1/2  flex items-center justify-center  '>
           <div className='w-full  flex flex-col items-center justify-center'>

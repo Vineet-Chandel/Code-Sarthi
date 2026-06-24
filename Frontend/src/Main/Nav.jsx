@@ -233,16 +233,17 @@ const Nav = () => {
     return (
         <div className="relative w-full">
             {/* NAVBAR */}
-            <div className=" top-5 z-30  2xl:px-7 xl:px-6 px-4   w-screen text-white">
+            <div className=" top-5 z-30  xl:px-10 px-4   w-screen text-white">
                 <div className="flex items-center  justify-between">
 
                     {/* LOGO */}
                     <div
                         onClick={() => navigate("/")}
-                        className="flex items-center gap-2 text-2xl font-extrabold cursor-pointer group">
+                        className="flex items-center gap-2 relative z-30 text-2xl font-extrabold cursor-pointer group">
 
 
-                        <img className="w-[35px] h-[35px] group-hover:animate-bounce text-white" src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1779801993/Untitled_design_3_-Photoroom_hkidic.webp" alt="" />
+                        <img onClick={() => navigate("/")}
+                            className="w-[35px] h-[35px]  text-white" src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1779801993/Untitled_design_3_-Photoroom_hkidic.webp" alt="" />
 
                     </div>
 
@@ -288,7 +289,7 @@ const Nav = () => {
                     </div>
 
                     {/* CTA */}
-                    <div className="flex justify-center items-center gap-3 pr-3">
+                    <div className="relarive z-30  flex justify-center items-center gap-3 pr-3">
 
 
                         <div className="hidden lg:flex">

@@ -85,10 +85,27 @@ const Hero = () => {
             <SecondLanding />
             <Lines2 />
             <ContentSecond2 />
-            <Devs />
 
 
-            {/* {/*  */}
+
+            <div className="relative">
+
+                <div
+                    className="
+absolute
+inset-0
+bg-[linear-gradient(rgba(255,255,255,.09)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.09)_1px,transparent_1px)]
+bg-[size:90px_90px]
+"
+                />
+
+                <Devs />
+                <Footer />
+            </div>
+
+
+
+
 
 
             {/*  */}

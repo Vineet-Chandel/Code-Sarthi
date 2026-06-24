@@ -21,7 +21,7 @@ const Main2 = ({ ctaData }) => {
 
 
     return (
-        <div
+        <div id="home"
             className='relative w-full bg-gray-200 p-1.5 
 '>
 

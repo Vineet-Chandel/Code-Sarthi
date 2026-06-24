@@ -27,7 +27,7 @@ const SecondLanding = () => {
 
     return (
 
-        <div className="w-full flex flex-col items-center justify-center">
+        <div id="resume" className="w-full flex flex-col items-center justify-center">
             < div
                 className="sm:max-w-[1520px] w-full mt-10  bg-gray-200 flex flex-col items-center justify-between    " >
                 <div className="w-full justify-start pl-7 flex sm:flex-row flex-col">
