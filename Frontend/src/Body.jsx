@@ -13,7 +13,7 @@ const Body = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate(); // ✅ rename
     const [isLoading, setIsLoading] = useState(true);
-    const [selectedChatUser2, setSelectedChatUser2] = useState({ idx: null, info: null, isOpenTab: false });
+    const [selectedChatUser2, setSelectedChatUser2] = useState({ id: null, info: null, isOpenTab: false });
     const fetchUserData = async () => {
         try {
             const response = await axios.get(

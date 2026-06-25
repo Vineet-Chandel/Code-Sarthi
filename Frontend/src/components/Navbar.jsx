@@ -355,7 +355,7 @@ group-hover:after:w-full">
                             >
                                 <div className="h-full w-full rounded-full overflow-hidden  ">
                                     <img
-                                        src={selectedChatUser2?.info?.photoUrl}
+                                        src={selectedChatUser2?.info?.photoUrl.url}
                                         alt="Profile"
                                         className="h-full w-full object-cover transition-all duration-500   "
                                     />

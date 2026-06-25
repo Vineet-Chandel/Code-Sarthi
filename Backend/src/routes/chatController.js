@@ -78,6 +78,19 @@ chatRouter.post("/send-message", userAuth, async (req, res) => {
 
         let convoContainer = null;
 
+
+        if (!convId) {
+
+            const existConvo = await conversation.findOne({
+                members: {
+                    $all: members
+                },
+                type
+            }).session(session)
+
+            convoContainer = await conversation.findById(existConvo._id).session(session)
+        }
+
         if (convId) {
             convoContainer = await conversation.findById(convId).session(session)
         }
