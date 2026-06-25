@@ -365,13 +365,13 @@ const Login = () => {
 
     const ToastContainer = ({ toasts, removeToast }) => {
         return (
-            <div className="fixed bottom-5 right-5 flex flex-col gap-3 z-50">
-                <AnimatePresence>
-                    {toasts.map((t) => (
+            <div className="fixed top-4 left-4 right-4 md:top-auto md:left-auto md:bottom-5 md:right-5 flex flex-col gap-3 w-auto md:w-[440px] max-w-full z-[9999] pointer-events-none">
+                <AnimatePresence mode="popLayout">
+                    {toasts.map((toast) => (
                         <Toast
-                            key={t.id}
-                            {...t}
-                            onClose={() => removeToast(t.id)}
+                            key={toast.id}
+                            {...toast}
+                            onClose={() => removeToast(toast.id)}
                         />
                     ))}
                 </AnimatePresence>

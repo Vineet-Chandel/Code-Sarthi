@@ -96,6 +96,36 @@ Return ONLY a valid JSON object. No prose. No markdown fences.
   }
 }
 `;
+
+
+function parseAIResponse(completion) {
+  const rawText = completion?.choices?.[0]?.message?.content;
+
+  if (!rawText || rawText.trim() === "") {
+    console.error(
+      "Empty AI response:",
+      JSON.stringify(completion, null, 2)
+    );
+
+    throw new Error(
+      `AI returned empty content. finish_reason: ${completion?.choices?.[0]?.finish_reason ?? "unknown"
+      }`
+    );
+  }
+
+  const cleanedText = rawText
+    .replace(/```json/gi, "")
+    .replace(/```/g, "")
+    .trim();
+
+  try {
+    return JSON.parse(cleanedText);
+  } catch (err) {
+    throw new Error(
+      `AI returned invalid JSON.\n${err.message}\n\nRaw Response:\n${cleanedText}`
+    );
+  }
+}
 // ─── STAGE 2A — SUMMARY REWRITE ──────────────────────────────────────────────
 const buildSummaryPrompt = ({ profile, strategy }) => `
 You are an expert resume writer specializing in ${strategy.toneGuidance?.overall ?? "professional"} resumes.
@@ -127,7 +157,7 @@ Education: ${JSON.stringify(profile.education)}
 Achievements: ${JSON.stringify(profile.achievements)}
 
 ## RULES
-- 3–4 sentences MAX. No bullet points. No lists.
+- 2–3 sentences MAX. No bullet points. No lists.
 - Open with the strongest proof point from their real experience — not a generic opener
 - Do NOT start with "I"
 - Embed 3–5 must-include keywords naturally — never stuff them
@@ -135,6 +165,7 @@ Achievements: ${JSON.stringify(profile.achievements)}
 - Every claim must be traceable to the profile data above — no invented achievements
 - Sound like a human wrote it for this specific person, not a template
 - Align the title to the target role — not the original title if it doesn't match
+- Don't use the projects , experience or education or the skills name in the summary 
 
 Return ONLY this JSON shape:
 {
@@ -722,7 +753,7 @@ aiWorkRouter.post("/resume/rewrite/summary", userAuth, async (req, res) => {
     if (!user) return res.status(401).json({ success: false, message: "Please re-login" });
     if (!strategy) return res.status(400).json({ success: false, message: "strategy is required" });
 
-  const Profile = await resume.findOne({ userId: user._id });
+    const Profile = await resume.findOne({ userId: user._id });
     if (!Profile) {
       return res.status(404).json({ success: false, message: "Career profile not found" });
     }
@@ -737,7 +768,7 @@ aiWorkRouter.post("/resume/rewrite/summary", userAuth, async (req, res) => {
     delete profileClean.createdAt;
     delete profileClean.updatedAt;
     delete profileClean.isProfileCompleted;
-     const completion = await client.chat.completions.create({
+    const completion = await client.chat.completions.create({
       model: "llama-3.3-70b-versatile",
       messages: [
         { role: "system", content: JSON_SYSTEM_PROMPT },
@@ -772,7 +803,7 @@ aiWorkRouter.post("/resume/rewrite/experience", userAuth, async (req, res) => {
     if (!user) return res.status(401).json({ success: false, message: "Please re-login" });
     if (!strategy) return res.status(400).json({ success: false, message: "strategy is required" });
 
-  const Profile = await resume.findOne({ userId: user._id });
+    const Profile = await resume.findOne({ userId: user._id });
     if (!Profile) {
       return res.status(404).json({ success: false, message: "Career profile not found" });
     }
@@ -787,7 +818,7 @@ aiWorkRouter.post("/resume/rewrite/experience", userAuth, async (req, res) => {
     delete profileClean.createdAt;
     delete profileClean.updatedAt;
     delete profileClean.isProfileCompleted;
-     // one AI call per experience entry — all parallel
+    // one AI call per experience entry — all parallel
     const results = await Promise.all(
       profileClean.experience.map(async (entry) => {
         const roleStrategy = strategy.experienceStrategy?.perRole?.find(
@@ -829,7 +860,7 @@ aiWorkRouter.post("/resume/rewrite/projects", userAuth, async (req, res) => {
     if (!user) return res.status(401).json({ success: false, message: "Please re-login" });
     if (!strategy) return res.status(400).json({ success: false, message: "strategy is required" });
 
-  const Profile = await resume.findOne({ userId: user._id });
+    const Profile = await resume.findOne({ userId: user._id });
     if (!Profile) {
       return res.status(404).json({ success: false, message: "Career profile not found" });
     }
@@ -844,7 +875,7 @@ aiWorkRouter.post("/resume/rewrite/projects", userAuth, async (req, res) => {
     delete profileClean.createdAt;
     delete profileClean.updatedAt;
     delete profileClean.isProfileCompleted;
-     // filter out projects strategy flagged as shouldInclude: false
+    // filter out projects strategy flagged as shouldInclude: false
     const projectsToRewrite = profileClean.projects.filter(proj => {
       const ps = strategy.projectStrategy?.perProject?.find(p => p.name === proj.name);
       return ps?.shouldInclude !== false;
@@ -891,7 +922,7 @@ aiWorkRouter.post("/resume/rewrite/skills", userAuth, async (req, res) => {
     if (!user) return res.status(401).json({ success: false, message: "Please re-login" });
     if (!strategy) return res.status(400).json({ success: false, message: "strategy is required" });
 
-  const Profile = await resume.findOne({ userId: user._id });
+    const Profile = await resume.findOne({ userId: user._id });
     if (!Profile) {
       return res.status(404).json({ success: false, message: "Career profile not found" });
     }
@@ -906,7 +937,7 @@ aiWorkRouter.post("/resume/rewrite/skills", userAuth, async (req, res) => {
     delete profileClean.createdAt;
     delete profileClean.updatedAt;
     delete profileClean.isProfileCompleted;
-     const completion = await client.chat.completions.create({
+    const completion = await client.chat.completions.create({
       model: "llama-3.3-70b-versatile",
       messages: [
         { role: "system", content: JSON_SYSTEM_PROMPT },

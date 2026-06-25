@@ -175,16 +175,16 @@ const Landing = () => {
     }, []);
     const ProfileCompleteness = 70
     return (
-        <div className=' bg-black px-2 sm:px-5 lg:px-10'>
+        <div className=' bg-white p-1'>
             <div className="
 w-full
 mx-auto
-pb-8
-lg:pb-10
-
+p-4
+lg:p-10
+bg-black
 flex
 flex-col
-
+rounded-[20px]
 gap-6
 items-stretch
 ">

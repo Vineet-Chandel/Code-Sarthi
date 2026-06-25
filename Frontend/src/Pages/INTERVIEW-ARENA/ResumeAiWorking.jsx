@@ -319,6 +319,13 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
         data: null
     });
 
+    const [rewrittingData, setRewrittingData] = useState({
+        data1: null,
+        data2: null,
+        data3: null,
+        data4: null
+    });
+
     const DEV_MODE = true;
 
 
@@ -450,7 +457,6 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
             }
         }
     }
-
     const mockStrategyData = {
         "success": true,
         "data": {
@@ -589,6 +595,9 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
             }
         }
     }
+
+
+
     const audit = async () => {
 
 
@@ -693,7 +702,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
                         : stage
                 )
             );
-            return 1;
+            return res.data;
         } catch (err) {
             addToast(({
                 type: "error",
@@ -704,6 +713,218 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
             return 0;
         }
     }
+    const rewritting = async (strategyResult) => {
+        try {
+            if (DEV_MODE) {
+                setRewrittingData(
+
+                    {
+                        data1: {
+                            "data": {
+                                "summaryTitle": "Software Development Engineer",
+                                "summaryBody": "Built scalable React and Node.js applications, achieving top 5% ranking on LeetCode and demonstrating expertise in designing RESTful APIs. Engineered high-performance systems with a strong foundation in computer science, utilizing JavaScript and TypeScript to drive cloud computing solutions on Azure. With a focus on scalability, developed and maintained systems that enhanced user engagement and reduced latency, leveraging cloud computing to drive business growth."
+                            }
+                        },
+                        data2: {
+                            "data": [
+                                {
+                                    "role": "Frontend Developer",
+                                    "company": "CodeSarthi",
+                                    "location": "Kanpur, India",
+                                    "startDate": "2026-01",
+                                    "endDate": "2026-01",
+                                    "currentlyWorking": true,
+                                    "employmentType": "Internship",
+                                    "bullets": [
+                                        "Built responsive React UI components, reducing load time 35% via lazy loading and Server-Side Rendering (SSR) with Node.js",
+                                        "Streamlined RESTful API endpoints, cutting response latency 28% using Azure Cloud Computing and Redis caching",
+                                        "Deployed automated CI/CD pipelines with GitHub Actions, accelerating deployment cycles 4x and ensuring scalability with Docker",
+                                        "Designed microservices architecture, enhancing scalability 3x through Kubernetes and MongoDB integration",
+                                        "Implemented secure user authentication flow, integrating OAuth2 and JWT, reducing breach risk 99% with TypeScript and Cloud Computing"
+                                    ]
+                                },
+                                {
+                                    "role": "Backend Developer",
+                                    "company": "CodeSarthi",
+                                    "location": "Kanpur, India",
+                                    "startDate": "2029-06",
+                                    "endDate": "2030-12",
+                                    "currentlyWorking": true,
+                                    "employmentType": "Internship",
+                                    "bullets": [
+                                        "Built a stateless REST API using Node.js, cutting latency 35% measured by response time",
+                                        "Streamlined PostgreSQL queries, boosting throughput 4x measured by transactions per second with JavaScript and TypeScript",
+                                        "Deployed automated CI/CD pipelines with GitHub Actions and Docker, accelerating deployments 2x measured by release frequency",
+                                        "Designed a microservices architecture, scaling horizontally to 10 instances measured by uptime 99.9% with Kubernetes and Azure Cloud Computing",
+                                        "Implemented a secure OAuth2 flow with JWT, cutting breach risk 90% measured by scans, and integrated with React and React.js applications"
+                                    ]
+                                }
+                            ]
+                        },
+                        data3: {
+                            "data": [
+                                {
+                                    "name": "code sarhti",
+                                    "stack": "React, Mongo db",
+                                    "github": "https://github.com/Vineet-Chandel/Code-Sarthi",
+                                    "live": "https://www.codesarthi.in/",
+                                    "description": "CodeSarthi connects you with a global developer community to build and scale. Designed to boost productivity while keeping workflows fast and efficient.",
+                                    "bullets": [
+                                        "Engineered a scalable React.js component architecture, integrating with a Node.js backend via RESTful API, to achieve a 35% reduction in load time and significantly boost user engagement",
+                                        "Architected a MongoDB database with sharding, ensuring seamless support for 50k concurrent developers and showcasing expertise in Cloud Computing with Azure",
+                                        "Implemented a secure authentication mechanism using JWT and OAuth2, integrating with the REST API to reduce unauthorized access incidents by 90% and protect sensitive data",
+                                        "Optimized the React rendering pipeline, cutting the bundle size by 28% and improving SEO scores, while ensuring scalability and performance in a microservices-based architecture"
+                                    ]
+                                }
+                            ]
+                        },
+                        data4: {
+                            "data": {
+                                "skills": [
+                                    {
+                                        "skillCategory": "Languages",
+                                        "skills": [
+                                            "JavaScript",
+                                            "TypeScript"
+                                        ]
+                                    },
+                                    {
+                                        "skillCategory": "Frameworks",
+                                        "skills": [
+                                            "React"
+                                        ]
+                                    },
+                                    {
+                                        "skillCategory": "Databases",
+                                        "skills": [
+                                            "MongoDB",
+                                            "PostgreSQL"
+                                        ]
+                                    },
+                                    {
+                                        "skillCategory": "Tools",
+                                        "skills": [
+                                            "Node.js",
+                                            "Docker",
+                                            "Kubernetes",
+                                            "JWT",
+                                            "OAuth2"
+                                        ]
+                                    },
+                                    {
+                                        "skillCategory": "Cloud",
+                                        "skills": [
+                                            "Azure"
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    }
+
+                );
+                setResumePipelineStages(prev =>
+                    prev.map((stage, index) =>
+                        index >= 2 && index <= 5
+                            ? { ...stage, status: "SUCCESS" }
+                            : stage
+                    )
+                );
+                console.log(strategyData);
+                return 1;
+            }
+
+            console.log("strategyResult:", strategyResult);
+            console.log("strategyResult.data:", strategyResult?.data);
+            console.log("strategyResult.data.data:", strategyResult?.data?.data);
+            setResumePipelineStages(prev =>
+                prev.map((stage, index) =>
+                    (index >= 2 && index <= 5)
+                        ? { ...stage, status: "LOADING" }
+                        : stage
+                )
+            );
+
+
+            const res1 = await axios.post(`${BASE_URL}/resume/rewrite/summary`, {
+                strategy: strategyResult?.data
+            }, { withCredentials: true })
+
+            setRewrittingData({
+                ...prev,
+                data1: res1.data,
+
+            })
+
+            setResumePipelineStages(prev =>
+                prev.map((stage, index) =>
+                    (index === 2)
+                        ? { ...stage, status: "SUCCESS" }
+                        : stage
+                )
+            );
+            const res2 = await axios.post(`${BASE_URL}/resume/rewrite/experience`, {
+                strategy: strategyResult?.data
+            }, { withCredentials: true })
+
+            setRewrittingData({
+                ...prev,
+                data2: res2.data,
+
+            })
+
+            setResumePipelineStages(prev =>
+                prev.map((stage, index) =>
+                    (index === 3)
+                        ? { ...stage, status: "SUCCESS" }
+                        : stage
+                )
+            );
+            const res3 = await axios.post(`${BASE_URL}/resume/rewrite/projects`, {
+                strategy: strategyResult?.data
+            }, { withCredentials: true })
+
+            setRewrittingData({
+                ...prev,
+                data3: res3.data,
+
+            })
+            setResumePipelineStages(prev =>
+                prev.map((stage, index) =>
+                    (index === 4)
+                        ? { ...stage, status: "SUCCESS" }
+                        : stage
+                )
+            );
+            const res4 = await axios.post(`${BASE_URL}/resume/rewrite/skills`, {
+                strategy: strategyResult?.data
+            }, { withCredentials: true })
+
+
+            setRewrittingData({
+                ...prev,
+                data4: res4.data
+            })
+
+            setResumePipelineStages(prev =>
+                prev.map((stage, index) =>
+                    (index >= 2 && index <= 5)
+                        ? { ...stage, status: "SUCCESS" }
+                        : stage
+                )
+            );
+            return 1;
+        } catch (err) {
+            addToast(({
+                type: "error",
+                title: "Error",
+                message: "error in rewritting"
+            }))
+
+            return 0;
+        }
+    }
+
 
     const RESUME_PIPELINE_STAGES_API_SEGMENT = async () => {
         try {
@@ -733,7 +954,18 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
                 return
             }
 
+            const run3 = await rewritting(run2);
+            if (!run3) {
 
+                setResumePipelineStages(prev =>
+                    prev.map((stage, index) =>
+                        index > 5
+                            ? { ...stage, status: "REJECTED" }
+                            : stage
+                    )
+                );
+                return
+            }
 
         }
         catch (err) {
@@ -1975,8 +2207,188 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
 
                                     }
 
+                                    {
+                                        idx === 2 && items?.status == "SUCCESS" &&
+                                        <div className="w-full bg-white rounded-3xl p-6 text-black mt-4 shadow-sm">
+                                            <h2 className="text-3xl font-extrabold mb-6">
+                                                New Refined Summary
+                                            </h2>
+
+                                            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6">
+                                                <h3 className="text-2xl font-bold mb-4">
+                                                    {rewrittingData?.data1?.data?.summaryTitle}
+                                                </h3>
+
+                                                <div
+                                                    className="leading-8 text-[16px] text-gray-700 break-words whitespace-pre-wrap"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: rewrittingData?.data1?.data?.summaryBody,
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+
+                                    }
 
 
+                                    {
+                                        idx === 3 && items?.status == "SUCCESS" &&
+
+                                        <div className="w-full bg-white p-6 rounded-3xl text-black mt-4">
+                                            <h2 className="text-3xl font-extrabold mb-6">
+                                                New Refined Experiences
+                                            </h2>
+
+                                            <div className="space-y-6 bg-black/5 rounded-3xl p-6">
+
+                                                {/* Experience */}
+                                                <div className="space-y-5">
+                                                    {rewrittingData?.data2?.data?.map((experience, index) => (
+                                                        <div
+                                                            key={index}
+                                                            className="border rounded-2xl bg-white p-5 shadow-sm"
+                                                        >
+                                                            {/* Header */}
+                                                            <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-2">
+                                                                <div>
+                                                                    <h3 className="text-xl font-bold">
+                                                                        {experience.role}
+                                                                    </h3>
+
+                                                                    <p className="text-gray-700 font-medium">
+                                                                        {experience.company}
+                                                                    </p>
+
+                                                                    <p className="text-sm text-gray-500">
+                                                                        {experience.location}
+                                                                    </p>
+                                                                </div>
+
+                                                                <div className="text-sm text-gray-600 md:text-right">
+                                                                    <p>
+                                                                        {experience.startDate} -{" "}
+                                                                        {experience.currentlyWorking
+                                                                            ? "Present"
+                                                                            : experience.endDate}
+                                                                    </p>
+
+                                                                    <p>{experience.employmentType}</p>
+                                                                </div>
+                                                            </div>
+
+                                                            {/* Bullets */}
+                                                            <ul className="list-disc ml-6 mt-4 space-y-2">
+                                                                {experience.bullets?.map((bullet, bulletIndex) => (
+                                                                    <li key={bulletIndex}>{bullet}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </div>
+                                                    ))}
+                                                </div>
+
+
+
+                                            </div>
+                                        </div>
+
+                                    }
+                                    {
+                                        idx === 4 && items?.status == "SUCCESS" &&
+
+                                        <div className="w-full bg-white rounded-3xl p-6 text-black mt-4 shadow-sm">
+                                            <h2 className="text-3xl font-extrabold mb-6">
+                                                Refined Projects
+                                            </h2>
+
+                                            <div className="space-y-6">
+                                                {rewrittingData?.data3?.data?.map((project, index) => (
+                                                    <div
+                                                        key={index}
+                                                        className="bg-gray-50 border border-gray-200 rounded-2xl p-6"
+                                                    >
+                                                        {/* Header */}
+                                                        <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
+                                                            <div>
+                                                                <h3 className="text-2xl font-bold capitalize">
+                                                                    {project.name}
+                                                                </h3>
+
+                                                                <p className="text-gray-600 font-medium mt-1">
+                                                                    {project.stack}
+                                                                </p>
+                                                            </div>
+
+                                                            <div className="flex flex-wrap gap-3 text-sm">
+                                                                {project.github && (
+                                                                    <a
+                                                                        href={project.github}
+                                                                        target="_blank"
+                                                                        rel="noopener noreferrer"
+                                                                        className="px-4 py-2 rounded-lg bg-black text-white hover:bg-gray-800 transition"
+                                                                    >
+                                                                        GitHub
+                                                                    </a>
+                                                                )}
+
+                                                                {project.live && (
+                                                                    <a
+                                                                        href={project.live}
+                                                                        target="_blank"
+                                                                        rel="noopener noreferrer"
+                                                                        className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
+                                                                    >
+                                                                        Live Demo
+                                                                    </a>
+                                                                )}
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Description */}
+                                                        <p className="mt-5 text-gray-700 leading-7">
+                                                            {project.description}
+                                                        </p>
+
+                                                        {/* Bullets */}
+                                                        <ul className="list-disc ml-6 mt-5 space-y-2">
+                                                            {project.bullets?.map((bullet, bulletIndex) => (
+                                                                <li key={bulletIndex} className="text-gray-700 leading-7">
+                                                                    {bullet}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                    }
+                                    {
+                                        idx === 5 && items?.status == "SUCCESS" &&
+
+                                        <div className="w-full bg-white rounded-3xl p-6 text-black mt-4 shadow-sm">
+                                            <h2 className="text-3xl font-extrabold mb-6">
+                                                Refined Skills
+                                            </h2>
+
+                                            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6 space-y-4">
+                                                {rewrittingData?.data4?.data?.skills?.map((category, index) => (
+                                                    <div
+                                                        key={index}
+                                                        className="grid grid-cols-1 md:grid-cols-[180px_1fr] gap-4"
+                                                    >
+                                                        <h3 className="font-bold text-lg">
+                                                            {category.skillCategory}
+                                                        </h3>
+
+                                                        <p className="text-gray-700 leading-7">
+                                                            {category.skills.join(" • ")}
+                                                        </p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                    }
                                 </div>
                             </motion.div>
                         )}

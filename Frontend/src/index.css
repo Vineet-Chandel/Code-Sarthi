@@ -119,3 +119,19 @@
     --depth: 1;
     --noise: 1;
 }
+
+
+/* Fix Chrome Autofill white background bug */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    /* This overrides Chrome's injection with a massive inset box-shadow using your dark color */
+    -webkit-box-shadow: 0 0 0px 1000px #24242400 inset !important;
+
+    /* This forces the text to stay white instead of turning black */
+    -webkit-text-fill-color: #ffffff !important;
+
+    /* Matches your existing input font styling */
+    transition: background-color 5000s ease-in-out 0s;
+}
