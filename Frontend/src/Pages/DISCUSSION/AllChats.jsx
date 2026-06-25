@@ -245,14 +245,112 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                         </div>
 
 
-                        {availableConnections?.map((item) => (
-                            <div
-                                key={item.userId}
-                                className="bg-white text-black w-40 h-20"
-                            >
-                                {item.FirstName}
+                        {availableConnections?.map((user, index) =>
+
+                            user?._id !== loggedUser._id && <div key={index}
+                                onClick={() => {
+                                    if (selectedChatUser?.id === user._id) {
+                                        setSelectedChatUser({
+                                            id: null,
+                                            info: null,
+                                        });
+
+                                        setSelectedChatUser2(prev => ({
+                                            ...prev,
+                                            id: null,
+                                            info: null,
+                                        }));
+                                        return;
+                                    }
+
+                                    setSelectedChatUser({
+                                        id: user._id,
+                                        info: user,
+                                    });
+
+                                    setSelectedChatUser2(prev => ({
+                                        ...prev,
+                                        id: user._id,
+                                        info: user,
+                                    }));
+                                }}
+                                className={`${selectedChatUser?.id === user._id ? "bg-white" : "bg-white/20"} group text-white h-13 w-full  cursor-pointer  rounded-2xl my-2 flex items-center gap-2 p-1.5`}>
+
+
+                                <div className='w-full flex items-center gap-1 h-full bg-transparent rounded-2xl'>
+                                    <div className="w-10 h-10 rounded-xl bg-black flex items-center  justify-center overflow-hidden shrink-0">
+
+                                        {selectedChatUser?.id !== user._id &&
+                                            <>
+                                                <span className='group-hover:hidden flex'>
+
+
+                                                    <img src={user?.photoUrl} alt="" className=' w-fit h-full rounded-xl object-cover' />
+                                                </span>
+
+                                                <span className="group-hover:flex hidden flex-col items-center gap-1 justify-center py-1">
+                                                    {matrix.map((item, idx) => (
+                                                        <div
+                                                            key={idx}
+                                                            className="flex items-center justify-between gap-1 px-0.5"
+                                                        >
+                                                            {item.map((dot, dotIdx) => (
+                                                                <div
+                                                                    key={dotIdx}
+                                                                    className={`w-[2.5px] h-[2.5px] rounded-full ${dot === 1 ? "bg-white" : "bg-white/20"
+                                                                        }`}
+                                                                />
+                                                            ))}
+                                                        </div>
+                                                    ))}
+                                                </span>
+
+                                            </>
+                                        }
+
+
+                                        {selectedChatUser?.id === user._id &&
+                                            <>
+
+
+                                                <span className="flex  flex-col items-center gap-1 justify-center py-1">
+                                                    {matrix2.map((item, idx) => (
+                                                        <div
+                                                            key={idx}
+                                                            className="flex items-center justify-between gap-1 px-0.5"
+                                                        >
+                                                            {item.map((dot, dotIdx) => (
+                                                                <div
+                                                                    key={dotIdx}
+                                                                    className={`w-[2.5px] h-[2.5px] rounded-full ${dot === 1 ? "bg-white" : "bg-white/20"
+                                                                        }`}
+                                                                />
+                                                            ))}
+                                                        </div>
+                                                    ))}
+                                                </span>
+
+                                            </>
+                                        }
+
+                                    </div>
+                                    <div className='w-full h-full rounded-2xl bg-transparent px-1'>
+                                        <div className="flex justify-between items-center ">
+                                            <span className={`font-semibold text-sm truncate ${selectedChatUser?.id === user._id ? "text-black" : "text-white"}`}>{user.FirstName + ' ' + user.LastName}</span>
+                                            <span className={`text-xs  ${selectedChatUser?.id === user._id ? "text-black/60" : "text-gray-400"}`}>10:30 AM</span>
+                                        </div>
+                                        <div className="flex justify-between items-center ">
+                                            <span className={`text-xs  pl-1 truncate ${selectedChatUser?.id === user._id ? "text-black/60" : "text-gray-400"}`}>{chatUser?.lastMessage?.content}</span>
+                                            <div className="flex items-center gap-1">
+                                                <span className="w-5 h-5 rounded-full bg-green-500 text-xs flex items-center justify-center">3</span>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
                             </div>
-                        ))}
+                        )}
                     </div>
                 </div>
 
