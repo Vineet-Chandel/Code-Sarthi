@@ -19,10 +19,10 @@ chatRouter.get("/chats", userAuth, async (req, res) => {
         const chats = await conversation.find({
             members: userId
         }).sort({ updatedAt: -1 }).populate([
-            { path: "members", select: "firstName lastName gmail username profession photoUrl" },
-            { path: "admins", select: "firstName lastName gmail username profession photoUrl" },
-            { path: "createdBy", select: "firstName lastName gmail username profession photoUrl" },
-            { path: "lastMessage", populate: { path: "sender_id", select: "firstName lastName photoUrl gmail username profession" } }
+            { path: "members", select: "firstName lastName gmail username profession photoUrl  college about middleName skills isVerified" },
+            { path: "admins", select: "firstName lastName gmail username profession photoUrl  college about middleName skills isVerified" },
+            { path: "createdBy", select: "firstName lastName gmail username profession photoUrl  college about middleName skills isVerified" },
+            { path: "lastMessage", populate: { path: "sender_id", select: "firstName lastName photoUrl gmail username profession college about middleName skills isVerified" } }
         ])
 
         //chats are there not 

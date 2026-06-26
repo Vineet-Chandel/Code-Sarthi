@@ -58,7 +58,7 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
             return !chatsARR.some(chat =>
                 chat.members.some(
                     member =>
-                        member._id === connection.userId &&
+                        member._id === connection._id &&
                         member._id !== loggedUser._id
                 )
             );
@@ -118,7 +118,7 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                     {chatsARR?.map((chatUser, idx) => {
                         return (chatUser.members.map((user, index) => (
 
-                            user?._id !== loggedUser._id && <div key={index}
+                            user?._id !== loggedUser._id && chatUser.type === "private" && <div key={index}
                                 onClick={() => {
                                     if (selectedChatUser?.id === user._id) {
                                         setSelectedChatUser({
@@ -127,7 +127,7 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                         });
 
                                         setSelectedChatUser2(prev => ({
-                                            ...prev,
+
                                             id: null,
                                             info: null,
                                         }));
@@ -140,7 +140,7 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                     });
 
                                     setSelectedChatUser2(prev => ({
-                                        ...prev,
+
                                         id: user._id,
                                         info: user,
                                     }));
@@ -226,7 +226,7 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                     }
 
 
-                    <div>
+                    {chatsARR.length <= 5 && chatsARR.length > 0 && <div>
 
 
                         <div className="w-full px-3 my-4 h-10 rounded-xl bg-black flex items-center  justify-center overflow-hidden shrink-0 bg-white">
@@ -247,7 +247,7 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
 
                         {availableConnections?.map((user, index) =>
 
-                            user?._id !== loggedUser._id && <div key={index}
+                            <div key={index}
                                 onClick={() => {
                                     if (selectedChatUser?.id === user._id) {
                                         setSelectedChatUser({
@@ -256,7 +256,7 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                         });
 
                                         setSelectedChatUser2(prev => ({
-                                            ...prev,
+
                                             id: null,
                                             info: null,
                                         }));
@@ -269,7 +269,7 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                     });
 
                                     setSelectedChatUser2(prev => ({
-                                        ...prev,
+
                                         id: user._id,
                                         info: user,
                                     }));
@@ -285,7 +285,7 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                                 <span className='group-hover:hidden flex'>
 
 
-                                                    <img src={user?.photoUrl} alt="" className=' w-fit h-full rounded-xl object-cover' />
+                                                    <img src={user?.photoUrl.url} alt="" className=' w-fit h-full rounded-xl object-cover' />
                                                 </span>
 
                                                 <span className="group-hover:flex hidden flex-col items-center gap-1 justify-center py-1">
@@ -336,11 +336,11 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                     </div>
                                     <div className='w-full h-full rounded-2xl bg-transparent px-1'>
                                         <div className="flex justify-between items-center ">
-                                            <span className={`font-semibold text-sm truncate ${selectedChatUser?.id === user._id ? "text-black" : "text-white"}`}>{user.FirstName + ' ' + user.LastName}</span>
+                                            <span className={`font-semibold text-sm truncate ${selectedChatUser?.id === user._id ? "text-black" : "text-white"}`}>{user.firstName + ' ' + user.lastName}</span>
                                             <span className={`text-xs  ${selectedChatUser?.id === user._id ? "text-black/60" : "text-gray-400"}`}>10:30 AM</span>
                                         </div>
                                         <div className="flex justify-between items-center ">
-                                            <span className={`text-xs  pl-1 truncate ${selectedChatUser?.id === user._id ? "text-black/60" : "text-gray-400"}`}>{chatUser?.lastMessage?.content}</span>
+                                            <span className={`text-xs  pl-1 truncate ${selectedChatUser?.id === user._id ? "text-black/60" : "text-gray-400"}`}>Tap to start collabrating </span>
                                             <div className="flex items-center gap-1">
                                                 <span className="w-5 h-5 rounded-full bg-green-500 text-xs flex items-center justify-center">3</span>
 
@@ -351,7 +351,11 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                 </div>
                             </div>
                         )}
-                    </div>
+                    </div>}
+
+
+
+
                 </div>
 
 
@@ -377,22 +381,22 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                         <div className="w-full  flex flex-col ">
                             <div className="w-full flex justify-center mt-5">
 
-                                {selectedChatUser2?.info?.photoUrl ? (<img src={selectedChatUser2?.info?.photoUrl} alt="profile" className="w-[150px] h-[150px] rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300" />
+                                {selectedChatUser2?.info?.photoUrl?.url ? (<img src={selectedChatUser2?.info?.photoUrl?.url} alt="profile" className="w-[150px] h-[150px] rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300" />
                                 ) : (
                                     <img src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776259172/Pinterest_Pin_di5dy8.jpg" alt="profile" className="w-[150px] h-[150px] rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300" />
                                 )}
                             </div>
                             <div className="flex flex-col items-center">
                                 <span className="text-info text-2xl font-extrabold mt-3" >
-                                    {selectedChatUser2?.info?.FirstName ? (
-                                        <>{selectedChatUser2?.info?.FirstName} {selectedChatUser2?.info?.MiddleName} {selectedChatUser2?.info?.LastName} </>
+                                    {selectedChatUser2?.info?.firstName ? (
+                                        <>{selectedChatUser2?.info?.firstName} {selectedChatUser2?.info?.middleName} {selectedChatUser2?.info?.lastName} </>
                                     ) : (
                                         <>CodeSarthi User</>
                                     )}
                                 </span>
                                 <span className="text-info text-sm pl-1 flex justify-center items-center gap-1">
-                                    {selectedChatUser2?.info?.userId && (selectedChatUser2?.info?.username)}
-                                    {selectedChatUser2?.info?.userId && (<div onClick={() => handleCopy(selectedChatUser2?.info?.Username)}>
+                                    {selectedChatUser2?.info?._id && (selectedChatUser2?.info?.username)}
+                                    {selectedChatUser2?.info?._id && (<div onClick={() => handleCopy(selectedChatUser2?.info?.username)}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24">
                                             <g fill="none">
                                                 <path fill="#fff" d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z" opacity={0.16}></path>
@@ -414,7 +418,7 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                             <div className="mt-1 ">
 
                                 <div className="flex items-center gap-3  px-5 py-1 rounded-xl">
-                                    {selectedChatUser2?.info?.userId && (
+                                    {selectedChatUser2?.info?._id && (
                                         <span className="text-sm text-info font-medium flex justify-center items-center gap-3"><FaUniversity color="#fff" />
                                             {selectedChatUser2?.info?.college}
                                         </span>
@@ -422,7 +426,7 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                 </div>
 
                                 <div className="flex items-center gap-3 px-5 py-1 rounded-xl">
-                                    {selectedChatUser2?.info?.userId && (
+                                    {selectedChatUser2?.info?._id && (
                                         <span className="text-sm text-info font-medium flex justify-center items-center gap-3"><BsPersonWorkspace color="#fff" />
                                             {selectedChatUser2?.info?.profession}
                                         </span>
@@ -430,7 +434,7 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                 </div>
 
                                 <div className="flex items-center gap-3 px-5 py-1 rounded-xl">
-                                    {selectedChatUser2?.info?.userId && (
+                                    {selectedChatUser2?.info?._id && (
                                         <span className="text-sm text-info font-medium flex justify-center items-center gap-3">
                                             <IoBarChart color="#fff" />
                                             {selectedChatUser2?.info?.skills?.join(", ")}
@@ -439,7 +443,7 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                 </div>
                             </div>
                             {/* About */}
-                            {selectedChatUser2?.info?.userId && (
+                            {selectedChatUser2?.info?._id && (
                                 <div className="my-2 bg-base-100 border border-base-300  py-2 px-3 rounded-2xl m-1">
                                     <h3 className="text-lg font-semibold mb-1 text-white">
                                         About
@@ -449,7 +453,7 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                     </p>
                                 </div>
                             )}
-                            {selectedChatUser2?.info?.userId && (
+                            {selectedChatUser2?.info?._id && (
                                 <div>
 
                                     <div className="text-white text-sm pl-1 flex justify-between px-3 pl-3 cursor-pointer items-center gap-1 bg-base-300   border border-secondary border-[2px] py-2 rounded-2xl">

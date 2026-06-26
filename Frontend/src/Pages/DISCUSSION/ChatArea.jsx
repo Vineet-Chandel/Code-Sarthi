@@ -142,7 +142,7 @@ function ProfileTab() {
 
     ]
 }
-const useLongPress = (callback, ms = 500) => {
+const useLongPress = (callback, ms = 500, setClassLongPress) => {
     const [isHolding, setIsHolding] = useState(false);
     const timeoutRef = useRef(null);
 
@@ -165,22 +165,32 @@ const useLongPress = (callback, ms = 500) => {
 
     return {
         onPointerDown: start,
-        onPointerUp: stop,
-        onPointerLeave: stop, // Stops the action if user drags cursor away
+        onPointerUp: () => { stop(); setClassLongPress("") },
+        onPointerLeave: () => { stop(); setClassLongPress("") },
         className: isHolding ? "holding" : "" // Optional: utility to help with styling
     };
 };
 
+
+
 const ChatArea = ({ selectedChatUser }) => {
 
 
-
+    const [classLongPress, setClassLongPress] = useState("");
     const handleLongPress = () => {
-        console.log(switcher)
+        if (switcher === "mic") {
+            setClassLongPress("bg-red-500");
+            console.log("mic", switcher)
+        }
+        if (switcher === "vnote") {
+            setClassLongPress("bg-blue-500");
+            console.log("vnote", switcher)
+        }
+
     };
 
     // Instantiate hook with custom action and time window
-    const longPressEvents = useLongPress(handleLongPress, 600);
+    const longPressEvents = useLongPress(handleLongPress, 600, setClassLongPress);
 
     const [switcher, setSwitcher] = useState("mic")
     return (
@@ -201,9 +211,9 @@ const ChatArea = ({ selectedChatUser }) => {
                     <Paperclip />
                 </div>
 
-                <div className="border-t border-white/10 p-4 w-full">
+                <div className=" p-4 w-full">
 
-                    <div className="flex items-center gap-3 rounded-2xl bg-white/10 p-2.5">
+                    <div className="flex items-center gap-3 rounded-3xl bg-white/10 p-2.5">
 
 
 
@@ -213,7 +223,7 @@ const ChatArea = ({ selectedChatUser }) => {
                             className="flex-1 bg-transparent outline-none"
                         />
                         <div >
-                            <Smile />
+                            <Smile width={24} height={24} />
                         </div>
 
 
@@ -232,7 +242,7 @@ const ChatArea = ({ selectedChatUser }) => {
                         }
                         setSwitcher("mic")
                     }}
-                    className="bg-white/10 p-2.5 rounded-full cursor-pointer">
+                    className={` p-2.5 rounded-full cursor-pointer ${classLongPress ? classLongPress : "bg-white/10"} `}>
                     {switcher === "mic" ? <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
                         <path fill="#fff" fillRule="evenodd" d="M12 2C9.769 2 8 3.757 8 5.828v6.344C8 14.242 9.769 16 12 16s4-1.758 4-3.828V5.828C16 3.758 14.231 2 12 2" clipRule="evenodd"></path>
                         <path fill="#fff" d="M13 20.945V23a1 1 0 1 1-2 0v-2.055A9 9 0 0 1 3 12a1 1 0 1 1 2 0a7 7 0 1 0 14 0a1 1 0 1 1 2 0a9 9 0 0 1-8 8.945"></path>
