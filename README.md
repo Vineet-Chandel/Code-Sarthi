@@ -1,6 +1,6 @@
 # CodeSarthi — Route Map
 
-> Reference documentation for `App.jsx`'s routing configuration: every declared route, its access layer, and the component it renders.
+> Reference documentation for `App.jsx` routing configuration: every declared route, its access layer, and the component it renders.
 
 **Stack:** React Router v6 (`react-router-dom`) · Redux (`react-redux`) · Custom `ProtectedRoute` guard
 
