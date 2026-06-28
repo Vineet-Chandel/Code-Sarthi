@@ -28,7 +28,7 @@ const Third = () => {
                         uppercase leading-none text-black font-zentry tracking-[0.2rem] sm:tracking-[0.3rem] font-black
                         text-[clamp(2.5rem,10vw,10.625rem)]
                         self-end
-
+mt-2 sm:mt-0
                     ">
                         LESS WRECK
                     </h1>
@@ -36,21 +36,21 @@ const Third = () => {
                 </div>
 
                 {/* Bottom CTA row */}
-                <div className="mt-10 lg:mt-16 flex flex-col md:flex-row justify-between items-start lg:items-end gap-8 lg:gap-10">
+                <div className="mt-10 lg:mt-16 flex flex-row justify-between items-start lg:items-end gap-2 lg:gap-10">
 
                     <div className="space-y-1">
-                        <p className="text-black font-semibold leading-tight text-[clamp(1.4rem,4.5vw,2rem)]">
+                        <p className="text-black font-semibold leading-tight font-poppins text-[0.8rem] sm:text-[1.5rem] md:text-[1.8rem] lg:text-[2rem]" >
                             Access the full platform for free.
                         </p>
-                        <p className="text-black font-semibold leading-tight text-[clamp(1.4rem,4.5vw,2rem)]">
+                        <p className="text-black font-semibold leading-tight font-poppins text-[0.8rem] sm:text-[1.5rem] md:text-[1.8rem] lg:text-[2rem]" >
                             No credit card required.
                         </p>
                     </div>
 
                     <button className="
                         shrink-0 bg-black text-white rounded-full
-                        px-8 sm:px-12 py-4 sm:py-6
-                        text-base sm:text-xl font-medium
+                       px-3 sm:px-4  xl:px-8 sm:px-12 py-2 sm:py-4 sm:py-6
+                        text-sm md:text-base lg:text-lg xl:text-xl font-medium
                         hover:scale-105 duration-300
                     ">
                         Get Started Free
