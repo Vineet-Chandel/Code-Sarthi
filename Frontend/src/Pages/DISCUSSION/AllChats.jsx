@@ -369,13 +369,30 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
             {
                 selectedChatUser2?.isOpenTab && (
                     <div className="w-full  h-[calc(100vh-130px)] rounded-3xl bg-base-100 mt-2 flex flex-col  items-center overflow-hidden  relative">
-                        <div className="w-full absolute z-10 p-5 ">
+                        <div className="w-full flex justify-between absolute z-10 p-5 ">
 
                             <div className="hover:bg-base-300 hover:border hover:border-secondary bg-base-200 w-12 flex justify-center items-center rounded-full h-12 cursor-pointer" onClick={() => setSelectedChatUser2({ ...selectedChatUser2, isOpenTab: false })}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
                                     <path fill="#fff" d="M20 11H7.83l5.59-5.59L12 4l-8 8l8 8l1.41-1.41L7.83 13H20z"></path>
                                 </svg>
                             </div>
+                            <div className="flex justify-center items-center gap-2 " onClick={() => setSelectedChatUser2({ ...selectedChatUser2, isOpenTab: false })}>
+                                <div className='flex justify-center items-center  hover:bg-base-300 hover:border hover:border-secondary bg-base-200 w-12 rounded-full h-12 cursor-pointer'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="M19.95 21q-3.125 0-6.175-1.362t-5.55-3.863t-3.862-5.55T3 4.05q0-.45.3-.75t.75-.3H8.1q.35 0 .625.238t.325.562l.65 3.5q.05.4-.025.675T9.4 8.45L6.975 10.9q.5.925 1.187 1.787t1.513 1.663q.775.775 1.625 1.438T13.1 17l2.35-2.35q.225-.225.588-.337t.712-.063l3.45.7q.35.1.575.363T21 15.9v4.05q0 .45-.3.75t-.75.3"></path>
+                                    </svg>
+
+                                </div>
+                                <div className='flex justify-center items-center  hover:bg-base-300 hover:border hover:border-secondary bg-base-200 w-12 rounded-full h-12 cursor-pointer'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
+                                        <g fill="currentColor">
+                                            <path d="M20.117 7.625a1 1 0 0 0-.564.1L15 10v4l4.553 2.275A1 1 0 0 0 21 15.383V8.617a1 1 0 0 0-.883-.992"></path>
+                                            <path d="M5 5C3.355 5 2 6.355 2 8v8c0 1.645 1.355 3 3 3h8c1.645 0 3-1.355 3-3V8c0-1.645-1.355-3-3-3z"></path>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </div>
+
 
                         </div>
                         <div className="w-full  flex flex-col ">
@@ -539,6 +556,8 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
 
 
                         </div>
+
+
                     </div>
                 )
             }

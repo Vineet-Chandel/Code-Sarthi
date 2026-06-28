@@ -140,7 +140,7 @@ export default function Lines() {
     ];
 
     return (
-        <div id="testimonials" className="w-full bg-black flex flex-col justify-center overflow-hidden mt-10">
+        <div id="testimonials" className="w-full bg-black flex flex-col justify-center overflow-hidden ">
 
             <div className=' w-full  flex flex-col items-center justify-center  '>
                 <h2

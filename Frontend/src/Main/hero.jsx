@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import BASE_URL from "@/Pages/auth/baseURL";
 import axios from "axios";
 import ContentSecond2 from "./ContentSecond2";
+import Third from "./Third";
 
 
 
@@ -83,6 +84,7 @@ const Hero = () => {
             <ContentFirst />
 
             <SecondLanding />
+            <Third />
             <Lines2 />
             <ContentSecond2 />
 

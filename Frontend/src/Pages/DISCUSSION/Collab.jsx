@@ -14,7 +14,7 @@ const Collab = () => {
   });
 
   return (
-    <div className='h-[calc(100vh-55px)] w-screen bg-base-200 flex gap-1 justify-center items-center p-1 '>
+    <div className='h-[calc(100vh-63px)] w-screen bg-base-200 flex gap-1 justify-center items-center p-1 '>
 
       <div className=' h-full w-[30vw] bg-black rounded-2xl p-2'>
         <div>
