@@ -1,7 +1,6 @@
 <div align="center">
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=12,20,24&height=200&section=header&text=CodeSarthi&fontSize=72&fontColor=ffffff&fontAlignY=45&desc=AI-Powered%20Developer%20Career%20Acceleration%20Ecosystem&descSize=18&descAlignY=70&descColor=C4BFFF&animation=fadeIn" width="100%"/>
-
 <br/>
 
 <p align="center">
