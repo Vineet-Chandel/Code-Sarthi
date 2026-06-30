@@ -99,8 +99,11 @@ authRouter.post("/auth/signup", async (req, res) => {
 
         res.cookie("token", token, {
             httpOnly: true,
-            secure: true,
-            sameSite: "none",
+            secure: process.env.NODE_ENV === "production",
+            sameSite:
+                process.env.NODE_ENV === "production"
+                    ? "none"
+                    : "lax",
             maxAge: 8 * 60 * 60 * 1000
         });
 
@@ -550,10 +553,12 @@ authRouter.post("/auth/signin", async (req, res) => {
             const token = await user.getJWT();
 
             res.cookie("token", token, {
-                // expires: new Date(Date.now() + 8 * 3600000),
-                httpOnly: true,          // JS can’t access it
-                secure: true,
-                sameSite: "none",
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite:
+                    process.env.NODE_ENV === "production"
+                        ? "none"
+                        : "lax",
                 maxAge: 8 * 60 * 60 * 1000
             });
             res.status(200).json({
