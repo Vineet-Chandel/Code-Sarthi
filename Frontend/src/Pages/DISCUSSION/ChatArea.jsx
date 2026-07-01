@@ -8,7 +8,8 @@ import {
 
 } from "lucide-react";
 import ClipTab from "./ClipTab";
-
+import MessageArea from "./MessageArea";
+import EmojiTab from "./EmojiTab";
 
 
 function ThreeDotTab() {
@@ -129,8 +130,6 @@ function ThreeDotTab() {
     )
 }
 
-
-
 function ProfileTab() {
 
 
@@ -177,6 +176,7 @@ const useLongPress = (callback, ms = 500, setClassLongPress) => {
 const ChatArea = ({ selectedChatUser }) => {
 
     const [clipTab, setClipTab] = useState(false)
+    const [emojiTab, setEmojiTab] = useState(false)
     const [classLongPress, setClassLongPress] = useState("");
     const [message, setMessage] = useState("")
     const handleLongPress = () => {
@@ -197,13 +197,30 @@ const ChatArea = ({ selectedChatUser }) => {
     const [switcher, setSwitcher] = useState("mic")
     return (
         <div className="flex h-full w-full flex-col overflow-hidden rounded-2xl  bg-transparent ">
+            {clipTab &&
+
+                <div onClick={() => setClipTab(false)} className="absolute z-30 inset-0 w-full h-full bg-transparent">
+                    <ClipTab />
+                </div>
 
 
+            }
+
+
+            {emojiTab &&
+
+                <div onClick={() => setEmojiTab(false)} className="absolute z-30 inset-0 w-full h-full bg-transparent">
+                    <EmojiTab />
+                </div>
+
+
+            }
 
             {/* Messages */}
 
-            <div className="flex-1 overflow-y-auto p-6">
-                {/* Messages here */}
+            <div className="flex-1 overflow-y-auto  overflow-y-scroll  px-4">
+                <MessageArea />
+
             </div>
 
             {/* Input */}
@@ -214,7 +231,7 @@ const ChatArea = ({ selectedChatUser }) => {
                             <Paperclip />
                         </div>
                     </span>
-                    {clipTab && <ClipTab />}
+
                 </div>
 
 
@@ -235,7 +252,7 @@ const ChatArea = ({ selectedChatUser }) => {
                             placeholder="Write a message..."
                             className="flex-1 bg-transparent outline-none"
                         />
-                        <div >
+                        <div className="cursor-pointer" onClick={() => setEmojiTab((prev) => !prev)}>
                             <Smile width={24} height={24} />
                         </div>
 
