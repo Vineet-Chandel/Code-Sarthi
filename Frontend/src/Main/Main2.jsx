@@ -50,8 +50,8 @@ bg-[size:40px_40px]
 
                 <Nav />
 
-                <div className='w-full text-center p-6   flex flex-col items-center justify-center'>
-                    <div className='text-[#f9f9f9] font-poppins font-extrabold min-[450px]:text-2xl  sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl  justify-start'>
+                <div className='w-full text-center p-6  my-[40px] sm:my-[80px] flex flex-col items-center justify-center'>
+                    <div className='   text-[#f9f9f9] font-poppins font-extrabold min-[450px]:text-2xl  sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl  justify-start'>
                         An Ecosystem that do your works <br />Approvals that keep you safe
                     </div>
 
@@ -119,12 +119,12 @@ bg-[size:40px_40px]
             sm:rounded-3xl
             lg:rounded-[36px]
 
-            bg-[#f5f5f5]
+            bg-white/80
             border border-white/20
 
             p-2
             sm:p-3
-            md:p-4
+
 
             shadow-[0_30px_80px_rgba(0,0,0,.35)]
             lg:shadow-[0_80px_120px_rgba(0,0,0,.45)]

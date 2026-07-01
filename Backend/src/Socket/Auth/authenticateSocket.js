@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
-const User = require("../models/user");
+const User = require("../../models/user");
 
-const tokenVerification = async (token) => {
+const authenticateSocket = async (token) => {
     try {
         if (!token) {
             console.log("Please Login!");
@@ -10,7 +10,7 @@ const tokenVerification = async (token) => {
 
 
 
-        const decodedObj = await jwt.verify(token, process.env.JWT_SECRET);
+        const decodedObj = jwt.verify(token, process.env.JWT_SECRET);
 
         const { _id } = decodedObj;
 
@@ -30,5 +30,5 @@ const tokenVerification = async (token) => {
 };
 
 module.exports = {
-    tokenVerification,
+    authenticateSocket,
 };
