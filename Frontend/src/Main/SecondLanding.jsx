@@ -172,7 +172,8 @@ text-start
                                     </div>
                                 </motion.div>
                             </div>
-                            <img className="w-full h-full object-contain rounded-xl" src="https://res.cloudinary.com/dj0ivep44/image/upload/v1782162312/Screenshot_2026-06-23_at_2.31.53_AM_wesi5p.png" alt="" /></div>
+                            <img className="w-full h-full object-contain rounded-xl" src="https://res.cloudinary.com/dj0ivep44/image/upload/v1782162312/Screenshot_2026-06-23_at_2.31.53_AM_wesi5p.png" alt="" />
+                        </div>
                     </div>
 
                     <div className="w-full flex flex-col lg:flex-row gap-2">
