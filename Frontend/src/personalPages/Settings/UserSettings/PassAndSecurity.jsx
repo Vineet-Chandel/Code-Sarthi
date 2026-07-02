@@ -14,29 +14,29 @@ import { addUser } from "../../../utils/userSlice";
 const allChanges = [
     {
         "Tag": "Verify Email",
-        "svg": <RiVerifiedBadgeFill size={40} color="#9f2d00" />,
+        "svg": <RiVerifiedBadgeFill size={40} color="#fff" />,
         "index": 1,
     },
 
     {
         "Tag": "Forgot Password",
-        "svg": <MdMarkEmailUnread size={35} color="#9f2d00" />,
+        "svg": <MdMarkEmailUnread size={35} color="#fff" />,
         "index": 2
     },
     {
         "Tag": "Renew Password",
-        "svg": <TbPasswordFingerprint size={45} color="#9f2d00" />,
+        "svg": <TbPasswordFingerprint size={45} color="#fff" />,
         "index": 3,
     },
     {
         "Tag": "Change Gmail",
-        "svg": <MdOutgoingMail size={40} color="#9f2d00" />,
+        "svg": <MdOutgoingMail size={40} color="#fff" />,
 
         "index": 4,
     },
     {
         "Tag": "Change Username",
-        "svg": <FaUserTag size={35} color="#9f2d00" />,
+        "svg": <FaUserTag size={35} color="#fff" />,
         "index": 5,
     },
 
@@ -96,7 +96,8 @@ const PasswordSecuritySettings = () => {
         setIsVerified4(false)
         setIsVerified5(false)
         setIsVerified6(false)
-        setOTP("")
+        setOTP("");
+        setOtp(["", "", "", "", "", ""]);
         setToken1("")
         setToken2("")
         setError("")
@@ -144,7 +145,8 @@ const PasswordSecuritySettings = () => {
                 toVerifyotp: newOTP
             },
                 { withCredentials: true });
-            setOTP("")
+            setOTP("");
+            setOtp(["", "", "", "", "", ""]);
             setIsVerified(true);
             fetchUser();
         } catch (err) {
@@ -187,7 +189,8 @@ const PasswordSecuritySettings = () => {
             },
 
                 { withCredentials: true });
-            setOTP("")
+            setOTP("");
+            setOtp(["", "", "", "", "", ""]);
             setShow1(true);
             setIsVerified5(true);
             setOtpSentEmail1(false);
@@ -215,7 +218,8 @@ const PasswordSecuritySettings = () => {
             },
 
                 { withCredentials: true });
-            setOTP("")
+            setOTP("");
+            setOtp(["", "", "", "", "", ""]);
             setShow2(true);
             setIsVerified6(true);
             fetchUser();
@@ -247,6 +251,7 @@ const PasswordSecuritySettings = () => {
             }
             setToken1(token);
             setOTP("");
+            setOtp(["", "", "", "", "", ""]);
             setOtpSentForgot(true);
         } catch (err) {
             setError(err?.response?.data?.message || "Sending OTP failed");
@@ -280,7 +285,8 @@ const PasswordSecuritySettings = () => {
                 return;
             }
             setToken2(token);
-            setOTP("")
+            setOTP("");
+            setOtp(["", "", "", "", "", ""]);
             setIsVerified2(true);
         } catch (err) {
             setError(err?.response?.data?.message || "OTP verification failed");
@@ -369,39 +375,79 @@ const PasswordSecuritySettings = () => {
 
     }
 
+    const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+
+    const handleChange = (value, index) => {
+        if (!/^\d?$/.test(value)) return;
+
+        const newOtp = [...otp];
+        newOtp[index] = value;
+
+        setOtp(newOtp);
+        setOTP(newOtp.join("")); // <-- keep string in sync
+
+        if (value && index < otp.length - 1) {
+            document.getElementById(`otp-${index + 1}`).focus();
+        }
+    };
+
+    const handleKeyDown = (e, index) => {
+        if (e.key === "Backspace" && !otp[index] && index > 0) {
+            document.getElementById(`otp-${index - 1}`).focus();
+        }
+    };
+
+    const handlePaste = (e) => {
+        e.preventDefault();
+
+        const pasted = e.clipboardData
+            .getData("text")
+            .replace(/\D/g, "")
+            .slice(0, 6);
+
+        const newOtp = ["", "", "", "", "", ""];
+
+        pasted.split("").forEach((char, i) => {
+            newOtp[i] = char;
+        });
+
+        setOtp(newOtp);
+        setOTP(newOtp.join(""));
+    };
+    const finalOTP = otp.join("");
     return (
         <div>
 
-            <div className=" relative bg-base-100 p-4 sm:p-6 rounded-3xl border border-secondary border-[2px]  overflow-hidden ">
+            <div className=" relative  p-4 sm:p-6 rounded-3xl   overflow-hidden ">
 
                 <div>
-                    <div className="flex items-center justify-between mb-8">
-                        <span className="text-accent text-xl sm:text-2xl md:text-3xl font-extrabold flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" className='w-8 h-8 sm:w-10 sm:h-10' viewBox="0 0 24 24">
-                            <path fill="#9f2d00" d="M2 12c0-3.771 0-5.657 1.172-6.828S6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172S22 8.229 22 12s0 5.657-1.172 6.828S17.771 20 14 20h-4c-3.771 0-5.657 0-6.828-1.172S2 15.771 2 12" opacity="0.3" />
-                            <path fill="#9f2d00" d="M12.75 10a.75.75 0 0 0-1.5 0v.701l-.607-.35a.75.75 0 1 0-.75 1.298l.607.35l-.607.351a.75.75 0 1 0 .75 1.3l.607-.351V14a.75.75 0 1 0 1.5 0v-.7l.607.35a.75.75 0 0 0 .75-1.3L13.5 12l.607-.35a.75.75 0 0 0-.75-1.3l-.607.35zm-6.017-.75a.75.75 0 0 1 .75.75v.7l.606-.35a.75.75 0 0 1 .75 1.3l-.607.35l.607.35a.75.75 0 1 1-.75 1.3l-.606-.35v.7a.75.75 0 0 1-1.5 0v-.701l-.608.35a.75.75 0 0 1-.75-1.298L5.232 12l-.607-.35a.75.75 0 1 1 .75-1.3l.608.351V10a.75.75 0 0 1 .75-.75m11.285.75a.75.75 0 0 0-1.5 0v.701l-.607-.35a.75.75 0 1 0-.75 1.298l.607.35l-.607.351a.75.75 0 0 0 .75 1.3l.607-.351V14a.75.75 0 0 0 1.5 0v-.7l.607.35a.75.75 0 0 0 .75-1.3l-.607-.35l.607-.35a.75.75 0 1 0-.75-1.3l-.607.35z" />
+                    <div className="flex items-center justify-between mb-8 ml-10">
+                        <span className="text-white text-xl sm:text-2xl md:text-3xl font-extrabold flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" className='w-8 h-8 sm:w-10 sm:h-10' viewBox="0 0 24 24">
+                            <path fill="#fff" d="M2 12c0-3.771 0-5.657 1.172-6.828S6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172S22 8.229 22 12s0 5.657-1.172 6.828S17.771 20 14 20h-4c-3.771 0-5.657 0-6.828-1.172S2 15.771 2 12" opacity="0.3" />
+                            <path fill="#fff" d="M12.75 10a.75.75 0 0 0-1.5 0v.701l-.607-.35a.75.75 0 1 0-.75 1.298l.607.35l-.607.351a.75.75 0 1 0 .75 1.3l.607-.351V14a.75.75 0 1 0 1.5 0v-.7l.607.35a.75.75 0 0 0 .75-1.3L13.5 12l.607-.35a.75.75 0 0 0-.75-1.3l-.607.35zm-6.017-.75a.75.75 0 0 1 .75.75v.7l.606-.35a.75.75 0 0 1 .75 1.3l-.607.35l.607.35a.75.75 0 1 1-.75 1.3l-.606-.35v.7a.75.75 0 0 1-1.5 0v-.701l-.608.35a.75.75 0 0 1-.75-1.298L5.232 12l-.607-.35a.75.75 0 1 1 .75-1.3l.608.351V10a.75.75 0 0 1 .75-.75m11.285.75a.75.75 0 0 0-1.5 0v.701l-.607-.35a.75.75 0 1 0-.75 1.298l.607.35l-.607.351a.75.75 0 0 0 .75 1.3l.607-.351V14a.75.75 0 0 0 1.5 0v-.7l.607.35a.75.75 0 0 0 .75-1.3l-.607-.35l.607-.35a.75.75 0 1 0-.75-1.3l-.607.35z" />
                         </svg> Change Credentials</span>
                     </div>
 
                     {allChanges.map((items) => (
                         <div key={items.index} className="flex flex-col justify-center ml-0 sm:ml-11 ">
-                            <span onClick={() => { setEditPrivateisOpen(true); setActiveIndex(items.index); closEverything() }} className="text-accent ">
-                                <div className="flex items-center justify-between gap-3 mb-5 sm:mb-7 flex-wrap bg-base-200 rounded-xl px-4 py-3 cursor-pointer border-[2px] border-base-300 hover hover:bg-base-300 hover-border hover:border-secondary hover:border-[2px] group">
+                            <span onClick={() => { setEditPrivateisOpen(true); setActiveIndex(items.index); closEverything() }} className="text-white/50 ">
+                                <div className="text-white flex items-center justify-between gap-3 mb-5 sm:mb-7 flex-wrap bg-base-100 rounded-3xl px-4 py-3 cursor-pointer border border-base-300 hover hover:bg-base-300 hover-border hover:border-white  group transition-all duration-300">
 
-                                    <div className="  text-lg sm:text-xl md:text-2xl flex items-center gap-3 font-extrabold px-4 py-3 ">
-                                        {items.svg} {items.Tag}<svg className='group-hover:translate-x-5 transition-all duration-500 rotate-90' xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 20 20"><g fill="#bf630b" fillRule="evenodd" clipRule="evenodd"><g opacity={0.2}><path d="M6.848 9.794A1.5 1.5 0 0 1 7.04 7.68l4-3.333a1.5 1.5 0 0 1 1.92 2.304l-4 3.334a1.5 1.5 0 0 1-2.112-.192"></path><path d="M17.152 9.794a1.5 1.5 0 0 1-2.112.192l-4-3.334a1.5 1.5 0 1 1 1.92-2.304l4 3.333a1.5 1.5 0 0 1 .192 2.113"></path><path d="M12 6a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-3 0v-8A1.5 1.5 0 0 1 12 6"></path></g><path d="M5.616 8.653a.5.5 0 0 1 .064-.704l4-3.333a.5.5 0 1 1 .64.768l-4 3.333a.5.5 0 0 1-.704-.064"></path><path d="M14.384 8.653a.5.5 0 0 1-.704.064l-4-3.333a.5.5 0 1 1 .64-.768l4 3.333a.5.5 0 0 1 .064.704"></path><path d="M10 5a.5.5 0 0 1 .5.5V15a.5.5 0 0 1-1 0V5.5A.5.5 0 0 1 10 5"></path></g></svg>
+                                    <div className="  text-lg sm:text-xl md:text-2xl flex items-center gap-5 font-extrabold px-4 py-3 ">
+                                        {items.svg} {items.Tag}<svg className='group-hover:translate-x-5 transition-all duration-500 rotate-90' xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 20 20"><g fill="#fff" fillRule="evenodd" clipRule="evenodd"><g opacity={0.2}><path d="M6.848 9.794A1.5 1.5 0 0 1 7.04 7.68l4-3.333a1.5 1.5 0 0 1 1.92 2.304l-4 3.334a1.5 1.5 0 0 1-2.112-.192"></path><path d="M17.152 9.794a1.5 1.5 0 0 1-2.112.192l-4-3.334a1.5 1.5 0 1 1 1.92-2.304l4 3.333a1.5 1.5 0 0 1 .192 2.113"></path><path d="M12 6a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-3 0v-8A1.5 1.5 0 0 1 12 6"></path></g><path d="M5.616 8.653a.5.5 0 0 1 .064-.704l4-3.333a.5.5 0 1 1 .64.768l-4 3.333a.5.5 0 0 1-.704-.064"></path><path d="M14.384 8.653a.5.5 0 0 1-.704.064l-4-3.333a.5.5 0 1 1 .64-.768l4 3.333a.5.5 0 0 1 .064.704"></path><path d="M10 5a.5.5 0 0 1 .5.5V15a.5.5 0 0 1-1 0V5.5A.5.5 0 0 1 10 5"></path></g></svg>
                                     </div>
-                                    {(items.index === 5) && (<div className="text-accent bg-base-100 px-6 py-[5px] border border-secondary rounded-xl"><p className='text-secondary inline'>Username : </p>{user.username} </div>)}
-                                    {(items.index === 1) && (<div className="text-accent bg-base-100 px-6 py-[5px] border border-secondary rounded-xl"><div className='flex gap-2'><p className='text-secondary'> Gmail :</p>{user.gmail} <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#bf630b" d="M9 17.192V6.808L17.154 12z"></path></svg>
+                                    {(items.index === 5) && (<div className="text-white/50 bg-base-100 px-6 py-[5px] border border-white rounded-xl"><p className='text-white inline'>Username : </p>{user.username} </div>)}
+                                    {(items.index === 1) && (<div className="text-white/50 bg-base-100 px-6 py-[5px] border border-white rounded-xl"><div className='flex gap-2'><p className='text-white'> Gmail :</p>{user.gmail} <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#fff" d="M9 17.192V6.808L17.154 12z"></path></svg>
                                         {user.isVerified ? (
-                                            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd"></path><path fill="#9f2d00" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity={0.25}></path><path fill="#9f2d00" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z"></path></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#fff" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd"></path><path fill="#fff" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity={0.25}></path><path fill="#fff" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z"></path></svg>
                                         ) : (
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#9f2d00" d="M14.5 2.5c0 1.5-1.5 6-1.5 6h-2S9.5 4 9.5 2.5a2.5 2.5 0 0 1 5 0M12 10c-1.1 0-2 .9-2 2s.9 2 2 2s2-.9 2-2s-.9-2-2-2m4.08-4.89c.18-.75.33-1.47.39-2.06A10 10 0 0 1 22 12c0 5.52-4.48 10-10 10S2 17.52 2 12c0-3.92 2.25-7.31 5.53-8.95c.07.59.21 1.32.39 2.06A8.03 8.03 0 0 0 4 12c0 4.42 3.58 8 8 8s8-3.58 8-8c0-2.93-1.58-5.49-3.92-6.89M18 12c0 3.31-2.69 6-6 6s-6-2.69-6-6c0-2 .98-3.77 2.48-4.86c.23.81.65 2.07.65 2.07C8.43 9.93 8 10.92 8 12c0 2.21 1.79 4 4 4s4-1.79 4-4c0-1.08-.43-2.07-1.13-2.79c0 0 .41-1.22.65-2.07A6 6 0 0 1 18 12" /></svg>)}</div></div>)}
-                                    {(items.index === 4) && (<div className="text-accent bg-base-100 px-6 py-[5px] border border-secondary rounded-xl"><div className='flex gap-2'><p className='text-secondary'> Gmail :</p>{user.gmail} <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#bf630b" d="M9 17.192V6.808L17.154 12z"></path></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#fff" d="M14.5 2.5c0 1.5-1.5 6-1.5 6h-2S9.5 4 9.5 2.5a2.5 2.5 0 0 1 5 0M12 10c-1.1 0-2 .9-2 2s.9 2 2 2s2-.9 2-2s-.9-2-2-2m4.08-4.89c.18-.75.33-1.47.39-2.06A10 10 0 0 1 22 12c0 5.52-4.48 10-10 10S2 17.52 2 12c0-3.92 2.25-7.31 5.53-8.95c.07.59.21 1.32.39 2.06A8.03 8.03 0 0 0 4 12c0 4.42 3.58 8 8 8s8-3.58 8-8c0-2.93-1.58-5.49-3.92-6.89M18 12c0 3.31-2.69 6-6 6s-6-2.69-6-6c0-2 .98-3.77 2.48-4.86c.23.81.65 2.07.65 2.07C8.43 9.93 8 10.92 8 12c0 2.21 1.79 4 4 4s4-1.79 4-4c0-1.08-.43-2.07-1.13-2.79c0 0 .41-1.22.65-2.07A6 6 0 0 1 18 12" /></svg>)}</div></div>)}
+                                    {(items.index === 4) && (<div className="text-white/50 bg-base-100 px-6 py-[5px] border border-white rounded-xl"><div className='flex gap-2'><p className='text-white'> Gmail :</p>{user.gmail} <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#fff" d="M9 17.192V6.808L17.154 12z"></path></svg>
                                         {user.isVerified ? (
-                                            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd"></path><path fill="#9f2d00" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity={0.25}></path><path fill="#9f2d00" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z"></path></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#fff" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd"></path><path fill="#fff" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity={0.25}></path><path fill="#fff" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z"></path></svg>
                                         ) : (
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#9f2d00" d="M14.5 2.5c0 1.5-1.5 6-1.5 6h-2S9.5 4 9.5 2.5a2.5 2.5 0 0 1 5 0M12 10c-1.1 0-2 .9-2 2s.9 2 2 2s2-.9 2-2s-.9-2-2-2m4.08-4.89c.18-.75.33-1.47.39-2.06A10 10 0 0 1 22 12c0 5.52-4.48 10-10 10S2 17.52 2 12c0-3.92 2.25-7.31 5.53-8.95c.07.59.21 1.32.39 2.06A8.03 8.03 0 0 0 4 12c0 4.42 3.58 8 8 8s8-3.58 8-8c0-2.93-1.58-5.49-3.92-6.89M18 12c0 3.31-2.69 6-6 6s-6-2.69-6-6c0-2 .98-3.77 2.48-4.86c.23.81.65 2.07.65 2.07C8.43 9.93 8 10.92 8 12c0 2.21 1.79 4 4 4s4-1.79 4-4c0-1.08-.43-2.07-1.13-2.79c0 0 .41-1.22.65-2.07A6 6 0 0 1 18 12" /></svg>)}</div></div>)}
-                                    {((items.index === 2) || (items.index === 3)) && (<div className="text-accent bg-base-100 px-6 py-[5px] border border-secondary rounded-xl"><p className="text-secondary inline">Last updated on : </p>{user.dateOfPasswordChange
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#fff" d="M14.5 2.5c0 1.5-1.5 6-1.5 6h-2S9.5 4 9.5 2.5a2.5 2.5 0 0 1 5 0M12 10c-1.1 0-2 .9-2 2s.9 2 2 2s2-.9 2-2s-.9-2-2-2m4.08-4.89c.18-.75.33-1.47.39-2.06A10 10 0 0 1 22 12c0 5.52-4.48 10-10 10S2 17.52 2 12c0-3.92 2.25-7.31 5.53-8.95c.07.59.21 1.32.39 2.06A8.03 8.03 0 0 0 4 12c0 4.42 3.58 8 8 8s8-3.58 8-8c0-2.93-1.58-5.49-3.92-6.89M18 12c0 3.31-2.69 6-6 6s-6-2.69-6-6c0-2 .98-3.77 2.48-4.86c.23.81.65 2.07.65 2.07C8.43 9.93 8 10.92 8 12c0 2.21 1.79 4 4 4s4-1.79 4-4c0-1.08-.43-2.07-1.13-2.79c0 0 .41-1.22.65-2.07A6 6 0 0 1 18 12" /></svg>)}</div></div>)}
+                                    {((items.index === 2) || (items.index === 3)) && (<div className="text-white/50 bg-base-100 px-6 py-[5px] border border-white rounded-xl"><p className="text-white inline">Last updated on : </p>{user.dateOfPasswordChange
                                         ? new Date(user.dateOfPasswordChange).toLocaleString([], {
                                             dateStyle: "medium",
                                             timeStyle: "short"
@@ -420,20 +466,30 @@ const PasswordSecuritySettings = () => {
                 {editPrivate && (<div className="fixed inset-0 z-50 bg-black/70  flex justify-center items-center p-4 overflow-y-auto" onClick={() => { setEditPrivateisOpen(false); setError("") }}>
 
                     {/* CARD */}
-                    <div className="w-full max-w-[440px] rounded-3xl overflow-hidden bg-base-300 border border-secondary border-[2px]" onClick={(e) => e.stopPropagation()} >
+                    <div className="w-full max-w-[440px] rounded-3xl overflow-hidden bg-base-200 " onClick={(e) => e.stopPropagation()} >
 
                         {/* HEADER */}
-                        <div className=" flex items-center justify-center gap-3 px-4 sm:px-6 py-4 sm:py-5 border-b border-accent bg-gradient-to-r from-neutral to-accent ">
-                            <h2 className="text-xl font-semibold text-secondary-content">
-                                {allChanges.find(c => c.index === activeIndex)?.Tag}
-                            </h2>
+                        <div className=" flex items-center justify-between gap-3 px-4 sm:px-6 py-4 sm:py-5 border-b border-white/50 bg-white">
 
-                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 14 14">
-                                <g fill="none" fillRule="evenodd" clipRule="evenodd">
-                                    <path fill="#fff" d="M1.573 1.573A.25.25 0 0 1 1.75 1.5h1.5a.75.75 0 0 0 0-1.5h-1.5A1.75 1.75 0 0 0 0 1.75v1.5a.75.75 0 0 0 1.5 0v-1.5a.25.25 0 0 1 .073-.177M14 10.75a.75.75 0 0 0-1.5 0v1.5a.25.25 0 0 1-.25.25h-1.5a.75.75 0 0 0 0 1.5h1.5A1.75 1.75 0 0 0 14 12.25zM.75 10a.75.75 0 0 1 .75.75v1.5a.25.25 0 0 0 .25.25h1.5a.75.75 0 0 1 0 1.5h-1.5A1.75 1.75 0 0 1 0 12.25v-1.5A.75.75 0 0 1 .75 10m10-10a.75.75 0 0 0 0 1.5h1.5a.25.25 0 0 1 .25.25v1.5a.75.75 0 0 0 1.5 0v-1.5A1.75 1.75 0 0 0 12.25 0z" />
-                                    <path fill="#ffae4aff" d="M9.208 4.46a2.21 2.21 0 1 1-4.421 0a2.21 2.21 0 0 1 4.421 0m-6.353 6.195a4.423 4.423 0 0 1 8.288 0c.112.299-.126.595-.446.595H3.301c-.32 0-.558-.296-.446-.595" />
-                                </g>
-                            </svg>
+                            <div className='flex items-center gap-1'>
+
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1.7em" height="1.7em" viewBox="0 0 20 20">
+                                    <path fill="#000" d="M3.87 4h13.25C18.37 4 19 4.59 19 5.79v8.42c0 1.19-.63 1.79-1.88 1.79H3.87c-1.25 0-1.88-.6-1.88-1.79V5.79c0-1.2.63-1.79 1.88-1.79m6.62 8.6l6.74-5.53c.24-.2.43-.66.13-1.07c-.29-.41-.82-.42-1.17-.17l-5.7 3.86L4.8 5.83c-.35-.25-.88-.24-1.17.17c-.3.41-.11.87.13 1.07z"></path>
+                                </svg>
+                                <h2 className="text-xl font-semibold text-black">
+                                    {allChanges.find(c => c.index === activeIndex)?.Tag}
+                                </h2>
+
+
+                            </div>
+
+
+                            <div onClick={() => { setEditPrivateisOpen(false); setError("") }} className='hover:bg-black/20 transition-all duration-300 cursor-pointer rounded-full p-1'>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                    <path fill="#000" d="m12 13.4l-4.9 4.9q-.275.275-.7.275t-.7-.275t-.275-.7t.275-.7l4.9-4.9l-4.9-4.9q-.275-.275-.275-.7t.275-.7t.7-.275t.7.275l4.9 4.9l4.9-4.9q.275-.275.7-.275t.7.275t.275.7t-.275.7L13.4 12l4.9 4.9q.275.275.275.7t-.275.7t-.7.275t-.7-.275z"></path>
+                                </svg>
+                            </div>
+
                         </div>
 
 
@@ -443,34 +499,71 @@ const PasswordSecuritySettings = () => {
                             {/* ================= VERIFY EMAIL ================= */}
                             {activeChange?.index === 1 && ((!user.isVerified && (
                                 <div>
-                                    {!otpSentEmail && (
-                                        <button className="w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-secondary transition-all duration-300 flex justify-center items-center gap-4 text-accent" onClick={sendVerificationEmail}>
-                                            {isSending ? (
-                                                <div className='flex gap-3 justify-center items-center'><p>Sending Verification OTP</p>   <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#9f2d00" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg>
-                                                </div>) : (<div className='flex gap-1 justify-center items-center'><p>Send Verification OTP</p>   <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><g fill="none" stroke="#9f2d00" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}><path d="M7.51 14.353V6.096c0-.821.609-1.59 1.432-1.59s1.577.653 1.577 1.474v4.281m0 0l-.009 1.176m.009-1.176c.562-2.117 3.152-1.305 2.994.356c-.003.03 0 .738 0 .738m0 0v1.14m0-1.14c.283-1.91 3.422-1.963 3.022.95m0 0l-.023.688m.023-.688c.469-2.01 3.035-1.577 2.967.276v3.687c-.003 1.576-.311 2.33-1.125 3.279c-.16.186-.316.379-.432.595c-.428.793-.232 1.01-.303 1.85M7.51 10.414c-1.32 1.194-2.209 2.284-2.475 2.61c-.89 1.351-.663 2.237.601 4.04c.941 1.34 1.806 2.304 1.872 2.38c.673.76.614 1.263.614 2.558"></path><path d="M13.034 6c0-2.21-1.795-4-4.01-4a4.005 4.005 0 0 0-4.008 4"></path></g></svg></div>)}
-                                        </button>
+                                    {!isVerified && !otpSentEmail && (
+
+                                        <div >
+                                            <div className="flex flex-col items-start gap-2 text-sm text-white/60 mb-4">
+
+                                                <span >
+                                                    A one-time verification code will be sent to your email,
+                                                    <span className='text-white/80 bg-white/10 px-3 flex items-center justify-center w-fit rounded-md mt-1'>  {user.gmail} </span>
+                                                </span>
+                                                <span className='mt-1'>
+                                                    Enter the code to verify your identity and continue.
+
+                                                </span>
+                                            </div>
+                                            <button className="w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100  transition-all duration-300 flex justify-center items-center gap-4 text-white/70 hover:text-white/90" onClick={sendVerificationEmail}>
+                                                {isSending ? (
+                                                    <div className='flex gap-3 justify-center items-center'>
+
+                                                        <div className="flex items-end gap-1">
+                                                            <span className="w-2 h-2 rounded-full bg-white/80 animate-bounce [animation-delay:0ms]" />
+                                                            <span className="w-2 h-2 rounded-full bg-white/80 animate-bounce [animation-delay:200ms]" />
+                                                            <span className="w-2 h-2 rounded-full bg-white/80 animate-bounce [animation-delay:400ms]" />
+                                                        </div>
+                                                    </div>) : (<div className='flex gap-2 justify-center items-center'><p>Verify Email</p> <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 15 15">
+                                                        <path fill="currentColor" d="M8.293 2.293a1 1 0 0 1 1.414 0l4.5 4.5a1 1 0 0 1 0 1.414l-4.5 4.5a1 1 0 0 1-1.414-1.414L11 8.5H1.5a1 1 0 0 1 0-2H11L8.293 3.707a1 1 0 0 1 0-1.414"></path>
+                                                    </svg>  </div>)}
+                                            </button>
+                                        </div>
                                     )}
                                     {!isVerified && (otpSentEmail && (
                                         <div className=" flex flex-col gap-5">
-                                            <input
-                                                placeholder="Enter the OTP sent by ASTRA"
-                                                className="focus:placeholder:text-secondary-content w-full text-center py-2.5 sm:py-3 px-4 text-sm sm:text-base rounded-xl bg-base-100 border border-accent focus:border-secondary outline-none transition-all duration-300 placeholder:text-neutral text-secondary"
-                                                type="number"
-                                                value={newOTP}
-                                                onChange={(e) => setOTP(e.target.value.trim())} />
+
+                                            <div
+                                                className="flex justify-center gap-3"
+                                                onPaste={handlePaste}
+                                            >
+                                                {otp.map((digit, index) => (
+                                                    <input
+                                                        key={index}
+                                                        id={`otp-${index}`}
+                                                        type="text"
+                                                        inputMode="numeric"
+                                                        maxLength={1}
+                                                        value={digit}
+                                                        onChange={(e) => handleChange(e.target.value, index)}
+                                                        onKeyDown={(e) => handleKeyDown(e, index)}
+                                                        className="w-12 h-14 sm:w-14 sm:h-16 rounded-xl border border-white/20 bg-base-100 text-center text-xl font-semibold text-white outline-none transition-all duration-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
+                                                    />
+                                                ))}
+                                            </div>
+
                                             <button
-                                                className="flex justify-center items-center gap-2 w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-accent focus:border-secondary focus:ring-2 focus:ring-secondary/20 outline-none transition-all duration-300 text-secondary"
+                                                className="flex text-white/50 hover:text-white/90 justify-center items-center gap-2 w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100  transition-all duration-300 text-white"
                                                 onClick={verifyOTP}
                                             >
-                                                {isSending ? (<><span className="text-accent flex gap-2 justify-center items-center">Verifying  OTP</span><svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#9f2d00" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg></>) :
-                                                    (<><span className="text-accent flex gap-2 justify-center items-center">Verify OTP <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><g fill="none" stroke="#9f2d00" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}><path d="M7.51 14.353V6.096c0-.821.609-1.59 1.432-1.59s1.577.653 1.577 1.474v4.281m0 0l-.009 1.176m.009-1.176c.562-2.117 3.152-1.305 2.994.356c-.003.03 0 .738 0 .738m0 0v1.14m0-1.14c.283-1.91 3.422-1.963 3.022.95m0 0l-.023.688m.023-.688c.469-2.01 3.035-1.577 2.967.276v3.687c-.003 1.576-.311 2.33-1.125 3.279c-.16.186-.316.379-.432.595c-.428.793-.232 1.01-.303 1.85M7.51 10.414c-1.32 1.194-2.209 2.284-2.475 2.61c-.89 1.351-.663 2.237.601 4.04c.941 1.34 1.806 2.304 1.872 2.38c.673.76.614 1.263.614 2.558"></path><path d="M13.034 6c0-2.21-1.795-4-4.01-4a4.005 4.005 0 0 0-4.008 4"></path></g></svg></span></>)}
+                                                {isSending ? (<><span className="text-white/50 flex gap-2 justify-center items-center">Verifying  OTP</span><svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#fff" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#fff" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg></>) :
+                                                    (<>
+                                                        <span className=" flex gap-2 justify-center items-center">Verify OTP </span></>)}
                                             </button>
                                         </div>
                                     ))}
                                     {isVerified && (
                                         <div className="w-full flex flex-col justify-center items-center ">
                                             < div >
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="w-24 h-24 sm:w-32 sm:h-32" viewBox="0 0 24 24"><path fill="#9f2d00" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd" /><path fill="#9f2d00" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#9f2d00" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="w-24 h-24 sm:w-32 sm:h-32" viewBox="0 0 24 24"><path fill="#fff" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd" /><path fill="#fff" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#fff" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
                                             </div>
                                             <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white">
                                                 Email Verified
@@ -491,11 +584,13 @@ const PasswordSecuritySettings = () => {
                             )) || (user.isVerified && (
                                 <div className="w-full flex flex-col justify-center items-center ">
                                     < div >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24"><path fill="#9f2d00" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd" /><path fill="#9f2d00" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#9f2d00" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24"><path fill="#15ff00ff" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd" /><path fill="#15ff00ff" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#15ff00ff" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
                                     </div>
-                                    <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-secondary">
-                                        Email Already Verified !
+                                    <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-white">
+                                        Verified
                                     </h2>
+                                    <p className="text-sm sm:text-base text-white/50">You have sucessfully verified account</p>
+
                                 </div>
                             ))
                             )}
@@ -503,36 +598,60 @@ const PasswordSecuritySettings = () => {
                             {activeChange?.index === 2 && (
                                 <>
 
-                                    {!otpSentForgot && (
-                                        <button className="text-secondary w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-secondary transition-all duration-300 flex justify-center items-center gap-4" onClick={sendForgotPassEmail}>
-                                            {isSending ? (<div className="flex gap-2 justify-center items-center text-accent"> Sending Verification OTP<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#9f2d00" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg></div>) : (<div className="flex gap-2 justify-center items-center text-accent">
-                                                Send Verification OTP <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><g fill="none" stroke="#9f2d00" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}><path d="M7.51 14.353V6.096c0-.821.609-1.59 1.432-1.59s1.577.653 1.577 1.474v4.281m0 0l-.009 1.176m.009-1.176c.562-2.117 3.152-1.305 2.994.356c-.003.03 0 .738 0 .738m0 0v1.14m0-1.14c.283-1.91 3.422-1.963 3.022.95m0 0l-.023.688m.023-.688c.469-2.01 3.035-1.577 2.967.276v3.687c-.003 1.576-.311 2.33-1.125 3.279c-.16.186-.316.379-.432.595c-.428.793-.232 1.01-.303 1.85M7.51 10.414c-1.32 1.194-2.209 2.284-2.475 2.61c-.89 1.351-.663 2.237.601 4.04c.941 1.34 1.806 2.304 1.872 2.38c.673.76.614 1.263.614 2.558"></path><path d="M13.034 6c0-2.21-1.795-4-4.01-4a4.005 4.005 0 0 0-4.008 4"></path></g></svg></div>
-                                            )}
-                                        </button>
+                                    {!isVerified2 && !otpSentForgot && (
+
+                                        <div >
+                                            <div className="flex flex-col items-start gap-2 text-sm text-white/60 mb-4">
+
+                                                <span >
+                                                    A one-time verification code will be sent to your email,
+                                                    <span className='text-white/80 bg-white/10 px-3 flex items-center justify-center w-fit rounded-md mt-1'>  {user.gmail} </span>
+                                                </span>
+                                                <span className='mt-1'>
+                                                    Enter the code to verify your identity and continue.
+
+                                                </span>
+                                            </div>
+                                            <button className="text-white/60 hover:text-white/90 w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 transition-all duration-300 flex justify-center items-center gap-4" onClick={sendForgotPassEmail}>
+                                                {isSending ? (
+                                                    <div className="flex gap-2 justify-center items-center text-white/50">
+                                                        <div className="flex items-end gap-1">
+                                                            <span className="w-2 h-2 rounded-full bg-gray-500 animate-bounce [animation-delay:0ms]" />
+                                                            <span className="w-2 h-2 rounded-full bg-gray-500 animate-bounce [animation-delay:200ms]" />
+                                                            <span className="w-2 h-2 rounded-full bg-gray-500 animate-bounce [animation-delay:400ms]" />
+                                                        </div>
+
+                                                    </div>) : (<div className="flex gap-2 justify-center items-center ">
+                                                        Send OTP <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 15 15">
+                                                            <path fill="currentColor" d="M8.293 2.293a1 1 0 0 1 1.414 0l4.5 4.5a1 1 0 0 1 0 1.414l-4.5 4.5a1 1 0 0 1-1.414-1.414L11 8.5H1.5a1 1 0 0 1 0-2H11L8.293 3.707a1 1 0 0 1 0-1.414"></path>
+                                                        </svg> </div>
+                                                )}
+                                            </button>
+                                        </div>
                                     )}
                                     {!isVerified2 && (otpSentForgot && (
                                         <div className=" flex flex-col gap-5">
                                             <input
                                                 placeholder="Enter the OTP sent by ASTRA"
-                                                className="focus:placeholder:text-secondary-content w-full text-center py-2.5 sm:py-3 px-4 text-sm sm:text-base rounded-xl bg-base-100 border border-accent outline-none focus:placeholder:text-secondary-content placeholder:text-neutral text-secondary" type="number"
+                                                className="focus:placeholder:text-white-content w-full text-center py-2.5 sm:py-3 px-4 text-sm sm:text-base rounded-xl bg-base-100 border border-white/50 outline-none focus:placeholder:text-white-content placeholder:text-neutral text-white" type="number"
                                                 value={newOTP}
                                                 onChange={(e) => setOTP(e.target.value.trim())} />
                                             <button
-                                                className="flex justify-center items-center gap-2 w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-accent focus:border-secondary outline-none transition-all duration-300 text-secondary"
+                                                className="flex justify-center items-center gap-2 w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-white/50 focus:border-white outline-none transition-all duration-300 text-white"
                                                 onClick={verifyForgotPassOTP}
                                             >
                                                 {isSending ? (
-                                                    <span className="text-accent flex gap-2 justify-center items-center">Verifying  OTP<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#9f2d00" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg></span>
-                                                ) : (<span className="text-accent flex gap-2 justify-center items-center">Verify OTP <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><g fill="none" stroke="#9f2d00" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}><path d="M7.51 14.353V6.096c0-.821.609-1.59 1.432-1.59s1.577.653 1.577 1.474v4.281m0 0l-.009 1.176m.009-1.176c.562-2.117 3.152-1.305 2.994.356c-.003.03 0 .738 0 .738m0 0v1.14m0-1.14c.283-1.91 3.422-1.963 3.022.95m0 0l-.023.688m.023-.688c.469-2.01 3.035-1.577 2.967.276v3.687c-.003 1.576-.311 2.33-1.125 3.279c-.16.186-.316.379-.432.595c-.428.793-.232 1.01-.303 1.85M7.51 10.414c-1.32 1.194-2.209 2.284-2.475 2.61c-.89 1.351-.663 2.237.601 4.04c.941 1.34 1.806 2.304 1.872 2.38c.673.76.614 1.263.614 2.558"></path><path d="M13.034 6c0-2.21-1.795-4-4.01-4a4.005 4.005 0 0 0-4.008 4"></path></g></svg></span>
+                                                    <span className="text-white/50 flex gap-2 justify-center items-center">Verifying  OTP<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#fff" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#fff" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg></span>
+                                                ) : (<span className="text-white/50 flex gap-2 justify-center items-center">Verify OTP <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><g fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}><path d="M7.51 14.353V6.096c0-.821.609-1.59 1.432-1.59s1.577.653 1.577 1.474v4.281m0 0l-.009 1.176m.009-1.176c.562-2.117 3.152-1.305 2.994.356c-.003.03 0 .738 0 .738m0 0v1.14m0-1.14c.283-1.91 3.422-1.963 3.022.95m0 0l-.023.688m.023-.688c.469-2.01 3.035-1.577 2.967.276v3.687c-.003 1.576-.311 2.33-1.125 3.279c-.16.186-.316.379-.432.595c-.428.793-.232 1.01-.303 1.85M7.51 10.414c-1.32 1.194-2.209 2.284-2.475 2.61c-.89 1.351-.663 2.237.601 4.04c.941 1.34 1.806 2.304 1.872 2.38c.673.76.614 1.263.614 2.558"></path><path d="M13.034 6c0-2.21-1.795-4-4.01-4a4.005 4.005 0 0 0-4.008 4"></path></g></svg></span>
                                                 )}
 
                                             </button>
 
-                                            <div className='w-full border border-accent bg-[#370a0020] rounded-2xl p-4 flex gap-3 items-start  transition-all duration-300 hover:bg-[#370a0040] hover:border-secondary'>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" className="shrink-0 mt-0.5 animate-pulse"><path fill="#9f2d00" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" /></svg>
+                                            <div className='w-full border border-white/50 bg-[#370a0020] rounded-2xl p-4 flex gap-3 items-start  transition-all duration-300 hover:bg-[#370a0040] hover:border-white'>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" className="shrink-0 mt-0.5 animate-pulse"><path fill="#fff" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" /></svg>
                                                 <div className="flex flex-col gap-1">
-                                                    <div className="font-bold text-secondary text-sm tracking-widest uppercase">Note</div>
-                                                    <div className="text-neutral text-xs sm:text-sm leading-relaxed">If you want to resend the OTP, kindly cancel this request and <span className='text-secondary font-semibold'>send OTP again</span>.</div>
+                                                    <div className="font-bold text-white text-sm tracking-widest uppercase">Note</div>
+                                                    <div className="text-neutral text-xs sm:text-sm leading-relaxed">If you want to resend the OTP, kindly cancel this request and <span className='text-white font-semibold'>send OTP again</span>.</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -542,7 +661,7 @@ const PasswordSecuritySettings = () => {
 
                                             <input
                                                 placeholder="Enter the new password"
-                                                className="focus:placeholder:text-secondary-content w-full text-center py-2.5 sm:py-3 px-4 pr-12 text-sm sm:text-base rounded-xl bg-base-100 border border-accent outline-none placeholder:text-neutral text-secondary"
+                                                className="focus:placeholder:text-white-content w-full text-center py-2.5 sm:py-3 px-4 pr-12 text-sm sm:text-base rounded-xl bg-base-100 border border-white/50 outline-none placeholder:text-neutral text-white"
                                                 type={showNewPass1 ? "text" : "password"}
                                                 value={newPaass1}
                                                 onChange={(e) => setNewPaass1(e.target.value.trim())}
@@ -553,24 +672,24 @@ const PasswordSecuritySettings = () => {
                                                 className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
                                             >
                                                 {showNewPass1 ? (
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" fillRule="evenodd" d="m18.67 16.973l2.755 2.755l-.849.848L3.85 3.85L4.697 3l2.855 2.855C8.932 5.303 10.432 5 12 5c4.808 0 8.972 2.848 11 7a12.65 12.65 0 0 1-4.33 4.973M8.486 6.79l1.664 1.664a4 4 0 0 1 5.398 5.398l2.255 2.255c1.574-1 2.904-2.403 3.845-4.106C19.686 8.45 16.034 6.2 12 6.2a10.8 10.8 0 0 0-3.514.59m6.152 6.152a2.8 2.8 0 0 0-3.579-3.579zm1.81 5.204c-1.38.552-2.88.855-4.448.855c-4.808 0-8.972-2.848-11-7a12.65 12.65 0 0 1 4.33-4.973l.867.867A11.36 11.36 0 0 0 2.352 12c1.962 3.55 5.614 5.8 9.648 5.8a10.8 10.8 0 0 0 3.514-.59l.934.935zM8.453 10.15l.909.91a2.8 2.8 0 0 0 3.579 3.579l.91.908a4 4 0 0 1-5.398-5.398z"></path></svg>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#fff" fillRule="evenodd" d="m18.67 16.973l2.755 2.755l-.849.848L3.85 3.85L4.697 3l2.855 2.855C8.932 5.303 10.432 5 12 5c4.808 0 8.972 2.848 11 7a12.65 12.65 0 0 1-4.33 4.973M8.486 6.79l1.664 1.664a4 4 0 0 1 5.398 5.398l2.255 2.255c1.574-1 2.904-2.403 3.845-4.106C19.686 8.45 16.034 6.2 12 6.2a10.8 10.8 0 0 0-3.514.59m6.152 6.152a2.8 2.8 0 0 0-3.579-3.579zm1.81 5.204c-1.38.552-2.88.855-4.448.855c-4.808 0-8.972-2.848-11-7a12.65 12.65 0 0 1 4.33-4.973l.867.867A11.36 11.36 0 0 0 2.352 12c1.962 3.55 5.614 5.8 9.648 5.8a10.8 10.8 0 0 0 3.514-.59l.934.935zM8.453 10.15l.909.91a2.8 2.8 0 0 0 3.579 3.579l.91.908a4 4 0 0 1-5.398-5.398z"></path></svg>
                                                 ) : (
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" fillRule="evenodd" d="M12 17.8c4.034 0 7.686-2.25 9.648-5.8C19.686 8.45 16.034 6.2 12 6.2S4.314 8.45 2.352 12c1.962 3.55 5.614 5.8 9.648 5.8M12 5c4.808 0 8.972 2.848 11 7c-2.028 4.152-6.192 7-11 7s-8.972-2.848-11-7c2.028-4.152 6.192-7 11-7m0 9.8a2.8 2.8 0 1 0 0-5.6a2.8 2.8 0 0 0 0 5.6m0 1.2a4 4 0 1 1 0-8a4 4 0 0 1 0 8"></path></svg>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#fff" fillRule="evenodd" d="M12 17.8c4.034 0 7.686-2.25 9.648-5.8C19.686 8.45 16.034 6.2 12 6.2S4.314 8.45 2.352 12c1.962 3.55 5.614 5.8 9.648 5.8M12 5c4.808 0 8.972 2.848 11 7c-2.028 4.152-6.192 7-11 7s-8.972-2.848-11-7c2.028-4.152 6.192-7 11-7m0 9.8a2.8 2.8 0 1 0 0-5.6a2.8 2.8 0 0 0 0 5.6m0 1.2a4 4 0 1 1 0-8a4 4 0 0 1 0 8"></path></svg>
                                                 )}
                                             </div>
 
                                         </div>
                                         <button
-                                            className="flex justify-center items-center gap-2 w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-accent focus:border-secondary outline-none transition-all duration-300 text-secondary"
+                                            className="flex justify-center items-center gap-2 w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-white/50 focus:border-white outline-none transition-all duration-300 text-white"
                                             onClick={() => { newForgotPassChange(); setShowNewPass1(prev => !prev); }}
                                         >
-                                            {isSending ? (<div><span className="text-accent flex gap-2 justify-center items-center">Setting up your account <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#9f2d00" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg></span></div>) : "Confirm New Password"}
+                                            {isSending ? (<div><span className="text-white/50 flex gap-2 justify-center items-center">Setting up your account <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#fff" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#fff" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg></span></div>) : "Confirm New Password"}
                                         </button>
-                                        <div className='w-full border border-accent bg-[#370a0020] rounded-2xl p-4 flex gap-3 items-start  transition-all duration-300 hover:bg-[#370a0040] hover:border-secondary'>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" className="shrink-0 mt-0.5 animate-pulse"><path fill="#9f2d00" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" /></svg>
+                                        <div className='w-full border border-white/50 bg-[#370a0020] rounded-2xl p-4 flex gap-3 items-start  transition-all duration-300 hover:bg-[#370a0040] hover:border-white'>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" className="shrink-0 mt-0.5 animate-pulse"><path fill="#fff" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" /></svg>
                                             <div className="flex flex-col gap-1">
-                                                <div className="font-bold text-secondary text-sm tracking-widest uppercase">Note</div>
-                                                <div className="text-neutral text-xs sm:text-sm leading-relaxed">If you want to resend the OTP, kindly cancel this request and <span className='text-secondary font-semibold'>send OTP again</span>.</div>
+                                                <div className="font-bold text-white text-sm tracking-widest uppercase">Note</div>
+                                                <div className="text-neutral text-xs sm:text-sm leading-relaxed">If you want to resend the OTP, kindly cancel this request and <span className='text-white font-semibold'>send OTP again</span>.</div>
                                             </div>
                                         </div>
                                     </div>)}
@@ -587,9 +706,9 @@ const PasswordSecuritySettings = () => {
                                     {isVerified3 && (
                                         <div className="w-full flex flex-col justify-center items-center ">
                                             < div >
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24"><path fill="#9f2d00" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd" /><path fill="#9f2d00" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#9f2d00" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24"><path fill="#fff" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd" /><path fill="#fff" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#fff" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
                                             </div>
-                                            <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-secondary">
+                                            <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-white">
                                                 Password has been changed
                                             </h2>
                                         </div>
@@ -605,7 +724,7 @@ const PasswordSecuritySettings = () => {
                                     {!isVerified4 && (<div className='flex flex-col gap-3'>
                                         <input
                                             placeholder="Old Password"
-                                            className="focus:placeholder:text-secondary-content w-full text-center py-2.5 sm:py-3 px-4 pr-12 text-sm sm:text-base rounded-xl bg-base-100 border border-accent outline-none placeholder:text-neutral text-secondary"
+                                            className="focus:placeholder:text-white-content w-full text-center py-2.5 sm:py-3 px-4 pr-12 text-sm sm:text-base rounded-xl bg-base-100 border border-white/50 outline-none placeholder:text-neutral text-white"
 
                                             value={oldPass}
                                             onChange={(e) => setOldPass(e.target.value.trim())}
@@ -613,20 +732,20 @@ const PasswordSecuritySettings = () => {
 
                                         <input
                                             placeholder="New Password"
-                                            className="focus:placeholder:text-secondary-content w-full text-center py-2.5 sm:py-3 px-4 pr-12 text-sm sm:text-base rounded-xl bg-base-100 border border-accent outline-none placeholder:text-neutral text-secondary"
+                                            className="focus:placeholder:text-white-content w-full text-center py-2.5 sm:py-3 px-4 pr-12 text-sm sm:text-base rounded-xl bg-base-100 border border-white/50 outline-none placeholder:text-neutral text-white"
                                             value={newPaass2}
                                             onChange={(e) => setNewPaass2(e.target.value.trim())}
                                         />
                                         <button
-                                            className="flex justify-center items-center gap-2 w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-accent focus:border-secondary outline-none transition-all duration-300 text-secondary"
+                                            className="flex justify-center items-center gap-2 w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-white/50 focus:border-white outline-none transition-all duration-300 text-white"
                                             onClick={newRenewPassChange}
 
                                         >
 
 
                                             {isSending ? (
-                                                <div className='flex gap-3 justify-center items-center'><p>Confirming New Password</p>   <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#9f2d00" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg>
-                                                </div>) : (<div className='flex gap-1 justify-center items-center'><p> Confirm New Password</p>   <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><g fill="none" stroke="#9f2d00" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}><path d="M7.51 14.353V6.096c0-.821.609-1.59 1.432-1.59s1.577.653 1.577 1.474v4.281m0 0l-.009 1.176m.009-1.176c.562-2.117 3.152-1.305 2.994.356c-.003.03 0 .738 0 .738m0 0v1.14m0-1.14c.283-1.91 3.422-1.963 3.022.95m0 0l-.023.688m.023-.688c.469-2.01 3.035-1.577 2.967.276v3.687c-.003 1.576-.311 2.33-1.125 3.279c-.16.186-.316.379-.432.595c-.428.793-.232 1.01-.303 1.85M7.51 10.414c-1.32 1.194-2.209 2.284-2.475 2.61c-.89 1.351-.663 2.237.601 4.04c.941 1.34 1.806 2.304 1.872 2.38c.673.76.614 1.263.614 2.558"></path><path d="M13.034 6c0-2.21-1.795-4-4.01-4a4.005 4.005 0 0 0-4.008 4"></path></g></svg></div>)}
+                                                <div className='flex gap-3 justify-center items-center'><p>Confirming New Password</p>   <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#fff" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#fff" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg>
+                                                </div>) : (<div className='flex gap-1 justify-center items-center'><p> Confirm New Password</p>   <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><g fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}><path d="M7.51 14.353V6.096c0-.821.609-1.59 1.432-1.59s1.577.653 1.577 1.474v4.281m0 0l-.009 1.176m.009-1.176c.562-2.117 3.152-1.305 2.994.356c-.003.03 0 .738 0 .738m0 0v1.14m0-1.14c.283-1.91 3.422-1.963 3.022.95m0 0l-.023.688m.023-.688c.469-2.01 3.035-1.577 2.967.276v3.687c-.003 1.576-.311 2.33-1.125 3.279c-.16.186-.316.379-.432.595c-.428.793-.232 1.01-.303 1.85M7.51 10.414c-1.32 1.194-2.209 2.284-2.475 2.61c-.89 1.351-.663 2.237.601 4.04c.941 1.34 1.806 2.304 1.872 2.38c.673.76.614 1.263.614 2.558"></path><path d="M13.034 6c0-2.21-1.795-4-4.01-4a4.005 4.005 0 0 0-4.008 4"></path></g></svg></div>)}
 
                                         </button>
                                     </div>)}
@@ -645,9 +764,9 @@ const PasswordSecuritySettings = () => {
                                     {isVerified4 && (
                                         <div className="w-full flex flex-col justify-center items-center ">
                                             < div >
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24"><path fill="#9f2d00" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd" /><path fill="#9f2d00" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#9f2d00" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24"><path fill="#fff" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd" /><path fill="#fff" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#fff" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
                                             </div>
-                                            <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-secondary">
+                                            <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-white">
                                                 Password has been changed
                                             </h2>
                                         </div>
@@ -659,9 +778,9 @@ const PasswordSecuritySettings = () => {
                                 <div>
                                     {(!otpSentEmail1 && !show1) && (
 
-                                        <button className="text-secondary w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-secondary transition-all duration-300 flex justify-center items-center gap-4" onClick={sendVerificationEmailForGmailChange}>
-                                            {isSending1 ? (<div className="flex gap-2 justify-center items-center text-accent"> Sending Verification OTP<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#9f2d00" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg></div>) : (<div className="flex gap-2 justify-center items-center text-accent">
-                                                Send Verification OTP <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><g fill="none" stroke="#9f2d00" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}><path d="M7.51 14.353V6.096c0-.821.609-1.59 1.432-1.59s1.577.653 1.577 1.474v4.281m0 0l-.009 1.176m.009-1.176c.562-2.117 3.152-1.305 2.994.356c-.003.03 0 .738 0 .738m0 0v1.14m0-1.14c.283-1.91 3.422-1.963 3.022.95m0 0l-.023.688m.023-.688c.469-2.01 3.035-1.577 2.967.276v3.687c-.003 1.576-.311 2.33-1.125 3.279c-.16.186-.316.379-.432.595c-.428.793-.232 1.01-.303 1.85M7.51 10.414c-1.32 1.194-2.209 2.284-2.475 2.61c-.89 1.351-.663 2.237.601 4.04c.941 1.34 1.806 2.304 1.872 2.38c.673.76.614 1.263.614 2.558"></path><path d="M13.034 6c0-2.21-1.795-4-4.01-4a4.005 4.005 0 0 0-4.008 4"></path></g></svg></div>
+                                        <button className="text-white w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-white transition-all duration-300 flex justify-center items-center gap-4" onClick={sendVerificationEmailForGmailChange}>
+                                            {isSending1 ? (<div className="flex gap-2 justify-center items-center text-white/50"> Sending Verification OTP<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#fff" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#fff" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg></div>) : (<div className="flex gap-2 justify-center items-center text-white/50">
+                                                Send Verification OTP <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><g fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}><path d="M7.51 14.353V6.096c0-.821.609-1.59 1.432-1.59s1.577.653 1.577 1.474v4.281m0 0l-.009 1.176m.009-1.176c.562-2.117 3.152-1.305 2.994.356c-.003.03 0 .738 0 .738m0 0v1.14m0-1.14c.283-1.91 3.422-1.963 3.022.95m0 0l-.023.688m.023-.688c.469-2.01 3.035-1.577 2.967.276v3.687c-.003 1.576-.311 2.33-1.125 3.279c-.16.186-.316.379-.432.595c-.428.793-.232 1.01-.303 1.85M7.51 10.414c-1.32 1.194-2.209 2.284-2.475 2.61c-.89 1.351-.663 2.237.601 4.04c.941 1.34 1.806 2.304 1.872 2.38c.673.76.614 1.263.614 2.558"></path><path d="M13.034 6c0-2.21-1.795-4-4.01-4a4.005 4.005 0 0 0-4.008 4"></path></g></svg></div>
                                             )}
                                         </button>
                                     )}
@@ -669,29 +788,29 @@ const PasswordSecuritySettings = () => {
                                         <div className=" flex flex-col gap-5">
                                             <input
                                                 placeholder="Enter the OTP sent by ASTRA"
-                                                className="focus:placeholder:text-secondary-content w-full text-center py-2.5 sm:py-3 px-4 pr-12 text-sm sm:text-base rounded-xl bg-base-100 border border-accent outline-none placeholder:text-neutral text-secondary"
+                                                className="focus:placeholder:text-white-content w-full text-center py-2.5 sm:py-3 px-4 pr-12 text-sm sm:text-base rounded-xl bg-base-100 border border-white/50 outline-none placeholder:text-neutral text-white"
                                                 type="number"
                                                 value={newOTP}
                                                 onChange={(e) => setOTP(e.target.value.trim())} />
                                             <input
                                                 placeholder="Hey NOVA here ! Enter new GmailID"
-                                                className="focus:placeholder:text-secondary-content w-full text-center py-2.5 sm:py-3 px-4 pr-12 text-sm sm:text-base rounded-xl bg-base-100 border border-accent outline-none placeholder:text-neutral text-secondary"
+                                                className="focus:placeholder:text-white-content w-full text-center py-2.5 sm:py-3 px-4 pr-12 text-sm sm:text-base rounded-xl bg-base-100 border border-white/50 outline-none placeholder:text-neutral text-white"
                                                 value={newGmail}
                                                 onChange={(e) => setNewGmailId(e.target.value.trim())} />
 
                                             <button
-                                                className="text-secondary w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-secondary transition-all duration-300 flex justify-center items-center gap-4"
+                                                className="text-white w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-white transition-all duration-300 flex justify-center items-center gap-4"
                                                 onClick={patchiandOtpForGmailChange}
                                             >
-                                                {isUpdating ? (<div className="flex gap-2 justify-center items-center text-accent"> Updating Gmail<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#9f2d00" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg></div>) : (<div className="flex gap-2 justify-center items-center text-accent">
-                                                    Update Gmail <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><g fill="none" stroke="#9f2d00" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}><path d="M7.51 14.353V6.096c0-.821.609-1.59 1.432-1.59s1.577.653 1.577 1.474v4.281m0 0l-.009 1.176m.009-1.176c.562-2.117 3.152-1.305 2.994.356c-.003.03 0 .738 0 .738m0 0v1.14m0-1.14c.283-1.91 3.422-1.963 3.022.95m0 0l-.023.688m.023-.688c.469-2.01 3.035-1.577 2.967.276v3.687c-.003 1.576-.311 2.33-1.125 3.279c-.16.186-.316.379-.432.595c-.428.793-.232 1.01-.303 1.85M7.51 10.414c-1.32 1.194-2.209 2.284-2.475 2.61c-.89 1.351-.663 2.237.601 4.04c.941 1.34 1.806 2.304 1.872 2.38c.673.76.614 1.263.614 2.558"></path><path d="M13.034 6c0-2.21-1.795-4-4.01-4a4.005 4.005 0 0 0-4.008 4"></path></g></svg></div>
+                                                {isUpdating ? (<div className="flex gap-2 justify-center items-center text-white/50"> Updating Gmail<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#fff" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#fff" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg></div>) : (<div className="flex gap-2 justify-center items-center text-white/50">
+                                                    Update Gmail <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><g fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}><path d="M7.51 14.353V6.096c0-.821.609-1.59 1.432-1.59s1.577.653 1.577 1.474v4.281m0 0l-.009 1.176m.009-1.176c.562-2.117 3.152-1.305 2.994.356c-.003.03 0 .738 0 .738m0 0v1.14m0-1.14c.283-1.91 3.422-1.963 3.022.95m0 0l-.023.688m.023-.688c.469-2.01 3.035-1.577 2.967.276v3.687c-.003 1.576-.311 2.33-1.125 3.279c-.16.186-.316.379-.432.595c-.428.793-.232 1.01-.303 1.85M7.51 10.414c-1.32 1.194-2.209 2.284-2.475 2.61c-.89 1.351-.663 2.237.601 4.04c.941 1.34 1.806 2.304 1.872 2.38c.673.76.614 1.263.614 2.558"></path><path d="M13.034 6c0-2.21-1.795-4-4.01-4a4.005 4.005 0 0 0-4.008 4"></path></g></svg></div>
                                                 )}
                                             </button>
-                                            <div className='w-full border border-accent bg-[#370a0020] rounded-2xl p-4 flex gap-3 items-start  transition-all duration-300 hover:bg-[#370a0040] hover:border-secondary'>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" className="shrink-0 mt-0.5 animate-pulse"><path fill="#9f2d00" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" /></svg>
+                                            <div className='w-full border border-white/50 bg-[#370a0020] rounded-2xl p-4 flex gap-3 items-start  transition-all duration-300 hover:bg-[#370a0040] hover:border-white'>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" className="shrink-0 mt-0.5 animate-pulse"><path fill="#fff" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" /></svg>
                                                 <div className="flex flex-col gap-1">
-                                                    <div className="font-bold text-secondary text-sm tracking-widest uppercase">Note</div>
-                                                    <div className="text-neutral text-xs sm:text-sm leading-relaxed">If you want to resend the OTP, kindly cancel this request and <span className='text-secondary font-semibold'>send OTP again</span>.</div>
+                                                    <div className="font-bold text-white text-sm tracking-widest uppercase">Note</div>
+                                                    <div className="text-neutral text-xs sm:text-sm leading-relaxed">If you want to resend the OTP, kindly cancel this request and <span className='text-white font-semibold'>send OTP again</span>.</div>
                                                 </div>
                                             </div>
                                             {errrorInVerification && (<div className="space-y-2 mt-5">
@@ -711,9 +830,9 @@ const PasswordSecuritySettings = () => {
                                     {show1 && (
                                         <div className="w-full flex flex-col justify-center items-center ">
                                             < div >
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24"><path fill="#9f2d00" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd" /><path fill="#9f2d00" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#9f2d00" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24"><path fill="#fff" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd" /><path fill="#fff" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#fff" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
                                             </div>
-                                            <h2 className="text-4xl font-semibold text-secondary">
+                                            <h2 className="text-4xl font-semibold text-white">
                                                 GmailID Updated
                                             </h2>
                                         </div>
@@ -736,9 +855,9 @@ const PasswordSecuritySettings = () => {
 
                                 <div>{!otpSentEmail1 && (
 
-                                    <button className="text-secondary w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-secondary transition-all duration-300 flex justify-center items-center gap-4" onClick={sendVerificationEmailForGmailChange}>
-                                        {isSending1 ? (<div className="flex gap-2 justify-center items-center text-accent"> Sending Verification OTP<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#9f2d00" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg></div>) : (<div className="flex gap-2 justify-center items-center text-accent">
-                                            Send Verification OTP <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><g fill="none" stroke="#9f2d00" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}><path d="M7.51 14.353V6.096c0-.821.609-1.59 1.432-1.59s1.577.653 1.577 1.474v4.281m0 0l-.009 1.176m.009-1.176c.562-2.117 3.152-1.305 2.994.356c-.003.03 0 .738 0 .738m0 0v1.14m0-1.14c.283-1.91 3.422-1.963 3.022.95m0 0l-.023.688m.023-.688c.469-2.01 3.035-1.577 2.967.276v3.687c-.003 1.576-.311 2.33-1.125 3.279c-.16.186-.316.379-.432.595c-.428.793-.232 1.01-.303 1.85M7.51 10.414c-1.32 1.194-2.209 2.284-2.475 2.61c-.89 1.351-.663 2.237.601 4.04c.941 1.34 1.806 2.304 1.872 2.38c.673.76.614 1.263.614 2.558"></path><path d="M13.034 6c0-2.21-1.795-4-4.01-4a4.005 4.005 0 0 0-4.008 4"></path></g></svg></div>
+                                    <button className="text-white w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-white transition-all duration-300 flex justify-center items-center gap-4" onClick={sendVerificationEmailForGmailChange}>
+                                        {isSending1 ? (<div className="flex gap-2 justify-center items-center text-white/50"> Sending Verification OTP<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#fff" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#fff" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg></div>) : (<div className="flex gap-2 justify-center items-center text-white/50">
+                                            Send Verification OTP <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><g fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}><path d="M7.51 14.353V6.096c0-.821.609-1.59 1.432-1.59s1.577.653 1.577 1.474v4.281m0 0l-.009 1.176m.009-1.176c.562-2.117 3.152-1.305 2.994.356c-.003.03 0 .738 0 .738m0 0v1.14m0-1.14c.283-1.91 3.422-1.963 3.022.95m0 0l-.023.688m.023-.688c.469-2.01 3.035-1.577 2.967.276v3.687c-.003 1.576-.311 2.33-1.125 3.279c-.16.186-.316.379-.432.595c-.428.793-.232 1.01-.303 1.85M7.51 10.414c-1.32 1.194-2.209 2.284-2.475 2.61c-.89 1.351-.663 2.237.601 4.04c.941 1.34 1.806 2.304 1.872 2.38c.673.76.614 1.263.614 2.558"></path><path d="M13.034 6c0-2.21-1.795-4-4.01-4a4.005 4.005 0 0 0-4.008 4"></path></g></svg></div>
                                         )}
                                     </button>
                                 )}
@@ -746,30 +865,30 @@ const PasswordSecuritySettings = () => {
                                         <div className=" flex flex-col gap-5">
                                             <input
                                                 placeholder="Enter the OTP sent by ASTRA"
-                                                className="focus:placeholder:text-secondary-content w-full text-center py-2.5 sm:py-3 px-4 pr-12 text-sm sm:text-base rounded-xl bg-base-100 border border-accent outline-none placeholder:text-neutral text-secondary"
+                                                className="focus:placeholder:text-white-content w-full text-center py-2.5 sm:py-3 px-4 pr-12 text-sm sm:text-base rounded-xl bg-base-100 border border-white/50 outline-none placeholder:text-neutral text-white"
                                                 value={newOTP}
                                                 type="number"
                                                 onChange={(e) => setOTP(e.target.value.trim())} />
                                             <input
                                                 placeholder="Hey NOVA here ! Enter new Username"
 
-                                                className="focus:placeholder:text-secondary-content w-full text-center py-2.5 sm:py-3 px-4 pr-12 text-sm sm:text-base rounded-xl bg-base-100 border border-accent outline-none placeholder:text-neutral text-secondary"
+                                                className="focus:placeholder:text-white-content w-full text-center py-2.5 sm:py-3 px-4 pr-12 text-sm sm:text-base rounded-xl bg-base-100 border border-white/50 outline-none placeholder:text-neutral text-white"
                                                 value={newUsername}
                                                 onChange={(e) => setNewUsername(e.target.value.trim())} />
                                             <button
-                                                className="text-secondary w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-secondary transition-all duration-300 flex justify-center items-center gap-4"
+                                                className="text-white w-[70%] mx-auto py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-base-100 border border-white transition-all duration-300 flex justify-center items-center gap-4"
                                                 onClick={patchiandOtpForUsernameChange}
                                             >
                                                 {isSending ? (
-                                                    <div className='flex gap-3 justify-center items-center'><p>Verifying Credentials </p>   <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#9f2d00" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#9f2d00" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg>
-                                                    </div>) : (<div className='flex gap-1 justify-center items-center'><p>Save Credentials</p>   <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><g fill="none" stroke="#9f2d00" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}><path d="M7.51 14.353V6.096c0-.821.609-1.59 1.432-1.59s1.577.653 1.577 1.474v4.281m0 0l-.009 1.176m.009-1.176c.562-2.117 3.152-1.305 2.994.356c-.003.03 0 .738 0 .738m0 0v1.14m0-1.14c.283-1.91 3.422-1.963 3.022.95m0 0l-.023.688m.023-.688c.469-2.01 3.035-1.577 2.967.276v3.687c-.003 1.576-.311 2.33-1.125 3.279c-.16.186-.316.379-.432.595c-.428.793-.232 1.01-.303 1.85M7.51 10.414c-1.32 1.194-2.209 2.284-2.475 2.61c-.89 1.351-.663 2.237.601 4.04c.941 1.34 1.806 2.304 1.872 2.38c.673.76.614 1.263.614 2.558"></path><path d="M13.034 6c0-2.21-1.795-4-4.01-4a4.005 4.005 0 0 0-4.008 4"></path></g></svg></div>)}
+                                                    <div className='flex gap-3 justify-center items-center'><p>Verifying Credentials </p>   <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><path fill="#fff" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity={0.25}></path><path fill="#fff" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"></animateTransform></path></svg>
+                                                    </div>) : (<div className='flex gap-1 justify-center items-center'><p>Save Credentials</p>   <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24"><g fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}><path d="M7.51 14.353V6.096c0-.821.609-1.59 1.432-1.59s1.577.653 1.577 1.474v4.281m0 0l-.009 1.176m.009-1.176c.562-2.117 3.152-1.305 2.994.356c-.003.03 0 .738 0 .738m0 0v1.14m0-1.14c.283-1.91 3.422-1.963 3.022.95m0 0l-.023.688m.023-.688c.469-2.01 3.035-1.577 2.967.276v3.687c-.003 1.576-.311 2.33-1.125 3.279c-.16.186-.316.379-.432.595c-.428.793-.232 1.01-.303 1.85M7.51 10.414c-1.32 1.194-2.209 2.284-2.475 2.61c-.89 1.351-.663 2.237.601 4.04c.941 1.34 1.806 2.304 1.872 2.38c.673.76.614 1.263.614 2.558"></path><path d="M13.034 6c0-2.21-1.795-4-4.01-4a4.005 4.005 0 0 0-4.008 4"></path></g></svg></div>)}
 
                                             </button>
-                                            <div className='w-full border border-accent bg-[#370a0020] rounded-2xl p-4 flex gap-3 items-start  transition-all duration-300 hover:bg-[#370a0040] hover:border-secondary'>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" className="shrink-0 mt-0.5 animate-pulse"><path fill="#9f2d00" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" /></svg>
+                                            <div className='w-full border border-white/50 bg-[#370a0020] rounded-2xl p-4 flex gap-3 items-start  transition-all duration-300 hover:bg-[#370a0040] hover:border-white'>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" className="shrink-0 mt-0.5 animate-pulse"><path fill="#fff" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" /></svg>
                                                 <div className="flex flex-col gap-1">
-                                                    <div className="font-bold text-secondary text-sm tracking-widest uppercase">Note</div>
-                                                    <div className="text-neutral text-xs sm:text-sm leading-relaxed">If you want to resend the OTP, kindly cancel this request and <span className='text-secondary font-semibold'>send OTP again</span>.</div>
+                                                    <div className="font-bold text-white text-sm tracking-widest uppercase">Note</div>
+                                                    <div className="text-neutral text-xs sm:text-sm leading-relaxed">If you want to resend the OTP, kindly cancel this request and <span className='text-white font-semibold'>send OTP again</span>.</div>
                                                 </div>
                                             </div>
                                             {errrorInVerification && (<div className="space-y-2 mt-5">
@@ -787,9 +906,9 @@ const PasswordSecuritySettings = () => {
                                     {show2 && (
                                         <div className="w-full flex flex-col justify-center items-center ">
                                             < div >
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24"><path fill="#9f2d00" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd" /><path fill="#9f2d00" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#9f2d00" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 24 24"><path fill="#fff" fillRule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clipRule="evenodd" /><path fill="#fff" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#fff" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
                                             </div>
-                                            <h2 className="text-4xl font-semibold text-secondary">
+                                            <h2 className="text-4xl font-semibold text-white">
                                                 Username Updated
                                             </h2>
                                         </div>
@@ -800,8 +919,8 @@ const PasswordSecuritySettings = () => {
 
 
                         {/* FOOTER */}
-                        <div className="border-t border-accent">
-                            <button className="w-full py-2.5 sm:py-3 text-sm sm:text-base text-accent hover:text-secondary transition" onClick={() => { setEditPrivateisOpen(false); setError(""); closEverything() }}>
+                        <div className="border-t border-white/50">
+                            <button className="w-full py-2.5 sm:py-3 text-sm sm:text-base text-white/50 hover:text-white transition" onClick={() => { setEditPrivateisOpen(false); setError(""); closEverything() }}>
                                 Cancel
                             </button>
                         </div>

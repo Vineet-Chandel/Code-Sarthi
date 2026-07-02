@@ -981,7 +981,13 @@ const Signup = () => {
                     </div>
 
                     <span className="text-center text-black text-sm md:text-base lg:text-xl xl:text-2xl ">
-                      CodeSarthi welcomes you
+
+                      <div className="flex items-end gap-1">
+                        <span className="w-2 h-2 rounded-full bg-black/70 animate-bounce [animation-delay:0ms]" />
+                        <span className="w-2 h-2 rounded-full bg-black/70 animate-bounce [animation-delay:200ms]" />
+                        <span className="w-2 h-2 rounded-full bg-black/70 animate-bounce [animation-delay:400ms]" />
+                      </div>
+
                     </span>
 
                   </div>
@@ -1027,7 +1033,7 @@ const Signup = () => {
 
 
 
-                    <img className="w-32 h-32 sm:w-40 sm:h-40 lg:w-52 lg:h-52 text-white" src="https://res.cloudinary.com/dggoaxqxl/image/upload/v1779801993/Untitled_design_3_-Photoroom_hkidic.webp" alt="" />
+                    <img className="w-40 h-40 sm:w-50 sm:h-50 lg:w-60 lg:h-60 text-white" src="https://res.cloudinary.com/dggoaxqxl/image/upload/v1779801993/Untitled_design_3_-Photoroom_hkidic.webp" alt="" />
                   </div>
 
                   {/* Content */}

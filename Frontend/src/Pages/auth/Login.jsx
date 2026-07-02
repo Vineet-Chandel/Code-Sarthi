@@ -404,7 +404,11 @@ const Login = () => {
                                         </div>
 
                                         <span className="text-center text-sm md:text-base lg:text-xl xl:text-2xl text-black ">
-                                            CodeSarthi welcomes you
+                                            <div className="flex items-end gap-1">
+                                                <span className="w-2 h-2 rounded-full bg-black/70 animate-bounce [animation-delay:0ms]" />
+                                                <span className="w-2 h-2 rounded-full bg-black/70 animate-bounce [animation-delay:200ms]" />
+                                                <span className="w-2 h-2 rounded-full bg-black/70 animate-bounce [animation-delay:400ms]" />
+                                            </div>
                                         </span>
 
                                     </div>

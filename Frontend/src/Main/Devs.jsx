@@ -66,16 +66,8 @@ tracking-tight  justify-start'>
 relative
 overflow-hidden
 rounded-3xl
-border
-border-white/5
-
-backdrop-blur-xl
-shadow-2xl
 sm:p-5
-px-1
 w-full
-
-
 "
             >
 
