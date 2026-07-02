@@ -163,27 +163,48 @@ mt-10
                 <p className='text-md mt-3 text-gray-300 text-center w-full '  >Here's what some of our users have to say about CodeSarthi</p>
 
             </div>
+            <div className="relative">
+                {/* Left */}
+                <div className="pointer-events-none absolute left-0 top-0 h-full w-[300px] bg-gradient-to-r from-black to-transparent z-30" />
 
-            <section className="py-20 w-full overflow-hidden font-poppins flex flex-col gap-5">
-                <ParallaxText baseVelocity={-1} isHovered={isHovered}>
-                    {testimonials.map((item, index) => (
-                        <ReviewCard
-                            key={index}
-                            item={item}
-                            onHover={setIsHovered}
-                        />
-                    ))}
-                </ParallaxText>
-                <ParallaxText baseVelocity={1} isHovered={isHovered}>
-                    {testimonials.map((item, index) => (
-                        <ReviewCard
-                            key={index}
-                            item={item}
-                            onHover={setIsHovered}
-                        />
-                    ))}
-                </ParallaxText>
-            </section>
+                {/* Right */}
+                <div className="pointer-events-none absolute right-0 top-0 h-full w-[300px] bg-gradient-to-l from-black to-transparent z-30" />
+                <section className="py-20 w-full overflow-hidden font-poppins flex flex-col gap-5">
+
+
+                    <ParallaxText baseVelocity={-1} isHovered={isHovered}>
+
+
+                        {testimonials.map((item, index) => (
+                            <ReviewCard
+                                key={index}
+                                item={item}
+                                onHover={setIsHovered}
+                            />
+                        ))}
+                    </ParallaxText>
+                    <ParallaxText baseVelocity={1} isHovered={isHovered}>
+                        {testimonials.map((item, index) => (
+                            <ReviewCard
+                                key={index}
+                                item={item}
+                                onHover={setIsHovered}
+                            />
+                        ))}
+                    </ParallaxText>
+                    <ParallaxText baseVelocity={-1} isHovered={isHovered}>
+                        {testimonials.map((item, index) => (
+                            <ReviewCard
+                                key={index}
+                                item={item}
+                                onHover={setIsHovered}
+                            />
+                        ))}
+                    </ParallaxText>
+                </section>
+
+            </div>
+
         </div>
     );
 }

@@ -88,6 +88,7 @@ import InterViewArena from "./Pages/INTERVIEW-ARENA/InterviewArena";
 
 import MockInterview from "./Main/PagesMain/Sub-Category/Developers-Category/MOCK-INTERVIEWS/MockInterview";
 import ResumeBuilder from "./Main/PagesMain/Sub-Category/Developers-Category/RESUME-BUILDER/ResumeBuilder";
+import SessionHero from "./Main/SessionHero";
 
 
 const App = () => {
@@ -110,6 +111,7 @@ const App = () => {
           <Route path="/blogs" element={<Blogs />} />
           <Route path="/support" element={<Support />} />
           <Route path="/help-center" element={<HelpCenter />} />
+          <Route path="/book-session" element={<SessionHero />} />
 
           {/*  <Route path="/feedback" element={<Feedback />} />
            this lines means connect the route "/feedback" to the "Feedback component"
