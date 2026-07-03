@@ -34,7 +34,7 @@ const ClipTab = () => {
                 scale: 1
             }}
             transition={{ duration: 0.3 }}
-            className="absolute bottom-[70px] right-[980px] z-50 p-2 w-[170px] rounded-3xl bg-white/20 backdrop-blur-xl border border-white/20 shadow-xl overflow-hidden">
+            className="absolute bottom-[70px] right-[980px] z-50 p-2 w-[170px] rounded-3xl bg-black backdrop-blur-xl border border-white/20 shadow-xl overflow-hidden">
             {buttons.map((item, idx) => (
                 <button
                     key={idx}

@@ -1,10 +1,15 @@
 import { motion } from "framer-motion";
-import React from "react";
+import React, { useState } from "react";
 
 
 
 
 const MsgClickedTab = ({ msg }) => {
+
+    const [isCopied, setIsCopied] = useState({
+        isCopied: false,
+        idx: null
+    })
     const buttons = [
         {
             title: "Reply",
@@ -14,18 +19,20 @@ const MsgClickedTab = ({ msg }) => {
         },
         {
             title: "Copy Text",
-            icon: (
-                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                    <g fill="none" stroke="#fff" strokeWidth={1.5}>
-                        <path d="M6 11c0-2.828 0-4.243.879-5.121C7.757 5 9.172 5 12 5h3c2.828 0 4.243 0 5.121.879C21 6.757 21 8.172 21 11v5c0 2.828 0 4.243-.879 5.121C19.243 22 17.828 22 15 22h-3c-2.828 0-4.243 0-5.121-.879C6 20.243 6 18.828 6 16z"></path>
-                        <path d="M6 19a3 3 0 0 1-3-3v-6c0-3.771 0-5.657 1.172-6.828S7.229 2 11 2h4a3 3 0 0 1 3 3"></path>
-                    </g>
-                </svg>),
+            icon: ""
+
+
         },
         {
             title: "Forward",
             icon: (<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                 <path fill="#fff" d="m16 17l-1.425-1.4l4.6-4.6l-4.6-4.6L16 5l6 6zM2 19v-4q0-2.075 1.463-3.537T7 10h6.175l-3.6-3.6L11 5l6 6l-6 6l-1.425-1.4l3.6-3.6H7q-1.25 0-2.125.875T4 15v4z"></path>
+            </svg>),
+        },
+        {
+            title: "Delete",
+            icon: (<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                <path fill="#fff" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z"></path>
             </svg>),
         },
         {
@@ -37,8 +44,14 @@ const MsgClickedTab = ({ msg }) => {
         },
     ];
 
-    const handleCopy = async (text) => {
+
+
+    const handleCopy = async (text, idx) => {
         try {
+            setIsCopied({
+                isCopied: true,
+                idx: idx
+            });
             await navigator.clipboard.writeText(text);
 
         } catch (err) {
@@ -55,7 +68,7 @@ const MsgClickedTab = ({ msg }) => {
                 scale: 1
             }}
             transition={{ duration: 0.3 }}
-            className=" z-50 p-2 w-[170px] rounded-3xl bg-gray-500 backdrop-blur-xl border border-white/20 shadow-xl overflow-hidden">
+            className=" z-50 p-2 w-[170px] rounded-3xl bg-black backdrop-blur-xl border border-white/20 shadow-xl overflow-hidden">
             {buttons.map((item, idx) => (
 
                 <>
@@ -63,13 +76,39 @@ const MsgClickedTab = ({ msg }) => {
                         key={idx}
 
                         onClick={() => {
-                            if (item.idx === 1) {
-                                handleCopy(msg);
+                            if (idx === 1) {
+                                handleCopy(msg, idx);
+                                console.log("clicked");
+
+                                setInterval(() => {
+                                    setIsCopied({
+                                        isCopied: false,
+                                        idx: null
+                                    })
+                                }, 5000);
                             }
                         }}
-                        className="flex items-center gap-2 w-full rounded-3xl px-3 py-2 text-white hover:bg-white/20 transition-all duration-200  "
+                        className="relative z-30 flex items-center gap-2 w-full rounded-3xl px-3 py-2 text-white hover:bg-white/20 transition-all duration-200  "
                     >
-                        <span className="text-sm ">{item.icon}</span>
+                        <span className="text-sm ">
+
+
+
+                            {idx === 1 ? isCopied.isCopied ? (
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                    <path fill="#fff" d="M.41 13.41L6 19l1.41-1.42L1.83 12m20.41-6.42L11.66 16.17L7.5 12l-1.43 1.41L11.66 19l12-12M18 7l-1.41-1.42l-6.35 6.35l1.42 1.41z"></path>
+                                </svg>
+                            ) : (
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                    <g fill="none" stroke="#fff" strokeWidth={1.5}>
+                                        <path d="M6 11c0-2.828 0-4.243.879-5.121C7.757 5 9.172 5 12 5h3c2.828 0 4.243 0 5.121.879C21 6.757 21 8.172 21 11v5c0 2.828 0 4.243-.879 5.121C19.243 22 17.828 22 15 22h-3c-2.828 0-4.243 0-5.121-.879C6 20.243 6 18.828 6 16z"></path>
+                                        <path d="M6 19a3 3 0 0 1-3-3v-6c0-3.771 0-5.657 1.172-6.828S7.229 2 11 2h4a3 3 0 0 1 3 3"></path>
+                                    </g>
+                                </svg>
+                            ) : (
+                                item.icon
+                            )}
+                        </span>
                         <span className="text-sm font-medium">{item.title}</span>
                     </button>
 

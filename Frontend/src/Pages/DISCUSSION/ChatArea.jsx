@@ -198,7 +198,9 @@ const ChatArea = ({ selectedChatUser }) => {
     // Instantiate hook with custom action and time window
     const longPressEvents = useLongPress(handleLongPress, 600, setClassLongPress);
 
-    const [switcher, setSwitcher] = useState("mic")
+    const [switcher, setSwitcher] = useState("mic");
+
+
     return (
         <div className="flex h-full w-full flex-col overflow-hidden rounded-2xl  bg-transparent ">
             {clipTab &&
@@ -216,7 +218,7 @@ const ChatArea = ({ selectedChatUser }) => {
 
 
                     <div onClick={() => setEmojiTab(false)} className="absolute z-30 inset-0 w-full h-full bg-transparent" />
-                    <EmojiTab setEmojiTab={setEmojiTab} />
+                    <EmojiTab setEmojiTab={setEmojiTab} setText={setMessage} />
 
                 </>
 
@@ -256,7 +258,7 @@ const ChatArea = ({ selectedChatUser }) => {
 
 
                             placeholder="Write a message..."
-                            className="flex-1 bg-transparent outline-none"
+                            className="flex-1 text-xl bg-transparent outline-none"
                         />
                         <div className="cursor-pointer" onClick={() => setEmojiTab(true)}>
                             <Smile width={24} height={24} />
