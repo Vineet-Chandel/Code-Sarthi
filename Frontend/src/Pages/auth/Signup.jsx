@@ -498,7 +498,7 @@ const Signup = () => {
   return (
     <div data-theme="caramellatte" className="min-h-screen w-full flex items-center justify-center bg-gray-300   p-1">
       <ToastContainer toasts={toasts} removeToast={removeToast} />
-      <div className="w-full min-h-[98vh] bg-black  rounded-[40px]  flex flex-col md:flex-row gap-6 overflow-hidden border border-secondary">
+      <div className="w-full min-h-[98vh] bg-black  rounded-2xl  flex flex-col md:flex-row gap-6 overflow-hidden border border-secondary">
 
         {/* LEFT - Signup Form */}
         <div className="flex flex-col gap-8  p-6  md:p-12 w-full md:w-[50%] text-white">

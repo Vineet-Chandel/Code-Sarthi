@@ -20,9 +20,7 @@ import { useLocation } from "react-router-dom";
 
 const NavBar = ({ setSelectedChatUser2, selectedChatUser2 }) => {
     const location = useLocation();
-    useEffect(() => {
-        console.log(selectedChatUser2)
-    }, [selectedChatUser2])
+
 
 
 

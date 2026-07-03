@@ -21,7 +21,7 @@ const SearchChats = ({ loading, setLoading }) => {
 
         <div
             onClick={focusInput}
-            className="group w-full flex items-center gap-3 bg-base-100 border border-base-300 border px-1 py-1 rounded-full    transition-all duration-300 "
+            className="group w-full flex items-center gap-3  border border-base-300 border px-1 py-1 rounded-full    transition-all duration-300 "
         >
             <SearchDrawer showCreateTab={showCreateTab} setShowCreateTab={setShowCreateTab} />
             {/* LEFT ICON */}

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React from "react";
+import React, { useState } from "react";
 import {
     smileys_people,
     animals_nature,
@@ -14,6 +14,7 @@ import {
 
 const icon = [
     {
+        id: 0,
         name: "smileys_people",
         icon: (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 14 14">
             <path d="M0 0h14v14H0z" fill="none" />
@@ -22,6 +23,7 @@ const icon = [
         )
     },
     {
+        id: 1,
         name: "animals_nature",
         icon: (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
             <path fill="#fff" d="M16 9a1 1 0 1 0 0 2a1 1 0 1 0 0-2M8 9a1 1 0 1 0 0 2a1 1 0 1 0 0-2m4 1c-2.21 0-4 1.51-4 4s1.79 5 4 5s4-2.51 4-5s-1.79-4-4-4m0 4c-.83 0-1.5-.67-1.5-1.33c0-.37.67-.67 1.5-.67s1.5.3 1.5.67c0 .67-.67 1.33-1.5 1.33"></path>
@@ -31,6 +33,7 @@ const icon = [
         )
     },
     {
+        id: 2,
         name: "food_drink",
         icon: (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16">
             <path fill="#fff" d="M12.153.263a.5.5 0 0 0-.44-.263H4.288a.5.5 0 0 0-.44.263C3.294 1.295 3.001 2.5 3.001 3.75c0 1.647.506 3.2 1.424 4.374c.71.907 1.601 1.508 2.576 1.753V15h-1.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-1.5V9.877c.975-.244 1.866-.846 2.576-1.753c.918-1.174 1.424-2.727 1.424-4.374c0-1.249-.293-2.455-.847-3.487zM4.595 1h6.809a6.46 6.46 0 0 1 .59 3H4.003a6.46 6.46 0 0 1 .59-3z"></path>
@@ -38,6 +41,7 @@ const icon = [
         )
     },
     {
+        id: 3,
         name: "activity",
         icon: (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16">
             <path fill="#fff" d="m10.26 11.5l1.774 2.219A6.97 6.97 0 0 1 8 15a6.97 6.97 0 0 1-4.035-1.281L5.74 11.5zM1.314 5.964l2.284.913l1.34 4.022l-1.748 2.185A6.98 6.98 0 0 1 1 8c0-.71.106-1.395.303-2.041zm13.382-.005a7 7 0 0 1-1.887 7.125l-1.748-2.185l1.34-4.022l2.284-.913zm-3.285.725L10.14 10.5H5.86L4.588 6.684L8 4.125zM7.5 3.249L3.924 5.931l-2.238-.895l-.024-.01A7 7 0 0 1 7.5 1.02zm1-2.229a7 7 0 0 1 5.837 4.006l-.022.01l-2.24.895L8.5 3.249z"></path>
@@ -45,6 +49,7 @@ const icon = [
         )
     },
     {
+        id: 4,
         name: "travel_places",
         icon: (<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fillRule="evenodd" clipRule="evenodd" d="M12.398 17.804C13.881 17.0348 19 14.0163 19 9C19 5.13401 15.866 2 12 2C8.13401 2 5 5.13401 5 9C5 14.0163 10.119 17.0348 11.602 17.804C11.8548 17.9351 12.1452 17.9351 12.398 17.804ZM12 12C13.6569 12 15 10.6569 15 9C15 7.34315 13.6569 6 12 6C10.3431 6 9 7.34315 9 9C9 10.6569 10.3431 12 12 12Z" fill="#fff" fill-opacity="0.25" />
@@ -55,6 +60,7 @@ const icon = [
         )
     },
     {
+        id: 5,
         name: "objects",
         icon: (<svg width="27" height="27" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fillRule="evenodd" clipRule="evenodd" d="M9.67505 19.3393L6.67505 17.1964C5.8539 16.6099 5.44333 16.3167 5.22166 15.8859C5 15.4552 5 14.9506 5 13.9415V10.0585C5 9.73711 5 9.46693 5.00716 9.234L11 13.5146V20.2313C10.6433 20.0309 10.227 19.7335 9.67505 19.3393ZM13 20.2313C13.3567 20.0309 13.773 19.7335 14.325 19.3393L17.325 17.1964C18.1461 16.6099 18.5567 16.3167 18.7783 15.8859C19 15.4552 19 14.9506 19 13.9415V10.0585C19 9.73711 19 9.46693 18.9928 9.234L13 13.5146V20.2313ZM18.1276 7.39426L12 11.7711L5.87244 7.39426C6.08372 7.2259 6.34653 7.03818 6.67505 6.80352L9.67505 4.66067C10.7977 3.85875 11.3591 3.45779 12 3.45779C12.6409 3.45779 13.2023 3.85875 14.325 4.66067L17.325 6.80352C17.6535 7.03818 17.9163 7.2259 18.1276 7.39426Z" fill="#fff" />
@@ -63,6 +69,7 @@ const icon = [
         )
     },
     {
+        id: 6,
         name: "symbols",
         icon: (<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 3V5" stroke="#fff" stroke-width="2" stroke-linecap="round" />
@@ -75,6 +82,7 @@ const icon = [
         )
     },
     {
+        id: 7,
         name: "flags",
         icon: (
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -89,7 +97,44 @@ const icon = [
 
 const EmojiTab = () => {
 
+    const [emojiFeild, setEmojiFeild] = useState({
 
+        set: smileys_people,
+        index: 0,
+
+    })
+    const handleClick = (index) => {
+        switch (index) {
+            case 0:
+
+                setEmojiFeild({ set: smileys_people, index: 0 });
+                console.log(emojiFeild)
+                break;
+            case 1:
+                setEmojiFeild({ set: animals_nature, index: 1 });
+                break;
+            case 2:
+                setEmojiFeild({ set: food_drink, index: 2 });
+                break;
+            case 3:
+                setEmojiFeild({ set: activity, index: 3 });
+                break;
+            case 4:
+                setEmojiFeild({ set: travel_places, index: 4 });
+                break;
+            case 5:
+                setEmojiFeild({ set: objects, index: 5 });
+                break;
+            case 6:
+                setEmojiFeild({ set: symbols, index: 6 });
+                break;
+            case 7:
+                setEmojiFeild({ set: flags, index: 7 });
+                break;
+            default:
+                break;
+        }
+    }
     return (
         <motion.div
 
@@ -100,19 +145,32 @@ const EmojiTab = () => {
                 scale: 1
             }}
             transition={{ duration: 0.3 }}
-            className="absolute bottom-[70px] right-[60px] z-50 p-2 w-[470px] rounded-3xl bg-black/80 backdrop-blur-xl border border-white/15 shadow-xl overflow-hidden">
+            className="absolute bottom-[70px] right-[60px] z-30 p-2 w-[470px] rounded-3xl bg-black/80 backdrop-blur-xl border border-white/15 shadow-xl overflow-hidden">
 
 
-            <div className=' flex justify-around pt-2'>
+            <div className=' flex justify-around pt-2 mb-5'>
                 {icon.map((icon, index) => (
-                    <span key={index}>{icon.icon}</span>
+                    <div key={index} className="relative flex gap-2 items-center justify-center flex-col">
+                        <span className="cursor-pointer" onClick={() => handleClick(index)} >{icon.icon}</span>
+                        {
+                            emojiFeild.index === index &&
+                            <div className=" h-[2px] absolute bottom-[-10px] w-[35px] bg-white border" />
+                        }
+
+                    </div>
                 ))}
+
+
+
             </div>
 
 
-            <div className="grid grid-cols-8 h-[400px] flex items-center justify-center gap-3 mt-5 overflow-y-scroll">{smileys_people.map((emoji, index) => (
-                <span className="w-full flex items-center justify-center scale-[1.9] hover:scale-[3.0] hover:rotate-12 transition-all duration-300 cursor-pointer">{emoji}</span>
-            ))}</div>
+            <div className="grid grid-cols-8 h-[400px] flex items-center justify-center gap-3 pt-3 overflow-y-scroll relative z-30">
+
+                {emojiFeild.set.map((emoji, index) => (
+                    <span className="w-full flex items-center justify-center text-3xl hover:scale-150 hover:rotate-12 transition-all duration-300 p-0.5 cursor-pointer">{emoji}</span>
+                ))}
+            </div>
         </motion.div>
     );
 };

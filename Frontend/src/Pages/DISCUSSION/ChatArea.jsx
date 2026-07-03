@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
 
     MoreVertical,
@@ -191,6 +191,10 @@ const ChatArea = ({ selectedChatUser }) => {
 
     };
 
+    useEffect(() => {
+        console.log(emojiTab)
+    }, [emojiTab])
+
     // Instantiate hook with custom action and time window
     const longPressEvents = useLongPress(handleLongPress, 600, setClassLongPress);
 
@@ -208,11 +212,13 @@ const ChatArea = ({ selectedChatUser }) => {
 
 
             {emojiTab &&
+                <>
 
-                <div onClick={() => setEmojiTab(false)} className="absolute z-30 inset-0 w-full h-full bg-transparent">
-                    <EmojiTab />
-                </div>
 
+                    <div onClick={() => setEmojiTab(false)} className="absolute z-30 inset-0 w-full h-full bg-transparent" />
+                    <EmojiTab setEmojiTab={setEmojiTab} />
+
+                </>
 
             }
 
@@ -252,7 +258,7 @@ const ChatArea = ({ selectedChatUser }) => {
                             placeholder="Write a message..."
                             className="flex-1 bg-transparent outline-none"
                         />
-                        <div className="cursor-pointer" onClick={() => setEmojiTab((prev) => !prev)}>
+                        <div className="cursor-pointer" onClick={() => setEmojiTab(true)}>
                             <Smile width={24} height={24} />
                         </div>
 

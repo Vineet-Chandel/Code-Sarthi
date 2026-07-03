@@ -193,15 +193,7 @@ const Discussions = () => {
     const [msg, setMsg] = useState("");
     const [msgById, setMsgById] = useState("");
 
-    // function to copy the text on the clipboard
-    const handleCopy = async (text) => {
-        try {
-            await navigator.clipboard.writeText(text);
 
-        } catch (err) {
-            console.error("Failed to copy", err);
-        }
-    };
 
     //message deleting segment!
     const [deleteEveryoneStatus, setDeleteEveryoneStatus] = useState("toDelete");

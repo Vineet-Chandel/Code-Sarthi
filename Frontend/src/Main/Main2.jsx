@@ -87,25 +87,10 @@ bg-[size:40px_40px]
 
                 <div className="relative flex justify-center mt-1 sm:mt-1 md:mt-1 lg:mt-1 xl:mt-2 [perspective:1200px] lg:[perspective:1800px]">
 
-                    {/* Glow */}
-                    <div
-                        className="
-            absolute
-            bottom-0
-            left-1/2
-            -translate-x-1/2
-            w-3/4
-            h-16
-            sm:h-24
-            md:h-32
-            bg-white/20
-            blur-[60px]
-            md:blur-[100px]
-            rounded-full
-        "
-                    />
+
 
                     {/* Dashboard */}
+                    <div className="absolute inset-0 z-20 bg-gradient-to-t from-white/50 dark:from-black via-transparent to-transparent"></div>
                     <div
                         className={`
             relative
@@ -145,7 +130,10 @@ bg-[size:40px_40px]
         
         `}
                     >
+
                         <div className="overflow-hidden rounded-xl sm:rounded-2xl lg:rounded-[28px]">
+
+
                             <img
                                 src="https://res.cloudinary.com/dj0ivep44/image/upload/v1781375977/Screenshot_2026-06-13_at_11.29.26_PM_iintuq.webp"
                                 className="w-full block"

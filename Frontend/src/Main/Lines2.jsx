@@ -165,10 +165,10 @@ mt-10
             </div>
             <div className="relative">
                 {/* Left */}
-                <div className="pointer-events-none absolute left-0 top-0 h-full w-[300px] bg-gradient-to-r from-black to-transparent z-30" />
+                <div className="pointer-events-none absolute left-0 top-0 h-full w-[200px] sm:w-[300px] bg-gradient-to-r from-black to-transparent z-30" />
 
                 {/* Right */}
-                <div className="pointer-events-none absolute right-0 top-0 h-full w-[300px] bg-gradient-to-l from-black to-transparent z-30" />
+                <div className="pointer-events-none absolute right-0 top-0 h-full w-[200px] sm:w-[300px] bg-gradient-to-l from-black to-transparent z-30" />
                 <section className="py-20 w-full overflow-hidden font-poppins flex flex-col gap-5">
 
 

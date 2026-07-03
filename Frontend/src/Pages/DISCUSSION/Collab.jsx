@@ -17,12 +17,21 @@ const Collab = () => {
     <div className='h-[calc(100vh-63px)] w-screen bg-base-200 flex gap-1 justify-center items-center p-1 '>
 
       <div className=' h-full w-[30vw] bg-black rounded-2xl p-2'>
-        <div>
 
+        <div className='h-[53px] '>
           <SearchChats loading={loading} setLoading={setLoading} />
         </div>
 
-        <AllChats loading={loading} setLoading={setLoading} selectedChatUser={selectedChatUser} setSelectedChatUser={setSelectedChatUser} />
+
+
+        <div className='h-[calc(100%-53px)]'>
+          <AllChats loading={loading} setLoading={setLoading} selectedChatUser={selectedChatUser} setSelectedChatUser={setSelectedChatUser} />
+        </div>
+
+
+
+
+
 
       </div>
       <div className=' h-full w-[70vw] bg-black rounded-2xl  bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.1)_1px,transparent_1px)]
