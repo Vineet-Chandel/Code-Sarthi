@@ -1,17 +1,47 @@
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SearchChats from './SearchChats'
 import SearchDrawer from './SearchDrawer'
 import AllChats from './AllChats'
 import ChatArea from './ChatArea'
+import axios from 'axios'
+import BASE_URL from '../auth/baseURL'
+import { useDispatch, useSelector } from 'react-redux';
+import { addMessage, setConversationMessages } from "../../utils/messageSlice"
 
 const Collab = () => {
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [selectedChatUser, setSelectedChatUser] = useState({
     idx: null,
-    info: null
-
+    info: null,
+    convoId: null
   });
+
+
+
+  const messages = async (id) => {
+    try {
+      const res = await axios.post(`${BASE_URL}/get-message/${id}`, {}, {
+        withCredentials: true
+      });
+
+      dispatch(setConversationMessages(res.data))
+      console.log(res.data)
+
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  useEffect(() => {
+
+    if (selectedChatUser?.info?._id) {
+      messages(selectedChatUser?.convoId)
+      console.log(selectedChatUser?.convoId)
+    }
+
+  }, [selectedChatUser])
 
   return (
     <div className='h-[calc(100vh-63px)] w-screen bg-base-200 flex gap-1 justify-center items-center p-1 '>

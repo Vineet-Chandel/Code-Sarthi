@@ -2,7 +2,8 @@ import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react'
 import MsgClickedTab from './MsgClickedTab';
 import { useRef } from "react";
-
+import axios from 'axios';
+import BASE_URL from '../auth/baseURL';
 
 const dummyConversation = [
     { sender: "user1", text: "Hey! 👋 Ready to start building the new feature?" },
@@ -260,6 +261,9 @@ const dummyConversation = [
     }
 ];
 
+
+
+
 const MessageArea = () => {
 
     const [readMore, setReadMore] = useState({
@@ -295,6 +299,8 @@ const MessageArea = () => {
         };
 
     }, []);
+
+
 
 
     return (

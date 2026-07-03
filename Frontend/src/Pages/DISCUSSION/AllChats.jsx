@@ -76,7 +76,7 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
     }, [dispatch]);
 
 
-    const [trueConnection, setTrueConnection] = useState([])
+
 
 
 
@@ -98,7 +98,9 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
     ];
 
 
-
+    useEffect(() => {
+        console.log(chatsARR)
+    }, [chatsARR])
 
     return (
         <div className='bg-transparent h-full w-full '>
@@ -118,6 +120,7 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                             setSelectedChatUser({
                                                 id: null,
                                                 info: null,
+                                                convoId: null
                                             });
 
                                             setSelectedChatUser2(prev => ({
@@ -131,12 +134,14 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                         setSelectedChatUser({
                                             id: user._id,
                                             info: user,
+                                            convoId: chatUser._id
                                         });
 
                                         setSelectedChatUser2(prev => ({
 
                                             id: user._id,
                                             info: user,
+                                            convoId: chatUser._id
                                         }));
                                     }}
                                     className={`${selectedChatUser?.id === user._id ? "bg-white" : "bg-white/20"} group text-white h-13 w-full  cursor-pointer  rounded-2xl my-2 flex items-center gap-2 p-1.5`}>
@@ -260,12 +265,14 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                         setSelectedChatUser({
                                             id: user._id,
                                             info: user,
+                                            convoId: chatUser._id
                                         });
 
                                         setSelectedChatUser2(prev => ({
 
                                             id: user._id,
                                             info: user,
+
                                         }));
                                     }}
                                     className={`${selectedChatUser?.id === user._id ? "bg-white" : "bg-white/20"} group text-white h-13 w-full  cursor-pointer  rounded-2xl my-2 flex items-center gap-2 p-1.5`}>

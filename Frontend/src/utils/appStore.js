@@ -10,6 +10,7 @@ import RequestedUser from "./requestedUserSlice";
 import ReceivedRequests from "./receivedConnection";
 import chatsReducer from "./chat-user-slice";
 import resReducer from "./resStore";
+import messageReducer from "./messageSlice"
 
 const appStore = configureStore({
     reducer: {
@@ -21,6 +22,7 @@ const appStore = configureStore({
         receivedConnection: ReceivedRequests,
         chats: chatsReducer,
         res: resReducer,
+        messages: messageReducer
     }
 });
 

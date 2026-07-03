@@ -1,4 +1,4 @@
-const conversation = require("../models/conversation");
+const Conversation = require("../models/conversation");
 const message = require("../models/message");
 const upload = require("../middlewares/multerConvoImgVideo");
 const uploadToCloud = require("./convoImgVideo");
@@ -16,7 +16,7 @@ chatRouter.get("/chats", userAuth, async (req, res) => {
         const userId = req.user._id;
 
         // all the chats of the user
-        const chats = await conversation.find({
+        const chats = await Conversation.find({
             members: userId
         }).sort({ updatedAt: -1 }).populate([
             { path: "members", select: "firstName lastName gmail username profession photoUrl  college about middleName skills isVerified" },
@@ -78,22 +78,26 @@ chatRouter.post("/send-message", userAuth, async (req, res) => {
 
         let convoContainer = null;
 
-
         if (!convId) {
 
-            const existConvo = await conversation.findOne({
+            const existConvo = await Conversation.findOne({
                 members: {
-                    $all: members
+                    $all: members,
+                    $size: members.length
                 },
                 type
             }).session(session)
+            if (existConvo) {
+                convoContainer = existConvo;
+            }
 
-            convoContainer = await conversation.findById(existConvo._id).session(session)
         }
 
         if (convId) {
-            convoContainer = await conversation.findById(convId).session(session)
+
+            convoContainer = await Conversation.findById(convId).session(session)
         }
+
 
         if (!convoContainer) {
             if (!members || !type) {
@@ -106,17 +110,14 @@ chatRouter.post("/send-message", userAuth, async (req, res) => {
                 })
 
             }
-            const uniqueMembers = [...new Set([
-                ...members.map(String),
-                userId.toString()
-            ])];
-            convoContainer = new conversation({
-                members: uniqueMembers,
+
+            convoContainer = new Conversation({
+                members: members,
                 type: type,
                 createdBy: userId,
                 name: name,
-                admin: [userId],
-                unreadCounts: uniqueMembers.map(member => ({
+                admins: [userId],
+                unreadCounts: members.map(member => ({
                     user: member,
                     count: member.toString() === userId.toString() ? 0 : 1
                 }))
@@ -126,9 +127,20 @@ chatRouter.post("/send-message", userAuth, async (req, res) => {
 
         }
 
-        const isMember = convoContainer.members.some(member =>
-            member.equals(userId)
-        );
+        let isMember = false;
+
+
+        convoContainer.members.forEach(member => {
+
+
+            if (member.toString() === userId.toString()) {
+                isMember = true;
+            }
+
+        });
+
+
+
 
         if (!isMember) {
             await session.abortTransaction();
@@ -136,9 +148,49 @@ chatRouter.post("/send-message", userAuth, async (req, res) => {
 
             return res.status(403).json({
                 success: false,
-                message: "Invalid Attempt 2"
+                message: "Unauthorised Access"
             });
         }
+
+        const uniqueMember = convoContainer.members.filter((member) => member.toString() !== userId.toString());
+        let isMemberItself = false;
+
+        uniqueMember.forEach(member => {
+
+
+            if (member.toString() === userId.toString()) {
+                isMemberItself = true;
+            }
+
+        });
+
+
+
+        if (isMemberItself) {
+            await session.abortTransaction();
+            await session.endSession();
+
+            return res.status(403).json({
+                success: false,
+                message: "Unauthorised Access"
+            });
+        }
+
+        for (const member of convoContainer.members) {
+            const valid = await User.findById(member).session(session);
+
+            if (!valid) {
+                await session.abortTransaction();
+
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid Member"
+                });
+            }
+        }
+
+
+
 
 
         const messageStored = new message({
@@ -190,13 +242,20 @@ chatRouter.post("/send-message", userAuth, async (req, res) => {
 
 
     } catch (err) {
-        if (session) {
+        console.error(err);
+
+
+        if (session?.inTransaction()) {
             await session.abortTransaction();
+        }
+
+        if (session) {
             await session.endSession();
         }
+
         return res.status(400).json({
             success: false,
-            message: "Message failed to sent",
+            message: "Message failed to send",
             error: err.message
         });
     }
@@ -205,61 +264,78 @@ chatRouter.post("/send-message", userAuth, async (req, res) => {
 
 
 // //Load chat messages
-// chatRouter.post("/get-message/:conversationId", userAuth, async (req, res) => {
-//     const { conversationId } = req.params;
-//     const userId = req.user._id;
+chatRouter.post("/get-message/:conversationId", userAuth, async (req, res) => {
+    const { conversationId } = req.params;
+    const userId = req.user._id;
 
-//     try {
-//         let conversation = await Convo.findById(conversationId);
+    try {
 
-//         if (!conversation) {
-//             return res.status(404).json({
-//                 success: false,
-//                 message: "Convo not found"
-//             });
-//         }
 
-//         if (!conversation.Participants.some(
-//             p => p.toString() === userId.toString()
-//         )) {
-//             return res.status(403).json({
-//                 success: false,
-//                 message: "Not Authorized"
-//             });
-//         }
+        if (
+            !conversationId ||
+            conversationId.includes("<") ||
+            conversationId.includes(">") ||
+            conversationId.includes("@")
+        ) {
+            return res.status(403).json({
+                success: false,
+                message: "Not Valid Id"
+            });
+        }
 
-//         // ✅ FIXED
-//         const messages = await Msg.find({ conversationId: conversationId })
-//             .populate("sender", "username photoUrl")
-//             .populate("receiver", "username photoUrl")
-//             .sort({ createdAt: 1 });
+        let conversation = await Conversation.findById(conversationId);
+        if (!conversation) {
+            return res.status(404).json({
+                success: false,
+                message: "Convo not found"
+            });
+        }
 
-//         // ✅ FIXED
-//         await Msg.updateMany(
-//             {
-//                 conversationId: conversationId,
-//                 receiver: userId,
-//                 messageStatus: { $in: ["sent", "delivered"] }
-//             },
-//             { $set: { messageStatus: "read" } }
-//         );
+        if (!conversation.members.some(
+            p => p.toString() === userId.toString()
+        )) {
+            return res.status(403).json({
+                success: false,
+                message: "Not Authorized"
+            });
+        }
 
-//         conversation.unReadCount = 0;
-//         await conversation.save();
+        // ✅ FIXED
+        const messages = await message.find({ conversation_id: conversationId })
+            .populate("sender_id", "username photoUrl")
+            .sort({ createdAt: 1 });
 
-//         res.status(200).json({
-//             success: true,
-//             message: "Messages Retrieved",
-//             messages
-//         });
+        // ✅ FIXED
+        await message.updateMany(
+            {
+                conversation_id: conversationId,
+                receiver: userId,
+                status: { $in: ["sent", "delivered"] }
+            },
+            { $set: { status: "read" } }
+        );
 
-//     } catch (error) {
-//         res.status(500).json({
-//             success: false,
-//             message: error.message,
-//         });
-//     }
-// });
+        conversation.unreadCounts.forEach((p) => {
+            if (p.user.toString() === userId.toString()) {
+                p.count = 0;
+            }
+        });
+        await conversation.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Messages Retrieved",
+            conversation_id: conversationId,
+            messages
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+});
 
 
 
