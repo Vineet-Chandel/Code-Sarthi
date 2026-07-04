@@ -10,7 +10,7 @@ import { BsPersonWorkspace } from 'react-icons/bs';
 import { IoBarChart } from 'react-icons/io5';
 import { setChatUsers } from '@/utils/chat-user-slice';
 
-const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, }) => {
+const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, addToast }) => {
     const {
         selectedChatUser2,
         setSelectedChatUser2,
@@ -31,7 +31,14 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
 
 
         } catch (err) {
-            console.error(err?.message || err);
+            addToast({
+                type: "error",
+                title: "Error",
+                message:
+                    err?.response?.data?.message ||
+                    err?.message ||
+                    "Something went wrong"
+            });
         } finally {
             setLoading(false);
         }
@@ -47,7 +54,14 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
 
             dispatch(setChatUsers(response.data));
         } catch (err) {
-            console.error(err?.message || err);
+            addToast({
+                type: "error",
+                title: "Error",
+                message:
+                    err?.response?.data?.message ||
+                    err?.message ||
+                    "Something went wrong"
+            });
         } finally {
             setLoading(false);
         }
@@ -98,9 +112,7 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
     ];
 
 
-    useEffect(() => {
-        console.log(chatsARR)
-    }, [chatsARR])
+
 
     return (
         <div className='bg-transparent h-full w-full '>
@@ -120,13 +132,15 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                             setSelectedChatUser({
                                                 id: null,
                                                 info: null,
-                                                convoId: null
+                                                convoId: null,
+                                                fullChatInfo: null
                                             });
 
                                             setSelectedChatUser2(prev => ({
-
                                                 id: null,
                                                 info: null,
+                                                convoId: null,
+                                                fullChatInfo: null
                                             }));
                                             return;
                                         }
@@ -134,14 +148,16 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                         setSelectedChatUser({
                                             id: user._id,
                                             info: user,
-                                            convoId: chatUser._id
+                                            convoId: chatUser._id,
+                                            fullChatInfo: chatUser
                                         });
 
                                         setSelectedChatUser2(prev => ({
 
                                             id: user._id,
                                             info: user,
-                                            convoId: chatUser._id
+                                            convoId: chatUser._id,
+                                            fullChatInfo: chatUser
                                         }));
                                     }}
                                     className={`${selectedChatUser?.id === user._id ? "bg-white" : "bg-white/20"} group text-white h-13 w-full  cursor-pointer  rounded-2xl my-2 flex items-center gap-2 p-1.5`}>
@@ -252,12 +268,15 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                             setSelectedChatUser({
                                                 id: null,
                                                 info: null,
+                                                convoId: null,
+                                                fullChatInfo: null
                                             });
 
                                             setSelectedChatUser2(prev => ({
-
                                                 id: null,
                                                 info: null,
+                                                convoId: null,
+                                                fullChatInfo: null
                                             }));
                                             return;
                                         }
@@ -265,14 +284,17 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                         setSelectedChatUser({
                                             id: user._id,
                                             info: user,
-                                            convoId: chatUser._id
+                                            convoId: chatUser._id,
+                                            fullChatInfo: chatUser
+
                                         });
 
                                         setSelectedChatUser2(prev => ({
 
                                             id: user._id,
                                             info: user,
-
+                                            convoId: chatUser._id,
+                                            fullChatInfo: chatUser
                                         }));
                                     }}
                                     className={`${selectedChatUser?.id === user._id ? "bg-white" : "bg-white/20"} group text-white h-13 w-full  cursor-pointer  rounded-2xl my-2 flex items-center gap-2 p-1.5`}>

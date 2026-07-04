@@ -10,6 +10,8 @@ import {
 import ClipTab from "./ClipTab";
 import MessageArea from "./MessageArea";
 import EmojiTab from "./EmojiTab";
+import axios from "axios";
+import BASE_URL from "../auth/baseURL";
 
 
 function ThreeDotTab() {
@@ -173,33 +175,68 @@ const useLongPress = (callback, ms = 500, setClassLongPress) => {
 
 
 
-const ChatArea = ({ selectedChatUser }) => {
+const ChatArea = ({ selectedChatUser, setSelectedChatUser }) => {
 
     const [clipTab, setClipTab] = useState(false)
     const [emojiTab, setEmojiTab] = useState(false)
     const [classLongPress, setClassLongPress] = useState("");
     const [message, setMessage] = useState("")
+
     const handleLongPress = () => {
         if (switcher === "mic") {
             setClassLongPress("bg-red-500");
-            console.log("mic", switcher)
+
         }
         if (switcher === "vnote") {
             setClassLongPress("bg-blue-500");
-            console.log("vnote", switcher)
+
         }
 
     };
 
-    useEffect(() => {
-        console.log(emojiTab)
-    }, [emojiTab])
+
 
     // Instantiate hook with custom action and time window
     const longPressEvents = useLongPress(handleLongPress, 600, setClassLongPress);
 
     const [switcher, setSwitcher] = useState("mic");
 
+
+    const handelSend = async (selectedChatUser, message, messageType) => {
+
+        try {
+            let payload = {}
+            if (selectedChatUser.convoId) {
+                payload = {
+                    messageType: messageType,
+                    type: selectedChatUser.fullChatInfo.type,
+                    conversationId: selectedChatUser.convoId,
+                    content: message
+                }
+            } else {
+                payload = {
+                    messageType: messageType,
+                    type: selectedChatUser.fullChatInfo.type,
+                    members: selectedChatUser.members,
+                    content: message
+                }
+            }
+
+            const res = await axios.post(`${BASE_URL}/send-message`, payload, {
+                withCredentials: true
+            })
+            setMessage("")
+        } catch (err) {
+            addToast({
+                type: "error",
+                title: "Error",
+                message:
+                    err?.response?.data?.message ||
+                    err?.message ||
+                    "Something went wrong"
+            });
+        }
+    }
 
     return (
         <div className="flex h-full w-full flex-col overflow-hidden rounded-2xl  bg-transparent ">
@@ -227,7 +264,7 @@ const ChatArea = ({ selectedChatUser }) => {
             {/* Messages */}
 
             <div className="flex-1 overflow-y-auto  overflow-y-scroll  px-4">
-                <MessageArea />
+                <MessageArea setSelectedChatUser={setSelectedChatUser} selectedChatUser={selectedChatUser} />
 
             </div>
 
@@ -275,7 +312,7 @@ const ChatArea = ({ selectedChatUser }) => {
 
 
 
-                {message ? <div className=" p-2.5 rounded-full cursor-pointer bg-white/20 hover:bg-white text-white hover:text-black transition-colors duration-200 ">
+                {message ? <div onClick={(e) => handelSend(selectedChatUser, message, "text")} className=" p-2.5 rounded-full cursor-pointer bg-white/20 hover:bg-white text-white hover:text-black transition-colors duration-200 ">
                     <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
                         <path fill="currentColor" d="M21.864 3.549L15.41 21.417a1.55 1.55 0 0 1-1.41.903a1.54 1.54 0 0 1-1.394-.874l-2.88-5.759zM20.45 2.135L8.311 14.273l-5.728-2.864A1.55 1.55 0 0 1 1.68 10c0-.606.353-1.157.981-1.44z"></path>
                     </svg>

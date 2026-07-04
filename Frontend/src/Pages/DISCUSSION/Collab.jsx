@@ -8,8 +8,12 @@ import axios from 'axios'
 import BASE_URL from '../auth/baseURL'
 import { useDispatch, useSelector } from 'react-redux';
 import { addMessage, setConversationMessages } from "../../utils/messageSlice"
+import Toast from '../CARRER-PROFILE-CREATION/2/Toast'
+import { motion, AnimatePresence } from 'framer-motion'
 
 const Collab = () => {
+
+  const allMessages = useSelector(state => state.messages)
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [selectedChatUser, setSelectedChatUser] = useState({
@@ -27,25 +31,68 @@ const Collab = () => {
       });
 
       dispatch(setConversationMessages(res.data))
-      console.log(res.data)
+
 
     } catch (err) {
-      console.log(err)
+      addToast({
+        type: "error",
+        title: "Error",
+        message:
+          err?.response?.data?.message ||
+          err?.message ||
+          "Something went wrong"
+      });
     }
   }
 
-  useEffect(() => {
 
-    if (selectedChatUser?.info?._id) {
+  useEffect(() => {
+    const messagesPeek = allMessages?.messages?.[selectedChatUser?.convoId];
+    if (selectedChatUser?.info?._id && !messagesPeek) {
       messages(selectedChatUser?.convoId)
-      console.log(selectedChatUser?.convoId)
     }
 
   }, [selectedChatUser])
 
+
+  const [toasts, setToasts] = useState([]);
+  const ToastContainer = ({ toasts, removeToast }) => {
+    return (
+      <div className="fixed top-4 left-4 right-4 md:top-auto md:left-auto md:bottom-5 md:right-5 flex flex-col gap-3 w-auto md:w-[440px] max-w-full z-[9999] pointer-events-none">
+        <AnimatePresence mode="popLayout">
+          {toasts.map((toast) => (
+            <Toast
+              key={toast.id}
+              {...toast}
+              onClose={() => removeToast(toast.id)}
+            />
+          ))}
+        </AnimatePresence>
+      </div>
+    );
+  };
+  const addToast = ({ type = "success", title, message }) => {
+    const id = Date.now();
+    setToasts((prev) => [...prev, { id, type, title, message }]);
+  };
+
+  const removeToast = (id) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  };
+
+
+
+
+
+
+
+
+
+
+
   return (
     <div className='h-[calc(100vh-63px)] w-screen bg-base-200 flex gap-1 justify-center items-center p-1 '>
-
+      <ToastContainer toasts={toasts} removeToast={removeToast} />
       <div className=' h-full w-[30vw] bg-black rounded-2xl p-2'>
 
         <div className='h-[53px] '>
@@ -55,7 +102,7 @@ const Collab = () => {
 
 
         <div className='h-[calc(100%-53px)]'>
-          <AllChats loading={loading} setLoading={setLoading} selectedChatUser={selectedChatUser} setSelectedChatUser={setSelectedChatUser} />
+          <AllChats loading={loading} setLoading={setLoading} selectedChatUser={selectedChatUser} setSelectedChatUser={setSelectedChatUser} addToast={addToast} />
         </div>
 
 
@@ -79,7 +126,7 @@ const Collab = () => {
         </>)}
 
 
-        {selectedChatUser?.info !== null && <ChatArea selectedChatUser={selectedChatUser} setSelectedChatUser={setSelectedChatUser} />}
+        {selectedChatUser?.info !== null && <ChatArea setSelectedChatUser={setSelectedChatUser} selectedChatUser={selectedChatUser} addToast={addToast} />}
 
       </div>
 

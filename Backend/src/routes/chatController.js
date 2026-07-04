@@ -49,152 +49,184 @@ chatRouter.get("/chats", userAuth, async (req, res) => {
 });
 
 //send the message
+
 chatRouter.post("/send-message", userAuth, async (req, res) => {
 
-    let session;
     try {
-
-        //LOGINNED USER KI USER ID
-        const userId = req.user._id
+        const userId = req.user._id;
         if (!userId) {
-            return res.status(400).json({
-                success: false,
-                message: "Please Re-Login"
-            })
+            throw new Error("Please re-login!");
         }
-        const { convId, messageType, content, forwarded, edited, reactions, replyTo, name, members, type } = req.body
+
+        const { conversationId, messageType, forwarded, edited, reactions, replyTo, name, members, type } = req.body
+        let { content } = req.body
+
+        //minimised feature
+        //initially forwarded and replyto and edited and reactions array is minimised so only boolean type is allowed
+        if (forwarded !== undefined && forwarded !== true && forwarded !== false) {
+            throw new Error("Invalid forwarded type");
+        }
+        if (replyTo !== undefined && replyTo !== true && replyTo !== false) {
+            throw new Error("Invalid replyTo type");
+        }
+        if (edited !== undefined && edited !== true && edited !== false) {
+            throw new Error("Invalid edited type");
+        }
+        if (reactions !== undefined && reactions !== true && reactions !== false) {
+            throw new Error("Invalid reactions type");
+        }
+
+
+        if (typeof content !== "string") {
+            throw new Error("Message content must be a string");
+        }    //content verification
+
+        // Remove leading/trailing whitespace
+        content = content.trim();
 
 
         if (!content) {
-            return res.status(400).json({
-                success: false,
-                message: "Message cannot be empty"
-            });
-        }
-
-        session = await mongoose.startSession();
-        session.startTransaction();
-
-
-        let convoContainer = null;
-
-        if (!convId) {
-
-            const existConvo = await Conversation.findOne({
-                members: {
-                    $all: members,
-                    $size: members.length
-                },
-                type
-            }).session(session)
-            if (existConvo) {
-                convoContainer = existConvo;
-            }
-
-        }
-
-        if (convId) {
-
-            convoContainer = await Conversation.findById(convId).session(session)
+            throw new Error("Message cannot be empty");
         }
 
 
-        if (!convoContainer) {
-            if (!members || !type) {
-                await session.abortTransaction();
-                await session.endSession();
+        if (content.length > 10000) {
+            throw new Error("Message is too long");
+        }
+        //members verification 
 
-                return res.status(400).json({
+        let conversation
+
+        if (conversationId) {
+            conversation = await Conversation.findById(conversationId);
+
+            if (!conversation) {
+                return res.status(404).json({
                     success: false,
-                    message: "Invalid Attempt 1"
-                })
-
-            }
-
-            convoContainer = new Conversation({
-                members: members,
-                type: type,
-                createdBy: userId,
-                name: name,
-                admins: [userId],
-                unreadCounts: members.map(member => ({
-                    user: member,
-                    count: member.toString() === userId.toString() ? 0 : 1
-                }))
-            })
-
-            await convoContainer.save({ session });
-
-        }
-
-        let isMember = false;
-
-
-        convoContainer.members.forEach(member => {
-
-
-            if (member.toString() === userId.toString()) {
-                isMember = true;
-            }
-
-        });
-
-
-
-
-        if (!isMember) {
-            await session.abortTransaction();
-            await session.endSession();
-
-            return res.status(403).json({
-                success: false,
-                message: "Unauthorised Access"
-            });
-        }
-
-        const uniqueMember = convoContainer.members.filter((member) => member.toString() !== userId.toString());
-        let isMemberItself = false;
-
-        uniqueMember.forEach(member => {
-
-
-            if (member.toString() === userId.toString()) {
-                isMemberItself = true;
-            }
-
-        });
-
-
-
-        if (isMemberItself) {
-            await session.abortTransaction();
-            await session.endSession();
-
-            return res.status(403).json({
-                success: false,
-                message: "Unauthorised Access"
-            });
-        }
-
-        for (const member of convoContainer.members) {
-            const valid = await User.findById(member).session(session);
-
-            if (!valid) {
-                await session.abortTransaction();
-
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid Member"
+                    message: "Id invalid",
                 });
             }
+            const isMember = conversation.members.some(
+                member => member.toString() === userId.toString()
+            );
+
+            if (!isMember) {
+                return res.status(403).json({
+                    success: false,
+                    message: "You are not a member of this conversation."
+                });
+            }
+            if (!messageType) {
+                throw new Error("Message Type is Undefined");
+            }
+
+            if (!["text", "image", "video", "audio", "file", "code", "system"].includes(messageType)) {
+                throw new Error("Invalid conversation type or message type");
+            }
+
+        } else {
+
+            if (!type || !messageType) {
+                throw new Error("Type or Message Type is Undefined");
+            }
+
+            if (!["private", "group"].includes(type) || !["text", "image", "video", "audio", "file", "code", "system"].includes(messageType)) {
+                throw new Error("Invalid conversation type or message type");
+            }
+
+            if (!Array.isArray(members) || members.length === 0) {
+                throw new Error("Members must be a non-empty array");
+            }
+
+
+            const uniqueMember = [...new Set(members)];
+            if (uniqueMember.length !== members.length) {
+                throw new Error("Duplicate members are not allowed");
+            }
+
+
+            const isMember = uniqueMember.some(
+                member => member.toString() === userId.toString()
+            );
+            if (!isMember) {
+                return res.status(403).json({
+                    success: false,
+                    message: "Not your matter",
+                });
+            }
+
+            const users = await User.find({
+                _id: { $in: uniqueMember }
+            });
+
+            if (users.length !== uniqueMember.length) {
+                throw new Error("Users do not exist");
+            }
+
+            let nameG = ""
+            if (type === "group") {
+                nameG = name;
+            } else if (type === "private") {
+
+
+                nameG = ""
+
+            }
+
+
+            const existingConversation = await Conversation.findOne({
+                type: "private",
+                members: {
+                    $all: uniqueMember,
+                    $size: 2
+                }
+            });
+
+            if (existingConversation) {
+                conversation = existingConversation;
+            } else {
+
+                conversation = new Conversation({
+                    members: uniqueMember,
+                    type: type,
+                    createdBy: userId,
+                    name: nameG,
+                    admins: [userId],
+                    unreadCounts: uniqueMember.map(member => ({
+                        user: member,
+                        count: member.toString() === userId.toString() ? 0 : 1
+                    }))
+                })
+
+                await conversation.save();
+
+            }
         }
 
 
 
+        if (conversation.type === "private" && conversation.members.length !== 2) {
+            throw new Error("Private conversation must have exactly 2 members");
+        }
+
+        if (conversation.type === "group") {
+            if (conversation.members.length < 3) {
+                throw new Error("Group must have at least 3 members");
+            }
+
+            if (!conversation.name) {
+                throw new Error("Group name is required");
+            }
+        }
+
+
+
+
+        //send the message
 
 
         const messageStored = new message({
-            conversation_id: convoContainer._id,
+            conversation_id: conversation._id,
             sender_id: userId,
             content: content,
             forwarded,
@@ -209,21 +241,19 @@ chatRouter.post("/send-message", userAuth, async (req, res) => {
 
 
 
-        await messageStored.save({ session });
+        await messageStored.save()
 
-        convoContainer.lastMessage = messageStored._id;
-        convoContainer.updatedAt = new Date();
-        convoContainer.unreadCounts.forEach(item => {
+        conversation.lastMessage = messageStored._id;
+        conversation.updatedAt = new Date();
+        conversation.unreadCounts.forEach(item => {
             if (item.user.toString() !== userId.toString()) {
                 item.count++;
             }
         });
 
-        await convoContainer.save({ session });
+        await conversation.save()
 
-        await session.commitTransaction();
 
-        await session.endSession();
 
 
 
@@ -237,30 +267,16 @@ chatRouter.post("/send-message", userAuth, async (req, res) => {
 
 
 
-
-
-
-
     } catch (err) {
         console.error(err);
-
-
-        if (session?.inTransaction()) {
-            await session.abortTransaction();
-        }
-
-        if (session) {
-            await session.endSession();
-        }
-
         return res.status(400).json({
             success: false,
             message: "Message failed to send",
             error: err.message
         });
     }
-})
 
+})
 
 
 // //Load chat messages

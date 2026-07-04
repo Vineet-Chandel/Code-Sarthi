@@ -41,6 +41,30 @@ const Body = () => {
         fetchUserData();
     }, []);
 
+
+    useEffect(() => {
+        const socket = new WebSocket("ws://localhost:3000");
+
+        socket.onopen = () => {
+            console.log("Connected");
+        };
+
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            console.log(data);
+        };
+
+        socket.onclose = () => {
+            console.log("Disconnected");
+        };
+
+        socket.onerror = (err) => {
+            console.log(err);
+        };
+
+        return () => socket.close();
+    }, []);
+
     if (isLoading) {
         return (
             <div className="min-h-screen w-full bg-zinc-950 flex flex-col items-center justify-center px-4">

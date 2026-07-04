@@ -55,9 +55,19 @@ const MsgClickedTab = ({ msg }) => {
             await navigator.clipboard.writeText(text);
 
         } catch (err) {
-            console.error("Failed to copy", err);
+            addToast({
+                type: "error",
+                title: "Error",
+                message:
+                    err?.response?.data?.message ||
+                    err?.message ||
+                    "Something went wrong"
+            });
         }
     };
+
+
+
     return (
         <motion.div
 
