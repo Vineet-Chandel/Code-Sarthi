@@ -150,7 +150,7 @@ const EmojiTab = ({ setText }) => {
                 scale: 1
             }}
             transition={{ duration: 0.3 }}
-            className="absolute bottom-[70px]  right-[60px] z-30 p-2 w-[400px]  rounded-3xl bg-black  border border-white/15 shadow-xl ">
+            className="absolute bottom-[90px]  right-[90px] z-30 p-2 w-[400px]  rounded-3xl bg-[#212121]   shadow-xl ">
 
 
             <div className=' flex justify-around pt-2 mb-5'>
@@ -173,7 +173,7 @@ const EmojiTab = ({ setText }) => {
 
             </div>
 
-            <div className="overflow-y-scroll ">
+            <div className="overflow-y-auto scrollbar-none ">
                 <span className="text-md text-white/80 font-poppins ml-2"> {emojiFeild.name}</span>
                 <div className="grid grid-cols-8 h-[300px] flex items-center justify-center gap-3 pt-3 relative z-30">
 
@@ -182,7 +182,7 @@ const EmojiTab = ({ setText }) => {
                             setText(prev => prev + emoji);
 
                         }}
-                            className="group relative w-full flex items-center justify-center text-3xl hover:scale-150 hover:rotate-12  transition-all duration-300 p-0.5 cursor-pointer" >
+                            className="group relative w-full flex items-center justify-center text-3xl  transition-all duration-300 p-0.5 cursor-pointer" >
                             <span className="group-hover:bg-white/10 rounded-xl  absolute w-full h-full z-30  bg-transparent"></span>
                             {emoji}
                         </span>

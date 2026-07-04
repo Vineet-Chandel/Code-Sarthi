@@ -221,11 +221,11 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser }) => {
                     content: message
                 }
             }
-
+            setMessage("")
             const res = await axios.post(`${BASE_URL}/send-message`, payload, {
                 withCredentials: true
             })
-            setMessage("")
+
         } catch (err) {
             addToast({
                 type: "error",
@@ -263,16 +263,16 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser }) => {
 
             {/* Messages */}
 
-            <div className="flex-1 overflow-y-auto  overflow-y-scroll  px-4">
+            <div className="flex-1 overflow-y-auto scrollbar-none  px-4">
                 <MessageArea setSelectedChatUser={setSelectedChatUser} selectedChatUser={selectedChatUser} />
 
             </div>
 
             {/* Input */}
             <div className="w-full flex items-center px-4 relative">
-                <div className="relative">
-                    <span onClick={() => setClipTab((prev) => !prev)}>
-                        <div className="bg-white/10 p-2.5 rounded-full cursor-pointer">
+                <div className="relative cursor-pointer" onClick={() => setClipTab(true)} onMouseEnter={() => setClipTab(true)}>
+                    <span>
+                        <div className="bg-[#212121] p-2.5 rounded-full ">
                             <Paperclip />
                         </div>
                     </span>
@@ -283,7 +283,7 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser }) => {
 
                 <div className=" p-4 w-full">
 
-                    <div className="flex items-center gap-3 rounded-3xl bg-white/10 p-2.5">
+                    <div className="flex items-center gap-3 rounded-xl bg-[#212121] p-2.5">
 
 
 
@@ -297,7 +297,7 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser }) => {
                             placeholder="Write a message..."
                             className="flex-1 text-xl bg-transparent outline-none"
                         />
-                        <div className="cursor-pointer" onClick={() => setEmojiTab(true)}>
+                        <div className="cursor-pointer" onClick={() => setEmojiTab(true)} onMouseEnter={() => setEmojiTab(true)}>
                             <Smile width={24} height={24} />
                         </div>
 
@@ -325,7 +325,7 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser }) => {
                         }
                         setSwitcher("mic")
                     }}
-                    className={` p-2.5 rounded-full cursor-pointer ${classLongPress ? classLongPress : "bg-white/10"} `}>
+                    className={` p-2.5 rounded-full cursor-pointer ${classLongPress ? classLongPress : "bg-[#212121]"} `}>
                     {switcher === "mic" ? <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
                         <path fill="#fff" fillRule="evenodd" d="M12 2C9.769 2 8 3.757 8 5.828v6.344C8 14.242 9.769 16 12 16s4-1.758 4-3.828V5.828C16 3.758 14.231 2 12 2" clipRule="evenodd"></path>
                         <path fill="#fff" d="M13 20.945V23a1 1 0 1 1-2 0v-2.055A9 9 0 0 1 3 12a1 1 0 1 1 2 0a7 7 0 1 0 14 0a1 1 0 1 1 2 0a9 9 0 0 1-8 8.945"></path>

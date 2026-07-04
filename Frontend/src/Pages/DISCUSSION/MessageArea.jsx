@@ -60,9 +60,6 @@ const MessageArea = ({ selectedChatUser }) => {
 
 
 
-
-
-
     return (
         <div className='relative z-10 text-white  h-full w-full flex flex-col justify-end items-end '>
             {/* Top */}
@@ -91,7 +88,7 @@ const MessageArea = ({ selectedChatUser }) => {
                     isOpen: false,
                 }))}
 
-                className='h-full  w-full flex flex-col   overflow-y-scroll'>
+                className='h-full  w-full flex flex-col   overflow-y-auto scrollbar-none '>
 
                 {messages ? messages.map((items, idx) => {
 
@@ -161,7 +158,7 @@ const MessageArea = ({ selectedChatUser }) => {
 
                                     <div
 
-                                        className={`max-w-[45%] break-words [overflow-wrap:anywhere] whitespace-pre-wrap overflow-hidden [overflow-wrap:anywhere] flex  font-poppins  ${items?.content?.length > 40 ? "flex-col items-start gap-2" : "items-end gap-3 flex-row "} min-w-[10%] bg-white/20 py-3 px-5   ${isSingle ? SingleClassName : isFirst ? FirstClassName : isMiddle ? MiddleClassName : isLast ? LastClassName : ""}`}>
+                                        className={`max-w-[45%] break-words [overflow-wrap:anywhere] whitespace-pre-wrap overflow-hidden [overflow-wrap:anywhere] flex  font-poppins  ${items?.content?.length > 40 ? "flex-col items-start gap-2" : "items-end gap-3 flex-row "} min-w-[10%] bg-[#212121] py-3 px-5   ${isSingle ? SingleClassName : isFirst ? FirstClassName : isMiddle ? MiddleClassName : isLast ? LastClassName : ""}`}>
 
                                         {displayText?.replace(/\t/g, "    ")}
 
@@ -284,7 +281,7 @@ const MessageArea = ({ selectedChatUser }) => {
                             {/* Left Message */}
                             <div className="flex justify-start overflow-y-auto">
                                 <div className="flex items-end  gap-2 max-w-[75%]">
-
+                                    <div className="w-8 h-8 rounded-full bg-gray-300"></div>
 
                                     <div className="space-y-2">
                                         <div className="h-4 w-20 rounded-full bg-gray-300"></div>
@@ -323,7 +320,7 @@ const MessageArea = ({ selectedChatUser }) => {
                             {/* Left Message */}
                             <div className="flex justify-start">
                                 <div className="flex items-end gap-2 max-w-[75%]">
-
+                                    <div className="w-8 h-8 rounded-full bg-gray-300"></div>
 
                                     <div className="space-y-2">
                                         <div className="h-10 w-72 rounded-2xl rounded-bl-md bg-gray-300"></div>
@@ -344,7 +341,7 @@ const MessageArea = ({ selectedChatUser }) => {
                             {/* Left Message */}
                             <div className="flex justify-start">
                                 <div className="flex items-end gap-2 max-w-[75%]">
-
+                                    <div className="w-8 h-8 rounded-full bg-gray-300"></div>
 
                                     <div className="space-y-2">
                                         <div className="h-10 w-40 rounded-2xl rounded-bl-md bg-gray-300"></div>

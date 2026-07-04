@@ -91,9 +91,9 @@ const Collab = () => {
 
 
   return (
-    <div className='h-[calc(100vh-63px)] w-screen bg-base-200 flex gap-1 justify-center items-center p-1 '>
+    <div className='h-[calc(100vh-63px)] w-screen bg-black flex gap-1 justify-center items-center p-4'>
       <ToastContainer toasts={toasts} removeToast={removeToast} />
-      <div className=' h-full w-[30vw] bg-black rounded-2xl p-2'>
+      <div className=' h-full w-[25vw]  bg-[#212121] rounded-3xl pl-2 pr-1 p-3'>
 
         <div className='h-[53px] '>
           <SearchChats loading={loading} setLoading={setLoading} />
@@ -111,7 +111,7 @@ const Collab = () => {
 
 
       </div>
-      <div className=' h-full w-[70vw] bg-black rounded-2xl  bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.1)_1px,transparent_1px)]
+      <div className=' h-full w-[75vw] bg-black rounded-2xl  bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.1)_1px,transparent_1px)]
     bg-[size:40px_40px]  flex justify-center items-center flex-col'>
 
 

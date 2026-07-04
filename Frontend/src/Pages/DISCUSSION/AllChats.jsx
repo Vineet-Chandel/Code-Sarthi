@@ -5,12 +5,14 @@ import axios from 'axios';
 import { addConnectionUser } from '@/utils/connectionSlice';
 import { FaUniversity, FaVideo } from 'react-icons/fa';
 
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { BsPersonWorkspace } from 'react-icons/bs';
 import { IoBarChart } from 'react-icons/io5';
 import { setChatUsers } from '@/utils/chat-user-slice';
 
 const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, addToast }) => {
+
+    const navigate = useNavigate()
     const {
         selectedChatUser2,
         setSelectedChatUser2,
@@ -19,6 +21,10 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
     const chatsARR = useSelector(state => state?.chats?.users?.data || [])
     const loggedUser = useSelector(store => store.user.user.DATA);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        console.log(connectionsARR.total)
+    }, [])
     const connectionUser = async () => {
 
         try {
@@ -118,11 +124,13 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
         <div className='bg-transparent h-full w-full '>
 
             <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-20 z-20 bg-gradient-to-t from-black/30 via-black/10 to-transparent dark:from-black/60 dark:via-black/20" />
-            <div className='h-full overflow-y-auto  overflow-y-scroll '>
+            <div className='h-full w-full overflow-y-auto   scrollbar-none '>
+
+
                 {!selectedChatUser2?.isOpenTab &&
 
 
-                    <div className='w-full '>
+                    <div className='mt-3 p-0 w-[100%] '>
                         {chatsARR?.map((chatUser, idx) => {
                             return (chatUser.members.map((user, index) => (
 
@@ -160,7 +168,7 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                             fullChatInfo: chatUser
                                         }));
                                     }}
-                                    className={`${selectedChatUser?.id === user._id ? "bg-white" : "bg-white/20"} group text-white h-13 w-full  cursor-pointer  rounded-2xl my-2 flex items-center gap-2 p-1.5`}>
+                                    className={`${selectedChatUser?.id === user._id ? "bg-white/20" : "bg-transparent"} group text-white h-13 w-full  cursor-pointer  rounded-2xl my-2 flex items-center gap-2 p-1.5`}>
 
 
                                     <div className='w-full flex items-center gap-1 h-full bg-transparent rounded-2xl'>
@@ -222,11 +230,11 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                         </div>
                                         <div className='w-full h-full rounded-2xl bg-transparent px-1'>
                                             <div className="flex justify-between items-center ">
-                                                <span className={`font-semibold text-sm truncate ${selectedChatUser?.id === user._id ? "text-black" : "text-white"}`}>{user.firstName + ' ' + user.lastName}</span>
-                                                <span className={`text-xs  ${selectedChatUser?.id === user._id ? "text-black/60" : "text-gray-400"}`}>10:30 AM</span>
+                                                <span className={`font-semibold text-sm truncate text-white`}>{user.firstName + ' ' + user.lastName}</span>
+                                                <span className={`text-xs  text-gray-300`}>10:30 AM</span>
                                             </div>
                                             <div className="flex justify-between items-center ">
-                                                <span className={`text-xs  pl-1 truncate ${selectedChatUser?.id === user._id ? "text-black/60" : "text-gray-400"}`}>{chatUser?.lastMessage?.content}</span>
+                                                <span className={`text-xs  pl-1 truncate  text-gray-300`}>{chatUser?.lastMessage?.content}</span>
                                                 <div className="flex items-center gap-1">
                                                     <span className="w-5 h-5 rounded-full bg-green-500 text-xs flex items-center justify-center">3</span>
 
@@ -241,7 +249,7 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                         }
 
 
-                        {chatsARR.length <= 5 && chatsARR.length > 0 && <div>
+                        {chatsARR.length <= 5 && chatsARR.length > 0 && availableConnections.length !== 0 && <div>
 
 
                             <div className="w-full px-3 my-4 h-10 rounded-xl bg-black flex items-center  justify-center overflow-hidden shrink-0 bg-white">
@@ -581,6 +589,31 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                         </div>
                     )
                 }
+
+
+                {connectionsARR?.total == 0 && (
+                    <div className="w-full h-[calc(100vh-200px)]  flex flex-col items-center justify-center gap-2">
+                        <div className="w-16 h-16 rounded-full bg-secondary/20 flex items-center justify-center text-secondary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" viewBox="0 0 24 24">
+                                <path fill="none" stroke="#212121" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12s4.477 10 10 10Z" />
+                                <path fill="none" stroke="#212121" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12v.01M16 12v.01M12 16a4 4 0 0 1-4-4h-3a3 3 0 0 0 3 3v5h4v-5a3 3 0 0 0 3-3h-3a4 4 0 0 1-4 4Z" />
+                            </svg>
+                        </div>
+                        <h1 className="text-lg font-semibold text-white">No Connections Yet</h1>
+                        <p className="text-sm text-gray-400 group flex items-center justify-center gap-1 hover:underline underline-offset-2 cursor-pointer" onClick={() => navigate("/app/explore")}>Start Exploring Developers
+
+
+                            <span className='group-hover:opacity-100 opacity-0 transition-all duration-300' >
+                                <svg xmlns="http://www.w3.org/2000/svg" className='rotate-45' width="1em" height="1em" viewBox="0 0 80 80">
+                                    <g fill="none">
+                                        <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z"></path>
+                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={6} d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177"></path>
+                                    </g>
+                                </svg>
+                            </span>
+                        </p>
+                    </div>
+                )}
             </div>
 
 
