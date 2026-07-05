@@ -141,7 +141,7 @@ const MessageArea = ({ selectedChatUser }) => {
                     return (
 
                         <div key={idx} className='relative '>
-                            {items?.sender_id === user?._id ? (
+                            {items?.sender_id._id !== user?._id ? (
                                 <div
                                     onContextMenu={(e) => {
                                         e.preventDefault();

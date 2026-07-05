@@ -155,11 +155,11 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
                                             fullChatInfo: chatUser
                                         }));
                                     }}
-                                    className={`${selectedChatUser?.id === user._id ? "bg-white/20" : "bg-transparent"} group text-white h-13 w-full  cursor-pointer  rounded-2xl my-2 flex items-center gap-2 p-1.5`}>
+                                    className={`${selectedChatUser?.id === user._id ? "bg-white/20" : "bg-transparent"} group text-white h-auto w-full  cursor-pointer  rounded-2xl my-2 flex items-center gap-2 p-1.5`}>
 
 
                                     <div className='w-full flex items-center gap-1 h-full bg-transparent rounded-2xl'>
-                                        <div className="w-10 h-10 rounded-xl bg-black flex items-center  justify-center overflow-hidden shrink-0">
+                                        <div className="w-[60px] h-[60px] rounded-xl bg-black flex items-center  justify-center overflow-hidden shrink-0">
 
                                             {selectedChatUser?.id !== user._id &&
                                                 <>
@@ -217,13 +217,13 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
                                         </div>
                                         <div className='w-full h-full rounded-2xl bg-transparent px-1'>
                                             <div className="flex justify-between items-center ">
-                                                <span className={`font-semibold text-sm truncate text-white`}>{user.firstName + ' ' + user.lastName}</span>
-                                                <span className={`text-xs  text-gray-300`}>10:30 AM</span>
+                                                <span className={`font-semibold text-md truncate text-white`}>{user.firstName + ' ' + user.lastName}</span>
+                                                <span className={`text-sm  text-gray-300`}>10:30 AM</span>
                                             </div>
                                             <div className="flex justify-between items-center ">
-                                                <span className={`text-xs  pl-1 truncate  text-gray-300`}>{chatUser?.lastMessage?.content}</span>
+                                                <span className={`text-sm  pl-1 truncate  text-gray-300`}>{chatUser?.lastMessage?.content}</span>
                                                 <div className="flex items-center gap-1">
-                                                    <span className="w-5 h-5 rounded-full bg-green-500 text-xs flex items-center justify-center">3</span>
+                                                    <span className="w-5 h-5 rounded-full bg-green-500 text-sm flex items-center justify-center">3</span>
 
                                                 </div>
                                             </div>
@@ -249,7 +249,7 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
                                         <path fill="#000" d="M19 3a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-3.697l-2.61 1.74c-.42.28-.966.28-1.386 0L8.697 19H5a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3zM8.5 10a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3m7 0a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3"></path>
                                     </g>
                                 </svg>
-                                <p className="w-full text-end text-black text-sm">Start Collabrating </p>
+                                <p className="w-full text-end text-black text-md">Start Collabrating </p>
 
 
                             </div>
@@ -281,11 +281,11 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
 
 
                                     }}
-                                    className={`${selectedChatUser?.id === user._id ? "bg-white" : "bg-white/20"} group text-white h-13 w-full  cursor-pointer  rounded-2xl my-2 flex items-center gap-2 p-1.5`}>
+                                    className={`${selectedChatUser?.id === user._id ? "bg-white" : "bg-white/20"} group text-white h-auto w-full  cursor-pointer  rounded-2xl my-2 flex items-center gap-2 p-1.5`}>
 
 
                                     <div className='w-full flex items-center gap-1 h-full bg-transparent rounded-2xl'>
-                                        <div className="w-10 h-10 rounded-xl bg-black flex items-center  justify-center overflow-hidden shrink-0">
+                                        <div className="w-[60px] h-[60px] rounded-xl bg-black flex items-center  justify-center overflow-hidden shrink-0">
 
                                             {selectedChatUser?.id !== user._id &&
                                                 <>
@@ -343,13 +343,13 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
                                         </div>
                                         <div className='w-full h-full rounded-2xl bg-transparent px-1'>
                                             <div className="flex justify-between items-center ">
-                                                <span className={`font-semibold text-sm truncate ${selectedChatUser?.id === user._id ? "text-black" : "text-white"}`}>{user.firstName + ' ' + user.lastName}</span>
-                                                <span className={`text-xs  ${selectedChatUser?.id === user._id ? "text-black/60" : "text-gray-400"}`}>10:30 AM</span>
+                                                <span className={`font-semibold text-md truncate ${selectedChatUser?.id === user._id ? "text-black" : "text-white"}`}>{user.firstName + ' ' + user.lastName}</span>
+                                                <span className={`text-sm  ${selectedChatUser?.id === user._id ? "text-black/60" : "text-gray-400"}`}>10:30 AM</span>
                                             </div>
                                             <div className="flex justify-between items-center ">
-                                                <span className={`text-xs  pl-1 truncate ${selectedChatUser?.id === user._id ? "text-black/60" : "text-gray-400"}`}>Tap to start collabrating </span>
+                                                <span className={`text-sm  pl-1 truncate ${selectedChatUser?.id === user._id ? "text-black/60" : "text-gray-400"}`}>Tap to start collabrating </span>
                                                 <div className="flex items-center gap-1">
-                                                    <span className="w-5 h-5 rounded-full bg-green-500 text-xs flex items-center justify-center">3</span>
+                                                    <span className="w-5 h-5 rounded-full bg-green-500 text-sm flex items-center justify-center">3</span>
 
                                                 </div>
                                             </div>
@@ -415,7 +415,7 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
                                             <>CodeSarthi User</>
                                         )}
                                     </span>
-                                    <span className="text-info text-sm pl-1 flex justify-center items-center gap-1">
+                                    <span className="text-info text-md pl-1 flex justify-center items-center gap-1">
                                         {selectedChatUser?.info?._id && (selectedChatUser?.info?.username)}
                                         {selectedChatUser?.info?._id && (<div onClick={() => handleCopy(selectedChatUser?.info?.username)}>
                                             <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24">
@@ -440,7 +440,7 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
 
                                     <div className="flex items-center gap-3  px-5 py-1 rounded-xl">
                                         {selectedChatUser?.info?._id && (
-                                            <span className="text-sm text-info font-medium flex justify-center items-center gap-3"><FaUniversity color="#fff" />
+                                            <span className="text-md text-info font-medium flex justify-center items-center gap-3"><FaUniversity color="#fff" />
                                                 {selectedChatUser?.info?.college}
                                             </span>
                                         )}
@@ -448,7 +448,7 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
 
                                     <div className="flex items-center gap-3 px-5 py-1 rounded-xl">
                                         {selectedChatUser?.info?._id && (
-                                            <span className="text-sm text-info font-medium flex justify-center items-center gap-3"><BsPersonWorkspace color="#fff" />
+                                            <span className="text-md text-info font-medium flex justify-center items-center gap-3"><BsPersonWorkspace color="#fff" />
                                                 {selectedChatUser?.info?.profession}
                                             </span>
                                         )}
@@ -456,7 +456,7 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
 
                                     <div className="flex items-center gap-3 px-5 py-1 rounded-xl">
                                         {selectedChatUser?.info?._id && (
-                                            <span className="text-sm text-info font-medium flex justify-center items-center gap-3">
+                                            <span className="text-md text-info font-medium flex justify-center items-center gap-3">
                                                 <IoBarChart color="#fff" />
                                                 {selectedChatUser?.info?.skills?.join(", ")}
                                             </span>
@@ -469,7 +469,7 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
                                         <h3 className="text-lg font-semibold mb-1 text-white">
                                             About
                                         </h3>
-                                        <p className="text-info text-xs leading-relaxed">
+                                        <p className="text-info text-sm leading-relaxed">
                                             {selectedChatUser?.info?.about}
                                         </p>
                                     </div>
@@ -477,7 +477,7 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
                                 {selectedChatUser?.info?._id && (
                                     <div>
 
-                                        <div className="text-white text-sm pl-1 flex justify-between px-3 pl-3 cursor-pointer items-center gap-1 bg-base-300   border border-secondary border-[2px] py-2 rounded-2xl">
+                                        <div className="text-white text-md pl-1 flex justify-between px-3 pl-3 cursor-pointer items-center gap-1 bg-base-300   border border-secondary border-[2px] py-2 rounded-2xl">
                                             <div className="flex justify-center items-center gap-1 font-extrabold">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 32 32">
                                                     <path fill="#fff" d="M26 20h-6v-2h6zm4 8h-6v-2h6zm-2-4h-6v-2h6z"></path>
@@ -490,7 +490,7 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
 
                                         </div>
 
-                                        <div className="text-white text-sm pl-1 flex justify-between px-3 pl-3 items-center gap-1  mt-2 bg-base-300  border border-secondary border-[2px] py-2 rounded-2xl">
+                                        <div className="text-white text-md pl-1 flex justify-between px-3 pl-3 items-center gap-1  mt-2 bg-base-300  border border-secondary border-[2px] py-2 rounded-2xl">
                                             <div className="flex justify-center items-center gap-1">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 16 16">
                                                     <path fill="#fff" d="M4 3a2 2 0 0 0-2 2v.201l6 3.231l6-3.23V5a2 2 0 0 0-2-2zm10 3.337L8.237 9.44a.5.5 0 0 1-.474 0L2 6.337V11a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2z"></path>
@@ -511,7 +511,7 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
                                         </div>
 
 
-                                        <div className="text-white text-sm  flex justify-between px-3 pl-3 items-center gap-1 bg-base-300  mt-2 border border-secondary  py-2 rounded-2xl cursor-pointer ">
+                                        <div className="text-white text-md  flex justify-between px-3 pl-3 items-center gap-1 bg-base-300  mt-2 border border-secondary  py-2 rounded-2xl cursor-pointer ">
                                             <div className="flex justify-center items-center gap-1">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
                                                     <path fill="#fff" d="M12 2c5.5 0 10 4.5 10 10s-4.5 10-10 10S2 17.5 2 12S6.5 2 12 2m0 2c-1.9 0-3.6.6-4.9 1.7l11.2 11.2c1-1.4 1.7-3.1 1.7-4.9c0-4.4-3.6-8-8-8m4.9 14.3L5.7 7.1C4.6 8.4 4 10.1 4 12c0 4.4 3.6 8 8 8c1.9 0 3.6-.6 4.9-1.7"></path>
@@ -531,7 +531,7 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
                                         </div>
 
 
-                                        <div className="text-white text-sm pl-1 flex justify-between px-3 pl-3 items-center gap-1 bg-base-300  my-2 border border-secondary border-[2px] py-2 rounded-2xl cursor-pointer ">
+                                        <div className="text-white text-md pl-1 flex justify-between px-3 pl-3 items-center gap-1 bg-base-300  my-2 border border-secondary border-[2px] py-2 rounded-2xl cursor-pointer ">
                                             <div className="flex justify-center items-center gap-1">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
                                                     <g fill="none" fillRule="evenodd">
@@ -576,7 +576,7 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
                             </svg>
                         </div>
                         <h1 className="text-lg font-semibold text-white">No Connections Yet</h1>
-                        <p className="text-sm text-gray-400 group flex items-center justify-center gap-1 hover:underline underline-offset-2 cursor-pointer" onClick={() => navigate("/app/explore")}>Start Exploring Developers
+                        <p className="text-md text-gray-400 group flex items-center justify-center gap-1 hover:underline underline-offset-2 cursor-pointer" onClick={() => navigate("/app/explore")}>Start Exploring Developers
 
 
                             <span className='group-hover:opacity-100 opacity-0 transition-all duration-300' >

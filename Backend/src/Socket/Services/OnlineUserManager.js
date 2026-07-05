@@ -2,26 +2,9 @@
 
 const onlineUsers = new Map();
 
-const getSocket = (participants) => {
-
-    if (participants.length <= 0) {
-
-        return [];
-    }
-    let onlineUserArray = [];
-    for (let i = 0; i < participants.length; i++) {
-        let sockets = onlineUsers.get(participants[i]);
-
-        if (sockets) {
-            onlineUserArray.push(sockets);
-        }
-
-    }
-
-
-    return onlineUserArray;
-
-}
+const getSocket = (userId) => {
+    return onlineUsers.get(userId);
+};
 
 
 const getOnlineUsers = () => {
