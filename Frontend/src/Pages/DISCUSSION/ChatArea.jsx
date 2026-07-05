@@ -272,7 +272,7 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser }) => {
             <div className="w-full flex items-center px-2 sm:px-4 relative">
                 <div className="relative cursor-pointer" onClick={() => setClipTab(true)} onMouseEnter={() => setClipTab(true)}>
                     <span>
-                        <div className="bg-[#212121] p-2.5 rounded-full ">
+                        <div className="bg-[#212121] p-2 sm:p-2.5 rounded-full ">
                             <Paperclip />
                         </div>
                     </span>
@@ -283,7 +283,7 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser }) => {
 
                 <div className="px-2 py-3 sm:p-4 w-full">
 
-                    <div className="flex items-center gap-3 rounded-xl bg-[#212121] p-2.5">
+                    <div className="flex items-center gap-2 sm:gap-3 rounded-xl bg-[#212121] p-2 sm:p-2.5">
 
 
 
@@ -298,7 +298,9 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser }) => {
                             className="flex-1 text-base sm:text-lg md:text-xl bg-transparent outline-none"
                         />
                         <div className="cursor-pointer" onClick={() => setEmojiTab(true)} onMouseEnter={() => setEmojiTab(true)}>
-                            <Smile width={24} height={24} />
+                            <Smile
+                                className="w-5 h-5 sm:w-6 sm:h-6"
+                            />
                         </div>
 
 
@@ -312,8 +314,8 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser }) => {
 
 
 
-                {message ? <div onClick={(e) => handelSend(selectedChatUser, message, "text")} className=" p-2.5 rounded-full cursor-pointer bg-white/20 hover:bg-white text-white hover:text-black transition-colors duration-200 ">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
+                {message ? <div onClick={(e) => handelSend(selectedChatUser, message, "text")} className=" p-2 sm:p-2.5 rounded-full cursor-pointer bg-white/20 hover:bg-white text-white hover:text-black transition-colors duration-200 ">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24">
                         <path fill="currentColor" d="M21.864 3.549L15.41 21.417a1.55 1.55 0 0 1-1.41.903a1.54 1.54 0 0 1-1.394-.874l-2.88-5.759zM20.45 2.135L8.311 14.273l-5.728-2.864A1.55 1.55 0 0 1 1.68 10c0-.606.353-1.157.981-1.44z"></path>
                     </svg>
                 </div> : < div
@@ -325,13 +327,13 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser }) => {
                         }
                         setSwitcher("mic")
                     }}
-                    className={` p-2.5 rounded-full cursor-pointer ${classLongPress ? classLongPress : "bg-[#212121]"} `}>
-                    {switcher === "mic" ? <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
+                    className={` p-2 sm:p-2.5 rounded-full cursor-pointer ${classLongPress ? classLongPress : "bg-[#212121]"} `}>
+                    {switcher === "mic" ? <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24">
                         <path fill="#fff" fillRule="evenodd" d="M12 2C9.769 2 8 3.757 8 5.828v6.344C8 14.242 9.769 16 12 16s4-1.758 4-3.828V5.828C16 3.758 14.231 2 12 2" clipRule="evenodd"></path>
                         <path fill="#fff" d="M13 20.945V23a1 1 0 1 1-2 0v-2.055A9 9 0 0 1 3 12a1 1 0 1 1 2 0a7 7 0 1 0 14 0a1 1 0 1 1 2 0a9 9 0 0 1-8 8.945"></path>
                     </svg>
                         :
-                        <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24">
                             <g fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}>
                                 <circle cx={12} cy={12} r={4}></circle>
                                 <rect width={20} height={20} x={2} y={2} rx={5}></rect>
