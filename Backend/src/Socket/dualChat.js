@@ -81,6 +81,7 @@ module.exports = (server) => {
         debug();
 
         socket.on('message', async (rawData) => {
+
             let data;
             try {
                 data = JSON.parse(rawData.toString());
@@ -89,22 +90,19 @@ module.exports = (server) => {
                 return;
             }
             if (!data) return;
-            const { conversationId, content, type, isTyping } = data;
+            const { conversationId, content, type, isTyping, messageType, members, conversationType } = data;
 
-            if (!conversationId) {
-                console.log("no conversation id")
-                return;
-            }
+
             switch (type) {
 
 
                 case "typing": {
 
-                    typingHandler(conversationId, socket, isTyping)
+                    await typingHandler(conversationId, socket, isTyping, messageType, members, conversationType)
                     break;
                 }
                 case "message": {
-                    messageHandler(conversationId, socket, content)
+                    await messageHandler(conversationId, socket, content, messageType, members, conversationType)
                     break;
 
                 } default: {

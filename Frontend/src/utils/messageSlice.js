@@ -25,6 +25,32 @@ const messageSlice = createSlice({
             state.messages[conversation_id].push(message);
         },
 
+        replaceTemporaryMessage: (state, action) => {
+
+            const { clientMessageId, message } = action.payload;
+
+            const conversationId = message.conversation_id;
+
+            if (!state.messages[conversationId]) {
+                state.messages[conversationId] = [message];
+                return;
+            }
+
+            const index = state.messages[conversationId].findIndex(
+                msg => msg.clientMessageId === clientMessageId
+            );
+
+            if (index !== -1) {
+                // Replace temporary message with the real one
+                state.messages[conversationId][index] = {
+                    ...message,
+                    clientMessageId
+                };
+            } else {
+                // If no temporary message exists, just append
+                state.messages[conversationId].push(message);
+            }
+        },
         clearConversation: (state, action) => {
             delete state.messages[action.payload];
         },
@@ -40,6 +66,7 @@ export const {
     addMessage,
     clearConversation,
     clearAllMessages,
+    replaceTemporaryMessage
 } = messageSlice.actions;
 
 export default messageSlice.reducer;

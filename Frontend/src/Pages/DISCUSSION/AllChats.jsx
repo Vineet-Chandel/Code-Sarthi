@@ -120,7 +120,7 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
     return (
         <div className='bg-transparent h-full w-full '>
 
-            <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-20 z-20 bg-gradient-to-t from-black/30 via-black/10 to-transparent dark:from-black/60 dark:via-black/20" />
+
             <div className='h-full w-full overflow-y-auto   scrollbar-none '>
 
 

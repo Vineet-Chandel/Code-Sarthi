@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import BASE_URL from "./Pages/auth/baseURL";
 import { useNavigate } from "react-router-dom";
 import InternetPopup from "./ErrorSaver/InternetPopup";
+import { SocketProvider } from "./socket/SocketProvider";
 
 
 const Body = () => {
@@ -150,22 +151,26 @@ const Body = () => {
 
 
     return (
-        <div data-theme="caramellatte" className="bg-base-200 h-screen">
-            <InternetPopup />
-            <div className=" h-[53px]">
-                <NavBar selectedChatUser={selectedChatUser} setSelectedChatUser={setSelectedChatUser} />
+
+        <SocketProvider>
+            <div data-theme="caramellatte" className="bg-base-200 h-screen">
+                <InternetPopup />
+                <div className=" h-[53px]">
+                    <NavBar selectedChatUser={selectedChatUser} setSelectedChatUser={setSelectedChatUser} />
+                </div>
+
+                <div className="h-[calc(100vh-53px)]">
+                    <Outlet
+                        context={{
+                            selectedChatUser,
+                            setSelectedChatUser,
+                        }}
+                    />
+                </div>
+
             </div>
 
-            <div className="h-[calc(100vh-53px)]">
-                <Outlet
-                    context={{
-                        selectedChatUser,
-                        setSelectedChatUser,
-                    }}
-                />
-            </div>
-
-        </div>
+        </SocketProvider>
     );
 };
 

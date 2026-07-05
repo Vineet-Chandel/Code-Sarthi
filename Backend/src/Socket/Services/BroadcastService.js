@@ -7,7 +7,7 @@ const broadcastService = (participants, payload) => {
 
 
 
-        const sockets = OnlineUserManager.getSocket(participants.toString());
+        const sockets = OnlineUserManager.getSocket(member.toString());
 
         if (!sockets) return; // User is offline
 

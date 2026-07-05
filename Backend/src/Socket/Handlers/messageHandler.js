@@ -1,59 +1,48 @@
 const Conversation = require("../../models/conversation");
 const broadcastService = require("../Services/BroadcastService");
 
+const { saveMessage } = require("../Services/MessageService")
 
 
 
 
+const messageHandler = async (conversationId, socket, content, messageType, members, type) => {
 
-const messageHandler = async (conversationId, socket, content) => {
-    // ConversationService.getConversation()
-    let conversation = null;
+
     try {
-        conversation = await Conversation.findById(conversationId)
 
 
-        if (!conversation) {
-            console.log("no conversation")
-            return;
-        }
+        const result = await saveMessage({
+
+            senderId: socket.userId,
+            conversationId,
+            content,
+            messageType,
+            forwarded: false,
+            edited: false,
+            reactions: false,
+            replyTo: false,
+            members: members,
+            type: type
+        });
+        const payload = {
+            type: "message",
+            message: result.message
+        };
+
+
+
+        broadcastService(
+            result.conversation.members,
+            payload
+        );
     } catch (err) {
-        console.log("Database error while fetching conversation", err)
-        return;
+        socket.send(JSON.stringify({
+            type: "error",
+            event: "message",
+            message: err.message
+        }));
     }
-
-    // Validate sender
-    if (!conversation.members.some(
-        member => member.toString() === socket.userId
-    )) {
-        console.log("user is not part of this conversation")
-        return;
-    }
-
-
-
-
-    if (typeof content !== "string") {
-        console.error("Content should be in the String ");
-
-
-    }
-    if (content.trim().length === 0 || content.length > 10000) {
-        return;
-    }
-
-    const payload = {
-        type: "message",
-        conversationId,
-        senderId: socket.userId,
-        content,
-        createdAt: new Date()
-    };
-
-    await broadcastService(
-        conversation.members,
-        payload
-    );
 
 
 

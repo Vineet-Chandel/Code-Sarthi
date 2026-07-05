@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
+
+import { useSocket } from "../../socket/SocketProvider";
 import {
 
     MoreVertical,
@@ -12,6 +14,8 @@ import MessageArea from "./MessageArea";
 import EmojiTab from "./EmojiTab";
 import axios from "axios";
 import BASE_URL from "../auth/baseURL";
+import { useDispatch, useSelector } from "react-redux";
+import { addMessage } from "@/utils/messageSlice";
 
 
 function ThreeDotTab() {
@@ -175,8 +179,10 @@ const useLongPress = (callback, ms = 500, setClassLongPress) => {
 
 
 
-const ChatArea = ({ selectedChatUser, setSelectedChatUser }) => {
-
+const ChatArea = ({ selectedChatUser, setSelectedChatUser, addToast }) => {
+    const dispatch = useDispatch()
+    const user = useSelector(state => state?.user?.user?.DATA);
+    const socketRef = useSocket();
     const [clipTab, setClipTab] = useState(false)
     const [emojiTab, setEmojiTab] = useState(false)
     const [classLongPress, setClassLongPress] = useState("");
@@ -205,26 +211,46 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser }) => {
     const handelSend = async (selectedChatUser, message, messageType) => {
 
         try {
+            const clientMessageId = crypto.randomUUID();
             let payload = {}
             if (selectedChatUser.convoId) {
                 payload = {
-                    messageType: messageType,
-                    type: selectedChatUser.fullChatInfo.type,
+                    clientMessageId,
+                    messageType,
+                    type: "message",
+                    conversationType: selectedChatUser?.fullChatInfo?.type,
                     conversationId: selectedChatUser.convoId,
                     content: message
                 }
             } else {
                 payload = {
-                    messageType: messageType,
-                    type: selectedChatUser.fullChatInfo.type,
+                    clientMessageId,
+                    messageType,
+                    type: "message",
+                    conversationType: selectedChatUser?.fullChatInfo?.type,
                     members: selectedChatUser.members,
                     content: message
                 }
             }
+            const tempMessage = {
+
+                _id: clientMessageId,
+                conversation_id: selectedChatUser.convoId,
+                sender_id: user,
+                content: message,
+                updatedAt: new Date().toISOString(),
+                status: "sending",
+                isTemporary: true
+            };
+
+            dispatch(addMessage(tempMessage));
             setMessage("")
-            const res = await axios.post(`${BASE_URL}/send-message`, payload, {
-                withCredentials: true
-            })
+
+
+
+            socketRef.current.send(
+                JSON.stringify(payload)
+            );
 
         } catch (err) {
             addToast({
@@ -237,6 +263,14 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser }) => {
             });
         }
     }
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter" && message) {
+
+            handelSend(selectedChatUser, message, "text")
+        }
+    };
+
+
 
     return (
         <div className="flex h-full w-full flex-col overflow-hidden rounded-2xl  bg-transparent ">
@@ -289,6 +323,8 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser }) => {
 
 
                         <input
+
+                            onKeyDown={handleKeyDown}
                             type="text"
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
