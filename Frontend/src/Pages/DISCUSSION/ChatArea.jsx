@@ -263,13 +263,13 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser }) => {
 
             {/* Messages */}
 
-            <div className="flex-1 overflow-y-auto scrollbar-none  px-4">
+            <div className="flex-1 overflow-y-auto scrollbar-none px-0.5  md:px-4">
                 <MessageArea setSelectedChatUser={setSelectedChatUser} selectedChatUser={selectedChatUser} />
 
             </div>
 
             {/* Input */}
-            <div className="w-full flex items-center px-4 relative">
+            <div className="w-full flex items-center px-2 sm:px-4 relative">
                 <div className="relative cursor-pointer" onClick={() => setClipTab(true)} onMouseEnter={() => setClipTab(true)}>
                     <span>
                         <div className="bg-[#212121] p-2.5 rounded-full ">
@@ -281,7 +281,7 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser }) => {
 
 
 
-                <div className=" p-4 w-full">
+                <div className="px-2 py-3 sm:p-4 w-full">
 
                     <div className="flex items-center gap-3 rounded-xl bg-[#212121] p-2.5">
 
@@ -295,7 +295,7 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser }) => {
 
 
                             placeholder="Write a message..."
-                            className="flex-1 text-xl bg-transparent outline-none"
+                            className="flex-1 text-base sm:text-lg md:text-xl bg-transparent outline-none"
                         />
                         <div className="cursor-pointer" onClick={() => setEmojiTab(true)} onMouseEnter={() => setEmojiTab(true)}>
                             <Smile width={24} height={24} />
