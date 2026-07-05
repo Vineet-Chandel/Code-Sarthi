@@ -38,7 +38,7 @@ import Signup from "./Pages/auth/Signup";
 
 /* ===== APP (PROTECTED) ===== */
 import Dashboard from "./Pages/Dashboard";
-import Discussions from "./Pages/Discussions";
+import Discussions from "./Pages/DISCUSSION/Discussion";
 import Meeting from "./Pages/Meeting";
 import Explore from "./Pages/Explore";
 
@@ -58,7 +58,7 @@ import Assignment from "./Pages/Assignment";
 import Notes from "./Pages/Notes";
 import EditProfile from "./personalPages/editProfile";
 import Connections from "./personalPages/Connections";
-import Collab from "./Pages/DISCUSSION/Collab";
+import Collab from "./Pages/Collab";
 import HTML from "./Pages/Toolkit/Htmlw";
 import Css from "./Pages/Toolkit/Css";
 import Toolkit from "./Pages/Toolkit/Toolkitw";

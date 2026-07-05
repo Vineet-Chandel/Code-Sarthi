@@ -12,7 +12,7 @@ import Toast from '../CARRER-PROFILE-CREATION/2/Toast'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useOutletContext } from 'react-router-dom'
 
-const Collab = () => {
+const Discussion = () => {
   const {
     selectedChatUser,
     setSelectedChatUser,
@@ -20,12 +20,13 @@ const Collab = () => {
   const allMessages = useSelector(state => state.messages)
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-
+  const [subLoading, setSubLoading] = useState(false)
 
 
 
   const messages = async (id) => {
     try {
+      setLoading(true)
       const res = await axios.post(`${BASE_URL}/get-message/${id}`, {}, {
         withCredentials: true
       });
@@ -42,6 +43,8 @@ const Collab = () => {
           err?.message ||
           "Something went wrong"
       });
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -139,4 +142,4 @@ const Collab = () => {
   )
 }
 
-export default Collab
+export default Discussion

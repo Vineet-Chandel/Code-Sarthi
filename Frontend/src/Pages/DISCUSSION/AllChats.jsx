@@ -19,6 +19,9 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
     const loggedUser = useSelector(store => store.user.user.DATA);
     const dispatch = useDispatch();
 
+
+
+
     useEffect(() => {
         console.log(connectionsARR.total)
     }, [])
@@ -92,7 +95,9 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
         }
     }, [dispatch]);
 
-
+    useEffect(() => {
+        console.log(loading)
+    }, [loading])
 
 
 
@@ -236,7 +241,7 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
                         }
 
 
-                        {chatsARR.length <= 5 && chatsARR.length > 0 && availableConnections.length !== 0 && <div>
+                        {chatsARR.length <= 5 && chatsARR.length >= 0 && availableConnections.length !== 0 && <div>
 
 
                             <div className="w-full px-3 my-4 h-10 rounded-xl bg-black flex items-center  justify-center overflow-hidden shrink-0 bg-white">
@@ -567,7 +572,7 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
                 }
 
 
-                {connectionsARR?.total == 0 && (
+                {!loading && connectionsARR?.total == 0 && (
                     <div className="w-full h-[calc(100vh-200px)]  flex flex-col items-center justify-center gap-2">
                         <div className="w-16 h-16 rounded-full bg-secondary/20 flex items-center justify-center text-secondary">
                             <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" viewBox="0 0 24 24">

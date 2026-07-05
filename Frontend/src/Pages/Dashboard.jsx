@@ -99,9 +99,9 @@ const Dashboard = () => {
 
 
     return (
-        <div data-theme="caramellatte" className="min-h-[90vh] h-auto bg-white  p-2 ">
+        <div data-theme="caramellatte" className="h-auto bg-white  p-1  ">
 
-            <div className="w-full mx-auto flex xl:flex-row flex-col gap-2">
+            <div className="w-full h-full mx-auto flex xl:flex-row flex-col gap-2">
 
                 {/* LEFT PROFILE CARD */}
                 <div
@@ -122,6 +122,7 @@ md:flex-row
 xl:flex-col
 xl:min-h-[90vh]
 h-auto
+mt-2.5
 "
                 >
 
@@ -283,7 +284,7 @@ md:text-3xl font-bold tracking-wide text-secondary-content">
 
                 {/* RIGHT SIDE DASHBOARD */}
 
-                <div className="flex flex-col gap-2 w-full xl:w-3/4">
+                <div className="flex flex-col gap-2 w-full xl:w-3/4 mt-2.5">
                     <div className="lg:col-span-2 space-y-8">
 
                         {/* Stats Cards */}
