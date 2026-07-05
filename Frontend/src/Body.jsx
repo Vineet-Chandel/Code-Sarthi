@@ -150,17 +150,21 @@ const Body = () => {
 
 
     return (
-        <div data-theme="caramellatte" className="bg-base-200">
+        <div data-theme="caramellatte" className="bg-base-200 h-screen">
             <InternetPopup />
+            <div className=" h-[53px]">
+                <NavBar selectedChatUser={selectedChatUser} setSelectedChatUser={setSelectedChatUser} />
+            </div>
 
-            <NavBar selectedChatUser={selectedChatUser} setSelectedChatUser={setSelectedChatUser} />
+            <div className="h-[calc(100vh-53px)]">
+                <Outlet
+                    context={{
+                        selectedChatUser,
+                        setSelectedChatUser,
+                    }}
+                />
+            </div>
 
-            <Outlet
-                context={{
-                    selectedChatUser,
-                    setSelectedChatUser,
-                }}
-            />
         </div>
     );
 };

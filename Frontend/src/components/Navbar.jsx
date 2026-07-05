@@ -169,7 +169,7 @@ const NavBar = ({ setSelectedChatUser, selectedChatUser }) => {
 
     return (
         <div>
-            <div data-theme="caramellatte" className=" relative z-40   bg-base-100 border border-secondary flex items-center justify-between rounded-b-xl px-1 sm:px-2 lg:px-4 py-1.5  ">
+            <div data-theme="caramellatte" className=" relative z-40   bg-base-100 border border-secondary flex items-center justify-between rounded-b-xl px-1 sm:px-2 lg:px-4 py-1.5 h-full ">
 
                 {/* Left side - Menu button */}
                 <div className="NavStart flex justify-center items-center gap-2.5">
