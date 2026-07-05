@@ -115,6 +115,10 @@ module.exports = (server) => {
             // The rawMessage parameter is raw binary data (a Buffer in Node.js) or bytes received over the network.
         })
         socket.on('error', (err) => {
+
+            if (err.code === "EADDRINUSE") {
+                console.error(`Port ${PORT} is already in use.`);
+            }
             console.log("error", err)
         })
         socket.on("close", () => {

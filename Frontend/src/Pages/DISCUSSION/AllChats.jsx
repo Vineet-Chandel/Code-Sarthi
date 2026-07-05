@@ -178,7 +178,7 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
                                                                 {item.map((dot, dotIdx) => (
                                                                     <div
                                                                         key={dotIdx}
-                                                                        className={`w-[2.5px] h-[2.5px] rounded-full ${dot === 1 ? "bg-white" : "bg-white/20"
+                                                                        className={`w-[4px] h-[4px] rounded-full ${dot === 1 ? "bg-white" : "bg-white/20"
                                                                             }`}
                                                                     />
                                                                 ))}
@@ -203,7 +203,7 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
                                                                 {item.map((dot, dotIdx) => (
                                                                     <div
                                                                         key={dotIdx}
-                                                                        className={`w-[2.5px] h-[2.5px] rounded-full ${dot === 1 ? "bg-white" : "bg-white/20"
+                                                                        className={`w-[4px] h-[4px] rounded-full ${dot === 1 ? "bg-white" : "bg-white/20"
                                                                             }`}
                                                                     />
                                                                 ))}
@@ -304,7 +304,7 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
                                                                 {item.map((dot, dotIdx) => (
                                                                     <div
                                                                         key={dotIdx}
-                                                                        className={`w-[2.5px] h-[2.5px] rounded-full ${dot === 1 ? "bg-white" : "bg-white/20"
+                                                                        className={`w-[4px] h-[4px] rounded-full ${dot === 1 ? "bg-white" : "bg-white/20"
                                                                             }`}
                                                                     />
                                                                 ))}
@@ -329,7 +329,7 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
                                                                 {item.map((dot, dotIdx) => (
                                                                     <div
                                                                         key={dotIdx}
-                                                                        className={`w-[2.5px] h-[2.5px] rounded-full ${dot === 1 ? "bg-white" : "bg-white/20"
+                                                                        className={`w-[4px] h-[4px] rounded-full ${dot === 1 ? "bg-white" : "bg-white/20"
                                                                             }`}
                                                                     />
                                                                 ))}
