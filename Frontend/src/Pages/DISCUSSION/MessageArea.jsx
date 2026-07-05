@@ -36,6 +36,7 @@ const MessageArea = ({ selectedChatUser }) => {
             setMessageTab(prev => ({
                 ...prev,
                 isOpen: false,
+                idx: null
             }));
         };
         chat.addEventListener("scroll", handleScroll);
@@ -86,6 +87,7 @@ const MessageArea = ({ selectedChatUser }) => {
                 onClick={() => setMessageTab(prev => ({
                     ...prev,
                     isOpen: false,
+                    idx: null
                 }))}
 
                 className='h-full  w-full flex flex-col   overflow-y-auto scrollbar-none '>
@@ -138,7 +140,7 @@ const MessageArea = ({ selectedChatUser }) => {
 
                     return (
 
-                        <div key={idx} >
+                        <div key={idx} className='relative '>
                             {items?.sender_id?._id !== user?._id ? (
                                 <div
                                     onContextMenu={(e) => {
@@ -153,7 +155,7 @@ const MessageArea = ({ selectedChatUser }) => {
                                             setMsg: items?.content
                                         });
                                     }}
-                                    className='w-full flex items-center justify-start  mt-1 relative'>
+                                    className={`${messageTab.idx == idx ? "bg-white/10 absolute w-full inset-0" : "bg-transparent"} transition-all duration-300 w-full flex items-center  justify-start  mt-1 relative`}>
 
 
                                     <div

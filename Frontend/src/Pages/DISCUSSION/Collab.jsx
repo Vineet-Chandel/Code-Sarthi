@@ -10,17 +10,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addMessage, setConversationMessages } from "../../utils/messageSlice"
 import Toast from '../CARRER-PROFILE-CREATION/2/Toast'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useOutletContext } from 'react-router-dom'
 
 const Collab = () => {
-
+  const {
+    selectedChatUser,
+    setSelectedChatUser,
+  } = useOutletContext();
   const allMessages = useSelector(state => state.messages)
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const [selectedChatUser, setSelectedChatUser] = useState({
-    idx: null,
-    info: null,
-    convoId: null
-  });
+
 
 
 
@@ -91,9 +91,11 @@ const Collab = () => {
 
 
   return (
-    <div className='h-[calc(100vh-63px)] w-screen bg-black flex gap-1 justify-center items-center p-4'>
+    <div className='h-[calc(100vh-54px)] w-screen bg-black flex gap-1 justify-center items-center p-2 md:p-4'>
+
+
       <ToastContainer toasts={toasts} removeToast={removeToast} />
-      <div className=' h-full w-[25vw]  bg-[#212121] rounded-3xl pl-2 pr-1 p-3'>
+      <div className={`    ${selectedChatUser?.info ? "hidden md:block" : "block"} h-full w-full  sm:relative md:w-[340px] lg:w-[380px] xl:w-[420px]  bg-[#212121] rounded-3xl pl-2 pr-1 p-3`}>
 
         <div className='h-[53px] '>
           <SearchChats loading={loading} setLoading={setLoading} />
@@ -111,8 +113,11 @@ const Collab = () => {
 
 
       </div>
-      <div className=' h-full w-[75vw] bg-black rounded-2xl  bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.1)_1px,transparent_1px)]
-    bg-[size:40px_40px]  flex justify-center items-center flex-col'>
+      <div className={`  ${selectedChatUser?.info
+        ? "flex"
+        : "hidden md:flex"
+        }    flex-1 h-full   sm:relative bg-black rounded-2xl  bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.1)_1px,transparent_1px)]
+    bg-[size:40px_40px]  flex justify-center items-center flex-col`}>
 
 
         {selectedChatUser?.info === null && (<><svg className='w-[400px] h-[400px]  ' viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

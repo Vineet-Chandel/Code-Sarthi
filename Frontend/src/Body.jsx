@@ -13,7 +13,7 @@ const Body = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate(); // ✅ rename
     const [isLoading, setIsLoading] = useState(true);
-    const [selectedChatUser2, setSelectedChatUser2] = useState({ id: null, info: null, isOpenTab: false });
+    const [selectedChatUser, setSelectedChatUser] = useState({ id: null, info: null, isOpenTab: false });
     const fetchUserData = async () => {
         try {
             const response = await axios.get(
@@ -153,12 +153,12 @@ const Body = () => {
         <div data-theme="caramellatte" className="bg-base-200">
             <InternetPopup />
 
-            <NavBar selectedChatUser2={selectedChatUser2} setSelectedChatUser2={setSelectedChatUser2} />
+            <NavBar selectedChatUser={selectedChatUser} setSelectedChatUser={setSelectedChatUser} />
 
             <Outlet
                 context={{
-                    selectedChatUser2,
-                    setSelectedChatUser2,
+                    selectedChatUser,
+                    setSelectedChatUser,
                 }}
             />
         </div>

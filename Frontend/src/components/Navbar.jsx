@@ -18,7 +18,7 @@ import BASE_URL from "../Pages/auth/baseURL";
 import Search from "./navSearch";
 import { useLocation } from "react-router-dom";
 
-const NavBar = ({ setSelectedChatUser2, selectedChatUser2 }) => {
+const NavBar = ({ setSelectedChatUser, selectedChatUser }) => {
     const location = useLocation();
 
 
@@ -320,11 +320,20 @@ group-hover:after:w-full">
 
 
                 {/* Right side - Profile button */}
-                < div className="NavEnd relative flex gap-3 justify-center items-center w-auto " >
+                < div className="NavEnd relative flex gap-1 min-[430px]:gap-2 sm:gap-3 justify-center items-center w-auto " >
                     <div className="md:flex hidden">
                         <Search height={35} displayType={"nav"} />
                     </div>
-                    {(activePage !== "Code Collab" || selectedChatUser2.info === null) && (
+
+                    {selectedChatUser.info !== null && < div onClick={() => setSelectedChatUser({ info: null })} className="relative md:hidden flex  items-center bg-[#212121] p-2 rounded-full justify-center text-white/50 hover:text-[#fff] transition-all duration-300">
+                        <svg className="rotate-[270deg]" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 80 80">
+                            <g fill="none">
+                                <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z"></path>
+                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={6} d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177"></path>
+                            </g>
+                        </svg>
+                    </div>}
+                    {(activePage !== "Code Collab" || selectedChatUser.info === null) && (
                         <button
                             onClick={openProfile}
                             className="h-10 rounded-full overflow-hidden bg-black cursor-pointer transition-all duration-300  relative group"
@@ -343,17 +352,17 @@ group-hover:after:w-full">
                     )}
 
 
-                    {activePage === "Code Collab" && selectedChatUser2.info !== null && (
+                    {activePage === "Code Collab" && selectedChatUser.info !== null && (
 
                         <div className="bg-white/10 h-full flex gap-1 rounded-full p-1">
                             <button
-                                onClick={() => setSelectedChatUser2({ ...selectedChatUser2, isOpenTab: true })}
-                                className={`h-10 rounded-full overflow-hidden bg-black cursor-pointer transition-all duration-300 border-2  ${selectedChatUser2?.info?.isOnline ? "border-green-500" : "border-red-500"} relative group`}
+                                onClick={() => setSelectedChatUser({ ...selectedChatUser, isOpenTab: true })}
+                                className={`h-10 rounded-full overflow-hidden bg-black cursor-pointer transition-all duration-300 border-2  ${selectedChatUser?.info?.isOnline ? "border-green-500" : "border-red-500"} relative group`}
                                 aria-label="Open profile menu"
                             >
                                 <div className="h-full w-full rounded-full overflow-hidden  ">
                                     <img
-                                        src={selectedChatUser2?.info?.photoUrl.url}
+                                        src={selectedChatUser?.info?.photoUrl.url}
                                         alt="Profile"
                                         className="h-full w-full object-cover transition-all duration-500   "
                                     />
@@ -524,7 +533,7 @@ group-hover:after:w-full">
 
 
 
-        </div>
+        </div >
 
     );
 };

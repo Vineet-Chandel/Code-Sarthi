@@ -10,13 +10,10 @@ import { BsPersonWorkspace } from 'react-icons/bs';
 import { IoBarChart } from 'react-icons/io5';
 import { setChatUsers } from '@/utils/chat-user-slice';
 
-const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, addToast }) => {
+const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelectedChatUser, }) => {
 
     const navigate = useNavigate()
-    const {
-        selectedChatUser2,
-        setSelectedChatUser2,
-    } = useOutletContext();
+
     const connectionsARR = useSelector(state => state?.connections || []);
     const chatsARR = useSelector(state => state?.chats?.users?.data || [])
     const loggedUser = useSelector(store => store.user.user.DATA);
@@ -127,7 +124,7 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
             <div className='h-full w-full overflow-y-auto   scrollbar-none '>
 
 
-                {!selectedChatUser2?.isOpenTab &&
+                {!selectedChatUser?.isOpenTab &&
 
 
                     <div className='mt-3 p-0 w-[100%] '>
@@ -137,14 +134,9 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                 user?._id !== loggedUser._id && chatUser.type === "private" && <div key={index}
                                     onClick={() => {
                                         if (selectedChatUser?.id === user._id) {
-                                            setSelectedChatUser({
-                                                id: null,
-                                                info: null,
-                                                convoId: null,
-                                                fullChatInfo: null
-                                            });
 
-                                            setSelectedChatUser2(prev => ({
+
+                                            setSelectedChatUser(prev => ({
                                                 id: null,
                                                 info: null,
                                                 convoId: null,
@@ -153,14 +145,9 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                             return;
                                         }
 
-                                        setSelectedChatUser({
-                                            id: user._id,
-                                            info: user,
-                                            convoId: chatUser._id,
-                                            fullChatInfo: chatUser
-                                        });
 
-                                        setSelectedChatUser2(prev => ({
+
+                                        setSelectedChatUser(prev => ({
 
                                             id: user._id,
                                             info: user,
@@ -273,14 +260,9 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                 <div key={index}
                                     onClick={() => {
                                         if (selectedChatUser?.id === user._id) {
-                                            setSelectedChatUser({
-                                                id: null,
-                                                info: null,
-                                                convoId: null,
-                                                fullChatInfo: null
-                                            });
 
-                                            setSelectedChatUser2(prev => ({
+
+                                            setSelectedChatUser(prev => ({
                                                 id: null,
                                                 info: null,
                                                 convoId: null,
@@ -297,13 +279,7 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
 
                                         });
 
-                                        setSelectedChatUser2(prev => ({
 
-                                            id: user._id,
-                                            info: user,
-                                            convoId: chatUser._id,
-                                            fullChatInfo: chatUser
-                                        }));
                                     }}
                                     className={`${selectedChatUser?.id === user._id ? "bg-white" : "bg-white/20"} group text-white h-13 w-full  cursor-pointer  rounded-2xl my-2 flex items-center gap-2 p-1.5`}>
 
@@ -395,16 +371,16 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
 
 
                 {
-                    selectedChatUser2?.isOpenTab && (
+                    selectedChatUser?.isOpenTab && (
                         <div className="w-full  h-[calc(100vh-130px)] rounded-3xl bg-base-100 mt-2 flex flex-col  items-center overflow-hidden  relative">
                             <div className="w-full flex justify-between absolute z-10 p-5 ">
 
-                                <div className="hover:bg-base-300 hover:border hover:border-secondary bg-base-200 w-12 flex justify-center items-center rounded-full h-12 cursor-pointer" onClick={() => setSelectedChatUser2({ ...selectedChatUser2, isOpenTab: false })}>
+                                <div className="hover:bg-base-300 hover:border hover:border-secondary bg-base-200 w-12 flex justify-center items-center rounded-full h-12 cursor-pointer" onClick={() => setSelectedChatUser({ ...selectedChatUser, isOpenTab: false })}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
                                         <path fill="#fff" d="M20 11H7.83l5.59-5.59L12 4l-8 8l8 8l1.41-1.41L7.83 13H20z"></path>
                                     </svg>
                                 </div>
-                                <div className="flex justify-center items-center gap-2 " onClick={() => setSelectedChatUser2({ ...selectedChatUser2, isOpenTab: false })}>
+                                <div className="flex justify-center items-center gap-2 " onClick={() => setSelectedChatUser({ ...selectedChatUser, isOpenTab: false })}>
                                     <div className='flex justify-center items-center  hover:bg-base-300 hover:border hover:border-secondary bg-base-200 w-12 rounded-full h-12 cursor-pointer'>
                                         <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24">
                                             <path fill="currentColor" d="M19.95 21q-3.125 0-6.175-1.362t-5.55-3.863t-3.862-5.55T3 4.05q0-.45.3-.75t.75-.3H8.1q.35 0 .625.238t.325.562l.65 3.5q.05.4-.025.675T9.4 8.45L6.975 10.9q.5.925 1.187 1.787t1.513 1.663q.775.775 1.625 1.438T13.1 17l2.35-2.35q.225-.225.588-.337t.712-.063l3.45.7q.35.1.575.363T21 15.9v4.05q0 .45-.3.75t-.75.3"></path>
@@ -426,22 +402,22 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                             <div className="w-full  flex flex-col ">
                                 <div className="w-full flex justify-center mt-5">
 
-                                    {selectedChatUser2?.info?.photoUrl?.url ? (<img src={selectedChatUser2?.info?.photoUrl?.url} alt="profile" className="w-[150px] h-[150px] rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300" />
+                                    {selectedChatUser?.info?.photoUrl?.url ? (<img src={selectedChatUser?.info?.photoUrl?.url} alt="profile" className="w-[150px] h-[150px] rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300" />
                                     ) : (
                                         <img src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776259172/Pinterest_Pin_di5dy8.jpg" alt="profile" className="w-[150px] h-[150px] rounded-full object-cover ring-2 ring-accent group-hover:ring-secondary transition-all duration-300" />
                                     )}
                                 </div>
                                 <div className="flex flex-col items-center">
                                     <span className="text-info text-2xl font-extrabold mt-3" >
-                                        {selectedChatUser2?.info?.firstName ? (
-                                            <>{selectedChatUser2?.info?.firstName} {selectedChatUser2?.info?.middleName} {selectedChatUser2?.info?.lastName} </>
+                                        {selectedChatUser?.info?.firstName ? (
+                                            <>{selectedChatUser?.info?.firstName} {selectedChatUser?.info?.middleName} {selectedChatUser?.info?.lastName} </>
                                         ) : (
                                             <>CodeSarthi User</>
                                         )}
                                     </span>
                                     <span className="text-info text-sm pl-1 flex justify-center items-center gap-1">
-                                        {selectedChatUser2?.info?._id && (selectedChatUser2?.info?.username)}
-                                        {selectedChatUser2?.info?._id && (<div onClick={() => handleCopy(selectedChatUser2?.info?.username)}>
+                                        {selectedChatUser?.info?._id && (selectedChatUser?.info?.username)}
+                                        {selectedChatUser?.info?._id && (<div onClick={() => handleCopy(selectedChatUser?.info?.username)}>
                                             <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24">
                                                 <g fill="none">
                                                     <path fill="#fff" d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z" opacity={0.16}></path>
@@ -463,42 +439,42 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                 <div className="mt-1 ">
 
                                     <div className="flex items-center gap-3  px-5 py-1 rounded-xl">
-                                        {selectedChatUser2?.info?._id && (
+                                        {selectedChatUser?.info?._id && (
                                             <span className="text-sm text-info font-medium flex justify-center items-center gap-3"><FaUniversity color="#fff" />
-                                                {selectedChatUser2?.info?.college}
+                                                {selectedChatUser?.info?.college}
                                             </span>
                                         )}
                                     </div>
 
                                     <div className="flex items-center gap-3 px-5 py-1 rounded-xl">
-                                        {selectedChatUser2?.info?._id && (
+                                        {selectedChatUser?.info?._id && (
                                             <span className="text-sm text-info font-medium flex justify-center items-center gap-3"><BsPersonWorkspace color="#fff" />
-                                                {selectedChatUser2?.info?.profession}
+                                                {selectedChatUser?.info?.profession}
                                             </span>
                                         )}
                                     </div>
 
                                     <div className="flex items-center gap-3 px-5 py-1 rounded-xl">
-                                        {selectedChatUser2?.info?._id && (
+                                        {selectedChatUser?.info?._id && (
                                             <span className="text-sm text-info font-medium flex justify-center items-center gap-3">
                                                 <IoBarChart color="#fff" />
-                                                {selectedChatUser2?.info?.skills?.join(", ")}
+                                                {selectedChatUser?.info?.skills?.join(", ")}
                                             </span>
                                         )}
                                     </div>
                                 </div>
                                 {/* About */}
-                                {selectedChatUser2?.info?._id && (
+                                {selectedChatUser?.info?._id && (
                                     <div className="my-2 bg-base-100 border border-base-300  py-2 px-3 rounded-2xl m-1">
                                         <h3 className="text-lg font-semibold mb-1 text-white">
                                             About
                                         </h3>
                                         <p className="text-info text-xs leading-relaxed">
-                                            {selectedChatUser2?.info?.about}
+                                            {selectedChatUser?.info?.about}
                                         </p>
                                     </div>
                                 )}
-                                {selectedChatUser2?.info?._id && (
+                                {selectedChatUser?.info?._id && (
                                     <div>
 
                                         <div className="text-white text-sm pl-1 flex justify-between px-3 pl-3 cursor-pointer items-center gap-1 bg-base-300   border border-secondary border-[2px] py-2 rounded-2xl">
@@ -518,10 +494,10 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                             <div className="flex justify-center items-center gap-1">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 16 16">
                                                     <path fill="#fff" d="M4 3a2 2 0 0 0-2 2v.201l6 3.231l6-3.23V5a2 2 0 0 0-2-2zm10 3.337L8.237 9.44a.5.5 0 0 1-.474 0L2 6.337V11a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2z"></path>
-                                                </svg>   {selectedChatUser2?.info?.gmail}
+                                                </svg>   {selectedChatUser?.info?.gmail}
                                             </div>
                                             <div>
-                                                <div onClick={() => handleCopy(selectedChatUser2?.info?.gmail)}>
+                                                <div onClick={() => handleCopy(selectedChatUser?.info?.gmail)}>
                                                     <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24">
                                                         <g fill="none">
                                                             <path fill="#fff" d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z" opacity={0.16}></path>
@@ -546,7 +522,7 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                                     <path fill="#fff" fill-rule="evenodd" d="M10.157 12.711L4.5 18.368l-1.414-1.414l4.95-4.95l-4.95-4.95L4.5 5.64l5.657 5.657a1 1 0 0 1 0 1.414" />
                                                 </svg>
 
-                                                {selectedChatUser2?.info?.username}
+                                                {selectedChatUser?.info?.username}
                                             </div>
                                             <div>
 
@@ -572,7 +548,7 @@ const AllChats = ({ loading, setLoading, selectedChatUser, setSelectedChatUser, 
                                                 </svg>
 
 
-                                                {selectedChatUser2?.info?.username}
+                                                {selectedChatUser?.info?.username}
                                             </div>
                                             <div>
 
