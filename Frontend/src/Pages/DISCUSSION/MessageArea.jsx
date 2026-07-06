@@ -110,39 +110,47 @@ const MessageArea = ({ selectedChatUser, setReplyHandeler, replyHandeler }) => {
 
                     const prev = messages[idx - 1];
                     const next = messages[idx + 1];
-                    const isSameAsPrev = prev?.sender_id === items?.sender_id;
-                    const isSameAsNext = next?.sender_id === items?.sender_id;
+                    const currentId = String(items.sender_id);
+                    const prevId = prev ? String(prev.sender_id) : null;
+                    const nextId = next ? String(next.sender_id) : null;
+
+                    const isSameAsPrev = currentId === prevId;
+                    const isSameAsNext = currentId === nextId;
 
                     const isSingle = !isSameAsPrev && !isSameAsNext;
                     const isFirst = !isSameAsPrev && isSameAsNext;
                     const isMiddle = isSameAsPrev && isSameAsNext;
                     const isLast = isSameAsPrev && !isSameAsNext;
 
+                    const marginClass =
+                        isSingle || isFirst
+                            ? "mt-4"
+                            : "mt-0.5";
+                    const SingleClassName =
+                        "rounded-2xl";
+                    const FirstClassName =
+                        "rounded-2xl rounded-bl-md"
+                    const MiddleClassName =
+                        "rounded-2xl rounded-tl-md rounded-bl-md";
 
-                    const SingleClassName = "  rounded-t-xl rounded-r-xl"
-                    const FirstClassName = "rounded-t-xl rounded-r-xl rounded-bl-xl";
-                    const MiddleClassName = "rounded-xl ";
-
-                    const LastClassName = "rounded-r-xl rounded-tl-md rounded-bl-xl";
-
+                    const LastClassName =
+                        "rounded-2xl rounded-tl-md";
 
 
                     const singleClass =
-                        "rounded-t-xl rounded-l-xl";
+                        "rounded-2xl";
 
                     const firstClass =
-                        "rounded-t-xl rounded-l-xl rounded-br-md";
-
+                        "rounded-2xl rounded-br-md";
                     const middleClass =
-                        "rounded-l-xl rounded-r-md";
-
+                        "rounded-2xl rounded-tr-md rounded-br-md";
                     const lastClass =
-                        "rounded-l-xl rounded-tr-md rounded-br-xl";
+                        "rounded-2xl rounded-tr-md";
 
 
                     return (
 
-                        <div key={idx} className='relative '>
+                        <div key={items?._id} className='relative '>
                             {items?.sender_id !== user?._id ? (
                                 <div
                                     onContextMenu={(e) => {
@@ -157,12 +165,18 @@ const MessageArea = ({ selectedChatUser, setReplyHandeler, replyHandeler }) => {
                                             setMsg: items
                                         });
                                     }}
-                                    className={`${messageTab.idx == idx ? "bg-white/10 absolute w-full inset-0" : "bg-transparent"} transition-all duration-300 w-full flex items-center  justify-start  mt-1 relative`}>
+                                    className={`${messageTab.idx == idx ? "bg-white/10 absolute w-full inset-0" : "bg-transparent"} transition-all duration-300 w-full flex items-center  justify-start   ${marginClass}  relative`}>
 
 
-                                    <div
+                                    <motion.div
+                                        layout
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0 }}
 
-                                        className={`max-w-[45%] break-words [overflow-wrap:anywhere] whitespace-pre-wrap overflow-hidden [overflow-wrap:anywhere] flex  font-poppins  ${items?.content?.length > 40 ? "flex-col items-start gap-2" : "items-end gap-3 flex-row "} min-w-[10%] bg-[#212121] py-3 px-5   ${isSingle ? SingleClassName : isFirst ? FirstClassName : isMiddle ? MiddleClassName : isLast ? LastClassName : ""}`}>
+                                        className={` text-sm sm:text-md lg:text-xl max-w-[80%]
+md:max-w-[65%]
+xl:max-w-[55%] break-words [overflow-wrap:anywhere] whitespace-pre-wrap overflow-hidden [overflow-wrap:anywhere] flex  font-poppins  ${items?.content?.length > 40 ? "flex-col items-start gap-2" : "items-end gap-3 flex-row "} min-w-[10%] bg-[#242424]  py-3 px-5 ${isSingle ? SingleClassName : isFirst ? FirstClassName : isMiddle ? MiddleClassName : isLast ? LastClassName : ""}`}>
 
                                         {displayText?.replace(/\t/g, "    ")}
 
@@ -181,7 +195,7 @@ const MessageArea = ({ selectedChatUser, setReplyHandeler, replyHandeler }) => {
                                                 });
                                             } else {
                                                 setReadMore({
-                                                    idx,
+                                                    idx: items?._id,
                                                     isOpen: true,
                                                 });
                                             }
@@ -193,7 +207,8 @@ const MessageArea = ({ selectedChatUser, setReplyHandeler, replyHandeler }) => {
                                                 <path d="M18 15L12 9L6 15" stroke="#aeacacff" strokeWidth="2" />
                                             </svg>}
                                         </div>}
-                                    </div>
+                                    </motion.div>
+
 
 
                                 </div>
@@ -212,11 +227,18 @@ const MessageArea = ({ selectedChatUser, setReplyHandeler, replyHandeler }) => {
                                             setMsg: items
                                         });
                                     }}
-                                    className='w-full flex items-center justify-end  mt-1 relative'>
+                                    className={`w-full flex items-center justify-end   ${marginClass}  relative`}>
 
-                                    <div
+                                    <motion.div
+                                        layout
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0 }}
 
-                                        className={`max-w-[45%] break-words [overflow-wrap:anywhere] whitespace-pre-wrap overflow-hidden [overflow-wrap:anywhere] flex  font-poppins   ${items?.content?.length > 40 ? "flex-col items-start gap-2" : "justify-end gap-3 flex-col items-end"} bg-white text-black py-3 px-5    ${isSingle ? singleClass : isFirst ? firstClass : isMiddle ? middleClass : isLast ? lastClass : ""}`}>
+
+                                        className={` text-sm sm:text-md lg:text-xl max-w-[80%]
+md:max-w-[65%]
+xl:max-w-[55%] break-words [overflow-wrap:anywhere] whitespace-pre-wrap overflow-hidden [overflow-wrap:anywhere] flex  font-poppins   ${items?.content?.length > 40 ? "flex-col items-start gap-2" : "justify-end gap-3 flex-col items-end"} bg-white text-black py-3 px-5    ${isSingle ? singleClass : isFirst ? firstClass : isMiddle ? middleClass : isLast ? lastClass : ""}`}>
 
 
                                         {displayText?.replace(/\t/g, "    ")}
@@ -256,7 +278,7 @@ const MessageArea = ({ selectedChatUser, setReplyHandeler, replyHandeler }) => {
                                                 });
                                             } else {
                                                 setReadMore({
-                                                    idx,
+                                                    idx: items?._id,
                                                     isOpen: true,
                                                 });
                                             }
@@ -268,10 +290,11 @@ const MessageArea = ({ selectedChatUser, setReplyHandeler, replyHandeler }) => {
                                                 <path d="M18 15L12 9L6 15" stroke="#7f7c7cff" strokeWidth="2" />
                                             </svg>}
                                         </div>}
-                                    </div>
+                                    </motion.div>
 
                                 </div>
-                            )}
+                            )
+                            }
 
 
                         </div>

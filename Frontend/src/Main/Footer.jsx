@@ -2,6 +2,58 @@ import { motion } from 'framer-motion';
 import React from 'react';
 import { useNavigate } from 'react-router-dom'; // Ensure this is installed, or replace with standard navigation
 
+
+const MainCTAbutton = ({ ClassName = "" }) => {
+    return (
+
+
+        <div onClick={() => navigate("/login")} className={`mt-3 flex items-center justify-between cursor-pointer text-black  font-bold ${ClassName}`}>
+            <span className="text-white relative -right-[1px] rotate-180">
+                <svg height="40" viewBox="0 0 15 40" width="15" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M0 .5h11A3.5 3.5 0 0 1 14.5 4v20.523a5.5 5.5 0 0 1-1.416 3.684l-8.547 9.477A5.5 5.5 0 0 1 .453 39.5H0"
+                        fill="#000"
+                    />
+                </svg>
+            </span>
+
+            <button className="bg-black text-white  px-4 py-[7.5px] ">Open CodeSarthi</button>
+            <span className="text-white relative rotate-180 -left-[1px]" >
+                <svg height="40" viewBox="0 0 15 40" width="15" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" transform="matrix(-1,0,0,1,0,0)">
+                    <path d="M0 .5h11A3.5 3.5 0 0 1 14.5 4v20.523a5.5 5.5 0 0 1-1.416 3.684l-8.547 9.477A5.5 5.5 0 0 1 .453 39.5H0" data-stroke="true"
+                        fill="#000"
+                    ></path>
+                </svg>
+            </span>
+        </div>
+    )
+}
+const MainCTAbutton2 = ({ ClassName = "" }) => {
+    return (
+
+
+        <div onClick={() => navigate("/login")} className={` flex items-center justify-between cursor-pointer text-black  font-bold ${ClassName}`}>
+
+            <span className="text-white relative -right-[1px]" >
+                <svg height="40" viewBox="0 0 15 40" width="15" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" transform="matrix(-1,0,0,1,0,0)">
+                    <path d="M0 .5h11A3.5 3.5 0 0 1 14.5 4v20.523a5.5 5.5 0 0 1-1.416 3.684l-8.547 9.477A5.5 5.5 0 0 1 .453 39.5H0" data-stroke="true"
+                        fill="#000"
+                    ></path>
+                </svg>
+            </span>
+            <button className="bg-black text-white  px-4 py-[7.5px] ">Founder's Space</button>
+            <span className="text-white relative -left-[1px]">
+                <svg height="40" viewBox="0 0 15 40" width="15" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M0 .5h11A3.5 3.5 0 0 1 14.5 4v20.523a5.5 5.5 0 0 1-1.416 3.684l-8.547 9.477A5.5 5.5 0 0 1 .453 39.5H0"
+                        fill="#000"
+                    />
+                </svg>
+            </span>
+        </div>
+    )
+}
+
 const Footer = () => {
     const navigate = useNavigate();
 
@@ -258,6 +310,9 @@ const Footer = () => {
                                         {link.name}
                                     </motion.span>
                                 ))}
+
+                                <MainCTAbutton />
+                                <MainCTAbutton2 />
                             </div>
                         </div>
                     </div>
