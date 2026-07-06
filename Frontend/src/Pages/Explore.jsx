@@ -7,13 +7,14 @@ import { useDispatch, useSelector } from "react-redux";
 import Search from "../components/navSearch";
 import { RiUserUnfollowFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const Explore = () => {
     const user = useSelector(store => store.user.user.DATA);
     const feed = useSelector(store => store.feed.users || []);
 
     const dispatch = useDispatch();
-    const [page, setPage] = useState(1); // ✅ page defined
+    const [page, setPage] = useState(1);
     const [actionId, setActionId] = useState(null);
     const [actionColorId, setActionColorId] = useState(null);
     const Navigate = useNavigate()
@@ -80,8 +81,9 @@ const Explore = () => {
         <div className="
 w-full min-h-screen
 bg-base-100
-p-4 md:p-10
-relative overflow-hidden
+p-4 md:p-10 scrollbar-none 
+
+relative overflow-y-auto
 ">
             <div className="text-center mb-16 sm:mb-20 lg:mb-24 w-full flex flex-col items-center px-4">
 
@@ -118,25 +120,30 @@ text-blue-500
                     <span className="text-white">You can collab with new developers from all over the world</span>
                 </p>
 
-                <div className="flex gap-3 mt-5">
-                    <div onClick={() => Navigate("/app/connections")} className="rounded-full border-white/15 hover:border-white/30 cursor-pointer border px-4 text-white hover:text-blue-500 transistion-all duration-300 flex items-center justify-center gap-2  py-3">Connections  <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 80 80" className="rotate-45">
-                        <g fill="none">
-                            <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z"></path>
-                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={6} d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177"></path>
-                        </g>
-                    </svg></div>
-                    <div onClick={() => Navigate("/app/requestedUser")} className="rounded-full border-white/15 hover:border-white/30 cursor-pointer border px-4 text-white hover:text-blue-500 transistion-all duration-300 flex items-center justify-center gap-2  py-3">Requested Developers <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 80 80" className="rotate-45">
-                        <g fill="none">
-                            <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z"></path>
-                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={6} d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177"></path>
-                        </g>
-                    </svg></div>
-                    <div onClick={() => Navigate("/app/requestreceived")} className="rounded-full border-white/15 hover:border-white/30 cursor-pointer border px-4 text-white hover:text-blue-500 transistion-all duration-300 flex items-center justify-center gap-2  py-3">Recieved Requests <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 80 80" className="rotate-45">
-                        <g fill="none">
-                            <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z"></path>
-                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={6} d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177"></path>
-                        </g>
-                    </svg></div>
+                <div className="flex flex-wrap justify-center gap-3 mt-5 w-full">
+                    <div
+                        onClick={() => Navigate("/app/connections")}
+                        className="w-full sm:w-auto flex-1 sm:flex-none min-w-[220px] rounded-full border border-white/15 hover:border-white/30 cursor-pointer px-4 py-3 text-white hover:text-blue-500 transition-all duration-300 flex items-center justify-center gap-2"
+                    >
+                        Connections
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 80 80" className="rotate-45"> <g fill="none"> <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z"></path> <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={6} d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177"></path> </g> </svg>
+                    </div>
+
+                    <div
+                        onClick={() => Navigate("/app/requestedUser")}
+                        className="w-full sm:w-auto flex-1 sm:flex-none min-w-[220px] rounded-full border border-white/15 hover:border-white/30 cursor-pointer px-4 py-3 text-white hover:text-blue-500 transition-all duration-300 flex items-center justify-center gap-2"
+                    >
+                        Requested Developers
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 80 80" className="rotate-45"> <g fill="none"> <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z"></path> <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={6} d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177"></path> </g> </svg>
+                    </div>
+
+                    <div
+                        onClick={() => Navigate("/app/requestreceived")}
+                        className="w-full sm:w-auto flex-1 sm:flex-none min-w-[220px] rounded-full border border-white/15 hover:border-white/30 cursor-pointer px-4 py-3 text-white hover:text-blue-500 transition-all duration-300 flex items-center justify-center gap-2"
+                    >
+                        Received Requests
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 80 80" className="rotate-45"> <g fill="none"> <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z"></path> <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={6} d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177"></path> </g> </svg>
+                    </div>
                 </div>
             </div>
 
@@ -146,12 +153,19 @@ text-blue-500
 
                 (
                     <div className="w-full mx-auto flex justify-center text-blue-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="w-15 sm:w-24" viewBox="0 0 24 24">
-                            <path d="M0 0h24v24H0z" fill="none" />
-                            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3c4.97 0 9 4.03 9 9">
-                                <animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12" />
-                            </path>
-                        </svg>
+                        <motion.div
+                            animate={{
+                                rotate: 360,
+                                borderRadius: ["0%", "10%", "100%", "10%", "0%"]
+                            }}
+                            transition={{
+                                duration: 1,
+                                repeat: Infinity,
+                                ease: "linear"
+                            }}
+                            className="w-12 sm:w-24 h-12 sm:h-24 border  border-[5px] sm:border-[10px] border-blue-500  rounded-xl"  >
+
+                        </motion.div>
 
                     </div>
                 ) : (
@@ -176,7 +190,7 @@ text-blue-500
 
                                                         <img
                                                             src={item.photoUrl.url}
-                                                            className=" w-full h-full object-cover rounded-2xl group-hover:scale-110 transition-transform duration-700
+                                                            className=" w-full h-full object-cover rounded-2xl 
 "
                                                         />
 
@@ -192,17 +206,17 @@ text-blue-500
                                             <div className="grid grid-cols-2 gap-2 w-full">
                                                 <div className="text-center p-2 bg-white/10 rounded-lg border border-secondary border-[2px]">
                                                     <div className="text-xs text-white">Age</div>
-                                                    <div className="text-lg font-bold text-white/50">{item.age}</div>
+                                                    <div className="text-lg font-bold text-white">{item.age}</div>
                                                 </div>
                                                 <div className="text-center p-2 bg-white/10 rounded-lg border border-secondary border-[2px]">
                                                     <div className="text-xs text-white">Gender</div>
-                                                    <div className="text-lg font-bold text-white/50">{item.gender}</div>
+                                                    <div className="text-lg font-bold text-white">{item.gender}</div>
                                                 </div>
 
                                             </div>
                                             <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 rounded-full border border-secondary border-[2px]">
                                                 <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></div>
-                                                <span className="text-md text-white/50">{item.college}</span>
+                                                <span className="text-md text-white">{item.college}</span>
                                             </div>
                                         </div>
 
@@ -222,7 +236,7 @@ text-blue-500
                                                     <div className="flex items-center gap-2 mt-1">
                                                         <code className="text-white/50 text-sm font-mono">@{item.username}</code>
                                                         <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
-                                                        <span className="text-lg text-gray-500">{item.profession}</span>
+                                                        <span className="text-lg text-white/70">{item.profession}</span>
                                                     </div>
                                                 </div>
 
@@ -237,7 +251,7 @@ text-blue-500
 
                                                         <h3 className="text-sm font-semibold text-white">About</h3>
                                                     </div>
-                                                    <p className="text-white/50 text-sm leading-relaxed">{item.about || "No description available"}</p>
+                                                    <p className="text-white text-sm leading-relaxed">{item.about || "No description available"}</p>
 
                                                 </div>
                                             </div>
@@ -268,28 +282,40 @@ text-blue-500
                                             </div>
 
                                             {/* Action buttons with tech style */}
-                                            <div className="flex flex-wrap gap-3 pt-2">
+                                            <div className="flex justify-end w-full flex-wrap gap-3 pt-2 ">
 
 
 
                                                 <button disabled={actionId === item._id}
-                                                    className={`${actionId === item._id ? "opacity-70 cursor-not-allowed" : ""}relative group flex-1 min-w-[140px] bg-white/10 border border-[2px] border-secondary text-white px-4 py-2.5 rounded-xl font-medium hover:from-purple-500 hover:to-purple-600 transition-all duration-300 active:scale-95  border border-purple-500/30 overflow-hidden`} onClick={() => sendRequest(item.username, item._id)}>
-                                                    <span className="relative z-10 flex items-center justify-center gap-3 text-2xl">
+                                                    className={`${actionId === item._id ? "opacity-70  cursor-not-allowed" : ""}  sm:w-fit px-4 relative group   bg-white/10   px-4 py-2.5 rounded-full font-medium  text-white hover:text-blue-500  transition-all duration-300  `}
 
-                                                        {actionId === item._id && (<svg xmlns="http://www.w3.org/2000/svg" width={32} height={32} viewBox="0 0 24 24">
-                                                            <path fill="#fff" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity={0.3}></path>
-                                                            <path fill="#fff" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z">
-                                                                <animateTransform attributeName="transform" dur="1s" from="0 12 12" repeatCount="indefinite" to="360 12 12" type="rotate"></animateTransform>
-                                                            </path>
-                                                        </svg>)}
+                                                    onClick={() => sendRequest(item.username, item._id)}>
+                                                    <span className="relative z-10 flex items-center justify-center gap-3 text-xl">
 
+                                                        {actionId === item._id ? (<div className="w-full mx-auto flex justify-center text-blue-500">
+                                                            <motion.div
+                                                                animate={{
+                                                                    rotate: 360,
+                                                                    borderRadius: ["0%", "10%", "100%", "10%", "0%"]
+                                                                }}
+                                                                transition={{
+                                                                    duration: 1,
+                                                                    repeat: Infinity,
+                                                                    ease: "linear"
+                                                                }}
+                                                                className="w-8 h-8 border  border-[3px]  border-blue-500  rounded-xl"  >
 
-                                                        <div className="flex justify-center items-center gap-4">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 32 32">
-                                                                <path fill="#ffffff" d="M25 22.142V9c0-2.206-1.794-4-4-4h-4.172l2.586-2.586L18 1l-5 5l5 5l1.414-1.414L16.828 7H21c1.103 0 2 .898 2 2v13.142c-1.72.447-3 2-3 3.858c0 2.206 1.794 4 4 4s4-1.794 4-4c0-1.858-1.28-3.41-3-3.858M24 28c-1.103 0-2-.897-2-2s.897-2 2-2s2 .898 2 2s-.897 2-2 2M4 6c0 1.858 1.28 3.41 3 3.858v12.284c-1.72.447-3 2-3 3.858c0 2.206 1.794 4 4 4s4-1.794 4-4c0-1.859-1.28-3.41-3-3.858V9.858c1.72-.447 3-2 3-3.858c0-2.206-1.794-4-4-4S4 3.794 4 6m6 20c0 1.103-.897 2-2 2s-2-.897-2-2s.897-2 2-2s2 .898 2 2m0-20c0 1.103-.897 2-2 2s-2-.897-2-2s.897-2 2-2s2 .897 2 2"></path>
-                                                            </svg>
-                                                            <h1 className="text-white/50">  Send Request</h1>
-                                                        </div>
+                                                            </motion.div>
+
+                                                        </div>)
+
+                                                            :
+                                                            (<div className="flex  transistion-all duration-200 justify-center items-center gap-4">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 32 32">
+                                                                    <path fill="currentColor" d="M25 22.142V9c0-2.206-1.794-4-4-4h-4.172l2.586-2.586L18 1l-5 5l5 5l1.414-1.414L16.828 7H21c1.103 0 2 .898 2 2v13.142c-1.72.447-3 2-3 3.858c0 2.206 1.794 4 4 4s4-1.794 4-4c0-1.858-1.28-3.41-3-3.858M24 28c-1.103 0-2-.897-2-2s.897-2 2-2s2 .898 2 2s-.897 2-2 2M4 6c0 1.858 1.28 3.41 3 3.858v12.284c-1.72.447-3 2-3 3.858c0 2.206 1.794 4 4 4s4-1.794 4-4c0-1.859-1.28-3.41-3-3.858V9.858c1.72-.447 3-2 3-3.858c0-2.206-1.794-4-4-4S4 3.794 4 6m6 20c0 1.103-.897 2-2 2s-2-.897-2-2s.897-2 2-2s2 .898 2 2m0-20c0 1.103-.897 2-2 2s-2-.897-2-2s.897-2 2-2s2 .897 2 2"></path>
+                                                                </svg>
+                                                                <h1 >  Send Request</h1>
+                                                            </div>)}
                                                     </span>
                                                 </button>
                                             </div>
@@ -297,7 +323,7 @@ text-blue-500
                                     </div>
 
                                     {/* Bottom tech border */}
-                                    < div className="h-1 bg-gradient-to-r from-transparent via-blue-500/20 to-transparent" ></div>
+
                                 </div>
                             ))}
                         </div>
@@ -336,17 +362,17 @@ text-blue-500
                         <div className="absolute inset-0 bg-black/50" onClick={() => setShowRequestModal(false)}></div>
 
                         {/* MODAL */}
-                        <div className="relative px-8 py-6 rounded-3xl border border-secondary border-[3px]
+                        <div className="relative px-8 py-6 rounded-3xl 
     bg-base-200
     animate-[modalPop_0.25s_ease]">
 
                             <div className="flex items-center gap-4">
 
                                 {/* ICON */}
-                                <div className="w-[130px] h-[130px] flex items-center justify-center rounded-full bg-base-100 border border-secondary border-[3px]">
+                                <div className="w-[130px] h-[130px] flex items-center justify-center rounded-full bg-base-100 text-blue-500">
                                     <svg xmlns="http://www.w3.org/2000/svg" width={80} height={80} viewBox="0 0 40 40">
                                         <g fill="none" strokeMiterlimit={10}>
-                                            <path fill="#ffb667" stroke="#231f20" d="M37 4.24c-1.89-1.44-4.45-2.38-7 0c-1.52 1-5.67 5-10.22 11c-1.19 1.58-2.32 3.08-3.35 4.49c-3.74-2.84-6.69-4.85-7.91-5c-2.07-.8-4.31 1.45-5.75 3.34S-.32 22.63 1 24.4c.47 1.14 3.13 3.53 6.87 6.38c4.49 3.41 7.73 6 9.63 6.24c2.91 1.13 5-2.31 13.37-13.36c4.55-6 7.45-11 8-12.69c1.56-3.08-.03-5.29-1.87-6.73Z" strokeWidth={1}></path>
+                                            <path fill="currentColor" stroke="#231f20" d="M37 4.24c-1.89-1.44-4.45-2.38-7 0c-1.52 1-5.67 5-10.22 11c-1.19 1.58-2.32 3.08-3.35 4.49c-3.74-2.84-6.69-4.85-7.91-5c-2.07-.8-4.31 1.45-5.75 3.34S-.32 22.63 1 24.4c.47 1.14 3.13 3.53 6.87 6.38c4.49 3.41 7.73 6 9.63 6.24c2.91 1.13 5-2.31 13.37-13.36c4.55-6 7.45-11 8-12.69c1.56-3.08-.03-5.29-1.87-6.73Z" strokeWidth={1}></path>
                                             <path stroke="#fff" strokeLinecap="round" d="M28.56 8.89c1.64-1.84 3.16-3.58 4.55-3.73" strokeWidth={1}></path>
                                         </g>
                                     </svg>
@@ -373,7 +399,7 @@ text-blue-500
 };
 
 export default Explore;
-// onClick = {() => setPage(prev => prev + 1)}
+
 
 
 

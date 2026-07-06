@@ -19,9 +19,12 @@ const connectionSlice = createSlice({
 
         },
         removeConnectionUser: (state, action) => {
+            const idToDelete = action.payload;
+
             state.users = state.users.filter(
-                user => user.connectionId !== action.payload
+                user => user.connectionId !== idToDelete
             );
+
             state.total = state.total - 1;
         },
         clearConnection: (state) => {

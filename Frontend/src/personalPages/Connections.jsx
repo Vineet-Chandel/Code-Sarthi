@@ -6,6 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { FaPeopleCarry } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+
+
 const Connections = () => {
     const Navigate = useNavigate()
     const connectionsARR = useSelector(state => state.connections?.users || []);
@@ -47,8 +50,8 @@ const Connections = () => {
             );
             dispatch(
                 removeConnectionUser(
-                    connectionsARR.filter(item => item.userId !== idtodelte)
-                )
+
+                    idtodelte)
             );
 
             setShowRequestModal(true);
@@ -105,25 +108,34 @@ text-blue-500
 
 
 
-                    <div className="flex gap-3 mt-5">
-                        <div onClick={() => Navigate("/app/discussions")} className="rounded-full border-white/15 hover:border-white/30 cursor-pointer border px-4 text-white hover:text-blue-500 transistion-all duration-300 flex items-center justify-center gap-2  py-3">Collabrate Now  <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 80 80" className="rotate-45">
-                            <g fill="none">
-                                <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z"></path>
-                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={6} d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177"></path>
-                            </g>
-                        </svg></div>
-                        <div onClick={() => Navigate("/app/requestedUser")} className="rounded-full border-white/15 hover:border-white/30 cursor-pointer border px-4 text-white hover:text-blue-500 transistion-all duration-300 flex items-center justify-center gap-2  py-3">Requested Developers <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 80 80" className="rotate-45">
-                            <g fill="none">
-                                <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z"></path>
-                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={6} d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177"></path>
-                            </g>
-                        </svg></div>
-                        <div onClick={() => Navigate("/app/requestreceived")} className="rounded-full border-white/15 hover:border-white/30 cursor-pointer border px-4 text-white hover:text-blue-500 transistion-all duration-300 flex items-center justify-center gap-2  py-3">Recieved Requests <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 80 80" className="rotate-45">
-                            <g fill="none">
-                                <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z"></path>
-                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={6} d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177"></path>
-                            </g>
-                        </svg></div>
+
+
+
+
+                    <div className="flex flex-wrap justify-center gap-3 mt-5 w-full">
+                        <div
+                            onClick={() => Navigate("/app/discussions")}
+                            className="w-full sm:w-auto flex-1 sm:flex-none min-w-[220px] rounded-full border border-white/15 hover:border-white/30 cursor-pointer px-4 py-3 text-white hover:text-blue-500 transition-all duration-300 flex items-center justify-center gap-2"
+                        >
+                            Collabrate Now
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 80 80" className="rotate-45"> <g fill="none"> <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z"></path> <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={6} d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177"></path> </g> </svg>
+                        </div>
+
+                        <div
+                            onClick={() => Navigate("/app/requestedUser")}
+                            className="w-full sm:w-auto flex-1 sm:flex-none min-w-[220px] rounded-full border border-white/15 hover:border-white/30 cursor-pointer px-4 py-3 text-white hover:text-blue-500 transition-all duration-300 flex items-center justify-center gap-2"
+                        >
+                            Requested Developers
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 80 80" className="rotate-45"> <g fill="none"> <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z"></path> <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={6} d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177"></path> </g> </svg>
+                        </div>
+
+                        <div
+                            onClick={() => Navigate("/app/requestreceived")}
+                            className="w-full sm:w-auto flex-1 sm:flex-none min-w-[220px] rounded-full border border-white/15 hover:border-white/30 cursor-pointer px-4 py-3 text-white hover:text-blue-500 transition-all duration-300 flex items-center justify-center gap-2"
+                        >
+                            Received Requests
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 80 80" className="rotate-45"> <g fill="none"> <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z"></path> <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={6} d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177"></path> </g> </svg>
+                        </div>
                     </div>
                 </div>
 
@@ -134,155 +146,169 @@ text-blue-500
 
 
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-
-                    {connectionsARR.map((item, index) => (
-                        <div
-                            key={item.connectionId}
-                            className=" relative group bg-[#212121]   rounded-3xl border border-base-300 border-[3px] transition-all duration-500 hover:-translate-y-1 overflow-hidden before:absolute before:inset-0 before:rounded-3xl before:bg-gradient-to-br before:from-blue-500/[0.05] before:to-purple-500/[0.05] before:opacity-0 group-hover:before:opacity-100 before:transition-opacity">
 
 
 
-                            <div className="relative p-6 flex flex-col md:flex-row gap-6">
-                                {/* Left Profile Section */}
-                                <div className="flex flex-col items-center md:items-start space-y-4">
-                                    {/* Avatar with tech ring */}
-                                    <div className="relative">
+                {
+                    loading ? (
+                        <div className="w-full mx-auto flex justify-center text-blue-500">
 
-                                        <div className="relative w-28 h-28 rounded-2xl bg-gradient-to-br from-[#111827] to-black border border-blue-500/20 bg-gradient-to-br from-gray-800 to-gray-900 overflow-hidden">
 
-                                            <div className="absolute inset-0 flex items-center justify-center">
+                            <motion.div
+                                animate={{
+                                    rotate: 360,
+                                    borderRadius: ["0%", "10%", "100%", "10%", "0%"]
+                                }}
+                                transition={{
+                                    duration: 1,
+                                    repeat: Infinity,
+                                    ease: "linear"
+                                }}
+                                className="w-12 sm:w-24 h-12 sm:h-24 border  border-[5px] sm:border-[10px] border-blue-500  rounded-xl"  >
 
-                                                <img
-                                                    src={item.photoUrl}
-                                                    className=" w-full h-full object-cover rounded-2xl group-hover:scale-110 transition-transform duration-700
+                            </motion.div>
+                        </div>
+                    ) :
+
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            {connectionsARR.map((item, index) => (
+                                <div
+                                    key={item.connectionId}
+                                    className=" relative group bg-[#212121]   rounded-3xl border border-base-300 border-[3px] transition-all duration-500 hover:-translate-y-1 overflow-hidden before:absolute before:inset-0 before:rounded-3xl before:bg-gradient-to-br before:from-blue-500/[0.05] before:to-purple-500/[0.05] before:opacity-0 group-hover:before:opacity-100 before:transition-opacity">
+
+
+
+                                    <div className="relative p-6 flex flex-col md:flex-row gap-6">
+                                        {/* Left Profile Section */}
+                                        <div className="flex flex-col items-center md:items-start space-y-4">
+                                            {/* Avatar with tech ring */}
+                                            <div className="relative">
+
+                                                <div className="relative w-28 h-28 rounded-2xl bg-gradient-to-br from-[#111827] to-black border border-blue-500/20 bg-gradient-to-br from-gray-800 to-gray-900 overflow-hidden">
+
+                                                    <div className="absolute inset-0 flex items-center justify-center">
+
+                                                        <img
+                                                            src={item.photoUrl.url}
+                                                            className=" w-full h-full object-cover rounded-2xl 
 "
-                                                />
+                                                        />
+
+                                                    </div>
+
+                                                </div>
+
+
 
                                             </div>
 
-                                        </div>
-
-
-
-                                    </div>
-
-                                    {/* Tech stats */}
-                                    <div className="grid grid-cols-2 gap-2 w-full">
-                                        <div className="text-center p-2 bg-white/10 rounded-lg border border-secondary border-[3px]">
-                                            <div className="text-xs text-white">Age</div>
-                                            <div className="text-lg font-bold text-white/50">{item.age}</div>
-                                        </div>
-                                        <div className="text-center p-2 bg-white/10 rounded-lg border border-secondary border-[3px]">
-                                            <div className="text-xs text-white">Gender</div>
-                                            <div className="text-lg font-bold text-white/50">{item.gender}</div>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 rounded-full border border-secondary border-[3px]">
-                                        <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                                        <span className="text-md text-white/50">{item.college}</span>
-                                    </div>
-                                </div>
-
-                                {/* Right Content Section */}
-                                <div className="flex-1 space-y-4">
-                                    {/* Header with tech indicators */}
-                                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-                                        <div>
-                                            <div className="flex items-center gap-2">
-                                                <h1 className="text-2xl font-bold text-white">
-                                                    {item.firstName} {item.middleName} {item.lastName}
-                                                </h1>
-                                                {item.isVerified && (
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24"><path fill="#44f53d" fill-rule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clip-rule="evenodd" /><path fill="#44f53d" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#44f53d" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
-                                                )}
+                                            {/* Tech stats */}
+                                            <div className="grid grid-cols-2 gap-2 w-full">
+                                                <div className="text-center p-2 bg-white/10 rounded-lg border border-secondary border-[3px]">
+                                                    <div className="text-xs text-white">Age</div>
+                                                    <div className="text-lg font-bold text-white">{item.age}</div>
+                                                </div>
+                                                <div className="text-center p-2 bg-white/10 rounded-lg border border-secondary border-[3px]">
+                                                    <div className="text-xs text-white">Gender</div>
+                                                    <div className="text-lg font-bold text-white">{item.gender}</div>
+                                                </div>
                                             </div>
-                                            <div className="flex items-center gap-2 mt-1">
-                                                <code className="text-white/50 text-sm font-mono">@{item.username}</code>
-                                                <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
-                                                <span className="text-lg text-gray-500">{item.profession}</span>
+                                            <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 rounded-full border border-secondary border-[3px]">
+                                                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                                                <span className="text-md text-white">{item.college}</span>
                                             </div>
                                         </div>
 
-                                        {/* Connection status */}
+                                        {/* Right Content Section */}
+                                        <div className="flex-1 space-y-4">
+                                            {/* Header with tech indicators */}
+                                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                                                <div>
+                                                    <div className="flex items-center gap-2">
+                                                        <h1 className="text-2xl font-bold text-white">
+                                                            {item.firstName} {item.middleName} {item.lastName}
+                                                        </h1>
+                                                        {item.isVerified && (
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24"><path fill="#44f53d" fill-rule="evenodd" d="M13.11 13.5a1.71 1.71 0 0 0-2.22 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973a1.71 1.71 0 0 0 0 2.219a1.7 1.7 0 0 1 .403.973a1.71 1.71 0 0 0 1.57 1.57c.358.028.699.169.973.402a1.71 1.71 0 0 0 2.218 0a1.7 1.7 0 0 1 .973-.403a1.71 1.71 0 0 0 1.57-1.569c.028-.358.169-.7.402-.973a1.71 1.71 0 0 0 0-2.219a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403m.902 3.603a.75.75 0 1 0-1.024-1.097l-1.63 1.523l-.346-.323a.75.75 0 0 0-1.024 1.097l.857.8a.75.75 0 0 0 1.024 0z" clip-rule="evenodd" /><path fill="#44f53d" d="M2 12V8c0-2.828 0-4.243.879-5.121C3.757 2 5.172 2 8 2h8c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v4c0 2.828 0 4.243-.879 5.121c-.835.836-2.156.877-4.717.879a1.71 1.71 0 0 0-.35-1.555a1.7 1.7 0 0 1-.403-.973a1.71 1.71 0 0 0-1.569-1.569a1.7 1.7 0 0 1-.973-.403a1.71 1.71 0 0 0-2.219 0a1.7 1.7 0 0 1-.973.403a1.71 1.71 0 0 0-1.569 1.569c-.028.359-.17.7-.403.973A1.71 1.71 0 0 0 7.595 18c-2.56-.002-3.88-.043-4.716-.879C2 16.243 2 14.828 2 12" opacity="0.3" /><path fill="#44f53d" d="M8.25 6A.75.75 0 0 1 9 5.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 6M7 8.75a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5z" /></svg>
+                                                        )}
+                                                    </div>
+                                                    <div className="flex items-center gap-2 mt-1">
+                                                        <code className="text-white/50 text-sm font-mono">@{item.username}</code>
+                                                        <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
+                                                        <span className="text-lg text-white/70">{item.profession}</span>
+                                                    </div>
+                                                </div>
 
-                                    </div>
+                                                {/* Connection status */}
 
-                                    {/* About section */}
-                                    <div className=" rounded-xl p-4  bg-white/10 border border-secondary border-[3px] ">
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <div className="w-1 h-4 bg-secondary rounded-full"></div>
-                                            <h3 className="text-sm font-semibold text-white">ABOUT</h3>
-                                        </div>
-                                        <p className="text-white/50 text-sm leading-relaxed">{item.about || "No description available"}</p>
-                                    </div>
+                                            </div>
 
-                                    {/* Skills section with tech tags */}
-                                    <div>
-                                        <div className="flex items-center gap-1 mb-3">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 384 512">
-                                                <path fill="#5a2c01ff" d="M290.7 311L95 269.7L86.8 309l195.7 41zm51-87L188.2 95.7l-25.5 30.8l153.5 128.3zm-31.2 39.7L129.2 179l-16.7 36.5L293.7 300zM262 32l-32 24l119.3 160.3l32-24zm20.5 328h-200v39.7h200zm39.7 80H42.7V320h-40v160h359.5V320h-40z"></path>
-                                            </svg>
-                                            <h3 className="text-sm font-semibold text-white">TECH STACK</h3>
-                                        </div>
-                                        <div className="flex flex-wrap gap-2 text-white/50">
-                                            {item.skills?.map((skill, idx) => (
-                                                <span
-                                                    key={idx}
-                                                    className=" px-3 py-1.5 text-xs font-medium rounded-xl bg-white/10 border border-white/10 text-gray-300  border border-secondary border-[2px] transition-all duration-300 group relative overflow-hidden "
-                                                >
-                                                    <div className="absolute inset-0 bg-accent/10 "></div>
-                                                    <span className="relative text-white/50">{skill}</span>
-                                                </span>
-                                            )) || (
-                                                    <span className="px-3 py-1.5 text-xs text-gray-500 bg-gray-900/50 rounded-lg border border-gray-700/30">
-                                                        No skills configured
+                                            {/* About section */}
+                                            <div className=" rounded-xl  p-4 flex bg-white/10 border border-secondary border-[2px]">
+                                                <div className="w-1.5 mr-2 bg-blue-600 rounded-full"></div>
+                                                <div>
+                                                    <div className="flex items-center gap-2 mb-2">
+
+                                                        <h3 className="text-sm font-semibold text-white">About</h3>
+                                                    </div>
+                                                    <p className="text-white text-sm leading-relaxed">{item.about || "No description available"}</p>
+
+                                                </div>
+                                            </div>
+
+
+                                            {/* Skills section with tech tags */}
+                                            <div>
+                                                <div className="flex items-center gap-1 mb-3">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 384 512">
+                                                        <path fill="#fff" d="M290.7 311L95 269.7L86.8 309l195.7 41zm51-87L188.2 95.7l-25.5 30.8l153.5 128.3zm-31.2 39.7L129.2 179l-16.7 36.5L293.7 300zM262 32l-32 24l119.3 160.3l32-24zm20.5 328h-200v39.7h200zm39.7 80H42.7V320h-40v160h359.5V320h-40z"></path>
+                                                    </svg>
+                                                    <h3 className="text-sm font-semibold text-white">TECH STACK</h3>
+                                                </div>
+                                                <div className="flex flex-wrap gap-2 text-white/50">
+                                                    {item.skills?.map((skill, idx) => (
+                                                        <span
+                                                            key={idx}
+                                                            className=" px-3 py-1.5 text-xs font-medium rounded-xl bg-white/10 border border-white/10 text-gray-300  border border-secondary border-[2px] transition-all duration-300 group relative overflow-hidden "
+                                                        >
+                                                            <div className="absolute inset-0 bg-accent/10 "></div>
+                                                            <span className="relative text-white/50">{skill}</span>
+                                                        </span>
+                                                    )) || (
+                                                            <span className="px-3 py-1.5 text-xs text-gray-500 bg-gray-900/50 rounded-lg border border-gray-700/30">
+                                                                No skills configured
+                                                            </span>
+                                                        )}
+                                                </div>
+                                            </div>
+
+                                            {/* Action buttons with tech style */}
+                                            <div className="flex justify-end gap-3 w-full pt-2">
+
+
+
+                                                <button className="w-full/2  relative group flex justify-center bg-white/10  text-white hover:text-blue-500  px-4 py-2.5 rounded-full font-medium hover:bg-base-200 transition-all duration-300 active:scale-95 border border-secondary border-[2px] overflow-hidden" onClick={() => { setOntapDelete(true); setIdSelectedToDelte(item.connectionId) }}>
+                                                    <span className="relative z-10 flex items-center text-xl justify-center gap-2 ">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width={45} height={45} viewBox="0 0 24 24">
+                                                            <path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z"></path>
+                                                        </svg>
+                                                        Delete Connection
                                                     </span>
-                                                )}
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    {/* Action buttons with tech style */}
-                                    <div className="flex gap-3 w-full pt-2">
 
-                                        <button className="relative group  flex justify-center w-full bg-white/10  text-gray-300 px-4 py-2.5 rounded-xl font-medium hover:bg-base-200 transition-all duration-300 active:scale-95 border border-secondary border-[2px] overflow-hidden">
-                                            <span className="relative z-10 flex items-center justify-center gap-2 text-xl text-white/50">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width={45} height={45} viewBox="0 0 24 24">
-                                                    <g fill="none">
-                                                        <rect width={16} height={12} x={4} y={6} stroke="#bf630b" rx={2} strokeWidth={1}></rect>
-                                                        <path fill="#bf630b" d="M11.106 12.553L4 9v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-7.106 3.553a2 2 0 0 1-1.788 0"></path>
-                                                    </g>
-                                                </svg>
-                                                Message
-                                            </span>
-                                        </button>
-
-                                        <button className="relative group flex justify-center bg-white/10  text-gray-300 px-4 py-2.5 rounded-xl font-medium hover:bg-base-200 transition-all duration-300 active:scale-95 border border-secondary border-[2px] overflow-hidden" onClick={() => { setOntapDelete(true); setIdSelectedToDelte(item.connectionId) }}>
-                                            <span className="relative z-10 flex items-center text-xl justify-center gap-2 text-white/50">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width={45} height={45} viewBox="0 0 24 24">
-                                                    <path fill="#bf630b" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z"></path>
-                                                </svg>
-
-                                            </span>
-                                        </button>
-                                    </div>
                                 </div>
-                            </div>
-
-                            {/* Bottom tech border */}
-                            <div className="h-1 bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
+                            ))}
                         </div>
-                    ))}
+
+                }
 
 
 
-                    {loading && (
-                        <div className="flex items-center justify-center py-12 w-screen">
-                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent"></div>
-                        </div>
-                    )}
-                </div>
+
 
 
 
@@ -299,10 +325,10 @@ text-blue-500
                         <div className="flex items-center gap-4">
 
                             {/* ICON */}
-                            <div className="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 border border-secondary border-[2px]">
-                                <svg width="26" height="26" viewBox="0 0 24 24">
+                            <div className="w-20 h-20 flex items-center justify-center rounded-full bg-white/10 border border-secondary border-[2px] text-blue-500">
+                                <svg className="w-10 h-10" viewBox="0 0 24 24">
                                     <path
-                                        fill="#bf630b"
+                                        fill="currentColor"
                                         d="M9 16.2l-3.5-3.5L4 14.2l5 5l11-11l-1.5-1.5z"
                                     />
                                 </svg>
@@ -310,10 +336,10 @@ text-blue-500
 
                             {/* TEXT */}
                             <div>
-                                <div className="text-lg font-semibold text-white/50">
+                                <div className="text-lg font-semibold text-white">
                                     Connection Deleted
                                 </div>
-                                <div className="text-sm text-gray-800">
+                                <div className="text-sm text-white/50">
                                     Connection has been deleted.
                                 </div>
                             </div>
@@ -327,7 +353,7 @@ text-blue-500
                 <div className="fixed inset-0 z-[999] flex items-center justify-center">
 
                     {/* BACKDROP */}
-                    <div className="absolute inset-0 bg-black/50 "></div>
+                    <div className="absolute inset-0 bg-black/50  " onClick={() => { setOntapDelete(false); setIdSelectedToDelte(null); }}></div>
 
                     {/* MODAL */}
                     <div className="relative px-8 py-6 rounded-3xl border border-secondary border-[2px] bg-base-100 
@@ -340,16 +366,16 @@ text-blue-500
 
                             {/* TEXT */}
                             <div>
-                                <div className="text-2xl font-semibold text-white/50">
+                                <div className="text-2xl font-semibold text-white">
                                     Do you want to delete this connection?
                                 </div>
-                                <div className="text-xl text-gray-700">
+                                <div className="text-xl text-white/50">
                                     It will lead to lose all the messages and contacts between you and the user.
                                 </div>
-                                <button disabled={deleting} className="relative group flex w-full mt-5 justify-center bg-white/10  text-gray-300 px-4 py-2.5 rounded-xl font-medium hover:bg-base-200 transition-all duration-300 active:scale-95 border border-secondary border-[2px] overflow-hidden" onClick={() => { deleteConnections(idSelectedToDelte); setOntapDelete(false); setIdSelectedToDelte(null); }}>
-                                    <span className="relative z-10 flex items-center text-xl justify-center gap-2 text-white/50">
+                                <button disabled={deleting} className="relative group flex w-full mt-5 justify-center bg-white/10  text-white hover:text-red-500 px-4 py-2.5 rounded-xl font-medium hover:bg-base-200 transition-all duration-300 active:scale-95 border border-secondary border-[2px] overflow-hidden" onClick={() => { deleteConnections(idSelectedToDelte); setOntapDelete(false); setIdSelectedToDelte(null); }}>
+                                    <span className="relative z-10 flex items-center text-xl justify-center gap-2 ">
                                         <svg xmlns="http://www.w3.org/2000/svg" width={45} height={45} viewBox="0 0 24 24">
-                                            <path fill="#bf630b" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z"></path>
+                                            <path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z"></path>
                                         </svg>
                                         {deleting ? "Deleting..." : "Delete Connection"}
                                     </span>
@@ -362,10 +388,10 @@ text-blue-500
             )}
 
             {!loading && connectionsARR.length == 0 && (
-                <div className="  inset-0 flex items-center justify-center px-4">
+                <div className="  inset-0 flex items-center justify-center px-4 ">
 
                     <div className="relative w-full max-w-3xl p-10 rounded-3xl 
-              bg-base-100 border border-secondary border-[2px]
+bg-[#212121]
             
                 animate-[modalPop_0.3s_ease]">
 
@@ -373,19 +399,19 @@ text-blue-500
 
                             {/* ICON */}
                             <div className="w-36 h-36 flex items-center justify-center 
-                        rounded-full bg-white/10
+                        rounded-full  bg-black
                         border border-secondary border-[2px]
                     ">
-                                <FaPeopleCarry className="text-white/50" size={60} />
+                                <FaPeopleCarry className="text-blue-500" size={60} />
                             </div>
 
                             {/* TEXT SECTION */}
-                            <div className="text-center md:text-left">
-                                <h2 className="text-4xl font-bold text-white/50 mb-4">
+                            <div className="text-center w-fit md:text-left">
+                                <h2 className="text-4xl font-bold text-white mb-4">
                                     No Connections Found
                                 </h2>
 
-                                <p className="text-lg text-gray-800 mb-6 max-w-md">
+                                <p className="text-lg text-white/50 mb-6 max-w-md">
                                     Discover and connect with developers from around the world.
                                     Start exploring new profiles today.
                                 </p>
@@ -394,15 +420,17 @@ text-blue-500
 
                                 <button
                                     onClick={() => navigate("/app/explore")}
-                                    className="px-6 py-3 rounded-xl 
-                                bg-white/10 border border-secondary border-[2px]
-                                hover:scale-105 
-                                transition-all duration-300
-                                text-white/50 font-semibold flex gap-3 items-center justify-center"
+                                    className=" px-6 py-3 rounded-full bg-white/5 border border-secondary border-[2px]
+                                 text-white hover:text-blue-500 transition-all duration-300 font-semibold flex gap-2 items-center justify-center"
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 512 512">
-                                        <path fill="#a9580cff" fillRule="evenodd" d="m380.656 106.622l-35.01 23.344l37.117 92.733l42.309-12.418zm-71.28 47.49L97.67 295.272l4.928 9.857l239.035-70.334zm90.3-111.445l83.57 194.995l-157.166 46.221l63.256 168.168l-39.95 14.982l-64.351-171.075l-28.928 8.49l-59.662 162.6l-39.217-16.808l47.999-130.816l-124.824 36.721l-37.736-75.472z"></path>
-                                    </svg>   Explore Developers
+                                        <path fill="currentColor" fillRule="evenodd" d="m380.656 106.622l-35.01 23.344l37.117 92.733l42.309-12.418zm-71.28 47.49L97.67 295.272l4.928 9.857l239.035-70.334zm90.3-111.445l83.57 194.995l-157.166 46.221l63.256 168.168l-39.95 14.982l-64.351-171.075l-28.928 8.49l-59.662 162.6l-39.217-16.808l47.999-130.816l-124.824 36.721l-37.736-75.472z"></path>
+                                    </svg>   Explore Developers  <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 80 80" className="rotate-45">
+                                        <g fill="none">
+                                            <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z"></path>
+                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={6} d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177"></path>
+                                        </g>
+                                    </svg>
                                 </button>
                             </div>
 

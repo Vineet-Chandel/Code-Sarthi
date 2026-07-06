@@ -13,8 +13,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
     cors({
-        origin: process.env.AT_FRONT,
-        // origin: process.env.AT_SYSTEM_API,
+        // origin: process.env.AT_FRONT,
+        origin: process.env.AT_SYSTEM_API,
         credentials: true
     })
 );
@@ -54,18 +54,18 @@ app.use("/api", aiWorkRouter);
 app.use("/api", newsletterRouter);
 app.use("/api", resRouter);
 
-app.use("/", authRouter);
-app.use("/", profileRouter);
-app.use("/", requestRouter);
-app.use("/", userPreference);
-app.use("/", passwordManagment);
-app.use("/", fileUpload);
-app.use("/", chatRouter);
-app.use("/", feedbackRouter);
-app.use("/", reviewRouter);
-app.use("/", aiWorkRouter);
-app.use("/", newsletterRouter);
-app.use("/", resRouter);
+// app.use("/", authRouter);
+// app.use("/", profileRouter);
+// app.use("/", requestRouter);
+// app.use("/", userPreference);
+// app.use("/", passwordManagment);
+// app.use("/", fileUpload);
+// app.use("/", chatRouter);
+// app.use("/", feedbackRouter);
+// app.use("/", reviewRouter);
+// app.use("/", aiWorkRouter);
+// app.use("/", newsletterRouter);
+// app.use("/", resRouter);
 const PORT = process.env.PORT || 8000;
 
 (async () => {

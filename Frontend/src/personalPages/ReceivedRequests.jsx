@@ -6,9 +6,11 @@ import { addReceviedConnectionUser } from "../utils/receivedConnection";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FaPeopleCarry } from "react-icons/fa";
+import { motion } from 'framer-motion';
 
 const ReceivedRequests = () => {
-    const navigate = useNavigate();
+    const Navigate = useNavigate();
+
     const user = useSelector(store => store.user.user.DATA);
     const receivedConnections = useSelector(store => store.receivedConnection.users || []);
     const receivedConnectionsTotal = useSelector(store => store.receivedConnection.total || []);
@@ -17,6 +19,8 @@ const ReceivedRequests = () => {
     const [showRequestModal1, setShowRequestModal1] = useState(false);
     const [showRequestModal2, setShowRequestModal2] = useState(false);
     const [actionId, setActionId] = useState(null);
+
+
     const fetchReceivedConnections = async () => {
         try {
             const { data } = await axios.get(
@@ -76,7 +80,7 @@ const ReceivedRequests = () => {
     return (
         <div className="
 w-full min-h-screen
-bg-base-200
+bg-base-100
 p-4 md:p-10
 relative overflow-hidden
 ">
@@ -97,14 +101,9 @@ relative overflow-hidden
         lg:text-8xl 
         xl:text-9xl
         font-extrabold 
-            bg-gradient-to-b 
-        from-[#ff8904] 
-        to-accent 
-        bg-clip-text 
-        text-transparent
-        leading-tight
+text-white
     ">
-                    Received Requests
+                    Received  Requests
                 </h1>
 
                 {/* Subtitle */}
@@ -113,24 +112,49 @@ relative overflow-hidden
         sm:text-lg 
         md:text-xl 
         lg:text-2xl 
-        text-gray-800 
+text-blue-500
         mt-6 
         max-w-xl 
         lg:max-w-3xl
+
+        flex items-center gap-2
     ">
-                    Collab with the developers by accepting their connection request
+                    <svg xmlns="http://www.w3.org/2000/svg" width={45} height={45} viewBox="0 0 24 24" className="transition-transform duration-500 ease-in-out hover:rotate-180">
+                        <path fill="currentColor" d="M10.565 2.075a3.33 3.33 0 0 1 2.87 0c.394.189.755.497 1.26.928l.079.066c.48.41.939.604 1.58.655l.102.008c.662.053 1.135.09 1.547.236a3.33 3.33 0 0 1 2.03 2.029c.145.412.182.885.235 1.547l.008.102c.051.641.246 1.1.655 1.58l.066.078c.431.506.74.867.928 1.261a3.33 3.33 0 0 1 0 2.87c-.189.394-.497.755-.928 1.26l-.066.079c-.418.49-.605.951-.655 1.58l-.008.102c-.053.662-.09 1.135-.236 1.547a3.33 3.33 0 0 1-2.029 2.03c-.412.145-.885.182-1.547.235l-.102.008c-.641.051-1.1.246-1.58.655l-.079.066c-.505.431-.866.74-1.26.928a3.33 3.33 0 0 1-2.87 0c-.394-.189-.755-.497-1.26-.928l-.079-.066a2.56 2.56 0 0 0-1.58-.655l-.102-.008c-.662-.053-1.135-.09-1.547-.236a3.33 3.33 0 0 1-2.03-2.029c-.145-.412-.182-.885-.235-1.547l-.008-.102a2.56 2.56 0 0 0-.655-1.58l-.066-.079c-.431-.505-.74-.866-.928-1.26a3.33 3.33 0 0 1 0-2.87c.189-.394.497-.755.928-1.26l.066-.079a2.56 2.56 0 0 0 .655-1.58l.008-.102c.053-.662.09-1.135.236-1.547a3.33 3.33 0 0 1 2.029-2.03c.412-.145.885-.182 1.547-.235l.102-.008a2.56 2.56 0 0 0 1.58-.655l.078-.066c.506-.431.867-.74 1.261-.928m3.232 6.12a.75.75 0 1 0-1.45-.39l-2.143 8a.75.75 0 0 0 1.449.39zm1.641.974a.75.75 0 1 0-1.06 1.06l.131.132c.527.526.867.869 1.085 1.155c.205.268.23.396.23.484s-.025.216-.23.484c-.218.286-.558.629-1.085 1.155l-.131.131a.75.75 0 1 0 1.06 1.06l.167-.166c.482-.48.895-.894 1.181-1.27c.307-.402.537-.846.537-1.394s-.23-.992-.537-1.394c-.286-.376-.7-.79-1.18-1.27zm-5.816 0a.75.75 0 0 0-1.06 0l-.167.167c-.481.48-.895.894-1.181 1.27c-.307.402-.537.846-.537 1.394s.23.992.537 1.394c.286.376.7.79 1.18 1.27l.168.167a.75.75 0 0 0 1.06-1.06l-.131-.132c-.527-.526-.867-.869-1.085-1.155c-.205-.268-.23-.396-.23-.484s.025-.216.23-.484c.218-.286.558-.629 1.085-1.155l.131-.131a.75.75 0 0 0 0-1.061"></path>
+                    </svg>
+
+                    <span className="text-white">All Developers who requested you for collabration  </span>
                 </p>
 
-                {/* Search */}
-                <div className="
-        w-full 
-        sm:w-4/5 
-        md:w-3/5 
-        lg:w-1/2 
-        xl:w-2/5 
-        mt-10
-    ">
 
+
+
+
+
+                <div className="flex flex-wrap justify-center gap-3 mt-5 w-full">
+                    <div
+                        onClick={() => Navigate("/app/connections")}
+                        className="w-full sm:w-auto flex-1 sm:flex-none min-w-[220px] rounded-full border border-white/15 hover:border-white/30 cursor-pointer px-4 py-3 text-white hover:text-blue-500 transition-all duration-300 flex items-center justify-center gap-2"
+                    >
+                        Connections
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 80 80" className="rotate-45"> <g fill="none"> <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z"></path> <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={6} d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177"></path> </g> </svg>
+                    </div>
+
+                    <div
+                        onClick={() => Navigate("/app/requestedUser")}
+                        className="w-full sm:w-auto flex-1 sm:flex-none min-w-[220px] rounded-full border border-white/15 hover:border-white/30 cursor-pointer px-4 py-3 text-white hover:text-blue-500 transition-all duration-300 flex items-center justify-center gap-2"
+                    >
+                        Requested Developers
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 80 80" className="rotate-45"> <g fill="none"> <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z"></path> <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={6} d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177"></path> </g> </svg>
+                    </div>
+
+                    <div
+                        onClick={() => Navigate("/app/explore")}
+                        className="w-full sm:w-auto flex-1 sm:flex-none min-w-[220px] rounded-full border border-white/15 hover:border-white/30 cursor-pointer px-4 py-3 text-white hover:text-blue-500 transition-all duration-300 flex items-center justify-center gap-2"
+                    >
+                        Explore
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 80 80" className="rotate-45"> <g fill="none"> <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z"></path> <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={6} d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177"></path> </g> </svg>
+                    </div>
                 </div>
             </div>
 
@@ -144,7 +168,7 @@ relative overflow-hidden
                     {receivedConnections.map((item, index) => (
                         <div
                             key={item.connectionId}
-                            className=" relative group bg-base-100 rounded-3xl border border-base-300 border-[3px] transition-all duration-500 hover:-translate-y-1 overflow-hidden before:absolute before:inset-0 before:rounded-3xl before:bg-gradient-to-br before:from-blue-500/[0.05] before:to-purple-500/[0.05] before:opacity-0 group-hover:before:opacity-100 before:transition-opacity">
+                            className=" relative group  rounded-3xl  bg-[#212121]">
 
 
 
@@ -160,7 +184,7 @@ relative overflow-hidden
 
                                                 <img
                                                     src={item?.photoUrl?.url}
-                                                    className=" w-full h-full object-cover rounded-2xl group-hover:scale-110 transition-transform duration-700
+                                                    className=" w-full h-full object-cover rounded-2xl 
 "
                                                 />
 
@@ -174,19 +198,19 @@ relative overflow-hidden
 
                                     {/* Tech stats */}
                                     <div className="grid grid-cols-2 gap-2 w-full">
-                                        <div className="text-center p-2 bg-base-300 rounded-lg border border-[2px] border-secondary">
-                                            <div className="text-xs text-secondary">Age</div>
-                                            <div className="text-lg font-bold text-accent">{item.age}</div>
+                                        <div className="text-center p-2 bg-white/10 rounded-lg border border-[2px] border-secondary">
+                                            <div className="text-xs text-white">Age</div>
+                                            <div className="text-lg font-bold text-white">{item.age}</div>
                                         </div>
-                                        <div className="text-center p-2 bg-base-300 rounded-lg border border-[2px] border-secondary">
-                                            <div className="text-xs text-secondary">Gender</div>
-                                            <div className="text-lg font-bold text-accent">{item.gender}</div>
+                                        <div className="text-center p-2 bg-white/10 rounded-lg border border-[2px] border-secondary">
+                                            <div className="text-xs text-white">Gender</div>
+                                            <div className="text-lg font-bold text-white">{item.gender}</div>
                                         </div>
                                     </div>
                                     {/* Connection status */}
-                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-base-300 rounded-full border border-[2px] border-secondary">
-                                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                                        <span className="text-md text-accent">{item.college}</span>
+                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 rounded-full border border-[2px] border-secondary">
+                                        <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                                        <span className="text-md text-white">{item.college}</span>
                                     </div>
                                 </div>
 
@@ -196,7 +220,7 @@ relative overflow-hidden
                                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
                                         <div>
                                             <div className="flex items-center gap-2">
-                                                <h1 className="text-2xl font-bold bg-gradient-to-r from-accent to-secondary bg-clip-text text-transparent">
+                                                <h1 className="text-2xl font-bold text-white">
                                                     {item.firstName} {item.middleName} {item.lastName}
                                                 </h1>
                                                 {item.isVerified && (
@@ -204,9 +228,9 @@ relative overflow-hidden
                                                 )}
                                             </div>
                                             <div className="flex items-center gap-2 mt-1">
-                                                <code className="text-accent text-sm font-mono">@{item.username}</code>
+                                                <code className="text-white/50 text-sm font-mono">@{item.username}</code>
                                                 <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
-                                                <span className="text-lg text-gray-800">{item.profession}</span>
+                                                <span className="text-lg text-white/70">{item.profession}</span>
                                             </div>
                                         </div>
 
@@ -214,33 +238,37 @@ relative overflow-hidden
                                     </div>
 
                                     {/* About section */}
-                                    <div className=" rounded-xl p-4  bg-base-300 border border-[2px] border-secondary ">
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <div className="w-1 h-4 bg-secondary rounded-full"></div>
-                                            <h3 className="text-sm font-semibold text-secondary">ABOUT</h3>
+                                    <div className=" rounded-xl  p-4 flex bg-white/10 border border-secondary border-[2px]">
+                                        <div className="w-1.5 mr-2 bg-blue-600 rounded-full"></div>
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-2">
+
+                                                <h3 className="text-sm font-semibold text-white">About</h3>
+                                            </div>
+                                            <p className="text-white text-sm leading-relaxed">{item.about || "No description available"}</p>
+
                                         </div>
-                                        <p className="text-accent text-sm leading-relaxed">{item.about || "No description available"}</p>
                                     </div>
 
                                     {/* Skills section with tech tags */}
                                     <div>
                                         <div className="flex items-center gap-1 mb-3">
                                             <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 384 512">
-                                                <path fill="#5a2c01ff" d="M290.7 311L95 269.7L86.8 309l195.7 41zm51-87L188.2 95.7l-25.5 30.8l153.5 128.3zm-31.2 39.7L129.2 179l-16.7 36.5L293.7 300zM262 32l-32 24l119.3 160.3l32-24zm20.5 328h-200v39.7h200zm39.7 80H42.7V320h-40v160h359.5V320h-40z"></path>
+                                                <path fill="#fff" d="M290.7 311L95 269.7L86.8 309l195.7 41zm51-87L188.2 95.7l-25.5 30.8l153.5 128.3zm-31.2 39.7L129.2 179l-16.7 36.5L293.7 300zM262 32l-32 24l119.3 160.3l32-24zm20.5 328h-200v39.7h200zm39.7 80H42.7V320h-40v160h359.5V320h-40z"></path>
                                             </svg>
-                                            <h3 className="text-sm font-semibold text-secondary">TECH STACK</h3>
+                                            <h3 className="text-sm font-semibold text-white">TECH STACK</h3>
                                         </div>
-                                        <div className="flex flex-wrap gap-2">
-                                            {item?.skills?.map((skill, idx) => (
+                                        <div className="flex flex-wrap gap-2 text-white/50">
+                                            {item.skills?.map((skill, idx) => (
                                                 <span
                                                     key={idx}
-                                                    className=" px-3 py-1.5 text-xs font-medium rounded-xl  text-accent  border-[2px] border-secondary relative overflow-hidden "
+                                                    className=" px-3 py-1.5 text-xs font-medium rounded-xl bg-white/10 border border-secondary text-gray-300  relative overflow-hidden border border-[2px] border-secondary"
                                                 >
-                                                    <div className="absolute inset-0 bg-base-300 border  "></div>
-                                                    <span className="relative">{skill}</span>
+                                                    <div className="absolute inset-0 "></div>
+                                                    <span className="relative text-white/50">{skill}</span>
                                                 </span>
                                             )) || (
-                                                    <span className="px-3 py-1.5 text-xs text-gray-500 bg-gray-900/50 rounded-lg border border-gray-700/30">
+                                                    <span className="px-3 py-1.5 text-xs text-white/50 bg-gray-900/50 rounded-lg border border-gray-700/30">
                                                         No skills configured
                                                     </span>
                                                 )}
@@ -248,14 +276,32 @@ relative overflow-hidden
                                     </div>
 
                                     {/* Action buttons with tech style */}
-                                    <div className="flex flex-wrap gap-3 pt-2">
+                                    {actionId ? (
 
-                                        <button className="relative group flex-1 min-w-[140px] bg-base-300 text-accent px-4 py-2.5 rounded-xl font-medium hover:from-gray-700 hover:to-gray-800 transition-all duration-300 active:scale-95 border border-secondary border-2 overflow-hidden">
-                                            <span className="relative z-10 flex items-center justify-center gap-2 text-2xl" onClick={() => handelRequest("REJECTED", item.connectionId)}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width={50} height={50} viewBox="0 0 40 40">
+                                        <div className="w-full mx-auto flex justify-center text-red-500">
+                                            <motion.div
+                                                animate={{
+                                                    rotate: 360,
+                                                    borderRadius: ["0%", "10%", "100%", "10%", "0%"]
+                                                }}
+                                                transition={{
+                                                    duration: 1,
+                                                    repeat: Infinity,
+                                                    ease: "linear"
+                                                }}
+                                                className="w-8 h-8 border  border-[3px]  border-blue-500  rounded-xl"  >
+
+                                            </motion.div>
+
+                                        </div>
+                                    ) : (<div className="flex flex-wrap gap-3 pt-2">
+
+                                        <button className="relative group flex-1 min-w-[140px] bg-white/10 text-white/50 px-4 py-2.5 rounded-full  ">
+                                            <span className="relative z-10 flex items-center justify-center gap-2 text-xl text-white hover:text-red-500 transition-all duration-300" onClick={() => handelRequest("REJECTED", item.connectionId)}>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width={35} height={35} viewBox="0 0 40 40">
                                                     <g fill="none" strokeMiterlimit={10}>
-                                                        <path fill="#9e5007ff" stroke="#231f20" d="M.5 20a19.5 19.5 0 1 0 39 0a19.5 19.5 0 0 0-39 0Z" strokeWidth={1}></path>
-                                                        <path fill="#fff" stroke="#231f20" d="M30.08 25.41c-.16-.77-2.31-3.15-4.48-5.41c2.17-2.26 4.32-4.64 4.48-5.41c.46-.89-.63-2.11-1.59-3.08s-2.19-2-3.08-1.59c-.77.16-3.15 2.31-5.41 4.48c-2.26-2.17-4.64-4.32-5.41-4.48c-.89-.46-2.11.63-3.07 1.59s-2.06 2.19-1.6 3.08c.16.77 2.31 3.15 4.48 5.41c-2.17 2.26-4.32 4.64-4.48 5.41c-.46.89.63 2.11 1.59 3.08s2.19 2.05 3.08 1.59c.77-.16 3.15-2.31 5.41-4.48c2.26 2.17 4.64 4.32 5.41 4.48c.89.46 2.11-.63 3.08-1.59s2.05-2.19 1.59-3.08Z" strokeWidth={1}></path>
+                                                        <path fill="currentColor" stroke="#231f20" d="M.5 20a19.5 19.5 0 1 0 39 0a19.5 19.5 0 0 0-39 0Z" strokeWidth={1}></path>
+                                                        <path fill="#000" stroke="#231f20" d="M30.08 25.41c-.16-.77-2.31-3.15-4.48-5.41c2.17-2.26 4.32-4.64 4.48-5.41c.46-.89-.63-2.11-1.59-3.08s-2.19-2-3.08-1.59c-.77.16-3.15 2.31-5.41 4.48c-2.26-2.17-4.64-4.32-5.41-4.48c-.89-.46-2.11.63-3.07 1.59s-2.06 2.19-1.6 3.08c.16.77 2.31 3.15 4.48 5.41c-2.17 2.26-4.32 4.64-4.48 5.41c-.46.89.63 2.11 1.59 3.08s2.19 2.05 3.08 1.59c.77-.16 3.15-2.31 5.41-4.48c2.26 2.17 4.64 4.32 5.41 4.48c.89.46 2.11-.63 3.08-1.59s2.05-2.19 1.59-3.08Z" strokeWidth={1}></path>
                                                         <path stroke="#fff" strokeLinecap="round" d="M27.56 5a15.4 15.4 0 0 1 5.26 3.73" strokeWidth={1}></path>
                                                     </g>
                                                 </svg>
@@ -263,12 +309,12 @@ relative overflow-hidden
                                             </span>
                                         </button>
 
-                                        <button className="relative group flex-1 min-w-[140px] bg-base-300 text-accent px-4 py-2.5 rounded-xl font-medium hover:from-purple-500 hover:to-purple-600 transition-all duration-300 active:scale-95  border border-secondary border-2 overflow-hidden" >
+                                        <button className="relative group flex-1 min-w-[140px] bg-white/10 text-white/50 px-4 py-2.5 rounded-full   " >
 
-                                            <span className="relative z-10 flex items-center justify-center gap-2 text-2xl" onClick={() => handelRequest("ACCEPTED", item.connectionId)}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width={50} height={50} viewBox="0 0 40 40">
+                                            <span className="relative z-10 flex items-center justify-center gap-2 text-xl text-white hover:text-blue-500 transition-all duration-300" onClick={() => handelRequest("ACCEPTED", item.connectionId)}>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width={35} height={35} viewBox="0 0 40 40">
                                                     <g fill="none" strokeMiterlimit={10}>
-                                                        <path fill="#9e5007ff" stroke="#231f20" d="M37 4.24c-1.89-1.44-4.45-2.38-7 0c-1.52 1-5.67 5-10.22 11c-1.19 1.58-2.32 3.08-3.35 4.49c-3.74-2.84-6.69-4.85-7.91-5c-2.07-.8-4.31 1.45-5.75 3.34S-.32 22.63 1 24.4c.47 1.14 3.13 3.53 6.87 6.38c4.49 3.41 7.73 6 9.63 6.24c2.91 1.13 5-2.31 13.37-13.36c4.55-6 7.45-11 8-12.69c1.56-3.08-.03-5.29-1.87-6.73Z" strokeWidth={1}></path>
+                                                        <path fill="currentColor" stroke="#231f20" d="M37 4.24c-1.89-1.44-4.45-2.38-7 0c-1.52 1-5.67 5-10.22 11c-1.19 1.58-2.32 3.08-3.35 4.49c-3.74-2.84-6.69-4.85-7.91-5c-2.07-.8-4.31 1.45-5.75 3.34S-.32 22.63 1 24.4c.47 1.14 3.13 3.53 6.87 6.38c4.49 3.41 7.73 6 9.63 6.24c2.91 1.13 5-2.31 13.37-13.36c4.55-6 7.45-11 8-12.69c1.56-3.08-.03-5.29-1.87-6.73Z" strokeWidth={1}></path>
                                                         <path stroke="#fff" strokeLinecap="round" d="M28.56 8.89c1.64-1.84 3.16-3.58 4.55-3.73" strokeWidth={1}></path>
                                                     </g>
                                                 </svg>
@@ -276,12 +322,11 @@ relative overflow-hidden
                                             </span>
 
                                         </button>
-                                    </div>
+                                    </div>)}
                                 </div>
                             </div>
 
-                            {/* Bottom tech border */}
-                            <div className="h-1 bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
+
                         </div>
                     ))}
                 </div>
@@ -302,7 +347,7 @@ relative overflow-hidden
                         <div className="flex items-center gap-4">
 
                             {/* ICON */}
-                            <div className="w-[150px] h-[150px] flex items-center justify-center rounded-full bg-base-300 border border-secondary border-[3px]">
+                            <div className="w-[150px] h-[150px] flex items-center justify-center rounded-full bg-white/10 border border-secondary border-[3px]">
                                 <svg xmlns="http://www.w3.org/2000/svg" width={80} height={80} viewBox="0 0 40 40">
                                     <g fill="none">
                                         <path fill="#ffe236" stroke="#231f20" strokeMiterlimit={10} d="M.5 20.06a12.23 12.23 0 1 0 24.46 0a12.23 12.23 0 0 0-24.46 0Z" strokeWidth={1}></path>
@@ -320,7 +365,7 @@ relative overflow-hidden
 
                             {/* TEXT */}
                             <div>
-                                <div className="text-4xl font-semibold text-secondary">
+                                <div className="text-4xl font-semibold text-white">
                                     Connection Request Accepted!
                                 </div>
                                 <div className="text-xl text-gray-800">
@@ -343,13 +388,13 @@ relative overflow-hidden
                     <div className="absolute inset-0 bg-black/50" onClick={() => setShowRequestModal2(false)}></div>
 
                     {/* MODAL */}
-                    <div className="relative px-8 py-6 rounded-3xl border border-secondary bg-base-100 border-[3px]
+                    <div className="relative px-8 py-6 rounded-3xl  bg-[#212121]
     animate-[modalPop_0.25s_ease]">
 
                         <div className="flex items-center gap-4">
 
                             {/* ICON */}
-                            <div className="w-[150px] h-[150px] flex items-center justify-center rounded-full bg-base-300 border border-secondary border-[3px]">
+                            <div className="w-[150px] h-[150px] flex items-center justify-center rounded-full bg-black border border-secondary border-[3px]">
                                 <svg xmlns="http://www.w3.org/2000/svg" width={80} height={80} viewBox="0 0 40 40">
                                     <g fill="none">
                                         <path fill="#ffe236" stroke="#231f20" strokeMiterlimit={10} d="M.5 20.06a12.23 12.23 0 1 0 24.46 0a12.23 12.23 0 0 0-24.46 0Z" strokeWidth={1}></path>
@@ -367,10 +412,10 @@ relative overflow-hidden
 
                             {/* TEXT */}
                             <div>
-                                <div className="text-4xl font-semibold text-secondary">
+                                <div className="text-4xl font-semibold text-white">
                                     Connection Request Rejected!
                                 </div>
-                                <div className="text-xl text-gray-800">
+                                <div className="text-xl text-white/50">
                                     Connection request has been deleted successfully !
                                 </div>
                             </div>
@@ -382,45 +427,49 @@ relative overflow-hidden
             }
 
             {(receivedConnectionsTotal === 0 || receivedConnections.length === 0) && (
-                <div className="inset-0 flex items-center justify-center px-4">
+                <div className="  inset-0 flex items-center justify-center px-4 ">
 
-                    <div className="relative w-full max-w-3xl p-10 rounded-3xl  bg-base-100 border border-secondary border-[3px] animate-[modalPop_0.3s_ease]">
+                    <div className="relative w-full max-w-3xl p-10 rounded-3xl 
+bg-[#212121]
+            
+                animate-[modalPop_0.3s_ease]">
 
                         <div className="flex flex-col md:flex-row items-center gap-8">
 
                             {/* ICON */}
                             <div className="w-36 h-36 flex items-center justify-center 
-                                                    rounded-full bg-base-300
-                                                    border border-secondary border-[3px]
-                                                ">
-                                <FaPeopleCarry className="text-accent" size={60} />
+                        rounded-full  bg-black
+                        border border-secondary border-[2px]
+                    ">
+                                <FaPeopleCarry className="text-blue-500" size={60} />
                             </div>
 
                             {/* TEXT SECTION */}
-
-
-                            <div className="text-center md:text-left">
-                                <h2 className="text-4xl font-bold text-secondary mb-4">
-                                    No requests found!
+                            <div className="text-center w-fit md:text-left">
+                                <h2 className="text-4xl font-bold text-white mb-4">
+                                    No Requests Found
                                 </h2>
 
-                                <p className="text-lg text-accent mb-6 max-w-md">
+                                <p className="text-lg text-white/50 mb-6 max-w-md">
                                     Discover and connect with developers from around the world.
                                     Start exploring new profiles today.
                                 </p>
 
                                 {/* BUTTON */}
+
                                 <button
-                                    onClick={() => navigate("/app/explore")}
-                                    className="px-6 py-3 rounded-xl 
-                                bg-base-300 border border-secondary border-[2px]
-                                hover:scale-105 
-                                transition-all duration-300
-                                text-accent font-semibold flex gap-3 items-center justify-center"
+                                    onClick={() => Navigate("/app/explore")}
+                                    className=" px-6 py-3 rounded-full bg-white/5 border border-secondary border-[2px]
+                                 text-white hover:text-blue-500 transition-all duration-300 font-semibold flex gap-2 items-center justify-center"
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 512 512">
-                                        <path fill="#a9580cff" fillRule="evenodd" d="m380.656 106.622l-35.01 23.344l37.117 92.733l42.309-12.418zm-71.28 47.49L97.67 295.272l4.928 9.857l239.035-70.334zm90.3-111.445l83.57 194.995l-157.166 46.221l63.256 168.168l-39.95 14.982l-64.351-171.075l-28.928 8.49l-59.662 162.6l-39.217-16.808l47.999-130.816l-124.824 36.721l-37.736-75.472z"></path>
-                                    </svg>   Explore Developers
+                                        <path fill="currentColor" fillRule="evenodd" d="m380.656 106.622l-35.01 23.344l37.117 92.733l42.309-12.418zm-71.28 47.49L97.67 295.272l4.928 9.857l239.035-70.334zm90.3-111.445l83.57 194.995l-157.166 46.221l63.256 168.168l-39.95 14.982l-64.351-171.075l-28.928 8.49l-59.662 162.6l-39.217-16.808l47.999-130.816l-124.824 36.721l-37.736-75.472z"></path>
+                                    </svg>   Explore Developers  <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 80 80" className="rotate-45">
+                                        <g fill="none">
+                                            <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z"></path>
+                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={6} d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177"></path>
+                                        </g>
+                                    </svg>
                                 </button>
                             </div>
 
