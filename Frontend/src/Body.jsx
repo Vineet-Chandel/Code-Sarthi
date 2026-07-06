@@ -52,7 +52,7 @@ const Body = () => {
 
         socket.onmessage = (event) => {
             const data = JSON.parse(event.data);
-            console.log(data);
+
         };
 
         socket.onclose = () => {

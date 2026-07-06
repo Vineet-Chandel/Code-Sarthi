@@ -26,17 +26,17 @@ export const SocketProvider = ({ children }) => {
             console.log(err);
         };
         socketRef.current.onmessage = (event) => {
-            console.log("📩 RAW EVENT:", event.data);
+
 
             const payload = JSON.parse(event.data);
-            console.log("📩 Parsed:", payload);
+
 
 
 
             switch (payload.type) {
 
                 case "message": {
-                    console.log("Dispatching:", payload);
+
                     dispatch(
                         receiveMessage(payload)
                     );

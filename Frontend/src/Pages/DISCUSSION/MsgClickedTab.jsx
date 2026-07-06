@@ -4,7 +4,7 @@ import React, { useState } from "react";
 
 
 
-const MsgClickedTab = ({ msg }) => {
+const MsgClickedTab = ({ msg, setMessageTab, messageTab, setReplyHandeler, replyHandeler }) => {
 
     const [isCopied, setIsCopied] = useState({
         isCopied: false,
@@ -86,6 +86,21 @@ const MsgClickedTab = ({ msg }) => {
                         key={idx}
 
                         onClick={() => {
+
+                            if (idx === 0) {
+
+                                console.log(msg)
+                                setReplyHandeler({
+                                    isOpen: true,
+                                    msg: msg
+                                })
+                                setMessageTab(prev => ({
+                                    ...prev,
+                                    isOpen: false,
+                                    idx: null
+                                }));
+
+                            }
                             if (idx === 1) {
                                 handleCopy(msg, idx);
                                 console.log("clicked");

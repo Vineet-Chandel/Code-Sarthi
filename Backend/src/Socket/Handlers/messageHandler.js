@@ -5,10 +5,9 @@ const { saveMessage } = require("../Services/MessageService")
 
 
 
+const messageHandler = async (clientMessageId, conversationId, socket, content, messageType, members, type) => {
 
-const messageHandler = async (conversationId, socket, content, messageType, members, type) => {
 
-    console.log("🚀 MessageHandler Started");
     try {
 
 
@@ -26,22 +25,19 @@ const messageHandler = async (conversationId, socket, content, messageType, memb
             type: type
         });
 
-        console.log("✅ Message Saved");
+
         const payload = {
             type: "message",
+            clientMessageId,
             message: result.message
         };
 
-
-        console.log("📤 Broadcasting...", payload);
-        console.log(typeof broadcastService);
-        console.log(broadcastService);
         broadcastService(
             result.conversation.members,
             payload
         );
 
-        console.log("✅ Broadcast Finished");
+
     } catch (err) {
         socket.send(JSON.stringify({
             type: "error",

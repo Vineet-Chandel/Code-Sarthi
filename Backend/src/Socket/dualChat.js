@@ -48,7 +48,7 @@ module.exports = (server) => {
         socket.on("pong", () => {
             socket.isAlive = true;
         });
-        console.log("✅ New Client connected ");
+
 
         const url = new URL(req.url, "http://localhost");
 
@@ -90,7 +90,7 @@ module.exports = (server) => {
                 return;
             }
             if (!data) return;
-            const { conversationId, content, type, isTyping, messageType, members, conversationType } = data;
+            const { clientMessageId, conversationId, content, type, isTyping, messageType, members, conversationType } = data;
 
 
             switch (type) {
@@ -102,7 +102,7 @@ module.exports = (server) => {
                     break;
                 }
                 case "message": {
-                    await messageHandler(conversationId, socket, content, messageType, members, conversationType)
+                    await messageHandler(clientMessageId, conversationId, socket, content, messageType, members, conversationType)
                     break;
 
                 } default: {

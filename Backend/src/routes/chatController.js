@@ -318,7 +318,6 @@ chatRouter.post("/get-message/:conversationId", userAuth, async (req, res) => {
 
         // ✅ FIXED
         const messages = await message.find({ conversation_id: conversationId })
-            .populate("sender_id", "username photoUrl")
             .sort({ createdAt: 1 });
 
         // ✅ FIXED

@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 
 
 
-const MessageArea = ({ selectedChatUser }) => {
+const MessageArea = ({ selectedChatUser, setReplyHandeler, replyHandeler }) => {
     const user = useSelector(state => state?.user?.user?.DATA);
     const allMessages = useSelector(state => state.messages)
     const [readMore, setReadMore] = useState({
@@ -25,6 +25,9 @@ const MessageArea = ({ selectedChatUser }) => {
         y: 0,
         setMsg: ""
     });
+
+
+
     const chatRef = useRef(null);
 
     useEffect(() => {
@@ -74,7 +77,7 @@ const MessageArea = ({ selectedChatUser }) => {
                         top: messageTab.y,
                     }}
                 >
-                    <MsgClickedTab msg={messageTab.setMsg} />
+                    <MsgClickedTab msg={messageTab.setMsg} setMessageTab={setMessageTab} messageTab={messageTab} setReplyHandeler={setReplyHandeler} replyHandeler={replyHandeler} />
                 </div>
             )}
             <div className="pointer-events-none absolute top-0 left-0 right-0 h-20 z-20 bg-gradient-to-b from-black/30 via-black/10 to-transparent dark:from-black/60 dark:via-black/20" />
@@ -107,8 +110,8 @@ const MessageArea = ({ selectedChatUser }) => {
 
                     const prev = messages[idx - 1];
                     const next = messages[idx + 1];
-                    const isSameAsPrev = prev?.sender_id?._id === items?.sender_id?._id;
-                    const isSameAsNext = next?.sender_id?._id === items?.sender_id?._id;
+                    const isSameAsPrev = prev?.sender_id === items?.sender_id;
+                    const isSameAsNext = next?.sender_id === items?.sender_id;
 
                     const isSingle = !isSameAsPrev && !isSameAsNext;
                     const isFirst = !isSameAsPrev && isSameAsNext;
@@ -137,11 +140,10 @@ const MessageArea = ({ selectedChatUser }) => {
                         "rounded-l-xl rounded-tr-md rounded-br-xl";
 
 
-
                     return (
 
                         <div key={idx} className='relative '>
-                            {items?.sender_id._id !== user?._id ? (
+                            {items?.sender_id !== user?._id ? (
                                 <div
                                     onContextMenu={(e) => {
                                         e.preventDefault();
@@ -152,7 +154,7 @@ const MessageArea = ({ selectedChatUser }) => {
                                             idx: idx,
                                             x: e.clientX,
                                             y: e.clientY,
-                                            setMsg: items?.content
+                                            setMsg: items
                                         });
                                     }}
                                     className={`${messageTab.idx == idx ? "bg-white/10 absolute w-full inset-0" : "bg-transparent"} transition-all duration-300 w-full flex items-center  justify-start  mt-1 relative`}>
@@ -207,7 +209,7 @@ const MessageArea = ({ selectedChatUser }) => {
                                             idx: idx,
                                             x: e.clientX,
                                             y: e.clientY,
-                                            setMsg: items?.content
+                                            setMsg: items
                                         });
                                     }}
                                     className='w-full flex items-center justify-end  mt-1 relative'>
@@ -230,11 +232,11 @@ const MessageArea = ({ selectedChatUser }) => {
                                             </span>
 
 
-                                            <span>{true ? (<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                            <span>{items?.status === "sent" ? (<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                                                 <path fill="#000" d="M.41 13.41L6 19l1.41-1.42L1.83 12m20.41-6.42L11.66 16.17L7.5 12l-1.43 1.41L11.66 19l12-12M18 7l-1.41-1.42l-6.35 6.35l1.42 1.41z"></path>
-                                            </svg>) : (false ? (<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16">
+                                            </svg>) : (items?.status === "sending" ? (<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16">
                                                 <polyline fill="none" stroke="#000" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} points="2.75 8.75 6.25 12.25 13.25 4.75"></polyline>
-                                            </svg>) : (false ? (<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                            </svg>) : (items?.status === "error" ? (<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                                                 <path fill="#000" d="M12.713 16.713Q13 16.425 13 16t-.288-.712T12 15t-.712.288T11 16t.288.713T12 17t.713-.288m0-4Q13 12.425 13 12V8q0-.425-.288-.712T12 7t-.712.288T11 8v4q0 .425.288.713T12 13t.713-.288M12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"></path>
                                             </svg>) : (<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16">
                                                 <path fill="#000" d="M8 9.5a1.5 1.5 0 1 0 0-3a1.5 1.5 0 0 0 0 3"></path>

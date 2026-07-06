@@ -200,7 +200,10 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser, addToast }) => {
 
     };
 
-
+    const [replyHandeler, setReplyHandeler] = useState({
+        isOpen: false,
+        msg: null
+    })
 
     // Instantiate hook with custom action and time window
     const longPressEvents = useLongPress(handleLongPress, 600, setClassLongPress);
@@ -235,8 +238,9 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser, addToast }) => {
             const tempMessage = {
 
                 _id: clientMessageId,
+                clientMessageId,
                 conversation_id: selectedChatUser.convoId,
-                sender_id: user,
+                sender_id: user._id,
                 content: message,
                 updatedAt: new Date().toISOString(),
                 status: "sending",
@@ -298,13 +302,13 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser, addToast }) => {
             {/* Messages */}
 
             <div className="flex-1 overflow-y-auto scrollbar-none px-0.5  md:px-4">
-                <MessageArea setSelectedChatUser={setSelectedChatUser} selectedChatUser={selectedChatUser} />
+                <MessageArea setSelectedChatUser={setSelectedChatUser} selectedChatUser={selectedChatUser} setReplyHandeler={setReplyHandeler} replyHandeler={replyHandeler} />
 
             </div>
 
             {/* Input */}
-            <div className="w-full flex items-center px-2 sm:px-4 relative">
-                <div className="relative cursor-pointer" onClick={() => setClipTab(true)} onMouseEnter={() => setClipTab(true)}>
+            <div className="w-full flex gap-2 items-center px-2 sm:px-4 relative mt-2">
+                <div className="relative cursor-pointer" onClick={() => setClipTab(true)} >
                     <span>
                         <div className="bg-[#212121] p-2 sm:p-2.5 rounded-full ">
                             <Paperclip />
@@ -315,9 +319,19 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser, addToast }) => {
 
 
 
-                <div className="px-2 py-3 sm:p-4 w-full">
+                <div className={`${replyHandeler.isOpen ? "bg-blue-300" : ""} w-full  rounded-xl flex-col flex gap-1  p-1`}>
 
-                    <div className="flex items-center gap-2 sm:gap-3 rounded-xl bg-[#212121] p-2 sm:p-2.5">
+                    {replyHandeler.isOpen && <div className="flex items-center gap-2 bg-[#212121] w-full h-10 rounded-t-xl">
+                        <span className="w-1 h-1/2 bg-blue-500 rounded-xl ml-4">
+
+                        </span>
+                        <span className="text-lg h-fit w-full text-white/70 flex items-center justify-start gap-3">
+
+                            {replyHandeler.msg.content}
+                        </span>
+                    </div>}
+
+                    <div className={`flex items-center gap-2 sm:gap-3 ${replyHandeler.isOpen ? "rounded-b-xl" : "rounded-xl"} bg-[#212121] p-2 sm:p-2.5`}>
 
 
 
@@ -333,7 +347,14 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser, addToast }) => {
                             placeholder="Write a message..."
                             className="flex-1 text-base sm:text-lg md:text-xl bg-transparent outline-none"
                         />
-                        <div className="cursor-pointer" onClick={() => setEmojiTab(true)} onMouseEnter={() => setEmojiTab(true)}>
+
+
+
+
+
+
+
+                        <div className="cursor-pointer" onClick={() => setEmojiTab(true)} >
                             <Smile
                                 className="w-5 h-5 sm:w-6 sm:h-6"
                             />

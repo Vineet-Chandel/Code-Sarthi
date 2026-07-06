@@ -22,9 +22,6 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
 
 
 
-    useEffect(() => {
-        console.log(connectionsARR.total)
-    }, [])
     const connectionUser = async () => {
 
         try {
@@ -95,9 +92,7 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
         }
     }, [dispatch]);
 
-    useEffect(() => {
-        console.log(loading)
-    }, [loading])
+
 
 
 

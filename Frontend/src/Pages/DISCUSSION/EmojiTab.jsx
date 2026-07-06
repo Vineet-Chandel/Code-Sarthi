@@ -149,7 +149,7 @@ const EmojiTab = ({ setText }) => {
                 opacity: [0, 1],
                 scale: 1
             }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.5 }}
             className="absolute bottom-[90px]  right-[90px] z-30 p-2 w-[400px]  rounded-3xl bg-[#212121]   shadow-xl ">
 
 
