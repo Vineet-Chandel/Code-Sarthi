@@ -325,7 +325,7 @@ group-hover:after:w-full font-bold font-poppins">
                         <Search height={35} displayType={"nav"} />
                     </div>
 
-                    {selectedChatUser.info !== null && < div onClick={() => setSelectedChatUser({ info: null })} className="relative md:hidden flex  items-center bg-[#212121] p-2 rounded-full justify-center text-white/50 hover:text-[#fff] transition-all duration-300">
+                    {activePage !== "Code Collab" && selectedChatUser.info !== null && < div onClick={() => setSelectedChatUser({ info: null })} className="relative md:hidden flex  items-center bg-[#212121] p-2 rounded-full justify-center text-white/50 hover:text-[#fff] transition-all duration-300">
                         <svg className="rotate-[270deg]" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 80 80">
                             <g fill="none">
                                 <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z"></path>

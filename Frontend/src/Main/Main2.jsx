@@ -22,7 +22,7 @@ const Main2 = ({ ctaData }) => {
 
     return (
         <div id="home"
-            className='relative w-full bg-gray-200 p-1.5 h-screen
+            className='relative w-full bg-gray-200 p-1.5 max-h-screen
 '>
 
             <div className='w-full h-full relative bg-black  
@@ -52,22 +52,22 @@ bg-[size:40px_40px]
                     <Nav />
                 </div>
 
-                <div className='w-full text-center p-6   flex flex-col items-center justify-center'>
+                <div className='w-full text-center sm:p-6   flex flex-col items-center justify-center'>
                     <div className='   text-[#f9f9f9] font-poppins font-extrabold min-[450px]:text-2xl  sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl  justify-start'>
                         An Ecosystem that do your works <br />Approvals that keep you safe
                     </div>
                 </div>
 
-                <div className=" flex justify-center mt-1 sm:mt-1 md:mt-1 lg:mt-1 xl:mt-2 [perspective:1200px] lg:[perspective:1800px]">
+                <div className="  relative
+            -bottom-[30px] flex justify-center mt-0 sm:mt-1 md:mt-1 lg:mt-1 xl:mt-2 [perspective:1200px] lg:[perspective:1800px]">
 
 
 
                     {/* Dashboard */}
-                    <div className="absolute inset-0 -bottom-[60px] z-20 bg-gradient-to-t from-white/50 dark:from-black via-transparent to-transparent"></div>
+                    <div className="absolute inset-0 -bottom-[30px] z-20 bg-gradient-to-t from-white/50 dark:from-black via-transparent to-transparent"></div>
                     <div
                         className={`
-            relative
-            -bottom-[60px]
+          
             w-[95%]
             sm:w-[92%]
             md:w-[88%]

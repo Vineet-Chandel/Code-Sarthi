@@ -303,7 +303,7 @@ const Nav = () => {
                         {openHam && (
                             <div ref={hamRef} className=" fixed inset-0  z-50 w-full px-4 text-white bg-[#000000] min-h-screen overflow-y-scroll justify-self-end ">
                                 <div className="flex items-center  justify-between mt-6">
-                                    <div> <img className="h-[35px] w-[35px]" src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1779801993/Untitled_design_3_-Photoroom_hkidic.webp" alt="" /></div>
+                                    <div className="h-12 w-12 md:h-12 md:w-12 cursor-pointer object-contain border border-red-500" onClick={() => navigate("/")}> <img src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1779801993/Untitled_design_3_-Photoroom_hkidic.webp" alt="" /></div>
 
 
                                     <div className="flex items-center justify-center gap-2">
