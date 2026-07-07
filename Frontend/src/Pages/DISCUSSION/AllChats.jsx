@@ -10,7 +10,7 @@ import { BsPersonWorkspace } from 'react-icons/bs';
 import { IoBarChart } from 'react-icons/io5';
 import { setChatUsers } from '@/utils/chat-user-slice';
 
-const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelectedChatUser, }) => {
+const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelectedChatUser, lastMsgStatus }) => {
 
     const navigate = useNavigate()
 
@@ -91,7 +91,6 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
             chatUser();
         }
     }, [dispatch]);
-
 
 
 
@@ -215,20 +214,20 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
                                             }
 
                                         </div>
-                                        <div className='w-full h-full rounded-2xl bg-transparent px-1'>
+                                        {chatUser?.convoId === lastMsgStatus?.convoId && < div className='w-full h-full rounded-2xl bg-transparent px-1'>
                                             <div className="flex justify-between items-center ">
                                                 <span className={`font-semibold text-md truncate text-white`}>{user.firstName + ' ' + user.lastName}</span>
-                                                <span className={`text-sm  text-gray-300`}>10:30 AM</span>
+                                                <span className={`text-sm  text-gray-300`}>{lastMsgStatus?.msgId ? lastMsgStatus?.lastMsgTime : chatUser?.lastMessage?.updatedAt}</span>
                                             </div>
                                             <div className="flex justify-between items-center ">
-                                                <span className={`text-sm  pl-1 truncate  text-gray-300`}>{chatUser?.lastMessage?.content}</span>
+                                                <span className={`text-sm  pl-1 truncate  text-gray-300`}>{lastMsgStatus?.msgId ? lastMsgStatus?.lastMsg : chatUser?.lastMessage?.content}</span>
                                                 <div className="flex items-center gap-1">
                                                     <span className="w-5 h-5 rounded-full bg-green-500 text-sm flex items-center justify-center">3</span>
 
                                                 </div>
                                             </div>
 
-                                        </div>
+                                        </div>}
                                     </div>
                                 </div>
                             )))

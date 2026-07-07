@@ -179,7 +179,7 @@ const useLongPress = (callback, ms = 500, setClassLongPress) => {
 
 
 
-const ChatArea = ({ selectedChatUser, setSelectedChatUser, addToast }) => {
+const ChatArea = ({ selectedChatUser, setSelectedChatUser, addToast, setlastMsgStatus, lastMsgStatus }) => {
     const dispatch = useDispatch()
     const user = useSelector(state => state?.user?.user?.DATA);
     const socketRef = useSocket();
@@ -302,7 +302,7 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser, addToast }) => {
             {/* Messages */}
 
             <div className="flex-1 overflow-y-auto scrollbar-none px-0.5  md:px-4">
-                <MessageArea setSelectedChatUser={setSelectedChatUser} selectedChatUser={selectedChatUser} setReplyHandeler={setReplyHandeler} replyHandeler={replyHandeler} />
+                <MessageArea setSelectedChatUser={setSelectedChatUser} selectedChatUser={selectedChatUser} setReplyHandeler={setReplyHandeler} replyHandeler={replyHandeler} setlastMsgStatus={setlastMsgStatus} lastMsgStatus={lastMsgStatus} />
 
             </div>
 

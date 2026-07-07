@@ -43,9 +43,6 @@ const MsgClickedTab = ({ msg, setMessageTab, messageTab, setReplyHandeler, reply
                 </svg>),
         },
     ];
-
-
-
     const handleCopy = async (text, idx) => {
         try {
             setIsCopied({

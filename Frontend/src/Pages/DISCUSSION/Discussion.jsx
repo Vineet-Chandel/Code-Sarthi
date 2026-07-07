@@ -22,6 +22,11 @@ const Discussion = () => {
   const [loading, setLoading] = useState(false);
   const [subLoading, setSubLoading] = useState(false)
 
+  const [lastMsgStatus, setlastMsgStatus] = useState({
+    lastMsg: "",
+    lastMsgTime: "",
+    msgId: ""
+  })
 
 
   const messages = async (id) => {
@@ -107,7 +112,7 @@ const Discussion = () => {
 
 
         <div className='h-[calc(100%-53px)]'>
-          <AllChats loading={loading} setLoading={setLoading} selectedChatUser={selectedChatUser} setSelectedChatUser={setSelectedChatUser} addToast={addToast} />
+          <AllChats loading={loading} setLoading={setLoading} selectedChatUser={selectedChatUser} setSelectedChatUser={setSelectedChatUser} addToast={addToast} setlastMsgStatus={setlastMsgStatus} lastMsgStatus={lastMsgStatus} />
         </div>
 
 
@@ -134,7 +139,7 @@ const Discussion = () => {
         </>)}
 
 
-        {selectedChatUser?.info !== null && <ChatArea setSelectedChatUser={setSelectedChatUser} selectedChatUser={selectedChatUser} addToast={addToast} />}
+        {selectedChatUser?.info !== null && <ChatArea setSelectedChatUser={setSelectedChatUser} selectedChatUser={selectedChatUser} addToast={addToast} setlastMsgStatus={setlastMsgStatus} lastMsgStatus={lastMsgStatus} />}
 
       </div>
 

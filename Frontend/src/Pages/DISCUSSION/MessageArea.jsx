@@ -10,9 +10,9 @@ import { useSelector } from 'react-redux';
 
 
 
-const MessageArea = ({ selectedChatUser, setReplyHandeler, replyHandeler }) => {
+const MessageArea = ({ selectedChatUser, setReplyHandeler, replyHandeler, setlastMsgStatus, lastMsgStatus }) => {
     const user = useSelector(state => state?.user?.user?.DATA);
-    const allMessages = useSelector(state => state.messages)
+    const allMessages = useSelector(state => state.messages);
     const [readMore, setReadMore] = useState({
         idx: null,
         isOpen: false,
@@ -25,7 +25,6 @@ const MessageArea = ({ selectedChatUser, setReplyHandeler, replyHandeler }) => {
         y: 0,
         setMsg: ""
     });
-
 
 
     const chatRef = useRef(null);
@@ -53,13 +52,21 @@ const MessageArea = ({ selectedChatUser, setReplyHandeler, replyHandeler }) => {
 
     const messages = allMessages?.messages?.[selectedChatUser?.convoId];
     useEffect(() => {
-
+        console.log(messages)
 
         if (chatRef.current) {
             chatRef.current.scrollTop = chatRef.current.scrollHeight;
         }
 
-
+        if (messages.length) {
+            const last = messages[messages.length - 1];
+            setlastMsgStatus({
+                lastMsg: last.content,
+                lastMsgTime: last.createdAt,
+                msgId: last._id,
+                convoId: selectedChatUser?.convoId
+            })
+        }
     }, [messages]);
 
 
@@ -73,17 +80,17 @@ const MessageArea = ({ selectedChatUser, setReplyHandeler, replyHandeler }) => {
                 <div
                     className="fixed z-50"
                     style={{
-                        left: messageTab.x,
-                        top: messageTab.y,
+                        ...(messageTab.setMsg?.sender_id === user._id
+                            ? { left: `${messageTab.x - 220}px` } // your message
+                            : { left: `${messageTab.x}px` }),     // other user's message
+                        top: `${messageTab.y}px`,
                     }}
                 >
-                    <MsgClickedTab msg={messageTab.setMsg} setMessageTab={setMessageTab} messageTab={messageTab} setReplyHandeler={setReplyHandeler} replyHandeler={replyHandeler} />
+                    <MsgClickedTab msg={messageTab.setMsg.content} setMessageTab={setMessageTab} messageTab={messageTab} setReplyHandeler={setReplyHandeler} replyHandeler={replyHandeler} />
                 </div>
-            )}
+            )
+            }
             <div className="pointer-events-none absolute top-0 left-0 right-0 h-20 z-20 bg-gradient-to-b from-black/30 via-black/10 to-transparent dark:from-black/60 dark:via-black/20" />
-
-
-
 
             <div
                 ref={chatRef}
@@ -151,6 +158,26 @@ const MessageArea = ({ selectedChatUser, setReplyHandeler, replyHandeler }) => {
                     return (
 
                         <div key={items?._id} className='relative '>
+
+                            {(!prev ||
+                                new Date(prev.updatedAt).toDateString() !==
+                                new Date(items.updatedAt).toDateString()) && (
+                                    <div className="my-10 sm:my-20  flex justify-center text-xs font-poppins text-white/60 items-center bg-[#242424]  w-fit mx-auto px-2 py-1 rounded-lg">
+                                        {new Date(items.updatedAt).toLocaleDateString(
+                                            "en-US",
+                                            new Date(items.updatedAt).getFullYear() === new Date().getFullYear()
+                                                ? {
+                                                    day: "numeric",
+                                                    month: "long",
+                                                }
+                                                : {
+                                                    day: "numeric",
+                                                    month: "long",
+                                                    year: "numeric",
+                                                }
+                                        )}
+                                    </div>
+                                )}
                             {items?.sender_id !== user?._id ? (
                                 <div
                                     onContextMenu={(e) => {
@@ -176,11 +203,12 @@ const MessageArea = ({ selectedChatUser, setReplyHandeler, replyHandeler }) => {
 
                                         className={` text-sm sm:text-md lg:text-xl max-w-[80%]
 md:max-w-[65%]
-xl:max-w-[55%] break-words [overflow-wrap:anywhere] whitespace-pre-wrap overflow-hidden [overflow-wrap:anywhere] flex  font-poppins  ${items?.content?.length > 40 ? "flex-col items-start gap-2" : "items-end gap-3 flex-row "} min-w-[10%] bg-[#242424]  py-3 px-5 ${isSingle ? SingleClassName : isFirst ? FirstClassName : isMiddle ? MiddleClassName : isLast ? LastClassName : ""}`}>
+xl:max-w-[55%] break-words [overflow-wrap:anywhere] whitespace-pre-wrap overflow-hidden [overflow-wrap:anywhere] flex  font-poppins  ${items?.content?.length > 40 ? "flex-col items-start gap-2" : "items-end gap-3 flex-row "} min-w-[10%] bg-[#242424]  px-3 py-1.5 ${isSingle ? SingleClassName : isFirst ? FirstClassName : isMiddle ? MiddleClassName : isLast ? LastClassName : ""}`}>
 
                                         {displayText?.replace(/\t/g, "    ")}
 
-                                        <span className="text-xs font-mono text-gray-400">{new Date(items?.updatedAt).toLocaleTimeString("en-US", {
+
+                                        <span className="  text-xs font-mono text-gray-400">{new Date(items?.updatedAt).toLocaleTimeString("en-US", {
                                             hour: "numeric",
                                             minute: "2-digit",
                                             hour12: true,
@@ -238,20 +266,18 @@ xl:max-w-[55%] break-words [overflow-wrap:anywhere] whitespace-pre-wrap overflow
 
                                         className={` text-sm sm:text-md lg:text-xl max-w-[80%]
 md:max-w-[65%]
-xl:max-w-[55%] break-words [overflow-wrap:anywhere] whitespace-pre-wrap overflow-hidden [overflow-wrap:anywhere] flex  font-poppins   ${items?.content?.length > 40 ? "flex-col items-start gap-2" : "justify-end gap-3 flex-col items-end"} bg-white text-black py-3 px-5    ${isSingle ? singleClass : isFirst ? firstClass : isMiddle ? middleClass : isLast ? lastClass : ""}`}>
+xl:max-w-[55%] break-words [overflow-wrap:anywhere]   whitespace-pre-wrap overflow-hidden [overflow-wrap:anywhere] flex  font-poppins   ${items?.content?.length > 40 ? "flex-col items-start gap-2" : " gap-3 flex-col items-start"} bg-white text-black px-3 py-1.5    ${isSingle ? singleClass : isFirst ? firstClass : isMiddle ? middleClass : isLast ? lastClass : ""}`}>
 
 
                                         {displayText?.replace(/\t/g, "    ")}
 
-                                        <span className="text-xs font-mono flex w-full justify-between text-gray-700">
+                                        <span className="text-xs font-mono pl-1 flex w-full justify-between text-gray-700">
 
-                                            <span>{new Date(items?.updatedAt).toLocaleTimeString("en-US", {
+                                            <span className="mr-3">{new Date(items?.updatedAt).toLocaleTimeString("en-US", {
                                                 hour: "numeric",
                                                 minute: "2-digit",
                                                 hour12: true,
-                                            })}
-
-                                            </span>
+                                            })}</span>
 
 
                                             <span>{items?.status === "sent" ? (<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
