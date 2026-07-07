@@ -88,6 +88,8 @@
     animation: fadeIn 0.2s ease;
 }
 
+
+
 [data-theme="caramellatte"] {
     --color-base-content: #ffffff;
     --color-primary-content: #ffffff;

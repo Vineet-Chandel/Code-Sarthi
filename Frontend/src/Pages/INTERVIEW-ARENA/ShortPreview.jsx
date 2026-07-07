@@ -8,7 +8,7 @@ const ShortPreview = () => {
         <div>
             <div className="
                             relative
-                            overflow-y-scroll
+                            scrollbar-none overflow-y-auto
                             cursor-pointer
                             group
                             transition-all

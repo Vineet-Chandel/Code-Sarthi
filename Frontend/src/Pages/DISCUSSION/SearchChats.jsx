@@ -18,7 +18,7 @@ const SearchChats = ({ loading, setLoading }) => {
 
 
     return (
-        <div className='flex gap-3'>
+        <div className='flex gap-3 pr-1'>
 
 
             <div className="ml-3 flex items-center justify-center " onClick={() => setShowCreateTab(prev => !prev)}>

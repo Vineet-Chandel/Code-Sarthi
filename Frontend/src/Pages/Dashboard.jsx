@@ -101,7 +101,7 @@ const Dashboard = () => {
     return (
         <div data-theme="caramellatte" className="h-auto bg-white  p-1  ">
 
-            <div className="w-full h-full mx-auto flex xl:flex-row flex-col gap-2">
+            <div className="w-full h-full mx-auto flex xl:flex-row flex-col gap-2 ">
 
                 {/* LEFT PROFILE CARD */}
                 <div
@@ -292,7 +292,7 @@ md:text-3xl font-bold tracking-wide text-secondary-content">
 
 
                         {/* Projects Section */}
-                        <div className={` relative overflow-y-scroll  group transition-all duration-500 ease-in-out min-h-[400px] bg-base-100 border border-base-300 rounded-3xl p-3 shadow-xl`}>
+                        <div className={` relative overflow-y-auto   group transition-all duration-500 ease-in-out min-h-[400px] bg-base-100 border border-base-300 rounded-3xl p-3 shadow-xl`}>
 
                             <div className="flex flex-col justify-between items-start mb-2  ">
                                 <h2 className="text-2xl flex gap-1 items-center font-bold text-secondary-content ml-1 mt-2">
@@ -331,7 +331,7 @@ md:text-3xl font-bold tracking-wide text-secondary-content">
                                 </div>
 
                                 <div className="w-full md:flex-row flex-col  flex gap-3">
-                                    <div className="max-h-[300px] overflow-y-scroll flex flex-col p-3 md:w-2/4 w-full  bg-white rounded-3xl border border-base-300 mt-3">
+                                    <div className="max-h-[300px] overflow-y-auto scrollbar-none flex flex-col p-3 md:w-2/4 w-full  bg-white rounded-3xl border border-base-300 mt-3">
 
                                         <span className="w-full flex justify-between items-center" >
                                             <h1 className="text-3xl font-light w-3/4 text-black">
@@ -438,7 +438,7 @@ md:text-3xl font-bold tracking-wide text-secondary-content">
                                         </div>
                                     </div>
 
-                                    <div className="max-h-[300px] overflow-y-scroll flex flex-col p-3 md:w-2/4 w-full  bg-white rounded-3xl border border-base-300 mt-3">
+                                    <div className="max-h-[300px] overflow-y-auto scrollbar-none flex flex-col p-3 md:w-2/4 w-full  bg-white rounded-3xl border border-base-300 mt-3">
 
                                         <span className="w-full flex justify-between items-center" >
                                             <h1 className="text-3xl font-light w-3/4 text-black">
@@ -537,7 +537,7 @@ md:text-3xl font-bold tracking-wide text-secondary-content">
 
 
                     </div>
-                    <div className="lg:col-span-2 space-y-8">
+                    <div className="lg:col-span-2 space-y-8 ">
 
                         {/* Stats Cards */}
 

@@ -187,9 +187,9 @@ const Search = ({ height, displayType }) => {
                     animate={isExpanded ? "expand" : "collapse"}
                     transition={TRANSITION}
 
-                    className='h-[35px] w-[35px] flex items-center justify-center ml-2 ' >
+                    className='h-[35px] w-[35px] flex items-center justify-center ml-2 text-white/40' >
 
-                    <span className='h-full flex items-center justify-center ml-2 bg-base-100 p-2 rounded-full border-[2px] border-secondary-content'>
+                    <span className='h-full flex items-center justify-center ml-2 bg-[#242424] p-2 rounded-full '>
                         <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
                             <path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5A6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5S14 7.01 14 9.5S11.99 14 9.5 14"></path>
                         </svg>
@@ -201,9 +201,9 @@ const Search = ({ height, displayType }) => {
                     animate={isExpanded ? "expand" : "collapse"}
                     transition={TRANSITION}
                     className='h-[35px] flex items-center justify-center outline-none border-none focus:ring-0 focus:border-0 '>
-                    <button onClick={() => { setIsExpanded(true); inputRef.current.focus() }} className='h-[35px] w-full cursor-pointer items-center justify-center flex gap-2 rounded-full bg-base-100 text-white font-medium border-[2px] border-secondary-content'>
+                    <button onClick={() => { setIsExpanded(true); inputRef.current.focus() }} className='h-[35px] w-full cursor-pointer items-center justify-center flex gap-2 rounded-full bg-[#242424] text-white font-medium '>
                         {!isExpanded && (
-                            <span className='h-full w-[30px] flex items-center justify-center ml-2 '>
+                            <span className='pl-2 text-white/40 h-full w-[30px] flex items-center justify-center ml-2 '>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
                                     <path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5A6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5S14 7.01 14 9.5S11.99 14 9.5 14"></path>
                                 </svg>
@@ -215,7 +215,7 @@ const Search = ({ height, displayType }) => {
                             ref={inputRef}
                             value={username}
                             type="text"
-                            placeholder='Search Devs...'
+                            placeholder='Search'
                             onChange={(e) => {
                                 let val = e.target.value;
 
@@ -257,17 +257,17 @@ const Search = ({ height, displayType }) => {
 
                             {/* STATS */}
                             <div className="grid grid-cols-2 gap-2 w-full">
-                                <div className="text-center p-2 bg-base-100 rounded-lg border border-secondary-content border-[2px]">
+                                <div className="text-center p-2 bg-[#242424] rounded-lg border border-secondary-content border-[2px]">
                                     <div className="text-xs text-secondary">Age</div>
                                     <div className="text-lg font-bold text-accent">{data?.age}</div>
                                 </div>
-                                <div className="text-center p-2 bg-base-100 rounded-lg border border-secondary-content border-[2px]">
+                                <div className="text-center p-2 bg-[#242424] rounded-lg border border-secondary-content border-[2px]">
                                     <div className="text-xs text-secondary">Gender</div>
                                     <div className="text-lg font-bold text-accent">{data?.gender}</div>
                                 </div>
 
                             </div>
-                            <div className="flex items-center gap-2 px-3 py-1.5 bg-base-100 rounded-full border border-secondary-content border-[2px]">
+                            <div className="flex items-center gap-2 px-3 py-1.5 bg-[#242424] rounded-full border border-secondary-content border-[2px]">
                                 <div className="w-2 h-2 bg-green-700 rounded-full animate-pulse"></div>
                                 <span className="text-md text-secondary">{data?.college}</span>
                             </div>
@@ -318,7 +318,7 @@ const Search = ({ height, displayType }) => {
                             </div>
 
                             {/* ABOUT */}
-                            <div className="rounded-xl p-4 bg-base-100 border border-secondary-content border-[2px] shadow-inner backdrop-blur-xl">
+                            <div className="rounded-xl p-4 bg-[#242424] border border-secondary-content border-[2px] shadow-inner backdrop-blur-xl">
                                 <h3 className="text-sm text-start font-semibold text-secondary mb-2">
                                     ABOUT :
                                 </h3>
@@ -358,7 +358,7 @@ const Search = ({ height, displayType }) => {
 
                                 {data?._id && !connectionsARR.some(item => item.userId === data._id) && (
                                     <button disabled={actionId === data?._id}
-                                        className={`${actionId === data?._id ? "opacity-70 cursor-not-allowed" : ""} relative hover:bg-base-200 group flex-1 min-w-[140px] bg-base-300 border border-[2px] border-secondary-content text-white px-4 py-2.5  rounded-xl font-medium  transition-all duration-300 active:scale-95 overflow-hidden`} onClick={() => sendRequest(data?.username, data?._id)}>
+                                        className={`${actionId === data?._id ? "opacity-70 cursor-not-allowed" : ""} relative hover:bg-base-200 group flex-1 min-w-[140px] bg-base-300 border  text-white px-4 py-2.5  rounded-xl font-medium  transition-all duration-300 active:scale-95 overflow-hidden`} onClick={() => sendRequest(data?.username, data?._id)}>
                                         <span className="relative z-10 flex items-center justify-center gap-2 text-xl">
 
                                             {actionId === data?._id && (<svg xmlns="http://www.w3.org/2000/svg" width={45} height={45} viewBox="0 0 24 24">
