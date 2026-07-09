@@ -1,269 +1,317 @@
-import React from "react";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import {
+    Menu,
+    Sparkles,
+    Mic,
+    Plus,
+    Zap,
+    MessageCircle,
+    Youtube,
+    BookOpen,
+    Ellipsis,
+} from "lucide-react";
+import Sidebar from "./Sidebar";
 
-const ACCENTS = {
-    blue: { icon: "text-[#4F46E5]", soft: "bg-[#4F46E5]/10", glow: "bg-[#4F46E5]" },
-    purple: { icon: "text-[#8B5CF6]", soft: "bg-[#8B5CF6]/10", glow: "bg-[#8B5CF6]" },
-    orange: { icon: "text-[#F59E0B]", soft: "bg-[#F59E0B]/10", glow: "bg-[#F59E0B]" },
-};
+/* ---------------------------------------------------------
+   Constants
+--------------------------------------------------------- */
 
-const DashboardGlyph = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden="true">
-        <rect x="3.5" y="3.5" width="7.5" height="7.5" rx="1.8" />
-        <rect x="13" y="3.5" width="7.5" height="4.5" rx="1.8" />
-        <rect x="13" y="10.5" width="7.5" height="10" rx="1.8" />
-        <rect x="3.5" y="13.5" width="7.5" height="7" rx="1.8" />
-    </svg>
-);
-
-const ChatGlyph = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden="true">
-        <path d="M4 5h16a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H10l-4.5 4v-4H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z" />
-        <path d="M7.5 9.5h9M7.5 12.5h5.5" />
-    </svg>
-);
-
-const PhoneGlyph = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden="true">
-        <rect x="7" y="2.5" width="10" height="19" rx="2.5" />
-        <line x1="10.5" y1="18" x2="13.5" y2="18" />
-    </svg>
-);
-
-const CircleIcon = ({ accent, children }) => (
-    <div
-        className={`flex h-12 w-12 items-center justify-center rounded-full transition-transform duration-300 ease-out motion-reduce:transition-none group-hover:rotate-6 ${ACCENTS[accent].soft} ${ACCENTS[accent].icon}`}
-    >
-        {children}
-    </div>
-);
-
-const SectionTitle = () => (
-    <div className="flex flex-col items-center text-center">
-        <h2 className="max-w-[700px] text-[34px] font-black leading-[1.15] tracking-tight text-gray-900 md:text-[48px] lg:text-[62px]">
-            Effectivity your workflow
-            <br />
-            better with good collaboration
-        </h2>
-        <p className="mt-6 max-w-[600px] text-lg leading-relaxed text-gray-500">
-            Boost your team's productivity with powerful collaboration tools. Our platform allows your team to work
-            together in real time, share insights effortlessly, and streamline communication.
-        </p>
-        <button
-            type="button"
-            className="mt-10 flex h-14 w-[170px] items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-indigo-700 font-semibold text-white shadow-lg shadow-indigo-600/30 transition-all duration-300 ease-out motion-reduce:transition-none hover:scale-[1.04] hover:shadow-2xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-200 active:scale-[0.98]"
-        >
-            Try Now
-        </button>
-    </div>
-);
-
-const DashboardMockup = () => (
-    <div className="relative h-full w-full overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-50 via-indigo-50/60 to-white p-3.5">
-        <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-indigo-200/40 blur-2xl" />
-
-        <div className="relative flex items-center gap-2 rounded-xl bg-white px-3 py-2 shadow-sm">
-            <div className="h-5 w-5 shrink-0 rounded-full bg-indigo-400" />
-            <div className="h-2 flex-1 rounded-full bg-gray-100" />
-            <div className="h-4 w-4 shrink-0 rounded-md bg-gray-100" />
-        </div>
-
-        <div className="relative mt-3 flex gap-1.5">
-            {["Projects", "Meeting", "Settings"].map((label, i) => (
-                <span
-                    key={label}
-                    className={`rounded-full px-2.5 py-1 text-[9px] font-medium shadow-sm ${i === 0 ? "bg-indigo-600 text-white" : "bg-white text-gray-400"
-                        }`}
-                >
-                    {label}
-                </span>
-            ))}
-        </div>
-
-        <div className="relative mt-3 space-y-2 rounded-2xl bg-white p-3 shadow-md">
-            {[0, 1, 2].map((row) => (
-                <div key={row} className="flex items-center gap-2">
-                    <div className="h-6 w-6 shrink-0 rounded-lg bg-indigo-100" />
-                    <div className="h-2 flex-1 rounded-full bg-gray-100" />
-                    <div className="flex -space-x-1.5">
-                        <div className="h-4 w-4 rounded-full bg-indigo-300 ring-2 ring-white" />
-                        <div className="h-4 w-4 rounded-full bg-violet-300 ring-2 ring-white" />
-                    </div>
-                </div>
-            ))}
-        </div>
-
-        <div className="absolute bottom-3.5 right-3.5 flex items-center gap-1 rounded-full bg-white px-2 py-1.5 shadow-md">
-            <div className="h-5 w-5 rounded-full bg-indigo-500" />
-            <div className="h-5 w-5 rounded-full bg-violet-400" />
-            <div className="h-5 w-5 rounded-full bg-amber-400" />
-        </div>
-    </div>
-);
-
-const ChatMockup = () => (
-    <div className="relative h-full w-full overflow-hidden rounded-3xl border border-[#ECECEC] bg-white p-3.5">
-        <div className="flex items-center justify-between border-b border-[#ECECEC] pb-2.5">
-            <div className="flex items-center gap-1.5">
-                <span className="h-2.5 w-2.5 rounded-full bg-rose-200" />
-                <span className="h-2.5 w-2.5 rounded-full bg-amber-200" />
-                <span className="h-2.5 w-2.5 rounded-full bg-emerald-200" />
-            </div>
-            <div className="h-5 w-20 rounded-full border border-[#ECECEC] bg-gray-50" />
-            <div className="flex -space-x-1.5">
-                <div className="h-5 w-5 rounded-full bg-violet-400 ring-2 ring-white" />
-                <div className="h-5 w-5 rounded-full bg-indigo-400 ring-2 ring-white" />
-            </div>
-        </div>
-
-        <div className="mt-3 space-y-2.5 overflow-hidden">
-            <div className="flex items-start gap-2">
-                <div className="h-6 w-6 shrink-0 rounded-full bg-violet-300" />
-                <div className="max-w-[72%] rounded-2xl rounded-tl-sm bg-gray-50 px-3 py-2">
-                    <div className="h-2 w-20 rounded-full bg-gray-200" />
-                    <div className="mt-1.5 h-2 w-14 rounded-full bg-gray-200" />
-                </div>
-            </div>
-
-            <div className="flex items-start justify-end gap-2">
-                <div className="max-w-[72%] rounded-2xl rounded-tr-sm bg-violet-500 px-3 py-2">
-                    <div className="h-2 w-16 rounded-full bg-white/70" />
-                </div>
-                <div className="h-6 w-6 shrink-0 rounded-full bg-indigo-300" />
-            </div>
-
-            <div className="flex items-start gap-2">
-                <div className="h-6 w-6 shrink-0 rounded-full bg-violet-300" />
-                <div className="flex items-center gap-2 rounded-2xl rounded-tl-sm border border-[#ECECEC] bg-white px-3 py-2 shadow-sm">
-                    <div className="h-6 w-6 shrink-0 rounded-md bg-violet-100" />
-                    <div className="h-2 w-12 rounded-full bg-gray-200" />
-                </div>
-            </div>
-
-            <div className="ml-8 flex gap-1.5">
-                <span className="flex h-5 items-center gap-1 rounded-full border border-[#ECECEC] bg-white px-2 text-[10px] shadow-sm">
-                    👍<span className="text-gray-400">2</span>
-                </span>
-                <span className="flex h-5 items-center rounded-full border border-[#ECECEC] bg-white px-2 text-[10px] shadow-sm">
-                    🎉
-                </span>
-            </div>
-        </div>
-
-        <div className="absolute bottom-3.5 left-3.5 right-3.5 flex items-center gap-2 rounded-full border border-[#ECECEC] bg-white px-3 py-2 shadow-sm">
-            <div className="h-2 flex-1 rounded-full bg-gray-100" />
-            <div className="h-6 w-6 shrink-0 rounded-full bg-violet-500" />
-        </div>
-    </div>
-);
-
-const PHONE_ROWS = [
-    { color: "bg-indigo-300", unread: true, time: "9:41" },
-    { color: "bg-violet-300", unread: false, time: "9:24" },
-    { color: "bg-amber-300", unread: true, time: "Mon" },
-    { color: "bg-emerald-300", unread: false, time: "Sun" },
+const SUGGESTIONS = [
+    { id: 1, label: "Any advice for me?", icon: MessageCircle },
+    { id: 2, label: "Some youtube video idea", icon: Youtube },
+    { id: 3, label: "Life lessons from kratos", icon: BookOpen },
+    { id: 4, label: "Something else entirely", icon: Ellipsis },
 ];
 
-const PhoneMockup = () => (
-    <div className="relative h-full w-full">
-        <div className="absolute left-1/2 top-0 w-[190px] -translate-x-1/2">
-            <div className="rounded-[38px] border-[5px] border-gray-900 bg-gray-900 shadow-2xl">
-                <div className="relative h-[400px] w-full overflow-hidden rounded-[32px] bg-white">
-                    <div className="absolute left-1/2 top-2 h-4 w-16 -translate-x-1/2 rounded-full bg-gray-900" />
+/* ---------------------------------------------------------
+   Background layers — near-black base with soft radial glows
+   and faint vertical guide lines behind the logo
+--------------------------------------------------------- */
 
-                    <div className="flex items-center justify-between px-4 pt-7">
-                        <span className="text-[10px] font-semibold text-gray-900">Messages</span>
-                        <div className="relative h-5 w-5 rounded-full bg-amber-300">
-                            <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-white" />
-                        </div>
-                    </div>
-
-                    <div className="mx-4 mt-2.5 h-5 rounded-full bg-gray-100" />
-
-                    <div className="mt-3 space-y-3 px-4">
-                        {PHONE_ROWS.map((row, i) => (
-                            <div key={i} className="flex items-center gap-2">
-                                <div className={`h-8 w-8 shrink-0 rounded-full ${row.color}`} />
-                                <div className="min-w-0 flex-1">
-                                    <div className="h-2 w-14 rounded-full bg-gray-300" />
-                                    <div className="mt-1.5 h-2 w-20 rounded-full bg-gray-100" />
-                                </div>
-                                <div className="flex shrink-0 flex-col items-end gap-1.5">
-                                    <span className="text-[7px] text-gray-300">{row.time}</span>
-                                    {row.unread && <span className="h-1.5 w-1.5 rounded-full bg-indigo-600" />}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
-                    <div className="absolute bottom-0 left-0 right-0 flex justify-around border-t border-gray-100 bg-white py-3">
-                        {[0, 1, 2, 3].map((i) => (
-                            <span key={i} className={`h-1.5 w-5 rounded-full ${i === 0 ? "bg-indigo-600" : "bg-gray-200"}`} />
-                        ))}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-);
-
-const FeatureCard = ({ accent, icon, title, subtitle, children }) => (
-    <div className="group relative flex h-[620px] flex-col overflow-hidden rounded-[36px] border border-[#ECECEC] bg-white p-8 shadow-[0_25px_60px_-35px_rgba(15,23,42,0.25)] transition-all duration-[400ms] ease-out motion-reduce:transition-none hover:-translate-y-2 hover:shadow-2xl">
+const Background = () => (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden bg-[#090909]">
+        {/* top glow */}
         <div
-            className={`pointer-events-none absolute -right-16 -top-16 z-0 h-56 w-56 rounded-full opacity-10 blur-3xl ${ACCENTS[accent].glow}`}
+            className="absolute left-1/2 top-[-10%] h-[520px] w-[900px] -translate-x-1/2 rounded-full blur-3xl"
+            style={{
+                background:
+                    "radial-gradient(closest-side, rgba(90,110,255,0.10), transparent 70%)",
+            }}
+        />
+        {/* center glow */}
+        <div
+            className="absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
+            style={{
+                background:
+                    "radial-gradient(closest-side, rgba(255,255,255,0.05), transparent 70%)",
+            }}
+        />
+        {/* bottom fade */}
+        <div
+            className="absolute bottom-0 left-1/2 h-[400px] w-[1000px] -translate-x-1/2 translate-y-1/3 rounded-full blur-3xl"
+            style={{
+                background:
+                    "radial-gradient(closest-side, rgba(0,0,0,0.6), transparent 70%)",
+            }}
         />
 
-        <div className="relative z-10 flex h-full flex-col">
-            <CircleIcon accent={accent}>{icon}</CircleIcon>
-            <h3 className="mt-6 text-[30px] font-bold leading-tight tracking-tight text-gray-900">{title}</h3>
-            <p className="mt-3 text-base leading-relaxed text-gray-500">{subtitle}</p>
-            <div className="relative mt-6 min-h-0 flex-1">{children}</div>
+        {/* faint vertical guide lines behind the logo */}
+        <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 gap-10">
+            {[...Array(7)].map((_, i) => (
+                <div
+                    key={i}
+                    className="h-[420px] w-px"
+                    style={{
+                        background:
+                            "linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.06) 35%, rgba(255,255,255,0.06) 65%, transparent 100%)",
+                        filter: "blur(0.5px)",
+                        opacity: i % 2 === 0 ? 0.5 : 0.9,
+                    }}
+                />
+            ))}
         </div>
     </div>
 );
 
-const CollaborationSection = () => {
+/* ---------------------------------------------------------
+   Header — floating menu button + upgrade button
+--------------------------------------------------------- */
+
+const Header = () => (
+    <div className="absolute inset-x-0 top-0 z-20 flex items-center justify-between px-4 pt-5 sm:px-6 sm:pt-6">
+        {/* Menu button */}
+        <motion.button
+            whileHover={{ rotate: -6, scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="group flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-zinc-300 backdrop-blur-xl transition-shadow duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.08)]"
+            aria-label="Open menu"
+        >
+            <Menu className="h-4 w-4" />
+        </motion.button>
+
+        {/* Upgrade button */}
+        <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-center gap-1.5 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-zinc-200 backdrop-blur-xl transition-shadow duration-300 hover:shadow-[0_0_24px_rgba(80,120,255,0.25)]"
+        >
+            <Sparkles className="h-3.5 w-3.5 text-blue-300" />
+            <span>Upgrade</span>
+        </motion.button>
+    </div>
+);
+
+/* ---------------------------------------------------------
+   Hero — logo, heading, subtitle
+--------------------------------------------------------- */
+
+const Hero = () => (
+    <div className="relative flex flex-col items-center">
+        {/* ambient spotlight behind logo */}
+        <div
+            className="pointer-events-none absolute -top-10 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full blur-2xl"
+            style={{
+                background:
+                    "radial-gradient(closest-side, rgba(255,255,255,0.12), transparent 70%)",
+            }}
+        />
+
+        <motion.div
+            initial={{ opacity: 0, y: 16, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            whileHover={{ scale: 1.05 }}
+            className="relative flex h-[72px] w-[72px] items-center justify-center rounded-3xl border border-white/10 bg-white/5 shadow-[0_10px_40px_rgba(0,0,0,0.35)] backdrop-blur-xl"
+        >
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                className="h-8 w-8 text-white"
+            >
+                <path
+                    d="M12 2L14.4 9.2L22 12L14.4 14.8L12 22L9.6 14.8L2 12L9.6 9.2L12 2Z"
+                    fill="currentColor"
+                    fillOpacity="0.92"
+                />
+            </svg>
+        </motion.div>
+
+        <motion.h1
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-7 text-center text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl"
+        >
+            Good to See You!
+            <br className="hidden sm:block" /> How Can I be an Assistance?
+        </motion.h1>
+
+        <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-4 text-center text-sm text-zinc-500 sm:text-base"
+        >
+            I'm available 24/7 for you, ask me anything.
+        </motion.p>
+    </div>
+);
+
+/* ---------------------------------------------------------
+   Prompt Card — top row (pro plan / extensions), bottom row (input)
+--------------------------------------------------------- */
+
+const PromptCard = () => {
+    const [value, setValue] = useState("");
+
     return (
-        <section className="relative overflow-hidden bg-white">
-            <div className="pointer-events-none absolute inset-0">
-                <div className="absolute left-[8%] top-[52%] h-[420px] w-[420px] rounded-full bg-indigo-500/10 blur-3xl" />
-                <div className="absolute right-[10%] top-[38%] h-[380px] w-[380px] rounded-full bg-violet-500/10 blur-3xl" />
-                <div className="absolute bottom-0 left-1/2 h-[400px] w-[400px] -translate-x-1/2 rounded-full bg-amber-500/10 blur-3xl" />
-            </div>
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            whileHover={{ y: -2 }}
+            className="relative mx-auto mt-10 w-full max-w-[700px] overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] shadow-[0_10px_40px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-shadow duration-300 hover:shadow-[0_10px_50px_rgba(80,120,255,0.12)]"
+        >
+            {/* animated floating glow */}
+            <motion.div
+                className="pointer-events-none absolute top-0 h-full w-1/3"
+                style={{
+                    background:
+                        "linear-gradient(90deg, transparent, rgba(255,255,255,0.10), transparent)",
+                }}
+                animate={{ left: ["-30%", "110%"] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+            />
 
-            <div className="relative mx-auto max-w-[1400px] px-5 py-16 md:px-8 md:py-24">
-                <SectionTitle />
-
-                <div className="mt-20 grid grid-cols-1 gap-[30px] md:grid-cols-2 lg:grid-cols-3">
-                    <FeatureCard
-                        accent="blue"
-                        icon={<DashboardGlyph />}
-                        title="Optimize Team Work!"
-                        subtitle="Good teamwork become smooth with good management team from services"
-                    >
-                        <DashboardMockup />
-                    </FeatureCard>
-
-                    <FeatureCard
-                        accent="purple"
-                        icon={<ChatGlyph />}
-                        title="Grow Up Team Collaboratte"
-                        subtitle="Communication more important and good proportionality work"
-                    >
-                        <ChatMockup />
-                    </FeatureCard>
-
-                    <FeatureCard
-                        accent="orange"
-                        icon={<PhoneGlyph />}
-                        title="Mobile User Friendly"
-                        subtitle="Wherever you are, it's still easy to organize projects from your phone"
-                    >
-                        <PhoneMockup />
-                    </FeatureCard>
+            {/* top row */}
+            <div className="relative flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-center gap-2 text-xs text-zinc-400 sm:text-sm">
+                    <Zap className="h-4 w-4 text-blue-300" />
+                    <span>Shastra Ai</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-zinc-400 sm:text-sm">
+                    <span className="relative flex h-2 w-2">
+                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
+                        <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+                    </span>
+                    <span>Active </span>
                 </div>
             </div>
-        </section>
+
+            {/* divider */}
+            <div className="h-px w-full bg-white/[0.06]" />
+
+            {/* bottom row */}
+            <div className="relative flex items-center gap-3 px-4 py-4 sm:px-5">
+                <button
+                    className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-zinc-300 transition-transform duration-200 hover:scale-105 hover:bg-white/10"
+                    aria-label="Add attachment"
+                >
+                    <Plus className="h-4 w-4" />
+                </button>
+
+                <div className="h-6 w-px flex-shrink-0 bg-white/10" />
+
+                <input
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+                    placeholder="Ask anything..."
+                    className="min-w-0 flex-1 bg-transparent text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none sm:text-base"
+                />
+
+                <button
+                    className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-zinc-300 transition-transform duration-200 hover:scale-105 hover:bg-white/10"
+                    aria-label="Voice input"
+                >
+                    <Mic className="h-4 w-4" />
+                </button>
+            </div>
+        </motion.div>
     );
 };
 
-export default CollaborationSection;
+/* ---------------------------------------------------------
+   Suggestion chip
+--------------------------------------------------------- */
+
+const SuggestionChip = ({ label, icon: Icon }) => (
+    <motion.button
+        whileHover={{ scale: 1.03, y: -2 }}
+        whileTap={{ scale: 0.98 }}
+        className="flex flex-shrink-0 items-center gap-2 rounded-full border border-white/10 bg-white/[0.02] px-4 py-2 text-xs text-zinc-300 transition-colors duration-300 hover:bg-white/5 sm:text-sm"
+    >
+        <Icon className="h-3.5 w-3.5 text-zinc-400" />
+        <span className="whitespace-nowrap">{label}</span>
+    </motion.button>
+);
+
+const SuggestionRow = () => (
+    <motion.div
+        initial="hidden"
+        animate="show"
+        variants={{
+            hidden: {},
+            show: { transition: { staggerChildren: 0.08, delayChildren: 0.6 } },
+        }}
+        className="mx-auto mt-6 flex w-full max-w-[700px] gap-2.5 overflow-x-auto px-4 pb-1 sm:flex-wrap sm:justify-center sm:overflow-visible sm:px-0"
+    >
+        {SUGGESTIONS.map((s) => (
+            <motion.div
+                key={s.id}
+                variants={{
+                    hidden: { opacity: 0, y: 10 },
+                    show: { opacity: 1, y: 0 },
+                }}
+                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            >
+                <SuggestionChip label={s.label} icon={s.icon} />
+            </motion.div>
+        ))}
+    </motion.div>
+);
+
+/* ---------------------------------------------------------
+   Footer
+--------------------------------------------------------- */
+
+const Footer = () => (
+    <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.9 }}
+        className="absolute inset-x-0 bottom-6 flex justify-center px-4 text-center text-xs text-zinc-500 sm:text-sm"
+    >
+        <p>
+            Unlock new era with AetherAI.{" "}
+            <a
+                href="#"
+                className="relative text-zinc-300 after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-full after:origin-right after:scale-x-0 after:bg-zinc-300 after:transition-transform after:duration-300 hover:after:origin-left hover:after:scale-x-100"
+            >
+                share us
+            </a>
+        </p>
+    </motion.div>
+);
+
+/* ---------------------------------------------------------
+   Root component
+--------------------------------------------------------- */
+
+export default function AetherAI() {
+    return (
+        <div className="relative flex flex-row min-h-screen overflow-y-auto scrollbar-none w-full items-center justify-center  bg-[#090909] font-sans">
+            <Background />
+            <Sidebar />
+            {/* <Header /> */}
+
+            <main className="relative z-10 flex w-full flex-col items-center px-4 sm:px-6">
+                <Hero />
+                <PromptCard />
+                <SuggestionRow />
+            </main>
+
+            <Footer />
+        </div>
+    );
+}
