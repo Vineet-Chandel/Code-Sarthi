@@ -202,7 +202,8 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser, addToast, setlastMsgS
 
     const [replyHandeler, setReplyHandeler] = useState({
         isOpen: false,
-        msg: null
+        msg: null,
+        senderId: null
     })
 
     // Instantiate hook with custom action and time window
@@ -281,7 +282,7 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser, addToast, setlastMsgS
             {clipTab &&
 
                 <div onClick={() => setClipTab(false)} className="absolute z-30 inset-0 w-full h-full bg-transparent">
-                    <ClipTab />
+                    <ClipTab replyHandeler={replyHandeler} />
                 </div>
 
 
@@ -293,7 +294,7 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser, addToast, setlastMsgS
 
 
                     <div onClick={() => setEmojiTab(false)} className="absolute z-30 inset-0 w-full h-full bg-transparent" />
-                    <EmojiTab setEmojiTab={setEmojiTab} setText={setMessage} />
+                    <EmojiTab setEmojiTab={setEmojiTab} setText={setMessage} replyHandeler={replyHandeler} />
 
                 </>
 
@@ -321,15 +322,47 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser, addToast, setlastMsgS
 
                 <div className={`${replyHandeler.isOpen ? "bg-blue-300" : ""} w-full  rounded-xl flex-col flex gap-1  p-1`}>
 
-                    {replyHandeler.isOpen && <div className="flex items-center gap-2 bg-[#212121] w-full h-10 rounded-t-xl">
-                        <span className="w-1 h-1/2 bg-blue-500 rounded-xl ml-4">
+                    {replyHandeler.isOpen && (
+                        <div className="flex items-stretch gap-3 bg-[#212121] px-4 py-3 rounded-t-xl border-b border-white/10">
+                            <div className="w-[3px] rounded-full bg-blue-500 shrink-0"></div>
 
-                        </span>
-                        <span className="text-lg h-fit w-full text-white/70 flex items-center justify-start gap-3">
+                            <div className="flex flex-col flex-1 overflow-hidden">
+                                <span className="text-sm text-blue-400">
+                                    Replying to{" "}
+                                    <span className="font-semibold text-white truncate max-w-[180px] block">
+                                        {replyHandeler?.senderId}
+                                    </span>
+                                </span>
+                                <p className="text-sm text-white/70 line-clamp-1 break-words">
+                                    {replyHandeler?.msg}
+                                </p>
+                            </div>
 
-                            {replyHandeler.msg.content}
-                        </span>
-                    </div>}
+
+                            <div
+                                onClick={() => {
+                                    setReplyHandeler({
+                                        isOpen: false,
+                                        msg: null,
+                                        senderId: null,
+                                    });
+                                }}
+                                className="flex items-center justify-center shrink-0 cursor-pointer text-white/50 hover:text-white transition-colors duration-200"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width={20}
+                                    height={20}
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        fill="currentColor"
+                                        d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41z"
+                                    />
+                                </svg>
+                            </div>
+                        </div>
+                    )}
 
                     <div className={`flex items-center gap-2 sm:gap-3 ${replyHandeler.isOpen ? "rounded-b-xl" : "rounded-xl"} bg-[#212121] p-2 sm:p-2.5`}>
 

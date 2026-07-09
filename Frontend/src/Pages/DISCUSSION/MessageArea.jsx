@@ -16,7 +16,6 @@ const MessageArea = ({ selectedChatUser, setReplyHandeler, replyHandeler, setlas
     const [readMore, setReadMore] = useState({
         idx: null,
         isOpen: false,
-
     });
     const [messageTab, setMessageTab] = useState({
         isOpen: false,
@@ -26,9 +25,8 @@ const MessageArea = ({ selectedChatUser, setReplyHandeler, replyHandeler, setlas
         setMsg: ""
     });
 
-
+    useEffect(() => { console.log(readMore) }, [readMore])
     const chatRef = useRef(null);
-
     useEffect(() => {
         const chat = chatRef.current;
 
@@ -58,14 +56,17 @@ const MessageArea = ({ selectedChatUser, setReplyHandeler, replyHandeler, setlas
             chatRef.current.scrollTop = chatRef.current.scrollHeight;
         }
 
-        if (messages.length) {
-            const last = messages[messages.length - 1];
+        if (messages?.length) {
+            const last = messages[messages?.length - 1];
             setlastMsgStatus({
                 lastMsg: last.content,
                 lastMsgTime: last.createdAt,
                 msgId: last._id,
                 convoId: selectedChatUser?.convoId
             })
+
+            console.log(selectedChatUser.fullChatInfo?._id)
+            console.log(lastMsgStatus?.convoId)
         }
     }, [messages]);
 
@@ -86,7 +87,7 @@ const MessageArea = ({ selectedChatUser, setReplyHandeler, replyHandeler, setlas
                         top: `${messageTab.y}px`,
                     }}
                 >
-                    <MsgClickedTab msg={messageTab.setMsg.content} setMessageTab={setMessageTab} messageTab={messageTab} setReplyHandeler={setReplyHandeler} replyHandeler={replyHandeler} />
+                    <MsgClickedTab msg={messageTab.setMsg.content} setMessageTab={setMessageTab} messageTab={messageTab} setReplyHandeler={setReplyHandeler} replyHandeler={replyHandeler} selectedChatUser={selectedChatUser} />
                 </div>
             )
             }
@@ -192,7 +193,7 @@ const MessageArea = ({ selectedChatUser, setReplyHandeler, replyHandeler, setlas
                                             setMsg: items
                                         });
                                     }}
-                                    className={`${messageTab.idx == idx ? "bg-white/10 absolute w-full inset-0" : "bg-transparent"} transition-all duration-300 w-full flex items-center  justify-start   ${marginClass}  relative`}>
+                                    className={`${messageTab.idx == idx ? "bg-white/5 absolute w-full inset-0" : "bg-transparent"} transition-all duration-300 w-full flex items-center  justify-start   ${marginClass}  relative`}>
 
 
                                     <motion.div
@@ -223,7 +224,7 @@ xl:max-w-[55%] break-words [overflow-wrap:anywhere] whitespace-pre-wrap overflow
                                                 });
                                             } else {
                                                 setReadMore({
-                                                    idx: items?._id,
+                                                    idx: idx,
                                                     isOpen: true,
                                                 });
                                             }
@@ -304,7 +305,7 @@ xl:max-w-[55%] break-words [overflow-wrap:anywhere]   whitespace-pre-wrap overfl
                                                 });
                                             } else {
                                                 setReadMore({
-                                                    idx: items?._id,
+                                                    idx: idx,
                                                     isOpen: true,
                                                 });
                                             }

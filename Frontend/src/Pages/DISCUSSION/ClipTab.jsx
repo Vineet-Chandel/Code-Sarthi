@@ -8,7 +8,7 @@ import {
 
 
 
-const ClipTab = () => {
+const ClipTab = ({ replyHandeler }) => {
     const buttons = [
         {
             title: "Photo or Video",
@@ -34,7 +34,7 @@ const ClipTab = () => {
                 scale: 1
             }}
             transition={{ duration: 0.3 }}
-            className="absolute bottom-[80px] right-[1040px] z-50 p-2 w-[170px] rounded-3xl bg-[#212121] backdrop-blur-xl  shadow-xl overflow-hidden">
+            className={`absolute ${replyHandeler?.isOpen ? "bottom-[155px]" : "bottom-[60px]"}   right-[1030px] z-30 p-2 w-[180px]  rounded-3xl bg-[#212121]   shadow-xl `}>
             {buttons.map((item, idx) => (
                 <button
                     key={idx}

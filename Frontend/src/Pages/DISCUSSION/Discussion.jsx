@@ -23,9 +23,10 @@ const Discussion = () => {
   const [subLoading, setSubLoading] = useState(false)
 
   const [lastMsgStatus, setlastMsgStatus] = useState({
-    lastMsg: "",
-    lastMsgTime: "",
-    msgId: ""
+    lastMsg: null,
+    lastMsgTime: null,
+    msgId: null,
+    convoId: null
   })
 
 

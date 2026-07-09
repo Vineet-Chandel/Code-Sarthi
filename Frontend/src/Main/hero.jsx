@@ -85,6 +85,7 @@ const Hero = () => {
 
             <SecondLanding />
             <Third />
+            <ContentSecond />
             <Lines2 />
             <ContentSecond2 />
 
@@ -111,7 +112,7 @@ bg-[size:90px_90px]
 
 
             {/*  */}
-            {/* <ContentSecond /> */}
+
 
             {/* <ContentThird /> */}
 

@@ -1,391 +1,359 @@
-import React, { useRef } from "react";
+import { motion } from "framer-motion";
+import React from "react";
 
-/* ─────────────────────────────────────────────
-   Each guardian has its own colour signature
-───────────────────────────────────────────── */
-const cards = [
-  {
-    unit: "UNIT-01",
-    title: "ASTRA",
-    role: "Verification Guardian",
-    quote: "Trust is verified in silence",
-    img: "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778989004/CS_Verification_Manager_uohza5.webp",
-    color: "#00e5ff",        // ice-cyan
-    glow: "rgba(0,229,255,0.22)",
-    dimGlow: "rgba(0,229,255,0.07)",
-    status: "ACTIVE",
-    tag: "VERIFICATION",
-  },
-  {
-    unit: "UNIT-02",
-    title: "NOVA",
-    role: "Identity Guardian",
-    quote: "Your digital identity, reconstructed",
-    img: "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778989004/CS_Identity_Manager_amyjyi.webp",
-    color: "#ffb830",        // amber-gold
-    glow: "rgba(255,184,48,0.22)",
-    dimGlow: "rgba(255,184,48,0.07)",
-    status: "ACTIVE",
-    tag: "IDENTITY",
-  },
-  {
-    unit: "UNIT-03",
-    title: "ORION",
-    role: "Community & AI Guardian",
-    quote: "Every developer is a signal",
-    img: "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778989003/CS_Community_AI_Manager_z664dg.webp",
-    color: "#bf7fff",        // violet
-    glow: "rgba(191,127,255,0.22)",
-    dimGlow: "rgba(191,127,255,0.07)",
-    status: "ACTIVE",
-    tag: "COMMUNITY",
-  },
-  {
-    unit: "UNIT-04",
-    title: "ZENITH",
-    role: "Help & Support Guardian",
-    quote: "No noise. Only solutions",
-    img: "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778989005/CS_Help_Support_onbjoi.webp",
-    color: "#00ff87",        // brand-green
-    glow: "rgba(0,255,135,0.22)",
-    dimGlow: "rgba(0,255,135,0.07)",
-    status: "ACTIVE",
-    tag: "SUPPORT",
-  },
+const ACCENTS = {
+  blue: { icon: "text-[#4F46E5]", soft: "bg-[#4F46E5]/10", glow: "bg-[#4F46E5]" },
+  purple: { icon: "text-[#8B5CF6]", soft: "bg-[#8B5CF6]/10", glow: "bg-[#8B5CF6]" },
+  orange: { icon: "text-[#F59E0B]", soft: "bg-[#F59E0B]/10", glow: "bg-[#F59E0B]" },
+};
+
+
+const MainCTAbutton2 = ({ ClassName = "" }) => {
+  return (
+
+
+    <div onClick={() => navigate("/login")} className={`mt-3 flex items-center justify-between cursor-pointer text-black  font-bold ${ClassName}`}>
+
+      <span className="text-white relative -right-[1px]" >
+        <svg height="40" viewBox="0 0 15 40" width="15" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" transform="matrix(-1,0,0,1,0,0)">
+          <path d="M0 .5h11A3.5 3.5 0 0 1 14.5 4v20.523a5.5 5.5 0 0 1-1.416 3.684l-8.547 9.477A5.5 5.5 0 0 1 .453 39.5H0" data-stroke="true"
+            fill="#000"
+          ></path>
+        </svg>
+      </span>
+      <button className="bg-black text-white  px-4 py-[7.5px] ">Open CodeSarthi !</button>
+      <span className="text-white relative -left-[1px]">
+        <svg height="40" viewBox="0 0 15 40" width="15" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M0 .5h11A3.5 3.5 0 0 1 14.5 4v20.523a5.5 5.5 0 0 1-1.416 3.684l-8.547 9.477A5.5 5.5 0 0 1 .453 39.5H0"
+            fill="#000"
+          />
+        </svg>
+      </span>
+    </div>
+  )
+}
+const DashboardGlyph = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden="true">
+    <rect x="3.5" y="3.5" width="7.5" height="7.5" rx="1.8" />
+    <rect x="13" y="3.5" width="7.5" height="4.5" rx="1.8" />
+    <rect x="13" y="10.5" width="7.5" height="10" rx="1.8" />
+    <rect x="3.5" y="13.5" width="7.5" height="7" rx="1.8" />
+  </svg>
+);
+
+const ChatGlyph = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden="true">
+    <path d="M4 5h16a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H10l-4.5 4v-4H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z" />
+    <path d="M7.5 9.5h9M7.5 12.5h5.5" />
+  </svg>
+);
+
+const PhoneGlyph = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden="true">
+    <rect x="7" y="2.5" width="10" height="19" rx="2.5" />
+    <line x1="10.5" y1="18" x2="13.5" y2="18" />
+  </svg>
+);
+
+const CircleIcon = ({ accent, children }) => (
+  <div
+    className={`flex h-12 w-12 items-center justify-center rounded-full transition-transform duration-300 ease-out motion-reduce:transition-none group-hover:rotate-6 ${ACCENTS[accent].soft} ${ACCENTS[accent].icon}`}
+  >
+    {children}
+  </div>
+);
+
+const SectionTitle = () => (
+  <div className="flex flex-col items-center text-center">
+    <h2 className="w-[95%] text-[34px] font-black leading-[1.15] tracking-tight text-gray-900 md:text-[48px] lg:text-[62px]">
+      Effectivity your workflow
+      <br />
+      better with good collaboration
+    </h2>
+    <p className="mt-6 w-[75%] text-lg leading-relaxed text-gray-500">
+      Boost your team's productivity with powerful collaboration tools. Our platform allows your team to work
+      together in real time, share insights effortlessly, and streamline communication.
+    </p>
+
+    <MainCTAbutton2 />
+  </div>
+);
+
+const DashboardMockup = () => (
+  <div className="relative h-full w-full overflow-hidden rounded-[28px] bg-gradient-to-br from-[#F6F5FF] via-[#FAFAFC] to-white p-4 shadow-[0_1px_2px_rgba(15,15,35,0.04),0_24px_48px_-16px_rgba(67,56,202,0.18)] ring-1 ring-black/[0.04]">
+    {/* ambient glow */}
+    <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-gradient-to-br from-indigo-300/30 to-violet-300/10 blur-3xl" />
+    <div className="pointer-events-none absolute -left-8 bottom-0 h-32 w-32 rounded-full bg-amber-200/20 blur-3xl" />
+
+    {/* top bar */}
+    <div className="relative flex items-center gap-2.5 rounded-2xl bg-white/90 px-3.5 py-2.5 shadow-[0_1px_2px_rgba(15,15,35,0.04),0_8px_20px_-8px_rgba(15,15,35,0.08)] ring-1 ring-black/[0.04] backdrop-blur">
+      <div className="h-5 w-5 shrink-0 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 shadow-[0_2px_6px_rgba(99,102,241,0.4)]" />
+      <div className="h-2 flex-1 rounded-full bg-gradient-to-r from-gray-100 to-gray-50" />
+      <div className="h-4 w-4 shrink-0 rounded-md bg-gray-100" />
+    </div>
+
+    {/* tabs */}
+    <div className="relative mt-3.5 flex gap-1.5">
+      {["Projects", "Meeting", "Settings"].map((label, i) => (
+        <span
+          key={label}
+          className={`rounded-full px-3 py-1 text-[9px] font-medium tracking-wide transition-all ${i === 0
+            ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-[0_4px_12px_-2px_rgba(99,102,241,0.5)]"
+            : "bg-white/80 text-gray-400 ring-1 ring-black/[0.04]"
+            }`}
+        >
+          {label}
+        </span>
+      ))}
+    </div>
+
+    {/* list card */}
+    <div className="relative mt-3.5 space-y-2.5 rounded-2xl bg-white p-3.5 shadow-[0_1px_2px_rgba(15,15,35,0.04),0_12px_28px_-10px_rgba(15,15,35,0.1)] ring-1 ring-black/[0.04]">
+      {[
+        { tint: "from-indigo-100 to-indigo-50", w: "w-[85%]" },
+        { tint: "from-violet-100 to-violet-50", w: "w-[65%]" },
+        { tint: "from-amber-100 to-amber-50", w: "w-[75%]" },
+      ].map((row, i) => (
+        <div key={i} className="flex items-center gap-2.5">
+          <div className={`h-7 w-7 shrink-0 rounded-xl bg-gradient-to-br ${row.tint} ring-1 ring-black/[0.03]`} />
+          <div className="flex-1 space-y-1">
+            <div className={`h-2 ${row.w} rounded-full bg-gray-100`} />
+          </div>
+          <div className="flex -space-x-1.5">
+            <div className="h-4 w-4 rounded-full bg-gradient-to-br from-indigo-400 to-indigo-500 ring-2 ring-white" />
+            <div className="h-4 w-4 rounded-full bg-gradient-to-br from-violet-400 to-violet-500 ring-2 ring-white" />
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {/* floating avatar cluster */}
+    <div className="absolute bottom-4 right-4 flex items-center gap-1 rounded-full bg-white/95 px-2 py-1.5 shadow-[0_8px_20px_-6px_rgba(15,15,35,0.18)] ring-1 ring-black/[0.04] backdrop-blur">
+      <div className="h-5 w-5 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-600 ring-2 ring-white" />
+      <div className="h-5 w-5 rounded-full bg-gradient-to-br from-violet-400 to-violet-600 ring-2 ring-white" />
+      <div className="h-5 w-5 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 ring-2 ring-white" />
+    </div>
+  </div>
+);
+
+const ChatMockup = () => (
+  <div className="relative h-full w-full overflow-hidden rounded-[28px] bg-white p-4 shadow-[0_1px_2px_rgba(15,15,35,0.04),0_24px_48px_-16px_rgba(15,15,35,0.14)] ring-1 ring-black/[0.05]">
+    <div className="pointer-events-none absolute -left-10 -top-10 h-32 w-32 rounded-full bg-violet-200/25 blur-3xl" />
+
+    {/* window chrome */}
+    <div className="relative flex items-center justify-between border-b border-black/[0.05] pb-3">
+      <div className="flex items-center gap-1.5">
+        <span className="h-2.5 w-2.5 rounded-full bg-rose-300" />
+        <span className="h-2.5 w-2.5 rounded-full bg-amber-300" />
+        <span className="h-2.5 w-2.5 rounded-full bg-emerald-300" />
+      </div>
+      <div className="h-5 w-24 rounded-full bg-gray-50 ring-1 ring-black/[0.04]" />
+      <div className="flex -space-x-1.5">
+        <div className="h-5 w-5 rounded-full bg-gradient-to-br from-violet-400 to-violet-500 ring-2 ring-white" />
+        <div className="h-5 w-5 rounded-full bg-gradient-to-br from-indigo-400 to-indigo-500 ring-2 ring-white" />
+      </div>
+    </div>
+
+    {/* thread */}
+    <div className="relative mt-3.5 space-y-3 overflow-hidden">
+      <div className="flex items-start gap-2">
+        <div className="h-6 w-6 shrink-0 rounded-full bg-gradient-to-br from-violet-300 to-violet-400 shadow-sm" />
+        <div className="max-w-[72%] rounded-2xl rounded-tl-sm bg-gray-50 px-3.5 py-2.5 ring-1 ring-black/[0.03]">
+          <div className="h-2 w-20 rounded-full bg-gray-200" />
+          <div className="mt-1.5 h-2 w-14 rounded-full bg-gray-200" />
+        </div>
+      </div>
+
+      <div className="flex items-start justify-end gap-2">
+        <div className="max-w-[72%] rounded-2xl rounded-tr-sm bg-gradient-to-br from-violet-500 to-indigo-600 px-3.5 py-2.5 shadow-[0_6px_16px_-6px_rgba(124,58,237,0.5)]">
+          <div className="h-2 w-16 rounded-full bg-white/75" />
+        </div>
+        <div className="h-6 w-6 shrink-0 rounded-full bg-gradient-to-br from-indigo-300 to-indigo-400 shadow-sm" />
+      </div>
+
+      <div className="flex items-start gap-2">
+        <div className="h-6 w-6 shrink-0 rounded-full bg-gradient-to-br from-violet-300 to-violet-400 shadow-sm" />
+        <div className="flex items-center gap-2 rounded-2xl rounded-tl-sm bg-white px-3 py-2 shadow-[0_1px_2px_rgba(15,15,35,0.04),0_8px_16px_-8px_rgba(15,15,35,0.12)] ring-1 ring-black/[0.04]">
+          <div className="h-6 w-6 shrink-0 rounded-lg bg-gradient-to-br from-violet-100 to-indigo-50" />
+          <div className="h-2 w-12 rounded-full bg-gray-200" />
+        </div>
+      </div>
+
+      <div className="ml-8 flex gap-1.5">
+        <span className="flex h-5 items-center gap-1 rounded-full bg-white px-2 text-[10px] shadow-sm ring-1 ring-black/[0.05]">
+          <span className="text-gray-500">👍</span>
+          <span className="text-gray-400">2</span>
+        </span>
+        <span className="flex h-5 items-center rounded-full bg-white px-2 text-[10px] shadow-sm ring-1 ring-black/[0.05]">
+          🎉
+        </span>
+      </div>
+    </div>
+
+    {/* composer */}
+    <div className="absolute bottom-4 left-4 right-4 flex items-center gap-2 rounded-full bg-white px-3.5 py-2.5 shadow-[0_1px_2px_rgba(15,15,35,0.04),0_10px_24px_-10px_rgba(15,15,35,0.14)] ring-1 ring-black/[0.06]">
+      <div className="h-2 flex-1 rounded-full bg-gray-100" />
+      <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-indigo-600 shadow-[0_4px_10px_-2px_rgba(99,102,241,0.5)]">
+        <svg viewBox="0 0 24 24" className="h-3 w-3 fill-white">
+          <path d="M2 21l21-9L2 3v7l15 2-15 2z" />
+        </svg>
+      </div>
+    </div>
+  </div>
+);
+
+const PHONE_ROWS = [
+  { grad: "from-indigo-400 to-indigo-500", unread: true, time: "9:41" },
+  { grad: "from-violet-400 to-violet-500", unread: false, time: "9:24" },
+  { grad: "from-amber-400 to-amber-500", unread: true, time: "Mon" },
+  { grad: "from-emerald-400 to-emerald-500", unread: false, time: "Sun" },
 ];
 
-/* ── Inline styles ── */
-const STYLES = `
+const PhoneMockup = () => (
+  <div className="relative flex h-full w-full items-center justify-center">
+    <div className="pointer-events-none absolute h-64 w-64 rounded-full bg-gradient-to-br from-indigo-200/40 to-violet-200/20 blur-3xl" />
 
-.gs-section {
-  background: #060a07;
-  font-family: 'Outfit', sans-serif;
-  position: relative;
-  overflow: hidden;
-}
+    <div className="relative w-[196px]">
+      <div className="rounded-[42px] bg-gradient-to-b from-gray-800 to-gray-900 p-[6px] shadow-[0_30px_60px_-20px_rgba(15,15,35,0.45)]">
+        <div className="relative h-[404px] w-full overflow-hidden rounded-[36px] bg-white">
+          <div className="absolute left-1/2 top-2.5 z-10 h-4 w-16 -translate-x-1/2 rounded-full bg-gray-900" />
 
-/* Circuit-board dot grid */
-.gs-grid {
-  position: absolute; inset: 0; pointer-events: none; z-index: 0;
-  background-image:
-    radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
-  background-size: 32px 32px;
-}
-
-/* Ambient orb behind the whole section */
-.gs-bg-orb {
-  position: absolute; border-radius: 50%;
-
-}
-
-/* ── Section badge ── */
-.gs-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 999px; padding: 6px 18px;
-  font-family: 'Space Mono', monospace;
-  font-size: 11px; letter-spacing: 0.14em;
-  color: rgba(255,255,255,0.5);
-  background: rgba(255,255,255,0.04);
-  text-transform: uppercase;
-}
-.gs-badge-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: #00ff87;
-
-  animation: gs-pulse 2s ease-in-out infinite;
-}
-@keyframes gs-pulse {
-  0%,100% { opacity:1; transform:scale(1); }
-  50%      { opacity:0.35; transform:scale(0.7); }
-}
-
-/* ── Section title ── */
-.gs-title {
-  font-family: head;
-  font-weight: 800;
-  font-size: clamp(2.4rem, 5.5vw, 5rem);
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-  color: #fff;
-  text-align: center;
-}
-.gs-title span {
-  -webkit-text-stroke: 1px rgba(0, 255, 13, 0.35);
-  color: transparent;
-}
-
-/* ── Card ── */
-.gs-card {
-  position: relative;
-  border-radius: 28px;
-  overflow: hidden;
-  background: rgba(10,15,12,0.9);
-  border: 1px solid rgba(255,255,255,0.07);
-  display: flex; flex-direction: column;
-  transition: transform 0.45s cubic-bezier(0.23,1,0.32,1),
-
-  cursor: default;
-}
-.gs-card:hover {
-  transform: translateY(-10px);
-}
-
-/* Top colour bar */
-.gs-card-bar {
-  height: 2px; width: 100%;
-  background: var(--card-color);
-
-  opacity: 0.8;
-  transition: opacity 0.35s;
-}
-.gs-card:hover .gs-card-bar { opacity: 1; }
-
-/* Halo glow behind card on hover */
-.gs-card::before {
-  content: '';
-  position: absolute; inset: 0; z-index: 0;
-  background: radial-gradient(ellipse at 50% 0%, var(--card-dim-glow) 0%, transparent 65%);
-  opacity: 0;
-  transition: opacity 0.45s;
-  pointer-events: none;
-}
-.gs-card:hover::before { opacity: 1; }
-
-/* Image wrapper */
-.gs-img-wrap {
-  position: relative; overflow: hidden;
-  flex-shrink: 0;
-}
-.gs-img-wrap img {
-  width: 100%; height: 280px; object-fit: cover; display: block;
-  transition: transform 0.6s cubic-bezier(0.23,1,0.32,1), filter 0.4s;
-  filter: saturate(0.8) brightness(0.85);
-}
-.gs-card:hover .gs-img-wrap img {
-  transform: scale(1.06);
-  filter: saturate(1) brightness(1);
-}
-
-/* Scanline sweep on hover */
-.gs-scan {
-  position: absolute; inset: 0; z-index: 2; pointer-events: none;
-  background: repeating-linear-gradient(
-    180deg,
-    transparent 0px,
-    transparent 3px,
-    rgba(255,255,255,0.015) 3px,
-    rgba(255,255,255,0.015) 4px
-  );
-  opacity: 0;
-  transition: opacity 0.35s;
-}
-.gs-card:hover .gs-scan { opacity: 1; }
-
-/* Image overlay fade */
-.gs-img-fade {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  height: 80px;
-  background: linear-gradient(transparent, rgba(10,15,12,0.95));
-  z-index: 1;
-}
-
-/* Unit badge on image */
-.gs-unit-badge {
-  position: absolute; top: 14px; left: 14px; z-index: 3;
-  font-family: 'Space Mono', monospace;
-  font-size: 10px; letter-spacing: 0.12em;
-  padding: 4px 10px; border-radius: 999px;
-  background: rgba(0,0,0,0.65);
-  border: 1px solid var(--card-color);
-  color: var(--card-color);
-  text-transform: uppercase;
-
-}
-
-/* Status pill on image */
-.gs-status {
-  position: absolute; top: 14px; right: 14px; z-index: 3;
-  display: flex; align-items: center; gap: 5px;
-  font-family: 'Space Mono', monospace;
-  font-size: 9px; letter-spacing: 0.1em;
-  padding: 4px 10px; border-radius: 999px;
-  background: rgba(0,0,0,0.65);
-  color: rgba(255,255,255,0.5);
-  border: 1px solid rgba(255,255,255,0.1);
-
-  text-transform: uppercase;
-}
-.gs-status-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--card-color);
-
-  animation: gs-pulse 2s ease-in-out infinite;
-}
-
-/* Card body */
-.gs-card-body {
-  position: relative; z-index: 2;
-  padding: 20px 22px 24px;
-  display: flex; flex-direction: column; gap: 8px;
-  flex: 1;
-}
-
-/* Tag row */
-.gs-tag {
-  font-family: 'Space Mono', monospace;
-  font-size: 10px; letter-spacing: 0.14em;
-  color: var(--card-color);
-  opacity: 0.7;
-  text-transform: uppercase;
-}
-
-/* Name */
-.gs-name {
-  font-family: head;
-  font-weight: 800;
-  font-size: clamp(2rem, 3vw, 2.8rem);
-  letter-spacing: -0.03em;
-  color: #fff;
-  line-height: 1;
-}
-
-/* Role */
-.gs-role {
-  font-size: 0.85rem;
-  color: rgba(255,255,255,0.4);
-  font-weight: 400;
-  letter-spacing: 0.02em;
-}
-
-/* Divider */
-.gs-divider {
-  height: 1px; width: 100%;
-  background: linear-gradient(90deg, var(--card-color), transparent);
-  opacity: 0.2;
-  margin: 4px 0;
-  transition: opacity 0.35s;
-}
-.gs-card:hover .gs-divider { opacity: 0.45; }
-
-/* Quote */
-.gs-quote {
-  font-size: 0.95rem;
-  color: rgba(255,255,255,0.55);
-  line-height: 1.55;
-  font-style: italic;
-  font-weight: 300;
-  transition: color 0.3s;
-}
-.gs-quote::before { content: '"'; color: var(--card-color); font-style: normal; margin-right: 2px; }
-.gs-quote::after  { content: '"'; color: var(--card-color); font-style: normal; margin-left:  2px; }
-.gs-card:hover .gs-quote { color: rgba(255,255,255,0.8); }
-
-/* Appear animation */
-.gs-card-anim {
-  opacity: 0;
-  transform: translateY(40px);
-  animation: gs-appear 0.7s cubic-bezier(0.23,1,0.32,1) forwards;
-}
-@keyframes gs-appear {
-  to { opacity: 1; transform: translateY(0); }
-}
-`;
-
-const ContentSecond = () => {
-  return (
-    <>
-      <style>{STYLES}</style>
-
-      <section className="gs-section w-full py-24 px-4 md:px-10 flex flex-col items-center gap-14 mt-[-100px]">
-
-        {/* ── Header ── */}
-        <div className="relative z-10 flex flex-col items-center gap-5">
-          <div className="gs-badge">
-            <div className="gs-badge-dot" />
-            Intelligent Agents
+          <div className="flex items-center justify-between px-4 pt-8">
+            <span className="text-[10px] font-semibold tracking-wide text-gray-900">Messages</span>
+            <div className="relative h-5 w-5 rounded-full bg-gradient-to-br from-amber-300 to-amber-400 shadow-[0_2px_6px_rgba(251,191,36,0.5)]">
+              <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-white" />
+            </div>
           </div>
 
-          <h2 className="gs-title">
-            Meet the <span>Guardians</span>
-          </h2>
+          <div className="mx-4 mt-3 flex h-6 items-center gap-1.5 rounded-full bg-gray-50 px-2.5 ring-1 ring-black/[0.03]">
+            <svg viewBox="0 0 24 24" className="h-2.5 w-2.5 fill-none stroke-gray-300 stroke-2">
+              <circle cx="11" cy="11" r="7" />
+              <path d="M21 21l-4.3-4.3" strokeLinecap="round" />
+            </svg>
+            <div className="h-1.5 w-14 rounded-full bg-gray-200" />
+          </div>
 
-          <p style={{
-            fontFamily: "'Outfit', sans-serif",
-            fontSize: "clamp(0.95rem, 1.4vw, 1.15rem)",
-            color: "rgba(255,255,255,0.4)",
-            fontWeight: 300,
-            maxWidth: 560,
-            textAlign: "center",
-            lineHeight: 1.7,
-          }}>
-            Four autonomous intelligences — each with a singular purpose,
-            operating in the background so you never have to think about it.
-          </p>
-        </div>
-
-        {/* ── Cards grid ── */}
-        <div
-          className="relative z-10 w-full max-w-[1400px]"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-            gap: "20px",
-          }}
-        >
-          {cards.map((card, i) => (
-            <div
-              key={i}
-              className="gs-card gs-card-anim"
-              style={{
-                "--card-color": card.color,
-                "--card-glow": card.glow,
-                "--card-dim-glow": card.dimGlow,
-                animationDelay: `${i * 0.12}s`,
-              }}
-            >
-              {/* Top accent bar */}
-              <div className="gs-card-bar" />
-
-              {/* Image */}
-              <div className="gs-img-wrap">
-                {/* Unit badge */}
-                <div className="gs-unit-badge">{card.unit}</div>
-
-                {/* Status */}
-                <div className="gs-status">
-                  <div className="gs-status-dot" />
-                  {card.status}
+          <div className="mt-3.5 space-y-3.5 px-4">
+            {PHONE_ROWS.map((row, i) => (
+              <div key={i} className="flex items-center gap-2.5">
+                <div className={`h-9 w-9 shrink-0 rounded-full bg-gradient-to-br ${row.grad} shadow-sm ring-2 ring-white`} />
+                <div className="min-w-0 flex-1">
+                  <div className="h-2 w-14 rounded-full bg-gray-300" />
+                  <div className="mt-1.5 h-2 w-20 rounded-full bg-gray-100" />
                 </div>
-
-                <img src={card.img} alt={card.title} />
-                <div className="gs-scan" />
-                <div className="gs-img-fade" />
+                <div className="flex shrink-0 flex-col items-end gap-1.5">
+                  <span className="text-[7px] text-gray-300">{row.time}</span>
+                  {row.unread && (
+                    <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600" />
+                  )}
+                </div>
               </div>
+            ))}
+          </div>
 
-              {/* Body */}
-              <div className="gs-card-body">
-                <p className="gs-tag">// {card.tag}</p>
-                <h3 className="gs-name">{card.title}</h3>
-                <p className="gs-role">{card.role}</p>
-                <div className="gs-divider" />
-                <p className="gs-quote">{card.quote}</p>
-              </div>
-            </div>
-          ))}
+          <div className="absolute bottom-0 left-0 right-0 flex justify-around border-t border-black/[0.04] bg-white/95 py-3.5 backdrop-blur">
+            {[0, 1, 2, 3].map((i) => (
+              <span
+                key={i}
+                className={`h-1.5 w-5 rounded-full ${i === 0 ? "bg-gradient-to-r from-indigo-600 to-violet-600" : "bg-gray-200"
+                  }`}
+              />
+            ))}
+          </div>
         </div>
+      </div>
+    </div>
+  </div>
+);
 
-        {/* ── Bottom flourish ── */}
-        <div className="relative z-10 flex items-center gap-4 w-full max-w-[1400px]">
-          <div style={{ flex: 1, height: 1, background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.08))" }} />
-          <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, letterSpacing: "0.15em", color: "rgba(255,255,255,0.2)", textTransform: "uppercase" }}>
-            4 of 4 Guardians Active
-          </span>
-          <div style={{ flex: 1, height: 1, background: "linear-gradient(90deg, rgba(255,255,255,0.08), transparent)" }} />
+
+const FeatureCard = ({ accent, icon, title, subtitle, children, index }) => (
+  <motion.div
+
+    initial={{
+      opacity: 0,
+      y: 80,
+      scale: 0.94,
+    }}
+
+    whileInView={{
+      opacity: 1,
+      y: 0,
+      scale: 1,
+    }}
+
+    transition={{
+      duration: .7,
+      ease: [0.22, 1, 0.36, 1],
+      delay: index * .55
+    }}
+    className="group relative flex h-auto flex-col overflow-hidden   p-8 ">
+
+    <div className="absolute inset-0 ">
+
+      <svg fill="#fff" stroke="rgba(123, 123, 123, 1)" strokeOpacity={"0.25"} height="100%" preserveAspectRatio="none" viewBox="0 0 443 494" width="100%" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 490V4a4 4 0 0 1 4-4h288.23c.932 0 1.856.163 2.731.48l60.814 22.09c.875.318 1.8.48 2.731.48H439a4 4 0 0 1 4 4V490a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4" fill="var(--color-white)"></path>
+        <path d="M4 .5h288.23c.874 0 1.74.152 2.561.45l60.813 22.09c.931.338 1.912.51 2.902.51H439a3.5 3.5 0 0 1 3.5 3.5V490a3.5 3.5 0 0 1-3.5 3.5H4A3.5 3.5 0 0 1 .5 490V4A3.5 3.5 0 0 1 4 .5Z" stroke="var(--color-black-20)"></path>
+      </svg>
+    </div>
+
+    <div className="relative z-10 flex h-full flex-col">
+      <h3 className="mt-6 text-[30px] font-bold leading-tight tracking-tight text-gray-900">{title}</h3>
+      <div className="my-3 w-full border-t border-dotted border-gray-400"></div>
+      <p className="mt-3 text-base leading-relaxed text-gray-500">{subtitle}</p>
+      <div className="relative mt-6 min-h-0 flex-1">{children}</div>
+
+    </div>
+  </motion.div>
+);
+
+const CollaborationSection = () => {
+  return (
+    <section className="relative overflow-hidden bg-white">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute left-[8%] top-[52%] h-[420px] w-[420px] rounded-full bg-indigo-500/10 blur-3xl" />
+        <div className="absolute right-[10%] top-[38%] h-[380px] w-[380px] rounded-full bg-violet-500/10 blur-3xl" />
+        <div className="absolute bottom-0 left-1/2 h-[400px] w-[400px] -translate-x-1/2 rounded-full bg-amber-500/10 blur-3xl" />
+      </div>
+
+      <div className="relative mx-auto max-w-[1400px] px-5 py-16 md:px-8 md:py-24">
+        <SectionTitle />
+
+        <div className="mt-20 grid grid-cols-1 gap-[30px] md:grid-cols-2 lg:grid-cols-3">
+          <FeatureCard
+            accent="blue"
+            icon={<DashboardGlyph />}
+            title="Optimize Team Work!"
+            subtitle="Good teamwork become smooth with good management team from services"
+            index={0}
+          >
+            <DashboardMockup />
+          </FeatureCard>
+
+          <FeatureCard
+            accent="purple"
+            icon={<ChatGlyph />}
+            title="Grow Up Team Collaboratte"
+            subtitle="Communication more important and good proportionality work"
+            index={1}
+          >
+            <ChatMockup />
+          </FeatureCard>
+
+          <FeatureCard
+            accent="orange"
+            icon={<PhoneGlyph />}
+            title="Mobile User Friendly"
+            subtitle="Wherever you are, it's still easy to organize projects from your phone"
+            index={2}
+          >
+            <PhoneMockup />
+          </FeatureCard>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 };
 
-export default ContentSecond;
+export default CollaborationSection;

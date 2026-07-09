@@ -98,7 +98,7 @@ const icon = [
 ]
 
 
-const EmojiTab = ({ setText }) => {
+const EmojiTab = ({ setText, replyHandeler }) => {
 
     const [emojiFeild, setEmojiFeild] = useState({
         name: "Emoji & People",
@@ -150,7 +150,7 @@ const EmojiTab = ({ setText }) => {
                 scale: 1
             }}
             transition={{ duration: 0.5 }}
-            className="absolute bottom-[90px]  right-[90px] z-30 p-2 w-[400px]  rounded-3xl bg-[#212121]   shadow-xl ">
+            className={`absolute ${replyHandeler?.isOpen ? "bottom-[155px]" : "bottom-[60px]"}   right-[70px] z-30 p-2 w-[400px]  rounded-3xl bg-[#212121]   shadow-xl `}>
 
 
             <div className=' flex justify-around pt-2 mb-5'>

@@ -88,6 +88,8 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
             connectionUser();
         }
         if (!chatsARR) {
+
+
             chatUser();
         }
     }, [dispatch]);
@@ -128,9 +130,12 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
 
                     <div className='mt-3 p-0 w-[100%] '>
                         {chatsARR?.map((chatUser, idx) => {
-                            return (chatUser.members.map((user, index) => (
-
-                                user?._id !== loggedUser._id && chatUser.type === "private" && <div key={index}
+                            return (chatUser.members.map((user, index) => {
+                                const unreadCount =
+                                    chatUser?.unreadCounts?.find(
+                                        (item) => item.user === user._id
+                                    )?.count ?? 0;
+                                return (user?._id !== loggedUser._id && chatUser.type === "private" && <div key={index}
                                     onClick={() => {
                                         if (selectedChatUser?.id === user._id) {
 
@@ -214,23 +219,42 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
                                             }
 
                                         </div>
-                                        {chatUser?.convoId === lastMsgStatus?.convoId && < div className='w-full h-full rounded-2xl bg-transparent px-1'>
+                                        {< div className='w-full h-full rounded-2xl bg-transparent px-1'>
                                             <div className="flex justify-between items-center ">
                                                 <span className={`font-semibold text-md truncate text-white`}>{user.firstName + ' ' + user.lastName}</span>
-                                                <span className={`text-sm  text-gray-300`}>{lastMsgStatus?.msgId ? lastMsgStatus?.lastMsgTime : chatUser?.lastMessage?.updatedAt}</span>
+                                                <span className={`text-sm  text-gray-300`}>{lastMsgStatus?.convoId === chatUser?._id && lastMsgStatus?.msgId ?
+                                                    lastMsgStatus?.lastMsgTime ?
+                                                        new Date(lastMsgStatus?.lastMsgTime).toLocaleTimeString("en-US", {
+                                                            hour: "numeric",
+                                                            minute: "2-digit",
+                                                            hour12: true,
+                                                        })
+                                                        : ""
+                                                    : chatUser?.lastMessage?.updatedAt ?
+                                                        new Date(chatUser?.lastMessage?.updatedAt).toLocaleTimeString("en-US", {
+                                                            hour: "numeric",
+                                                            minute: "2-digit",
+                                                            hour12: true,
+                                                        })
+                                                        : ""
+                                                }</span>
                                             </div>
                                             <div className="flex justify-between items-center ">
-                                                <span className={`text-sm  pl-1 truncate  text-gray-300`}>{lastMsgStatus?.msgId ? lastMsgStatus?.lastMsg : chatUser?.lastMessage?.content}</span>
-                                                <div className="flex items-center gap-1">
-                                                    <span className="w-5 h-5 rounded-full bg-green-500 text-sm flex items-center justify-center">3</span>
 
+                                                <span className={`text-sm  pl-1 line-clamp-1 break-words  text-gray-300`}>{lastMsgStatus?.convoId === chatUser?._id && lastMsgStatus?.msgId ? lastMsgStatus?.lastMsg : chatUser?.lastMessage?.content}</span>
+                                                <div className="flex items-center gap-1">
+                                                    {unreadCount > 0 && (
+                                                        <span className="min-w-5 h-5 px-1 rounded-full bg-blue-500 text-xs font-medium flex items-center justify-center">
+                                                            {unreadCount < 10 ? unreadCount : "!"}
+                                                        </span>
+                                                    )}
                                                 </div>
                                             </div>
 
                                         </div>}
                                     </div>
-                                </div>
-                            )))
+                                </div>)
+                            }))
                         })
                         }
 
