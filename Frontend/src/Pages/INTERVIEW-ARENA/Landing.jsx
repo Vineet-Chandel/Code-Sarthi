@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import ShortPreview from './ShortPreview';
-import { motion } from 'framer-motion';
+import { motion, percent } from 'framer-motion';
 import ClickedInterviews from "./ClickedInterviews"
 import ClickedResume from "./ClickedResume"
 
@@ -16,54 +16,38 @@ const Landing = () => {
     const [clicked, setClicked] = useState(false);
     const [clicked2, setClicked2] = useState(false);
 
-
-
     const data = [
         {
-            icon: (
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="2.2em" height="2.2em" viewBox="0 0 24 24">
-                    <g fill="none">
-                        <path d="m12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036q-.016-.004-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.016-.018m.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01z"></path>
-                        <path fill="#A7A0F8" d="M9.107 5.448c.598-1.75 3.016-1.803 3.725-.159l.06.16l.807 2.36a4 4 0 0 0 2.276 2.411l.217.081l2.36.806c1.75.598 1.803 3.016.16 3.725l-.16.06l-2.36.807a4 4 0 0 0-2.412 2.276l-.081.216l-.806 2.361c-.598 1.75-3.016 1.803-3.724.16l-.062-.16l-.806-2.36a4 4 0 0 0-2.276-2.412l-.216-.081l-2.36-.806c-1.751-.598-1.804-3.016-.16-3.724l.16-.062l2.36-.806A4 4 0 0 0 8.22 8.025l.081-.216zM19 2a1 1 0 0 1 .898.56l.048.117l.35 1.026l1.027.35a1 1 0 0 1 .118 1.845l-.118.048l-1.026.35l-.35 1.027a1 1 0 0 1-1.845.117l-.048-.117l-.35-1.026l-1.027-.35a1 1 0 0 1-.118-1.845l.118-.048l1.026-.35l.35-1.027A1 1 0 0 1 19 2"></path>
-                    </g>
+            title: "Profile Completeness",
+            icon: <>
+                <svg width="45" height="45" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11.1056 3.44721L5.78885 6.10557C5.00831 6.49585 4.61803 6.69098 4.61803 7C4.61803 7.30902 5.00831 7.50415 5.78885 7.89443L11.1056 10.5528C11.5445 10.7722 11.7639 10.882 12 10.882C12.2361 10.882 12.4555 10.7722 12.8944 10.5528L18.2111 7.89443C18.9917 7.50415 19.382 7.30902 19.382 7C19.382 6.69098 18.9917 6.49585 18.2111 6.10557L12.8944 3.44721C12.4555 3.22776 12.2361 3.11803 12 3.11803C11.7639 3.11803 11.5445 3.22776 11.1056 3.44721Z" fill="#fff" />
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M7.02217 10.4893C7.62603 10.8135 8.33716 11.169 9.15554 11.5782L10.2113 12.1061C11.0891 12.545 11.528 12.7644 12.0001 12.7644C12.4723 12.7644 12.9112 12.545 13.789 12.1061L14.8447 11.5782C15.6631 11.169 16.3742 10.8135 16.9781 10.4893L18.2113 11.1059C18.9918 11.4961 19.3821 11.6913 19.3821 12.0003C19.3821 12.3093 18.9918 12.5044 18.2113 12.8947L12.8946 15.5531C12.4557 15.7725 12.2362 15.8822 12.0001 15.8822C11.7641 15.8822 11.5446 15.7725 11.1057 15.5531L11.1057 15.5531L5.78898 12.8947C5.00844 12.5044 4.61816 12.3093 4.61816 12.0003C4.61816 11.6913 5.00844 11.4961 5.78898 11.1059L7.02217 10.4893Z" fill="#fff" />
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M7.02169 15.4893C7.62567 15.8135 8.33696 16.1692 9.15557 16.5785L10.2113 17.1063C11.0891 17.5452 11.528 17.7647 12.0001 17.7647C12.4723 17.7647 12.9112 17.5452 13.789 17.1063L14.8447 16.5785C15.6633 16.1692 16.3746 15.8135 16.9786 15.4893L18.2113 16.1056C18.9918 16.4959 19.3821 16.691 19.3821 17C19.3821 17.3091 18.9918 17.5042 18.2113 17.8945L12.8946 20.5528C12.4557 20.7723 12.2362 20.882 12.0001 20.882C11.7641 20.882 11.5446 20.7723 11.1057 20.5528L11.1057 20.5528L5.78898 17.8945C5.00844 17.5042 4.61816 17.3091 4.61816 17C4.61816 16.691 5.00844 16.4959 5.78898 16.1056L7.02169 15.4893Z" fill="#fff" />
                 </svg>
-            ),
-            title: "Analyse Career Profile",
-
+            </>,
+            percentage: "0%"
         },
-
         {
-            icon: (
-
-
-                <svg width="2.2em" height="2.2em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M9.14939 7.83131C8.57654 5.92179 10.0064 4 12 4C13.9936 4 15.4235 5.92179 14.8506 7.8313L13.2873 13.0422C13.2171 13.2762 13.182 13.3932 13.128 13.4895C12.989 13.7371 12.7513 13.9139 12.4743 13.9759C12.3664 14 12.2443 14 12 14C11.7557 14 11.6336 14 11.5257 13.9759C11.2487 13.9139 11.011 13.7371 10.872 13.4895C10.818 13.3932 10.7829 13.2762 10.7127 13.0422L9.14939 7.83131Z" fill="#A7A0F8" stroke="#A7A0F8" strokeWidth="2" />
-                    <circle cx="12" cy="19" r="2" fill="#A7A0F8" stroke="#A7A0F8" stroke-width="2" />
+            title: "Analytics",
+            subTitle: "Sucess Rate",
+            percentage: "67%",
+            icon: <>
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 32 32">
+                    <path fill="currentColor" d="M20 8v2h6.586L18 18.586l-4.293-4.293a1 1 0 0 0-1.414 0L2 24.586L3.414 26L13 16.414l4.293 4.293a1 1 0 0 0 1.414 0L28 11.414V18h2V8Z"></path>
                 </svg>
-
-            ),
-            title: "Instant Suggestions & Feedbacks",
+            </>
         },
-
         {
-            icon: (
-                <svg xmlns="http://www.w3.org/2000/svg" width="2.2em" height="2.2em" viewBox="0 0 24 24"> <path fill="#A7A0F8" d="M16.4 21h-2.154l-2-5H5.754l-2 5H1.6L8 5h2zm4.6-9v9h-2v-9zM6.554 14h4.892L9 7.885zM19.529 2.32a.507.507 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.717.32a.53.53 0 0 1 0 .962l-.758.338a4.36 4.36 0 0 0-2.22 2.25l-.246.566a.506.506 0 0 1-.934 0l-.247-.565a4.36 4.36 0 0 0-2.219-2.251l-.76-.338a.53.53 0 0 1 0-.963l.718-.32a4.37 4.37 0 0 0 2.251-2.325z"></path> </svg>),
-            title: "AI Powered Mock Interview",
-        },
-
-        {
-            icon: (
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" viewBox="0 0 32 32">
-                    <path fill="#A7A0F8" d="M10 18h8v2h-8zm0-5h12v2H10zm0 10h5v2h-5z"></path>
-                    <path fill="#A7A0F8" d="M25 5h-3V4a2 2 0 0 0-2-2h-8a2 2 0 0 0-2 2v1H7a2 2 0 0 0-2 2v21a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2M12 4h8v4h-8Zm13 24H7V7h3v3h12V7h3Z"></path>
-                </svg>
-
-            ),
-            title: "After Mock Interview",
+            title: "Interview Faced ",
+            subTitle: "Good Responses",
+            percentage: "79%",
+            icon: <>
+                <svg className="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"> <path fill="#fff" fillRule="evenodd" d="M280.4 68.995c26.79-29.767 76.077-15.992 83.552 23.35l14.88 78.321h-245.67l14.881-78.32c7.475-39.343 56.762-53.118 83.552-23.351c13.041 14.49 35.764 14.49 48.805 0M129.109 191.999l-8.106 42.667h-35.67v42.666h341.334v-42.666h-35.675l-8.106-42.667zm41.558 234.667L128 405.332l-42.667-21.333v85.333h341.334v-85.333L384 405.332l-42.667 21.334L256 469.332zm213.333-128H128v21.333h.062c1.392 29.69 25.904 53.333 55.938 53.333h8c22.679 0 34.959-14.259 39.955-32.235c3.155-11.352 12.263-21.098 24.045-21.098s20.89 9.746 24.045 21.098c4.996 17.976 17.276 32.235 39.955 32.235h8c30.034 0 54.546-23.643 55.938-53.333H384z" clipRule="evenodd"></path> </svg>
+            </>
         }
-    ];
+    ]
+
 
     const CTAcreateResume = ({ type }) => {
         const Navigate = useNavigate()
@@ -175,7 +159,7 @@ const Landing = () => {
     }, []);
     const ProfileCompleteness = 70
     return (
-        <div className=' bg-white p-1'>
+        <div className=' bg-white px-1 py-3.5'>
             <div className="
 w-full
 mx-auto
@@ -189,11 +173,11 @@ gap-6
 items-stretch
 ">
 
-                <div className='flex lg:flex-row flex-col items-center justify-between '>
-                    <div className='lg:w-1/2 w-full flex flex-col sm:flex-row lg:flex-col justify-between items-start'>
-                        <div className='text-white text-2xl min-[450px]:text-4xl sm:text-5xl font-extrabold font-poppins mt-5 tracking-wider'>Hello, <br /><span className='text-[#A7A0F8]'>{user.firstName} {user.lastName}</span>
+                <div className='flex  flex-col items-center justify-between '>
+                    <div className=' w-full flex flex-col sm:flex-row lg:flex-col justify-between items-start'>
+                        <div className='text-white text-2xl min-[450px]:text-4xl sm:text-5xl font-extrabold font-poppins mt-5 tracking-wider'>Hello,<span className='text-[#A7A0F8]'>{user.firstName} {user.lastName}</span>
                         </div>
-                        <div className='mt-5 flex flex-col gap-2 justify-center items-center'>
+                        {/* <div className='mt-5 flex flex-col gap-2 justify-center items-center'>
 
                             <span className='text-sm text-white ml-0 min-[450px]:ml-2 border mx-auto py-2 px-4 rounded-3xl bg-white/10 border border-white/20'>
                                 <b> Profession : </b> {user.profession}
@@ -202,11 +186,13 @@ items-stretch
                                 <b> College : </b> {user.college}
                             </span>
 
-                        </div>
+                        </div> */}
+
+
 
                     </div>
 
-                    <div className="lg:w-[60%] w-full flex flex-col justify-center items-center mt-10">
+                    <div className=" w-full flex flex-col justify-center items-center mt-10">
                         <div className="w-full h-auto">
                             <h1 className="text-4xl mb-2 font-bold">AI Mock Interview,</h1>
                             <div className=' w-full bg-transparent rounded-3xl'>
