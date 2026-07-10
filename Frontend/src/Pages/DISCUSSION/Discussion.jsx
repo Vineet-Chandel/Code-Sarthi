@@ -13,6 +13,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useOutletContext } from 'react-router-dom'
 
 const Discussion = () => {
+  const [forwardTabOpen, setForwardTabOpen] = useState(false);
   const {
     selectedChatUser,
     setSelectedChatUser,
@@ -32,10 +33,17 @@ const Discussion = () => {
 
   const messages = async (id) => {
     try {
+      setSubLoading(true)
+      if (!id) {
+        setSubLoading(false);
+        return;
+      }
       setLoading(true)
       const res = await axios.post(`${BASE_URL}/get-message/${id}`, {}, {
         withCredentials: true
       });
+
+
 
       dispatch(setConversationMessages(res.data))
 
@@ -50,7 +58,8 @@ const Discussion = () => {
           "Something went wrong"
       });
     } finally {
-      setLoading(false)
+      setLoading(false);
+      setSubLoading(false);
     }
   }
 
@@ -120,7 +129,7 @@ const Discussion = () => {
 
 
         <div className='h-[calc(100%-53px)]'>
-          <AllChats loading={loading} setLoading={setLoading} selectedChatUser={selectedChatUser} setSelectedChatUser={setSelectedChatUser} addToast={addToast} setlastMsgStatus={setlastMsgStatus} lastMsgStatus={lastMsgStatus} />
+          <AllChats forwardTabOpen={forwardTabOpen} setForwardTabOpen={setForwardTabOpen} loading={loading} setLoading={setLoading} selectedChatUser={selectedChatUser} setSelectedChatUser={setSelectedChatUser} addToast={addToast} setlastMsgStatus={setlastMsgStatus} lastMsgStatus={lastMsgStatus} />
         </div>
 
 
@@ -147,7 +156,7 @@ const Discussion = () => {
         </>)}
 
 
-        {selectedChatUser?.info !== null && <ChatArea setSelectedChatUser={setSelectedChatUser} selectedChatUser={selectedChatUser} addToast={addToast} setlastMsgStatus={setlastMsgStatus} lastMsgStatus={lastMsgStatus} />}
+        {selectedChatUser?.info !== null && <ChatArea subLoading={subLoading} forwardTabOpen={forwardTabOpen} setForwardTabOpen={setForwardTabOpen} setSelectedChatUser={setSelectedChatUser} selectedChatUser={selectedChatUser} addToast={addToast} setlastMsgStatus={setlastMsgStatus} lastMsgStatus={lastMsgStatus} />}
 
       </div>
 

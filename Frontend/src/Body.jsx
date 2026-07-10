@@ -16,9 +16,6 @@ const Body = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [selectedChatUser, setSelectedChatUser] = useState({ id: null, info: null, isOpenTab: false });
 
-    useEffect(() => {
-        console.log(selectedChatUser)
-    }, [selectedChatUser])
     const fetchUserData = async () => {
         try {
             const response = await axios.get(
@@ -55,6 +52,7 @@ const Body = () => {
         };
 
         socket.onmessage = (event) => {
+
             const data = JSON.parse(event.data);
 
         };

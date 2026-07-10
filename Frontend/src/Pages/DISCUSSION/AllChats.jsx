@@ -11,12 +11,14 @@ import { IoBarChart } from 'react-icons/io5';
 import { setChatUsers } from '@/utils/chat-user-slice';
 import ChatClickedTab from './ChatClickedTab';
 
-const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelectedChatUser, lastMsgStatus }) => {
+const AllChats = ({ setForwardTabOpen, forwardTabOpen, loading, setLoading, addToast, selectedChatUser, setSelectedChatUser, lastMsgStatus }) => {
 
     const navigate = useNavigate()
 
     const connectionsARR = useSelector(state => state?.connections || []);
-    const chatsARR = useSelector(state => state?.chats?.users?.data || [])
+    const chatsARR = useSelector(
+        state => state.chats.users
+    );
     const loggedUser = useSelector(store => store.user.user.DATA);
     const dispatch = useDispatch();
 
@@ -56,7 +58,7 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
             );
 
 
-            dispatch(setChatUsers(response.data));
+            dispatch(setChatUsers(response.data.data));
         } catch (err) {
             addToast({
                 type: "error",
@@ -81,6 +83,8 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
                 )
             );
         });
+
+
     useEffect(() => {
         chatUser()
     }, [dispatch])
@@ -227,6 +231,10 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
                                         }}
                                         key={index}
                                         onClick={() => {
+
+                                            if (forwardTabOpen) {
+                                                setForwardTabOpen(false)
+                                            }
                                             if (selectedChatUser?.id === user._id) {
 
 
@@ -345,8 +353,7 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
                                         </div>
                                     </div>)
                             }))
-                        })
-                        }
+                        })}
 
 
                         {chatsARR.length <= 5 && chatsARR.length >= 0 && availableConnections.length !== 0 && <div>
@@ -372,6 +379,10 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
 
                                 <div key={index}
                                     onClick={() => {
+
+                                        if (forwardTabOpen) {
+                                            setForwardTabOpen(false)
+                                        }
                                         if (selectedChatUser?.id === user._id) {
 
 
