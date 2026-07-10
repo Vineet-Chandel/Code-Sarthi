@@ -15,6 +15,10 @@ const Body = () => {
     const navigate = useNavigate(); // ✅ rename
     const [isLoading, setIsLoading] = useState(true);
     const [selectedChatUser, setSelectedChatUser] = useState({ id: null, info: null, isOpenTab: false });
+
+    useEffect(() => {
+        console.log(selectedChatUser)
+    }, [selectedChatUser])
     const fetchUserData = async () => {
         try {
             const response = await axios.get(

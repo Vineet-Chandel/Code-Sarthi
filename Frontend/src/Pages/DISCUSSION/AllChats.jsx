@@ -9,6 +9,7 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import { BsPersonWorkspace } from 'react-icons/bs';
 import { IoBarChart } from 'react-icons/io5';
 import { setChatUsers } from '@/utils/chat-user-slice';
+import ChatClickedTab from './ChatClickedTab';
 
 const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelectedChatUser, lastMsgStatus }) => {
 
@@ -116,10 +117,83 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
     ];
 
 
+    const [chatTab, setChatTab] = useState({
+        isOpen: false,
+        idx: null,
+        userId: null,
+        convoId: null,
+        x: 0,
+        y: 0,
+    })
 
 
+    const MENU = {
+        width: 260,
+        height: 430,
+        padding: 8,
+    };
+
+    let left = chatTab.x;
+    let top = chatTab.y;
+
+    if (left + MENU.width > window.innerWidth) {
+        left -= MENU.width;
+    }
+
+    if (top + MENU.height > window.innerHeight) {
+        top -= MENU.height;
+    }
+
+    left = Math.max(MENU.padding, left);
+    top = Math.max(MENU.padding, top);
     return (
-        <div className='bg-transparent h-full w-full '>
+        <div
+            onContextMenu={(e) => {
+                e.preventDefault();
+            }}
+            className='bg-transparent h-full w-full relative'>
+
+
+            {chatTab.isOpen && (
+
+                <>
+
+                    <div
+                        onClick={() => setChatTab({
+
+                            isOpen: false,
+                            idx: null,
+                            userId: null,
+                            convoId: null,
+                            x: 0,
+                            y: 0,
+                        })}
+
+                        onContextMenu={(e) => {
+                            e.preventDefault();
+                            setChatTab({
+
+                                isOpen: false,
+                                idx: null,
+                                userId: null,
+                                convoId: null,
+                                x: 0,
+                                y: 0,
+                            });
+                        }}
+                        className='absolute z-10 w-full h-full inset-0'></div>
+                    <div
+                        className="fixed z-50"
+                        style={{
+                            left,
+                            top,
+                        }}
+                    >
+                        <ChatClickedTab setChatTab={setChatTab} chatTab={chatTab} selectedChatUser={selectedChatUser} />
+                    </div>
+                </>
+            )
+            }
 
 
             <div className='h-full w-full overflow-y-auto   scrollbar-none '>
@@ -135,125 +209,141 @@ const AllChats = ({ loading, setLoading, addToast, selectedChatUser, setSelected
                                     chatUser?.unreadCounts?.find(
                                         (item) => item.user === user._id
                                     )?.count ?? 0;
-                                return (user?._id !== loggedUser._id && chatUser.type === "private" && <div key={index}
-                                    onClick={() => {
-                                        if (selectedChatUser?.id === user._id) {
+                                return (user?._id !== loggedUser._id && chatUser.type === "private" &&
+
+                                    <div
+                                        onContextMenu={(e) => {
+                                            e.preventDefault();
+
+
+                                            setChatTab({
+                                                isOpen: true,
+                                                idx: idx,
+                                                x: e.clientX,
+                                                y: e.clientY,
+                                                userId: user._id,
+                                                convoId: chatUser._id,
+                                            });
+                                        }}
+                                        key={index}
+                                        onClick={() => {
+                                            if (selectedChatUser?.id === user._id) {
+
+
+                                                setSelectedChatUser(prev => ({
+                                                    id: null,
+                                                    info: null,
+                                                    convoId: null,
+                                                    fullChatInfo: null
+                                                }));
+                                                return;
+                                            }
+
 
 
                                             setSelectedChatUser(prev => ({
-                                                id: null,
-                                                info: null,
-                                                convoId: null,
-                                                fullChatInfo: null
+
+                                                id: user._id,
+                                                info: user,
+                                                convoId: chatUser._id,
+                                                fullChatInfo: chatUser
                                             }));
-                                            return;
-                                        }
+                                        }}
+                                        className={`${selectedChatUser?.id === user._id ? "bg-white/20" : "bg-transparent"} group text-white h-auto w-full  cursor-pointer  rounded-2xl my-2 flex items-center gap-2 p-1.5`}>
 
 
+                                        <div className='w-full flex items-center gap-1 h-full bg-transparent rounded-2xl'>
+                                            <div className="w-[60px] h-[60px] rounded-xl bg-black flex items-center  justify-center overflow-hidden shrink-0">
 
-                                        setSelectedChatUser(prev => ({
-
-                                            id: user._id,
-                                            info: user,
-                                            convoId: chatUser._id,
-                                            fullChatInfo: chatUser
-                                        }));
-                                    }}
-                                    className={`${selectedChatUser?.id === user._id ? "bg-white/20" : "bg-transparent"} group text-white h-auto w-full  cursor-pointer  rounded-2xl my-2 flex items-center gap-2 p-1.5`}>
+                                                {selectedChatUser?.id !== user._id &&
+                                                    <>
+                                                        <span className='group-hover:hidden flex'>
 
 
-                                    <div className='w-full flex items-center gap-1 h-full bg-transparent rounded-2xl'>
-                                        <div className="w-[60px] h-[60px] rounded-xl bg-black flex items-center  justify-center overflow-hidden shrink-0">
-
-                                            {selectedChatUser?.id !== user._id &&
-                                                <>
-                                                    <span className='group-hover:hidden flex'>
-
-
-                                                        <img src={user.photoUrl.url} alt="" className=' w-fit h-full rounded-xl object-cover' />
-                                                    </span>
-
-                                                    <span className="group-hover:flex hidden flex-col items-center gap-1 justify-center py-1">
-                                                        {matrix.map((item, idx) => (
-                                                            <div
-                                                                key={idx}
-                                                                className="flex items-center justify-between gap-1 px-0.5"
-                                                            >
-                                                                {item.map((dot, dotIdx) => (
-                                                                    <div
-                                                                        key={dotIdx}
-                                                                        className={`w-[4px] h-[4px] rounded-full ${dot === 1 ? "bg-white" : "bg-white/20"
-                                                                            }`}
-                                                                    />
-                                                                ))}
-                                                            </div>
-                                                        ))}
-                                                    </span>
-
-                                                </>
-                                            }
-
-
-                                            {selectedChatUser?.id === user._id &&
-                                                <>
-
-
-                                                    <span className="flex  flex-col items-center gap-1 justify-center py-1">
-                                                        {matrix2.map((item, idx) => (
-                                                            <div
-                                                                key={idx}
-                                                                className="flex items-center justify-between gap-1 px-0.5"
-                                                            >
-                                                                {item.map((dot, dotIdx) => (
-                                                                    <div
-                                                                        key={dotIdx}
-                                                                        className={`w-[4px] h-[4px] rounded-full ${dot === 1 ? "bg-white" : "bg-white/20"
-                                                                            }`}
-                                                                    />
-                                                                ))}
-                                                            </div>
-                                                        ))}
-                                                    </span>
-
-                                                </>
-                                            }
-
-                                        </div>
-                                        {< div className='w-full h-full rounded-2xl bg-transparent px-1'>
-                                            <div className="flex justify-between items-center ">
-                                                <span className={`font-semibold text-md truncate text-white`}>{user.firstName + ' ' + user.lastName}</span>
-                                                <span className={`text-sm  text-gray-300`}>{lastMsgStatus?.convoId === chatUser?._id && lastMsgStatus?.msgId ?
-                                                    lastMsgStatus?.lastMsgTime ?
-                                                        new Date(lastMsgStatus?.lastMsgTime).toLocaleTimeString("en-US", {
-                                                            hour: "numeric",
-                                                            minute: "2-digit",
-                                                            hour12: true,
-                                                        })
-                                                        : ""
-                                                    : chatUser?.lastMessage?.updatedAt ?
-                                                        new Date(chatUser?.lastMessage?.updatedAt).toLocaleTimeString("en-US", {
-                                                            hour: "numeric",
-                                                            minute: "2-digit",
-                                                            hour12: true,
-                                                        })
-                                                        : ""
-                                                }</span>
-                                            </div>
-                                            <div className="flex justify-between items-center ">
-
-                                                <span className={`text-sm  pl-1 line-clamp-1 break-words  text-gray-300`}>{lastMsgStatus?.convoId === chatUser?._id && lastMsgStatus?.msgId ? lastMsgStatus?.lastMsg : chatUser?.lastMessage?.content}</span>
-                                                <div className="flex items-center gap-1">
-                                                    {unreadCount > 0 && (
-                                                        <span className="min-w-5 h-5 px-1 rounded-full bg-blue-500 text-xs font-medium flex items-center justify-center">
-                                                            {unreadCount < 10 ? unreadCount : "!"}
+                                                            <img src={user.photoUrl.url} alt="" className=' w-fit h-full rounded-xl object-cover' />
                                                         </span>
-                                                    )}
-                                                </div>
-                                            </div>
 
-                                        </div>}
-                                    </div>
-                                </div>)
+                                                        <span className="group-hover:flex hidden flex-col items-center gap-1 justify-center py-1">
+                                                            {matrix.map((item, idx) => (
+                                                                <div
+                                                                    key={idx}
+                                                                    className="flex items-center justify-between gap-1 px-0.5"
+                                                                >
+                                                                    {item.map((dot, dotIdx) => (
+                                                                        <div
+                                                                            key={dotIdx}
+                                                                            className={`w-[4px] h-[4px] rounded-full ${dot === 1 ? "bg-white" : "bg-white/20"
+                                                                                }`}
+                                                                        />
+                                                                    ))}
+                                                                </div>
+                                                            ))}
+                                                        </span>
+
+                                                    </>
+                                                }
+
+
+                                                {selectedChatUser?.id === user._id &&
+                                                    <>
+
+
+                                                        <span className="flex  flex-col items-center gap-1 justify-center py-1">
+                                                            {matrix2.map((item, idx) => (
+                                                                <div
+                                                                    key={idx}
+                                                                    className="flex items-center justify-between gap-1 px-0.5"
+                                                                >
+                                                                    {item.map((dot, dotIdx) => (
+                                                                        <div
+                                                                            key={dotIdx}
+                                                                            className={`w-[4px] h-[4px] rounded-full ${dot === 1 ? "bg-white" : "bg-white/20"
+                                                                                }`}
+                                                                        />
+                                                                    ))}
+                                                                </div>
+                                                            ))}
+                                                        </span>
+
+                                                    </>
+                                                }
+
+                                            </div>
+                                            {< div className='w-full h-full rounded-2xl bg-transparent px-1'>
+                                                <div className="flex justify-between items-center ">
+                                                    <span className={`font-semibold text-md truncate text-white`}>{user.firstName + ' ' + user.lastName}</span>
+                                                    <span className={`text-sm  text-gray-300`}>{lastMsgStatus?.convoId === chatUser?._id && lastMsgStatus?.msgId ?
+                                                        lastMsgStatus?.lastMsgTime ?
+                                                            new Date(lastMsgStatus?.lastMsgTime).toLocaleTimeString("en-US", {
+                                                                hour: "numeric",
+                                                                minute: "2-digit",
+                                                                hour12: true,
+                                                            })
+                                                            : ""
+                                                        : chatUser?.lastMessage?.updatedAt ?
+                                                            new Date(chatUser?.lastMessage?.updatedAt).toLocaleTimeString("en-US", {
+                                                                hour: "numeric",
+                                                                minute: "2-digit",
+                                                                hour12: true,
+                                                            })
+                                                            : ""
+                                                    }</span>
+                                                </div>
+                                                <div className="flex justify-between items-center ">
+
+                                                    <span className={`text-sm  pl-1 line-clamp-1 break-words  text-gray-300`}>{lastMsgStatus?.convoId === chatUser?._id && lastMsgStatus?.msgId ? lastMsgStatus?.lastMsg : chatUser?.lastMessage?.content}</span>
+                                                    <div className="flex items-center gap-1">
+                                                        {unreadCount > 0 && (
+                                                            <span className="min-w-5 h-5 px-1 rounded-full bg-blue-500 text-xs font-medium flex items-center justify-center">
+                                                                {unreadCount < 10 ? unreadCount : "!"}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                </div>
+
+                                            </div>}
+                                        </div>
+                                    </div>)
                             }))
                         })
                         }

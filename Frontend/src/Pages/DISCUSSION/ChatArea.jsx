@@ -203,7 +203,8 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser, addToast, setlastMsgS
     const [replyHandeler, setReplyHandeler] = useState({
         isOpen: false,
         msg: null,
-        senderId: null
+        senderId: null,
+        name: ""
     })
 
     // Instantiate hook with custom action and time window
@@ -211,8 +212,22 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser, addToast, setlastMsgS
 
     const [switcher, setSwitcher] = useState("mic");
 
+    const [messageTab, setMessageTab] = useState({
+        isOpen: false,
+        idx: null,
+        x: 0,
+        y: 0,
+        setMsg: ""
+    });
 
-    const handelSend = async (selectedChatUser, message, messageType) => {
+
+    useEffect(() => {
+        if (messageTab.isOpen) {
+            console.log(messageTab)
+        }
+    }, [messageTab])
+
+    const handelSend = async (selectedChatUser, message, messageType, isReply) => {
 
         try {
             const clientMessageId = crypto.randomUUID();
@@ -224,7 +239,11 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser, addToast, setlastMsgS
                     type: "message",
                     conversationType: selectedChatUser?.fullChatInfo?.type,
                     conversationId: selectedChatUser.convoId,
-                    content: message
+                    content: message,
+                    replyTo: isReply ? {
+                        userId: messageTab.setMsg?.sender_id,
+                        content: messageTab.setMsg?.content
+                    } : null
                 }
             } else {
                 payload = {
@@ -245,17 +264,27 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser, addToast, setlastMsgS
                 content: message,
                 updatedAt: new Date().toISOString(),
                 status: "sending",
-                isTemporary: true
+                isTemporary: true,
+                replyTo: isReply ? {
+                    userId: messageTab.setMsg?.sender_id,
+                    content: messageTab.setMsg?.content
+                } : null
             };
 
             dispatch(addMessage(tempMessage));
             setMessage("")
+            setReplyHandeler({
+                isOpen: false,
+                msg: null,
+                senderId: null,
+                name: ""
+            })
 
-
-
-            socketRef.current.send(
-                JSON.stringify(payload)
-            );
+            if (socketRef.current?.readyState === WebSocket.OPEN) {
+                socketRef.current.send(
+                    JSON.stringify(payload)
+                );
+            }
 
         } catch (err) {
             addToast({
@@ -269,11 +298,12 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser, addToast, setlastMsgS
         }
     }
     const handleKeyDown = (e) => {
-        if (e.key === "Enter" && message) {
+        if (e.key === "Enter" && message.trim()) {
 
-            handelSend(selectedChatUser, message, "text")
+            handelSend(selectedChatUser, message, "text", replyHandeler.isOpen)
         }
     };
+
 
 
 
@@ -303,7 +333,7 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser, addToast, setlastMsgS
             {/* Messages */}
 
             <div className="flex-1 overflow-y-auto scrollbar-none px-0.5  md:px-4">
-                <MessageArea setSelectedChatUser={setSelectedChatUser} selectedChatUser={selectedChatUser} setReplyHandeler={setReplyHandeler} replyHandeler={replyHandeler} setlastMsgStatus={setlastMsgStatus} lastMsgStatus={lastMsgStatus} />
+                <MessageArea setSelectedChatUser={setSelectedChatUser} selectedChatUser={selectedChatUser} setReplyHandeler={setReplyHandeler} replyHandeler={replyHandeler} setlastMsgStatus={setlastMsgStatus} lastMsgStatus={lastMsgStatus} messageTab={messageTab} setMessageTab={setMessageTab} />
 
             </div>
 
@@ -330,7 +360,7 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser, addToast, setlastMsgS
                                 <span className="text-sm text-blue-400">
                                     Replying to{" "}
                                     <span className="font-semibold text-white truncate max-w-[180px] block">
-                                        {replyHandeler?.senderId}
+                                        {replyHandeler?.senderId === user?._id ? "You" : replyHandeler?.name}
                                     </span>
                                 </span>
                                 <p className="text-sm text-white/70 line-clamp-1 break-words">
@@ -404,7 +434,7 @@ const ChatArea = ({ selectedChatUser, setSelectedChatUser, addToast, setlastMsgS
 
 
 
-                {message ? <div onClick={(e) => handelSend(selectedChatUser, message, "text")} className=" p-2 sm:p-2.5 rounded-full cursor-pointer bg-white/20 hover:bg-white text-white hover:text-black transition-colors duration-200 ">
+                {message ? <div onClick={(e) => handelSend(selectedChatUser, message, "text", replyHandeler.isOpen)} className=" p-2 sm:p-2.5 rounded-full cursor-pointer bg-white/20 hover:bg-white text-white hover:text-black transition-colors duration-200 ">
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24">
                         <path fill="currentColor" d="M21.864 3.549L15.41 21.417a1.55 1.55 0 0 1-1.41.903a1.54 1.54 0 0 1-1.394-.874l-2.88-5.759zM20.45 2.135L8.311 14.273l-5.728-2.864A1.55 1.55 0 0 1 1.68 10c0-.606.353-1.157.981-1.44z"></path>
                     </svg>

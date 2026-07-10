@@ -4,12 +4,14 @@ import React, { useState } from "react";
 
 
 
-const MsgClickedTab = ({ msg, setMessageTab, messageTab, setReplyHandeler, replyHandeler, selectedChatUser }) => {
+const MsgClickedTab = ({ senderId, msg, setMessageTab, messageTab, setReplyHandeler, replyHandeler, selectedChatUser }) => {
 
     const [isCopied, setIsCopied] = useState({
         isCopied: false,
         idx: null
     })
+
+
     const buttons = [
         {
             title: "Reply",
@@ -96,7 +98,8 @@ const MsgClickedTab = ({ msg, setMessageTab, messageTab, setReplyHandeler, reply
                                 console.log(msg)
                                 setReplyHandeler({
                                     isOpen: true,
-                                    senderId: selectedChatUser?.info?.firstName + " " + selectedChatUser?.info?.lastName,
+                                    senderId: senderId,
+                                    name: selectedChatUser?.info?.firstName + " " + selectedChatUser?.info?.lastName || "Unknown",
                                     msg: msg
                                 })
                                 setMessageTab(prev => ({

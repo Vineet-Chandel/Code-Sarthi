@@ -5,7 +5,7 @@ const { saveMessage } = require("../Services/MessageService")
 
 
 
-const messageHandler = async (clientMessageId, conversationId, socket, content, messageType, members, type) => {
+const messageHandler = async (clientMessageId, conversationId, socket, content, messageType, members, type, replyTo) => {
 
 
     try {
@@ -20,7 +20,7 @@ const messageHandler = async (clientMessageId, conversationId, socket, content, 
             forwarded: false,
             edited: false,
             reactions: false,
-            replyTo: false,
+            replyTo: replyTo,
             members: members,
             type: type
         });

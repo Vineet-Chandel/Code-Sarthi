@@ -85,12 +85,13 @@ module.exports = (server) => {
             let data;
             try {
                 data = JSON.parse(rawData.toString());
+
             } catch (err) {
                 console.log("parsing error", err)
                 return;
             }
             if (!data) return;
-            const { clientMessageId, conversationId, content, type, isTyping, messageType, members, conversationType } = data;
+            const { clientMessageId, conversationId, content, type, isTyping, messageType, members, conversationType, replyTo } = data;
 
 
             switch (type) {
@@ -102,7 +103,7 @@ module.exports = (server) => {
                     break;
                 }
                 case "message": {
-                    await messageHandler(clientMessageId, conversationId, socket, content, messageType, members, conversationType)
+                    await messageHandler(clientMessageId, conversationId, socket, content, messageType, members, conversationType, replyTo)
                     break;
 
                 } default: {

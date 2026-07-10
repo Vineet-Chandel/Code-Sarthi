@@ -100,7 +100,14 @@ const Discussion = () => {
 
 
   return (
-    <div className='h-full  w-screen bg-black flex gap-1 justify-center items-center p-2 md:p-4'>
+    <div
+
+
+      onContextMenu={(e) => {
+        e.preventDefault();
+      }}
+      className='h-full  w-screen bg-black flex gap-1 justify-center items-center p-2 md:p-4'>
+
 
 
       <ToastContainer toasts={toasts} removeToast={removeToast} />

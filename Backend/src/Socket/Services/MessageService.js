@@ -28,9 +28,7 @@ const saveMessage = async ({
     if (forwarded !== undefined && forwarded !== true && forwarded !== false) {
         throw new Error("Invalid forwarded type");
     }
-    if (replyTo !== undefined && replyTo !== true && replyTo !== false) {
-        throw new Error("Invalid replyTo type");
-    }
+
     if (edited !== undefined && edited !== true && edited !== false) {
         throw new Error("Invalid edited type");
     }
@@ -184,13 +182,13 @@ const saveMessage = async ({
         editedAt: edited ? new Date() : undefined,
         messageType: messageType,
         reactions: [],
-        replyTo: null,
+        replyTo: replyTo,
         status: "sent"
     })
 
 
 
-
+    console.log(messageStored);
     try {
         await messageStored.save();
 

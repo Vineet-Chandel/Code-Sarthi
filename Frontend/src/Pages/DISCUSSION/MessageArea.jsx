@@ -10,22 +10,16 @@ import { useSelector } from 'react-redux';
 
 
 
-const MessageArea = ({ selectedChatUser, setReplyHandeler, replyHandeler, setlastMsgStatus, lastMsgStatus }) => {
+const MessageArea = ({ selectedChatUser, setReplyHandeler, replyHandeler, setlastMsgStatus, lastMsgStatus, messageTab, setMessageTab }) => {
     const user = useSelector(state => state?.user?.user?.DATA);
     const allMessages = useSelector(state => state.messages);
     const [readMore, setReadMore] = useState({
         idx: null,
         isOpen: false,
     });
-    const [messageTab, setMessageTab] = useState({
-        isOpen: false,
-        idx: null,
-        x: 0,
-        y: 0,
-        setMsg: ""
-    });
 
-    useEffect(() => { console.log(readMore) }, [readMore])
+
+
     const chatRef = useRef(null);
     useEffect(() => {
         const chat = chatRef.current;
@@ -49,8 +43,10 @@ const MessageArea = ({ selectedChatUser, setReplyHandeler, replyHandeler, setlas
 
 
     const messages = allMessages?.messages?.[selectedChatUser?.convoId];
+
+    useEffect(() => { console.log(messages) }, [messages])
     useEffect(() => {
-        console.log(messages)
+
 
         if (chatRef.current) {
             chatRef.current.scrollTop = chatRef.current.scrollHeight;
@@ -65,29 +61,28 @@ const MessageArea = ({ selectedChatUser, setReplyHandeler, replyHandeler, setlas
                 convoId: selectedChatUser?.convoId
             })
 
-            console.log(selectedChatUser.fullChatInfo?._id)
-            console.log(lastMsgStatus?.convoId)
+
         }
     }, [messages]);
 
 
 
+
+
     return (
         <div className='relative z-10 text-white  h-full w-full flex flex-col justify-end items-end '>
-            {/* Top */}
 
-
-            {messageTab.isOpen && (
+            {messageTab?.isOpen && (
                 <div
                     className="fixed z-50"
                     style={{
-                        ...(messageTab.setMsg?.sender_id === user._id
-                            ? { left: `${messageTab.x - 220}px` } // your message
-                            : { left: `${messageTab.x}px` }),     // other user's message
-                        top: `${messageTab.y}px`,
+                        ...(messageTab?.setMsg?.sender_id === user._id
+                            ? { left: `${messageTab?.x - 220}px` } // your message
+                            : { left: `${messageTab?.x}px` }),     // other user's message
+                        top: `${messageTab?.y}px`,
                     }}
                 >
-                    <MsgClickedTab msg={messageTab.setMsg.content} setMessageTab={setMessageTab} messageTab={messageTab} setReplyHandeler={setReplyHandeler} replyHandeler={replyHandeler} selectedChatUser={selectedChatUser} />
+                    <MsgClickedTab senderId={messageTab?.setMsg?.sender_id} msg={messageTab?.setMsg?.content} setMessageTab={setMessageTab} messageTab={messageTab} setReplyHandeler={setReplyHandeler} replyHandeler={replyHandeler} selectedChatUser={selectedChatUser} />
                 </div>
             )
             }
@@ -204,16 +199,78 @@ const MessageArea = ({ selectedChatUser, setReplyHandeler, replyHandeler, setlas
 
                                         className={` text-sm sm:text-md lg:text-xl max-w-[80%]
 md:max-w-[65%]
-xl:max-w-[55%] break-words [overflow-wrap:anywhere] whitespace-pre-wrap overflow-hidden [overflow-wrap:anywhere] flex  font-poppins  ${items?.content?.length > 40 ? "flex-col items-start gap-2" : "items-end gap-3 flex-row "} min-w-[10%] bg-[#242424]  px-3 py-1.5 ${isSingle ? SingleClassName : isFirst ? FirstClassName : isMiddle ? MiddleClassName : isLast ? LastClassName : ""}`}>
+xl:max-w-[55%]  break-words [overflow-wrap:anywhere] whitespace-pre-wrap overflow-hidden [overflow-wrap:anywhere] flex  font-poppins  flex-col gap-3 items-end min-w-[10%] bg-[#242424]  px-3 py-1.5 ${isSingle ? SingleClassName : isFirst ? FirstClassName : isMiddle ? MiddleClassName : isLast ? LastClassName : ""}`}>
+                                        {items.replyTo && (
 
-                                        {displayText?.replace(/\t/g, "    ")}
+
+                                            <div
+                                                className="w-full  mb-1 mt-4 rounded-xl border-l-4 border-blue-500 bg-black/80  px-3 py-2 cursor-pointer   transition-all duration-200"
+                                                onClick={() => {
+                                                    // Scroll to original message
+                                                    document
+                                                        .getElementById(`message-${items.replyTo?.messageId}`)
+                                                        ?.scrollIntoView({
+                                                            behavior: "smooth",
+                                                            block: "center",
+                                                        });
+                                                }}
+                                            >
+                                                <div className="flex items-start gap-3">
+                                                    {/* Reply Indicator */}
+                                                    <div className="flex-shrink-0 mt-1">
+                                                        <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            width="18"
+                                                            height="18"
+                                                            viewBox="0 0 24 24"
+                                                            fill="none"
+                                                        >
+                                                            <path
+                                                                d="M10 9L5 12L10 15"
+                                                                stroke="#fff"
+                                                                strokeWidth="2"
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                            />
+                                                            <path
+                                                                d="M5 12H15C18.3137 12 21 14.6863 21 18V19"
+                                                                stroke="#fff"
+                                                                strokeWidth="2"
+                                                                strokeLinecap="round"
+                                                            />
+                                                        </svg>
+                                                    </div>
+
+                                                    {/* Preview */}
+                                                    <div className="flex-1 overflow-hidden">
+                                                        <p className="text-lg font-semibold text-white truncate">
+                                                            {items.replyTo?.userId === user._id
+                                                                ? "You"
+                                                                : selectedChatUser?.info?.firstName + " " + selectedChatUser?.info?.lastName || "Unknown User"}
+                                                        </p>
+
+                                                        <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 break-words">
+                                                            {items.replyTo?.content}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        <div className={`flex w-full justify-between gap-2 ${items?.content?.length > 40 ? "flex-col items-end gap-3" : "items-end gap-3 flex-col "}`}>
+                                            <span className='w-full'>
+                                                {displayText?.replace(/\t/g, "    ")}
+                                            </span>
 
 
-                                        <span className="  text-xs font-mono text-gray-400">{new Date(items?.updatedAt).toLocaleTimeString("en-US", {
-                                            hour: "numeric",
-                                            minute: "2-digit",
-                                            hour12: true,
-                                        })}</span>
+
+                                            <span className="  text-xs font-mono text-gray-400">{new Date(items?.updatedAt).toLocaleTimeString("en-US", {
+                                                hour: "numeric",
+                                                minute: "2-digit",
+                                                hour12: true,
+                                            })}</span>
+                                        </div>
+
 
 
                                         {items?.content?.length > 500 && < div onClick={() => {
@@ -256,7 +313,7 @@ xl:max-w-[55%] break-words [overflow-wrap:anywhere] whitespace-pre-wrap overflow
                                             setMsg: items
                                         });
                                     }}
-                                    className={`w-full flex items-center justify-end   ${marginClass}  relative`}>
+                                    className={`w-full flex flex-col items-end justify-end   ${marginClass}  relative`}>
 
                                     <motion.div
                                         layout
@@ -267,9 +324,66 @@ xl:max-w-[55%] break-words [overflow-wrap:anywhere] whitespace-pre-wrap overflow
 
                                         className={` text-sm sm:text-md lg:text-xl max-w-[80%]
 md:max-w-[65%]
-xl:max-w-[55%] break-words [overflow-wrap:anywhere]   whitespace-pre-wrap overflow-hidden [overflow-wrap:anywhere] flex  font-poppins   ${items?.content?.length > 40 ? "flex-col items-start gap-2" : " gap-3 flex-col items-start"} bg-white text-black px-3 py-1.5    ${isSingle ? singleClass : isFirst ? firstClass : isMiddle ? middleClass : isLast ? lastClass : ""}`}>
+xl:max-w-[55%] break-words [overflow-wrap:anywhere]   whitespace-pre-wrap overflow-hidden [overflow-wrap:anywhere] flex  font-poppins bg-white ${items?.content?.length > 40 ? "flex-col items-start gap-2" : " gap-3 flex-col items-start"} text-black px-3 py-1.5    ${isSingle ? singleClass : isFirst ? firstClass : isMiddle ? middleClass : isLast ? lastClass : ""}`}>
 
 
+
+                                        {items.replyTo && (
+
+
+                                            <div
+                                                className="w-full  mb-1 mt-4 rounded-xl border-l-4 border-blue-500 bg-black/80  px-3 py-2 cursor-pointer   transition-all duration-200"
+                                                onClick={() => {
+                                                    // Scroll to original message
+                                                    document
+                                                        .getElementById(`message-${items.replyTo?.messageId}`)
+                                                        ?.scrollIntoView({
+                                                            behavior: "smooth",
+                                                            block: "center",
+                                                        });
+                                                }}
+                                            >
+                                                <div className="flex items-start gap-3">
+                                                    {/* Reply Indicator */}
+                                                    <div className="flex-shrink-0 mt-1">
+                                                        <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            width="18"
+                                                            height="18"
+                                                            viewBox="0 0 24 24"
+                                                            fill="none"
+                                                        >
+                                                            <path
+                                                                d="M10 9L5 12L10 15"
+                                                                stroke="#fff"
+                                                                strokeWidth="2"
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                            />
+                                                            <path
+                                                                d="M5 12H15C18.3137 12 21 14.6863 21 18V19"
+                                                                stroke="#fff"
+                                                                strokeWidth="2"
+                                                                strokeLinecap="round"
+                                                            />
+                                                        </svg>
+                                                    </div>
+
+                                                    {/* Preview */}
+                                                    <div className="flex-1 overflow-hidden">
+                                                        <p className="text-lg font-semibold text-white truncate">
+                                                            {items.replyTo?.userId === user._id
+                                                                ? "You"
+                                                                : items.replyTo?.senderName || "Unknown User"}
+                                                        </p>
+
+                                                        <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 break-words">
+                                                            {items.replyTo?.content}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
                                         {displayText?.replace(/\t/g, "    ")}
 
                                         <span className="text-xs font-mono pl-1 flex w-full justify-between text-gray-700">

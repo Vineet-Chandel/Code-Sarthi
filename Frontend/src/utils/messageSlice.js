@@ -27,6 +27,7 @@ const messageSlice = createSlice({
 
 
         receiveMessage: (state, action) => {
+
             const { clientMessageId, message } = action.payload;
 
             const conversationId = message.conversation_id;
