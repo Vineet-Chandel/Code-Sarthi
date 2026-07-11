@@ -3,12 +3,12 @@ import { motion } from "framer-motion";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 
 import BrandHeader from "./components/Brandheader";
-import NewConversationButton from "./components/NewConversationButton";
+import NewConversationButton from "./components/Newconversationbutton";
 import SearchBar from "./components/Searchbar";
-import NavSection from "./components/NavSection";
-import NavItem from "./components/NavItem";
-import ProfileCard from "./components/ProfileCard";
-import { navigationSections, settingsItem } from "./components/navigationData";
+import NavSection from "./components/Navsection";
+import NavItem from "./components/Navitem";
+import ProfileCard from "./components/Profilecard";
+import { navigationSections, settingsItem } from "./components/navigationdata";
 
 const DEFAULT_USER = {
     name: "Aarav Sharma",
