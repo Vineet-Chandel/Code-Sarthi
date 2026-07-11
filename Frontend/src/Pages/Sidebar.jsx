@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 
-import BrandHeader from "./components/BrandHeader";
+import BrandHeader from "./components/Brandheader";
 import NewConversationButton from "./components/NewConversationButton";
 import SearchBar from "./components/Searchbar";
 import NavSection from "./components/NavSection";
