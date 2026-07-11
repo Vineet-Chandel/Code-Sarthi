@@ -8,7 +8,7 @@ import SearchBar from "./components/Searchbar";
 import NavSection from "./components/Navsection";
 import NavItem from "./components/Navitem";
 import ProfileCard from "./components/Profilecard";
-import { navigationSections, settingsItem } from "./components/navigationdata";
+import { navigationSections, settingsItem } from "./components/Navigationdata";
 
 const DEFAULT_USER = {
     name: "Aarav Sharma",
