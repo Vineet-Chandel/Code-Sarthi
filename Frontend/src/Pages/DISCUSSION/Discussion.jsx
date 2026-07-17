@@ -34,10 +34,14 @@ const Discussion = () => {
   const messages = async (id) => {
     try {
       setSubLoading(true)
-      if (!id) {
+      if (!id || id.toString() === `temp_${selectedChatUser?.info?._id}`) {
+        console.log("returning")
         setSubLoading(false);
+        setLoading(false);
         return;
       }
+
+
       setLoading(true)
       const res = await axios.post(`${BASE_URL}/get-message/${id}`, {}, {
         withCredentials: true

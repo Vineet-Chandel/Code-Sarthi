@@ -14,7 +14,7 @@ const Body = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate(); // ✅ rename
     const [isLoading, setIsLoading] = useState(true);
-    const [selectedChatUser, setSelectedChatUser] = useState({ id: null, info: null, isOpenTab: false });
+    const [selectedChatUser, setSelectedChatUser] = useState({ isNew: false, id: null, info: null, isOpenTab: false });
 
     const fetchUserData = async () => {
         try {

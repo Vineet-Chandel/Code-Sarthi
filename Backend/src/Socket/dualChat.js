@@ -90,11 +90,12 @@ module.exports = (server) => {
                 console.log("parsing error", err)
                 return;
             }
+
             if (!data) return;
-            const { clientMessageId, conversationId, content, type, isTyping, messageType, members, conversationType, replyTo } = data;
+            const { clientMessageId, conversationId, content, type, isTyping, messageType, members, conversationType, replyTo, does, localChatKey } = data;
 
 
-            switch (type) {
+            switch (does) {
 
 
                 case "typing": {
@@ -103,7 +104,8 @@ module.exports = (server) => {
                     break;
                 }
                 case "message": {
-                    await messageHandler(clientMessageId, conversationId, socket, content, messageType, members, conversationType, replyTo)
+
+                    await messageHandler(clientMessageId, conversationId, socket, content, messageType, members, type, replyTo, localChatKey)
                     break;
 
                 } default: {

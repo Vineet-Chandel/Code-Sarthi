@@ -43,6 +43,10 @@ const MessageArea = ({ subLoading, forwardTabOpen, setForwardTabOpen, selectedCh
 
 
     const messages = allMessages?.messages?.[selectedChatUser?.convoId];
+    useEffect(() => {
+        console.log(selectedChatUser)
+    }, [selectedChatUser])
+
 
 
     useEffect(() => {
@@ -197,7 +201,7 @@ const MessageArea = ({ subLoading, forwardTabOpen, setForwardTabOpen, selectedCh
                                         <motion.div
                                             layout
                                             initial={{ opacity: 0, y: 10 }}
-                                            animate={{ opacity: 1, y: 0 }}
+                                            animate={!items.isTemporary && { opacity: 1, y: 0 }}
                                             exit={{ opacity: 0 }}
 
                                             className={` text-sm sm:text-md lg:text-xl max-w-[80%]
@@ -522,8 +526,18 @@ xl:max-w-[55%] break-words [overflow-wrap:anywhere]   whitespace-pre-wrap overfl
                             </div>
 
                             ) : (
-                                <div>
+                                <div className="flex justify-center items-center h-full">
+                                    <div className='h-auto w-auto px-5 py-7 bg-[#212121] rounded-xl flex flex-col justify-center gap-3'>
 
+                                        <span className="text-md font-extrabold">No messages here yet...</span>
+                                        <span className="text-sm">Send a message or tap on <br />the greeting below.</span>
+                                        <div
+                                            onClick={() => handleSend("Hey! How's it going?")}
+                                            className='group bg-green-200 rounded-xl h-[40px] w-[80%] mx-auto mt-3 flex items-center justify-center text-black text-xs font-extrabold animate-bounce cursor-pointer transition-all duration-300 ease-out hover:scale-105 hover:bg-green-300 hover:shadow-[0_0_0_3px_rgba(187,247,208,0.25)]'
+                                        >
+                                            Hey! How's it going?
+                                        </div>
+                                    </div>
                                 </div>
                             )
                     )

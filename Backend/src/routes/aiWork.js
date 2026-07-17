@@ -317,12 +317,401 @@ Return ONLY this JSON shape:
 }
 `;
 
+// ─── STAGE 3B — COHERENCE CHECK (optional, runs after assembly) ───────────────
+const buildCoherencePrompt = ({ tailoredProfile, strategyResult }) => `
+You are a senior resume reviewer doing a final quality check before a resume is sent to a hiring manager.
+
+The resume has already been rewritten by specialized AI rewriters. Your job is NOT to rewrite anything.
+Your job is to check whether the assembled resume tells a coherent, consistent story for the target role.
+
+## TARGET
+Role: ${tailoredProfile._tailoringMeta?.targetRole}
+Company: ${tailoredProfile._tailoringMeta?.company}
+Version: ${tailoredProfile._tailoringMeta?.versionLabel}
+Positioning: ${strategyResult.positioningStatement}
+
+## ASSEMBLED RESUME
+Summary Title: ${tailoredProfile.summaryTitle}
+Summary Body: ${tailoredProfile.summaryBody}
+
+Experience Bullets:
+${tailoredProfile.Experience?.map(e =>
+  `${e.role} @ ${e.company}:\n${e.bullets?.map(b => `  - ${b}`).join("\n")}`
+).join("\n\n")}
+
+Projects:
+${tailoredProfile.Project?.map(p =>
+  `${p.name} (${p.stack}):\n${p.bullets?.map(b => `  - ${b}`).join("\n")}`
+).join("\n\n")}
+
+Skills:
+${tailoredProfile.Skills?.map(s =>
+  `${s.skillCategory}: ${s.skills?.join(", ")}`
+).join("\n")}
+
+---
+
+## YOUR TASK
+
+Check for coherence issues ONLY. Do not rewrite. Flag problems and score the final output.
+
+Return ONLY valid JSON:
+
+{
+  "coherenceScore": 85,
+
+  "isReadyToSend": true,
+
+  "summaryAligned": true,
+
+  "issues": [
+    {
+      "severity": "critical | warning | suggestion",
+      "section": "summary | experience | projects | skills",
+      "issue": "specific problem — e.g. summary mentions TypeScript but it does not appear anywhere in experience or skills",
+      "fix": "specific fix without rewriting — e.g. add TypeScript to skills under Languages or remove the mention from summary"
+    }
+  ],
+
+  "keywordConsistency": {
+    "appearsInSummary": ["keywords confirmed present in summary"],
+    "appearsInExperience": ["keywords confirmed present in experience bullets"],
+    "appearsInProjects": ["keywords confirmed present in project bullets"],
+    "appearsInSkills": ["keywords confirmed present in skills section"],
+    "missingEverywhere": ["must-include keywords from strategy that appear nowhere in the resume"]
+  },
+
+  "toneConsistency": "consistent | inconsistent — one line on whether the tone is uniform across all sections",
+
+  "overallVerdict": "2 sentences max — is this resume ready to send, and what is the single most important thing still wrong if anything"
+}
+`;
+
+
+// ─── STAGE 4 — SKILL GAP ANALYSIS ────────────────────────────────────────────
+const buildSkillGapPrompt = ({
+  tailoredProfile,
+  originalAuditGap,
+  SpecificRole,
+  ResumeType,
+  Company,
+  JobDescription
+}) => `
+You are a senior technical recruiter and ATS systems expert.
+
+Your job is to run a precise skill gap analysis comparing a candidate's TAILORED resume
+against the requirements of a specific target role.
+
+This analysis runs AFTER the resume has been rewritten — so you are evaluating the
+final tailored version, not the raw profile. Compare against the pre-rewrite audit
+gap to show improvement delta.
+
+## TARGET ROLE
+- Specific Role: ${SpecificRole}
+- Resume Category: ${ResumeType}
+- Company: ${Company ?? "Not specified"}
+- Job Description:
+${JobDescription ? `"""${JobDescription}"""` : "Not provided. Infer from role and company."}
+
+## TAILORED RESUME CONTENT
+
+Summary:
+${tailoredProfile.summaryBody}
+
+Experience Bullets:
+${tailoredProfile.experience?.map(e =>
+  `${e.role} @ ${e.company}:\n${e.bullets?.map(b => `  - ${b}`).join("\n")}`
+).join("\n\n")}
+
+Projects:
+${tailoredProfile.projects?.map(p =>
+  `${p.name} (${p.stack}):\n${p.bullets?.map(b => `  - ${b}`).join("\n")}`
+).join("\n\n")}
+
+Explicit Skills:
+${tailoredProfile.skills?.map(s =>
+  `${s.skillCategory}: ${s.skills?.join(", ")}`
+).join("\n")}
+
+## PRE-REWRITE SKILL GAP (from audit — use for delta comparison)
+Pre-rewrite coverage: ${originalAuditGap?.skillCoveragePercent ?? "unknown"}%
+Pre-rewrite matched skills: ${originalAuditGap?.matchedSkills?.join(", ") ?? "unknown"}
+Pre-rewrite missing critical: ${originalAuditGap?.missingCriticalSkills?.map(s => s.skill).join(", ") ?? "unknown"}
+
+---
+
+## YOUR TASK
+
+Return ONLY valid JSON. No prose. No markdown fences.
+
+{
+  "roleRequiresSkills": [
+    "complete list of skills this role typically requires — inferred from role, company, and JD"
+  ],
+
+  "candidateHasSkills": [
+    "skills confirmed present in the TAILORED resume — from explicit skills section AND naturally mentioned in bullets"
+  ],
+
+  "matchedSkills": [
+    "skills the candidate has that directly match role requirements"
+  ],
+
+  "missingCriticalSkills": [
+    {
+      "skill": "skill name",
+      "importance": "critical | preferred",
+      "reason": "why this skill matters for this specific role and company",
+      "howToAcquire": "specific actionable path — e.g. 'Build a TypeScript project using the official docs, then add it to CodeSarthi'"
+    }
+  ],
+
+  "missingPreferredSkills": [
+    {
+      "skill": "skill name",
+      "importance": "preferred",
+      "reason": "why this would strengthen the application"
+    }
+  ],
+
+  "irrelevantSkills": [
+    {
+      "skill": "skill still present in resume that adds no ATS signal for this role",
+      "suggestion": "remove from this version or deprioritize"
+    }
+  ],
+
+  "skillCoveragePercent": 65,
+
+  "delta": {
+    "coverageBefore": ${originalAuditGap?.skillCoveragePercent ?? 0},
+    "coverageAfter": 0,
+    "improvement": 0,
+    "newlyMatchedSkills": ["skills that were missing before rewrite but now appear in the tailored resume"],
+    "stillMissing": ["skills that were missing before AND still missing after rewrite"]
+  },
+
+  "atsScanSimulation": {
+    "estimatedATSPassRate": 72,
+    "keywordsFoundByATS": ["keywords an ATS would extract from this resume"],
+    "keywordsNotFound": ["role-critical keywords an ATS would NOT find in this resume"],
+    "recommendation": "one concrete sentence on the single highest-impact change left to make"
+  },
+
+  "skillsStrengthMap": [
+    {
+      "skill": "skill name",
+      "presentIn": ["summary", "experience", "projects", "skills"],
+      "strength": "strong | moderate | weak",
+      "note": "brief note — e.g. 'appears in 3 experience bullets with metrics' or 'only listed in skills, no context'"
+    }
+  ]
+}
+`;
+
+// ─── STAGE 5 — GROWTH RECOMMENDATIONS ────────────────────────────────────────
+const buildGrowthPrompt = ({
+  tailoredProfile,
+  skillGapResult,
+  auditResult,
+  coherenceResult,
+  SpecificRole,
+  ResumeType,
+  Company,
+  JobDescription,
+}) => `
+You are an elite career coach and technical mentor with deep expertise in ${ResumeType} hiring.
+
+Your job is to generate a highly personalized, role-specific 30–90 day growth plan
+for this candidate based on everything known about their profile, the target role,
+their skill gaps, and the quality of their tailored resume.
+
+This is NOT generic career advice.
+Every recommendation must be tied to a specific gap, inconsistency, or opportunity
+found in the data below. Name real resources. Give real timelines. Be a mentor,
+not a content generator.
+
+## TARGET
+- Specific Role: ${SpecificRole}
+- Resume Category: ${ResumeType}
+- Company: ${Company ?? "Not specified"}
+- Job Description:
+${JobDescription ? `"""${JobDescription}"""` : "Not provided. Infer from role and company."}
+
+## CANDIDATE PROFILE SNAPSHOT
+Summary: ${tailoredProfile.summaryBody}
+Current Role: ${tailoredProfile.experience?.[0]?.role ?? "Not specified"} @ ${tailoredProfile.experience?.[0]?.company ?? "Not specified"}
+Education: ${tailoredProfile.education?.[0]?.degree ?? ""} in ${tailoredProfile.education?.[0]?.field ?? ""} from ${tailoredProfile.education?.[0]?.institution ?? ""}
+Certifications: ${tailoredProfile.certifications?.map(c => c.about).join(", ") || "None"}
+
+## SKILL GAP DATA (from Stage 4)
+Coverage After Rewrite: ${skillGapResult?.skillCoveragePercent ?? 0}%
+Coverage Before Rewrite: ${skillGapResult?.delta?.coverageBefore ?? 0}%
+Improvement Delta: ${skillGapResult?.delta?.improvement ?? 0}%
+
+Missing Critical Skills:
+${skillGapResult?.missingCriticalSkills?.map(s =>
+  `- ${s.skill} (${s.importance}): ${s.reason}`
+).join("\n") ?? "None"}
+
+Missing Preferred Skills:
+${skillGapResult?.missingPreferredSkills?.map(s =>
+  `- ${s.skill}: ${s.reason}`
+).join("\n") ?? "None"}
+
+Still Missing After Rewrite:
+${skillGapResult?.delta?.stillMissing?.join(", ") ?? "None"}
+
+ATS Pass Rate Estimate: ${skillGapResult?.atsScanSimulation?.estimatedATSPassRate ?? 0}%
+ATS Keywords Not Found: ${skillGapResult?.atsScanSimulation?.keywordsNotFound?.join(", ") ?? "None"}
+
+## AUDIT ISSUES (from Stage 0 — unresolved problems)
+Health Score: ${auditResult?.overallHealthScore?.score ?? 0}/100
+Content Issues: ${auditResult?.contentIssues?.map(i => `${i.field} (${i.severity}): ${i.issue}`).join(" | ") ?? "None"}
+Missing Fields: ${auditResult?.missingFields?.map(f => `${f.section}.${f.field} (${f.importance})`).join(", ") ?? "None"}
+Quick Wins Flagged: ${auditResult?.quickWins?.join(" | ") ?? "None"}
+
+## COHERENCE CHECK (from Stage 3b — if available)
+Coherence Score: ${coherenceResult?.coherenceScore ?? "Not run"}
+Is Ready to Send: ${coherenceResult?.isReadyToSend ?? "Unknown"}
+Remaining Issues: ${coherenceResult?.issues?.map(i => i.issue).join(" | ") ?? "None"}
+Missing Keywords Everywhere: ${coherenceResult?.keywordConsistency?.missingEverywhere?.join(", ") ?? "None"}
+
+---
+
+## YOUR TASK
+
+Return ONLY valid JSON. No prose. No markdown fences.
+
+{
+  "overallReadinessScore": {
+    "score": 74,
+    "outOf": 100,
+    "label": "Nearly Ready | e.g. 'Resume is strong but 2 critical skill gaps remain before applying'",
+    "breakdown": {
+      "resumeQuality": 85,
+      "skillCoverage": 67,
+      "profileCompleteness": 70,
+      "atsReadiness": 72
+    }
+  },
+
+  "thirtyDayPlan": [
+    {
+      "priority": 1,
+      "category": "skill | certification | project | portfolio | profile | networking",
+      "title": "Short punchy title — e.g. 'Build a TypeScript project end-to-end'",
+      "why": "Exactly why this matters for THIS role at THIS company — not generic. Reference the specific gap or issue.",
+      "howTo": [
+        "Step 1 — specific and actionable. Name the resource, the approach, the deliverable.",
+        "Step 2",
+        "Step 3"
+      ],
+      "resource": {
+        "name": "e.g. 'TypeScript Official Docs — Handbook'",
+        "url": "https://www.typescriptlang.org/docs/handbook/intro.html",
+        "type": "docs | course | book | repo | platform | community"
+      },
+      "estimatedImpact": "high | medium | low",
+      "timeToAchieve": "e.g. '1 week', '2 weeks'",
+      "successMetric": "how the candidate knows they have completed this — e.g. 'Can build a typed Express API with interfaces, generics, and error handling without referencing docs'"
+    }
+  ],
+
+  "sixtyDayPlan": [
+    {
+      "priority": 1,
+      "category": "skill | certification | project | portfolio | profile | networking",
+      "title": "Title",
+      "why": "Why this matters at this stage",
+      "howTo": ["Step 1", "Step 2"],
+      "resource": {
+        "name": "Resource name",
+        "url": "https://...",
+        "type": "docs | course | book | repo | platform | community"
+      },
+      "estimatedImpact": "high | medium | low",
+      "timeToAchieve": "e.g. '2–3 weeks'",
+      "successMetric": "How they know they're done"
+    }
+  ],
+
+  "ninetyDayPlan": [
+    {
+      "priority": 1,
+      "category": "skill | certification | project | portfolio | profile | networking",
+      "title": "Title",
+      "why": "Why this matters at this stage",
+      "howTo": ["Step 1", "Step 2"],
+      "resource": {
+        "name": "Resource name",
+        "url": "https://...",
+        "type": "docs | course | book | repo | platform | community"
+      },
+      "estimatedImpact": "high | medium | low",
+      "timeToAchieve": "e.g. '3–4 weeks'",
+      "successMetric": "How they know they're done"
+    }
+  ],
+
+  "quickWinsToday": [
+    {
+      "action": "Specific one-liner the candidate can do in under 30 minutes — e.g. 'Add Node.js and Express.js to the Languages and Frameworks skill category — both appear in your experience bullets but are missing from explicit skills'",
+      "impact": "high | medium | low",
+      "timeRequired": "e.g. '5 minutes', '20 minutes'"
+    }
+  ],
+
+  "interviewPrepPlan": [
+    {
+      "area": "e.g. 'System Design'",
+      "relevance": "Why this area is critical for this specific role and company",
+      "topicsToStudy": ["specific topic 1", "specific topic 2"],
+      "resources": [
+        {
+          "name": "Resource name",
+          "url": "https://...",
+          "type": "docs | course | book | repo | platform | community"
+        }
+      ],
+      "practiceApproach": "Specific practice method — e.g. 'Do 2 mock system design interviews per week on Pramp, focusing on designing distributed systems at Microsoft scale'"
+    }
+  ],
+
+  "portfolioGaps": [
+    {
+      "gap": "specific thing missing from portfolio or projects",
+      "whyItMatters": "why hiring managers for this role look for this",
+      "projectIdea": "concrete project idea that would fill this gap — e.g. 'Build a TypeScript + Azure Functions API with JWT auth and CosmosDB — mirrors Microsoft's internal stack'"
+    }
+  ],
+
+  "certificationRoadmap": [
+    {
+      "certification": "Certification name",
+      "issuingBody": "e.g. Microsoft, AWS, Google",
+      "relevance": "why this cert matters for the target role specifically",
+      "studyPath": "Specific study path — name the official materials and timeline",
+      "estimatedCost": "e.g. '₹4,500 / $165'",
+      "timeToComplete": "e.g. '4–6 weeks'"
+    }
+  ],
+
+  "networkingActions": [
+    {
+      "action": "Specific networking step — e.g. 'Follow 5 Microsoft SDEs on LinkedIn who post about Azure architecture, engage with their posts for 2 weeks before cold messaging'",
+      "platform": "LinkedIn | GitHub | Twitter | Discord | Meetup",
+      "timeRequired": "e.g. '15 min/day'"
+    }
+  ],
+
+  "growthSummary": "3–4 sentence honest assessment of where this candidate stands for the target role right now, what the single most important thing to do in the next 30 days is, and what their realistic timeline to being a strong applicant looks like. Sound like a mentor who has seen hundreds of successful applications for this exact role."
+}
+`;
 
 
 
-
-
-
+// ─── STAGE 0 ROUTE ───────────────────────────────────────────────────────────
 aiWorkRouter.post("/resume/audit", userAuth, async (req, res) => {
   try {
     const { SpecificRole, ResumeType, BroadRole, JobDescription, Company } = req.body;
@@ -530,8 +919,7 @@ Follow this EXACT shape:
     });
   }
 });
-
-
+// ─── STAGE 1 ROUTE ───────────────────────────────────────────────────────────
 aiWorkRouter.post("/resume/strategy", userAuth, async (req, res) => {
   try {
     const { SpecificRole, ResumeType, BroadRole, JobDescription, Company, auditResult } = req.body;
@@ -738,13 +1126,6 @@ Return ONLY a valid JSON object. No prose. No markdown fences.
     });
   }
 });
-
-
-
-
-
-
-
 // ─── STAGE 2A ROUTE ───────────────────────────────────────────────────────────
 aiWorkRouter.post("/resume/rewrite/summary", userAuth, async (req, res) => {
   try {
@@ -793,8 +1174,6 @@ aiWorkRouter.post("/resume/rewrite/summary", userAuth, async (req, res) => {
     res.status(500).json({ success: false, error: "Summary rewrite failed", message: error.message });
   }
 });
-
-
 // ─── STAGE 2B ROUTE ───────────────────────────────────────────────────────────
 aiWorkRouter.post("/resume/rewrite/experience", userAuth, async (req, res) => {
   try {
@@ -850,8 +1229,6 @@ aiWorkRouter.post("/resume/rewrite/experience", userAuth, async (req, res) => {
     res.status(500).json({ success: false, error: "Experience rewrite failed", message: error.message });
   }
 });
-
-
 // ─── STAGE 2C ROUTE ───────────────────────────────────────────────────────────
 aiWorkRouter.post("/resume/rewrite/projects", userAuth, async (req, res) => {
   try {
@@ -912,8 +1289,6 @@ aiWorkRouter.post("/resume/rewrite/projects", userAuth, async (req, res) => {
     res.status(500).json({ success: false, error: "Projects rewrite failed", message: error.message });
   }
 });
-
-
 // ─── STAGE 2D ROUTE ───────────────────────────────────────────────────────────
 aiWorkRouter.post("/resume/rewrite/skills", userAuth, async (req, res) => {
   try {
@@ -961,13 +1336,260 @@ aiWorkRouter.post("/resume/rewrite/skills", userAuth, async (req, res) => {
     res.status(500).json({ success: false, error: "Skills rewrite failed", message: error.message });
   }
 });
+// ─── STAGE 3B ROUTE ───────────────────────────────────────────────────────────
+aiWorkRouter.post("/resume/coherence", userAuth, async (req, res) => {
+  try {
+    const { tailoredProfile, strategyResult } = req.body;
 
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({ success: false, message: "Please re-login" });
+    }
 
+    if (!tailoredProfile || !strategyResult) {
+      return res.status(400).json({
+        success: false,
+        message: "tailoredProfile and strategyResult are required"
+      });
+    }
 
+    const completion = await client.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+      messages: [
+        { role: "system", content: JSON_SYSTEM_PROMPT },
+        { role: "user", content: buildCoherencePrompt({ tailoredProfile, strategyResult }) }
+      ],
+      temperature: 0.1,   // as deterministic as possible — this is a checker not a writer
+      max_tokens: 1500,
+    });
 
+    const parsedData = parseAIResponse(completion);
 
+    const normalizeCoherence = (data) => ({
+      coherenceScore: data.coherenceScore ?? 0,
+      isReadyToSend: data.isReadyToSend ?? false,
+      summaryAligned: data.summaryAligned ?? false,
+      issues: data.issues ?? [],
+      keywordConsistency: data.keywordConsistency ?? {
+        appearsInSummary: [],
+        appearsInExperience: [],
+        appearsInProjects: [],
+        appearsInSkills: [],
+        missingEverywhere: [],
+      },
+      toneConsistency: data.toneConsistency ?? "",
+      overallVerdict: data.overallVerdict ?? "",
+    });
 
+    return res.status(200).json({
+      success: true,
+      data: normalizeCoherence(parsedData),
+    });
 
+  } catch (error) {
+    console.error("Coherence Check Error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Coherence check failed",
+      message: error.message,
+    });
+  }
+});
+// ─── STAGE 4 ROUTE ────────────────────────────────────────────────────────────
+aiWorkRouter.post("/resume/skillgap", userAuth, async (req, res) => {
+  try {
+    const {
+      tailoredProfile,
+      auditResult,
+      SpecificRole,
+      ResumeType,
+      Company,
+      JobDescription,
+    } = req.body;
+
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({ success: false, message: "Please re-login" });
+    }
+
+    if (!tailoredProfile) {
+      return res.status(400).json({
+        success: false,
+        message: "tailoredProfile from Stage 3 is required"
+      });
+    }
+
+    if (!SpecificRole || !ResumeType) {
+      return res.status(400).json({
+        success: false,
+        message: "SpecificRole and ResumeType are required"
+      });
+    }
+
+    const originalAuditGap = auditResult?.skillGapAnalysis ?? null;
+
+    const completion = await client.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+      messages: [
+        { role: "system", content: JSON_SYSTEM_PROMPT },
+        {
+          role: "user",
+          content: buildSkillGapPrompt({
+            tailoredProfile,
+            originalAuditGap,
+            SpecificRole,
+            ResumeType,
+            Company,
+            JobDescription,
+          })
+        }
+      ],
+      temperature: 0.1,
+      max_tokens: 2000,
+    });
+
+    const parsedData = parseAIResponse(completion);
+
+    const normalizeSkillGap = (data) => {
+      const coverageBefore = originalAuditGap?.skillCoveragePercent ?? 0;
+      const coverageAfter = data.skillCoveragePercent ?? 0;
+
+      return {
+        roleRequiresSkills: data.roleRequiresSkills ?? [],
+        candidateHasSkills: data.candidateHasSkills ?? [],
+        matchedSkills: data.matchedSkills ?? [],
+        missingCriticalSkills: data.missingCriticalSkills ?? [],
+        missingPreferredSkills: data.missingPreferredSkills ?? [],
+        irrelevantSkills: data.irrelevantSkills ?? [],
+        skillCoveragePercent: coverageAfter,
+
+        delta: {
+          coverageBefore,
+          coverageAfter,
+          improvement: Math.round(coverageAfter - coverageBefore),
+          newlyMatchedSkills: data.delta?.newlyMatchedSkills ?? [],
+          stillMissing: data.delta?.stillMissing ?? [],
+        },
+
+        atsScanSimulation: data.atsScanSimulation ?? {
+          estimatedATSPassRate: 0,
+          keywordsFoundByATS: [],
+          keywordsNotFound: [],
+          recommendation: "",
+        },
+
+        skillsStrengthMap: data.skillsStrengthMap ?? [],
+      };
+    };
+
+    return res.status(200).json({
+      success: true,
+      data: normalizeSkillGap(parsedData),
+    });
+
+  } catch (error) {
+    console.error("Skill Gap Error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Skill gap analysis failed",
+      message: error.message,
+    });
+  }
+});
+// ─── STAGE 5 ROUTE ────────────────────────────────────────────────────────────
+aiWorkRouter.post("/resume/growth", userAuth, async (req, res) => {
+  try {
+    const {
+      tailoredProfile,
+      skillGapResult,
+      auditResult,
+      coherenceResult,
+      SpecificRole,
+      ResumeType,
+      Company,
+      JobDescription,
+    } = req.body;
+
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({ success: false, message: "Please re-login" });
+    }
+
+    if (!tailoredProfile || !skillGapResult) {
+      return res.status(400).json({
+        success: false,
+        message: "tailoredProfile and skillGapResult are required"
+      });
+    }
+
+    if (!SpecificRole || !ResumeType) {
+      return res.status(400).json({
+        success: false,
+        message: "SpecificRole and ResumeType are required"
+      });
+    }
+
+    const completion = await client.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+      messages: [
+        { role: "system", content: JSON_SYSTEM_PROMPT },
+        {
+          role: "user",
+          content: buildGrowthPrompt({
+            tailoredProfile,
+            skillGapResult,
+            auditResult,
+            coherenceResult: coherenceResult ?? null,
+            SpecificRole,
+            ResumeType,
+            Company,
+            JobDescription,
+          })
+        }
+      ],
+      temperature: 0.4,   // slightly higher — growth recs benefit from varied, specific suggestions
+      max_tokens: 3000,
+    });
+
+    const parsedData = parseAIResponse(completion);
+
+    const normalizeGrowth = (data) => ({
+      overallReadinessScore: data.overallReadinessScore ?? {
+        score: 0,
+        outOf: 100,
+        label: "",
+        breakdown: {
+          resumeQuality: 0,
+          skillCoverage: 0,
+          profileCompleteness: 0,
+          atsReadiness: 0,
+        }
+      },
+      thirtyDayPlan: data.thirtyDayPlan ?? [],
+      sixtyDayPlan: data.sixtyDayPlan ?? [],
+      ninetyDayPlan: data.ninetyDayPlan ?? [],
+      quickWinsToday: data.quickWinsToday ?? [],
+      interviewPrepPlan: data.interviewPrepPlan ?? [],
+      portfolioGaps: data.portfolioGaps ?? [],
+      certificationRoadmap: data.certificationRoadmap ?? [],
+      networkingActions: data.networkingActions ?? [],
+      growthSummary: data.growthSummary ?? "",
+    });
+
+    return res.status(200).json({
+      success: true,
+      data: normalizeGrowth(parsedData),
+    });
+
+  } catch (error) {
+    console.error("Growth Recommendations Error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Growth recommendations failed",
+      message: error.message,
+    });
+  }
+});
 
 
 

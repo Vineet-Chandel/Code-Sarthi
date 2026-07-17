@@ -5,12 +5,16 @@ const { saveMessage } = require("../Services/MessageService")
 
 
 
-const messageHandler = async (clientMessageId, conversationId, socket, content, messageType, members, type, replyTo) => {
-
+const messageHandler = async (clientMessageId, conversationId, socket, content, messageType, members, type, replyTo, localChatKey) => {
+    console.log({
+        clientMessageId,
+        localChatKey,
+        conversationId
+    });
 
     try {
 
-
+        console.log(type);
         const result = await saveMessage({
 
             senderId: socket.userId,
@@ -29,9 +33,10 @@ const messageHandler = async (clientMessageId, conversationId, socket, content, 
         const payload = {
             type: "message",
             clientMessageId,
+            localChatKey,              // 👈 temp key
+            conversation: result.conversation,
             message: result.message
         };
-
         broadcastService(
             result.conversation.members,
             payload

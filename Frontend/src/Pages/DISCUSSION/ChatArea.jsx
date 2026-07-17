@@ -94,7 +94,7 @@ const ChatArea = ({ subLoading, forwardTabOpen, setForwardTabOpen, selectedChatU
 
 
 
-    const handelSend = async (selectedChatUser, message, messageType, isReply) => {
+    const handelSend = async (selectedChatUser,setSelectedChatUser, message, messageType, isReply) => {
 
         try {
             const clientMessageId = crypto.randomUUID();
@@ -102,12 +102,14 @@ const ChatArea = ({ subLoading, forwardTabOpen, setForwardTabOpen, selectedChatU
                 selectedChatUser.convoId
                     ? selectedChatUser.convoId
                     : `temp_${selectedChatUser.id}`;
+
+            console.log("TEMP ID:", clientMessageId);
             let payload = {}
             if (selectedChatUser.convoId) {
                 payload = {
                     clientMessageId,
                     messageType,
-                    type: selectedChatUser?.fullChatInfo?.type,
+                    type: "private",
                     conversationId: selectedChatUser.convoId,
                     content: message,
                     replyTo: isReply ? {
@@ -117,7 +119,10 @@ const ChatArea = ({ subLoading, forwardTabOpen, setForwardTabOpen, selectedChatU
                     does: "message"
                 }
             } else {
-
+                setSelectedChatUser({
+                    ...prev,
+                    convoId: conversationKey
+                })
 
                 payload = {
                     conversationId: selectedChatUser.convoId,
@@ -148,6 +153,8 @@ const ChatArea = ({ subLoading, forwardTabOpen, setForwardTabOpen, selectedChatU
                     }
                     : null
             };
+            console.log(tempMessage)
+            console.log(payload)
 
             dispatch(addMessage(tempMessage));
             setMessage("")
@@ -157,6 +164,8 @@ const ChatArea = ({ subLoading, forwardTabOpen, setForwardTabOpen, selectedChatU
                 senderId: null,
                 name: ""
             })
+
+
             const str = JSON.stringify(payload);
 
 

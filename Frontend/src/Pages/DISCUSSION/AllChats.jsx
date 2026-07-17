@@ -250,7 +250,7 @@ const AllChats = ({ setForwardTabOpen, forwardTabOpen, loading, setLoading, addT
 
 
                                             setSelectedChatUser(prev => ({
-
+                                                isNew: false,
                                                 id: user._id,
                                                 info: user,
                                                 convoId: chatUser._id,
@@ -396,10 +396,13 @@ const AllChats = ({ setForwardTabOpen, forwardTabOpen, loading, setLoading, addT
                                         }
 
                                         setSelectedChatUser({
+                                            isNew: true,
                                             id: user._id,
                                             info: user,
-                                            convoId: chatUser._id,
-                                            fullChatInfo: chatUser
+                                            convoId: selectedChatUser.convoId
+                                                ? selectedChatUser.convoId
+                                                : `temp_${user._id}`,
+                                            fullChatInfo: chatUser,
 
                                         });
 
