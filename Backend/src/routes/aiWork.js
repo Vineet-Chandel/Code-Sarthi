@@ -8,6 +8,8 @@ const client = new OpenAI({
   baseURL: "https://api.groq.com/openai/v1",
 });
 const { userAuth } = require("../middlewares/userAuth");
+
+
 const JSON_SYSTEM_PROMPT = `
 You are a JSON API.
 
@@ -96,8 +98,6 @@ Return ONLY a valid JSON object. No prose. No markdown fences.
   }
 }
 `;
-
-
 function parseAIResponse(completion) {
   const rawText = completion?.choices?.[0]?.message?.content;
 
@@ -173,8 +173,6 @@ Return ONLY this JSON shape:
   "summaryBody": "rewritten 3–4 sentence summary"
 }
 `;
-
-
 // ─── STAGE 2B — EXPERIENCE BULLETS REWRITE ───────────────────────────────────
 const buildExperiencePrompt = ({ experienceEntry, roleStrategy, strategy }) => `
 You are an expert resume writer specializing in ${strategy.toneGuidance?.overall ?? "professional"} resumes.
@@ -223,8 +221,6 @@ Return ONLY this JSON shape:
   "bullets": ["rewritten bullet 1", "rewritten bullet 2", ...]
 }
 `;
-
-
 // ─── STAGE 2C — PROJECTS BULLETS REWRITE ─────────────────────────────────────
 const buildProjectPrompt = ({ project, projectStrategy, strategy }) => `
 You are an expert resume writer specializing in ${strategy.toneGuidance?.overall ?? "professional"} resumes.
@@ -269,9 +265,7 @@ Return ONLY this JSON shape:
   "bullets": ["rewritten bullet 1", "rewritten bullet 2", ...]
 }
 `;
-
-
-// ─── STAGE 2D — SKILLS CURATION ──────────────────────────────────────────────
+// ── STAGE 2D — SKILLS CURATION ──────────────────────────────────────────────
 const buildSkillsPrompt = ({ profile, strategy }) => `
 You are an expert resume writer and ATS optimization specialist.
 
@@ -316,7 +310,6 @@ Return ONLY this JSON shape:
   ]
 }
 `;
-
 // ─── STAGE 3B — COHERENCE CHECK (optional, runs after assembly) ───────────────
 const buildCoherencePrompt = ({ tailoredProfile, strategyResult }) => `
 You are a senior resume reviewer doing a final quality check before a resume is sent to a hiring manager.
@@ -386,8 +379,6 @@ Return ONLY valid JSON:
   "overallVerdict": "2 sentences max — is this resume ready to send, and what is the single most important thing still wrong if anything"
 }
 `;
-
-
 // ─── STAGE 4 — SKILL GAP ANALYSIS ────────────────────────────────────────────
 const buildSkillGapPrompt = ({
   tailoredProfile,
@@ -508,11 +499,11 @@ Return ONLY valid JSON. No prose. No markdown fences.
   ]
 }
 `;
-
 // ─── STAGE 5 — GROWTH RECOMMENDATIONS ────────────────────────────────────────
 const buildGrowthPrompt = ({
   tailoredProfile,
   skillGapResult,
+
   auditResult,
   coherenceResult,
   SpecificRole,
@@ -708,7 +699,6 @@ Return ONLY valid JSON. No prose. No markdown fences.
   "growthSummary": "3–4 sentence honest assessment of where this candidate stands for the target role right now, what the single most important thing to do in the next 30 days is, and what their realistic timeline to being a strong applicant looks like. Sound like a mentor who has seen hundreds of successful applications for this exact role."
 }
 `;
-
 
 
 // ─── STAGE 0 ROUTE ───────────────────────────────────────────────────────────
@@ -1771,8 +1761,6 @@ aiWorkRouter.post("/generate-exp-pointer", userAuth, async (req, res) => {
     });
   }
 });
-
-
 aiWorkRouter.post("/generate-edu-pointer", userAuth, async (req, res) => {
   const { degree, field, cgpa, college, graduationYear } = req.body;
 
@@ -1899,7 +1887,6 @@ aiWorkRouter.post("/generate-edu-pointer", userAuth, async (req, res) => {
     });
   }
 });
-
 aiWorkRouter.post("/generate-skills", userAuth, async (req, res) => {
   const { category } = req.body;
 
@@ -2041,7 +2028,6 @@ aiWorkRouter.post("/generate-skills", userAuth, async (req, res) => {
     });
   }
 });
-
 aiWorkRouter.post("/generate-summary", userAuth, async (req, res) => {
   const {
     skills,
@@ -2208,7 +2194,6 @@ Requirements:
     });
   }
 });
-
 aiWorkRouter.post("/improve-pointer", userAuth, async (req, res) => {
   const { bullet } = req.body;
 
@@ -2331,7 +2316,6 @@ aiWorkRouter.post("/improve-pointer", userAuth, async (req, res) => {
     });
   }
 });
-
 aiWorkRouter.post("/generate-project-pointer", userAuth, async (req, res) => {
   const { name, stack, description } = req.body;
 
@@ -2446,8 +2430,6 @@ aiWorkRouter.post("/generate-project-pointer", userAuth, async (req, res) => {
     });
   }
 });
-
-
 aiWorkRouter.post("/resume/generate-jd", userAuth, async (req, res) => {
   try {
     const { specificRole, company, resumeCategory, broadRole } = req.body;

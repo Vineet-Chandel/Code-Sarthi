@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { motion } from "framer-motion";
 
 import {
@@ -20,8 +20,13 @@ import {
     GitCompareArrows,
 } from "lucide-react";
 const Stage4 = ({ skillGapData }) => {
+
+    useEffect(() => {
+        console.log(skillGapData.data.data.data);
+    }, [skillGapData])
+
     return (
-        <>
+        <div className='mt-3'>
             {/* 1. HERO STATISTICS */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
                 {/* Skill Coverage */}
@@ -162,294 +167,162 @@ const Stage4 = ({ skillGapData }) => {
                         );
                     })}
                 </div>
-            </div>
 
-            {/* 3. FOUR COLUMN LAYOUT */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-                {/* Matched Skills */}
-                <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm hover:shadow-xl transition-all duration-300">
-                    <div className="flex items-center gap-2 mb-4">
-                        <CheckCircle2 className="w-5 h-5 text-green-500" />
-                        <h3 className="text-sm font-semibold text-black">Matched Skills</h3>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                        {skillGapData?.data?.data?.data?.matchedSkills?.map((skill, idx) => (
-                            <motion.div
-                                key={`matched-${idx}`}
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.3, delay: idx * 0.03 }}
-                                className="rounded-xl border border-green-100 bg-green-50 px-3 py-2 text-xs font-medium text-green-700"
-                            >
-                                {skill}
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Critical Skills */}
-                <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm hover:shadow-xl transition-all duration-300">
-                    <div className="flex items-center gap-2 mb-4">
-                        <AlertTriangle className="w-5 h-5 text-red-500" />
-                        <h3 className="text-sm font-semibold text-black">Critical Skills</h3>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                        {skillGapData?.data?.data?.data?.missingCriticalSkills?.map((skill, idx) => (
-                            <motion.div
-                                key={`critical-${idx}`}
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.3, delay: idx * 0.03 }}
-                                className="rounded-xl border border-red-100 bg-red-50 px-3 py-2 text-xs font-medium text-red-700"
-                            >
-                                {skill}
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Preferred Skills */}
-                <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm hover:shadow-xl transition-all duration-300">
-                    <div className="flex items-center gap-2 mb-4">
-                        <AlertCircle className="w-5 h-5 text-yellow-500" />
-                        <h3 className="text-sm font-semibold text-black">Preferred Skills</h3>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                        {skillGapData?.data?.data?.data?.missingPreferredSkills?.map((skill, idx) => (
-                            <motion.div
-                                key={`preferred-${idx}`}
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.3, delay: idx * 0.03 }}
-                                className="rounded-xl border border-yellow-100 bg-yellow-50 px-3 py-2 text-xs font-medium text-yellow-700"
-                            >
-                                {skill}
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Irrelevant Skills */}
-                <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm hover:shadow-xl transition-all duration-300">
-                    <div className="flex items-center gap-2 mb-4">
-                        <Circle className="w-5 h-5 text-gray-400" />
-                        <h3 className="text-sm font-semibold text-black">Irrelevant Skills</h3>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                        {skillGapData?.data?.data?.data?.irrelevantSkills?.map((skill, idx) => (
-                            <motion.div
-                                key={`irrelevant-${idx}`}
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.3, delay: idx * 0.03 }}
-                                className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-xs font-medium text-gray-600"
-                            >
-                                {skill}
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-
-            {/* 4. CRITICAL SKILL DEEP DIVE */}
-            <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm hover:shadow-xl transition-all duration-300 mb-10">
-                <div className="flex items-center gap-2 mb-6">
-                    <Flame className="w-5 h-5 text-red-500" />
-                    <h2 className="text-xl font-semibold text-black">Critical Skill Deep Dive</h2>
-                </div>
-                <div className="flex flex-col gap-4">
-                    {skillGapData?.data?.data?.data?.missingCriticalSkills?.map((skill, idx) => {
-                        const detail = skillGapData?.data?.data?.data?.criticalSkillDetails?.[skill];
-                        return (
-                            <motion.details
-                                key={`deepdive-${idx}`}
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.3, delay: idx * 0.05 }}
-                                className="group rounded-2xl border border-gray-200 p-5 hover:shadow-md transition-all duration-300 open:shadow-md"
-                            >
-                                <summary className="flex items-center justify-between cursor-pointer list-none">
-                                    <div className="flex items-center gap-3">
-                                        <span className="text-sm font-semibold text-black">{skill}</span>
-                                        <span className="flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full border bg-red-50 text-red-600 border-red-200">
-                                            <AlertTriangle className="w-3.5 h-3.5" />
-                                            {detail?.importance ?? "High Importance"}
-                                        </span>
-                                    </div>
-                                    <ChevronDown className="w-4 h-4 text-gray-400 transition-transform duration-300 group-open:rotate-180" />
-                                </summary>
-                                <div className="mt-4 pt-4 border-t border-gray-100 flex flex-col gap-3">
-                                    <div>
-                                        <p className="text-xs font-medium text-gray-400 mb-1">Why it matters</p>
-                                        <p className="text-sm text-gray-700">{detail?.reason}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-xs font-medium text-gray-400 mb-1">How to acquire</p>
-                                        <p className="text-sm text-gray-700">{detail?.howToAcquire}</p>
-                                    </div>
-                                </div>
-                            </motion.details>
-                        );
-                    })}
-                </div>
-            </div>
-
-            {/* 5. SKILL STRENGTH ANALYSIS */}
-            <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm hover:shadow-xl transition-all duration-300 mb-10">
-                <div className="flex items-center gap-2 mb-6">
-                    <BarChart3 className="w-5 h-5 text-gray-700" />
-                    <h2 className="text-xl font-semibold text-black">Skill Strength Analysis</h2>
-                </div>
-                <div className="flex flex-col gap-5">
-                    {Object.entries(skillGapData?.data?.data?.data?.skillsStrengthMap ?? {}).map(
-                        ([skillName, skillInfo], idx) => (
-                            <motion.div
-                                key={`strength-${idx}`}
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.3, delay: idx * 0.04 }}
-                                className="rounded-2xl border border-gray-200 p-5 hover:shadow-md transition-all duration-300"
-                            >
-                                <div className="flex items-center justify-between mb-3">
-                                    <span className="text-sm font-semibold text-black">{skillName}</span>
-                                    <span className="text-xs font-medium px-2.5 py-1 rounded-full border bg-blue-50 text-blue-600 border-blue-200">
-                                        {skillInfo?.strength}
-                                    </span>
-                                </div>
-                                <div className="w-full h-2 rounded-full bg-gray-100 overflow-hidden mb-3">
-                                    <motion.div
-                                        initial={{ width: 0 }}
-                                        animate={{ width: `${skillInfo?.score ?? 0}%` }}
-                                        transition={{ duration: 1, ease: "easeOut" }}
-                                        className="h-full rounded-full bg-black"
-                                    />
-                                </div>
-                                <div className="flex flex-wrap gap-2 mb-2">
-                                    {["Summary", "Experience", "Projects", "Skills"].map((location, locIdx) => {
-                                        const isPresent = skillInfo?.presentIn?.includes(location);
-                                        return (
-                                            <span
-                                                key={`loc-${idx}-${locIdx}`}
-                                                className={`text-xs font-medium px-2.5 py-1 rounded-full border ${isPresent
-                                                    ? "bg-green-50 text-green-600 border-green-200"
-                                                    : "bg-gray-50 text-gray-400 border-gray-200"
-                                                    }`}
-                                            >
-                                                {location}
-                                            </span>
-                                        );
-                                    })}
-                                </div>
-                                {skillInfo?.note && <p className="text-xs text-gray-400 mt-1">{skillInfo.note}</p>}
-                            </motion.div>
-                        )
-                    )}
-                </div>
-            </div>
-
-            {/* 6. ATS SCANNER */}
-            <div className="rounded-3xl border border-gray-800 bg-black p-8 shadow-sm hover:shadow-xl transition-all duration-300 mb-10">
-                <div className="flex flex-col items-center text-center mb-8">
-                    <div className="flex items-center gap-2 text-gray-400 mb-2">
-                        <ScanLine className="w-5 h-5" />
-                        <span className="text-sm font-medium">ATS Scanner</span>
-                    </div>
-                    <div className="text-6xl font-bold text-white">
-                        {skillGapData?.data?.data?.data?.atsScanSimulation?.estimatedATSPassRate ?? 0}%
-                    </div>
-                    <p className="text-xs text-gray-500 mt-2">Estimated ATS Pass Rate</p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div className="rounded-2xl border border-gray-800 bg-gray-900 p-5">
+                {/* 3. FOUR COLUMN LAYOUT */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-4 mt-4">
+                    {/* Matched Skills */}
+                    <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm hover:shadow-xl transition-all duration-300">
                         <div className="flex items-center gap-2 mb-4">
-                            <CheckCircle2 className="w-4 h-4 text-green-400" />
-                            <h3 className="text-sm font-semibold text-white">Keywords Found</h3>
+                            <CheckCircle2 className="w-5 h-5 text-green-500" />
+                            <h3 className="text-sm font-semibold text-black">Matched Skills</h3>
                         </div>
-                        <div className="flex flex-wrap gap-2">
-                            {skillGapData?.data?.data?.data?.atsScanSimulation?.keywordsFoundByATS?.map((kw, idx) => (
-                                <span
-                                    key={`found-${idx}`}
-                                    className="text-xs font-medium px-3 py-1.5 rounded-full bg-green-500/10 text-green-400 border border-green-500/20"
+                        <div className="flex flex-col gap-2">
+                            {skillGapData?.data?.data?.data?.matchedSkills?.map((skill, idx) => (
+                                <motion.div
+                                    key={`matched-${idx}`}
+                                    initial={{ opacity: 0, x: -10 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ duration: 0.3, delay: idx * 0.03 }}
+                                    className="rounded-xl border border-green-100 bg-green-50 px-3 py-2 text-xs font-medium text-green-700"
                                 >
-                                    {kw}
-                                </span>
+                                    {skill}
+                                </motion.div>
                             ))}
                         </div>
                     </div>
-                    <div className="rounded-2xl border border-gray-800 bg-gray-900 p-5">
+
+                    {/* Critical Skills */}
+                    <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm hover:shadow-xl transition-all duration-300">
                         <div className="flex items-center gap-2 mb-4">
-                            <XCircle className="w-4 h-4 text-red-400" />
-                            <h3 className="text-sm font-semibold text-white">Keywords Missing</h3>
+                            <AlertTriangle className="w-5 h-5 text-red-500" />
+                            <h3 className="text-sm font-semibold text-black">Critical Skills</h3>
                         </div>
-                        <div className="flex flex-wrap gap-2">
-                            {skillGapData?.data?.data?.data?.atsScanSimulation?.keywordsNotFound?.map((kw, idx) => (
-                                <span
-                                    key={`missing-${idx}`}
-                                    className="text-xs font-medium px-3 py-1.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/20"
+                        <div className="flex flex-col gap-2">
+                            {skillGapData?.data?.data?.data?.missingCriticalSkills?.map((skill, idx) => (
+                                <motion.div
+                                    key={`critical-${idx}`}
+                                    initial={{ opacity: 0, x: -10 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ duration: 0.3, delay: idx * 0.03 }}
+                                    className="rounded-xl border border-red-100 bg-red-50 px-3 py-2 text-xs font-medium text-red-700"
                                 >
-                                    {kw}
-                                </span>
+                                    {skill.skill}
+                                </motion.div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Preferred Skills */}
+                    <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm hover:shadow-xl transition-all duration-300">
+                        <div className="flex items-center gap-2 mb-4">
+                            <AlertCircle className="w-5 h-5 text-yellow-500" />
+                            <h3 className="text-sm font-semibold text-black">Preferred Skills</h3>
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            {skillGapData?.data?.data?.data?.missingPreferredSkills?.map((skill, idx) => (
+                                <motion.div
+                                    key={`preferred-${idx}`}
+                                    initial={{ opacity: 0, x: -10 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ duration: 0.3, delay: idx * 0.03 }}
+                                    className="rounded-xl border border-yellow-100 bg-yellow-50 px-3 py-2 text-xs font-medium text-yellow-700"
+                                >
+                                    {skill.skill}
+                                </motion.div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Irrelevant Skills */}
+                    <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm hover:shadow-xl transition-all duration-300">
+                        <div className="flex items-center gap-2 mb-4">
+                            <Circle className="w-5 h-5 text-gray-400" />
+                            <h3 className="text-sm font-semibold text-black">Irrelevant Skills</h3>
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            {skillGapData?.data?.data?.data?.irrelevantSkills?.map((skill, idx) => (
+                                <motion.div
+                                    key={`irrelevant-${idx}`}
+                                    initial={{ opacity: 0, x: -10 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ duration: 0.3, delay: idx * 0.03 }}
+                                    className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-xs font-medium text-gray-600"
+                                >
+                                    {skill.skill}
+                                </motion.div>
                             ))}
                         </div>
                     </div>
                 </div>
-                <div className="rounded-2xl border border-gray-800 bg-gray-900 p-5">
-                    <div className="flex items-center gap-2 mb-2">
-                        <Sparkles className="w-4 h-4 text-white" />
-                        <h3 className="text-sm font-semibold text-white">Recommendation</h3>
-                    </div>
-                    <p className="text-sm text-gray-300 leading-relaxed">
-                        {skillGapData?.data?.data?.data?.atsScanSimulation?.recommendation}
-                    </p>
-                </div>
             </div>
 
-            {/* 7. COVERAGE COMPARISON */}
-            <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm hover:shadow-xl transition-all duration-300 mb-10">
-                <div className="flex items-center gap-2 mb-6">
-                    <GitCompareArrows className="w-5 h-5 text-gray-700" />
-                    <h2 className="text-xl font-semibold text-black">Coverage Comparison</h2>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div className="rounded-2xl border border-gray-200 p-6">
-                        <p className="text-xs font-medium text-gray-400 mb-2">Before</p>
-                        <div className="text-4xl font-bold text-gray-400 mb-4">
-                            {skillGapData?.data?.data?.data?.delta?.coverageBefore ?? 0}%
-                        </div>
-                        <div className="w-full h-2 rounded-full bg-gray-100 overflow-hidden">
-                            <motion.div
-                                initial={{ width: 0 }}
-                                animate={{ width: `${skillGapData?.data?.data?.data?.delta?.coverageBefore ?? 0}%` }}
-                                transition={{ duration: 1, ease: "easeOut" }}
-                                className="h-full rounded-full bg-gray-400"
-                            />
-                        </div>
-                    </div>
-                    <div className="rounded-2xl border border-gray-200 p-6">
-                        <p className="text-xs font-medium text-gray-400 mb-2">After</p>
-                        <div className="text-4xl font-bold text-black mb-4">
-                            {skillGapData?.data?.data?.data?.delta?.coverageAfter ?? 0}%
-                        </div>
-                        <div className="w-full h-2 rounded-full bg-gray-100 overflow-hidden">
-                            <motion.div
-                                initial={{ width: 0 }}
-                                animate={{ width: `${skillGapData?.data?.data?.data?.delta?.coverageAfter ?? 0}%` }}
-                                transition={{ duration: 1, ease: "easeOut", delay: 0.1 }}
-                                className="h-full rounded-full bg-black"
-                            />
-                        </div>
-                    </div>
-                </div>
-                <div className="flex items-center justify-center gap-2 rounded-2xl border border-green-200 bg-green-50 py-4">
-                    <ArrowUpRight className="w-5 h-5 text-green-600" />
-                    <span className="text-lg font-semibold text-green-600">
-                        +{skillGapData?.data?.data?.data?.delta?.improvement ?? 0}% Improvement
-                    </span>
-                </div>
-            </div>
+
+
+
+
+
+
+
 
             {/* 8. NEWLY MATCHED SKILLS */}
             <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm hover:shadow-xl transition-all duration-300 mb-10">
+                {/* 6. ATS SCANNER */}
+                <div className="rounded-3xl border border-gray-800 bg-black p-8 shadow-sm hover:shadow-xl transition-all duration-300 mb-10">
+                    <div className="flex flex-col items-center text-center mb-8">
+                        <div className="flex items-center gap-2 text-gray-400 mb-2">
+                            <ScanLine className="w-5 h-5" />
+                            <span className="text-sm font-medium">ATS Scanner</span>
+                        </div>
+                        <div className="text-6xl font-bold text-white">
+                            {skillGapData?.data?.data?.data?.atsScanSimulation?.estimatedATSPassRate ?? 0}%
+                        </div>
+                        <p className="text-xs text-gray-500 mt-2">Estimated ATS Pass Rate</p>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div className="rounded-2xl border border-gray-800 bg-gray-900 p-5">
+                            <div className="flex items-center gap-2 mb-4">
+                                <CheckCircle2 className="w-4 h-4 text-green-400" />
+                                <h3 className="text-sm font-semibold text-white">Keywords Found</h3>
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                                {skillGapData?.data?.data?.data?.atsScanSimulation?.keywordsFoundByATS?.map((kw, idx) => (
+                                    <span
+                                        key={`found-${idx}`}
+                                        className="text-xs font-medium px-3 py-1.5 rounded-full bg-green-500/10 text-green-400 border border-green-500/20"
+                                    >
+                                        {kw}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="rounded-2xl border border-gray-800 bg-gray-900 p-5">
+                            <div className="flex items-center gap-2 mb-4">
+                                <XCircle className="w-4 h-4 text-red-400" />
+                                <h3 className="text-sm font-semibold text-white">Keywords Missing</h3>
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                                {skillGapData?.data?.data?.data?.atsScanSimulation?.keywordsNotFound?.map((kw, idx) => (
+                                    <span
+                                        key={`missing-${idx}`}
+                                        className="text-xs font-medium px-3 py-1.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/20"
+                                    >
+                                        {kw}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="rounded-2xl border border-gray-800 bg-gray-900 p-5">
+                        <div className="flex items-center gap-2 mb-2">
+                            <Sparkles className="w-4 h-4 text-white" />
+                            <h3 className="text-sm font-semibold text-white">Recommendation</h3>
+                        </div>
+                        <p className="text-sm text-gray-300 leading-relaxed">
+                            {skillGapData?.data?.data?.data?.atsScanSimulation?.recommendation}
+                        </p>
+                    </div>
+                </div>
+
                 <div className="flex items-center gap-2 mb-6">
                     <Sparkles className="w-5 h-5 text-green-500" />
                     <h2 className="text-xl font-semibold text-black">Newly Matched Skills</h2>
@@ -469,11 +342,10 @@ const Stage4 = ({ skillGapData }) => {
                         </motion.span>
                     ))}
                 </div>
-            </div>
 
-            {/* 9. STILL MISSING SKILLS */}
-            <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm hover:shadow-xl transition-all duration-300 mb-10">
-                <div className="flex items-center gap-2 mb-6">
+                {/* 9. STILL MISSING SKILLS */}
+
+                <div className="flex items-center gap-2 mt-6 mb-6">
                     <XCircle className="w-5 h-5 text-red-500" />
                     <h2 className="text-xl font-semibold text-black">Still Missing Skills</h2>
                 </div>
@@ -492,26 +364,88 @@ const Stage4 = ({ skillGapData }) => {
                         </motion.span>
                     ))}
                 </div>
+                {/* 10. AI RECOMMENDATION */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="rounded-3xl border border-gray-800 bg-gradient-to-br from-black via-gray-900 to-black p-10 shadow-sm hover:shadow-xl transition-all duration-300 mt-10"
+                >
+                    <div className="flex items-center gap-2 mb-4">
+                        <Sparkles className="w-5 h-5 text-white" />
+                        <span className="text-sm font-medium text-gray-400 tracking-wide uppercase">
+                            AI Recommendation
+                        </span>
+                    </div>
+                    <p className="text-2xl md:text-3xl font-semibold text-white leading-snug tracking-tight">
+                        {skillGapData?.data?.data?.data?.atsScanSimulation?.recommendation}
+                    </p>
+
+                    {/* 4. CRITICAL SKILL DEEP DIVE */}
+
+                    <div className="flex items-center gap-2 mt-6 mb-6">
+                        <Flame className="w-5 h-5 text-red-500" />
+                        <h2 className="text-xl font-semibold text-white">Skill Acquisation</h2>
+                    </div>
+                    <div className="flex flex-col gap-4">
+                        {skillGapData?.data?.data?.data?.missingCriticalSkills?.map((item, idx) => (
+                            <motion.details
+                                key={`deepdive-${idx}`}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3, delay: idx * 0.05 }}
+                                className="group rounded-2xl border border-gray-200 p-5 hover:shadow-md transition-all duration-300 open:shadow-md"
+                            >
+                                <summary className="flex flex-col w-full items-start justify-between cursor-pointer list-none">
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-sm font-semibold text-white">
+                                            {item.skill}
+                                        </span>
+
+                                        <span className="flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full border bg-red-50 text-red-600 border-red-200">
+                                            <AlertTriangle className="w-3.5 h-3.5" />
+                                            {item.importance}
+                                        </span>
+                                    </div>
+
+
+
+                                    <div className="mt-4 pt-4 border-t border-gray-100 flex flex-col w-full gap-3">
+                                        <div>
+                                            <p className="text-xs font-medium text-white mb-1">
+                                                Why it matters
+                                            </p>
+                                            <p className="text-sm text-white/70">
+                                                {item.reason}
+                                            </p>
+                                        </div>
+
+                                        <div>
+                                            <p className="text-xs font-medium text-white mb-1">
+                                                How to acquire
+                                            </p>
+                                            <p className="text-sm text-white/70">
+                                                {item.howToAcquire}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </summary>
+
+
+                            </motion.details>
+                        ))}
+                    </div>
+                </motion.div>
+
+
+
             </div>
 
-            {/* 10. AI RECOMMENDATION */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="rounded-3xl border border-gray-800 bg-gradient-to-br from-black via-gray-900 to-black p-10 shadow-sm hover:shadow-xl transition-all duration-300"
-            >
-                <div className="flex items-center gap-2 mb-4">
-                    <Sparkles className="w-5 h-5 text-white" />
-                    <span className="text-sm font-medium text-gray-400 tracking-wide uppercase">
-                        AI Recommendation
-                    </span>
-                </div>
-                <p className="text-2xl md:text-3xl font-semibold text-white leading-snug tracking-tight">
-                    {skillGapData?.data?.data?.data?.atsScanSimulation?.recommendation}
-                </p>
-            </motion.div>
-        </>
+
+
+
+        </div>
+
     )
 }
 
