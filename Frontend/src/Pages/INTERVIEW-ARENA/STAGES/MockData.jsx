@@ -369,3 +369,177 @@ export const mockRewritingData =
         }
     }
 }
+
+export const mockSkillGapData = {
+    "data": {
+        "roleRequiresSkills": [
+            "Software Development",
+            "Cloud Computing",
+            "Agile Methodologies",
+            "Version Control",
+            "Programming Languages",
+            "Data Structures",
+            "Algorithms",
+            "Database Management",
+            "Operating Systems",
+            "Networking Fundamentals"
+        ],
+        "candidateHasSkills": [
+            "Programming Languages",
+            "Data Structures",
+            "Algorithms",
+            "Database Management"
+        ],
+        "matchedSkills": [
+            "Programming Languages",
+            "Data Structures",
+            "Algorithms",
+            "Database Management"
+        ],
+        "missingCriticalSkills": [
+            {
+                "skill": "Cloud Computing",
+                "importance": "critical",
+                "reason": "Cloud computing is essential for the company's infrastructure and the role requires experience with cloud-based systems",
+                "howToAcquire": "Take an online course on cloud computing and deploy a personal project on a cloud platform like AWS or Azure"
+            },
+            {
+                "skill": "Agile Methodologies",
+                "importance": "critical",
+                "reason": "The company uses agile methodologies for software development and the role requires experience with agile practices",
+                "howToAcquire": "Read the Agile Manifesto and participate in an agile project to gain hands-on experience"
+            }
+        ],
+        "missingPreferredSkills": [
+            {
+                "skill": "Version Control",
+                "importance": "preferred",
+                "reason": "Version control is important for collaborative software development and would strengthen the application"
+            },
+            {
+                "skill": "Operating Systems",
+                "importance": "preferred",
+                "reason": "Knowledge of operating systems would be beneficial for the role and improve the candidate's overall technical skills"
+            }
+        ],
+        "irrelevantSkills": [
+            {
+                "skill": "Graphic Design",
+                "suggestion": "remove from this version or deprioritize"
+            }
+        ],
+        "skillCoveragePercent": 40,
+        "delta": {
+            "coverageBefore": 0,
+            "coverageAfter": 40,
+            "improvement": 40,
+            "newlyMatchedSkills": [
+                "Database Management"
+            ],
+            "stillMissing": [
+                "Cloud Computing",
+                "Agile Methodologies",
+                "Version Control",
+                "Operating Systems"
+            ]
+        },
+        "atsScanSimulation": {
+            "estimatedATSPassRate": 60,
+            "keywordsFoundByATS": [
+                "Programming Languages",
+                "Data Structures",
+                "Algorithms",
+                "Database Management"
+            ],
+            "keywordsNotFound": [
+                "Cloud Computing",
+                "Agile Methodologies",
+                "Version Control",
+                "Operating Systems"
+            ],
+            "recommendation": "Add relevant experience with cloud computing and agile methodologies to the resume to improve the ATS pass rate"
+        },
+        "skillsStrengthMap": [
+            {
+                "skill": "Programming Languages",
+                "presentIn": [
+                    "summary",
+                    "experience",
+                    "skills"
+                ],
+                "strength": "strong",
+                "note": "appears in 2 experience bullets with metrics"
+            },
+            {
+                "skill": "Data Structures",
+                "presentIn": [
+                    "experience",
+                    "skills"
+                ],
+                "strength": "moderate",
+                "note": "mentioned in 1 experience bullet without metrics"
+            },
+            {
+                "skill": "Algorithms",
+                "presentIn": [
+                    "experience",
+                    "skills"
+                ],
+                "strength": "moderate",
+                "note": "mentioned in 1 experience bullet without metrics"
+            },
+            {
+                "skill": "Database Management",
+                "presentIn": [
+                    "experience",
+                    "skills"
+                ],
+                "strength": "moderate",
+                "note": "mentioned in 1 experience bullet without metrics"
+            }
+        ]
+    }
+}
+export const mockCoherenceData = {
+    "data": {
+        "coherenceScore": 0,
+        "isReadyToSend": false,
+        "summaryAligned": false,
+        "issues": [
+            {
+                "severity": "critical",
+                "section": "summary",
+                "issue": "summary is undefined",
+                "fix": "define summary"
+            },
+            {
+                "severity": "critical",
+                "section": "experience",
+                "issue": "experience bullets are undefined",
+                "fix": "define experience bullets"
+            },
+            {
+                "severity": "critical",
+                "section": "projects",
+                "issue": "projects are undefined",
+                "fix": "define projects"
+            },
+            {
+                "severity": "critical",
+                "section": "skills",
+                "issue": "skills are undefined",
+                "fix": "define skills"
+            }
+        ],
+        "keywordConsistency": {
+            "appearsInSummary": [],
+            "appearsInExperience": [],
+            "appearsInProjects": [],
+            "appearsInSkills": [],
+            "missingEverywhere": []
+        },
+        "toneConsistency": "inconsistent",
+        "overallVerdict": "This resume is not ready to send because it lacks all necessary information. The most important thing wrong is that all sections are undefined."
+    }
+
+}

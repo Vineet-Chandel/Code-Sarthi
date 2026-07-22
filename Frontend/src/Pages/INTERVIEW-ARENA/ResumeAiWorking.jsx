@@ -12,7 +12,7 @@ import Stage3 from "./STAGES/Stage3";
 import Stage4 from "./STAGES/Stage4";
 import Stage5 from "./STAGES/Stage5";
 import { RESUME_PIPELINE_STAGES } from "./STAGES/RESUME_PIPELINE_STAGES";
-import { mockAuditData, mockStrategyData, mockRewritingData } from "./STAGES/MockData";
+import { mockAuditData, mockStrategyData, mockRewritingData, mockSkillGapData, mockCoherenceData } from "./STAGES/MockData";
 import AfterCompletion from "./STAGES/AfterCompletion";
 
 
@@ -42,7 +42,8 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
     })
 
 
-    const DEV_MODE = false;
+    const DEV_MODE = false
+        ;
 
 
 
@@ -254,7 +255,10 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
             addToast(({
                 type: "error",
                 title: "Error",
-                message: err
+                message:
+                    err?.response?.data?.message ||
+                    err?.message ||
+                    "Something went wrong"
             }))
 
             return 0;
@@ -271,7 +275,19 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
                 )
             );
 
+            if (DEV_MODE) {
+                setProfileAssembly(mockCoherenceData);
+                setResumePipelineStages(prev =>
+                    prev.map((stage, index) =>
+                        index === 6
+                            ? { ...stage, status: "SUCCESS" }
+                            : stage
+                    )
+                );
 
+
+                return mockCoherenceData;
+            }
             const res3 = await axios.post(`${BASE_URL}/resume/coherence`, {
                 tailoredProfile: tailoredProfile, strategyResult: strategyResult
             }, { withCredentials: true })
@@ -292,7 +308,10 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
             addToast(({
                 type: "error",
                 title: "Error",
-                message: err
+                message:
+                    err?.response?.data?.message ||
+                    err?.message ||
+                    "Something went wrong"
             }))
         }
     }
@@ -310,6 +329,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
     ) => {
         try {
 
+
             setResumePipelineStages(prev =>
                 prev.map((stage, index) =>
                     (index === 7)
@@ -318,7 +338,19 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
                 )
             );
 
+            if (DEV_MODE) {
+                setSkillGapData(mockSkillGapData);
+                setResumePipelineStages(prev =>
+                    prev.map((stage, index) =>
+                        index === 7
+                            ? { ...stage, status: "SUCCESS" }
+                            : stage
+                    )
+                );
 
+
+                return mockSkillGapData;
+            }
             const res5 = await axios.post(`${BASE_URL}/resume/skillgap`, {
                 tailoredProfile: tailoredProfile,
                 auditResult: auditResult,
@@ -344,7 +376,10 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
             addToast(({
                 type: "error",
                 title: "Error",
-                message: err
+                message:
+                    err?.response?.data?.message ||
+                    err?.message ||
+                    "Something went wrong"
             }))
 
         }
@@ -404,7 +439,10 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
             addToast(({
                 type: "error",
                 title: "Error",
-                message: err
+                message:
+                    err?.response?.data?.message ||
+                    err?.message ||
+                    "Something went wrong"
             }))
 
         }
@@ -502,7 +540,10 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
             addToast(({
                 type: "error",
                 title: "Error",
-                message: err
+                message:
+                    err?.response?.data?.message ||
+                    err?.message ||
+                    "Something went wrong"
             }))
         }
 
@@ -716,7 +757,7 @@ const ResumeAiWorking = ({ addToast, SpecificRole, Company, JobDescription, Broa
 
             {
                 analysingFinish && (
-                    <AfterCompletion />
+                    <AfterCompletion auditData={auditData} strategyData={strategyData} rewrittingData={rewrittingData} profileAssebly={profileAssebly} skillGapData={skillGapData} growthData={growthData} />
                 )
             }
 

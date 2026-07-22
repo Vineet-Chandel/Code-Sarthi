@@ -90,6 +90,7 @@ import MockInterview from "./Main/PagesMain/Sub-Category/Developers-Category/MOC
 import ResumeBuilder from "./Main/PagesMain/Sub-Category/Developers-Category/RESUME-BUILDER/ResumeBuilder";
 import SessionHero from "./Main/SessionHero";
 import BuyMeChai from "./Main/BuyMeAChai";
+import Goal from "./Pages/PROJECT-MANAGER/Goal";
 
 const App = () => {
   return (
@@ -192,6 +193,7 @@ const App = () => {
 
 
               <Route path="interview-arena" element={<InterViewArena />} />
+              <Route path="goals" element={<Goal />} />
 
 
               <Route path="editProfile" element={<EditProfile />} />

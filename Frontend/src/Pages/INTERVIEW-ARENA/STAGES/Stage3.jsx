@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState, memo } from "react";
-import { motion, AnimatePresence, useInView } from "framer-motion";
+
 import {
     CheckCircle,
     Type,
@@ -68,38 +68,12 @@ const KEYWORD_GROUP_CONFIG = [
     { key: "missingEverywhere", label: "Missing everywhere", icon: Ban, danger: true },
 ];
 
-const fadeUp = {
-    hidden: { opacity: 0, y: 16 },
-    visible: (i = 0) => ({
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.5, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] },
-    }),
-};
+
 
 /* -------------------------------------------------------------------------- */
 /*  Hooks                                                                      */
 /* -------------------------------------------------------------------------- */
 
-function useCountUp(target = 0, active = false, duration = 1200) {
-    const [value, setValue] = useState(0);
-    useEffect(() => {
-        if (!active) return undefined;
-        let frame;
-        let start = null;
-        const to = Math.max(0, Math.min(100, Number(target) || 0));
-        const tick = (ts) => {
-            if (start === null) start = ts;
-            const progress = Math.min((ts - start) / duration, 1);
-            const eased = 1 - Math.pow(1 - progress, 3);
-            setValue(Math.round(to * eased));
-            if (progress < 1) frame = requestAnimationFrame(tick);
-        };
-        frame = requestAnimationFrame(tick);
-        return () => cancelAnimationFrame(frame);
-    }, [target, active, duration]);
-    return value;
-}
 
 /* -------------------------------------------------------------------------- */
 /*  Primitives                                                                 */
@@ -108,7 +82,7 @@ function useCountUp(target = 0, active = false, duration = 1200) {
 const GlassPanel = memo(function GlassPanel({ className = "", children, as: Component = "div", ...rest }) {
     return (
         <Component
-            className={`rounded-3xl border border-black/10 bg-black/[0.035] backdrop-blur-xl shadow-[0_8px_40px_-16px_rgba(83,74,183,0.35)] ${className}`}
+            className={`rounded-3xl border border-black/10 bg-black/[0.035]  shadow-[0_8px_40px_-16px_rgba(83,74,183,0.35)] ${className}`}
             {...rest}
         >
             {children}
@@ -165,16 +139,16 @@ function getScoreTier(score) {
 }
 
 const ScoreGauge = memo(function ScoreGauge({ score = 0 }) {
-    const ref = useRef(null);
-    const inView = useInView(ref, { once: true, margin: "-60px" });
+
+
     const clamped = Math.max(0, Math.min(100, Number(score) || 0));
-    const animated = useCountUp(clamped, inView);
+
     const tier = useMemo(() => getScoreTier(clamped), [clamped]);
     const offset = CIRCUMFERENCE * (1 - clamped / 100);
 
     return (
         <div
-            ref={ref}
+
             className="relative flex items-center justify-center w-full"
             role="img"
             aria-label={`Coherence score ${clamped} out of 100, ${tier.label}`}
@@ -187,7 +161,7 @@ const ScoreGauge = memo(function ScoreGauge({ score = 0 }) {
                     </linearGradient>
                 </defs>
                 <circle cx={SIZE / 2} cy={SIZE / 2} r={RADIUS} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth={STROKE} />
-                <motion.circle
+                <circle
                     cx={SIZE / 2}
                     cy={SIZE / 2}
                     r={RADIUS}
@@ -196,14 +170,12 @@ const ScoreGauge = memo(function ScoreGauge({ score = 0 }) {
                     strokeWidth={STROKE}
                     strokeLinecap="round"
                     strokeDasharray={CIRCUMFERENCE}
+                    strokeDashoffset={offset}
                     transform={`rotate(-90 ${SIZE / 2} ${SIZE / 2})`}
-                    initial={{ strokeDashoffset: CIRCUMFERENCE }}
-                    animate={{ strokeDashoffset: inView ? offset : CIRCUMFERENCE }}
-                    transition={{ duration: 1.3, ease: [0.16, 1, 0.3, 1] }}
                 />
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-4xl font-extrabold tabular-nums text-black">{animated}</span>
+                <span className="text-4xl font-extrabold tabular-nums text-black">{clamped}</span>
                 <span className="text-[11px] font-semibold uppercase tracking-wider mt-1" style={{ color: tier.color }}>
                     {tier.label}
                 </span>
@@ -214,7 +186,7 @@ const ScoreGauge = memo(function ScoreGauge({ score = 0 }) {
 
 const CoherenceHero = memo(function CoherenceHero({ score }) {
     return (
-        <motion.div variants={fadeUp} initial="hidden" animate="visible" className="h-full">
+        <div className="h-full">
             <GlassPanel className="p-5 sm:p-6 h-full flex flex-col items-center justify-center text-center gap-4">
                 <h2 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-black/60">
                     <Sparkles size={16} className="text-[#A7A0F8]" aria-hidden="true" />
@@ -225,7 +197,7 @@ const CoherenceHero = memo(function CoherenceHero({ score }) {
                     How well your summary, experience and skills tell one consistent story.
                 </p>
             </GlassPanel>
-        </motion.div>
+        </div>
     );
 });
 
@@ -235,11 +207,8 @@ const CoherenceHero = memo(function CoherenceHero({ score }) {
 
 const StatusCard = memo(function StatusCard({ ok, icon: Icon, title, description, index = 0 }) {
     return (
-        <motion.div
-            custom={index}
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
+        <div
+
             className={`rounded-2xl border p-4 flex items-start gap-3 ${ok ? "bg-emerald-500/[0.06] border-emerald-500/20" : "bg-red-500/[0.06] border-red-500/20"
                 }`}
         >
@@ -253,7 +222,7 @@ const StatusCard = memo(function StatusCard({ ok, icon: Icon, title, description
                 <p className="text-sm font-semibold text-black">{title}</p>
                 <p className="text-xs text-black/50 mt-0.5">{description}</p>
             </div>
-        </motion.div>
+        </div>
     );
 });
 
@@ -310,11 +279,8 @@ const StatusOverview = memo(function StatusOverview({ data }) {
 const OverallVerdict = memo(function OverallVerdict({ verdict, className = "" }) {
     if (!verdict) return null;
     return (
-        <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-40px" }}
+        <div
+
             className={className}
         >
             <div className="relative overflow-hidden rounded-3xl border border-[#534AB7]/30 bg-gradient-to-br from-[#534AB7]/15 via-black/[0.03] to-transparent p-5 sm:p-6 pl-6 sm:pl-7">
@@ -328,7 +294,7 @@ const OverallVerdict = memo(function OverallVerdict({ verdict, className = "" })
                 </p>
                 <p className="text-lg sm:text-xl font-medium leading-relaxed text-black/90">{verdict}</p>
             </div>
-        </motion.div>
+        </div>
     );
 });
 
@@ -343,13 +309,8 @@ const IssueCard = memo(function IssueCard({ issue, index }) {
     const panelId = `issue-panel-${index}`;
 
     return (
-        <motion.div
-            custom={index}
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-40px" }}
-            role="listitem"
+        <div
+
             className={`rounded-2xl border border-black/10 border-l-4 ${config.border} bg-black/[0.03] hover:bg-black/[0.05] transition-colors overflow-hidden`}
         >
             <button
@@ -367,22 +328,16 @@ const IssueCard = memo(function IssueCard({ issue, index }) {
                     <span className={`text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full border ${config.badge}`}>
                         {config.label}
                     </span>
-                    <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.2 }}>
+                    <span >
                         <ChevronDown size={16} className="text-black/40" aria-hidden="true" />
-                    </motion.span>
+                    </span>
                 </div>
             </button>
 
-            <AnimatePresence initial={false}>
+            < >
                 {open && (
-                    <motion.div
-                        id={panelId}
-                        role="region"
-                        aria-label={`${issue.section} details`}
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                    <div
+
                         className="px-4 sm:px-5 pb-4 sm:pb-5"
                     >
                         <div className="space-y-3">
@@ -399,10 +354,10 @@ const IssueCard = memo(function IssueCard({ issue, index }) {
                                 </p>
                             </div>
                         </div>
-                    </motion.div>
+                    </div>
                 )}
-            </AnimatePresence>
-        </motion.div>
+            </>
+        </div>
     );
 });
 
@@ -432,13 +387,8 @@ const IssueList = memo(function IssueList({ issues }) {
 const KeywordChip = memo(function KeywordChip({ label, danger, index = 0 }) {
     const Icon = danger ? AlertCircle : Hash;
     return (
-        <motion.span
-            custom={index}
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            whileHover={{ y: -2 }}
+        <span
+
             className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium transition-colors ${danger
                 ? "bg-red-500/[0.08] border-red-500/25 text-red-300 hover:bg-red-500/[0.14]"
                 : "bg-black/[0.04] border-black/10 text-black/80 hover:bg-black/[0.08]"
@@ -446,7 +396,7 @@ const KeywordChip = memo(function KeywordChip({ label, danger, index = 0 }) {
         >
             <Icon size={12} aria-hidden="true" />
             {label}
-        </motion.span>
+        </span>
     );
 });
 

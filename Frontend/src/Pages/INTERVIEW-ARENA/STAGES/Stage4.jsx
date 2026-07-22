@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { motion } from "framer-motion";
+
 
 import {
     Target,
@@ -21,20 +21,16 @@ import {
 } from "lucide-react";
 const Stage4 = ({ skillGapData }) => {
 
-    useEffect(() => {
-        console.log(skillGapData.data.data.data);
-    }, [skillGapData])
+
+
 
     return (
         <div className='mt-3'>
             {/* 1. HERO STATISTICS */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
                 {/* Skill Coverage */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4 }}
-                    whileHover={{ y: -4 }}
+                <div
+
                     className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm hover:shadow-xl transition-all duration-300"
                 >
                     <div className="flex items-center justify-between mb-4">
@@ -47,24 +43,19 @@ const Stage4 = ({ skillGapData }) => {
                         {skillGapData?.data?.data?.data?.skillCoveragePercent ?? 0}%
                     </div>
                     <div className="w-full h-2 rounded-full bg-gray-100 overflow-hidden">
-                        <motion.div
-                            initial={{ width: 0 }}
-                            animate={{ width: `${skillGapData?.data?.data?.data?.skillCoveragePercent ?? 0}%` }}
-                            transition={{ duration: 1, ease: "easeOut" }}
+                        <div
+
                             className="h-full rounded-full bg-black"
                         />
                     </div>
                     <p className="text-xs text-gray-400 mt-3">
                         Percentage of role-required skills currently covered by the candidate
                     </p>
-                </motion.div>
+                </div>
 
                 {/* ATS Compatibility */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: 0.1 }}
-                    whileHover={{ y: -4 }}
+                <div
+
                     className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm hover:shadow-xl transition-all duration-300"
                 >
                     <div className="flex items-center justify-between mb-4">
@@ -77,26 +68,19 @@ const Stage4 = ({ skillGapData }) => {
                         {skillGapData?.data?.data?.data?.atsScanSimulation?.estimatedATSPassRate ?? 0}%
                     </div>
                     <div className="w-full h-2 rounded-full bg-gray-100 overflow-hidden">
-                        <motion.div
-                            initial={{ width: 0 }}
-                            animate={{
-                                width: `${skillGapData?.data?.data?.data?.atsScanSimulation?.estimatedATSPassRate ?? 0}%`,
-                            }}
-                            transition={{ duration: 1, ease: "easeOut", delay: 0.1 }}
+                        <div
                             className="h-full rounded-full bg-blue-500"
                         />
                     </div>
                     <p className="text-xs text-gray-400 mt-3">
                         Estimated probability of passing automated resume screening
                     </p>
-                </motion.div>
+                </div>
 
                 {/* Improvement */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: 0.2 }}
-                    whileHover={{ y: -4 }}
+                <div
+
+
                     className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm hover:shadow-xl transition-all duration-300"
                 >
                     <div className="flex items-center justify-between mb-4">
@@ -114,7 +98,7 @@ const Stage4 = ({ skillGapData }) => {
                     <p className="text-xs text-gray-400 mt-3">
                         Projected skill coverage increase after recommended actions
                     </p>
-                </motion.div>
+                </div>
             </div>
 
             {/* 2. REQUIRED SKILLS MATRIX */}
@@ -148,12 +132,8 @@ const Stage4 = ({ skillGapData }) => {
                         }
 
                         return (
-                            <motion.div
-                                key={`${skill}-${idx}`}
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.3, delay: idx * 0.03 }}
-                                whileHover={{ y: -2 }}
+                            <div
+
                                 className="rounded-2xl border border-gray-200 p-4 flex items-center justify-between hover:shadow-md transition-all duration-300"
                             >
                                 <span className="text-sm font-medium text-black truncate pr-3">{skill}</span>
@@ -163,7 +143,7 @@ const Stage4 = ({ skillGapData }) => {
                                     <Icon className="w-3.5 h-3.5" />
                                     {label}
                                 </span>
-                            </motion.div>
+                            </div>
                         );
                     })}
                 </div>
@@ -178,15 +158,13 @@ const Stage4 = ({ skillGapData }) => {
                         </div>
                         <div className="flex flex-col gap-2">
                             {skillGapData?.data?.data?.data?.matchedSkills?.map((skill, idx) => (
-                                <motion.div
+                                <div
                                     key={`matched-${idx}`}
-                                    initial={{ opacity: 0, x: -10 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ duration: 0.3, delay: idx * 0.03 }}
+
                                     className="rounded-xl border border-green-100 bg-green-50 px-3 py-2 text-xs font-medium text-green-700"
                                 >
                                     {skill}
-                                </motion.div>
+                                </div>
                             ))}
                         </div>
                     </div>
@@ -199,15 +177,13 @@ const Stage4 = ({ skillGapData }) => {
                         </div>
                         <div className="flex flex-col gap-2">
                             {skillGapData?.data?.data?.data?.missingCriticalSkills?.map((skill, idx) => (
-                                <motion.div
+                                <div
                                     key={`critical-${idx}`}
-                                    initial={{ opacity: 0, x: -10 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ duration: 0.3, delay: idx * 0.03 }}
+
                                     className="rounded-xl border border-red-100 bg-red-50 px-3 py-2 text-xs font-medium text-red-700"
                                 >
                                     {skill.skill}
-                                </motion.div>
+                                </div>
                             ))}
                         </div>
                     </div>
@@ -220,15 +196,13 @@ const Stage4 = ({ skillGapData }) => {
                         </div>
                         <div className="flex flex-col gap-2">
                             {skillGapData?.data?.data?.data?.missingPreferredSkills?.map((skill, idx) => (
-                                <motion.div
+                                <div
                                     key={`preferred-${idx}`}
-                                    initial={{ opacity: 0, x: -10 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ duration: 0.3, delay: idx * 0.03 }}
+
                                     className="rounded-xl border border-yellow-100 bg-yellow-50 px-3 py-2 text-xs font-medium text-yellow-700"
                                 >
                                     {skill.skill}
-                                </motion.div>
+                                </div>
                             ))}
                         </div>
                     </div>
@@ -241,15 +215,13 @@ const Stage4 = ({ skillGapData }) => {
                         </div>
                         <div className="flex flex-col gap-2">
                             {skillGapData?.data?.data?.data?.irrelevantSkills?.map((skill, idx) => (
-                                <motion.div
+                                <div
                                     key={`irrelevant-${idx}`}
-                                    initial={{ opacity: 0, x: -10 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ duration: 0.3, delay: idx * 0.03 }}
+
                                     className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-xs font-medium text-gray-600"
                                 >
                                     {skill.skill}
-                                </motion.div>
+                                </div>
                             ))}
                         </div>
                     </div>
@@ -329,17 +301,14 @@ const Stage4 = ({ skillGapData }) => {
                 </div>
                 <div className="flex flex-wrap gap-3">
                     {skillGapData?.data?.data?.data?.delta?.newlyMatchedSkills?.map((skill, idx) => (
-                        <motion.span
+                        <span
                             key={`newly-${idx}`}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.3, delay: idx * 0.04 }}
-                            whileHover={{ scale: 1.05 }}
+
                             className="flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-full bg-green-50 text-green-700 border border-green-200"
                         >
                             <CheckCircle2 className="w-4 h-4" />
                             {skill}
-                        </motion.span>
+                        </span>
                     ))}
                 </div>
 
@@ -351,24 +320,19 @@ const Stage4 = ({ skillGapData }) => {
                 </div>
                 <div className="flex flex-wrap gap-3">
                     {skillGapData?.data?.data?.data?.delta?.stillMissing?.map((skill, idx) => (
-                        <motion.span
+                        <span
                             key={`stillmissing-${idx}`}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.3, delay: idx * 0.04 }}
-                            whileHover={{ scale: 1.05 }}
+
                             className="flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-full bg-red-50 text-red-700 border border-red-200"
                         >
                             <AlertTriangle className="w-4 h-4" />
                             {skill}
-                        </motion.span>
+                        </span>
                     ))}
                 </div>
                 {/* 10. AI RECOMMENDATION */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
+                <div
+
                     className="rounded-3xl border border-gray-800 bg-gradient-to-br from-black via-gray-900 to-black p-10 shadow-sm hover:shadow-xl transition-all duration-300 mt-10"
                 >
                     <div className="flex items-center gap-2 mb-4">
@@ -389,11 +353,9 @@ const Stage4 = ({ skillGapData }) => {
                     </div>
                     <div className="flex flex-col gap-4">
                         {skillGapData?.data?.data?.data?.missingCriticalSkills?.map((item, idx) => (
-                            <motion.details
+                            <details
                                 key={`deepdive-${idx}`}
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.3, delay: idx * 0.05 }}
+
                                 className="group rounded-2xl border border-gray-200 p-5 hover:shadow-md transition-all duration-300 open:shadow-md"
                             >
                                 <summary className="flex flex-col w-full items-start justify-between cursor-pointer list-none">
@@ -432,10 +394,10 @@ const Stage4 = ({ skillGapData }) => {
                                 </summary>
 
 
-                            </motion.details>
+                            </details>
                         ))}
                     </div>
-                </motion.div>
+                </div>
 
 
 

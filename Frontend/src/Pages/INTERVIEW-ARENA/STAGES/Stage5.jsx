@@ -1,5 +1,5 @@
 import React, { useState, useMemo, memo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+
 import {
   Target,
   Rocket,
@@ -33,19 +33,7 @@ import {
 /*  Design tokens (kept local so the file stays drop-in portable)      */
 /* ------------------------------------------------------------------ */
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  show: (i = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, delay: i * 0.06, ease: [0.16, 1, 0.3, 1] },
-  }),
-};
 
-const cardHover = {
-  whileHover: { scale: 1.02, y: -5 },
-  transition: { type: "spring", stiffness: 300, damping: 22 },
-};
 
 /* ------------------------------------------------------------------ */
 /*  Primitives                                                         */
@@ -65,7 +53,7 @@ const Badge = memo(function Badge({ children, tone = "neutral", icon: Icon }) {
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium tracking-wide backdrop-blur-sm ${tones[tone] || tones.neutral
+      className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium tracking-wide  ${tones[tone] || tones.neutral
         }`}
     >
       {Icon && <Icon className="h-3 w-3" strokeWidth={2.25} />}
@@ -86,7 +74,7 @@ const SectionTitle = memo(function SectionTitle({ icon: Icon, title, subtitle, e
   return (
     <div className="mb-8 flex items-start gap-4">
       {Icon && (
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] ">
           <Icon className="h-5 w-5 text-cyan-300" strokeWidth={1.75} />
         </div>
       )}
@@ -116,15 +104,13 @@ const EmptyState = memo(function EmptyState({ icon: Icon = Compass, message = "N
 
 function Section({ children, className = "" }) {
   return (
-    <motion.section
-      variants={fadeUp}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: "-80px" }}
+    <section
+
+
       className={`mx-auto w-full  px-6 py-14 sm:px-8 ${className}`}
     >
       {children}
-    </motion.section>
+    </section>
   );
 }
 
@@ -156,7 +142,7 @@ const ScoreRing = memo(function ScoreRing({ score = 0, size = 208 }) {
           stroke="rgba(255,255,255,0.06)"
           strokeWidth={stroke}
         />
-        <motion.circle
+        <circle
           cx={size / 2}
           cy={size / 2}
           r={radius}
@@ -165,9 +151,7 @@ const ScoreRing = memo(function ScoreRing({ score = 0, size = 208 }) {
           strokeWidth={stroke}
           strokeLinecap="round"
           strokeDasharray={circumference}
-          initial={{ strokeDashoffset: circumference }}
-          animate={{ strokeDashoffset: offset }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+          strokeDashoffset={offset}
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
@@ -189,11 +173,8 @@ const ProgressMetric = memo(function ProgressMetric({ label, value }) {
         <span className="font-medium tabular-nums text-white/90">{Math.round(clamped)}%</span>
       </div>
       <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/[0.06]">
-        <motion.div
-          initial={{ width: 0 }}
-          whileInView={{ width: `${clamped}%` }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+        <div
+
           className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-indigo-400"
         />
       </div>
@@ -224,12 +205,11 @@ function ReadinessHero({ overall }) {
 
   return (
     <Section>
-      <motion.div
-        {...cardHover}
-        className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-8 backdrop-blur-xl transition-all duration-300 hover:border-cyan-400/30 hover:bg-white/[0.05] sm:p-12"
+      <div
+
+        className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-8  hover:border-cyan-400/30 hover:bg-white/[0.05] sm:p-12"
       >
-        <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-cyan-500/10 blur-3xl" />
-        <div className="pointer-events-none absolute -left-24 -bottom-24 h-72 w-72 rounded-full bg-indigo-500/10 blur-3xl" />
+
 
         <div className="relative flex flex-col items-center gap-10 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex flex-col items-center gap-4 text-center lg:items-start lg:text-left">
@@ -257,7 +237,7 @@ function ReadinessHero({ overall }) {
             </p>
           </div>
         )}
-      </motion.div>
+      </div>
     </Section>
   );
 }
@@ -268,14 +248,9 @@ function ReadinessHero({ overall }) {
 
 function QuickWinCard({ win, index }) {
   return (
-    <motion.div
-      custom={index}
-      variants={fadeUp}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true }}
-      {...cardHover}
-      className="flex min-w-[260px] flex-1 flex-col gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-xl transition-all duration-300 hover:border-cyan-400/30 hover:bg-white/[0.05]"
+    <div
+
+      className="flex min-w-[260px] flex-1 flex-col gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5  hover:border-cyan-400/30 hover:bg-white/[0.05]"
     >
       <div className="flex items-start gap-3">
         <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-400" strokeWidth={2} />
@@ -285,7 +260,7 @@ function QuickWinCard({ win, index }) {
         {win?.impact && <Badge tone={impactTone(win.impact)}>{win.impact} Impact</Badge>}
         {win?.time && <Badge icon={Clock}>{win.time}</Badge>}
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -317,7 +292,7 @@ function ResourceCard({ resource }) {
       href={resource?.url || "#"}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3 transition-all duration-300 hover:border-cyan-400/30 hover:bg-white/[0.05]"
+      className="group flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3 hover:border-cyan-400/30 hover:bg-white/[0.05]"
     >
       <div className="flex items-center gap-3">
         <BookOpen className="h-4 w-4 shrink-0 text-white/40" strokeWidth={1.75} />
@@ -326,7 +301,7 @@ function ResourceCard({ resource }) {
           {resource?.type && <p className="text-xs text-white/40">{resource.type}</p>}
         </div>
       </div>
-      <ExternalLink className="h-4 w-4 shrink-0 text-white/30 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-cyan-300" />
+      <ExternalLink className="h-4 w-4 shrink-0 text-white/30" />
     </a>
   );
 }
@@ -346,47 +321,38 @@ function ExpandableSteps({ steps }) {
           <ListChecks className="h-4 w-4 text-cyan-300" strokeWidth={1.75} />
           How to achieve
         </span>
-        <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.25 }}>
+        <span className={open ? "rotate-180" : ""}>
           <ChevronDown className="h-4 w-4 text-white/40" />
-        </motion.span>
+        </span>
       </button>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            key="steps"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="overflow-hidden"
-          >
-            <ol className="mt-4 space-y-3">
-              {steps.map((step, i) => (
-                <li key={i} className="flex items-start gap-3 text-sm text-white/65">
-                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-cyan-400/10 text-xs font-semibold text-cyan-300">
-                    {i + 1}
-                  </span>
-                  <span className="leading-relaxed">{step}</span>
-                </li>
-              ))}
-            </ol>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
+      {open && (
+        <div
+
+          className="overflow-hidden"
+        >
+          <ol className="mt-4 space-y-3">
+            {steps.map((step, i) => (
+              <li key={i} className="flex items-start gap-3 text-sm text-white/65">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-cyan-400/10 text-xs font-semibold text-cyan-300">
+                  {i + 1}
+                </span>
+                <span className="leading-relaxed">{step}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
+
     </div>
   );
 }
 
 function RoadmapCard({ item, index }) {
   return (
-    <motion.div
-      custom={index}
-      variants={fadeUp}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true }}
-      {...cardHover}
-      className="flex flex-col gap-5 rounded-3xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-xl transition-all duration-300 hover:border-cyan-400/30 hover:bg-white/[0.05]"
+    <div
+
+      className="flex flex-col gap-5 rounded-3xl border border-white/10 bg-white/[0.03] p-6  hover:border-cyan-400/30 hover:bg-white/[0.05]"
     >
       <div className="flex flex-wrap gap-2">
         {item?.priority && <Badge tone={impactTone(item.priority)}>{item.priority} Priority</Badge>}
@@ -430,7 +396,7 @@ function RoadmapCard({ item, index }) {
       <ExpandableSteps steps={item?.howToAchieve} />
 
       {item?.resource && <ResourceCard resource={item.resource} />}
-    </motion.div>
+    </div>
   );
 }
 
@@ -478,14 +444,9 @@ function RoadmapSection({ thirtyDay, sixtyDay, ninetyDay }) {
 
 function InterviewCard({ area, index }) {
   return (
-    <motion.div
-      custom={index}
-      variants={fadeUp}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true }}
-      {...cardHover}
-      className="flex flex-col gap-5 rounded-3xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-xl transition-all duration-300 hover:border-cyan-400/30 hover:bg-white/[0.05]"
+    <div
+
+      className="flex flex-col gap-5 rounded-3xl border border-white/10 bg-white/[0.03] p-6  hover:border-cyan-400/30 hover:bg-white/[0.05]"
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h3 className="flex items-center gap-2 text-base font-semibold text-white">
@@ -522,7 +483,7 @@ function InterviewCard({ area, index }) {
           ))}
         </div>
       )}
-    </motion.div>
+    </div>
   );
 }
 
@@ -554,14 +515,9 @@ function InterviewPrepSection({ items }) {
 
 function GapCard({ gap, index }) {
   return (
-    <motion.div
-      custom={index}
-      variants={fadeUp}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true }}
-      {...cardHover}
-      className="flex flex-col gap-4 rounded-3xl border border-amber-400/15 bg-gradient-to-br from-amber-500/[0.05] to-white/[0.02] p-6 backdrop-blur-xl transition-all duration-300 hover:border-amber-400/30"
+    <div
+
+      className="flex flex-col gap-4 rounded-3xl border border-amber-400/15 bg-gradient-to-br from-amber-500/[0.05] to-white/[0.02] p-6  hover:border-amber-400/30"
     >
       <div className="flex items-start gap-3">
         <Lightbulb className="h-7 w-7 shrink-0 text-amber-300" strokeWidth={1.5} />
@@ -581,7 +537,7 @@ function GapCard({ gap, index }) {
           <p className="text-sm leading-relaxed text-white/75">{gap.suggestedProject}</p>
         </div>
       )}
-    </motion.div>
+    </div>
   );
 }
 
@@ -613,13 +569,9 @@ function PortfolioGapSection({ items }) {
 
 function CertCard({ cert, index, isLast }) {
   return (
-    <motion.div
-      custom={index}
-      variants={fadeUp}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true }}
-      className="relative flex gap-6 pb-10"
+    <div
+
+      className="relative flex gap-6 pb-10 text-white"
     >
       <div className="flex flex-col items-center">
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-cyan-400/30 bg-cyan-400/10">
@@ -628,9 +580,9 @@ function CertCard({ cert, index, isLast }) {
         {!isLast && <div className="mt-2 w-px flex-1 bg-gradient-to-b from-white/15 to-transparent" />}
       </div>
 
-      <motion.div
-        {...cardHover}
-        className="mb-2 flex-1 rounded-3xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-xl transition-all duration-300 hover:border-cyan-400/30 hover:bg-white/[0.05]"
+      <div
+
+        className="mb-2 flex-1 rounded-3xl border border-white/10 bg-white/[0.03] p-6  hover:border-cyan-400/30 hover:bg-white/[0.05]"
       >
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
@@ -657,8 +609,8 @@ function CertCard({ cert, index, isLast }) {
         {cert?.studyPath && (
           <p className="mt-4 text-sm leading-relaxed text-white/60">{cert.studyPath}</p>
         )}
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 }
 
@@ -690,14 +642,9 @@ function CertificationSection({ items }) {
 
 function NetworkCard({ action, index }) {
   return (
-    <motion.div
-      custom={index}
-      variants={fadeUp}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true }}
-      {...cardHover}
-      className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-xl transition-all duration-300 hover:border-cyan-400/30 hover:bg-white/[0.05]"
+    <div
+
+      className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5  hover:border-cyan-400/30 hover:bg-white/[0.05]"
     >
       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04]">
         <Users className="h-4 w-4 text-cyan-300" strokeWidth={1.75} />
@@ -714,7 +661,7 @@ function NetworkCard({ action, index }) {
         <Badge icon={Clock}>{action.timeRequired}</Badge>
       )}
       <ArrowUpRight className="h-4 w-4 shrink-0 text-white/25" />
-    </motion.div>
+    </div>
   );
 }
 

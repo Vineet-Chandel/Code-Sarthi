@@ -9,6 +9,8 @@ import axios from "axios";
 import BASE_URL from "@/Pages/auth/baseURL";
 import Step from "../Step";
 import ProgressMeter from "../ProgressMeter";
+import CTA from "../CTA";
+
 const Preview = ({ resumeData }) => {
     const location = useLocation();
     const dispatch = useDispatch();
@@ -69,9 +71,41 @@ const Preview = ({ resumeData }) => {
     };
     return (
         // visible
-        <div className="w-full min-h-screen bg-white p-2  ">
+        <div className="w-full min-h-screen bg-white p-2  mt-2">
 
+            <div className="flex flex-col min-[480px]:flex-row items-center justify-around min-[480px]:justify-center gap-5 min-[480px]:gap-3 bg-black px-2 py-3.5 border-b border-slate-700 sm:px-5 rounded-t-3xl ">
+                {/* Step Counter */}
+                <span className="w-full flex justify-center min-[480px]:justify-start min-[480px]:w-1/5">
+                    <Step index={7} />
+                </span>
 
+                {/* Progress Meter Container */}
+                <span className="flex min-[480px]:w-[70%] justify-center  w-full min-[480px]:justify-end sm:w-3/5 ">
+                    <ProgressMeter index={7} resumeData={resumeData} />
+                </span>
+                <div onClick={() => {
+                    Navigate("/app/interview-arena");
+                }} className={` flex items-center justify-between cursor-pointer text-black  font-bold `}>
+
+                    <span className="text-white">
+                        <svg height="40" viewBox="0 0 15 40" width="15" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" transform="matrix(-1,0,0,1,0,0)">
+                            <path d="M0 .5h11A3.5 3.5 0 0 1 14.5 4v20.523a5.5 5.5 0 0 1-1.416 3.684l-8.547 9.477A5.5 5.5 0 0 1 .453 39.5H0" data-stroke="true"
+                                fill="#fff"
+                            ></path>
+                        </svg>
+                    </span>
+                    <button className="bg-white flex px-4 py-[7.5px] gap-1"><p className='font-extrabold'>Next : </p> Analyse Your Profile </button>
+                    <span className="text-white">
+                        <svg height="40" viewBox="0 0 15 40" width="15" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M0 .5h11A3.5 3.5 0 0 1 14.5 4v20.523a5.5 5.5 0 0 1-1.416 3.684l-8.547 9.477A5.5 5.5 0 0 1 .453 39.5H0"
+                                fill="#fff"
+                            />
+                        </svg>
+                    </span>
+                </div>
+
+            </div>
 
 
             {globalProfileLoading && <div className='fixed bg-black/80 h-screen w-screen z-50 inset-0 flex items-center justify-center'>
@@ -103,7 +137,7 @@ const Preview = ({ resumeData }) => {
 
 
             <div
-                className="w-full min-h-screen  bg-black rounded-xl flex
+                className="w-full min-h-screen  bg-black rounded-b-xl flex
 flex-col
 sm:flex-row
 gap-3
@@ -987,8 +1021,8 @@ md:text-2xl justify-center mb-5 text-center items-center flex font-extrabold">No
 
                     </div>
                 </div>
-
             </div >
+
 
 
 
