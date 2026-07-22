@@ -104,7 +104,7 @@ module.exports = (server) => {
                     break;
                 }
                 case "message": {
-
+                    console.log(localChatKey)
                     await messageHandler(clientMessageId, conversationId, socket, content, messageType, members, type, replyTo, localChatKey)
                     break;
 

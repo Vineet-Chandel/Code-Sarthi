@@ -6,11 +6,7 @@ const { saveMessage } = require("../Services/MessageService")
 
 
 const messageHandler = async (clientMessageId, conversationId, socket, content, messageType, members, type, replyTo, localChatKey) => {
-    console.log({
-        clientMessageId,
-        localChatKey,
-        conversationId
-    });
+
 
     try {
 

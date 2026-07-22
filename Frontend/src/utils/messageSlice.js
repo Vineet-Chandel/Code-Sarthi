@@ -31,11 +31,7 @@ const messageSlice = createSlice({
             const { clientMessageId, message, localChatKey } = action.payload;
 
             const conversationId = message.conversation_id;
-            console.log("🔥 receiveMessage fired");
-            console.log("Conversation:", conversationId);
-            console.log("Messages Array:", state.messages[conversationId]);
 
-            console.log("Incoming:", message);
 
             if (
                 localChatKey &&
@@ -49,17 +45,8 @@ const messageSlice = createSlice({
             if (!state.messages[conversationId]) {
                 state.messages[conversationId] = [];
             }
-
-            console.log("Incoming clientMessageId:", clientMessageId);
             const messages = state.messages[conversationId];
-            console.log(
-                "Stored clientMessageIds:",
-                messages.map(msg => ({
-                    clientMessageId: msg.clientMessageId,
-                    id: msg._id,
-                    isTemporary: msg.isTemporary
-                }))
-            );
+
             // Replace only when clientMessageId exists
             if (clientMessageId) {
                 const index = messages.findIndex(

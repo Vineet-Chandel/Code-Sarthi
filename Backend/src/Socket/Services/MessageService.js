@@ -19,17 +19,18 @@ const saveMessage = async ({
     type,
     name
 }) => {
+    console.log(senderId,
+        conversationId,
+        messageType,
 
 
-    console.log("senderId", senderId,
-        "conversationId", conversationId,
-        "messageType", messageType,
 
-        "content", content,
-        "members", members,
-        "type", type,
-        "name", name
-    )
+
+        content,
+        members,
+        type,
+        name)
+
     //minimised feature
     //initially forwarded and replyto and edited and reactions array is minimised so only boolean type is allowed
     if (forwarded !== undefined && forwarded !== true && forwarded !== false) {
@@ -65,7 +66,7 @@ const saveMessage = async ({
     let conversation
 
     if (conversationId) {
-
+        console.log(conversationId)
         conversation = await Conversation.findById(conversationId);
 
         if (!conversation) {

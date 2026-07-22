@@ -7,13 +7,13 @@ import {
 const SocketContext = createContext(null);
 
 export const SocketProvider = ({ children }) => {
-    console.log("SocketProvider Mounted");
+
 
     const dispatch = useDispatch();
     const socketRef = useRef(null);
 
     useEffect(() => {
-        console.log("Creating socket...");
+
         socketRef.current = new WebSocket("ws://localhost:3000");
 
         socketRef.current.onopen = () => {
@@ -22,15 +22,14 @@ export const SocketProvider = ({ children }) => {
 
         socketRef.current.onclose = () => {
             console.log("❌ Socket Closed");
-            console.log(event.code);
-            console.log(event.reason);
+
         };
 
         socketRef.current.onerror = (err) => {
             console.log(err);
         };
         socketRef.current.onmessage = (event) => {
-            console.log("RAW EVENT", event.data);
+
 
 
             const payload = JSON.parse(event.data);
@@ -45,7 +44,7 @@ export const SocketProvider = ({ children }) => {
 
                     const payload = JSON.parse(event.data);
 
-                    console.log("PARSED", payload);
+
                     dispatch(
                         receiveMessage(payload)
                     );

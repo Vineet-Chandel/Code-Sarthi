@@ -94,58 +94,60 @@ const ChatArea = ({ subLoading, forwardTabOpen, setForwardTabOpen, selectedChatU
 
 
 
-    const handelSend = async (selectedChatUser,setSelectedChatUser, message, messageType, isReply) => {
+    const handelSend = async (selectedChatUser, message, messageType, isReply) => {
 
         try {
             const clientMessageId = crypto.randomUUID();
-            const conversationKey =
-                selectedChatUser.convoId
-                    ? selectedChatUser.convoId
-                    : `temp_${selectedChatUser.id}`;
+            const conversationKey = `temp_${selectedChatUser.id}`;
 
-            console.log("TEMP ID:", clientMessageId);
+
             let payload = {}
-            if (selectedChatUser.convoId) {
+            if (!selectedChatUser.isNew) {
                 payload = {
                     clientMessageId,
-                    messageType,
+                    message: message,
                     type: "private",
                     conversationId: selectedChatUser.convoId,
                     content: message,
+                    members: [selectedChatUser.id, user._id],
                     replyTo: isReply ? {
                         userId: messageTab.setMsg?.sender_id,
                         content: messageTab.setMsg?.content
                     } : null,
-                    does: "message"
+                    does: messageType,
+                    messageType: "text"
                 }
             } else {
-                setSelectedChatUser({
+                setSelectedChatUser(prev => ({
                     ...prev,
-                    convoId: conversationKey
-                })
+                    convoId: conversationKey,
+                }));
 
                 payload = {
-                    conversationId: selectedChatUser.convoId,
+                    // conversationId: selectedChatUser.convoId,
                     clientMessageId,
                     localChatKey: conversationKey,
-                    messageType,
+                    message: message,
                     type: "private",
                     members: [selectedChatUser.id, user._id],
                     content: message,
-                    does: "message"
+                    does: messageType,
+                    messageType: "text"
                 }
             }
 
-
+            console.log(payload)
             const tempMessage = {
                 _id: clientMessageId,
                 clientMessageId,
+                message: message,
                 conversation_id: conversationKey,
                 sender_id: user._id,
                 content: message,
                 updatedAt: new Date().toISOString(),
                 status: "sending",
                 isTemporary: true,
+                does: messageType,
                 replyTo: isReply
                     ? {
                         userId: messageTab.setMsg?.sender_id,
@@ -153,8 +155,8 @@ const ChatArea = ({ subLoading, forwardTabOpen, setForwardTabOpen, selectedChatU
                     }
                     : null
             };
-            console.log(tempMessage)
-            console.log(payload)
+
+
 
             dispatch(addMessage(tempMessage));
             setMessage("")
@@ -172,7 +174,11 @@ const ChatArea = ({ subLoading, forwardTabOpen, setForwardTabOpen, selectedChatU
             if (socketRef.current?.readyState === WebSocket.OPEN) {
                 socketRef.current.send(str);
             }
+            setSelectedChatUser({
+                ...selectedChatUser,
+                isNew: false,
 
+            })
         } catch (err) {
             addToast({
                 type: "error",
@@ -187,7 +193,7 @@ const ChatArea = ({ subLoading, forwardTabOpen, setForwardTabOpen, selectedChatU
     const handleKeyDown = (e) => {
         if (e.key === "Enter" && message.trim()) {
 
-            handelSend(selectedChatUser, message, "text", replyHandeler.isOpen)
+            handelSend(selectedChatUser, message, "message", replyHandeler.isOpen)
         }
     };
 
@@ -230,7 +236,7 @@ const ChatArea = ({ subLoading, forwardTabOpen, setForwardTabOpen, selectedChatU
             {/* Messages */}
 
             <div className="flex-1 overflow-y-auto scrollbar-none px-0.5  md:px-4">
-                <MessageArea subLoading={subLoading} forwardTabOpen={forwardTabOpen} setForwardTabOpen={setForwardTabOpen} setSelectedChatUser={setSelectedChatUser} selectedChatUser={selectedChatUser} setReplyHandeler={setReplyHandeler} replyHandeler={replyHandeler} setlastMsgStatus={setlastMsgStatus} lastMsgStatus={lastMsgStatus} messageTab={messageTab} setMessageTab={setMessageTab} />
+                <MessageArea subLoading={subLoading} forwardTabOpen={forwardTabOpen} setForwardTabOpen={setForwardTabOpen} setSelectedChatUser={setSelectedChatUser} selectedChatUser={selectedChatUser} setReplyHandeler={setReplyHandeler} replyHandeler={replyHandeler} setlastMsgStatus={setlastMsgStatus} lastMsgStatus={lastMsgStatus} messageTab={messageTab} setMessageTab={setMessageTab} handelSend={handelSend} />
 
             </div>
 
@@ -331,7 +337,7 @@ const ChatArea = ({ subLoading, forwardTabOpen, setForwardTabOpen, selectedChatU
 
 
 
-                {message ? <div onClick={(e) => handelSend(selectedChatUser, message, "text", replyHandeler.isOpen)} className=" p-2 sm:p-2.5 rounded-full cursor-pointer bg-white/20 hover:bg-white text-white hover:text-black transition-colors duration-200 ">
+                {message ? <div onClick={(e) => handelSend(selectedChatUser, message, "message", replyHandeler.isOpen)} className=" p-2 sm:p-2.5 rounded-full cursor-pointer bg-white/20 hover:bg-white text-white hover:text-black transition-colors duration-200 ">
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24">
                         <path fill="currentColor" d="M21.864 3.549L15.41 21.417a1.55 1.55 0 0 1-1.41.903a1.54 1.54 0 0 1-1.394-.874l-2.88-5.759zM20.45 2.135L8.311 14.273l-5.728-2.864A1.55 1.55 0 0 1 1.68 10c0-.606.353-1.157.981-1.44z"></path>
                     </svg>

@@ -85,9 +85,11 @@ const AllChats = ({ setForwardTabOpen, forwardTabOpen, loading, setLoading, addT
         });
 
 
+
+
     useEffect(() => {
         chatUser()
-    }, [dispatch])
+    }, [selectedChatUser])
     useEffect(() => {
         if (!connectionsARR) {
             connectionUser();
@@ -98,7 +100,6 @@ const AllChats = ({ setForwardTabOpen, forwardTabOpen, loading, setLoading, addT
             chatUser();
         }
     }, [dispatch]);
-
 
 
 
@@ -399,9 +400,7 @@ const AllChats = ({ setForwardTabOpen, forwardTabOpen, loading, setLoading, addT
                                             isNew: true,
                                             id: user._id,
                                             info: user,
-                                            convoId: selectedChatUser.convoId
-                                                ? selectedChatUser.convoId
-                                                : `temp_${user._id}`,
+                                            convoId: `temp_${user._id}`,
                                             fullChatInfo: chatUser,
 
                                         });
