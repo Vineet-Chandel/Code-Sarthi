@@ -367,7 +367,7 @@ const Templates = () => {
 
 
 
-                <div className="text-center mb-3s sm:mb-5 lg:mb-5 w-full flex flex-col items-center px-4">
+                <div className="text-center mb-3 sm:mb-5 lg:mb-5 w-full flex flex-col items-center px-4 mt-4">
 
                     {/* Heading */}
                     <h1 className="
