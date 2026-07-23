@@ -50,7 +50,7 @@ const useLongPress = (callback, ms = 500, setClassLongPress) => {
 
 
 
-const ChatArea = ({ subLoading, forwardTabOpen, setForwardTabOpen, selectedChatUser, setSelectedChatUser, addToast, setlastMsgStatus, lastMsgStatus }) => {
+const ChatArea = ({ setNewConvoFinded, newConvoFinded, subLoading, forwardTabOpen, setForwardTabOpen, selectedChatUser, setSelectedChatUser, addToast, setlastMsgStatus, lastMsgStatus }) => {
     const dispatch = useDispatch()
     const user = useSelector(state => state?.user?.user?.DATA);
     const socketRef = useSocket();
@@ -174,6 +174,14 @@ const ChatArea = ({ subLoading, forwardTabOpen, setForwardTabOpen, selectedChatU
             if (socketRef.current?.readyState === WebSocket.OPEN) {
                 socketRef.current.send(str);
             }
+
+            if (payload.localChatKey) {
+                console.log("newConvoFinded", payload)
+                setNewConvoFinded({
+                    isNew: true,
+                    payload: payload
+                })
+            }
             setSelectedChatUser({
                 ...selectedChatUser,
                 isNew: false,
@@ -188,6 +196,10 @@ const ChatArea = ({ subLoading, forwardTabOpen, setForwardTabOpen, selectedChatU
                     err?.message ||
                     "Something went wrong"
             });
+
+            console.log(err?.response?.data?.message ||
+                err?.message ||
+                "Something went wrong")
         }
     }
     const handleKeyDown = (e) => {
@@ -236,7 +248,7 @@ const ChatArea = ({ subLoading, forwardTabOpen, setForwardTabOpen, selectedChatU
             {/* Messages */}
 
             <div className="flex-1 overflow-y-auto scrollbar-none px-0.5  md:px-4">
-                <MessageArea subLoading={subLoading} forwardTabOpen={forwardTabOpen} setForwardTabOpen={setForwardTabOpen} setSelectedChatUser={setSelectedChatUser} selectedChatUser={selectedChatUser} setReplyHandeler={setReplyHandeler} replyHandeler={replyHandeler} setlastMsgStatus={setlastMsgStatus} lastMsgStatus={lastMsgStatus} messageTab={messageTab} setMessageTab={setMessageTab} handelSend={handelSend} />
+                <MessageArea newConvoFinded={newConvoFinded} subLoading={subLoading} forwardTabOpen={forwardTabOpen} setForwardTabOpen={setForwardTabOpen} setSelectedChatUser={setSelectedChatUser} selectedChatUser={selectedChatUser} setReplyHandeler={setReplyHandeler} replyHandeler={replyHandeler} setlastMsgStatus={setlastMsgStatus} lastMsgStatus={lastMsgStatus} messageTab={messageTab} setMessageTab={setMessageTab} handelSend={handelSend} />
 
             </div>
 

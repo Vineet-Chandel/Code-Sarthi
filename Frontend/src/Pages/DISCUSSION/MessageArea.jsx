@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 
 
 
-const MessageArea = ({ subLoading, forwardTabOpen, setForwardTabOpen, selectedChatUser, setReplyHandeler, replyHandeler, setlastMsgStatus, lastMsgStatus, messageTab, setMessageTab, handelSend }) => {
+const MessageArea = ({ newConvoFinded, subLoading, forwardTabOpen, setForwardTabOpen, selectedChatUser, setReplyHandeler, replyHandeler, setlastMsgStatus, lastMsgStatus, messageTab, setMessageTab, handelSend }) => {
     const user = useSelector(state => state?.user?.user?.DATA);
     const allMessages = useSelector(state => state.messages);
     const [readMore, setReadMore] = useState({

@@ -4,6 +4,7 @@ import {
 
     receiveMessage
 } from "../../src/utils/messageSlice";
+import { updateConversation } from "@/utils/chat-user-slice";
 const SocketContext = createContext(null);
 
 export const SocketProvider = ({ children }) => {
@@ -35,7 +36,7 @@ export const SocketProvider = ({ children }) => {
             const payload = JSON.parse(event.data);
 
 
-
+            console.log("payload", payload)
 
             switch (payload.type) {
 
@@ -43,12 +44,12 @@ export const SocketProvider = ({ children }) => {
 
 
                     const payload = JSON.parse(event.data);
-
+                    console.log("payload", payload)
 
                     dispatch(
                         receiveMessage(payload)
                     );
-
+                    // dispatch(updateConversation(payload)) 
                     break;
                 }
 

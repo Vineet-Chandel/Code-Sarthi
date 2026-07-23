@@ -20,13 +20,27 @@ const chatSlice = createSlice({
         clearChats: (state) => {
             state.users = [];
 
+        },
+        updateConversation: (state, action) => {
+            const { conversation } = action.payload;
+
+            const index = state.users.findIndex(
+                chat => chat._id === conversation._id
+            );
+
+            if (index !== -1) {
+                state.users[index] = conversation;
+            } else {
+                state.users.unshift(conversation);
+            }
         }
     }
 });
 
 export const {
     setChatUsers,
-    clearChats
+    clearChats,
+    updateConversation,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

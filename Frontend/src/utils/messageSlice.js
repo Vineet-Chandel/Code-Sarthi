@@ -40,6 +40,7 @@ const messageSlice = createSlice({
                 state.messages[message.conversation_id] =
                     state.messages[localChatKey];
 
+
                 delete state.messages[localChatKey];
             }
             if (!state.messages[conversationId]) {
@@ -58,6 +59,7 @@ const messageSlice = createSlice({
                         ...message,
                         clientMessageId
                     };
+
                     return;
                 }
             }

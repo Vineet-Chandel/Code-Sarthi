@@ -19,17 +19,7 @@ const saveMessage = async ({
     type,
     name
 }) => {
-    console.log(senderId,
-        conversationId,
-        messageType,
 
-
-
-
-        content,
-        members,
-        type,
-        name)
 
     //minimised feature
     //initially forwarded and replyto and edited and reactions array is minimised so only boolean type is allowed
@@ -66,7 +56,7 @@ const saveMessage = async ({
     let conversation
 
     if (conversationId) {
-        console.log(conversationId)
+
         conversation = await Conversation.findById(conversationId);
 
         if (!conversation) {
@@ -92,7 +82,7 @@ const saveMessage = async ({
         if (!type || !messageType) {
             throw new Error("Type or Message Type is Undefined");
         }
-        console.log("message service on command")
+
         if (!["private", "group"].includes(type) || !["text", "image", "video", "audio", "file", "code", "system"].includes(messageType)) {
             throw new Error("Invalid conversation type or message type");
         }
@@ -215,13 +205,17 @@ const saveMessage = async ({
     await conversation.save()
 
 
+    const convoForPayload = await conversation.populate([
+        { path: "members", select: "firstName lastName gmail username profession photoUrl  college about middleName skills isVerified" },
+        { path: "admins", select: "firstName lastName gmail username profession photoUrl  college about middleName skills isVerified" },
+        { path: "createdBy", select: "firstName lastName gmail username profession photoUrl  college about middleName skills isVerified" },
+        { path: "lastMessage", populate: { path: "sender_id", select: "firstName lastName photoUrl gmail username profession college about middleName skills isVerified" } }
+    ])
 
 
-
-
-
+    console.log(convoForPayload)
     return {
-        conversation,
+        conversation: convoForPayload,
         message: messageStored
     };
 

@@ -24,8 +24,9 @@ const broadcastService = (participants, payload) => {
 
 
 
-
                 clientSocket.send(JSON.stringify(payload));
+
+                console.log("payload", JSON.stringify(payload.conversation))
 
             } else {
 

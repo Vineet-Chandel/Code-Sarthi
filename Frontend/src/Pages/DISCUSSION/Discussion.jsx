@@ -108,7 +108,10 @@ const Discussion = () => {
 
 
 
-
+  const [newConvoFinded, setNewConvoFinded] = useState({
+    isNew: false,
+    payload: null
+  })
 
 
 
@@ -133,7 +136,7 @@ const Discussion = () => {
 
 
         <div className='h-[calc(100%-53px)]'>
-          <AllChats forwardTabOpen={forwardTabOpen} setForwardTabOpen={setForwardTabOpen} loading={loading} setLoading={setLoading} selectedChatUser={selectedChatUser} setSelectedChatUser={setSelectedChatUser} addToast={addToast} setlastMsgStatus={setlastMsgStatus} lastMsgStatus={lastMsgStatus} />
+          <AllChats setNewConvoFinded={setNewConvoFinded} newConvoFinded={newConvoFinded} forwardTabOpen={forwardTabOpen} setForwardTabOpen={setForwardTabOpen} loading={loading} setLoading={setLoading} selectedChatUser={selectedChatUser} setSelectedChatUser={setSelectedChatUser} addToast={addToast} setlastMsgStatus={setlastMsgStatus} lastMsgStatus={lastMsgStatus} />
         </div>
 
 
@@ -160,7 +163,7 @@ const Discussion = () => {
         </>)}
 
 
-        {selectedChatUser?.info !== null && <ChatArea subLoading={subLoading} forwardTabOpen={forwardTabOpen} setForwardTabOpen={setForwardTabOpen} setSelectedChatUser={setSelectedChatUser} selectedChatUser={selectedChatUser} addToast={addToast} setlastMsgStatus={setlastMsgStatus} lastMsgStatus={lastMsgStatus} />}
+        {selectedChatUser?.info !== null && <ChatArea newConvoFinded={newConvoFinded} setNewConvoFinded={setNewConvoFinded} subLoading={subLoading} forwardTabOpen={forwardTabOpen} setForwardTabOpen={setForwardTabOpen} setSelectedChatUser={setSelectedChatUser} selectedChatUser={selectedChatUser} addToast={addToast} setlastMsgStatus={setlastMsgStatus} lastMsgStatus={lastMsgStatus} />}
 
       </div>
 
