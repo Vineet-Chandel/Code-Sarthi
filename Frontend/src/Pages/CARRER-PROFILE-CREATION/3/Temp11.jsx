@@ -36,16 +36,11 @@ const ResumeTemplate = ({ data }) => {
                     Skills
                 </h2>
                 <div className="grid grid-cols-2 gap-x-12 px-8 text-[13px]">
-                    <ul className="list-disc space-y-1">
-                        <li>{data.skills.frontend}</li>
-                        <li>{data.skills.backend}</li>
-                        <li>{data.skills.authentication}</li>
-                    </ul>
-                    <ul className="list-disc space-y-1">
-                        <li>{data.skills.database}</li>
-                        <li>{data.skills.tools}</li>
-                        <li>{data.skills.deployment}</li>
-                    </ul>
+                    {data.skills.map((item, idx) => {
+                        return (<div className="space-y-2">
+                            <p> ● <strong>{item.skillCategory} :</strong> {item.skills}</p>
+                        </div>)
+                    })}
                 </div>
             </section>
 
@@ -118,7 +113,7 @@ const ResumeTemplate = ({ data }) => {
                                 <ul className="space-y-1.5 ml-1">
                                     {(edu.bullets || []).map((b, idx) => (
                                         <li key={idx} style={{ display: 'flex', gap: 6, fontSize: 12, color: '#475569', alignItems: 'flex-start' }}>
-                                            <CheckCircle size={13} color="#06b6d4" style={{ flexShrink: 0, marginTop: 2 }} />
+                                            ●
                                             <span dangerouslySetInnerHTML={{ __html: b }} />
                                         </li>
                                     ))}
@@ -135,18 +130,15 @@ const ResumeTemplate = ({ data }) => {
                     Languages
                 </h2>
                 <div className="grid grid-cols-2 gap-8 px-4">
-                    {/* {data.languages.map((lang, idx) => (
-                        <div key={idx}>
-                            <p className="text-[13px] font-bold">{lang.split(' ')[0]}:</p>
-                            <p className="text-[12px] text-gray-600 italic mb-1">{lang.split(' ')[1] || "Proficient"}</p>
-                            <div className="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden">
-                                <div
-                                    className="bg-black h-full"
-                                    style={{ width: idx === 0 ? '95%' : '85%' }}
-                                ></div>
-                            </div>
+
+                    {data.languages.map((lang, index) => (
+                        <div key={index} className='flex'>
+                            <p className="text-[13px] font-bold">{lang.langCategory}</p>
+                            <p className="text-[12px] text-gray-600">, {lang.status}</p>
+
                         </div>
-                    ))} */}
+                    ))}
+
                 </div>
             </section >
 
@@ -162,9 +154,9 @@ const ResumeTemplate = ({ data }) => {
                         ))}
                     </ul>
                     <ul className="list-disc space-y-1 italic">
-                        {/* {data.certifications.map((cert, idx) => (
-                            <li key={idx}>{cert}</li>
-                        ))} */}
+                        {data.certifications.map((cert, idx) => (
+                            <li key={idx} onClick={() => window.open(cert.link, "_blank")}>{cert.about}</li>
+                        ))}
                     </ul>
                 </div>
             </section >

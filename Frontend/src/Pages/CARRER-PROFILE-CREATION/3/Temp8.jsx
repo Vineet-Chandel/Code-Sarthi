@@ -6,7 +6,7 @@ const AmanGuptaAcademicTemplate = ({ data }) => {
     // Destructuring for dynamic prop drilling
     const {
         fname, lname, phone, email, summaryTitle, summaryBody,
-        experience, education, skills, projects, languages
+        experience, education, skills, projects, languages, certifications, achievements,
     } = data;
 
     return (
@@ -46,13 +46,11 @@ const AmanGuptaAcademicTemplate = ({ data }) => {
                 <section>
                     <h2 className="text-lg font-bold uppercase tracking-widest mb-4 border-b border-gray-200 pb-1">Skills</h2>
                     <div className="grid grid-cols-2 gap-x-12 gap-y-1 text-[14px] text-slate-700">
-                        {Object.values(skills).map((skillGroup, i) => (
-                            <div key={i}>
-                                {skillGroup.split(',').map((skill, j) => (
-                                    <p key={j} className="flex items-center gap-2">• {skill.trim()}</p>
-                                ))}
-                            </div>
-                        ))}
+                        {skills.map((item, idx) => {
+                            return (<div className="space-y-2">
+                                <p> ● <strong>{item.skillCategory} :</strong> {item.skills}</p>
+                            </div>)
+                        })}
                     </div>
                 </section>
 
@@ -118,30 +116,37 @@ const AmanGuptaAcademicTemplate = ({ data }) => {
                         </div>
                     ))}
                 </section>
+                <section>
 
+                    <h2 className="text-lg font-bold uppercase tracking-widest mb-6 border-b border-gray-200 pb-1">Achievements & Certifications</h2>
+                    <div className="grid grid-cols-2 gap-4 px-2">
+                        <ul className="list-disc ml-6 text-[12px] space-y-1">
+                            {achievements.map((ach, idx) => (
+                                <li key={idx}>{ach}</li>
+                            ))}
+                        </ul>
+                        <ul className="list-disc ml-6 text-[12px] space-y-1 italic">
+                            {certifications.map((item, idx) => (
+                                <li key={idx} onClick={() => (navigate(`${item.link}`))}>{item.about}</li>
+                            ))}
+                        </ul>
+                    </div>
+                </section>
                 {/* Languages - Progress Bar Style */}
                 <section className="pb-8">
                     <h2 className="text-lg font-bold uppercase tracking-widest mb-6 border-b border-gray-200 pb-1">Languages</h2>
                     <div className="grid grid-cols-2 gap-x-16 gap-y-8">
-                        {/* {languages.map((lang, idx) => (
-                            <div key={idx}>
-                                <div className="flex justify-between text-[13px] font-bold mb-1">
-                                    <span>{lang.split(' ')[0]}</span>
-                                    <span className="text-slate-400 font-normal uppercase tracking-tighter">
-                                        {lang.split(' ')[1] || "Proficient"}
-                                    </span>
-                                </div>
-                                <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                                    <div
-                                        className="bg-sky-700 h-full"
-                                        style={{ width: idx === 0 ? '95%' : '100%' }}
-                                    ></div>
-                                </div>
-                                <p className="text-[11px] text-slate-500 mt-1 italic">Native or Professional Proficiency</p>
+                        {languages.map((lang, index) => (
+                            <div key={index} className='flex'>
+                                <p className="text-[13px] font-bold">{lang.langCategory}</p>
+                                <p className="text-[12px] text-gray-600">, {lang.status}</p>
+
                             </div>
-                        ))} */}
+                        ))}
                     </div>
                 </section>
+
+
             </div>
         </div>
     );

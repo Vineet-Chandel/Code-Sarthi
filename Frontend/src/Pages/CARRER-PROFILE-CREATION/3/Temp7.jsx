@@ -1,160 +1,384 @@
-import React from 'react';
-import { Mail, Phone, MapPin } from 'lucide-react';
+import React from "react";
+import {
+    FaPhone,
+    FaEnvelope,
+    FaGithub,
+    FaLinkedin,
+    FaGlobe,
+    FaMapMarkerAlt,
+} from "react-icons/fa";
 
-const AmanGuptaLayoutTemplate = ({ data }) => {
+const SectionHeading = ({ children }) => (
+    <h2 className="uppercase font-bold text-3xl tracking-tight mb-2 border-b-[4px] border-black pb-1 text-black">
+        {children}
+    </h2>
+);
+
+const PROFICIENCY_BARS = {
+    native: 5,
+    fluent: 4,
+    advanced: 4,
+    intermediate: 3,
+    conversational: 2,
+    beginner: 1,
+};
+
+const ProficiencyBars = ({ status }) => {
+    const filled = PROFICIENCY_BARS[String(status || "").toLowerCase()] || 0;
+    return (
+        <div className="flex gap-1">
+            {[1, 2, 3, 4, 5].map((bar) => (
+                <span
+                    key={bar}
+                    className={`w-1.5 h-4 rounded-full ${bar <= filled ? "bg-blue-600" : "bg-gray-200"
+                        }`}
+                />
+            ))}
+        </div>
+    );
+};
+
+const Temp7 = ({ data }) => {
     const {
-        fname, lname, phone, email, summaryTitle, summaryBody,
-        experience, education, skills, projects, languages
+        fname,
+        lname,
+        phone,
+        github,
+        linkedin,
+        portfolio,
+        email,
+        location,
+        pincode,
+
+        summaryTitle,
+        summaryBody,
+
+        experience = [],
+        education = [],
+
+        skills,
+
+        projects = [],
+
+        certifications = [],
+
+        achievements = [],
+
+        languages = [],
     } = data;
 
-    // Helper to get initials for the logo box
-    const initials = fname[0] + lname[0];
+    const contactItems = [
+        { value: phone, icon: FaPhone },
+        { value: email, icon: FaEnvelope },
+        { value: github, icon: FaGithub },
+        { value: linkedin, icon: FaLinkedin },
+        { value: portfolio, icon: FaGlobe },
+        {
+            value: [location, pincode].filter(Boolean).join(", "),
+            icon: FaMapMarkerAlt,
+        },
+    ].filter((item) => item.value && String(item.value).trim().length > 0);
 
     return (
-        <div className="max-w-[900px] mx-auto my-10 bg-white shadow-lg border border-gray-200 font-sans text-gray-800 flex overflow-hidden">
-
-            {/* LEFT COLUMN: Sidebar with initials and contact */}
-            <div className="w-[35%] bg-white border-r border-gray-200 flex flex-col">
-                {/* Initials Logo Box */}
-                <div className="p-10">
-                    <div className="border-2 border-red-900 p-8 flex flex-col items-center justify-center">
-                        <div className="w-12 h-px bg-gray-400 mb-4"></div>
-                        <span className="text-6xl font-bold tracking-tighter text-gray-900">{initials}</span>
-                        <div className="w-12 h-px bg-gray-400 mt-4"></div>
-                    </div>
-                </div>
-
-                {/* Contact Info List */}
-                <div className="px-6 space-y-px">
-                    <div className="flex items-stretch border border-gray-200">
-                        <div className="bg-red-900 p-2 flex items-center justify-center w-10">
-                            <MapPin size={16} className="text-white" />
-                        </div>
-                        <div className="p-2 text-[11px] flex items-center">{education[0]?.location || "India"}</div>
-                    </div>
-                    <div className="flex items-stretch border border-gray-200">
-                        <div className="bg-red-900 p-2 flex items-center justify-center w-10">
-                            <Phone size={16} className="text-white" />
-                        </div>
-                        <div className="p-2 text-[11px] flex items-center">{phone}</div>
-                    </div>
-                    <div className="flex items-stretch border border-gray-200">
-                        <div className="bg-red-900 p-2 flex items-center justify-center w-10">
-                            <Mail size={16} className="text-white" />
-                        </div>
-                        <div className="p-2 text-[11px] flex items-center break-all">{email}</div>
-                    </div>
-                </div>
-
-                {/* Sidebar Education Section */}
-                <div className="p-8 mt-4">
-                    <h2 className="text-sm font-black uppercase tracking-widest text-gray-700 border-b border-gray-300 pb-2 mb-4">
-                        EDUCATION AND TRAINING
-                    </h2>
-                    <div className="space-y-6">
-                        {education.map((edu, idx) => (
-                            <div key={idx} className="text-[12px]">
-                                <p className="font-bold text-gray-800">{edu.degree} {edu.field ? `in ${edu.field}` : ''}</p>
-                                <p className="text-gray-600 leading-tight mt-1">{edu.institution}, {edu.location}</p>
-                                <p className="text-gray-500 font-bold mt-1">{edu.endDate}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-
-            {/* RIGHT COLUMN: Header and Main Content */}
-            <div className="flex-1 bg-white">
-                {/* Dark Header Banner */}
-                <div className="bg-red-900 p-10 pt-12">
-                    <h1 className="text-4xl font-bold tracking-wider text-white uppercase">{fname} {lname}</h1>
-                </div>
-                {/* Sub-banner Gray Strip */}
-                <div className="h-6 bg-neutral-800 w-full"></div>
-
-                <div className="p-10 space-y-10">
-                    {/* Summary */}
-                    <section>
-                        <h2 className="text-sm font-black uppercase tracking-widest text-gray-700 border-b border-gray-300 pb-1 mb-4">SUMMARY</h2>
-                        <p className="text-[12px] leading-relaxed text-gray-600">
-                            <span className="font-bold text-gray-800">{summaryTitle}:</span> {summaryBody}
+        <div
+            className="bg-white text-black font-sans mx-auto"
+            style={{ width: "210mm", minHeight: "297mm" }}
+        >
+            <div className="px-10 py-8">
+                <header className="mb-6">
+                    <h1 className="text-5xl font-black uppercase tracking-tight text-black">
+                        {fname} {lname}
+                    </h1>
+                    {summaryTitle && (
+                        <p className="mt-1 text-blue-600 font-semibold text-xl">
+                            {summaryTitle}
                         </p>
-                    </section>
-
-                    {/* Skills Grid */}
-                    <section>
-                        <h2 className="text-sm font-black uppercase tracking-widest text-gray-700 border-b border-gray-300 pb-1 mb-4">SKILLS</h2>
-                        <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-                            {Object.values(skills).map((skillGroup) =>
-                                skillGroup.split(',').map((skill, i) => (
-                                    <div key={i} className="text-[12px] text-gray-600 flex items-start gap-2">
-                                        <span className="mt-1.5 w-1 h-1 bg-gray-600 rounded-full shrink-0"></span>
-                                        {skill.trim()}
-                                    </div>
-                                ))
-                            )}
-                        </div>
-                    </section>
-
-                    {/* Experience & Projects */}
-                    <section>
-                        <h2 className="text-sm font-black uppercase tracking-widest text-gray-700 border-b border-gray-300 pb-1 mb-6">EXPERIENCE</h2>
-
-                        <div className="space-y-8">
-                            {/* Projects as Primary Experience */}
-                            {projects.map((project, idx) => (
-                                <div key={idx}>
-                                    <h3 className="text-[13px] font-black text-gray-800 uppercase tracking-wide">{project.name}</h3>
-                                    <p className="text-[11px] italic text-gray-500 mb-3">{project.stack} | Current</p>
-                                    <ul className="list-disc ml-4 space-y-2 text-[12px] text-gray-600">
-                                        {project.bullets.map((bullet, bIdx) => (
-                                            <li key={bIdx} dangerouslySetInnerHTML={{ __html: bullet }} />
-                                        ))}
-                                    </ul>
-                                </div>
-                            ))}
-
-                            {/* Internships */}
-                            {experience.map((exp, idx) => (
-                                <div key={idx}>
-                                    <h3 className="text-[13px] font-black text-gray-800 uppercase tracking-wide">{exp.role}</h3>
-                                    <p className="text-[11px] italic text-gray-500 mb-3">{exp.company} | {exp.duration}</p>
-                                    <ul className="list-disc ml-4 space-y-2 text-[12px] text-gray-600">
-                                        {exp.bullets.map((point, pIdx) => (
-                                            <li key={pIdx}>{point}</li>
-                                        ))}
-                                    </ul>
-                                </div>
+                    )}
+                    {contactItems.length > 0 && (
+                        <div className="mt-3 flex flex-wrap gap-4">
+                            {contactItems.map(({ value, icon: Icon }, idx) => (
+                                <span
+                                    key={idx}
+                                    className="flex items-center gap-1.5 text-sm text-black"
+                                >
+                                    <Icon className="text-blue-600" size={12} />
+                                    {value}
+                                </span>
                             ))}
                         </div>
-                    </section>
+                    )}
+                </header>
 
-                    {/* Languages Section */}
-                    <section className="pb-10">
-                        <h2 className="text-sm font-black uppercase tracking-widest text-gray-700 border-b border-gray-300 pb-1 mb-6">LANGUAGES</h2>
-                        <div className="grid grid-cols-2 gap-x-12 gap-y-8">
-                            {/* {languages.map((lang, idx) => (
-                                <div key={idx}>
-                                    <div className="flex justify-between text-[12px] font-bold mb-1">
-                                        <span>{lang.split(' ')[0]}:</span>
-                                        <span className="text-gray-400 font-normal italic uppercase">
-                                            {lang.split(' ')[1]?.replace('(', '').replace(')', '') || "Proficient"}
-                                        </span>
-                                    </div>
-                                    <div className="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden">
+                <div className="grid grid-cols-12 gap-x-8">
+                    <div className="col-span-7">
+                        {summaryBody && (
+                            <section className="mb-6">
+                                <SectionHeading>Summary</SectionHeading>
+                                <p className="text-sm leading-relaxed text-black">
+                                    {summaryBody}
+                                </p>
+                            </section>
+                        )}
+
+                        {experience.length > 0 && (
+                            <section className="mb-6">
+                                <SectionHeading>Experience</SectionHeading>
+                                <div>
+                                    {experience.map((exp, idx) => (
                                         <div
-                                            className="bg-red-900 h-full"
-                                            style={{ width: idx === 0 ? '95%' : '85%' }}
-                                        ></div>
-                                    </div>
+                                            key={idx}
+                                            className={`py-3 ${idx !== experience.length - 1
+                                                    ? "border-b border-gray-200"
+                                                    : ""
+                                                }`}
+                                        >
+                                            <p className="text-lg font-bold text-black">
+                                                {exp?.role}
+                                            </p>
+                                            <p className="text-sm font-semibold text-blue-600">
+                                                {exp?.company}
+                                            </p>
+                                            <div className="flex flex-wrap gap-3 text-xs text-gray-600 mt-0.5">
+                                                {(exp?.startDate || exp?.endDate || exp?.currentlyWorking) && (
+                                                    <span>
+                                                        {exp?.startDate}
+                                                        {exp?.startDate &&
+                                                            (exp?.currentlyWorking || exp?.endDate)
+                                                            ? " - "
+                                                            : ""}
+                                                        {exp?.currentlyWorking ? "Present" : exp?.endDate}
+                                                    </span>
+                                                )}
+                                                {exp?.location && <span>{exp.location}</span>}
+                                            </div>
+                                            {Array.isArray(exp?.bullets) &&
+                                                exp.bullets.length > 0 && (
+                                                    <ul className="mt-2 list-disc list-outside pl-5 space-y-1">
+                                                        {exp.bullets.map((bullet, bIdx) => (
+                                                            <li key={bIdx} className="text-sm text-black">
+                                                                {bullet}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                )}
+                                        </div>
+                                    ))}
                                 </div>
-                            ))} */}
-                        </div>
-                    </section>
+                            </section>
+                        )}
+
+                        {projects.length > 0 && (
+                            <section className="mb-6">
+                                <SectionHeading>Projects</SectionHeading>
+                                <div>
+                                    {projects.map((project, idx) => (
+                                        <div
+                                            key={idx}
+                                            className={`py-3 ${idx !== projects.length - 1
+                                                    ? "border-b border-gray-200"
+                                                    : ""
+                                                }`}
+                                        >
+                                            <p className="text-lg font-bold text-black">
+                                                {project?.name}
+                                            </p>
+                                            {project?.stack && (
+                                                <p className="text-sm font-semibold text-blue-600">
+                                                    {project.stack}
+                                                </p>
+                                            )}
+                                            {project?.description && (
+                                                <p className="mt-1 text-sm text-black">
+                                                    {project.description}
+                                                </p>
+                                            )}
+                                            {(project?.github || project?.liveLink) && (
+                                                <p className="mt-1 text-xs text-gray-600">
+                                                    {project?.github && (
+                                                        <a
+                                                            href={project.github}
+                                                            className="underline text-blue-600"
+                                                            target="_blank"
+                                                            rel="noreferrer"
+                                                        >
+                                                            {project.github}
+                                                        </a>
+                                                    )}
+                                                    {project?.github && project?.liveLink ? " | " : ""}
+                                                    {project?.liveLink && (
+                                                        <a
+                                                            href={project.liveLink}
+                                                            className="underline text-blue-600"
+                                                            target="_blank"
+                                                            rel="noreferrer"
+                                                        >
+                                                            {project.liveLink}
+                                                        </a>
+                                                    )}
+                                                </p>
+                                            )}
+                                            {Array.isArray(project?.bullets) &&
+                                                project.bullets.length > 0 && (
+                                                    <ul className="mt-2 list-disc list-outside pl-5 space-y-1">
+                                                        {project.bullets.map((bullet, bIdx) => (
+                                                            <li
+                                                                key={bIdx}
+                                                                className="text-sm text-black"
+                                                                dangerouslySetInnerHTML={{ __html: bullet }}
+                                                            />
+                                                        ))}
+                                                    </ul>
+                                                )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
+
+                        {languages.length > 0 && (
+                            <section className="mb-6">
+                                <SectionHeading>Languages</SectionHeading>
+                                <div className="space-y-2">
+                                    {languages.map((lang, idx) => (
+                                        <div
+                                            key={idx}
+                                            className="flex items-center justify-between"
+                                        >
+                                            <span className="text-sm text-black">
+                                                {lang?.langCategory}
+                                            </span>
+                                            <ProficiencyBars status={lang?.status} />
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
+                    </div>
+
+                    <div className="col-span-5">
+                        {achievements.length > 0 && (
+                            <section className="mb-6">
+                                <SectionHeading>Achievements</SectionHeading>
+                                <div>
+                                    {achievements.map((achievement, idx) => {
+                                        const isObject = typeof achievement === "object" && achievement !== null;
+                                        return (
+                                            <div
+                                                key={idx}
+                                                className={`py-2 ${idx !== achievements.length - 1
+                                                        ? "border-b border-dashed border-gray-300"
+                                                        : ""
+                                                    }`}
+                                            >
+                                                {isObject ? (
+                                                    <>
+                                                        <p className="text-sm font-bold text-black">
+                                                            {achievement?.title}
+                                                        </p>
+                                                        {achievement?.description && (
+                                                            <p className="text-xs text-gray-700 mt-0.5">
+                                                                {achievement.description}
+                                                            </p>
+                                                        )}
+                                                    </>
+                                                ) : (
+                                                    <p className="text-sm text-black">
+                                                        &bull; {achievement}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </section>
+                        )}
+
+                        {Array.isArray(skills) && skills.length > 0 && (
+                            <section className="mb-6">
+                                <SectionHeading>Skills</SectionHeading>
+                                <div className="space-y-1.5">
+                                    {skills.map((skillGroup, idx) => (
+                                        <p key={idx} className="text-sm text-black">
+                                            <span className="font-bold">
+                                                {skillGroup?.skillCategory}
+                                                {skillGroup?.skillCategory ? ": " : ""}
+                                            </span>
+                                            {Array.isArray(skillGroup?.skills)
+                                                ? skillGroup.skills.join(", ")
+                                                : skillGroup?.skills}
+                                        </p>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
+
+                        {education.length > 0 && (
+                            <section className="mb-6">
+                                <SectionHeading>Education</SectionHeading>
+                                <div className="space-y-3">
+                                    {education.map((edu, idx) => (
+                                        <div key={idx}>
+                                            <p className="text-sm font-bold text-black">
+                                                {[edu?.degree, edu?.field].filter(Boolean).join(", ")}
+                                            </p>
+                                            <p className="text-sm font-semibold text-blue-600">
+                                                {edu?.institution}
+                                            </p>
+                                            <div className="flex flex-wrap gap-3 text-xs text-gray-600 mt-0.5">
+                                                {(edu?.startDate || edu?.endDate) && (
+                                                    <span>
+                                                        {edu?.startDate}
+                                                        {edu?.startDate && edu?.endDate ? " - " : ""}
+                                                        {edu?.endDate}
+                                                    </span>
+                                                )}
+                                                {edu?.location && <span>{edu.location}</span>}
+                                            </div>
+                                            {edu?.cgpa && (
+                                                <p className="text-xs text-black mt-0.5">
+                                                    CGPA : {edu.cgpa}
+                                                </p>
+                                            )}
+                                            {edu?.percentage && (
+                                                <p className="text-xs text-black mt-0.5">
+                                                    Percentage : {edu.percentage}
+                                                </p>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
+
+                        {certifications.length > 0 && (
+                            <section className="mb-6">
+                                <SectionHeading>Training</SectionHeading>
+                                <div className="space-y-2">
+                                    {certifications.map((cert, idx) => (
+                                        <div key={idx}>
+                                            <p className="text-sm font-bold text-black">
+                                                {cert?.about}
+                                            </p>
+                                            {cert?.link && (
+                                                <a
+                                                    href={cert.link}
+                                                    className="text-xs underline text-blue-600"
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                >
+                                                    {cert.link}
+                                                </a>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
     );
 };
 
-export default AmanGuptaLayoutTemplate;
+export default Temp7;

@@ -69,17 +69,20 @@ const DynamicResumeTemplate = ({ data }) => {
                         </div>
                         <div className="space-y-4 px-2">
                             {data.education.map((edu, idx) => (
-                                <div key={idx} className="flex justify-between items-start text-sm font-bold">
-                                    <div className="max-w-[180px]">{edu.institution}</div>
-                                    <div className="whitespace-nowrap">{edu.startDate}-{edu.endDate}</div>
+                                <div key={idx} className="flex flex-col justify-between items-start text-sm font-bold gap-2">
+                                    <div className='flex'>
+                                        <div className="max-w-[180px]">{edu.institution}</div>
+                                        <div className="whitespace-nowrap">{edu.startDate}-{edu.endDate}</div>
 
+
+                                    </div>
 
                                     {
                                         edu.bullets && (
                                             <ul className="space-y-1.5 ml-1">
                                                 {(edu.bullets || []).map((b, idx) => (
                                                     <li key={idx} style={{ display: 'flex', gap: 6, fontSize: 12, color: '#475569', alignItems: 'flex-start' }}>
-                                                        <CheckCircle size={13} color="#06b6d4" style={{ flexShrink: 0, marginTop: 2 }} />
+                                                        ●
                                                         <span dangerouslySetInnerHTML={{ __html: b }} />
                                                     </li>
                                                 ))}
@@ -98,12 +101,11 @@ const DynamicResumeTemplate = ({ data }) => {
                             <h2 className="text-2xl font-black uppercase tracking-widest bg-[#E5E5E5] flex-1 px-4 py-1">Skills</h2>
                         </div>
                         <ul className="space-y-2 px-4 list-disc text-sm font-bold">
-                            {/* Flattening the skills object into a list for this specific layout */}
-                            {Object.values(data.skills).map((skillGroup) =>
-                                skillGroup.split(', ').map((skill, sIdx) => (
-                                    <li key={sIdx}>{skill}</li>
-                                ))
-                            ).flat().slice(0, 8)}
+                            {data.skills.map((item, idx) => {
+                                return (<div className="space-y-2">
+                                    <p> ● <strong>{item.skillCategory} :</strong> {item.skills}</p>
+                                </div>)
+                            })}
                         </ul>
                     </section>
                 </div>
@@ -127,7 +129,7 @@ const DynamicResumeTemplate = ({ data }) => {
                                     <p className="font-bold text-slate-500 mb-3 italic">{project.stack}</p>
                                     <ul className="text-xs space-y-2 text-justify leading-relaxed">
                                         {project.bullets.map((bullet, bIdx) => (
-                                            <li key={bIdx} dangerouslySetInnerHTML={{ __html: bullet }}></li>
+                                            <li key={bIdx} dangerouslySetInnerHTML={{ __html: "● " + bullet }}></li>
                                         ))}
                                     </ul>
                                 </div>
@@ -135,23 +137,42 @@ const DynamicResumeTemplate = ({ data }) => {
                         </div>
                     </section>
 
-                    {/* Certifications Section */}
                     <section>
-                        <div className="flex items-center gap-3 mb-6">
+
+                        <div className="flex items-center gap-3 mb-8">
                             <div className="w-8 h-8 bg-[#A6A6A6]"></div>
-                            <h2 className="text-2xl font-black uppercase tracking-widest bg-[#E5E5E5] flex-1 px-4 py-1">Certifications</h2>
+                            <h2 className="text-2xl font-black uppercase tracking-widest bg-[#E5E5E5] flex-1 px-4 py-1">Achievements & Certifications</h2>
                         </div>
-                        <div className="px-2">
-                            <ul className="space-y-3">
-                                {/* {data.certifications.map((cert, idx) => (
-                                    <li key={idx} className="text-sm font-bold leading-tight flex items-start gap-2 italic">
-                                        • {cert}
-                                    </li>
-                                ))} */}
+                        <div className="grid grid-cols-2 gap-4 px-2">
+                            <ul className="list-disc ml-6 text-[12px] space-y-1">
+                                {data.achievements.map((ach, idx) => (
+                                    <li key={idx}>{ach}</li>
+                                ))}
                             </ul>
-                            <p className="text-xs mt-4 text-slate-500 italic">
-                                Actively maintaining technical proficiency through industry-standard credentials and hands-on laboratory experience.
-                            </p>
+                            <ul className="list-disc ml-6 text-[12px] space-y-1 italic">
+                                {data.certifications.map((item, idx) => (
+                                    <li key={idx} onClick={() => (navigate(`${item.link}`))}>{item.about}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    </section>
+                    <section>
+
+                        <div className="flex items-center gap-3 mb-8">
+                            <div className="w-8 h-8 bg-[#A6A6A6]"></div>
+                            <h2 className="text-2xl font-black uppercase tracking-widest bg-[#E5E5E5] flex-1 px-4 py-1">Languages</h2>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4 px-2">
+
+                            {data.languages.map((lang, index) => (
+                                <div key={index} className='flex'>
+                                    <p className="text-[13px] font-bold">{lang.langCategory}</p>
+                                    <p className="text-[12px] text-gray-600">, {lang.status}</p>
+
+                                </div>
+                            ))}
+
+
                         </div>
                     </section>
                 </div>

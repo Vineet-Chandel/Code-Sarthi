@@ -120,19 +120,19 @@ const AmanGuptaDynamicTimeline = ({ data }) => {
                     <div className="grid grid-cols-2 text-[12px] gap-y-3 font-medium text-slate-700">
                         <div>
                             <p className="text-[10px] text-slate-400 uppercase font-black mb-1">Frontend</p>
-                            <p className="leading-tight">{skills.frontend.split(',').slice(0, 3).join(',')}</p>
+                            <p className="leading-tight">{skills.frontend?.split(',')?.slice(0, 3).join(',')}</p>
                         </div>
                         <div>
                             <p className="text-[10px] text-slate-400 uppercase font-black mb-1">Backend</p>
-                            <p className="leading-tight">{skills.backend.split(',').slice(0, 3).join(',')}</p>
+                            <p className="leading-tight">{skills.backend?.split(',')?.slice(0, 3).join(',')}</p>
                         </div>
                         <div>
                             <p className="text-[10px] text-slate-400 uppercase font-black mb-1">Database</p>
-                            <p className="leading-tight">{skills.database.split(',').slice(0, 2).join(',')}</p>
+                            <p className="leading-tight">{skills.database?.split(',')?.slice(0, 2).join(',')}</p>
                         </div>
                         <div>
                             <p className="text-[10px] text-slate-400 uppercase font-black mb-1">Infrastructure</p>
-                            <p className="leading-tight">{skills.deployment.split(',').slice(0, 2).join(',')}</p>
+                            <p className="leading-tight">{skills.deployment?.split(',')?.slice(0, 2).join(',')}</p>
                         </div>
                     </div>
                 </div>

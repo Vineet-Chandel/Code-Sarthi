@@ -17,7 +17,7 @@ const CATEGORIES = [
 ];
 
 const FAQS = [
-    { id: 1, cat: 'basics', q: 'How do I get started with CodeSarthi?', a: 'Sign up for a free account, then follow the onboarding checklist on your dashboard. The Beginner\'s Guide walks you through your first project step by step — you\'ll be up and running in under 10 minutes.' },
+    { id: 1, cat: 'basics', q: 'How do I get started with CodeSarthi?', a: 'Sign up for a free account, then follow the onboarding checklist on your dashboard. The Beginner\'s Guide walks you through your first project step by step — you\'ll be up and running in under 10 minutes.', },
     { id: 2, cat: 'account', q: 'How do I reset my password?', a: 'Go to the login page and click "Forgot password". Enter your email and we\'ll send a reset link within a minute. Check your spam folder if it doesn\'t arrive. The link expires after 30 minutes.' },
     { id: 3, cat: 'developers', q: 'Where do I find my API key?', a: 'Navigate to Settings → Developer → API Keys. Click "Generate new key", give it a name, and copy it immediately — it won\'t be shown again. Keep it secret and never expose it in client-side code.' },
     { id: 4, cat: 'developers', q: 'What are the rate limits for the API?', a: 'Free tier: 60 req/min. Pro: 600 req/min. Enterprise: custom. If you hit a limit you\'ll receive a 429 response — implement exponential backoff in your client. Check the Developer docs for full quota tables.' },

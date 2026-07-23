@@ -1,5 +1,6 @@
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const AmanGuptaDynamicClassic = ({ data }) => {
     // Extracting all fields from the resumeData1 object
@@ -8,7 +9,7 @@ const AmanGuptaDynamicClassic = ({ data }) => {
         summaryTitle, summaryBody, experience, education,
         skills, projects, certifications, achievements, languages
     } = data;
-
+    const navigate = useNavigate()
     return (
         <div className="max-w-[850px] mx-auto my-10 p-12 bg-white shadow-sm border border-gray-200 font-serif text-[#111]">
 
@@ -40,16 +41,12 @@ const AmanGuptaDynamicClassic = ({ data }) => {
             <section className="mb-6">
                 <h2 className="text-center font-bold uppercase text-sm border-b border-gray-300 mb-3 py-1 bg-gray-50 tracking-widest">Technical Skills</h2>
                 <div className="grid grid-cols-2 gap-x-12 px-4 text-[12px]">
-                    <div className="space-y-2">
-                        <p><strong>Frontend:</strong> {skills.frontend}</p>
-                        <p><strong>Backend:</strong> {skills.backend}</p>
-                        <p><strong>Auth:</strong> {skills.authentication}</p>
-                    </div>
-                    <div className="space-y-2">
-                        <p><strong>Database:</strong> {skills.database}</p>
-                        <p><strong>Tools:</strong> {skills.tools}</p>
-                        <p><strong>Deployment:</strong> {skills.deployment}</p>
-                    </div>
+                    {skills.map((item, idx) => {
+                        return (<div className="space-y-2">
+                            <p> ● <strong>{item.skillCategory} :</strong> {item.skills}</p>
+                        </div>)
+                    })}
+
                 </div>
             </section>
 
@@ -64,9 +61,9 @@ const AmanGuptaDynamicClassic = ({ data }) => {
                         </div>
                         <p className="italic text-[12px] text-gray-600 mb-1">{exp.location}</p>
                         <ul className="list-disc ml-6 text-[13px] space-y-1">
-                            {/* {exp.bullets.map((point, idx) => (
+                            {exp.bullets.map((point, idx) => (
                                 <li key={idx}>{point}</li>
-                            ))} */}
+                            ))}
 
 
                         </ul>
@@ -122,7 +119,7 @@ const AmanGuptaDynamicClassic = ({ data }) => {
                             <p className="text-[11px] text-gray-500 mt-1">
                                 {(edu.bullets || []).map((b, idx) => (
                                     <div key={idx} style={{ display: 'flex', gap: 6, fontSize: 12, color: '#475569', alignItems: 'flex-start' }}>
-                                        <CheckCircle size={13} color="#06b6d4" style={{ flexShrink: 0, marginTop: 2 }} />
+                                        ●
                                         <span dangerouslySetInnerHTML={{ __html: b }} />
                                     </div>
                                 ))}
@@ -136,15 +133,13 @@ const AmanGuptaDynamicClassic = ({ data }) => {
             <section className="mb-6">
                 <h2 className="text-center font-bold uppercase text-sm border-b border-gray-300 mb-3 py-1 bg-gray-50 tracking-widest">Languages</h2>
                 <div className="grid grid-cols-2 gap-8 px-4">
-                    {/* {languages.map((lang, index) => (
-                        <div key={index}>
-                            <p className="text-[13px] font-bold">{lang.split(' ')[0]}</p>
-                            <p className="text-[12px] text-gray-600">{lang.split(' ')[1] || 'Proficient'}</p>
-                            <div className="w-full bg-gray-100 h-1 mt-1">
-                                <div className={`bg-black h-full ${index === 0 ? 'w-full' : 'w-[90%]'}`}></div>
-                            </div>
+                    {languages.map((lang, index) => (
+                        <div key={index} className='flex'>
+                            <p className="text-[13px] font-bold">{lang.langCategory}</p>
+                            <p className="text-[12px] text-gray-600">, {lang.status}</p>
+
                         </div>
-                    ))} */}
+                    ))}
                 </div>
             </section>
 
@@ -158,9 +153,9 @@ const AmanGuptaDynamicClassic = ({ data }) => {
                         ))}
                     </ul>
                     <ul className="list-disc ml-6 text-[12px] space-y-1 italic">
-                        {/* {certifications.map((cert, idx) => (
-                            <li key={idx}>{cert}</li>
-                        ))} */}
+                        {certifications.map((item, idx) => (
+                            <li key={idx} onClick={() => (navigate(`${item.link}`))}>{item.about}</li>
+                        ))}
                     </ul>
                 </div>
             </section>

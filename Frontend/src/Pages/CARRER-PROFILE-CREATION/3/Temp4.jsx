@@ -56,13 +56,13 @@ const AmanGuptaDynamicMinimalist = ({ data }) => {
                                 </div>
                                 <div className="text-right">
                                     <p className="font-bold text-[15px]">{edu.startDate} — {edu.endDate}</p>
-                                    {edu.bullets && <p className="text-[12px] text-slate-500 max-w-[200px] leading-none mt-1">
+                                    {/* {edu.bullets && <p className="text-[12px] text-slate-500 max-w-[200px] leading-none mt-1">
                                         {(edu.bullets || []).map((b, idx) => (
                                             <div key={idx} style={{ display: 'flex', gap: 6, fontSize: 12, color: '#475569', alignItems: 'flex-start' }}>
                                                 <CheckCircle size={13} color="#06b6d4" style={{ flexShrink: 0, marginTop: 2 }} />
                                                 <span dangerouslySetInnerHTML={{ __html: b }} />
                                             </div>
-                                        ))}</p>}
+                                        ))}</p>} */}
                                 </div>
                             </div>
                         ))}

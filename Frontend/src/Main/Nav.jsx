@@ -90,6 +90,7 @@ const Nav = () => {
                     title="Blog Documentation"
                     items={[
                         "Terms and Conditions",
+                        "Privacy & Policy Hub",
                         "New Updates",
                         "Engineering and Developers",
                         "How to use CodeSarthi",
@@ -119,33 +120,7 @@ const Nav = () => {
             ),
         },
 
-        {
-            id: "safety",
-            label: "Safety",
-            path: "/privacy-&-policy-hub",
-            hasDropdown: true,
-            dropdown: (
-                <div className="flex gap-4">
-                    <Dropdown
-                        title="Resources"
-                        items={[
-                            "Family Center",
-                            "Safety Library",
-                            "Teen Charter",
 
-                        ]}
-                    />
-                    <Dropdown
-                        title="Hub"
-                        items={[
-                            "Privacy & Policy Hub",
-                            "Transparency Hub",
-                            "Wellbeing Hub",
-                        ]}
-                    />
-                </div>
-            ),
-        },
 
         {
             id: "support",

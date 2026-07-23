@@ -1,146 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-
-// ============================================================
-// MOCK TEMPLATE COMPONENTS (replace with your actual imports)
-// ============================================================
-import Temp1 from '../3/Temp1';
-import Temp2 from '../3/Temp2';
-import Temp3 from '../3/Temp3';
-import Temp4 from '../3/Temp4';
-import Temp5 from '../3/Temp5';
-import Temp6 from '../3/Temp6';
-import Temp7 from '../3/Temp7';
-import Temp8 from '../3/Temp8';
-import Temp9 from '../3/Temp9';
-import Temp10 from '../3/Temp10';
-import Temp11 from '../3/Temp11';
 import { useNavigate } from 'react-router-dom';
 
-// ============================================================
-// DATA
-// ============================================================
-const resumeData1 = {
-    fname: "Aman",
-    lname: "Gupta",
-    phone: "+91 98765 43210",
-    github: "https://github.com/amangupta-dev",
-    linkedin: "https://linkedin.com/in/aman-gupta",
-    portfolio: "https://aman-portfolio.dev",
-    email: "aman.dev@gmail.com",
-    summaryTitle: "Full Stack Developer & UI Specialist",
-    summaryBody:
-        "passionate about crafting high-performance web applications using the MERN stack. Expert in translating complex business requirements into elegant, scalable code with a focus on user-centric design and efficient backend architecture.",
-    location: "Kanpur,India",
-    pincode: "208024",
-    skills: [
-        {
-            skillCategory: "Frontend",
-            skills: "React.js, Next.js, TypeScript, Tailwind CSS, Framer Motion"
-        },
-        {
-            skillCategory: "Backend",
-            skills: "Node.js, Express.js, GraphQL, Socket.io"
-        },
-        {
-            skillCategory: "Authentication",
-            skills: "NextAuth.js, Firebase Auth, OAuth 2.0"
-        },
-        {
-            skillCategory: "Database",
-            skills: "PostgreSQL, MongoDB, Redis, Prisma ORM"
-        },
-        {
-            skillCategory: "Tools",
-            skills: "Docker, Git, Vercel, Postman, Figma"
-        },
-        {
-            skillCategory: "Deployment",
-            skills: "AWS S3, Netlify, Render, Vercel"
-        }
-    ],
-    projects: [
-        {
-            name: "RollZone!",
-            stack: "React | Tailwind CSS",
-            github: "https://github.com/amangupta-dev/rollzone",
-            live: "https://rollzone-game.vercel.app",
-            description: "is an interactive, high-stakes Pig Dice game designed for a professional portfolio.",
-            bullets: [
-                "Engineered a <b>dynamic game engine</b> using React hooks.",
-                "Implemented a <b>mobile-first responsive design</b> using Tailwind CSS.",
-                "Integrated <b>local storage persistence</b> to save player scores.",
-                "Optimized performance resulting in a smooth 60fps animation experience.",
-            ],
-        },
-        {
-            name: "DevConnect",
-            stack: "Next.js | PostgreSQL",
-            github: "https://github.com/amangupta-dev/devconnect",
-            live: "https://devconnect-platform.app",
-            description: "is a specialized networking portal for software engineers.",
-            bullets: [
-                "Architected a <b>relational database schema</b> using Prisma ORM.",
-                "Developed a <b>server-side rendered (SSR)</b> feed for SEO.",
-                "Built an <b>automated markdown parser</b> with syntax highlighting.",
-                "Deployed using <b>Docker containers</b> on AWS.",
-            ],
-        },
-    ],
-    experience: [
-        {
-            role: "Frontend Developer",
-            company: "XYZ Tech",
-            location: "Remote",
-            startDate: "2025",
-            endDate: "2027",
-            currentlyWorking: false,
-            employmentType: "Internship",
-            bullets: ["Built responsive UI using React", "Improved performance by 30%"],
-        },
-    ],
-    education: [
-        {
-            degree: "Bachelor of Technology",
-            field: "Computer Science and Engineering",
-            institution: "Pranveer Singh Institute of Technology",
-            location: "Kanpur, India",
-            startDate: "2023",
-            endDate: "2027",
-            cgpa: "8.7/10",
-            bullets: ["Data Structures & Algorithms", "Operating Systems", "DBMS", "Computer Networks"],
-        },
-        {
-            degree: "Class XII (Senior Secondary)",
-            field: "PCM",
-            institution: "ABC Senior Secondary School",
-            location: "Lucknow, India",
-            startDate: "2021",
-            endDate: "2023",
-            percentage: "92%",
-        },
-    ],
 
 
-    certifications: [{ about: "AWS Certified Cloud Practitioner", link: "" }, { about: "Meta Frontend Developer Certification", link: "" }],
-    achievements: ["Ranked Top 5% in LeetCode contests", "Winner of Hackathon XYZ", "Solved 500+ DSA problems"],
-    languages: [{ langCategory: "English ", status: "Fluent" }, { langCategory: "Hindi ", status: "Native" },],
-    Social_Links: ["www.insta.com", "www.protfolio.com"]
-};
 
-// ============================================================
-// THEME TOKENS (caramellatte)
-// ============================================================
-const T = {
-    base100: "oklab(97.962% 0.00443 0.01503)",   // near-white warm
-    base200: "oklch(95% 0.038 75.164)",            // cream
-    base300: "oklch(90% 0.076 70.697)",            // warm sand
-    content: "oklch(40% 0.123 38.172)",            // dark caramel text
-    accent: "oklab(46.44% 0.08796 0.06831)",       // caramel brown
-    accentContent: "oklch(90% 0.076 70.697)",
-    neutral: "oklch(55% 0.195 38.402)",
-    neutralContent: "oklch(98% 0.016 73.684)",
-    secondary: "oklab(22.574% 0.05917 0.04547)",   // deep espresso
-};
 
 // ============================================================
 // UTILITY HOOKS
@@ -164,17 +27,18 @@ function useIntersectionObserver(options = {}) {
 const FILTER_TAGS = ["All", "Minimal", "Creative", "Modern", "Classic", "Bold"];
 
 const templateMeta = [
-    { id: 1, Component: Temp1, name: "Modern Professional", tag: "Modern", color: "#9B6A3A" },
-    { id: 2, Component: Temp2, name: "Creative Minimal", tag: "Minimal", color: "#C4874B" },
-    { id: 3, Component: Temp3, name: "Technical Executive", tag: "Bold", color: "#6B3E26" },
-    { id: 4, Component: Temp4, name: "Focused Layout", tag: "Minimal", color: "#B8924A" },
-    { id: 5, Component: Temp5, name: "Clean Slate", tag: "Classic", color: "#A05C2C" },
-    { id: 6, Component: Temp6, name: "Clean Modern", tag: "Modern", color: "#7A8C4E" },
-    { id: 7, Component: Temp7, name: "Creative Contrast", tag: "Creative", color: "#8B5E3C" },
-    { id: 8, Component: Temp8, name: "Cool Overlay", tag: "Bold", color: "#4A6741" },
-    { id: 9, Component: Temp9, name: "Modern Functional", tag: "Modern", color: "#3D6B72" },
-    { id: 10, Component: Temp10, name: "Classic Module", tag: "Classic", color: "#7B5C8A" },
-    { id: 11, Component: Temp11, name: "Simple Linear", tag: "Minimal", color: "#C49A3C" },
+    // { id: 1, Component: Temp1, name: "Modern Professional", tag: "Modern", color: "#9B6A3A" },
+    { id: 2, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784819449/WSO_Investment_Banking_Resume_Free_Google_Docs_Template_ja5uw2.jpg", name: "Creative Minimal", tag: "Minimal", color: "#C4874B" },
+    // { id: 3, Component: Temp3, name: "Technical Executive", tag: "Bold", color: "#6B3E26" },
+    // { id: 4, Component: Temp4, name: "Focused Layout", tag: "Minimal", color: "#B8924A" },
+    { id: 5, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784822995/Screenshot_2026-07-23_at_9.39.10_PM_wohjmk.png", name: "Clean Slate", tag: "Classic", color: "#A05C2C" },
+    { id: 6, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784831970/Screenshot_2026-07-24_at_12.08.55_AM_z7wj79.png", name: "Clean Modern", tag: "Modern", color: "#7A8C4E" },
+    { id: 7, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784830138/Screenshot_2026-07-23_at_11.38.50_PM_ofo5zt.png", name: "Creative Contrast", tag: "Creative", color: "#8B5E3C" },
+    { id: 8, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784826697/Screenshot_2026-07-23_at_10.41.23_PM_kk0gd5.png", name: "Cool Overlay", tag: "Bold", color: "#4A6741" },
+    { id: 9, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784827771/Screenshot_2026-07-23_at_10.59.10_PM_pdvcrs.png", name: "Modern Functional", tag: "Modern", color: "#3D6B72" },
+    { id: 10, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784828253/Screenshot_2026-07-23_at_11.07.25_PM_plujfe.png", name: "Classic Module", tag: "Classic", color: "#7B5C8A" },
+    { id: 11, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784828456/Screenshot_2026-07-23_at_11.10.49_PM_nyihrk.png", name: "Simple Linear", tag: "Minimal", color: "#C49A3C" },
+    { id: 12, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784823538/Screenshot_2026-07-23_at_9.48.38_PM_gghcae.png", name: "Simple Linear", tag: "Minimal", color: "#C49A3C" },
 ];
 
 // ============================================================
@@ -207,14 +71,12 @@ function TemplateCard({ item, index, onSelect, isFavorite, onToggleFavorite }) {
             style={{
                 opacity: isVisible ? 1 : 0,
                 transform: isVisible ? "translateY(0) scale(1)" : "translateY(28px) scale(0.97)",
-                transition: `opacity 0.6s cubic-bezier(.4,0,.2,1) ${index * 60}ms, transform 0.6s cubic-bezier(.4,0,.2,1) ${index * 60}ms`,
+
                 borderRadius: "var(--radius-box, 1rem)",
                 overflow: "hidden",
-                border: `var(--border, 2px) solid ${hovered ? item.color : "oklch(87% 0.06 70)"}`,
-                background: "oklab(97.962% 0.00443 0.01503)",
-                boxShadow: hovered
-                    ? `0 8px 32px -4px ${item.color}44, 0 2px 8px -2px ${item.color}22`
-                    : "0 2px 12px -2px oklch(40% 0.08 60 / 0.10)",
+                border: `var(--border, 2px) solid ${hovered ? "#212121" : "fff"}`,
+                background: "#212121",
+
             }}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
@@ -223,11 +85,11 @@ function TemplateCard({ item, index, onSelect, isFavorite, onToggleFavorite }) {
             <div
                 style={{
                     position: "absolute", top: 10, left: 10, zIndex: 10,
-                    padding: "3px 10px",
+                    padding: "6px 12px",
                     borderRadius: "99px",
-                    fontSize: 9, fontWeight: 900, letterSpacing: "0.13em",
+                    fontSize: 12, fontWeight: 900, letterSpacing: "0.13em",
                     textTransform: "uppercase",
-                    background: item.color,
+                    background: "#212121",
                     color: "#fff",
                     fontFamily: "'DM Mono', monospace",
                 }}
@@ -239,9 +101,9 @@ function TemplateCard({ item, index, onSelect, isFavorite, onToggleFavorite }) {
             <button
                 style={{
                     position: "absolute", top: 10, right: 10, zIndex: 10,
-                    width: 32, height: 32, borderRadius: "50%",
-                    background: "oklab(97.962% 0.00443 0.01503)",
-                    border: "1.5px solid oklch(87% 0.06 70)",
+                    width: 40, height: 40, borderRadius: "50%",
+                    background: "#000",
+                    border: "1.5px solid #000",
                     display: "flex", alignItems: "center", justifyContent: "center",
                     cursor: "pointer", transition: "transform 0.2s",
                     transform: isFavorite ? "scale(1.15)" : "scale(1)",
@@ -250,41 +112,26 @@ function TemplateCard({ item, index, onSelect, isFavorite, onToggleFavorite }) {
                 title="Save"
             >
                 <svg viewBox="0 0 24 24" style={{ width: 14, height: 14 }}
-                    fill={isFavorite ? item.color : "none"}
-                    stroke={isFavorite ? item.color : "oklch(65% 0.08 60)"}
+                    fill={isFavorite ? "#fff" : "none"}
+                    stroke={isFavorite ? item.color : "#fff"}
                     strokeWidth="2">
                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                 </svg>
             </button>
 
-            <div style={{
-                position: "relative",
-                width: "100%",
-                overflow: "hidden",
-                clipPath: "inset(0 0 0 0)",          // bulletproof clip
-                background: "oklch(95% 0.038 75.164)",
-                aspectRatio: "1/1.41",
-            }}>
-                {/* ✅ No hardcoded width, no transform scale — A4Wrapper handles everything */}
+            <div >
+
                 <div
-                    style={{
-                        position: "absolute",
-                        top: 0, left: 0, right: 0,
-                        pointerEvents: "none",
-                        userSelect: "none",
-                        transformOrigin: "top center",
-                        transform: hovered ? "scale(1.06)" : "scale(1)",   // subtle zoom on hover
-                        transition: "transform 0.5s cubic-bezier(.4,0,.2,1)",
-                    }}
+
                 >
-                    <item.Component data={resumeData1} />
+                    <img src={item.Component} alt={item.name} className="w-full h-full object-cover" />
                 </div>
 
                 {/* Hover overlay CTA — unchanged */}
                 <div style={{
                     position: "absolute", inset: 0,
                     display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 12,
-                    background: `linear-gradient(160deg, ${item.color}18 0%, ${item.color}50 100%)`,
+                    background: `linear-gradient(160deg, #21212118 0%, #21212150 100%)`,
                     opacity: hovered ? 1 : 0,
                     transition: "opacity 0.3s ease",
                 }}>
@@ -292,8 +139,8 @@ function TemplateCard({ item, index, onSelect, isFavorite, onToggleFavorite }) {
                         style={{
                             padding: "10px 28px",
                             borderRadius: "var(--radius-field, 0.5rem)",
-                            fontWeight: 800, fontSize: 13, color: "#fff",
-                            background: item.color,
+                            fontWeight: 800, fontSize: 15, color: "#fff",
+                            background: "#212121",
                             border: "none", cursor: "pointer",
                             transform: hovered ? "translateY(0)" : "translateY(14px)",
                             transition: "transform 0.35s cubic-bezier(.4,0,.2,1) 0.05s",
@@ -310,24 +157,24 @@ function TemplateCard({ item, index, onSelect, isFavorite, onToggleFavorite }) {
             {/* Card footer */}
             <div style={{
                 padding: "12px 16px",
-                background: "oklab(97.962% 0.00443 0.01503)",
+                background: "#212121",
                 display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8,
             }}>
                 <div>
-                    <div style={{ fontWeight: 800, fontSize: 13, color: "oklch(40% 0.123 38.172)", fontFamily: "'DM Sans', sans-serif" }}>
+                    <div style={{ fontWeight: 800, fontSize: 15, color: "#fff", fontFamily: "'DM Sans', sans-serif" }}>
                         {item.name}
                     </div>
-                    <div style={{ fontSize: 10, color: "oklch(60% 0.08 60)", marginTop: 2, fontFamily: "'DM Mono', monospace" }}>
+                    <div style={{ fontSize: 10, color: "#fff", marginTop: 2, fontFamily: "'DM Mono', monospace" }}>
                         Template #{item.id}
                     </div>
                 </div>
                 <span style={{
                     fontSize: 9, fontWeight: 900, letterSpacing: "0.12em",
                     textTransform: "uppercase",
-                    background: "oklch(93% 0.06 75)",
-                    color: "oklch(45% 0.12 75)",
-                    border: "1.5px solid oklch(82% 0.07 75)",
-                    padding: "3px 8px",
+                    background: "#fff",
+                    color: "#212121",
+                    border: "1.5px solid #212121",
+                    padding: "4px 10px",
                     borderRadius: "var(--radius-field, 0.5rem)",
                     fontFamily: "'DM Mono', monospace",
                 }}>
@@ -335,13 +182,8 @@ function TemplateCard({ item, index, onSelect, isFavorite, onToggleFavorite }) {
                 </span>
             </div>
 
-            {/* Bottom accent bar */}
-            <div style={{
-                height: 3, width: "100%",
-                background: `linear-gradient(90deg, ${item.color}, transparent)`,
-                opacity: hovered ? 1 : 0,
-                transition: "opacity 0.3s",
-            }} />
+
+
         </div>
     );
 }
@@ -369,7 +211,7 @@ function PreviewModal({ item, onClose, onNext, onPrev }) {
             style={{
                 position: "fixed", inset: 0, zIndex: 50,
                 display: "flex", alignItems: "center", justifyContent: "center", padding: 16,
-                background: "oklch(18% 0.06 55 / 0.92)",
+                background: "#181818",
 
             }}
             onClick={onClose}
@@ -381,10 +223,10 @@ function PreviewModal({ item, onClose, onNext, onPrev }) {
                 {/* Header */}
                 <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, padding: "0 4px" }}>
                     <div>
-                        <h2 style={{ color: "oklch(93% 0.04 75)", fontWeight: 900, fontSize: 20, fontFamily: "'DM Sans', sans-serif", margin: 0 }}>
+                        <h2 style={{ color: "#fff", fontWeight: 900, fontSize: 20, fontFamily: "'DM Sans', sans-serif", margin: 0 }}>
                             {item.name}
                         </h2>
-                        <p style={{ color: "oklch(70% 0.06 70)", fontSize: 11, marginTop: 3, fontFamily: "'DM Mono', monospace" }}>
+                        <p style={{ color: "#fff", fontSize: 14, marginTop: 3, fontFamily: "'DM Mono', monospace" }}>
                             Template #{item.id} · {item.tag}
                         </p>
                     </div>
@@ -393,9 +235,8 @@ function PreviewModal({ item, onClose, onNext, onPrev }) {
                             <button key={label} onClick={fn}
                                 style={{
                                     width: 36, height: 36, borderRadius: "var(--radius-field, 0.5rem)",
-                                    background: "oklch(30% 0.08 60 / 0.6)",
-                                    border: "1.5px solid oklch(50% 0.08 60 / 0.4)",
-                                    color: "oklch(85% 0.05 70)",
+                                    background: "#fff",
+                                    color: "#212121",
                                     display: "flex", alignItems: "center", justifyContent: "center",
                                     cursor: "pointer", fontSize: 16,
                                 }}>
@@ -405,9 +246,8 @@ function PreviewModal({ item, onClose, onNext, onPrev }) {
                         <button onClick={onClose}
                             style={{
                                 width: 36, height: 36, borderRadius: "var(--radius-field, 0.5rem)",
-                                background: "oklch(30% 0.12 30 / 0.5)",
-                                border: "1.5px solid oklch(55% 0.15 30 / 0.4)",
-                                color: "oklch(75% 0.12 30)",
+                                background: "#fff",
+                                color: "#212121",
                                 display: "flex", alignItems: "center", justifyContent: "center",
                                 cursor: "pointer", fontSize: 20, lineHeight: 1,
                             }}>
@@ -418,14 +258,13 @@ function PreviewModal({ item, onClose, onNext, onPrev }) {
 
                 {/* Resume preview */}
                 <div style={{
-                    width: "100%",
+
                     borderRadius: "var(--radius-box, 1rem)",
                     overflow: "auto",
-                    maxHeight: "75vh",
-                    border: `2px solid ${item.color}66`,
-                    boxShadow: `0 24px 64px -12px ${item.color}55`,
-                }}>
-                    <item.Component data={resumeData1} />
+
+
+                }} className='h-full'>
+                    <img src={item.Component} alt="" />
                 </div>
 
                 {/* Actions */}
@@ -434,8 +273,8 @@ function PreviewModal({ item, onClose, onNext, onPrev }) {
                         style={{
                             padding: "12px 32px",
                             borderRadius: "var(--radius-field, 0.5rem)",
-                            fontWeight: 800, fontSize: 13, color: "#fff",
-                            background: item.color,
+                            fontWeight: 800, fontSize: 15, color: "#212121",
+                            background: "#fff",
                             border: "none", cursor: "pointer",
                             fontFamily: "'DM Sans', sans-serif",
                         }}
@@ -447,11 +286,10 @@ function PreviewModal({ item, onClose, onNext, onPrev }) {
                         style={{
                             padding: "12px 24px",
                             borderRadius: "var(--radius-field, 0.5rem)",
-                            fontWeight: 600, fontSize: 13,
-                            color: "oklch(75% 0.06 70)",
-                            background: "oklch(28% 0.08 60 / 0.5)",
-                            border: "1.5px solid oklch(50% 0.06 60 / 0.4)",
-                            cursor: "pointer",
+                            fontWeight: 600, fontSize: 15,
+                            color: "#fff",
+                            background: "#212121",
+                            border: "none", cursor: "pointer",
                             fontFamily: "'DM Sans', sans-serif",
                         }}
                         onClick={onClose}
@@ -460,7 +298,7 @@ function PreviewModal({ item, onClose, onNext, onPrev }) {
                     </button>
                 </div>
 
-                <p style={{ color: "oklch(55% 0.05 70)", fontSize: 11, marginTop: 12, fontFamily: "'DM Mono', monospace" }}>
+                <p style={{ color: "#ffff", fontSize: 14, marginTop: 12, fontFamily: "'DM Mono', monospace" }}>
                     Press ← → to navigate · Esc to close
                 </p>
             </div>
@@ -473,28 +311,19 @@ function PreviewModal({ item, onClose, onNext, onPrev }) {
 // ============================================================
 function StatsBar({ total, filtered, favorites }) {
     return (
-        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 20, fontSize: 13 }}>
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 20, fontSize: 15 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "oklch(55% 0.12 70)", display: "inline-block" }} />
-                <span style={{ color: "oklch(55% 0.09 60)" }}>{filtered} of {total} templates</span>
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#3c8affff", display: "inline-block" }} className='animate-pulse' />
+                <span style={{ color: "#fff" }}>{filtered} of {total} templates</span>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "oklch(60% 0.15 30)", display: "inline-block" }} />
-                <span style={{ color: "oklch(55% 0.09 60)" }}>{favorites} saved</span>
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#ff2929ff", display: "inline-block" }} className='animate-pulse' />
+                <span style={{ color: "#fff" }}>{favorites} saved</span>
             </div>
         </div>
     );
 }
 
-// ============================================================
-// DECORATIVE COFFEE RING
-// ============================================================
-const CoffeeRing = ({ style }) => (
-    <svg viewBox="0 0 120 120" style={{ opacity: 0.08, ...style }} xmlns="http://www.w3.org/2000/svg">
-        <circle cx="60" cy="60" r="54" fill="none" stroke="oklch(45% 0.14 55)" strokeWidth="6" />
-        <circle cx="60" cy="60" r="46" fill="none" stroke="oklch(50% 0.12 60)" strokeWidth="2" strokeDasharray="4 6" />
-    </svg>
-);
 
 // ============================================================
 // MAIN COMPONENT
@@ -506,9 +335,9 @@ const Templates = () => {
     const [favorites, setFavorites] = useState(new Set());
     const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
     const [viewMode, setViewMode] = useState("grid");
-    const [headerVisible, setHeaderVisible] = useState(false);
 
-    useEffect(() => { setTimeout(() => setHeaderVisible(true), 80); }, []);
+
+    // useEffect(() => { setTimeout(() => setHeaderVisible(true), 80); }, []);
 
     const filtered = templateMeta.filter((t) => {
         const matchFilter = activeFilter === "All" || t.tag === activeFilter;
@@ -528,118 +357,75 @@ const Templates = () => {
     const previewIndex = previewItem ? filtered.findIndex((t) => t.id === previewItem.id) : -1;
     const goNext = () => filtered[(previewIndex + 1) % filtered.length] && setPreviewItem(filtered[(previewIndex + 1) % filtered.length]);
     const goPrev = () => filtered[(previewIndex - 1 + filtered.length) % filtered.length] && setPreviewItem(filtered[(previewIndex - 1 + filtered.length) % filtered.length]);
-
+    const Navigate = useNavigate()
     return (
-        <div style={{
-            width: "100%", minHeight: "100vh",
-            background: "oklch(95% 0.038 75.164)",
-            fontFamily: "'DM Sans', system-ui, sans-serif",
-            position: "relative",
-            color: "oklch(40% 0.123 38.172)",
-        }}>
+        <div className='bg-black'>
             <GrainOverlay />
 
             {/* ── HERO HEADER ── */}
-            <div style={{ position: "relative", overflow: "hidden", padding: "72px 24px 56px", textAlign: "center" }}>
+            <div style={{ position: "relative", overflow: "hidden", textAlign: "center" }}>
 
-                {/* Decorative rings */}
-                <CoffeeRing style={{ position: "absolute", top: -30, left: "8%", width: 180, height: 180, transform: "rotate(15deg)" }} />
-                <CoffeeRing style={{ position: "absolute", bottom: -20, right: "6%", width: 140, height: 140, transform: "rotate(-10deg)" }} />
 
-                {/* Warm gradient blob */}
-                <div style={{
-                    position: "absolute", top: "10%", left: "50%", transform: "translateX(-50%)",
-                    width: 600, height: 300,
-                    background: "radial-gradient(ellipse at center, oklch(85% 0.08 65 / 0.5) 0%, transparent 70%)",
-                    pointerEvents: "none",
-                }} />
 
-                <div style={{
-                    position: "relative", zIndex: 1,
-                    opacity: headerVisible ? 1 : 0,
-                    transform: headerVisible ? "translateY(0)" : "translateY(24px)",
-                    transition: "all 0.75s cubic-bezier(.4,0,.2,1)",
-                }}>
-                    {/* Eyebrow */}
-                    <div style={{
-                        display: "inline-flex", alignItems: "center", gap: 8,
-                        padding: "6px 16px", borderRadius: "var(--radius-selector, 2rem)",
-                        background: "oklch(88% 0.07 70 / 0.7)",
-                        border: "var(--border, 2px) solid oklch(80% 0.09 68)",
-                        fontSize: 10, fontWeight: 900, letterSpacing: "0.13em",
-                        textTransform: "uppercase", marginBottom: 24,
-                        color: "oklch(42% 0.13 50)",
-                        fontFamily: "'DM Mono', monospace",
-                    }}>
-                        <span style={{
-                            width: 6, height: 6, borderRadius: "50%",
-                            background: "oklch(55% 0.14 55)",
-                            animation: "pulse 2s infinite",
-                            display: "inline-block",
-                        }} />
-                        {templateMeta.length}+ Premium Templates · ATS-Friendly
-                    </div>
+                <div className="text-center mb-3s sm:mb-5 lg:mb-5 w-full flex flex-col items-center px-4">
 
-                    {/* Headline */}
-                    <h1 style={{
-                        fontSize: "clamp(2.8rem, 8vw, 5.5rem)",
-                        fontWeight: 900,
-                        letterSpacing: "-0.03em",
-                        lineHeight: 1.0,
-                        color: "oklch(28% 0.1 45)",
-                        margin: "0 0 20px",
-                        fontFamily: "'DM Sans', sans-serif",
-                    }}>
-                        Your Resume,{" "}
-                        <span style={{
-                            position: "relative", display: "inline-block",
-                            color: "oklch(45% 0.14 55)",
-                        }}>
-                            Elevated
-                            {/* Underline squiggle */}
-                            <svg viewBox="0 0 200 12" style={{
-                                position: "absolute", bottom: -6, left: 0, width: "100%", height: 10,
-                                overflow: "visible",
-                            }}>
-                                <path d="M2,8 Q25,2 50,8 Q75,14 100,8 Q125,2 150,8 Q175,14 198,8"
-                                    fill="none" stroke="oklch(55% 0.16 58)" strokeWidth="2.5" strokeLinecap="round" />
-                            </svg>
-                        </span>
-                        .
+                    {/* Heading */}
+                    <h1 className="
+        text-4xl 
+        sm:text-6xl 
+        md:text-7xl 
+        lg:text-8xl 
+        xl:text-9xl
+        font-extrabold 
+text-white
+    ">
+                        Choose a Template
                     </h1>
 
-                    <p style={{
-                        fontSize: 16, lineHeight: 1.65,
-                        color: "oklch(52% 0.09 55)",
-                        maxWidth: 480, margin: "0 auto 40px",
-                    }}>
-                        Pick a template. Stand out. Land the role.
-                        Crafted with attention to every pixel.
+                    {/* Subtitle */}
+                    <p className="
+        text-base 
+        sm:text-lg 
+        md:text-xl 
+        lg:text-2xl 
+text-blue-500
+        mt-6 
+        max-w-xl 
+        lg:max-w-3xl
+
+        flex items-center gap-2
+    ">
+                        <svg xmlns="http://www.w3.org/2000/svg" width={45} height={45} viewBox="0 0 24 24" className="transition-transform duration-500 ease-in-out hover:rotate-180">
+                            <path fill="currentColor" d="M10.565 2.075a3.33 3.33 0 0 1 2.87 0c.394.189.755.497 1.26.928l.079.066c.48.41.939.604 1.58.655l.102.008c.662.053 1.135.09 1.547.236a3.33 3.33 0 0 1 2.03 2.029c.145.412.182.885.235 1.547l.008.102c.051.641.246 1.1.655 1.58l.066.078c.431.506.74.867.928 1.261a3.33 3.33 0 0 1 0 2.87c-.189.394-.497.755-.928 1.26l-.066.079c-.418.49-.605.951-.655 1.58l-.008.102c-.053.662-.09 1.135-.236 1.547a3.33 3.33 0 0 1-2.029 2.03c-.412.145-.885.182-1.547.235l-.102.008c-.641.051-1.1.246-1.58.655l-.079.066c-.505.431-.866.74-1.26.928a3.33 3.33 0 0 1-2.87 0c-.394-.189-.755-.497-1.26-.928l-.079-.066a2.56 2.56 0 0 0-1.58-.655l-.102-.008c-.662-.053-1.135-.09-1.547-.236a3.33 3.33 0 0 1-2.03-2.029c-.145-.412-.182-.885-.235-1.547l-.008-.102a2.56 2.56 0 0 0-.655-1.58l-.066-.079c-.431-.505-.74-.866-.928-1.26a3.33 3.33 0 0 1 0-2.87c.189-.394.497-.755.928-1.26l.066-.079a2.56 2.56 0 0 0 .655-1.58l.008-.102c.053-.662.09-1.135.236-1.547a3.33 3.33 0 0 1 2.029-2.03c.412-.145.885-.182 1.547-.235l.102-.008a2.56 2.56 0 0 0 1.58-.655l.078-.066c.506-.431.867-.74 1.261-.928m3.232 6.12a.75.75 0 1 0-1.45-.39l-2.143 8a.75.75 0 0 0 1.449.39zm1.641.974a.75.75 0 1 0-1.06 1.06l.131.132c.527.526.867.869 1.085 1.155c.205.268.23.396.23.484s-.025.216-.23.484c-.218.286-.558.629-1.085 1.155l-.131.131a.75.75 0 1 0 1.06 1.06l.167-.166c.482-.48.895-.894 1.181-1.27c.307-.402.537-.846.537-1.394s-.23-.992-.537-1.394c-.286-.376-.7-.79-1.18-1.27zm-5.816 0a.75.75 0 0 0-1.06 0l-.167.167c-.481.48-.895.894-1.181 1.27c-.307.402-.537.846-.537 1.394s.23.992.537 1.394c.286.376.7.79 1.18 1.27l.168.167a.75.75 0 0 0 1.06-1.06l-.131-.132c-.527-.526-.867-.869-1.085-1.155c-.205-.268-.23-.396-.23-.484s.025-.216.23-.484c.218-.286.558-.629 1.085-1.155l.131-.131a.75.75 0 0 0 0-1.061"></path>
+                        </svg>
+
+                        <span className="text-white">Choose any of the template below every template has its own uniqueness</span>
                     </p>
 
-                    {/* Stats row */}
-                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: 0 }}>
-                        {[["11", "Templates"], ["100%", "ATS-Ready"], ["∞", "Customizable"]].map(([val, label], i) => (
-                            <React.Fragment key={label}>
-                                <div style={{ textAlign: "center", padding: "0 28px" }}>
-                                    <div style={{
-                                        fontSize: "2rem", fontWeight: 900,
-                                        color: "oklch(38% 0.13 50)",
-                                        fontFamily: "'DM Sans', sans-serif",
-                                    }}>{val}</div>
-                                    <div style={{
-                                        fontSize: 10, color: "oklch(58% 0.08 60)", marginTop: 2, fontWeight: 600,
-                                        fontFamily: "'DM Mono', monospace", textTransform: "uppercase", letterSpacing: "0.1em",
-                                    }}>{label}</div>
-                                </div>
-                                {i < 2 && (
-                                    <div style={{
-                                        width: 1, height: 36,
-                                        background: "oklch(80% 0.07 65)",
-                                    }} />
-                                )}
-                            </React.Fragment>
-                        ))}
+                    <div className="flex flex-wrap justify-center gap-3 mt-5 w-full">
+                        <div
+                            onClick={() => Navigate("/app/interview-arena")}
+                            className="w-full sm:w-auto flex-1 sm:flex-none min-w-[220px] rounded-full border border-white/15 hover:border-white/30 cursor-pointer px-4 py-3 text-white hover:text-blue-500 transition-all duration-300 flex items-center justify-center gap-2"
+                        >
+                            Interview Arena
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 80 80" className="rotate-45"> <g fill="none"> <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z"></path> <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={6} d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177"></path> </g> </svg>
+                        </div>
+
+                        <div
+                            onClick={() => Navigate("/app/resume-examples")}
+                            className="w-full sm:w-auto flex-1 sm:flex-none min-w-[220px] rounded-full border border-white/15 hover:border-white/30 cursor-pointer px-4 py-3 text-white hover:text-blue-500 transition-all duration-300 flex items-center justify-center gap-2"
+                        >
+                            Examples
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 80 80" className="rotate-45"> <g fill="none"> <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z"></path> <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={6} d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177"></path> </g> </svg>
+                        </div>
+
+                        <div
+                            onClick={() => Navigate("/app/build-resume/preview-content")}
+                            className="w-full sm:w-auto flex-1 sm:flex-none min-w-[220px] rounded-full border border-white/15 hover:border-white/30 cursor-pointer px-4 py-3 text-white hover:text-blue-500 transition-all duration-300 flex items-center justify-center gap-2"
+                        >
+                            Your Career Profile
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 80 80" className="rotate-45"> <g fill="none"> <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z"></path> <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={6} d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177"></path> </g> </svg>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -650,14 +436,14 @@ const Templates = () => {
                 width: "90%", margin: "0 auto",
                 padding: "12px 20px",
                 display: "flex", flexWrap: "wrap", alignItems: "center", gap: 12,
-                background: "oklab(97.4% 0.003 0.012)",
-                borderRadius: "var(--radius-box, 1rem)",
-                border: "var(--border, 2px) solid oklch(87% 0.065 70)",
+                background: "#a0a0a0ff",
+                borderRadius: "1rem",
+                border: "2px solid #a0a0a0ff",
                 boxShadow: "0 8px 32px -8px oklch(40% 0.1 55 / 0.18), 0 2px 8px -2px oklch(40% 0.1 55 / 0.08)",
             }}>
                 {/* Search */}
                 <div style={{ position: "relative", flex: 1, minWidth: 160, maxWidth: 280 }}>
-                    <svg style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", width: 15, height: 15, color: "oklch(65% 0.07 60)" }}
+                    <svg style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", width: 15, height: 15, color: "#000" }}
                         viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
                     </svg>
@@ -668,10 +454,10 @@ const Templates = () => {
                         onChange={(e) => setSearchQuery(e.target.value)}
                         style={{
                             width: "100%", paddingLeft: 32, paddingRight: 14, paddingTop: 8, paddingBottom: 8,
-                            borderRadius: "var(--radius-field, 0.5rem)",
-                            border: "var(--border, 2px) solid oklch(86% 0.065 70)",
-                            background: "oklch(95% 0.038 75.164)",
-                            fontSize: 13, color: "oklch(40% 0.123 38.172)",
+                            borderRadius: "1rem",
+                            border: "#000 2px solid",
+                            background: "#fff",
+                            fontSize: 15, color: "#000",
                             outline: "none",
                             fontFamily: "'DM Sans', sans-serif",
                         }}
@@ -687,11 +473,11 @@ const Templates = () => {
                             style={{
                                 padding: "6px 14px",
                                 borderRadius: "var(--radius-selector, 2rem)",
-                                fontSize: 11, fontWeight: 800,
+                                fontSize: 14, fontWeight: 800,
                                 letterSpacing: "0.04em",
-                                border: `var(--border, 2px) solid ${activeFilter === tag ? "oklch(52% 0.14 55)" : "oklch(84% 0.07 70)"}`,
-                                background: activeFilter === tag ? "oklch(52% 0.14 55)" : "oklch(93% 0.05 73)",
-                                color: activeFilter === tag ? "#fff" : "oklch(52% 0.09 60)",
+                                border: `var(--border, 2px) solid ${activeFilter === tag ? "#000" : "#000"}`,
+                                background: activeFilter === tag ? "#000" : "#fff",
+                                color: activeFilter === tag ? "#fff" : "#000",
                                 cursor: "pointer",
                                 transform: activeFilter === tag ? "scale(1.05)" : "scale(1)",
                                 transition: "all 0.2s",
@@ -713,10 +499,10 @@ const Templates = () => {
                         display: "flex", alignItems: "center", gap: 6,
                         padding: "7px 14px",
                         borderRadius: "var(--radius-selector, 2rem)",
-                        fontSize: 11, fontWeight: 800,
-                        border: `var(--border, 2px) solid ${showFavoritesOnly ? "oklch(65% 0.15 35)" : "oklch(84% 0.07 70)"}`,
-                        background: showFavoritesOnly ? "oklch(94% 0.06 35)" : "oklch(93% 0.05 73)",
-                        color: showFavoritesOnly ? "oklch(45% 0.15 30)" : "oklch(62% 0.08 60)",
+                        fontSize: 14, fontWeight: 800,
+                        border: `var(--border, 2px) solid ${showFavoritesOnly ? "oklch(65% 0.15 35)" : "#000"}`,
+                        background: showFavoritesOnly ? "oklch(94% 0.06 35)" : "#ffffff",
+                        color: showFavoritesOnly ? "oklch(45% 0.15 30)" : "#000",
                         cursor: "pointer",
                         transition: "all 0.2s",
                         fontFamily: "'DM Mono', monospace",
@@ -735,19 +521,36 @@ const Templates = () => {
                 {/* Grid toggle */}
                 <div style={{
                     display: "flex", gap: 4, padding: 4,
-                    background: "oklch(91% 0.05 72)",
-                    borderRadius: "var(--radius-field, 0.5rem)",
-                    border: "var(--border, 2px) solid oklch(85% 0.07 70)",
+                    background: "#fff",
+                    borderRadius: "#212121",
+                    border: "var(--border, 2px) solid #212121",
                 }}>
-                    {[{ mode: "grid", icon: "▦" }, { mode: "wide", icon: "▤" }].map(({ mode, icon }) => (
+                    {[{
+                        mode: "grid", icon: (
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
+                                <g fill="currentColor" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}>
+                                    <rect width={6.5} height={6.5} x={3.75} y={13.75} rx={2}></rect>
+                                    <rect width={6.5} height={6.5} x={13.75} y={13.75} rx={2}></rect>
+                                    <rect width={6.5} height={6.5} x={3.75} y={3.75} rx={2}></rect>
+                                    <rect width={6.5} height={6.5} x={13.75} y={3.75} rx={2}></rect>
+                                </g>
+                            </svg>
+                        )
+                    }, {
+                        mode: "wide", icon: (
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M16 5.5H8V4h8zM16 20H8v-1.5h8zM5 9h14v6H5z"></path>
+                            </svg>
+                        )
+                    }].map(({ mode, icon }) => (
                         <button key={mode} onClick={() => setViewMode(mode)}
                             style={{
                                 width: 28, height: 28,
                                 borderRadius: "6px",
-                                fontSize: 13, cursor: "pointer",
+                                fontSize: 15, cursor: "pointer",
                                 border: "none",
-                                background: viewMode === mode ? "oklab(97.962% 0.00443 0.01503)" : "transparent",
-                                color: viewMode === mode ? "oklch(48% 0.13 55)" : "oklch(65% 0.07 60)",
+                                background: viewMode === mode ? "#212121" : "transparent",
+                                color: viewMode === mode ? "#fff" : "#212121",
                                 display: "flex", alignItems: "center", justifyContent: "center",
                                 transition: "all 0.2s",
                                 boxShadow: viewMode === mode ? "0 1px 4px oklch(40% 0.08 55 / 0.12)" : "none",
@@ -767,11 +570,7 @@ const Templates = () => {
                     {searchQuery && (
                         <button
                             onClick={() => setSearchQuery("")}
-                            style={{
-                                fontSize: 12, fontWeight: 700, color: "oklch(52% 0.14 55)",
-                                background: "none", border: "none", cursor: "pointer",
-                                fontFamily: "'DM Mono', monospace",
-                            }}
+                            className='border px-3 sm:px-5 py-2 sm:py-3 rounded-xl border-[#3a3a3a] text-sm sm:text-md'
                         >
                             ✕ Clear search
                         </button>
@@ -783,14 +582,14 @@ const Templates = () => {
                     <div style={{ textAlign: "center", padding: "96px 0", color: "oklch(62% 0.07 60)" }}>
                         <div style={{ fontSize: 48, marginBottom: 16 }}>☕</div>
                         <p style={{ fontWeight: 800, fontSize: 18, color: "oklch(45% 0.1 55)", marginBottom: 6 }}>No templates found</p>
-                        <p style={{ fontSize: 13, color: "oklch(60% 0.07 60)" }}>Try a different filter or search term</p>
+                        <p style={{ fontSize: 15, color: "oklch(60% 0.07 60)" }}>Try a different filter or search term</p>
                         <button
                             onClick={() => { setActiveFilter("All"); setSearchQuery(""); setShowFavoritesOnly(false); }}
                             style={{
                                 marginTop: 24, padding: "10px 24px",
                                 borderRadius: "var(--radius-field, 0.5rem)",
                                 background: "oklch(52% 0.14 55)", color: "#fff",
-                                fontWeight: 800, fontSize: 13, border: "none", cursor: "pointer",
+                                fontWeight: 800, fontSize: 15, border: "none", cursor: "pointer",
                                 fontFamily: "'DM Sans', sans-serif",
                             }}
                         >
@@ -804,8 +603,8 @@ const Templates = () => {
                     display: "grid",
                     gap: 24,
                     gridTemplateColumns: viewMode === "grid"
-                        ? "repeat(auto-fill, minmax(260px, 1fr))"
-                        : "repeat(auto-fill, minmax(380px, 1fr))",
+                        ? "repeat(auto-fill, minmax(480px, 1fr))"
+                        : "repeat(auto-fill, minmax(580px, 1fr))",
                 }}>
                     {filtered.map((item, index) => (
                         <TemplateCard
@@ -819,43 +618,7 @@ const Templates = () => {
                     ))}
                 </div>
 
-                {/* Bottom CTA */}
-                <div style={{
-                    marginTop: 80,
-                    borderRadius: "var(--radius-box, 1rem)",
-                    padding: "56px 32px",
-                    textAlign: "center",
-                    background: "oklch(28% 0.09 45)",
-                    border: "var(--border, 2px) solid oklch(38% 0.1 48)",
-                    position: "relative",
-                    overflow: "hidden",
-                }}>
-                    {/* Decorative rings inside CTA */}
-                    <CoffeeRing style={{ position: "absolute", top: -20, left: "3%", width: 120, height: 120 }} />
-                    <CoffeeRing style={{ position: "absolute", bottom: -20, right: "3%", width: 100, height: 100 }} />
 
-                    <div style={{ position: "relative", zIndex: 1 }}>
-                        <h2 style={{
-                            fontSize: "2rem", fontWeight: 900,
-                            color: "oklch(93% 0.04 72)", margin: "0 0 8px",
-                            fontFamily: "'DM Sans', sans-serif",
-                        }}>Can't decide?</h2>
-                        <p style={{ color: "oklch(68% 0.07 65)", fontSize: 14, maxWidth: 360, margin: "0 auto 24px" }}>
-                            Fill your details once and instantly preview all templates live.
-                        </p>
-                        <button style={{
-                            padding: "12px 32px",
-                            borderRadius: "var(--radius-field, 0.5rem)",
-                            fontWeight: 800, fontSize: 14, color: "oklch(28% 0.09 45)",
-                            background: "oklch(82% 0.12 68)",
-                            border: "none", cursor: "pointer",
-                            fontFamily: "'DM Sans', sans-serif",
-                            letterSpacing: "0.02em",
-                        }}>
-                            Preview All with My Data →
-                        </button>
-                    </div>
-                </div>
             </div>
 
             {/* ── PREVIEW MODAL ── */}

@@ -68,7 +68,7 @@ const DynamicResume = ({ data }) => {
                                         <ul className="space-y-1.5 ml-1">
                                             {(edu.bullets || []).map((b, idx) => (
                                                 <li key={idx} style={{ display: 'flex', gap: 6, fontSize: 12, color: '#475569', alignItems: 'flex-start' }}>
-                                                    <CheckCircle size={13} color="#06b6d4" style={{ flexShrink: 0, marginTop: 2 }} />
+                                                    ●
                                                     <span dangerouslySetInnerHTML={{ __html: b }} />
                                                 </li>
                                             ))}
@@ -86,15 +86,11 @@ const DynamicResume = ({ data }) => {
                             Skills
                         </h2>
                         <ul className="space-y-2 text-sm font-medium">
-                            {/* Flattening skills object into a list */}
-                            {Object.values(data.skills).map((skillGroup) =>
-                                skillGroup.split(', ').map((skill, idx) => (
-                                    <li key={idx} className="flex items-center gap-2">
-                                        <span className="w-1.5 h-1.5 bg-slate-900 rounded-full"></span>
-                                        {skill}
-                                    </li>
-                                ))
-                            ).flat().slice(0, 10)}
+                            {data.skills.map((item, idx) => {
+                                return (<div className="space-y-2">
+                                    <p> ● <strong>{item.skillCategory} :</strong> {item.skills}</p>
+                                </div>)
+                            })}
                         </ul>
                     </section>
 
@@ -104,12 +100,14 @@ const DynamicResume = ({ data }) => {
                             Certification
                         </h2>
                         <div className="space-y-4">
-                            {/* {data.certifications.map((cert, index) => (
-                                <div key={index}>
-                                    <p className="font-bold text-xs uppercase leading-tight">{cert}</p>
-                                    <p className="text-xs text-slate-500">Professional Certification</p>
-                                </div>
-                            ))} */}
+
+
+                            <ul className="list-disc ml-6 text-[12px] space-y-1 italic">
+                                {data.certifications.map((item, idx) => (
+                                    <li key={idx} onClick={() => (navigate(`${item.link}`))}>{item.about}</li>
+                                ))}
+                            </ul>
+
                         </div>
                     </section>
                 </aside>

@@ -4,7 +4,7 @@ import { CheckCircle } from 'lucide-react';
 const AmanGuptaTimelineResume = ({ data }) => {
     const {
         fname, lname, phone, email, portfolio, summaryTitle, summaryBody,
-        skills, projects, education, languages
+        skills, projects, education, languages, achievements, certifications
     } = data;
 
     return (
@@ -42,7 +42,7 @@ const AmanGuptaTimelineResume = ({ data }) => {
                                         <ul className="space-y-1.5 ml-1">
                                             {(edu.bullets || []).map((b, idx) => (
                                                 <li key={idx} style={{ display: 'flex', gap: 6, fontSize: 12, color: '#475569', alignItems: 'flex-start' }}>
-                                                    <CheckCircle size={13} color="#06b6d4" style={{ flexShrink: 0, marginTop: 2 }} />
+                                                    ●
                                                     <span dangerouslySetInnerHTML={{ __html: b }} />
                                                 </li>
                                             ))}
@@ -58,17 +58,12 @@ const AmanGuptaTimelineResume = ({ data }) => {
                 <section>
                     <h2 className="text-xl font-bold uppercase tracking-widest border-b border-slate-400 pb-1 mb-4">Skills</h2>
                     <div className="space-y-3">
-                        {['Frontend', 'Backend', 'Database', 'Tools'].map((cat, i) => (
-                            <div key={i}>
-                                <p className="text-[13px] font-medium mb-1">{cat}</p>
-                                <div className="w-full bg-slate-300 h-1.5 rounded-full overflow-hidden">
-                                    <div
-                                        className="bg-slate-900 h-full"
-                                        style={{ width: i === 0 ? '90%' : i === 1 ? '85%' : '80%' }}
-                                    ></div>
-                                </div>
-                            </div>
-                        ))}
+                        {skills.map((item, idx) => {
+                            return (<div className="space-y-2">
+                                <p> ● <strong>{item.skillCategory} :</strong> {item.skills}</p>
+                            </div>)
+                        })}
+
                     </div>
                 </section>
 
@@ -76,12 +71,13 @@ const AmanGuptaTimelineResume = ({ data }) => {
                 <section>
                     <h2 className="text-xl font-bold uppercase tracking-widest border-b border-slate-400 pb-1 mb-4">Language</h2>
                     <ul className="text-[14px] space-y-1">
-                        {/* {languages.map((lang, idx) => (
-                            <li key={idx} className="flex items-center gap-2">
-                                <span className="w-1.5 h-1.5 bg-slate-900 rounded-full"></span>
-                                {lang}
-                            </li>
-                        ))} */}
+                        {languages.map((lang, index) => (
+                            <div key={index} className='flex'>
+                                <p className="text-[13px] font-bold">{lang.langCategory}</p>
+                                <p className="text-[12px] text-gray-600">, {lang.status}</p>
+
+                            </div>
+                        ))}
                     </ul>
                 </section>
             </aside>
@@ -139,24 +135,20 @@ const AmanGuptaTimelineResume = ({ data }) => {
                     </div>
                 </section>
 
-                {/* References Section */}
-                <section className="p-12 pt-0">
-                    <h2 className="text-2xl font-bold uppercase tracking-[0.2em] mb-8 border-b border-slate-200 pb-2">References</h2>
-                    <div className="grid grid-cols-2 gap-10">
-                        <div>
-                            <p className="font-bold text-[15px]">Pranveer Singh Institute of Technology</p>
-                            <p className="text-[13px] italic mb-3 text-slate-500">Kanpur, India</p>
-                            <p className="text-[12px] font-medium leading-tight text-slate-400 italic">
-                                Enrollment: 2023 - 2027
-                            </p>
-                        </div>
-                        <div>
-                            <p className="font-bold text-[15px]">Professional Certifications</p>
-                            <ul className="text-[12px] text-slate-500 italic space-y-1 mt-1">
-                                <li>• AWS Certified Cloud Practitioner</li>
-                                <li>• Meta Frontend Developer</li>
-                            </ul>
-                        </div>
+
+                <section>
+                    <h2 className="text-center font-bold uppercase text-sm border-b border-gray-300 mb-3 py-1 bg-gray-50 tracking-widest">Achievements & Certifications</h2>
+                    <div className="grid grid-cols-2 gap-4 px-2">
+                        <ul className="list-disc ml-6 text-[12px] space-y-1">
+                            {achievements.map((ach, idx) => (
+                                <li key={idx}>{ach}</li>
+                            ))}
+                        </ul>
+                        <ul className="list-disc ml-6 text-[12px] space-y-1 italic">
+                            {certifications.map((item, idx) => (
+                                <li key={idx} onClick={() => (navigate(`${item.link}`))}>{item.about}</li>
+                            ))}
+                        </ul>
                     </div>
                 </section>
             </main>

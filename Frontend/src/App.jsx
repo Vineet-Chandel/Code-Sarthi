@@ -173,7 +173,7 @@ const App = () => {
 
 
               <Route path="build-resume" element={<BuildResume />} />
-              <Route path="build-resume/resume-templates" element={<Templates />} />
+              <Route path="resume-templates" element={<Templates />} />
               <Route path="build-resume/header-content" element={<HeaderContent />} />
               <Route path="build-resume/project-content" element={<Project />} />
               <Route path="build-resume/intro-additionals-page" element={<IntroAdditional />} />
