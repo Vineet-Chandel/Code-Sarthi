@@ -29,17 +29,18 @@ const SecondLanding = () => {
 
         <div id="resume" className="w-full flex flex-col items-center justify-center">
             < div
-                className="sm:max-w-[1520px] w-full mt-10  bg-gray-200 flex flex-col items-center justify-between    " >
-                <div className="w-full justify-start pl-7 flex sm:flex-row flex-col">
+                className=" w-[95%] sm:w-[90%] mx-auto mt-10  bg-gray-200 flex flex-col items-center justify-between    " >
+                <div className="w-full justify-start  flex sm:flex-row flex-col mt-10 mb-[-40px]">
                     <h2
                         className="
                     font-poppins
-                    font-semibold
-                   text-3xl
-                    lg:text-4xl
+                    font-extrabold
+                   text-2xl sm:text-5xl
+                    lg:text-6xl
                     leading-tight
                     text-black
 text-start
+
                     lg:ml-1
                 "
                     >
@@ -49,9 +50,9 @@ text-start
                     <h2
                         className="
                     font-poppins
-                    font-semibold
-               text-3xl
-                    lg:text-4xl
+                    font-extrabold
+               text-2xl sm:text-5xl
+                    lg:text-6xl
                     leading-tight
                     text-black
 text-start
@@ -61,7 +62,7 @@ text-start
                         Prepare for Every Job.
                     </h2>
                 </div>
-                <div className="w-full mx-auto h-full px-2 sm:px-5 flex py-3 lg:py-10 flex-col gap-2">
+                <div className="w-full mx-auto h-full  flex py-3 lg:py-10 flex-col gap-2">
 
 
                     <div className="flex lg:flex-row flex-col  w-full gap-5">
