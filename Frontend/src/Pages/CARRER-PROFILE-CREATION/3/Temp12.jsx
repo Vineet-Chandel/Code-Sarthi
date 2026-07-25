@@ -8,19 +8,9 @@ const SectionHeading = ({ children }) => (
     </div>
 );
 
-const Temp12 = ({ data }) => {
+const Temp12 = ({ data, ref }) => {
     const {
-        fname,
-        lname,
-        phone,
-        github,
-        linkedin,
-        portfolio,
-        email,
-        location,
-        pincode,
 
-        summaryTitle,
         summaryBody,
 
         experience = [],
@@ -37,6 +27,7 @@ const Temp12 = ({ data }) => {
         languages = [],
     } = data;
 
+    const { fname, lname, phone, github, linkedin, email, location, pincode, portfolio, summaryTitle } = data?.header
     const contactItems = [
         email,
         phone,
@@ -47,7 +38,7 @@ const Temp12 = ({ data }) => {
     ].filter((item) => item && String(item).trim().length > 0);
 
     return (
-        <div
+        <div ref={ref}
             className="bg-white text-gray-900 font-sans max-w-[850px] mx-auto"
 
         >

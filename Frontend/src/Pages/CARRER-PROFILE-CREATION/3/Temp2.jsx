@@ -2,28 +2,30 @@ import React from 'react';
 import { CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const AmanGuptaDynamicClassic = ({ data }) => {
+const AmanGuptaDynamicClassic = ({ data, ref }) => {
     // Extracting all fields from the resumeData1 object
     const {
-        fname, lname, phone, github, linkedin, portfolio, email,
-        summaryTitle, summaryBody, experience, education,
+
+        summaryBody, experience, education,
         skills, projects, certifications, achievements, languages
     } = data;
+
+    const { fname, lname, phone, github, linkedin, email, location, pincode, portfolio, summaryTitle } = data?.header
     const navigate = useNavigate()
     return (
-        <div className="max-w-[850px] mx-auto my-10 p-12 bg-white shadow-sm border border-gray-200 font-serif text-[#111]">
+        <div ref={ref} className="max-w-[850px] mx-auto my-10 p-12 bg-white shadow-sm border border-gray-200 font-serif text-[#111]">
 
             {/* Header: Dynamic Personal Branding */}
             <header className="text-center mb-6">
                 <h1 className="text-4xl font-bold tracking-tight uppercase mb-2">{fname} {lname}</h1>
                 <div className="text-[12px] border-t border-b border-black py-2 mt-4 flex justify-center gap-4 flex-wrap">
-                    <span>{education[0]?.location || 'India'}</span>
+                    <span>{location || 'India'}</span>
                     <span>|</span>
                     <span>{phone}</span>
                     <span>|</span>
                     <span className="font-semibold">{email}</span>
                     <span>|</span>
-                    <span className="italic">{portfolio.replace('https://', '')}</span>
+                    <span className="italic">{portfolio?.replace('https://', '')}</span>
                 </div>
             </header>
 

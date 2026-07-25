@@ -38,19 +38,9 @@ const ProficiencyBars = ({ status }) => {
     );
 };
 
-const Temp7 = ({ data }) => {
+const Temp7 = ({ data, ref }) => {
     const {
-        fname,
-        lname,
-        phone,
-        github,
-        linkedin,
-        portfolio,
-        email,
-        location,
-        pincode,
 
-        summaryTitle,
         summaryBody,
 
         experience = [],
@@ -67,6 +57,8 @@ const Temp7 = ({ data }) => {
         languages = [],
     } = data;
 
+    const { fname, lname, phone, github, linkedin, email, location, pincode, portfolio, summaryTitle } = data?.header
+
     const contactItems = [
         { value: phone, icon: FaPhone },
         { value: email, icon: FaEnvelope },
@@ -80,7 +72,7 @@ const Temp7 = ({ data }) => {
     ].filter((item) => item.value && String(item.value).trim().length > 0);
 
     return (
-        <div
+        <div ref={ref}
             className="bg-white text-black font-sans mx-auto"
             style={{ width: "210mm", minHeight: "297mm" }}
         >
@@ -128,8 +120,8 @@ const Temp7 = ({ data }) => {
                                         <div
                                             key={idx}
                                             className={`py-3 ${idx !== experience.length - 1
-                                                    ? "border-b border-gray-200"
-                                                    : ""
+                                                ? "border-b border-gray-200"
+                                                : ""
                                                 }`}
                                         >
                                             <p className="text-lg font-bold text-black">
@@ -175,8 +167,8 @@ const Temp7 = ({ data }) => {
                                         <div
                                             key={idx}
                                             className={`py-3 ${idx !== projects.length - 1
-                                                    ? "border-b border-gray-200"
-                                                    : ""
+                                                ? "border-b border-gray-200"
+                                                : ""
                                                 }`}
                                         >
                                             <p className="text-lg font-bold text-black">
@@ -266,8 +258,8 @@ const Temp7 = ({ data }) => {
                                             <div
                                                 key={idx}
                                                 className={`py-2 ${idx !== achievements.length - 1
-                                                        ? "border-b border-dashed border-gray-300"
-                                                        : ""
+                                                    ? "border-b border-dashed border-gray-300"
+                                                    : ""
                                                     }`}
                                             >
                                                 {isObject ? (

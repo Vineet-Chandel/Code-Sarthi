@@ -455,14 +455,16 @@ const StartHeader = ({ data }) => {
                                 className="relative flex-shrink-0 cursor-pointer"
                                 onMouseEnter={() => setHoveringImg(true)}
                                 onMouseLeave={() => setHoveringImg(false)}
+
+                                onClick={() => Navigate("/app/editprofile")}
                             >
                                 <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl border-2 border-dashed border-slate-600
                                  overflow-hidden relative transition-colors duration-200">
-                                    <svg className="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                    {user.photoUrl.url ? <img src={user.photoUrl.url} alt="" className="w-full h-full object-cover" /> : <svg className="w-full h-full object-cover" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                                         <path d="M0 0h24v24H0z" fill="none" />
                                         <circle cx="12" cy="6" r="4" fill="currentColor" />
                                         <path fill="currentColor" d="M20 17.5c0 2.485 0 4.5-8 4.5s-8-2.015-8-4.5S7.582 13 12 13s8 2.015 8 4.5" />
-                                    </svg>
+                                    </svg>}
 
 
 

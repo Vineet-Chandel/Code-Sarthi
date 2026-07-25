@@ -47,19 +47,11 @@ const LanguageDots = ({ status }) => {
     );
 };
 
-const ResumeTemplate04 = ({ data }) => {
+const ResumeTemplate04 = ({ data, ref }) => {
     const {
-        fname,
-        lname,
-        phone,
-        github,
-        linkedin,
-        portfolio,
-        email,
-        location,
-        pincode,
 
-        summaryTitle,
+
+
         summaryBody,
 
         experience = [],
@@ -76,6 +68,8 @@ const ResumeTemplate04 = ({ data }) => {
         languages = [],
     } = data;
 
+
+    const { fname, lname, phone, github, linkedin, email, location, pincode, portfolio, summaryTitle } = data?.header
     const fullLocation = [location, pincode].filter(Boolean).join(", ");
 
     const contactItems = [
@@ -88,7 +82,7 @@ const ResumeTemplate04 = ({ data }) => {
     ].filter((item) => item.value && String(item.value).trim().length > 0);
 
     return (
-        <div
+        <div ref={ref}
             className="bg-white text-gray-900 font-sans mx-auto"
             style={{ width: "210mm", minHeight: "297mm" }}
         >

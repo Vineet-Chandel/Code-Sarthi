@@ -2,15 +2,30 @@ import React from 'react';
 import { Mail, Phone, MapPin } from 'lucide-react';
 import { CheckCircle } from 'lucide-react';
 
-const AmanGuptaAcademicTemplate = ({ data }) => {
+const AmanGuptaAcademicTemplate = ({ data, ref }) => {
     // Destructuring for dynamic prop drilling
     const {
-        fname, lname, phone, email, summaryTitle, summaryBody,
-        experience, education, skills, projects, languages, certifications, achievements,
+
+        summaryBody,
+
+        experience = [],
+        education = [],
+
+        skills,
+
+        projects = [],
+
+        certifications = [],
+
+        achievements = [],
+
+        languages = [],
     } = data;
 
+    const { fname, lname, phone, github, linkedin, email, location, pincode, portfolio, summaryTitle } = data?.header
+
     return (
-        <div className="max-w-[850px] mx-auto my-10 bg-white shadow-lg font-sans text-[#333] border border-gray-100">
+        <div ref={ref} className="max-w-[850px] mx-auto my-10 bg-white shadow-lg font-sans text-[#333] border border-gray-100">
 
             {/* Light Blue Header */}
             <header className="bg-[#e3effb] p-10 py-12">
@@ -78,7 +93,18 @@ const AmanGuptaAcademicTemplate = ({ data }) => {
                         {/* Mapping Internships */}
                         {experience.map((exp, idx) => (
                             <div key={idx} className="flex gap-6">
-                                <span className="w-32 text-[13px] text-slate-500 font-medium shrink-0 pt-1">{exp.duration}</span>
+                                <span className="w-32 text-[13px] text-slate-500 font-medium shrink-0 pt-1"> {(exp?.startDate ||
+                                    exp?.endDate ||
+                                    exp?.currentlyWorking) && (
+                                        <span className="text-xs text-gray-500">
+                                            {exp?.startDate}
+                                            {exp?.startDate &&
+                                                (exp?.currentlyWorking || exp?.endDate)
+                                                ? " - "
+                                                : ""}
+                                            {exp?.currentlyWorking ? "Present" : exp?.endDate}
+                                        </span>
+                                    )}</span>
                                 <div className="flex-1">
                                     <p className="text-[14px] font-bold italic">{exp.role}, {exp.company}, {exp.location}</p>
                                     <ul className="mt-2 list-disc ml-5 space-y-1 text-[13px] text-slate-600">

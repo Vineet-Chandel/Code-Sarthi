@@ -41,13 +41,9 @@ import Dashboard from "./Pages/Dashboard";
 import Discussions from "./Pages/DISCUSSION/Discussion";
 import Meeting from "./Pages/Meeting";
 import Explore from "./Pages/Explore";
-
+import AfterTemplate from "./Pages/CARRER-PROFILE-CREATION/4/AfterTemplate";
 import Templates from "./Pages/CARRER-PROFILE-CREATION/2/Templates";
 import HeaderContent from "./Pages/CARRER-PROFILE-CREATION/2/01_HEADER/StartHeader"
-import HowResume from "./Pages/CARRER-PROFILE-CREATION/4/HowResume";
-import HowCv from "./Pages/CARRER-PROFILE-CREATION/4/HowCv";
-import HowCoverLetter from "./Pages/CARRER-PROFILE-CREATION/4/HowCoverLetter";
-import CredentialsAnalyser from "./Pages/CARRER-PROFILE-CREATION/4/ConditionalAnlyz";
 import BuildResume from "./Pages/CARRER-PROFILE-CREATION/2/01_HEADER/BuildResume";
 import Shastra from "./Pages/Shastra";
 import Projects from "./Pages/Projects";
@@ -165,10 +161,10 @@ const App = () => {
               <Route path="study" element={<Study />} />
               <Route path="assignment" element={<Assignment />} />
               <Route path="notes" element={<Notes />} />
-              <Route path="how-resume" element={<HowResume />} />
-              <Route path="how-cv" element={<HowCv />} />
-              <Route path="how-cover-letter" element={<HowCoverLetter />} />
-              <Route path="credentials-analyser" element={<CredentialsAnalyser />} />
+
+
+
+
 
 
 
@@ -189,7 +185,7 @@ const App = () => {
               <Route path="build-resume/skill-content" element={<Skills />} />
               <Route path="build-resume/experience-content" element={<Experience />} />
               <Route path="build-resume/education-content" element={<Education />} />
-
+              <Route path="final-resume" element={<AfterTemplate />} />
 
 
               <Route path="interview-arena" element={<InterViewArena />} />

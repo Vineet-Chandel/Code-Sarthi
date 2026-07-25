@@ -1,23 +1,34 @@
 import React from 'react';
 import { Phone, MapPin, Mail, Globe } from 'lucide-react';
 import { CheckCircle } from 'lucide-react';
-const DynamicResume = ({ data }) => {
+import { useSelector } from 'react-redux';
+const DynamicResume = ({ data, ref }) => {
+    const user = useSelector(state => state?.user?.user?.DATA);
+    const {
+
+        summaryBody, experience, education,
+        skills, projects, certifications, achievements, languages
+    } = data;
+
+    const { fname, lname, phone, github, linkedin, email, location, pincode, portfolio, summaryTitle } = data?.header
     return (
-        <div className="max-w-4xl mx-auto bg-white shadow-2xl font-sans text-slate-800">
+        <div ref={ref} className="max-w-4xl mx-auto bg-white shadow-2xl font-sans text-slate-800">
             {/* Header Section */}
             <header className="bg-[#1a1a1a] text-white p-12 flex items-center gap-10">
                 <div className="w-36 h-36 rounded-full border-4 border-white overflow-hidden bg-slate-300 shrink-0">
                     {/* Placeholder for Profile Image */}
-                    <div className="w-full h-full flex items-center justify-center text-slate-500 text-4xl font-bold">
-                        {data.fname[0]}{data.lname[0]}
-                    </div>
+
+                    {user.photoUrl.url ? <img src={user.photoUrl.url} alt="" /> :
+                        <div className="w-full h-full flex items-center justify-center text-slate-500 text-4xl font-bold">
+                            {fname[0]}{lname[0]}
+                        </div>}
                 </div>
                 <div>
                     <h1 className="text-5xl font-bold tracking-tighter uppercase mb-2">
-                        {data.fname} {data.lname}
+                        {fname} {lname}
                     </h1>
                     <p className="text-xl tracking-[0.2em] font-light uppercase text-slate-300">
-                        {data.summaryTitle}
+                        {summaryTitle}
                     </p>
                 </div>
             </header>
@@ -32,16 +43,16 @@ const DynamicResume = ({ data }) => {
                         </h2>
                         <ul className="space-y-4 text-sm font-medium">
                             <li className="flex items-center gap-3">
-                                <Phone size={16} className="text-slate-900" /> {data.phone}
+                                <Phone size={16} className="text-slate-900" /> {phone}
                             </li>
                             <li className="flex items-center gap-3 italic">
-                                <MapPin size={16} className="text-slate-900" /> {data.location}, India
+                                <MapPin size={16} className="text-slate-900" /> {location}, {pincode}
                             </li>
                             <li className="flex items-center gap-3 break-all">
-                                <Mail size={16} className="text-slate-900" /> {data.email}
+                                <Mail size={16} className="text-slate-900" /> {email}
                             </li>
                             <li className="flex items-center gap-3">
-                                <Globe size={16} className="text-slate-900" /> {data.portfolio.replace('https://', '')}
+                                <Globe size={16} className="text-slate-900" /> {portfolio?.replace('https://', '')}
                             </li>
                         </ul>
                     </section>
@@ -54,7 +65,7 @@ const DynamicResume = ({ data }) => {
 
 
                         <div className="space-y-6">
-                            {data.education.map((edu, index) => (
+                            {education.map((edu, index) => (
                                 <div key={index} className="mb-6">
                                     <div className="flex justify-between items-start mb-1">
                                         <div>
@@ -86,7 +97,7 @@ const DynamicResume = ({ data }) => {
                             Skills
                         </h2>
                         <ul className="space-y-2 text-sm font-medium">
-                            {data.skills.map((item, idx) => {
+                            {skills.map((item, idx) => {
                                 return (<div className="space-y-2">
                                     <p> ● <strong>{item.skillCategory} :</strong> {item.skills}</p>
                                 </div>)
@@ -103,7 +114,7 @@ const DynamicResume = ({ data }) => {
 
 
                             <ul className="list-disc ml-6 text-[12px] space-y-1 italic">
-                                {data.certifications.map((item, idx) => (
+                                {certifications.map((item, idx) => (
                                     <li key={idx} onClick={() => (navigate(`${item.link}`))}>{item.about}</li>
                                 ))}
                             </ul>
@@ -120,7 +131,7 @@ const DynamicResume = ({ data }) => {
                             About Me
                         </h2>
                         <p className="text-sm leading-relaxed text-slate-600 text-justify">
-                            {data.summaryBody}
+                            {summaryBody}
                         </p>
                     </section>
 
@@ -131,7 +142,7 @@ const DynamicResume = ({ data }) => {
                         </h2>
                         <div className="space-y-10">
                             {/* Project 1 as primary experience */}
-                            {data.projects.map((project, index) => (
+                            {projects.map((project, index) => (
                                 <div key={index} className="space-y-2">
                                     <h3 className="font-bold uppercase text-sm tracking-wide">
                                         {project.name.toUpperCase()}
@@ -154,7 +165,7 @@ const DynamicResume = ({ data }) => {
                             Achievements
                         </h2>
                         <div className="space-y-6">
-                            {data.achievements.map((ach, index) => (
+                            {achievements.map((ach, index) => (
                                 <div key={index} className="flex gap-4 items-baseline">
                                     <div className="w-2 h-2 bg-slate-900 rounded-full shrink-0"></div>
                                     <p className="text-sm font-medium leading-relaxed">

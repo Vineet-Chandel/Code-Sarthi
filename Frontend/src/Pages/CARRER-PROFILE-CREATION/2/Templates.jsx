@@ -28,17 +28,17 @@ const FILTER_TAGS = ["All", "Minimal", "Creative", "Modern", "Classic", "Bold"];
 
 const templateMeta = [
     // { id: 1, Component: Temp1, name: "Modern Professional", tag: "Modern", color: "#9B6A3A" },
-    { id: 2, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784819449/WSO_Investment_Banking_Resume_Free_Google_Docs_Template_ja5uw2.jpg", name: "Creative Minimal", tag: "Minimal", color: "#C4874B" },
+    { id: 2, idxToSend: 1, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784819449/WSO_Investment_Banking_Resume_Free_Google_Docs_Template_ja5uw2.jpg", name: "Creative Minimal", tag: "Minimal", color: "#C4874B" },
     // { id: 3, Component: Temp3, name: "Technical Executive", tag: "Bold", color: "#6B3E26" },
     // { id: 4, Component: Temp4, name: "Focused Layout", tag: "Minimal", color: "#B8924A" },
-    { id: 5, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784822995/Screenshot_2026-07-23_at_9.39.10_PM_wohjmk.png", name: "Clean Slate", tag: "Classic", color: "#A05C2C" },
-    { id: 6, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784831970/Screenshot_2026-07-24_at_12.08.55_AM_z7wj79.png", name: "Clean Modern", tag: "Modern", color: "#7A8C4E" },
-    { id: 7, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784830138/Screenshot_2026-07-23_at_11.38.50_PM_ofo5zt.png", name: "Creative Contrast", tag: "Creative", color: "#8B5E3C" },
-    { id: 8, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784826697/Screenshot_2026-07-23_at_10.41.23_PM_kk0gd5.png", name: "Cool Overlay", tag: "Bold", color: "#4A6741" },
-    { id: 9, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784827771/Screenshot_2026-07-23_at_10.59.10_PM_pdvcrs.png", name: "Modern Functional", tag: "Modern", color: "#3D6B72" },
-    { id: 10, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784828253/Screenshot_2026-07-23_at_11.07.25_PM_plujfe.png", name: "Classic Module", tag: "Classic", color: "#7B5C8A" },
-    { id: 11, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784828456/Screenshot_2026-07-23_at_11.10.49_PM_nyihrk.png", name: "Simple Linear", tag: "Minimal", color: "#C49A3C" },
-    { id: 12, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784823538/Screenshot_2026-07-23_at_9.48.38_PM_gghcae.png", name: "Simple Linear", tag: "Minimal", color: "#C49A3C" },
+    { id: 5, idxToSend: 2, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784822995/Screenshot_2026-07-23_at_9.39.10_PM_wohjmk.png", name: "Clean Slate", tag: "Classic", color: "#A05C2C" },
+    { id: 6, idxToSend: 3, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784831970/Screenshot_2026-07-24_at_12.08.55_AM_z7wj79.png", name: "Clean Modern", tag: "Modern", color: "#7A8C4E" },
+    { id: 7, idxToSend: 4, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784830138/Screenshot_2026-07-23_at_11.38.50_PM_ofo5zt.png", name: "Creative Contrast", tag: "Creative", color: "#8B5E3C" },
+    { id: 8, idxToSend: 5, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784826697/Screenshot_2026-07-23_at_10.41.23_PM_kk0gd5.png", name: "Cool Overlay", tag: "Bold", color: "#4A6741" },
+    { id: 9, idxToSend: 6, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784827771/Screenshot_2026-07-23_at_10.59.10_PM_pdvcrs.png", name: "Modern Functional", tag: "Modern", color: "#3D6B72" },
+    { id: 10, idxToSend: 7, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784828253/Screenshot_2026-07-23_at_11.07.25_PM_plujfe.png", name: "Classic Module", tag: "Classic", color: "#7B5C8A" },
+    { id: 11, idxToSend: 8, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784828456/Screenshot_2026-07-23_at_11.10.49_PM_nyihrk.png", name: "Simple Linear", tag: "Minimal", color: "#C49A3C" },
+    { id: 12, idxToSend: 9, Component: "https://res.cloudinary.com/dj0ivep44/image/upload/v1784823538/Screenshot_2026-07-23_at_9.48.38_PM_gghcae.png", name: "Simple Linear", tag: "Minimal", color: "#C49A3C" },
 ];
 
 // ============================================================
@@ -219,6 +219,7 @@ function PreviewModal({ item, onClose, onNext, onPrev }) {
             <div
                 style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", maxWidth: 860, width: "100%" }}
                 onClick={(e) => e.stopPropagation()}
+                className='h-screen py-10 '
             >
                 {/* Header */}
                 <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, padding: "0 4px" }}>
@@ -263,8 +264,8 @@ function PreviewModal({ item, onClose, onNext, onPrev }) {
                     overflow: "auto",
 
 
-                }} className='h-full'>
-                    <img src={item.Component} alt="" />
+                }} className='h-full overflow-y-auto scrollbar-none'>
+                    <img className='h-' src={item.Component} alt="" />
                 </div>
 
                 {/* Actions */}
@@ -278,7 +279,7 @@ function PreviewModal({ item, onClose, onNext, onPrev }) {
                             border: "none", cursor: "pointer",
                             fontFamily: "'DM Sans', sans-serif",
                         }}
-                        onClick={() => Navigate("/app/build-resume/header-content")}
+                        onClick={() => Navigate(`/app/final-resume`, { state: { idx: item.idxToSend } })}
                     >
                         Use This Template →
                     </button>

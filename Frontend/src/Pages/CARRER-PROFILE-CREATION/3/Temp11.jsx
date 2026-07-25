@@ -1,22 +1,42 @@
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
-const ResumeTemplate = ({ data }) => {
+const ResumeTemplate = ({ data, ref }) => {
+
+    const {
+
+        summaryBody,
+
+        experience = [],
+        education = [],
+
+        skills,
+
+        projects = [],
+
+        certifications = [],
+
+        achievements = [],
+
+        languages = [],
+    } = data;
+
+    const { fname, lname, phone, github, linkedin, email, location, pincode, portfolio, summaryTitle } = data?.header
     return (
-        <div className="max-w-[850px] mx-auto my-10 p-12 bg-white shadow-sm border border-gray-200 font-serif text-[#111]">
+        <div ref={ref} className="max-w-[850px] mx-auto my-10 p-12 bg-white shadow-sm border border-gray-200 font-serif text-[#111]">
 
             {/* Header: Name and Contact Info */}
             <header className="text-center mb-6">
                 <h1 className="text-4xl font-bold tracking-tight uppercase mb-2">
-                    {data.fname} <span className="font-black">{data.lname}</span>
+                    {fname} <span className="font-black">{lname}</span>
                 </h1>
                 <div className="text-[13px] border-t border-b border-black py-2 mt-4 flex justify-center gap-4 flex-wrap">
-                    <span>{data.location}</span>
+                    <span>{location}</span>
                     <span>|</span>
-                    <span>{data.phone}</span>
+                    <span>{phone}</span>
                     <span>|</span>
-                    <span className="font-semibold">{data.email}</span>
+                    <span className="font-semibold">{email}</span>
                     <span>|</span>
-                    <span className="italic">{data.portfolio.replace('https://', '')}</span>
+                    <span className="italic">{portfolio.replace('https://', '')}</span>
                 </div>
             </header>
 
@@ -26,7 +46,7 @@ const ResumeTemplate = ({ data }) => {
                     Summary
                 </h2>
                 <p className="text-[13px] leading-relaxed text-justify px-2">
-                    <span className="font-bold">{data.summaryTitle}:</span> {data.summaryBody}
+                    <span className="font-bold">{summaryTitle}:</span> {summaryBody}
                 </p>
             </section>
 
@@ -36,7 +56,7 @@ const ResumeTemplate = ({ data }) => {
                     Skills
                 </h2>
                 <div className="grid grid-cols-2 gap-x-12 px-8 text-[13px]">
-                    {data.skills.map((item, idx) => {
+                    {skills.map((item, idx) => {
                         return (<div className="space-y-2">
                             <p> ● <strong>{item.skillCategory} :</strong> {item.skills}</p>
                         </div>)
@@ -51,7 +71,7 @@ const ResumeTemplate = ({ data }) => {
                 </h2>
 
                 {/* Dynamic Mapping for Experience */}
-                {data.experience.map((exp, idx) => (
+                {experience.map((exp, idx) => (
                     <div key={idx} className="mb-5 px-2">
                         <div className="flex justify-between font-bold text-[14px]">
                             <span className="uppercase">{exp.role}</span>
@@ -70,7 +90,7 @@ const ResumeTemplate = ({ data }) => {
                 ))}
 
                 {/* Dynamic Mapping for Projects */}
-                {data.projects.map((project, idx) => (
+                {projects.map((project, idx) => (
                     <div key={idx} className="mb-5 px-2">
                         <div className="flex justify-between font-bold text-[14px]">
                             <span className="uppercase">{project.name}</span>
@@ -94,7 +114,7 @@ const ResumeTemplate = ({ data }) => {
                 <h2 className="text-center font-bold uppercase text-sm border-b border-gray-300 mb-3 py-1 bg-gray-50">
                     Education and Training
                 </h2>
-                {data.education.map((edu, idx) => (
+                {education.map((edu, idx) => (
                     <div key={idx} className="px-2 mb-4">
                         <div className="flex justify-between font-bold text-[14px]">
                             <span>{edu.degree} - {edu.field}</span>
@@ -131,7 +151,7 @@ const ResumeTemplate = ({ data }) => {
                 </h2>
                 <div className="grid grid-cols-2 gap-8 px-4">
 
-                    {data.languages.map((lang, index) => (
+                    {languages.map((lang, index) => (
                         <div key={index} className='flex'>
                             <p className="text-[13px] font-bold">{lang.langCategory}</p>
                             <p className="text-[12px] text-gray-600">, {lang.status}</p>
@@ -149,12 +169,12 @@ const ResumeTemplate = ({ data }) => {
                 </h2>
                 <div className="grid grid-cols-2 gap-x-12 px-8 text-[13px]">
                     <ul className="list-disc space-y-1">
-                        {data.achievements.map((ach, idx) => (
+                        {achievements.map((ach, idx) => (
                             <li key={idx}>{ach}</li>
                         ))}
                     </ul>
                     <ul className="list-disc space-y-1 italic">
-                        {data.certifications.map((cert, idx) => (
+                        {certifications.map((cert, idx) => (
                             <li key={idx} onClick={() => window.open(cert.link, "_blank")}>{cert.about}</li>
                         ))}
                     </ul>
