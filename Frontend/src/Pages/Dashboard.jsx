@@ -8,7 +8,7 @@ import BASE_URL from "../Pages/auth/baseURL";
 import { useNavigate } from "react-router-dom";
 
 import Preview from "./CARRER-PROFILE-CREATION/2/08_PREVIEW/Preview";
-import ShortPreview from "./INTERVIEW-ARENA/ShortPreview";
+import ShortPreview from "./INTERVIEW-ARENA/MediumPreview";
 
 const Dashboard = () => {
 

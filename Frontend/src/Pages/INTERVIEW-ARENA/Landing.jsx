@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import ShortPreview from './ShortPreview';
+import ShortPreview from './MediumPreview';
 import { motion, percent } from 'framer-motion';
 import ClickedInterviews from "./ClickedInterviews"
 import ClickedResume from "./ClickedResume"
 import ContentSecond2 from './ContentSecond2';
 import HowCareerProfile from './HowCareerProfile';
+import { Lock } from 'lucide-react';
 
 const Card = ({ idx }) => {
     const data = [
@@ -214,6 +215,8 @@ const Landing = () => {
                 {/* Create Resume Button */}
 
                 <button
+
+                    disabled={type !== "career"}
                     className='
                         text-center
                         h-[52px]
@@ -256,6 +259,8 @@ const Landing = () => {
                 {/* Import Resume Button */}
 
                 <button
+
+                    disabled={type !== "career"}
                     className='
                         text-center
                         h-[52px]
@@ -432,9 +437,12 @@ text-blue-500
                                 <Card idx={2} />
                                 <Card idx={3} />
                             </div>
-
+                            <HowCareerProfile />
                             <h1 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl my-2 font-extrabold flex gap-2 sm:flex-row flex-col">Your Career Profile </h1>
-                            <ShortPreview />
+                            <div className='rounded-3xl overflow-hidden bg-white '>
+                                <ShortPreview />
+                            </div>
+
                         </div>
                     </div>
 
@@ -447,7 +455,7 @@ text-blue-500
 
                 <div className=" w-full flex flex-col justify-center items-center mt-10">
                     <div className="w-full h-auto">
-                        <h1 className="text-4xl mb-2 font-bold">AI Mock Interview,</h1>
+                        <div className='flex justify-start items-center gap-2'> <h1 className="text-4xl mb-2 font-bold">AI Mock Interview,</h1> <div className='border-2 border-orange-500 text-orange-500 px-4 py-2 rounded-full text-xs sm:text-lg flex items-center gap-1 mb-2'><Lock /> Comming Soon</div></div>
                         <div className=' w-full bg-transparent rounded-3xl'>
                             {/* Background */}
 
