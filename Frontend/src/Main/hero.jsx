@@ -80,14 +80,14 @@ const Hero = () => {
             {loading && <Preloader />}
 
             <Main2 ctaData={ctaData} />
-            {/* 
+
             <ContentFirst />
 
             <SecondLanding />
             <Third />
             <ContentSecond />
             <Lines2 />
-            <ContentSecond2 /> */}
+            <ContentSecond2 />
 
 
 
@@ -102,8 +102,8 @@ bg-[size:90px_90px]
 "
                 />
 
-                {/* <Devs />
-                <Footer /> */}
+                <Devs />
+                <Footer />
             </div>
 
 
