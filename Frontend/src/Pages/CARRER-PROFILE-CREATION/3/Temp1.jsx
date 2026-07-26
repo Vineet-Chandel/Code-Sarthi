@@ -4,7 +4,7 @@ import {
     Mail, Phone, Globe, Linkedin, Github, ExternalLink,
     Code, Terminal, Award, BookOpen, MapPin, Briefcase
 } from 'lucide-react';
-import language from 'react-syntax-highlighter/dist/esm/languages/hljs/1c';
+
 
 /* ─── A4 constants (96 dpi) ───────────────────────────────────────────────── */
 const A4_W = 794;   // 210 mm → px

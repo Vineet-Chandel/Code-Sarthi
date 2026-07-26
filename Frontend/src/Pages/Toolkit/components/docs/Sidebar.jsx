@@ -2,16 +2,31 @@ import { useEffect, useRef } from "react";
 import clsx from "clsx";
 
 export default function Sidebar({ topics, activeTopic, onSelect }) {
+  const asideRef = useRef(null);
   const activeRef = useRef(null);
 
   useEffect(() => {
-    if (activeRef.current) {
-      activeRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    // Scroll only the sidebar's own overflow container — NOT all ancestors.
+    // Using scrollIntoView here would also scroll the main page container and
+    // fight with DocPage's programmatic scrollTo, causing the double-click bug.
+    const aside = asideRef.current;
+    const btn = activeRef.current;
+    if (!aside || !btn) return;
+
+    const asideTop = aside.scrollTop;
+    const asideBottom = asideTop + aside.clientHeight;
+    const btnTop = btn.offsetTop;
+    const btnBottom = btnTop + btn.offsetHeight;
+
+    if (btnTop < asideTop) {
+      aside.scrollTo({ top: btnTop - 8, behavior: "smooth" });
+    } else if (btnBottom > asideBottom) {
+      aside.scrollTo({ top: btnBottom - aside.clientHeight + 8, behavior: "smooth" });
     }
   }, [activeTopic]);
 
   return (
-    <aside className="sticky top-20 hidden h-[calc(100vh-6rem)] w-60 shrink-0 overflow-y-auto pr-3 lg:block scrollbar-none">
+    <aside ref={asideRef} className="sticky top-20 hidden h-[calc(100vh-6rem)] w-60 shrink-0 overflow-y-auto pr-3 lg:block scrollbar-none">
       <div className="mb-3 px-3 flex items-center justify-between">
         <p className="text-[11px] font-semibold uppercase tracking-wider text-white/65">
           Table of Contents

@@ -5,15 +5,15 @@ export default function Navbar({ onOpenSearch }) {
   const navigate = useNavigate();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-base-950/70 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+    <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-black backdrop-blur-xl">
+      <div className="mx-auto flex h-16  items-center justify-between px-6">
         <Link to="/" className="flex items-center gap-2.5 group">
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 border border-accent/20 text-accent transition-colors group-hover:bg-accent/20">
             <Terminal size={16} strokeWidth={2.25} />
           </span>
-          <span className="font-semibold tracking-tight text-[15px]">
-            DevCheats
-            <span className="ml-1.5 text-white/40 font-normal">by CodeSarthi</span>
+          <span className="font-semibold tracking-tight text-[25px]">
+            Developers ToolKit
+
           </span>
         </Link>
 
@@ -27,14 +27,7 @@ export default function Navbar({ onOpenSearch }) {
           </span>
         </button>
 
-        <nav className="flex items-center gap-6 text-sm text-white/60">
-          <a
-            href="https://codesarthi.in"
-            className="hover:text-white transition-colors"
-          >
-            CodeSarthi
-          </a>
-        </nav>
+
       </div>
     </header>
   );

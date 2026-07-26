@@ -168,7 +168,7 @@ export default function SearchPalette({ open, onClose }) {
             </div>
 
             {/* Results Container */}
-            <div className="max-h-[60vh] overflow-y-auto py-3 px-2 flex flex-col gap-4">
+            <div className="max-h-[60vh] overflow-y-auto scrollbar-none py-3 px-2 flex flex-col gap-4">
               {!hasResults ? (
                 <div className="py-12 text-center text-sm text-white/35">
                   No cheat sheet or topics matching "{query}"

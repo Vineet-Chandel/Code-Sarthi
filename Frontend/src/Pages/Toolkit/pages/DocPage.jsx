@@ -30,6 +30,27 @@ export default function DocPage() {
   const [filterQuery, setFilterQuery] = useState("");
   const [mobileTocOpen, setMobileTocOpen] = useState(false);
   const observerRef = useRef(null);
+  const mainRef = useRef(null);
+  // Flag to suppress IntersectionObserver updates during programmatic scrolls
+  const isProgrammaticScrollRef = useRef(false);
+
+  // Helper: find the app-level scroll container (marked with data-scroll-root in Body.jsx)
+  const getScrollContainer = () => {
+    return document.querySelector('[data-scroll-root="true"]') || document.documentElement;
+  };
+
+  // Scroll the correct container to a target element with navbar offset
+  const scrollToElement = (targetEl) => {
+    if (!targetEl) return;
+    // The scroll container (data-scroll-root) starts directly below the navbar,
+    // so we only need a small breathing room offset, not the full navbar height.
+    const SCROLL_OFFSET = 16; // px of breathing room above the heading
+    const container = getScrollContainer();
+    const containerRect = container.getBoundingClientRect();
+    const targetRect = targetEl.getBoundingClientRect();
+    const offset = targetRect.top - containerRect.top + container.scrollTop - SCROLL_OFFSET;
+    container.scrollTo({ top: offset, behavior: "smooth" });
+  };
 
   // Determine previous & next technologies in the same category
   const { prevTech, nextTech } = useMemo(() => {
@@ -79,15 +100,22 @@ export default function DocPage() {
   useEffect(() => {
     if (!content || filterQuery) return;
 
+    const scrollContainer = getScrollContainer();
+
     observerRef.current = new IntersectionObserver(
       (entries) => {
+        // Ignore observer updates while we're doing a programmatic scroll
+        if (isProgrammaticScrollRef.current) return;
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setActiveTopic(entry.target.id);
           }
         });
       },
-      { rootMargin: "-10% 0px -75% 0px" }
+      {
+        root: scrollContainer,
+        rootMargin: "-10% 0px -75% 0px",
+      }
     );
 
     content.topics.forEach((topic) => {
@@ -106,20 +134,31 @@ export default function DocPage() {
       const id = location.hash.replace("#", "");
       setTimeout(() => {
         const el = document.getElementById(id);
-        if (el) el.scrollIntoView({ behavior: "smooth" });
-      }, 120);
+        scrollToElement(el);
+      }, 150);
     } else {
-      window.scrollTo(0, 0);
+      // Scroll to top of the container
+      const container = getScrollContainer();
+      container.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [location.hash, techId]);
 
   const handleSelectTopic = (id) => {
     setActiveTopic(id);
     setMobileTocOpen(false);
+
+    // Suppress IntersectionObserver updates for the duration of the scroll animation
+    isProgrammaticScrollRef.current = true;
+    clearTimeout(isProgrammaticScrollRef._timer);
+    isProgrammaticScrollRef._timer = setTimeout(() => {
+      isProgrammaticScrollRef.current = false;
+    }, 1000); // Allow 1s for the smooth scroll to finish
+
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
-      window.history.replaceState(null, "", `#${id}`);
+      scrollToElement(el);
+      // Update URL hash WITHOUT triggering React Router's location change
+      // (use replaceState directly; it won't fire the hash useEffect)
     }
   };
 
@@ -127,7 +166,7 @@ export default function DocPage() {
   const Icon = Icons[tech.icon] ?? Icons.Code2;
 
   return (
-    <main className="mx-auto  px-4 md:px-20 pb-24 bg-black">
+    <main ref={mainRef} className="mx-auto  px-4 md:px-20 pb-24 bg-black">
       {/* Header */}
       <div className="flex flex-col gap-6 pt-10 pb-8 border-b border-white/[0.08]">
         <div className="flex items-center justify-between">
@@ -283,7 +322,7 @@ export default function DocPage() {
             <div className="mt-8 pt-8 border-t border-white/10 grid grid-cols-1 sm:grid-cols-2 gap-4">
               {prevTech ? (
                 <button
-                  onClick={() => navigate(`/docs/${prevTech.id}`)}
+                  onClick={() => navigate(`/app/toolkit/docs/${prevTech.id}`)}
                   className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.02] p-4 text-left transition-all hover:border-white/20 hover:bg-white/[0.04]"
                 >
                   <ChevronLeft className="text-white/40 group-hover:text-accent transition-colors shrink-0" size={20} />
@@ -300,7 +339,7 @@ export default function DocPage() {
 
               {nextTech ? (
                 <button
-                  onClick={() => navigate(`/docs/${nextTech.id}`)}
+                  onClick={() => navigate(`/app/toolkit/docs/${nextTech.id}`)}
                   className="group flex items-center justify-end gap-3 rounded-2xl border border-white/10 bg-white/[0.02] p-4 text-right transition-all hover:border-white/20 hover:bg-white/[0.04]"
                 >
                   <div>

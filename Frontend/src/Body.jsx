@@ -155,13 +155,13 @@ const Body = () => {
     return (
 
         <SocketProvider>
-            <div data-theme="caramellatte" className="bg-base-200 h-screen scrollbar-none overflow-y-auto">
+            <div data-theme="caramellatte" className="bg-base-200 h-screen flex flex-col scrollbar-none">
                 <InternetPopup />
-                <div className=" h-[53px]">
+                <div className="shrink-0 h-[53px]">
                     <NavBar selectedChatUser={selectedChatUser} setSelectedChatUser={setSelectedChatUser} />
                 </div>
 
-                <div className="h-[calc(100vh-53px)]">
+                <div data-scroll-root="true" className="flex-1 overflow-y-auto scrollbar-none">
                     <Outlet
                         context={{
                             selectedChatUser,
