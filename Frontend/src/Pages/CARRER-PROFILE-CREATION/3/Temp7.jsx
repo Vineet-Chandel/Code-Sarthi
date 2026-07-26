@@ -1,12 +1,14 @@
 import React from "react";
+
+
 import {
-    FaPhone,
-    FaEnvelope,
-    FaGithub,
-    FaLinkedin,
-    FaGlobe,
-    FaMapMarkerAlt,
-} from "react-icons/fa";
+    Phone,
+    Mail,
+    Github,
+    Linkedin,
+    Globe,
+    MapPin,
+} from "lucide-react";
 
 const SectionHeading = ({ children }) => (
     <h2 className="uppercase font-bold text-3xl tracking-tight mb-2 border-b-[4px] border-black pb-1 text-black">
@@ -60,14 +62,14 @@ const Temp7 = ({ data, ref }) => {
     const { fname, lname, phone, github, linkedin, email, location, pincode, portfolio, summaryTitle } = data?.header
 
     const contactItems = [
-        { value: phone, icon: FaPhone },
-        { value: email, icon: FaEnvelope },
-        { value: github, icon: FaGithub },
-        { value: linkedin, icon: FaLinkedin },
-        { value: portfolio, icon: FaGlobe },
+        { value: phone, icon: Phone },
+        { value: email, icon: Mail },
+        { value: github, icon: Github },
+        { value: linkedin, icon: Linkedin },
+        { value: portfolio, icon: Globe },
         {
             value: [location, pincode].filter(Boolean).join(", "),
-            icon: FaMapMarkerAlt,
+            icon: MapPin,
         },
     ].filter((item) => item.value && String(item.value).trim().length > 0);
 

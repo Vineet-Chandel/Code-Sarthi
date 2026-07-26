@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import BASE_URL from "../Pages/auth/baseURL";
 import axios from "axios";
 import { motion } from 'framer-motion';
-import { AiOutlineLoading } from "react-icons/ai";
+
 import { useDispatch, useSelector } from "react-redux";
 import { addConnectionUser } from "../utils/connectionSlice";
 import Toast from '../Pages/CARRER-PROFILE-CREATION/2/Toast';

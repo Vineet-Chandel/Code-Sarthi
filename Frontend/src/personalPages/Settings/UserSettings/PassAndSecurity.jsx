@@ -1,9 +1,17 @@
 import React, { useEffect } from 'react'
-import { RiVerifiedBadgeFill } from "react-icons/ri";
-import { TbPasswordFingerprint } from "react-icons/tb";
-import { MdMarkEmailUnread } from "react-icons/md";
-import { MdOutgoingMail } from "react-icons/md";
-import { FaUserTag } from "react-icons/fa";
+
+
+
+import {
+    BadgeCheck,
+    Fingerprint,
+    Mail,
+    Send,
+    AtSign,
+} from "lucide-react";
+
+
+
 import BASE_URL from "../../../Pages/auth/baseURL";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,29 +22,29 @@ import { addUser } from "../../../utils/userSlice";
 const allChanges = [
     {
         "Tag": "Verify Email",
-        "svg": <RiVerifiedBadgeFill size={40} color="#fff" />,
+        "svg": <BadgeCheck size={40} color="#fff" />,
         "index": 1,
     },
 
     {
         "Tag": "Forgot Password",
-        "svg": <MdMarkEmailUnread size={35} color="#fff" />,
+        "svg": <Mail size={35} color="#fff" />,
         "index": 2
     },
     {
         "Tag": "Renew Password",
-        "svg": <TbPasswordFingerprint size={45} color="#fff" />,
+        "svg": <Fingerprint size={45} color="#fff" />,
         "index": 3,
     },
     {
         "Tag": "Change Gmail",
-        "svg": <MdOutgoingMail size={40} color="#fff" />,
+        "svg": <Send size={40} color="#fff" />,
 
         "index": 4,
     },
     {
         "Tag": "Change Username",
-        "svg": <FaUserTag size={35} color="#fff" />,
+        "svg": <AtSign size={35} color="#fff" />,
         "index": 5,
     },
 

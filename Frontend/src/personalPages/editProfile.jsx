@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import BASE_URL from "../Pages/auth/baseURL";
+import { Pencil } from "lucide-react";
 
-import { MdEdit } from "react-icons/md";
 import Toast from '../Pages/CARRER-PROFILE-CREATION/2/Toast';
 import { AnimatePresence } from "framer-motion";
 import { addNewUser } from "@/utils/userSlice";
@@ -254,7 +254,7 @@ md:w-[180px] md:h-[180px] rounded-2xl bg-gray-900 border border-gray-700 flex it
                                     className={`absolute inset-0 rounded-2xl bg-black/60 flex justify-center items-center transition-all duration-300 ease-out ${hoveringImg ? "opacity-100 scale-100" : "opacity-0 scale-95"}
 `}
                                 >
-                                    <MdEdit className="text-white" size={35} />
+                                    <Pencil className="text-white" size={35} />
                                 </div>
 
                                 <img src={user?.photoUrl?.url} className="h-full rounded-2xl w-full object-cover transition-transform duration-500 group-hover:scale-110 border border-secondary border-[2px]" alt="" />

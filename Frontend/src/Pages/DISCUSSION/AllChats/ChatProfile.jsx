@@ -1,8 +1,12 @@
 import React from 'react'
-import { BsPersonWorkspace } from 'react-icons/bs';
-import { FaUniversity } from 'react-icons/fa';
 
-import { IoBarChart } from "react-icons/io5";
+
+import {
+    BriefcaseBusiness,
+    University,
+    BarChart3
+} from "lucide-react";
+
 const ChatProfile = ({ selectedChatUser, setSelectedChatUser }) => {
     return (
         <div className="w-full  h-[calc(100vh-130px)] rounded-3xl bg-base-100 mt-2 flex flex-col  items-center overflow-hidden  relative">
@@ -73,7 +77,7 @@ const ChatProfile = ({ selectedChatUser, setSelectedChatUser }) => {
 
                     <div className="flex items-center gap-3  px-5 py-1 rounded-xl">
                         {selectedChatUser?.info?._id && (
-                            <span className="text-md text-info font-medium flex justify-center items-center gap-3"><FaUniversity color="#fff" />
+                            <span className="text-md text-info font-medium flex justify-center items-center gap-3"><University color="#fff" />
                                 {selectedChatUser?.info?.college}
                             </span>
                         )}
@@ -81,7 +85,7 @@ const ChatProfile = ({ selectedChatUser, setSelectedChatUser }) => {
 
                     <div className="flex items-center gap-3 px-5 py-1 rounded-xl">
                         {selectedChatUser?.info?._id && (
-                            <span className="text-md text-info font-medium flex justify-center items-center gap-3"><BsPersonWorkspace color="#fff" />
+                            <span className="text-md text-info font-medium flex justify-center items-center gap-3"><BriefcaseBusiness color="#fff" />
                                 {selectedChatUser?.info?.profession}
                             </span>
                         )}
@@ -90,7 +94,7 @@ const ChatProfile = ({ selectedChatUser, setSelectedChatUser }) => {
                     <div className="flex items-center gap-3 px-5 py-1 rounded-xl">
                         {selectedChatUser?.info?._id && (
                             <span className="text-md text-info font-medium flex justify-center items-center gap-3">
-                                <IoBarChart color="#fff" />
+                                <BarChart3 color="#fff" />
                                 {selectedChatUser?.info?.skills?.join(", ")}
                             </span>
                         )}

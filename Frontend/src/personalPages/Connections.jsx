@@ -4,7 +4,7 @@ import BASE_URL from "../Pages/auth/baseURL";
 import { addConnectionUser, removeConnectionUser } from "../utils/connectionSlice";
 import { useDispatch, useSelector } from "react-redux";
 
-import { FaPeopleCarry } from "react-icons/fa";
+import { Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -402,7 +402,7 @@ bg-[#212121]
                         rounded-full  bg-black
                         border border-secondary border-[2px]
                     ">
-                                <FaPeopleCarry className="text-blue-500" size={60} />
+                                <Users className="text-blue-500" size={60} />
                             </div>
 
                             {/* TEXT SECTION */}

@@ -1,18 +1,20 @@
 import React from "react";
+
+
 import {
-    FaPhone,
-    FaEnvelope,
-    FaGithub,
-    FaLinkedin,
-    FaGlobe,
-    FaMapMarkerAlt,
-    FaAward,
-    FaRocket,
-    FaStar,
-    FaCheckCircle,
-    FaTrophy,
-    FaBolt,
-} from "react-icons/fa";
+    Phone,
+    Mail,
+    Github,
+    Linkedin,
+    Globe,
+    MapPin,
+    Award,
+    Rocket,
+    Star,
+    CircleCheck,
+    Trophy,
+    Zap,
+} from "lucide-react";
 
 const SectionTitle = ({ children }) => (
     <h2 className="uppercase text-gray-600 font-medium text-2xl border-b border-gray-400 pb-1 mb-5">
@@ -20,7 +22,7 @@ const SectionTitle = ({ children }) => (
     </h2>
 );
 
-const ACHIEVEMENT_ICONS = [FaAward, FaRocket, FaStar, FaCheckCircle, FaTrophy, FaBolt];
+const ACHIEVEMENT_ICONS = [Award, Rocket, Star, CircleCheck, Trophy, Zap];
 
 const LANGUAGE_LEVELS = {
     native: 5,
@@ -73,12 +75,12 @@ const ResumeTemplate04 = ({ data, ref }) => {
     const fullLocation = [location, pincode].filter(Boolean).join(", ");
 
     const contactItems = [
-        { value: phone, icon: FaPhone, href: null },
-        { value: email, icon: FaEnvelope, href: `mailto:${email}` },
-        { value: github, icon: FaGithub, href: github },
-        { value: linkedin, icon: FaLinkedin, href: linkedin },
-        { value: portfolio, icon: FaGlobe, href: portfolio },
-        { value: fullLocation, icon: FaMapMarkerAlt, href: null },
+        { value: phone, icon: Phone, href: null },
+        { value: email, icon: Mail, href: `mailto:${email}` },
+        { value: github, icon: Github, href: github },
+        { value: linkedin, icon: Linkedin, href: linkedin },
+        { value: portfolio, icon: Globe, href: portfolio },
+        { value: fullLocation, icon: MapPin, href: null },
     ].filter((item) => item.value && String(item.value).trim().length > 0);
 
     return (

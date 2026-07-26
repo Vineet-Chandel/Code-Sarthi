@@ -1,5 +1,5 @@
 //  IMPORTS OF LIBRARIES
-
+import { lazy, useEffect, Suspense, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 //  STORE IMPORT --- consist of all slices of redux store ex. : userSlice, requestedUserSlice, receivedConnection, feedSlice,connectionSlice, chat-user-slice, blockedSlice etc. 
@@ -55,9 +55,13 @@ import Notes from "./Pages/Notes";
 import EditProfile from "./personalPages/editProfile";
 import Connections from "./personalPages/Connections";
 import Collab from "./Pages/Collab";
-import HTML from "./Pages/Toolkit/Htmlw";
-import Css from "./Pages/Toolkit/Css";
-import Toolkit from "./Pages/Toolkit/Toolkitw";
+// import HTML from "./Pages/Toolkit/Htmlw";
+// import Css from "./Pages/Toolkit/Css";
+// import Toolkit from "./Pages/Toolkit/components/home/TechBlock";
+
+import Home from "@/pages/Toolkit/pages/Home";
+
+const DocPage = lazy(() => import("@/pages/Toolkit/pages/DocPage"));
 import Review from "./Main/PagesMain/Sub-Category/Support-Category/Review";
 import Settings from "./personalPages/Settings/Settings";
 import RequestedUser from "./personalPages/RequestedUser";
@@ -87,8 +91,24 @@ import ResumeBuilder from "./Main/PagesMain/Sub-Category/Developers-Category/RES
 import SessionHero from "./Main/SessionHero";
 import BuyMeChai from "./Main/BuyMeAChai";
 import Goal from "./Pages/PROJECT-MANAGER/Goal";
+import SearchPalette from "./Pages/Toolkit/components/docs/SearchPalette";
+
 
 const App = () => {
+
+  const [searchOpen, setSearchOpen] = useState(false);
+  useEffect(() => {
+
+    const handler = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, []);
+
   return (
     <Provider store={appStore}>
 
@@ -199,16 +219,29 @@ const App = () => {
 
               <Route path="requestreceived" element={<ReceivedRequests />} />
 
-              <Route path="toolkit" element={<Toolkit />} />
-              <Route path="toolkit/html" element={<HTML />} />
-              <Route path="toolkit/css" element={<Css />} />
+              <Route path="toolkit" element={<Home />} />
+              <Route
+                path="toolkit/docs/:techId"
+                element={
+                  <Suspense fallback={<div className="min-h-screen bg-base-950" />}>
+                    <DocPage />
+                  </Suspense>
+                }
+              />
+
+
+              {/* <Route path="toolkit/html" element={<HTML />} />
+              <Route path="toolkit/css" element={<Css />} /> */}
 
               {/* 📌 PAGE NOT FOUND ROUTE */}
               <Route path="*" element={<PageNotFound />} />
+
             </Route>
           </Route>
 
         </Routes>
+
+        <SearchPalette open={searchOpen} onClose={() => setSearchOpen(false)} />
       </BrowserRouter>
     </Provider>
   );

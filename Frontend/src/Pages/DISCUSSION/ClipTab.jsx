@@ -1,26 +1,26 @@
 import { motion } from "framer-motion";
 import React from "react";
-import {
-    FaImage,
-    FaMusic,
-    FaFileCode,
-} from "react-icons/fa";
 
+import {
+    Image,
+    Music,
+    FileCode2,
+} from "lucide-react";
 
 
 const ClipTab = ({ replyHandeler }) => {
     const buttons = [
         {
             title: "Photo or Video",
-            icon: <FaImage />,
+            icon: <Image />,
         },
         {
             title: "Audio",
-            icon: <FaMusic />,
+            icon: <Music />,
         },
         {
             title: "Code File",
-            icon: <FaFileCode />,
+            icon: <FileCode2 />,
         },
     ];
 

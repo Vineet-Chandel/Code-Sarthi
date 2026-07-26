@@ -5,7 +5,7 @@ import { addFeedUser } from "../utils/feedSlice";
 import { removeFeedUser } from "../utils/feedSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Search from "../components/navSearch";
-import { RiUserUnfollowFill } from "react-icons/ri";
+
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 

@@ -3,11 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import BASE_URL from '../auth/baseURL';
 import axios from 'axios';
 import { addConnectionUser } from '@/utils/connectionSlice';
-import { FaUniversity, FaVideo } from 'react-icons/fa';
 
 import { useNavigate, useOutletContext } from "react-router-dom";
-import { BsPersonWorkspace } from 'react-icons/bs';
-import { IoBarChart } from 'react-icons/io5';
+
 import { setChatUsers } from '@/utils/chat-user-slice';
 import ChatClickedTab from './ChatClickedTab';
 import ChatProfile from './AllChats/ChatProfile';

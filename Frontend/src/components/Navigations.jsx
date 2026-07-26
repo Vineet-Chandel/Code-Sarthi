@@ -1,5 +1,5 @@
-import { RiUserFollowFill } from "react-icons/ri";
-import { MdEmojiPeople } from "react-icons/md";
+import { UserRoundCheck } from 'lucide-react';
+import { UserRound } from 'lucide-react';
 export const Pages = [
 
     {
@@ -124,14 +124,14 @@ export const ProfilePlace = [
     {
         id: 3,
         name: "Requested Users",
-        icon: (<RiUserFollowFill size={20} color="white" />),
+        icon: (<UserRoundCheck size={20} color="white" />),
         path: "/requestedUser"
 
     },
     {
         id: 4,
         name: "Received Requests",
-        icon: (<MdEmojiPeople size={25} color="white" />),
+        icon: (<UserRound size={25} color="white" />),
         path: "/requestreceived"
     },
     {

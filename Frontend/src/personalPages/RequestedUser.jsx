@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import BASE_URL from "../Pages/auth/baseURL"
 import { addRequestedUser } from "../utils/requestedUserSlice";
 import { useDispatch, useSelector } from "react-redux";
-import Search from "../components/navSearch";
-import { RiUserUnfollowFill } from "react-icons/ri";
+
 import { useNavigate } from "react-router-dom";
-import { FaPeopleCarry } from "react-icons/fa";
+
+import { Users } from "lucide-react";
 import { motion } from "framer-motion";
 
 const RequestedUser = () => {
@@ -362,7 +362,7 @@ bg-[#212121]
                         rounded-full  bg-black
                         border border-secondary border-[2px]
                     ">
-                                <FaPeopleCarry className="text-blue-500" size={60} />
+                                <Users className="text-blue-500" size={60} />
                             </div>
 
                             {/* TEXT SECTION */}

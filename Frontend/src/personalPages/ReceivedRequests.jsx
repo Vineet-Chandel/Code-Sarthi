@@ -5,7 +5,8 @@ import BASE_URL from "../Pages/auth/baseURL"
 import { addReceviedConnectionUser } from "../utils/receivedConnection";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { FaPeopleCarry } from "react-icons/fa";
+
+import { Users } from "lucide-react";
 import { motion } from 'framer-motion';
 
 const ReceivedRequests = () => {
@@ -441,7 +442,7 @@ bg-[#212121]
                         rounded-full  bg-black
                         border border-secondary border-[2px]
                     ">
-                                <FaPeopleCarry className="text-blue-500" size={60} />
+                                <Users className="text-blue-500" size={60} />
                             </div>
 
                             {/* TEXT SECTION */}
