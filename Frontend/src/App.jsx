@@ -61,7 +61,7 @@ import Collab from "./Pages/Collab";
 
 import Home from "./Pages/Toolkit/pages/Home";
 
-const DocPage = lazy(() => import("./pages/Toolkit/pages/DocPage"));
+const DocPage = lazy(() => import("./Pages/Toolkit/pages/DocPage"));
 import Review from "./Main/PagesMain/Sub-Category/Support-Category/Review";
 import Settings from "./personalPages/Settings/Settings";
 import RequestedUser from "./personalPages/RequestedUser";
