@@ -59,9 +59,9 @@ import Collab from "./Pages/Collab";
 // import Css from "./Pages/Toolkit/Css";
 // import Toolkit from "./Pages/Toolkit/components/home/TechBlock";
 
-import Home from "@/pages/Toolkit/pages/Home";
+import Home from "./Pages/Toolkit/pages/Home";
 
-const DocPage = lazy(() => import("@/pages/Toolkit/pages/DocPage"));
+const DocPage = lazy(() => import("./pages/Toolkit/pages/DocPage"));
 import Review from "./Main/PagesMain/Sub-Category/Support-Category/Review";
 import Settings from "./personalPages/Settings/Settings";
 import RequestedUser from "./personalPages/RequestedUser";
