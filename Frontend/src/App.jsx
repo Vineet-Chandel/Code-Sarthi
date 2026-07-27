@@ -45,7 +45,7 @@ import AfterTemplate from "./Pages/CARRER-PROFILE-CREATION/4/AfterTemplate";
 import Templates from "./Pages/CARRER-PROFILE-CREATION/2/Templates";
 import HeaderContent from "./Pages/CARRER-PROFILE-CREATION/2/01_HEADER/StartHeader"
 import BuildResume from "./Pages/CARRER-PROFILE-CREATION/2/01_HEADER/BuildResume";
-import Shastra from "./Pages/Shastra";
+import Shastra from "./Pages/Shastra/Shastra";
 import Projects from "./Pages/Projects";
 import ProjectManager from "./Pages/Project-Manager";
 import Scheduler from "./Pages/Scheduler";

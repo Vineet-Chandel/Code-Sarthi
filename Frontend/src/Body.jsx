@@ -12,7 +12,7 @@ import { SocketProvider } from "./socket/SocketProvider";
 
 const Body = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate(); // ✅ rename
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const [selectedChatUser, setSelectedChatUser] = useState({ isNew: false, id: null, info: null, isOpenTab: false });
 
@@ -153,7 +153,6 @@ const Body = () => {
 
 
     return (
-
         <SocketProvider>
             <div data-theme="caramellatte" className="bg-base-200 h-screen flex flex-col scrollbar-none">
                 <InternetPopup />
@@ -169,9 +168,7 @@ const Body = () => {
                         }}
                     />
                 </div>
-
             </div>
-
         </SocketProvider>
     );
 };

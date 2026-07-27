@@ -48,7 +48,7 @@ export default function Home() {
   }, [searchQuery]);
 
   return (
-    <>
+    <div className="pt-5 bg-black">
       <Navbar onOpenSearch={() => setSearchOpen(true)} />
       <SearchPalette open={searchOpen} onClose={() => setSearchOpen(false)} />
       <main className="mx-auto px-6 pb-24 bg-black">
@@ -236,6 +236,6 @@ export default function Home() {
           </div>
         )}
       </main>
-    </>
+    </div>
   );
 }

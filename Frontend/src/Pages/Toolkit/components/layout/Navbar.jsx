@@ -11,10 +11,7 @@ export default function Navbar({ onOpenSearch }) {
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#212121] border border-[#212121] text-accent transition-colors group-hover:bg-accent/20">
             <Terminal size={16} strokeWidth={2.25} color="white" />
           </span>
-          <span className="font-semibold tracking-tight text-[25px]">
-            Developers ToolKit
 
-          </span>
         </Link>
 
         <button

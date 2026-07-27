@@ -58,6 +58,28 @@ module.exports = {
   },
 
 
+  safelist: [
+    // Bot component dynamic classes — must be safelisted for Tailwind JIT
+    "bg-white/8",
+    "bg-white/[0.06]",
+    "bg-white/[0.08]",
+    "border-white/15",
+    "border-white/[0.12]",
+    "border-white/[0.09]",
+    "border-white/[0.08]",
+    "border-white/[0.10]",
+    "backdrop-blur-xl",
+    "backdrop-blur-sm",
+    "border-[#A7A0F8]",
+    "text-[#A7A0F8]",
+    "from-[#534AB7]",
+    "to-[#A7A0F8]",
+    "z-[9999]",
+    "z-[9998]",
+    "rounded-br-sm",
+    "rounded-bl-sm",
+  ],
+
   plugins: [
     require("daisyui"),
     require("tailwind-scrollbar"),
