@@ -389,12 +389,12 @@ const Footer = () => (
         className="absolute inset-x-0 bottom-6 flex justify-center px-4 text-center text-xs text-zinc-500 sm:text-sm"
     >
         <p>
-            Unlock new era with AetherAI.{" "}
+            ShastraAi by the,{" "}
             <a
                 href="#"
                 className="relative text-zinc-300 after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-full after:origin-right after:scale-x-0 after:bg-zinc-300 after:transition-transform after:duration-300 hover:after:origin-left hover:after:scale-x-100"
             >
-                share us
+                CodeSarthi
             </a>
         </p>
     </motion.div>

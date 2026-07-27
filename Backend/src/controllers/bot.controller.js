@@ -86,11 +86,11 @@ const botChat = async (req, res) => {
         }
 
         if (cached) {
-            console.log(`🟢 Bot cache HIT for key: ${cacheKey}`);
+            // console.log(`🟢 Bot cache HIT for key: ${cacheKey}`);
             return streamCachedResponse(res, cached);
         }
 
-        console.log(`🔴 Bot cache MISS — calling Groq for: "${normalized.slice(0, 60)}"`);
+        // console.log(`🔴 Bot cache MISS — calling Groq for: "${normalized.slice(0, 60)}"`);
 
         // ── Call Groq with streaming ────────────────────────────────────────
         const stream = await groq.chat.completions.create({
