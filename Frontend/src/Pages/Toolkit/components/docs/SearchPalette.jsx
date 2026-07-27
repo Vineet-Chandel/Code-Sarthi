@@ -117,9 +117,9 @@ export default function SearchPalette({ open, onClose }) {
 
   const goTo = (item) => {
     if (item.type === "tech") {
-      navigate(`/docs/${item.techId}`);
+      navigate(`/app/toolkit/docs/${item.techId}`);
     } else {
-      navigate(`/docs/${item.techId}#${item.topicId}`);
+      navigate(`/app/toolkit/docs/${item.techId}#${item.topicId}`);
     }
     onClose();
   };

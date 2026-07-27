@@ -110,8 +110,8 @@ export default function CodeBlock({ code, language = "javascript" }) {
         >
           {copied ? (
             <>
-              <Check size={13} className="text-accent" />
-              <span className="text-accent">Copied</span>
+              <Check size={13} className="text-green-500" />
+              <span className="text-green-500">Copied</span>
             </>
           ) : (
             <>

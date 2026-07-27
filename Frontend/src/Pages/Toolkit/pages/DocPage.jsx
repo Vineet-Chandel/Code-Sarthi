@@ -172,7 +172,7 @@ export default function DocPage() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link
-              to="/"
+              to="/app/toolkit"
               className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/[0.03] text-white/40 transition-colors hover:text-white/80"
             >
               <ArrowLeft size={15} />
@@ -252,7 +252,7 @@ export default function DocPage() {
                       <span className="text-accent/60 font-mono text-lg">#</span>
                       {topic.title}
                     </h2>
-                    <span className="text-xs text-white/30 font-mono">
+                    <span className="text-xs text-white/50 font-mono">
                       {topic.sections?.length || 0} snippets
                     </span>
                   </div>

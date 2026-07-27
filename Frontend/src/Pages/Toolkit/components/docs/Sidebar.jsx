@@ -26,7 +26,7 @@ export default function Sidebar({ topics, activeTopic, onSelect }) {
   }, [activeTopic]);
 
   return (
-    <aside ref={asideRef} className="sticky top-20 hidden h-[calc(100vh-6rem)] w-60 shrink-0 overflow-y-auto pr-3 lg:block scrollbar-none">
+    <aside ref={asideRef} className="sticky top-20 hidden h-[85vh] w-60 shrink-0 overflow-y-auto pr-3 lg:block scrollbar-none">
       <div className="mb-3 px-3 flex items-center justify-between">
         <p className="text-[11px] font-semibold uppercase tracking-wider text-white/65">
           Table of Contents

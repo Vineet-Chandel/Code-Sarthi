@@ -5,11 +5,11 @@ export default function Navbar({ onOpenSearch }) {
   const navigate = useNavigate();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-black backdrop-blur-xl">
+    <header className="sticky top-0 z-10 border-b border-white/[0.06] bg-black backdrop-blur-xl">
       <div className="mx-auto flex h-16  items-center justify-between px-6">
-        <Link to="/" className="flex items-center gap-2.5 group">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 border border-accent/20 text-accent transition-colors group-hover:bg-accent/20">
-            <Terminal size={16} strokeWidth={2.25} />
+        <Link to="/app/toolkit" className="flex items-center gap-2.5 group">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#212121] border border-[#212121] text-accent transition-colors group-hover:bg-accent/20">
+            <Terminal size={16} strokeWidth={2.25} color="white" />
           </span>
           <span className="font-semibold tracking-tight text-[25px]">
             Developers ToolKit
