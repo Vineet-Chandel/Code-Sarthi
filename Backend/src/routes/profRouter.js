@@ -2778,17 +2778,17 @@ Your CodeSarthi Account ${user.gmail} has been sucessfully deleted.
         });
     }
 });
-profileRouter.post("/profile/others", userAuth, async (req, res) => {
+profileRouter.post("/profile/others", async (req, res) => {
     try {
-        const loggedInUser = req.user;
+        // const loggedInUser = req.user;
 
 
-        if (!loggedInUser || !loggedInUser._id) {
-            return res.status(401).json({
-                success: false,
-                message: "Please re-login"
-            });
-        }
+        // if (!loggedInUser || !loggedInUser._id) {
+        //     return res.status(401).json({
+        //         success: false,
+        //         message: "Please re-login"
+        //     });
+        // }
 
 
         const { username } = req.body;
@@ -2810,12 +2810,6 @@ profileRouter.post("/profile/others", userAuth, async (req, res) => {
         }
 
 
-        if (trimmedUsername === loggedInUser.username?.toLowerCase()) {
-            return res.status(400).json({
-                success: false,
-                message: "It's your profile only!"
-            });
-        }
 
 
         const otherUser = await User.findOne({ username: trimmedUsername })
@@ -2846,6 +2840,9 @@ profileRouter.post("/profile/others", userAuth, async (req, res) => {
         });
     }
 });
+
+
+
 
 
 module.exports = profileRouter;

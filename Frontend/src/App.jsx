@@ -91,7 +91,9 @@ import ResumeBuilder from "./Main/PagesMain/Sub-Category/Developers-Category/RES
 import SessionHero from "./Main/SessionHero";
 import BuyMeChai from "./Main/BuyMeAChai";
 import Goal from "./Pages/PROJECT-MANAGER/Goal";
+import GoalDetail from "./Pages/PROJECT-MANAGER/GoalDetail";
 import SearchPalette from "./Pages/Toolkit/components/docs/SearchPalette";
+import ProfileOther from "./BasePages/ProfileOther";
 
 
 const App = () => {
@@ -164,6 +166,7 @@ const App = () => {
 
           {/* Body is the main container for the app it will have the sidebar and the main content area and it is the layout of the app
            so user will be redirect to the /app route when he will login */}
+          <Route path="/:username" element={<ProfileOther />} />
           <Route path="/app" element={<Body />}>
 
             <Route element={<ProtectedRoute />}>
@@ -210,6 +213,7 @@ const App = () => {
 
               <Route path="interview-arena" element={<InterViewArena />} />
               <Route path="goals" element={<Goal />} />
+              <Route path="goals/:id" element={<GoalDetail />} />
 
 
               <Route path="editProfile" element={<EditProfile />} />
