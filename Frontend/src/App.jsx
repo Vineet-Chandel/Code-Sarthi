@@ -48,7 +48,7 @@ import BuildResume from "./Pages/CARRER-PROFILE-CREATION/2/01_HEADER/BuildResume
 import Shastra from "./Pages/Shastra/Shastra";
 import Projects from "./Pages/Projects";
 import ProjectManager from "./Pages/Project-Manager";
-import Scheduler from "./Pages/Scheduler";
+import Scheduler from "./Pages/SCHEDULER/Scheduler";
 import Study from "./Pages/Study";
 import Assignment from "./Pages/Assignment";
 import Notes from "./Pages/Notes";

@@ -37,6 +37,7 @@
     "react-responsive-ui": "^0.15.58",
     "react-router-dom": "^7.11.0",
     "react-to-print": "^3.3.0",
+    "recharts": "^3.10.1",
     "shadcn": "^4.8.0",
     "socket.io-client": "^4.8.3",
     "tailwind-merge": "^3.6.0",
