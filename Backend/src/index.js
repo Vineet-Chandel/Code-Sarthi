@@ -35,6 +35,7 @@ const aiWorkRouter = require("./routes/aiWork");
 const newsletterRouter = require("./routes/newsLetterAPI");
 const resRouter = require("./routes/resumeAPI");
 const botRouter = require("./routes/bot.routes");
+const goalsRouter = require("./routes/goalsRoute");
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
     api_key: process.env.CLOUD_KEY,
@@ -55,6 +56,7 @@ app.use("/api", aiWorkRouter);
 app.use("/api", newsletterRouter);
 app.use("/api", resRouter);
 app.use("/api", botRouter);
+app.use("/api", goalsRouter);
 
 app.use("/", authRouter);
 app.use("/", profileRouter);
@@ -69,6 +71,7 @@ app.use("/", aiWorkRouter);
 app.use("/", newsletterRouter);
 app.use("/", resRouter);
 app.use("/", botRouter);
+app.use("/", goalsRouter);
 const PORT = process.env.PORT || 8000;
 
 (async () => {
