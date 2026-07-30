@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const projectRoutes = require('./projectRoutes');
+const issueRoutes = require('./issueRoutes');
 const { userAuth } = require('../middlewares/userAuth');
 const { requireTeamMembership, requireTeamLeader } = require('../middleware/team');
 const rateLimit = require('express-rate-limit');
@@ -43,5 +45,9 @@ router.delete('/:teamId', requireTeamMembership, requireTeamLeader, archiveTeam)
 router.post('/:teamId/invite', requireTeamMembership, requireTeamLeader, generateInviteCode);
 router.delete('/:teamId/members/:userId', requireTeamMembership, requireTeamLeader, removeMember);
 router.post('/:teamId/transfer-ownership', requireTeamMembership, requireTeamLeader, transferOwnership);
+
+// Mount Sub-modules
+router.use('/:teamId/projects', projectRoutes);
+router.use('/:teamId/issues', requireTeamMembership, issueRoutes);
 
 module.exports = router;

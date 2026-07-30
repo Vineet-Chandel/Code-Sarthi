@@ -3,13 +3,16 @@ import axios from 'axios';
 import BASE_URL from '../../auth/baseURL';
 import TeamMembersPanel from './TeamMembersPanel';
 import TeamSettingsPanel from './TeamSettingsPanel';
+import ProjectListView from '../Projects/ProjectListView';
+import ProjectDetailPanel from '../Projects/ProjectDetailPanel';
 
 const TeamDetail = ({ teamId, onBack }) => {
     const [team, setTeam] = useState(null);
     const [membership, setMembership] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [activeTab, setActiveTab] = useState('members');
+    const [activeTab, setActiveTab] = useState('projects');
+    const [selectedProjectId, setSelectedProjectId] = useState(null);
 
     useEffect(() => {
         fetchTeam();
@@ -96,32 +99,64 @@ const TeamDetail = ({ teamId, onBack }) => {
             </div>
 
             {/* Tabs */}
-            <div className="flex gap-6 border-b border-white/10 mb-8">
-                <button
-                    onClick={() => setActiveTab('members')}
-                    className={`pb-3 text-sm font-medium transition-colors relative ${activeTab === 'members' ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
-                >
-                    Members
-                    {activeTab === 'members' && <div className="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-[#534AB7] rounded-t-full" />}
-                </button>
-                <button
-                    onClick={() => setActiveTab('settings')}
-                    className={`pb-3 text-sm font-medium transition-colors relative ${activeTab === 'settings' ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
-                >
-                    Settings
-                    {activeTab === 'settings' && <div className="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-[#534AB7] rounded-t-full" />}
-                </button>
-            </div>
+            {!selectedProjectId && (
+                <div className="flex gap-6 border-b border-white/10 mb-8">
+                    <button
+                        onClick={() => setActiveTab('projects')}
+                        className={`pb-3 text-sm font-medium transition-colors relative ${activeTab === 'projects' ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
+                    >
+                        Projects
+                        {activeTab === 'projects' && <div className="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-[#534AB7] rounded-t-full" />}
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('members')}
+                        className={`pb-3 text-sm font-medium transition-colors relative ${activeTab === 'members' ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
+                    >
+                        Members
+                        {activeTab === 'members' && <div className="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-[#534AB7] rounded-t-full" />}
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('settings')}
+                        className={`pb-3 text-sm font-medium transition-colors relative ${activeTab === 'settings' ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
+                    >
+                        Settings
+                        {activeTab === 'settings' && <div className="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-[#534AB7] rounded-t-full" />}
+                    </button>
+                </div>
+            )}
 
-            {/* Tab Content */}
-            <div>
-                {activeTab === 'members' && (
-                    <TeamMembersPanel teamId={team._id} myRole={membership.role} ownerId={team.ownerId._id} />
-                )}
-                {activeTab === 'settings' && (
-                    <TeamSettingsPanel team={team} myRole={membership.role} onUpdate={setTeam} />
-                )}
-            </div>
+            {/* Content */}
+            {selectedProjectId ? (
+                <ProjectDetailPanel 
+                    teamId={teamId} 
+                    projectId={selectedProjectId} 
+                    myRole={membership.role}
+                    onBack={() => setSelectedProjectId(null)} 
+                />
+            ) : (
+                <div className="min-h-[400px]">
+                    {activeTab === 'projects' && (
+                        <ProjectListView 
+                            teamId={teamId} 
+                            onProjectSelect={setSelectedProjectId} 
+                        />
+                    )}
+                    {activeTab === 'members' && (
+                        <TeamMembersPanel 
+                            teamId={teamId} 
+                            myRole={membership.role} 
+                            ownerId={team.ownerId._id} 
+                        />
+                    )}
+                    {activeTab === 'settings' && (
+                        <TeamSettingsPanel 
+                            team={team} 
+                            myRole={membership.role} 
+                            onUpdate={fetchTeam} 
+                        />
+                    )}
+                </div>
+            )}
         </div>
     );
 };

@@ -1,0 +1,140 @@
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import BASE_URL from '../../auth/baseURL';
+import CreateProjectModal from './CreateProjectModal';
+
+const ProjectListView = ({ teamId, onProjectSelect }) => {
+    const [projects, setProjects] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [createModalOpen, setCreateModalOpen] = useState(false);
+
+    // Filters
+    const [statusFilter, setStatusFilter] = useState('');
+    const [priorityFilter, setPriorityFilter] = useState('');
+
+    useEffect(() => {
+        fetchProjects();
+    }, [teamId, statusFilter, priorityFilter]);
+
+    const fetchProjects = async () => {
+        setLoading(true);
+        try {
+            const params = new URLSearchParams();
+            if (statusFilter) params.append('status', statusFilter);
+            if (priorityFilter) params.append('priority', priorityFilter);
+
+            const res = await axios.get(`${BASE_URL}/teams/${teamId}/projects?${params.toString()}`, { withCredentials: true });
+            setProjects(res.data.projects);
+        } catch (err) {
+            console.error("Failed to fetch projects", err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const getStatusColor = (status) => {
+        switch (status) {
+            case 'planning': return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+            case 'active': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+            case 'on_hold': return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+            case 'completed': return 'bg-purple-500/10 text-purple-400 border-purple-500/20';
+            default: return 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20';
+        }
+    };
+
+    const getPriorityColor = (priority) => {
+        switch (priority) {
+            case 'urgent': return 'bg-red-500/10 text-red-400 border-red-500/20';
+            case 'high': return 'bg-orange-500/10 text-orange-400 border-orange-500/20';
+            case 'medium': return 'bg-[#534AB7]/20 text-[#A7A0F8] border-[#534AB7]/30';
+            case 'low': return 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20';
+            default: return 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20';
+        }
+    };
+
+    return (
+        <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div className="flex gap-2">
+                    <select
+                        value={statusFilter}
+                        onChange={(e) => setStatusFilter(e.target.value)}
+                        className="bg-[#09090B] border border-white/10 text-sm text-zinc-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#534AB7]"
+                    >
+                        <option value="">All Statuses</option>
+                        <option value="planning">Planning</option>
+                        <option value="active">Active</option>
+                        <option value="on_hold">On Hold</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                    <select
+                        value={priorityFilter}
+                        onChange={(e) => setPriorityFilter(e.target.value)}
+                        className="bg-[#09090B] border border-white/10 text-sm text-zinc-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#534AB7]"
+                    >
+                        <option value="">All Priorities</option>
+                        <option value="urgent">Urgent</option>
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                </div>
+
+                <button
+                    onClick={() => setCreateModalOpen(true)}
+                    className="bg-[#534AB7] hover:bg-[#6F64E6] text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm"
+                >
+                    + New Project
+                </button>
+            </div>
+
+            {loading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {[1, 2, 3].map(i => <div key={i} className="h-40 bg-white/[0.02] border border-white/5 rounded-2xl animate-pulse"></div>)}
+                </div>
+            ) : projects.length === 0 ? (
+                <div className="text-center py-12 bg-[#09090B] border border-white/10 rounded-2xl">
+                    <p className="text-zinc-500">No projects found. Create one to get started.</p>
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {projects.map(project => (
+                        <div
+                            key={project._id}
+                            onClick={() => onProjectSelect(project._id)}
+                            className="bg-[#09090B] hover:bg-[#121215] border border-white/10 hover:border-[#534AB7]/50 rounded-2xl p-5 cursor-pointer transition-all group"
+                        >
+                            <h3 className="text-lg font-bold text-white mb-2 truncate group-hover:text-[#A7A0F8] transition-colors">
+                                {project.title}
+                            </h3>
+                            <p className="text-xs text-zinc-400 line-clamp-2 mb-4 h-8">
+                                {project.description || "No description provided."}
+                            </p>
+
+                            <div className="flex items-center gap-2 mt-auto">
+                                <span className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded border ${getStatusColor(project.status)}`}>
+                                    {project.status.replace('_', ' ')}
+                                </span>
+                                <span className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded border ${getPriorityColor(project.priority)}`}>
+                                    {project.priority}
+                                </span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            <CreateProjectModal
+                isOpen={createModalOpen}
+                onClose={() => setCreateModalOpen(false)}
+                teamId={teamId}
+                onSuccess={(newProject) => {
+                    setCreateModalOpen(false);
+                    fetchProjects();
+                }}
+            />
+        </div>
+    );
+};
+
+export default ProjectListView;
