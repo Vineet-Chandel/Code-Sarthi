@@ -1,0 +1,108 @@
+import { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
+import BASE_URL from '../../auth/baseURL';
+
+const AssignIssueDropdown = ({ teamId, issueId, currentAssigneeId, onAssign }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [members, setMembers] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const fetchMembers = async () => {
+        if (members.length > 0) return; // Already fetched
+        setLoading(true);
+        try {
+            const res = await axios.get(`${BASE_URL}/teams/${teamId}/members`, { withCredentials: true });
+            // Only active members can be assigned
+            setMembers(res.data.members.filter(m => m.status === 'active'));
+        } catch (err) {
+            console.error("Failed to fetch members", err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const toggleDropdown = () => {
+        setIsOpen(!isOpen);
+        if (!isOpen) {
+            fetchMembers();
+        }
+    };
+
+    const handleAssign = async (userId) => {
+        setIsOpen(false);
+        try {
+            const res = await axios.post(`${BASE_URL}/teams/${teamId}/issues/${issueId}/assign`, { userId }, { withCredentials: true });
+            onAssign(res.data.issue);
+        } catch (err) {
+            alert(err.response?.data?.error || "Failed to assign issue");
+        }
+    };
+
+    return (
+        <div className="relative" ref={dropdownRef}>
+            <button
+                onClick={(e) => { e.stopPropagation(); toggleDropdown(); }}
+                className="text-xs font-medium text-zinc-400 hover:text-white flex items-center gap-1 transition-colors px-2 py-1 rounded hover:bg-white/5"
+            >
+                Assign
+                <svg className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
+            </button>
+
+            {isOpen && (
+                <div className="absolute top-full left-0 mt-1 w-56 bg-[#121215] border border-white/10 rounded-xl shadow-xl z-10 py-2" onClick={e => e.stopPropagation()}>
+                    <div className="px-3 pb-2 mb-2 border-b border-white/10 text-xs font-bold text-zinc-500 uppercase tracking-wider">
+                        Assign to member
+                    </div>
+
+                    {loading ? (
+                        <div className="px-4 py-2 text-sm text-zinc-500 animate-pulse">Loading members...</div>
+                    ) : members.length === 0 ? (
+                        <div className="px-4 py-2 text-sm text-zinc-500">No active members found.</div>
+                    ) : (
+                        <div className="max-h-60 overflow-y-auto custom-scrollbar">
+                            {members.map(member => {
+                                const user = member.userId;
+                                const isAssigned = currentAssigneeId === user._id;
+
+                                return (
+                                    <button
+                                        key={user._id}
+                                        onClick={() => !isAssigned && handleAssign(user._id)}
+                                        disabled={isAssigned}
+                                        className={`w-full text-left px-4 py-2 text-sm flex items-center gap-3 transition-colors ${isAssigned
+                                            ? 'opacity-50 cursor-not-allowed bg-white/5'
+                                            : 'hover:bg-[#534AB7]/20 text-zinc-300 hover:text-white'
+                                            }`}
+                                    >
+                                        <div className="w-6 h-6 rounded-full bg-zinc-800 flex items-center justify-center overflow-hidden shrink-0">
+                                            {user.avatar ? (
+                                                <img src={user.avatar} alt={user.firstName} className="w-full h-full object-cover" />
+                                            ) : (
+                                                <span className="text-[10px] font-bold text-white">{user.firstName.charAt(0)}{user.lastName.charAt(0)}</span>
+                                            )}
+                                        </div>
+                                        <span className="truncate">{user.firstName} {user.lastName}</span>
+                                        {isAssigned && <svg className="w-4 h-4 ml-auto text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default AssignIssueDropdown;

@@ -3,8 +3,12 @@ import axios from 'axios';
 import BASE_URL from '../../auth/baseURL';
 import CreateIssueModal from './CreateIssueModal';
 import IssueDetailPanel from './IssueDetailPanel';
+import AssignmentBadge from './AssignmentBadge';
+import AssignIssueDropdown from './AssignIssueDropdown';
+import { useSelector } from 'react-redux';
 
 const IssueListView = ({ teamId, projectId, myRole }) => {
+    const user = useSelector(store => store.user);
     const [issues, setIssues] = useState([]);
     const [loading, setLoading] = useState(true);
     const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -36,6 +40,33 @@ const IssueListView = ({ teamId, projectId, myRole }) => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleClaim = async (e, issueId) => {
+        e.stopPropagation();
+        try {
+            const res = await axios.post(`${BASE_URL}/teams/${teamId}/issues/${issueId}/claim`, {}, { withCredentials: true });
+            setIssues(issues.map(i => i._id === issueId ? res.data.issue : i));
+            fetchIssues(); // Refresh to get populated assignedTo
+        } catch (err) {
+            alert(err.response?.data?.error || "Failed to claim issue");
+        }
+    };
+
+    const handleUnclaim = async (e, issueId) => {
+        e.stopPropagation();
+        try {
+            const res = await axios.post(`${BASE_URL}/teams/${teamId}/issues/${issueId}/unclaim`, {}, { withCredentials: true });
+            setIssues(issues.map(i => i._id === issueId ? res.data.issue : i));
+            fetchIssues(); // Refresh
+        } catch (err) {
+            alert(err.response?.data?.error || "Failed to unclaim issue");
+        }
+    };
+
+    const handleAssign = (updatedIssue) => {
+        setIssues(issues.map(i => i._id === updatedIssue._id ? updatedIssue : i));
+        fetchIssues(); // Refresh to get populated assignedTo
     };
 
     const getTypeIcon = (type) => {
@@ -141,7 +172,61 @@ const IssueListView = ({ teamId, projectId, myRole }) => {
                                 <div className="min-w-0 flex-1">
                                     <h4 className="text-white font-medium truncate group-hover:text-[#A7A0F8] transition-colors">{issue.title}</h4>
                                     <div className="flex items-center gap-3 mt-1 text-xs text-zinc-500">
-                                        <span>Unassigned</span> {/* Phase 3 Placeholder */}
+                                        {issue.assignedTo ? (
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-5 h-5 rounded-full bg-zinc-800 flex items-center justify-center overflow-hidden">
+                                                    {issue.assignedTo.avatar ? (
+                                                        <img src={issue.assignedTo.avatar} alt={issue.assignedTo.firstName} className="w-full h-full object-cover" />
+                                                    ) : (
+                                                        <span className="text-[9px] font-bold text-white">{issue.assignedTo.firstName.charAt(0)}{issue.assignedTo.lastName.charAt(0)}</span>
+                                                    )}
+                                                </div>
+                                                <span className="text-zinc-300">{issue.assignedTo.firstName} {issue.assignedTo.lastName}</span>
+                                                <AssignmentBadge source={issue.assignmentSource} />
+                                                
+                                                {String(issue.assignedTo._id) === String(user._id) && (
+                                                    <button 
+                                                        onClick={(e) => handleUnclaim(e, issue._id)}
+                                                        className="ml-2 text-xs font-medium text-zinc-400 hover:text-red-400 transition-colors px-2 py-0.5 rounded hover:bg-white/5"
+                                                    >
+                                                        Unclaim
+                                                    </button>
+                                                )}
+                                                {myRole === 'leader' && (
+                                                    <div className="ml-2">
+                                                        <AssignIssueDropdown 
+                                                            teamId={teamId} 
+                                                            issueId={issue._id} 
+                                                            currentAssigneeId={issue.assignedTo._id}
+                                                            onAssign={handleAssign}
+                                                        />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ) : (
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-5 h-5 rounded-full border border-dashed border-zinc-600 flex items-center justify-center">
+                                                    <span className="text-[9px] text-zinc-500">?</span>
+                                                </div>
+                                                <span>Unassigned</span>
+                                                <button 
+                                                    onClick={(e) => handleClaim(e, issue._id)}
+                                                    className="ml-2 text-xs font-medium text-[#A7A0F8] hover:text-white border border-[#534AB7] hover:bg-[#534AB7] transition-colors px-2 py-0.5 rounded"
+                                                >
+                                                    Claim
+                                                </button>
+                                                {myRole === 'leader' && (
+                                                    <div className="ml-2">
+                                                        <AssignIssueDropdown 
+                                                            teamId={teamId} 
+                                                            issueId={issue._id} 
+                                                            currentAssigneeId={null}
+                                                            onAssign={handleAssign}
+                                                        />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>

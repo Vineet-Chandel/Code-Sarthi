@@ -7,14 +7,7 @@ import React, {
     useCallback,
     useMemo,
 } from "react";
-import {
-    Puzzle,
-    Compass,
-    Users,
-    MessagesSquare,
-    ShieldAlert,
-    GitBranch,
-} from "lucide-react";
+
 
 const faqs1 = [
     {
@@ -2236,6 +2229,8 @@ function StrategicDirectives() {
                 position: "relative",
                 animation: reducedMotion ? "none" : "sd-section-in 800ms ease both",
             }}
+
+            className="border h-fill"
         >
             <style>{`
         @keyframes sd-section-in {
@@ -2488,7 +2483,7 @@ const ContentSecond2 = () => {
     return (
         <div
             id="faqs"
-            className="w-full bg-black flex flex-col items-center py-20 px-4 md:px-8 font-poppins">
+            className="w-full bg-black flex flex-col items-center py-20 px-4 md:px-8 font-poppins border">
             <StrategicDirectives />
             {/* FAQ Header */}
             <div className="w-full max-w-[1500px] mb-14 mt-[70px] text-center md:text-start">

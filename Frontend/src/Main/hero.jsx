@@ -18,6 +18,7 @@ import BASE_URL from "@/Pages/auth/baseURL";
 import axios from "axios";
 import ContentSecond2 from "./ContentSecond2";
 import Third from "./Third";
+import Ropes from "./Ropes";
 
 
 
@@ -87,8 +88,8 @@ const Hero = () => {
             <Third />
             <ContentSecond />
             <Lines2 />
+            <Ropes />
             <ContentSecond2 />
-
 
 
             <div className="relative">

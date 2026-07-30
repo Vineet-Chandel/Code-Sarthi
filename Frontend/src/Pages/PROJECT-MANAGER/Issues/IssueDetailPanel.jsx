@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import BASE_URL from '../../auth/baseURL';
 import { useSelector } from 'react-redux';
+import AssignmentBadge from './AssignmentBadge';
+import AssignIssueDropdown from './AssignIssueDropdown';
 
 const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
     const user = useSelector(store => store.user);
@@ -39,12 +41,33 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
         setSaving(true);
         try {
             const res = await axios.patch(`${BASE_URL}/teams/${teamId}/issues/${issueId}`, editData, { withCredentials: true });
-            setIssue(res.data.issue);
+            
+            // Note: The patch might not return populated assignedTo if the backend doesn't populate it on patch,
+            // so we might just fetch the issue again to ensure we have the populated object.
+            fetchIssue();
             setIsEditing(false);
         } catch (err) {
             alert(err.response?.data?.error || "Failed to update issue");
         } finally {
             setSaving(false);
+        }
+    };
+
+    const handleClaim = async () => {
+        try {
+            await axios.post(`${BASE_URL}/teams/${teamId}/issues/${issueId}/claim`, {}, { withCredentials: true });
+            fetchIssue();
+        } catch (err) {
+            alert(err.response?.data?.error || "Failed to claim issue");
+        }
+    };
+
+    const handleUnclaim = async () => {
+        try {
+            await axios.post(`${BASE_URL}/teams/${teamId}/issues/${issueId}/unclaim`, {}, { withCredentials: true });
+            fetchIssue();
+        } catch (err) {
+            alert(err.response?.data?.error || "Failed to unclaim issue");
         }
     };
 
@@ -178,13 +201,73 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                             </p>
                         </div>
                         <div>
-                            <h3 className="text-sm font-bold text-zinc-400 uppercase tracking-wider mb-2">Assignment</h3>
-                            <div className="bg-white/5 border border-white/10 rounded-lg p-4 text-sm text-zinc-500 flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-full bg-zinc-800 border-2 border-[#121215] border-dashed flex items-center justify-center">
-                                    ?
+                            <h3 className="text-sm font-bold text-zinc-400 uppercase tracking-wider mb-3">Assignment</h3>
+                            
+                            {issue.assignedTo ? (
+                                <div className="bg-white/5 border border-white/10 rounded-lg p-4">
+                                    <div className="flex items-center gap-3 mb-3">
+                                        <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center overflow-hidden">
+                                            {issue.assignedTo.avatar ? (
+                                                <img src={issue.assignedTo.avatar} alt={issue.assignedTo.firstName} className="w-full h-full object-cover" />
+                                            ) : (
+                                                <span className="text-xs font-bold text-white">{issue.assignedTo.firstName.charAt(0)}{issue.assignedTo.lastName.charAt(0)}</span>
+                                            )}
+                                        </div>
+                                        <div>
+                                            <div className="text-sm font-medium text-white">{issue.assignedTo.firstName} {issue.assignedTo.lastName}</div>
+                                            <AssignmentBadge source={issue.assignmentSource} />
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center gap-2">
+                                        {String(issue.assignedTo._id) === String(user._id) && (
+                                            <button 
+                                                onClick={handleUnclaim}
+                                                className="text-xs font-medium text-zinc-400 hover:text-red-400 transition-colors px-3 py-1.5 rounded hover:bg-white/5 w-full text-center border border-transparent hover:border-red-400/20"
+                                            >
+                                                Unclaim Issue
+                                            </button>
+                                        )}
+                                        {myRole === 'leader' && (
+                                            <div className="flex-1">
+                                                <AssignIssueDropdown 
+                                                    teamId={teamId} 
+                                                    issueId={issue._id} 
+                                                    currentAssigneeId={issue.assignedTo._id}
+                                                    onAssign={() => fetchIssue()}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
-                                <span>Unassigned</span>
-                            </div>
+                            ) : (
+                                <div className="bg-white/5 border border-white/10 rounded-lg p-4 text-center">
+                                    <div className="w-10 h-10 mx-auto rounded-full border-2 border-dashed border-zinc-600 flex items-center justify-center mb-3">
+                                        <span className="text-zinc-500">?</span>
+                                    </div>
+                                    <div className="text-sm font-medium text-zinc-300 mb-4">Unassigned</div>
+                                    
+                                    <div className="flex flex-col gap-2">
+                                        <button 
+                                            onClick={handleClaim}
+                                            className="w-full text-sm font-medium text-[#A7A0F8] hover:text-white border border-[#534AB7] hover:bg-[#534AB7] transition-colors px-4 py-2 rounded-lg"
+                                        >
+                                            Claim this Issue
+                                        </button>
+                                        
+                                        {myRole === 'leader' && (
+                                            <div className="mt-2">
+                                                <AssignIssueDropdown 
+                                                    teamId={teamId} 
+                                                    issueId={issue._id} 
+                                                    currentAssigneeId={null}
+                                                    onAssign={() => fetchIssue()}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

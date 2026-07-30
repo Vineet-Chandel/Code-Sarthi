@@ -168,6 +168,13 @@ export default function Lines() {
             proofUrl: "https://github.com/Vineet-Chandel/Code-Sarthi/discussions/11#discussioncomment-17614163",
             review: "looks great man. only thing I want to say, try not to add an npm package for everything. half the time native js does the same job and every lib you add is just more stuff the browser has to download. honestly few of them u can drop, keeps things light and fast.",
         },
+        {
+            name: "Rahul Tripathi",
+
+            image: "https://avatars.githubusercontent.com/u/236558490?v=4",
+            proofUrl: "https://github.com/Vineet-Chandel/Code-Sarthi/discussions/10#discussioncomment-17839635",
+            review: "To be honest, I genuinely feel that CodeSarthi has become more than just a project, it has already reached the initial stage of a complete ecosystem. A platforming serving as a guide to all the freshmen about where to start and how to proceed in the professional world with clean and soothing interface and interactive environment is what the students needed all along. I appreciate the owner who came up with this idea and implemented it in the form of a wonderful service. I hope that CodeSarthi gets the recognition it deserves and help more and more people in their professional journey. Thank you.",
+        },
 
     ];
 
