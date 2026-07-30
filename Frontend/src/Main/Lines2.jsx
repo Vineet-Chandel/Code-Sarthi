@@ -103,40 +103,72 @@ export default function Lines() {
 
     const testimonials = [
         {
-            name: "Alex Johnson",
+            name: "Ayush Tripathi",
 
-            image: "https://i.pravatar.cc/100?img=1",
-            proofUrl: "https://linkedin.com",
-            review: "CodeSarthi completely changed the way I prepare for interviews. The AI suggestions are incredibly accurate.",
+            image: "https://avatars.githubusercontent.com/u/250406547?v=4",
+            proofUrl: "https://github.com/Vineet-Chandel/Code-Sarthi/discussions/10#discussioncomment-17594476",
+            review: "Really liked using CodeSarthi! The AI assistant is fast, helpful, and makes coding much easier. The UI is clean and beginner-friendly.Looking forward to more features and improvements. Great work to the team! 🚀",
         },
         {
-            name: "Sophia Lee",
+            name: "Yatharth Sharma",
 
-            image: "https://i.pravatar.cc/100?img=5",
-            proofUrl: "https://twitter.com",
-            review: "Resume Builder and ATS analysis saved me hours. I finally started getting interview calls.",
+            image: "https://avatars.githubusercontent.com/u/249609646?v=4",
+            proofUrl: "https://github.com/Vineet-Chandel/Code-Sarthi/discussions/10#discussioncomment-17603523",
+            review: "CodeSarthi has been genuinely useful for my dev workflow. The Resume Builder stood out most—clean templates and ATS-friendly formatting saved me hours of formatting hassle. Combined with the AI Assistant for quick coding help, it's a solid all-in-one platform. Would definitely recommend to fellow developers and students. Great work!",
         },
         {
-            name: "Rahul Sharma",
+            name: "Sharvan",
 
-            image: "https://i.pravatar.cc/100?img=12",
-            proofUrl: "https://github.com",
-            review: "The roadmap generation feature is amazing. It feels like having a personal mentor available 24/7.",
+            image: "https://avatars.githubusercontent.com/u/181192220?v=4",
+            proofUrl: "https://github.com/Vineet-Chandel/Code-Sarthi/discussions/10#discussioncomment-17603812",
+            review: "Really like the direction CodeSarthi is heading. The platform feels modern, easy to use, and built with developers in mind. Keep it up Being curious for Project management segment to launch!!",
         },
         {
-            name: "Emma Wilson",
+            name: "Varshal Gupta",
 
-            image: "https://i.pravatar.cc/100?img=22",
-            proofUrl: "https://linkedin.com",
-            review: "Beautiful UI, smooth experience, and genuinely useful AI recommendations. Highly recommended!",
+            image: "https://avatars.githubusercontent.com/u/266241498?v=4",
+            proofUrl: "https://github.com/Vineet-Chandel/Code-Sarthi/discussions/10#discussioncomment-17612204",
+            review: "I've watched CodeSarthi grow from just an idea to something people can actually use. It's awesome to see your vision becoming reality. Keep pushing, keep improving, and don't stop building. You've got this! 💙",
         },
         {
-            name: "Daniel Kim",
+            name: "Bhumika Gupta",
 
-            image: "https://i.pravatar.cc/100?img=18",
-            proofUrl: "https://twitter.com",
-            review: "Project collaboration and resume optimization together make CodeSarthi stand out from other platforms.",
+            image: "https://avatars.githubusercontent.com/u/280631145?v=4",
+            proofUrl: "https://github.com/Vineet-Chandel/Code-Sarthi/discussions/10#discussioncomment-17624277",
+            review: "The thing I liked most is that CodeSarthi isn't trying to do too much at once—it feels focused and well thought out. The experience is smooth, and I can see it becoming a really useful platform for developers. Looking forward to the next release.",
         },
+        {
+            name: "Sourav Yadav",
+
+            image: "https://avatars.githubusercontent.com/u/264805866?v=4",
+            proofUrl: "https://github.com/Vineet-Chandel/Code-Sarthi/discussions/10#discussioncomment-17698225",
+            review: "Code Sarthi is a game-changer for developers It brings everything a developer needs—from AI resume building and interview preparation to collaboration and project management—into one powerful platform.Clean, smart, and incredibly useful for students and professionals alike.Highly recommended",
+        },
+        {
+            name: "Vinayak Dubey",
+
+            image: "https://avatars.githubusercontent.com/u/307045224?v=4",
+            proofUrl: "https://github.com/Vineet-Chandel/Code-Sarthi/discussions/10#discussioncomment-17698471",
+            review: "A great place for devlopers , a place where devlopers feel like home everything at onee place from interview preps to competing , from a student level user base to a project team user base a great idea coming to reality",
+        },
+    ];
+
+    const testimonials2 = [
+        {
+            name: "Ayushman",
+
+            image: "https://avatars.githubusercontent.com/u/306396295?v=4",
+            proofUrl: "https://github.com/Vineet-Chandel/Code-Sarthi/discussions/10#discussioncomment-17678758",
+            review: "Just used the CodeSarthi's resume builder it's really amazing it really helping me in the analysis of my resume thanks a lot for such a great product and vineet looking for the future collaboration with u in my team i will contact u as we start",
+        },
+        {
+            name: "Keval",
+
+            image: "https://avatars.githubusercontent.com/u/95030129?v=4",
+            proofUrl: "https://github.com/Vineet-Chandel/Code-Sarthi/discussions/11#discussioncomment-17614163",
+            review: "looks great man. only thing I want to say, try not to add an npm package for everything. half the time native js does the same job and every lib you add is just more stuff the browser has to download. honestly few of them u can drop, keeps things light and fast.",
+        },
+
     ];
 
     return (
@@ -184,7 +216,7 @@ mt-10
                         ))}
                     </ParallaxText>
                     <ParallaxText baseVelocity={1} isHovered={isHovered}>
-                        {testimonials.map((item, index) => (
+                        {testimonials2.map((item, index) => (
                             <ReviewCard
                                 key={index}
                                 item={item}

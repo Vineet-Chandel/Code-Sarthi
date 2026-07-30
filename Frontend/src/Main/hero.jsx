@@ -76,7 +76,7 @@ const Hero = () => {
     }, [loading]);
 
     return (
-        <div className="bg-gray-200">
+        <div className="bg-gray-200 overflow-y-auto scrollbar-none">
             {loading && <Preloader />}
 
             <Main2 ctaData={ctaData} />

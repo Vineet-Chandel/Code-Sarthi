@@ -95,7 +95,20 @@ const goalSchema = new Schema(
                 timestamp: {
                     type: Date,
                     default: Date.now
-                }
+                },
+                reactions: [
+                    {
+                        byUser: {
+                            type: Schema.Types.ObjectId,
+                            ref: "Users",
+                            required: true
+                        },
+                        emoji: {
+                            type: String,
+                            required: true
+                        }
+                    }
+                ]
             }
         ]
     },

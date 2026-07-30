@@ -2333,7 +2333,7 @@ function StrategicDirectives() {
                     position: reducedMotion ? "relative" : "sticky",
                     top: 0,
 
-                    width: "100vw",
+                    width: "100%",
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "start",
@@ -2363,6 +2363,8 @@ function StrategicDirectives() {
                         msOverflowStyle: "none",
                         scrollbarWidth: "none",
                     }}
+
+
                 >
                     <div
                         ref={trackRef}

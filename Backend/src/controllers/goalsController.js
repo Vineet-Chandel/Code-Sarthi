@@ -16,7 +16,7 @@ const getGoals = async (req, res) => {
 // @route   GET /api/goals/:id
 const getGoalById = async (req, res) => {
     try {
-        const goal = await Goals.findOne({ _id: req.params.id, owner: req.user._id });
+        const goal = await Goals.findOne({ _id: req.params.id, owner: req.user._id }).populate("comments.byUser", "firstName lastName photoUrl");
 
         if (!goal) {
             return res.status(404).json({ message: "Goal not found" });
@@ -122,6 +122,37 @@ const createGoal = async (req, res) => {
     }
 };
 
+// @desc    Update a goal
+// @route   PUT /api/goals/:id
+const updateGoal = async (req, res) => {
+    try {
+        const { name, status, targetDate, priority, category, description, tags, progress, following } = req.body;
+        
+        let goal = await Goals.findOne({ _id: req.params.id, owner: req.user._id });
+        if (!goal) {
+            return res.status(404).json({ message: "Goal not found" });
+        }
+
+        if (name) goal.name = name.trim();
+        if (status) goal.status = status.trim();
+        if (targetDate) goal.targetDate = targetDate;
+        if (priority) goal.priority = priority.trim();
+        if (category) goal.category = category.trim();
+        if (description) goal.description = description.trim();
+        if (tags && Array.isArray(tags)) goal.tags = tags.map(tag => tag.trim());
+        if (progress !== undefined) goal.progress = progress;
+        if (following !== undefined) goal.following = following;
+        
+        goal.lastUpdated = Date.now();
+
+        const updatedGoal = await goal.save();
+        res.status(200).json(updatedGoal);
+    } catch (error) {
+        console.error("Error in updateGoal:", error);
+        res.status(500).json({ message: "Server Error", error: error.message });
+    }
+};
+
 // @desc    Delete a goal
 // @route   DELETE /api/goals/:id
 const deleteGoal = async (req, res) => {
@@ -141,15 +172,143 @@ const deleteGoal = async (req, res) => {
 // @route   PATCH /api/goals/:id/archive
 const archiveGoal = async (req, res) => {
     try {
-        const goal = await Goals.findOne({ _id: req.params.id, owner: req.user._id });
+        const goal = await Goals.findOne({ _id: req.params.id, owner: req.user._id }).populate("comments.byUser", "firstName lastName photoUrl");
         if (!goal) {
             return res.status(404).json({ message: "Goal not found" });
         }
         goal.isArchived = !goal.isArchived;
         const updatedGoal = await goal.save();
-        res.status(200).json(updatedGoal);
+        // Since populate was chained to findOne, saving it will return the populated object or we might need to re-populate.
+        // re-populate is safer to return to client.
+        const populatedGoal = await Goals.findOne({ _id: goal._id }).populate("comments.byUser", "firstName lastName photoUrl");
+        res.status(200).json(populatedGoal);
     } catch (error) {
         console.error("Error in archiveGoal:", error);
+        res.status(500).json({ message: "Server Error", error: error.message });
+    }
+};
+
+// @desc    Add a comment to a goal
+// @route   POST /api/goals/:id/comments
+const addComment = async (req, res) => {
+    try {
+        const { text } = req.body;
+        if (!text || typeof text !== "string" || text.trim().length < 1) {
+            return res.status(400).json({ message: "Comment text is required" });
+        }
+
+        const goal = await Goals.findOne({ _id: req.params.id, owner: req.user._id });
+        if (!goal) {
+            return res.status(404).json({ message: "Goal not found" });
+        }
+
+        goal.comments.push({
+            byUser: req.user._id,
+            text: text.trim()
+        });
+
+        await goal.save();
+        
+        // Return the updated goal with populated user details
+        const updatedGoal = await Goals.findOne({ _id: goal._id, owner: req.user._id }).populate("comments.byUser", "firstName lastName photoUrl");
+        res.status(201).json(updatedGoal);
+    } catch (error) {
+        console.error("Error in addComment:", error);
+        res.status(500).json({ message: "Server Error", error: error.message });
+    }
+};
+
+// @desc    Edit a comment
+// @route   PUT /api/goals/:id/comments/:commentId
+const editComment = async (req, res) => {
+    try {
+        const { text } = req.body;
+        if (!text || typeof text !== "string" || text.trim().length < 1) {
+            return res.status(400).json({ message: "Comment text is required" });
+        }
+
+        const goal = await Goals.findOne({ _id: req.params.id, owner: req.user._id });
+        if (!goal) return res.status(404).json({ message: "Goal not found" });
+
+        const comment = goal.comments.id(req.params.commentId);
+        if (!comment) return res.status(404).json({ message: "Comment not found" });
+
+        // Ensure user owns the comment
+        if (comment.byUser.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: "Not authorized to edit this comment" });
+        }
+
+        comment.text = text.trim();
+        await goal.save();
+
+        const updatedGoal = await Goals.findOne({ _id: goal._id }).populate("comments.byUser", "firstName lastName photoUrl");
+        res.status(200).json(updatedGoal);
+    } catch (error) {
+        console.error("Error in editComment:", error);
+        res.status(500).json({ message: "Server Error", error: error.message });
+    }
+};
+
+// @desc    Delete a comment
+// @route   DELETE /api/goals/:id/comments/:commentId
+const deleteComment = async (req, res) => {
+    try {
+        const goal = await Goals.findOne({ _id: req.params.id, owner: req.user._id });
+        if (!goal) return res.status(404).json({ message: "Goal not found" });
+
+        const comment = goal.comments.id(req.params.commentId);
+        if (!comment) return res.status(404).json({ message: "Comment not found" });
+
+        // Allow comment author or goal owner to delete
+        if (comment.byUser.toString() !== req.user._id.toString() && goal.owner.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: "Not authorized to delete this comment" });
+        }
+
+        goal.comments.pull(req.params.commentId);
+        await goal.save();
+
+        const updatedGoal = await Goals.findOne({ _id: goal._id }).populate("comments.byUser", "firstName lastName photoUrl");
+        res.status(200).json(updatedGoal);
+    } catch (error) {
+        console.error("Error in deleteComment:", error);
+        res.status(500).json({ message: "Server Error", error: error.message });
+    }
+};
+
+// @desc    Toggle a reaction on a comment
+// @route   POST /api/goals/:id/comments/:commentId/reactions
+const toggleReaction = async (req, res) => {
+    try {
+        const { emoji } = req.body;
+        if (!emoji || typeof emoji !== "string") {
+            return res.status(400).json({ message: "Emoji is required" });
+        }
+
+        const goal = await Goals.findOne({ _id: req.params.id, owner: req.user._id });
+        if (!goal) return res.status(404).json({ message: "Goal not found" });
+
+        const comment = goal.comments.id(req.params.commentId);
+        if (!comment) return res.status(404).json({ message: "Comment not found" });
+
+        // Check if reaction already exists by this user for this emoji
+        const existingReactionIndex = comment.reactions.findIndex(
+            (r) => r.byUser.toString() === req.user._id.toString() && r.emoji === emoji
+        );
+
+        if (existingReactionIndex > -1) {
+            // Remove reaction
+            comment.reactions.splice(existingReactionIndex, 1);
+        } else {
+            // Add reaction
+            comment.reactions.push({ byUser: req.user._id, emoji });
+        }
+
+        await goal.save();
+
+        const updatedGoal = await Goals.findOne({ _id: goal._id }).populate("comments.byUser", "firstName lastName photoUrl");
+        res.status(200).json(updatedGoal);
+    } catch (error) {
+        console.error("Error in toggleReaction:", error);
         res.status(500).json({ message: "Server Error", error: error.message });
     }
 };
@@ -158,6 +317,11 @@ module.exports = {
     getGoals,
     getGoalById,
     createGoal,
+    updateGoal,
     deleteGoal,
-    archiveGoal
+    archiveGoal,
+    addComment,
+    editComment,
+    deleteComment,
+    toggleReaction
 };
