@@ -182,7 +182,7 @@ const Contact = () => {
     };
 
     return (
-        <section className="relative flex min-h-[90vh] w-full items-center justify-center overflow-hidden bg-[#000]">
+        <section className="relative flex min-h-[60vh] w-full items-center justify-center overflow-hidden bg-[#000]">
             {/* Background: gradients + blurred glow circles */}
             <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
                 <div
@@ -234,11 +234,9 @@ const Contact = () => {
                 {/* Description */}
                 <motion.p
                     variants={itemVariants}
-                    className="mt-8 max-w-[850px] text-lg leading-relaxed text-neutral-400 md:text-xl"
+                    className="mt-8 max-w-[850px] text-lg leading-relaxed text-neutral-400 md:text-xl text-white"
                 >
-                    Open to strategic collaborations in AI-driven systems and scalable
-                    full-stack engineering. Let&rsquo;s transform ambitious ideas into
-                    production-ready solutions.
+                    CodeSarthi is an AI-powered developer ecosystem that unifies collaboration, career growth, and project management in a single platform. It helps developers communicate, build ATS-friendly resumes, prepare for interviews, and manage projects efficiently without relying on a dedicated project manager.
                 </motion.p>
 
                 {/* CTA buttons */}

@@ -179,11 +179,15 @@ export default function Lines() {
     ];
 
     return (
-        <div id="testimonials" className="w-full bg-black flex flex-col justify-center overflow-hidden ">
 
-            <div className=' w-full  flex flex-col items-center justify-center  '>
-                <h2
-                    className="
+        <div className="w-full h-full bg-black pt-5">
+            < div id="testimonials" className="max-w-[1500px] mx-auto bg-black flex flex-col justify-center overflow-hidden " >
+
+                <div className=' w-full  flex flex-col items-start justify-center  pl-5 pt-5'>
+
+                    <img className='mb-3 sm:mr-5 w-15 h-15' src="https://neon.com/_next/static/media/auth.0rhscsge1_ukb.svg?dpl=dpl_2krqjZKb71veXn3xx7f5ScK8b3Aj" alt="" />
+                    <h2
+                        className="
                     font-poppins
                     font-semibold
                     text-2xl
@@ -195,55 +199,58 @@ mt-10
 
                   
                 "
-                >
-                    Loved by thousands of people
-                </h2>
+                    >
+                        Loved by thousands of people
+                    </h2>
 
-                <p className='text-md mt-3 text-gray-300 text-center w-full '  >Here's what some of our users have to say about CodeSarthi</p>
+                    <p className='text-md mt-3 text-gray-300 text-left w-full '  >Here's what some of our users have to say about CodeSarthi</p>
 
-            </div>
-            <div className="relative">
-                {/* Left */}
-                <div className="pointer-events-none absolute left-0 top-0 h-full w-[200px] sm:w-[300px] bg-gradient-to-r from-black to-transparent z-30" />
+                </div>
+                <div className="relative">
+                    {/* Left */}
+                    <div className="pointer-events-none absolute left-0 top-0 h-full w-[200px] sm:w-[300px] bg-gradient-to-r from-black to-transparent z-30" />
 
-                {/* Right */}
-                <div className="pointer-events-none absolute right-0 top-0 h-full w-[200px] sm:w-[300px] bg-gradient-to-l from-black to-transparent z-30" />
-                <section className="py-20 w-full overflow-hidden font-poppins flex flex-col gap-5">
-
-
-                    <ParallaxText baseVelocity={-1} isHovered={isHovered}>
+                    {/* Right */}
+                    <div className="pointer-events-none absolute right-0 top-0 h-full w-[200px] sm:w-[300px] bg-gradient-to-l from-black to-transparent z-30" />
+                    <section className="py-20 w-full overflow-hidden font-poppins flex flex-col gap-5">
 
 
-                        {testimonials.map((item, index) => (
-                            <ReviewCard
-                                key={index}
-                                item={item}
-                                onHover={setIsHovered}
-                            />
-                        ))}
-                    </ParallaxText>
-                    <ParallaxText baseVelocity={1} isHovered={isHovered}>
-                        {testimonials2.map((item, index) => (
-                            <ReviewCard
-                                key={index}
-                                item={item}
-                                onHover={setIsHovered}
-                            />
-                        ))}
-                    </ParallaxText>
-                    <ParallaxText baseVelocity={-1} isHovered={isHovered}>
-                        {testimonials.map((item, index) => (
-                            <ReviewCard
-                                key={index}
-                                item={item}
-                                onHover={setIsHovered}
-                            />
-                        ))}
-                    </ParallaxText>
-                </section>
+                        <ParallaxText baseVelocity={-1} isHovered={isHovered}>
 
-            </div>
+
+                            {testimonials.map((item, index) => (
+                                <ReviewCard
+                                    key={index}
+                                    item={item}
+                                    onHover={setIsHovered}
+                                />
+                            ))}
+                        </ParallaxText>
+                        <ParallaxText baseVelocity={1} isHovered={isHovered}>
+                            {testimonials2.map((item, index) => (
+                                <ReviewCard
+                                    key={index}
+                                    item={item}
+                                    onHover={setIsHovered}
+                                />
+                            ))}
+                        </ParallaxText>
+                        <ParallaxText baseVelocity={-1} isHovered={isHovered}>
+                            {testimonials.map((item, index) => (
+                                <ReviewCard
+                                    key={index}
+                                    item={item}
+                                    onHover={setIsHovered}
+                                />
+                            ))}
+                        </ParallaxText>
+                    </section>
+
+                </div>
+
+            </div >
 
         </div>
+
     );
 }

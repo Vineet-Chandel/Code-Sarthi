@@ -66,12 +66,13 @@ tracking-tight  justify-start'>
 relative
 overflow-hidden
 rounded-3xl
-sm:p-5
+  sm:p-3
 w-full
+bg-black
 "
             >
 
-              <div className="absolute inset-0 z-20 bg-gradient-to-l from-white/50 dark:from-black via-transparent to-transparent"></div>
+              <div className="absolute inset-0 z-30 bg-gradient-to-l from-black dark:from-black via-transparent to-transparent"></div>
 
               <img className="h-full object-cover rounded-3xl border border-white/10" src="https://res.cloudinary.com/dj0ivep44/image/upload/v1781411185/IMG_20260508_081110_lhmrvn.jpg" alt="" />
 

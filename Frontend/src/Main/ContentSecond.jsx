@@ -56,22 +56,18 @@ const PhoneGlyph = () => (
   </svg>
 );
 
-const CircleIcon = ({ accent, children }) => (
-  <div
-    className={`flex h-12 w-12 items-center justify-center rounded-full transition-transform duration-300 ease-out motion-reduce:transition-none group-hover:rotate-6 ${ACCENTS[accent].soft} ${ACCENTS[accent].icon}`}
-  >
-    {children}
-  </div>
-);
+
 
 const SectionTitle = () => (
-  <div className="flex flex-col items-center text-center">
+  <div className="flex flex-col items-start text-left">
+
+    <img className='mb-10 sm:mr-5 w-15 h-15' src="https://neon.com/_next/static/media/autoscaling.0_g.t5157bv5u.svg?dpl=dpl_2krqjZKb71veXn3xx7f5ScK8b3Aj" alt="" />
     <h2 className="w-[95%] text-[34px] font-black leading-[1.15] tracking-tight text-gray-900 md:text-[48px] lg:text-[62px]">
       Effectivity your workflow
       <br />
       better with good collaboration
     </h2>
-    <p className="mt-6 w-[75%] text-lg leading-relaxed text-gray-500">
+    <p className="mt-6 w-[75%] text-lg leading-relaxed text-gray-500 mb-6">
       Boost your team's productivity with powerful collaboration tools. Our platform allows your team to work
       together in real time, share insights effortlessly, and streamline communication.
     </p>
@@ -317,7 +313,7 @@ const CollaborationSection = () => {
         <div className="absolute bottom-0 left-1/2 h-[400px] w-[400px] -translate-x-1/2 rounded-full bg-amber-500/10 blur-3xl" />
       </div>
 
-      <div className="relative mx-auto max-w-[1400px] px-5 py-16 md:px-8 md:py-24">
+      <div className="relative mx-auto max-w-[1500px] px-5 py-16 md:px-8 md:py-24">
         <SectionTitle />
 
         <div className="mt-20 grid grid-cols-1 gap-[30px] md:grid-cols-2 lg:grid-cols-3">

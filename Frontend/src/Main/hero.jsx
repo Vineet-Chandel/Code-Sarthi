@@ -88,7 +88,7 @@ const Hero = () => {
             <Third />
             <ContentSecond />
             <Lines2 />
-            <Ropes />
+
             <ContentSecond2 />
 
 
@@ -104,6 +104,7 @@ bg-[size:90px_90px]
                 />
 
                 <Devs />
+                <Ropes />
                 <Footer />
             </div>
 
