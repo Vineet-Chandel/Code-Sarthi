@@ -7,21 +7,21 @@ import BASE_URL from '../../Pages/auth/baseURL';
 const formatCommentDate = (dateString) => {
     const date = new Date(dateString);
     const now = new Date();
-    
-    const isToday = date.getDate() === now.getDate() && 
-                    date.getMonth() === now.getMonth() && 
-                    date.getFullYear() === now.getFullYear();
-    
+
+    const isToday = date.getDate() === now.getDate() &&
+        date.getMonth() === now.getMonth() &&
+        date.getFullYear() === now.getFullYear();
+
     if (isToday) {
         return `Today at ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
     }
-    
+
     const yesterday = new Date(now);
     yesterday.setDate(now.getDate() - 1);
-    const isYesterday = date.getDate() === yesterday.getDate() && 
-                        date.getMonth() === yesterday.getMonth() && 
-                        date.getFullYear() === yesterday.getFullYear();
-                        
+    const isYesterday = date.getDate() === yesterday.getDate() &&
+        date.getMonth() === yesterday.getMonth() &&
+        date.getFullYear() === yesterday.getFullYear();
+
     if (isYesterday) {
         return `Yesterday at ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
     }
@@ -63,7 +63,7 @@ const GoalDetail = () => {
     useEffect(() => {
         const fetchGoal = async () => {
             try {
-                const res = await axios.get(`${BASE_URL}/api/goals/${id}`, { withCredentials: true });
+                const res = await axios.get(`${BASE_URL}/goals/${id}`, { withCredentials: true });
                 setGoal(res.data);
                 setComments(res.data.comments || []);
                 setLoading(false);
@@ -81,7 +81,7 @@ const GoalDetail = () => {
         if (!newComment.trim()) return;
 
         try {
-            const res = await axios.post(`${BASE_URL}/api/goals/${id}/comments`, { text: newComment }, { withCredentials: true });
+            const res = await axios.post(`${BASE_URL}/goals/${id}/comments`, { text: newComment }, { withCredentials: true });
             setGoal(res.data);
             setComments(res.data.comments || []);
             setNewComment('');
@@ -94,7 +94,7 @@ const GoalDetail = () => {
     const handleDeleteComment = async (commentId) => {
         if (!window.confirm("Are you sure you want to delete this comment?")) return;
         try {
-            const res = await axios.delete(`${BASE_URL}/api/goals/${id}/comments/${commentId}`, { withCredentials: true });
+            const res = await axios.delete(`${BASE_URL}/goals/${id}/comments/${commentId}`, { withCredentials: true });
             setGoal(res.data);
             setComments(res.data.comments || []);
         } catch (error) {
@@ -106,7 +106,7 @@ const GoalDetail = () => {
     const handleEditCommentSubmit = async (commentId) => {
         if (!editCommentText.trim()) return;
         try {
-            const res = await axios.put(`${BASE_URL}/api/goals/${id}/comments/${commentId}`, { text: editCommentText }, { withCredentials: true });
+            const res = await axios.put(`${BASE_URL}/goals/${id}/comments/${commentId}`, { text: editCommentText }, { withCredentials: true });
             setGoal(res.data);
             setComments(res.data.comments || []);
             setEditingCommentId(null);
@@ -119,7 +119,7 @@ const GoalDetail = () => {
 
     const handleReactionToggle = async (commentId, emoji) => {
         try {
-            const res = await axios.post(`${BASE_URL}/api/goals/${id}/comments/${commentId}/reactions`, { emoji }, { withCredentials: true });
+            const res = await axios.post(`${BASE_URL}/goals/${id}/comments/${commentId}/reactions`, { emoji }, { withCredentials: true });
             setGoal(res.data);
             setComments(res.data.comments || []);
         } catch (error) {
@@ -130,7 +130,7 @@ const GoalDetail = () => {
     const handleDeleteGoal = async () => {
         if (!window.confirm("Are you sure you want to delete this goal? This action cannot be undone.")) return;
         try {
-            await axios.delete(`${BASE_URL}/api/goals/${id}`, { withCredentials: true });
+            await axios.delete(`${BASE_URL}/goals/${id}`, { withCredentials: true });
             navigate('/app/goals');
         } catch (error) {
             console.error("Failed to delete goal", error);
@@ -140,7 +140,7 @@ const GoalDetail = () => {
 
     const handleArchiveGoal = async () => {
         try {
-            const res = await axios.patch(`${BASE_URL}/api/goals/${id}/archive`, {}, { withCredentials: true });
+            const res = await axios.patch(`${BASE_URL}/goals/${id}/archive`, {}, { withCredentials: true });
             setGoal(res.data);
         } catch (error) {
             console.error("Failed to archive goal", error);
@@ -169,7 +169,7 @@ const GoalDetail = () => {
             const tagsArray = editFormData.tags.split(',').map(tag => tag.trim()).filter(tag => tag);
             const dataToSubmit = { ...editFormData, tags: tagsArray };
 
-            const res = await axios.put(`${BASE_URL}/api/goals/${id}`, dataToSubmit, { withCredentials: true });
+            const res = await axios.put(`${BASE_URL}/goals/${id}`, dataToSubmit, { withCredentials: true });
             setGoal(res.data);
             setShowEditModal(false);
         } catch (error) {
@@ -320,7 +320,7 @@ const GoalDetail = () => {
                                         const canDelete = isAuthor || isGoalOwner;
                                         const isEditing = editingCommentId === comment._id;
                                         const displayUser = isAuthor ? currentUser : comment.byUser;
-                                        
+
                                         // Aggregate reactions for display
                                         const reactionCounts = {};
                                         const userReactions = new Set();
@@ -349,7 +349,7 @@ const GoalDetail = () => {
                                                         <span className="font-semibold text-sm">{displayUser ? `${displayUser.firstName} ${displayUser.lastName || ''}`.trim() : "User"}</span>
                                                         <span className="text-xs text-gray-500 flex items-center gap-2">
                                                             {formatCommentDate(comment.timestamp)}
-                                                            
+
                                                             {/* Actions Menu */}
                                                             <div className="flex gap-2 ml-2">
                                                                 {isAuthor && !isEditing && (
@@ -367,7 +367,7 @@ const GoalDetail = () => {
 
                                                     {isEditing ? (
                                                         <div className="mt-2">
-                                                            <textarea 
+                                                            <textarea
                                                                 value={editCommentText}
                                                                 onChange={(e) => setEditCommentText(e.target.value)}
                                                                 className="w-full bg-[#121212] border border-[#333] rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500 text-sm resize-none mb-2"
@@ -384,14 +384,14 @@ const GoalDetail = () => {
                                                     ) : (
                                                         <>
                                                             <p className="text-gray-300 text-sm leading-relaxed mb-3">{comment.text}</p>
-                                                            
+
                                                             {/* Reactions */}
                                                             <div className="flex flex-wrap gap-2 mt-2 pt-2 border-t border-[#2a2a2a]">
                                                                 {["👍", "❤️", "🚀", "👀"].map(emoji => {
                                                                     const count = reactionCounts[emoji] || 0;
                                                                     const hasReacted = userReactions.has(emoji);
                                                                     return (
-                                                                        <button 
+                                                                        <button
                                                                             key={emoji}
                                                                             onClick={() => handleReactionToggle(comment._id, emoji)}
                                                                             className={`px-2 py-1 rounded-full flex items-center gap-1 text-xs transition-colors ${hasReacted ? 'bg-blue-600/20 border border-blue-500/30' : 'bg-[#2a2a2a] hover:bg-[#333] border border-transparent'}`}

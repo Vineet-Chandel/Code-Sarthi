@@ -37,7 +37,7 @@ const ShowingGoals = ({ goals, loading, onGoalAdded }) => {
             const tagsArray = formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag);
             const dataToSubmit = { ...formData, tags: tagsArray };
 
-            const res = await axios.post(`${BASE_URL}/api/goals`, dataToSubmit, { withCredentials: true });
+            const res = await axios.post(`${BASE_URL}/goals`, dataToSubmit, { withCredentials: true });
             onGoalAdded(res.data);
             setShowModal(false);
             setFormData({ name: '', description: '', targetDate: '', priority: 'Low', category: '', status: 'Not Started', tags: '' });

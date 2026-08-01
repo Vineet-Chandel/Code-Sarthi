@@ -9,27 +9,28 @@ import {
     MessageCircle,
     Youtube,
     BookOpen,
-    Ellipsis,
     Send,
+    Paperclip,
+    Terminal,
+    Bot
 } from "lucide-react";
 
 import { useBotStream } from "../../hooks/useBotStream";
 import MessageList from "../../components/Bot/MessageList";
 
 /* ---------------------------------------------------------
-   Constants
+   Constants (Gemini & ChatGPT style starter cards)
 --------------------------------------------------------- */
 
 const SUGGESTIONS = [
-    { id: 1, label: "Any advice for me?", icon: MessageCircle },
-    { id: 2, label: "Some youtube video idea", icon: Youtube },
-    { id: 3, label: "Life lessons from kratos", icon: BookOpen },
-    { id: 4, label: "Something else entirely", icon: Ellipsis },
+    { id: 1, label: "Explain quantum computing simply", icon: Zap, sub: "Complex topics in plain words" },
+    { id: 2, label: "Help me debug my React app", icon: Terminal, sub: "Code optimization & error hunting" },
+    { id: 3, label: "Give me YouTube video ideas", icon: Youtube, sub: "Trending content creation" },
+    { id: 4, label: "Life lessons from Kratos", icon: BookOpen, sub: "Philosophy & character deep dives" },
 ];
 
 /* ---------------------------------------------------------
    Background layers — near-black base with soft radial glows
-   and faint vertical guide lines behind the logo
 --------------------------------------------------------- */
 
 const Background = () => (
@@ -39,7 +40,7 @@ const Background = () => (
             className="absolute left-1/2 top-[-10%] h-[520px] w-[900px] -translate-x-1/2 rounded-full blur-3xl"
             style={{
                 background:
-                    "radial-gradient(closest-side, rgba(90,110,255,0.10), transparent 70%)",
+                    "radial-gradient(closest-side, rgba(139,92,246,0.12), transparent 70%)",
             }}
         />
         {/* center glow */}
@@ -55,53 +56,9 @@ const Background = () => (
             className="absolute bottom-0 left-1/2 h-[400px] w-[1000px] -translate-x-1/2 translate-y-1/3 rounded-full blur-3xl"
             style={{
                 background:
-                    "radial-gradient(closest-side, rgba(0,0,0,0.6), transparent 70%)",
+                    "radial-gradient(closest-side, rgba(0,0,0,0.8), transparent 70%)",
             }}
         />
-
-        {/* faint vertical guide lines behind the logo */}
-        <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 gap-10">
-            {[...Array(7)].map((_, i) => (
-                <div
-                    key={i}
-                    className="h-[420px] w-px"
-                    style={{
-                        background:
-                            "linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.06) 35%, rgba(255,255,255,0.06) 65%, transparent 100%)",
-                        filter: "blur(0.5px)",
-                        opacity: i % 2 === 0 ? 0.5 : 0.9,
-                    }}
-                />
-            ))}
-        </div>
-    </div>
-);
-
-/* ---------------------------------------------------------
-   Header — floating menu button + upgrade button
---------------------------------------------------------- */
-
-const Header = () => (
-    <div className="absolute inset-x-0 top-0 z-20 flex items-center justify-between px-4 pt-5 sm:px-6 sm:pt-6">
-        {/* Menu button */}
-        <motion.button
-            whileHover={{ rotate: -6, scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="group flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-zinc-300 backdrop-blur-xl transition-shadow duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.08)]"
-            aria-label="Open menu"
-        >
-            <Menu className="h-4 w-4" />
-        </motion.button>
-
-        {/* Upgrade button */}
-        <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-1.5 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-zinc-200 backdrop-blur-xl transition-shadow duration-300 hover:shadow-[0_0_24px_rgba(255,255,255,0.15)]"
-        >
-            <Sparkles className="h-3.5 w-3.5 text-white/70" />
-            <span>Upgrade</span>
-        </motion.button>
     </div>
 );
 
@@ -232,32 +189,36 @@ const Hero = () => (
             </svg>
         </motion.div>
 
-        <motion.h1
+        <motion.div
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-7 text-center text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl"
+            className="mt-8 flex flex-col items-center text-center"
         >
-            Good to See You!
-            <br className="hidden sm:block" /> How Can I be an Assistance?
-        </motion.h1>
+            <h1 className="text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 sm:text-5xl lg:text-6xl pb-2">
+                Hello there, Explorer.
+            </h1>
+            <h2 className="mt-1 text-2xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-zinc-300">
+                How can Shastra assist you today?
+            </h2>
+        </motion.div>
 
         <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.28, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-4 text-center text-sm text-zinc-500 sm:text-base"
+            className="mt-4 text-center text-sm text-zinc-400 sm:text-base max-w-lg mx-auto leading-relaxed"
         >
-            I'm available 24/7 for you, ask me anything.
+            Powered by advanced intelligence. Ask anything, brainstorm ideas, or explore deep technical solutions.
         </motion.p>
     </div>
 );
 
 /* ---------------------------------------------------------
-   Prompt Card — top row (pro plan / extensions), bottom row (input)
+   Prompt Card — ChatGPT / Gemini style capsule input
 --------------------------------------------------------- */
 
-const PromptCard = ({ onSend, isStreaming }) => {
+const PromptCard = ({ onSend, isStreaming, inChat = false }) => {
     const [value, setValue] = useState("");
 
     const handleSend = () => {
@@ -273,82 +234,78 @@ const PromptCard = ({ onSend, isStreaming }) => {
         }
     };
 
+    const hasText = value.trim().length > 0;
+
     return (
         <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            whileHover={{ y: -2 }}
-            className="relative mx-auto mt-10 w-full max-w-[700px] overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] shadow-[0_10px_40px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-shadow duration-300 hover:shadow-[0_10px_50px_rgba(80,120,255,0.12)]"
+            transition={{ duration: 0.5, delay: inChat ? 0 : 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="relative w-full"
         >
-            {/* animated floating glow */}
-            <motion.div
-                className="pointer-events-none absolute top-0 h-full w-1/3"
-                style={{
-                    background:
-                        "linear-gradient(90deg, transparent, rgba(255,255,255,0.10), transparent)",
-                }}
-                animate={{ left: ["-30%", "110%"] }}
-                transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-            />
+            <div
+                className={`relative overflow-hidden rounded-[28px] border border-white/15 bg-[#18181c]/90 backdrop-blur-2xl transition-all duration-300 shadow-[0_8px_32px_rgba(0,0,0,0.5)] hover:border-white/25 focus-within:border-purple-500/50 focus-within:shadow-[0_0_40px_rgba(168,85,247,0.15)] ${inChat ? "py-2 px-3 sm:px-4" : "py-2.5 px-4 sm:px-5"
+                    }`}
+            >
+                {/* Input Controls Row */}
+                <div className="flex items-center gap-2 sm:gap-3">
 
 
+                    <input
+                        value={value}
+                        onChange={(e) => setValue(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        disabled={isStreaming}
+                        placeholder={inChat ? "Message Shastra AI..." : "Ask Shastra anything..."}
+                        className="min-w-0 flex-1 bg-transparent py-2 text-sm sm:text-base text-zinc-100 placeholder:text-zinc-500 focus:outline-none"
+                    />
 
-            {/* divider */}
-            <div className="h-px w-full bg-white/[0.06]" />
-
-            {/* bottom row */}
-            <div className="relative flex items-center gap-3 px-4 py-4 sm:px-5">
-                <button
-                    className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl border border-white/10 bg-black[0.8] text-zinc-300 transition-transform duration-200 hover:scale-105 hover:bg-white/10"
-                    aria-label="Add attachment"
-                >
-
-
-                    <Zap className="h-4 w-4 text-white/70" />
-
-                </button>
-
-                <div className="h-6 w-px flex-shrink-0 bg-white/10" />
-
-                <input
-                    value={value}
-                    onChange={(e) => setValue(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    disabled={isStreaming}
-                    placeholder="Ask anything..."
-                    className="min-w-0 flex-1 bg-transparent text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none sm:text-base"
-                />
+                    <div className="flex items-center gap-1.5">
 
 
-                <button
-                    onClick={handleSend}
-                    disabled={isStreaming}
-                    className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl border border-white/10 bg-black[0.8] text-zinc-300 transition-transform duration-200 hover:scale-105 hover:bg-white/10"
-                    aria-label="Send message"
-                >
-                    <Send className="h-4 w-4 text-white/70" />
+                        <button
+                            onClick={handleSend}
+                            disabled={!hasText || isStreaming}
+                            className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl transition-all duration-200 p-2 ${hasText && !isStreaming
+                                ? "bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.3)] hover:scale-105 cursor-pointer"
+                                : "bg-white/[0.05] text-zinc-600 cursor-not-allowed"
+                                }`}
+                            aria-label="Send message"
+                        >
+                            <Send className="w-full " />
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-                </button>
-
+            {/* Disclaimer subtitle */}
+            <div className="mt-2 text-center text-[12px] text-zinc-500 font-normal px-4">
+                Shastra AI can make mistakes. Check important info before use.
             </div>
         </motion.div>
     );
 };
 
 /* ---------------------------------------------------------
-   Suggestion chip
+   Suggestion cards (Gemini & ChatGPT starter prompts)
 --------------------------------------------------------- */
 
-const SuggestionChip = ({ label, icon: Icon, onSend }) => (
+const SuggestionCard = ({ label, sub, icon: Icon, onSend }) => (
     <motion.button
         onClick={() => onSend(label)}
-        whileHover={{ scale: 1.03, y: -2 }}
+        whileHover={{ scale: 1.02, y: -2 }}
         whileTap={{ scale: 0.98 }}
-        className="flex flex-shrink-0 items-center gap-2 rounded-full border border-white/10 bg-white/[0.02] px-4 py-2 text-xs text-zinc-300 transition-colors duration-300 hover:bg-white/5 sm:text-sm"
+        className="flex flex-col items-start text-left justify-between h-full w-full rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4 transition-all duration-300 hover:bg-white/[0.06] hover:border-white/20 hover:shadow-lg group"
     >
-        <Icon className="h-3.5 w-3.5 text-zinc-400" />
-        <span className="whitespace-nowrap">{label}</span>
+        <div className="flex items-center justify-between w-full mb-2">
+            <span className="text-sm font-semibold text-zinc-200 group-hover:text-purple-300 transition-colors">
+                {label}
+            </span>
+            <div className="p-2 rounded-xl bg-white/[0.04] text-zinc-400 group-hover:text-purple-400 group-hover:bg-purple-500/10 transition-all">
+                <Icon className="h-4 w-4" />
+            </div>
+        </div>
+        <span className="text-xs text-zinc-500 line-clamp-1">{sub}</span>
     </motion.button>
 );
 
@@ -358,20 +315,20 @@ const SuggestionRow = ({ onSend }) => (
         animate="show"
         variants={{
             hidden: {},
-            show: { transition: { staggerChildren: 0.08, delayChildren: 0.6 } },
+            show: { transition: { staggerChildren: 0.08, delayChildren: 0.5 } },
         }}
-        className="mx-auto mt-6 flex w-full max-w-[700px] gap-2.5 overflow-x-auto px-4 pb-1 sm:flex-wrap sm:justify-center sm:overflow-visible sm:px-0"
+        className="mx-auto mt-8 grid w-full max-w-[780px] grid-cols-1 sm:grid-cols-2 gap-3 px-2 sm:px-0"
     >
         {SUGGESTIONS.map((s) => (
             <motion.div
                 key={s.id}
                 variants={{
-                    hidden: { opacity: 0, y: 10 },
+                    hidden: { opacity: 0, y: 12 },
                     show: { opacity: 1, y: 0 },
                 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
-                <SuggestionChip label={s.label} icon={s.icon} onSend={onSend} />
+                <SuggestionCard label={s.label} sub={s.sub} icon={s.icon} onSend={onSend} />
             </motion.div>
         ))}
     </motion.div>
@@ -386,13 +343,13 @@ const Footer = () => (
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.9 }}
-        className="absolute inset-x-0 bottom-6 flex justify-center px-4 text-center text-xs text-zinc-500 sm:text-sm"
+        className="py-6 flex justify-center text-center text-xs text-zinc-600 sm:text-sm"
     >
         <p>
-            ShastraAi by the,{" "}
+            Shastra AI by{" "}
             <a
                 href="#"
-                className="relative text-zinc-300 after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-full after:origin-right after:scale-x-0 after:bg-zinc-300 after:transition-transform after:duration-300 hover:after:origin-left hover:after:scale-x-100"
+                className="relative text-zinc-400 after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-full after:origin-right after:scale-x-0 after:bg-zinc-400 after:transition-transform after:duration-300 hover:after:origin-left hover:after:scale-x-100"
             >
                 CodeSarthi
             </a>
@@ -401,37 +358,61 @@ const Footer = () => (
 );
 
 /* ---------------------------------------------------------
-   Root component
+   Root component — Fullscreen ChatGPT / Gemini experience
 --------------------------------------------------------- */
 
 export default function AetherAI() {
-    const { messages, isStreaming, sendMessage } = useBotStream();
+    const { messages, isStreaming, sendMessage, clearMessages } = useBotStream();
 
     return (
-        <div className="relative flex flex-row h-screen overflow-y-auto scrollbar-none w-full items-center justify-center  bg-[#090909] font-sans">
+        <div className="relative flex flex-col h-screen overflow-hidden bg-[#090909] text-zinc-100 font-sans">
             <Background />
 
-
-            {/* <Header /> */}
-
-            <main className="relative z-10 flex w-full flex-col items-center px-4 sm:px-6 py-12">
+            {/* Main conversation area */}
+            <main className="relative z-10 flex-1 flex flex-col w-full overflow-hidden">
                 {messages.length === 0 ? (
-                    <>
-                        <Hero />
-                        <PromptCard onSend={sendMessage} isStreaming={isStreaming} />
-                        <SuggestionRow onSend={sendMessage} />
-                    </>
-                ) : (
-                    <>
-                        <div className="flex w-full max-w-[800px] flex-col h-[65vh] mb-4 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] backdrop-blur-md shadow-2xl">
-                            <MessageList messages={messages} isStreaming={isStreaming} />
+                    <div className="flex-1 overflow-y-auto scrollbar-none flex flex-col items-center justify-between px-4 sm:px-6 py-8 sm:py-12 w-full max-w-5xl mx-auto">
+                        <div className="w-full flex flex-col items-center my-auto">
+                            <Hero />
+                            <div className="w-full max-w-[760px] mx-auto mt-8">
+                                <PromptCard onSend={sendMessage} isStreaming={isStreaming} inChat={false} />
+                            </div>
+                            <SuggestionRow onSend={sendMessage} />
                         </div>
-                        <PromptCard onSend={sendMessage} isStreaming={isStreaming} />
-                    </>
+                        <Footer />
+                    </div>
+                ) : (
+                    <div className="relative flex-1 flex flex-col w-full overflow-hidden">
+                        {/* Floating New Chat button */}
+                        <motion.button
+                            initial={{ opacity: 0, scale: 0.9, y: -10 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            onClick={clearMessages}
+                            whileHover={{ scale: 1.04 }}
+                            whileTap={{ scale: 0.96 }}
+                            className="absolute top-4 right-4 sm:top-6 sm:right-6 z-30 flex items-center gap-2 rounded-full border border-white/15 bg-[#18181c]/80 px-4 py-2 text-xs sm:text-sm text-zinc-200 backdrop-blur-xl shadow-lg transition-all hover:bg-white/10 hover:border-white/25 hover:text-white"
+                            title="Start a new chat"
+                        >
+                            <Plus className="h-4 w-4 text-purple-400" />
+                            <span className="font-semibold tracking-wide">New Chat</span>
+                        </motion.button>
+
+                        {/* Scrollable message feed without rigid boundaries */}
+                        <div className="flex-1 overflow-y-auto scrollbar-none w-full pb-36 pt-16 sm:pt-12">
+                            <div className="w-full max-w-[800px] mx-auto px-4 sm:px-6">
+                                <MessageList messages={messages} isStreaming={isStreaming} />
+                            </div>
+                        </div>
+
+                        {/* Docked bottom input bar with backdrop fade */}
+                        <div className="absolute bottom-0 inset-x-0 z-20 pb-6 pt-8 bg-gradient-to-t from-[#090909] via-[#090909]/95 to-transparent pointer-events-none">
+                            <div className="w-full max-w-[800px] mx-auto px-4 sm:px-6 pointer-events-auto">
+                                <PromptCard onSend={sendMessage} isStreaming={isStreaming} inChat={true} />
+                            </div>
+                        </div>
+                    </div>
                 )}
             </main>
-
-            <Footer />
         </div>
     );
 }
