@@ -56,7 +56,7 @@ const SchedulerCalendar = ({ schedules, goals, onScheduleAdded, onScheduleUpdate
         e.stopPropagation();
         const newStatus = schedule.status === 'Completed' ? 'Scheduled' : 'Completed';
         try {
-            const res = await axios.patch(`${BASE_URL}/api/schedules/${schedule._id}`, { status: newStatus }, { withCredentials: true });
+            const res = await axios.patch(`${BASE_URL}/schedules/${schedule._id}`, { status: newStatus }, { withCredentials: true });
             onScheduleUpdated(res.data);
         } catch (error) {
             console.error("Failed to update status", error);
@@ -74,7 +74,7 @@ const SchedulerCalendar = ({ schedules, goals, onScheduleAdded, onScheduleUpdate
     for (let d = 1; d <= daysInMonth; d++) {
         const currentIterDate = new Date(year, month, d);
         const isToday = currentIterDate.toDateString() === new Date().toDateString();
-        
+
         // Find schedules for this day
         const daySchedules = schedules.filter(s => {
             const sDate = new Date(s.startTime);
@@ -82,8 +82,8 @@ const SchedulerCalendar = ({ schedules, goals, onScheduleAdded, onScheduleUpdate
         });
 
         daysInMonthArray.push(
-            <div 
-                key={d} 
+            <div
+                key={d}
                 onClick={() => handleDayClick(d)}
                 className={`min-h-[140px] border border-[#222] rounded-xl p-2 cursor-pointer transition-all duration-300 hover:border-blue-500/50 hover:bg-[#151515] group relative flex flex-col ${isToday ? 'bg-[#1a1a2e] border-blue-900/50 shadow-[inset_0_0_20px_rgba(37,99,235,0.05)]' : 'bg-[#121212]'}`}
             >
@@ -95,27 +95,27 @@ const SchedulerCalendar = ({ schedules, goals, onScheduleAdded, onScheduleUpdate
                         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"></path></svg>
                     </button>
                 </div>
-                
+
                 <div className="flex flex-col gap-1.5 overflow-y-auto custom-scrollbar flex-1 pb-1">
                     {daySchedules.map(schedule => {
                         const isCompleted = schedule.status === 'Completed';
                         const isMissed = schedule.status === 'Missed';
                         let bgColor = 'bg-gray-800/50 border-gray-700 hover:border-gray-500 text-gray-300';
-                        
+
                         if (isCompleted) bgColor = 'bg-green-500/10 border-green-500/30 hover:border-green-500/60 text-green-400';
                         else if (isMissed) bgColor = 'bg-red-500/10 border-red-500/30 hover:border-red-500/60 text-red-400';
                         else bgColor = 'bg-blue-500/10 border-blue-500/30 hover:border-blue-500/60 text-blue-400'; // Scheduled
-                        
+
                         const timeString = new Date(schedule.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
                         return (
-                            <div 
-                                key={schedule._id} 
+                            <div
+                                key={schedule._id}
                                 onClick={(e) => handleScheduleClick(e, schedule)}
                                 className={`text-xs px-2 py-1.5 rounded-md border ${bgColor} truncate transition-all duration-200 group/item relative`}
                             >
                                 <div className="flex items-center gap-1.5 font-medium mb-0.5">
-                                    <button 
+                                    <button
                                         onClick={(e) => toggleScheduleStatus(e, schedule)}
                                         className={`w-3 h-3 rounded-full shrink-0 border flex items-center justify-center transition-colors ${isCompleted ? 'bg-green-500 border-green-400' : 'border-current hover:bg-current hover:bg-opacity-20'}`}
                                     >
@@ -137,7 +137,7 @@ const SchedulerCalendar = ({ schedules, goals, onScheduleAdded, onScheduleUpdate
             {/* Toolbar */}
             <div className="flex justify-between items-center mb-6">
                 <div className="flex items-center gap-4">
-                    <button 
+                    <button
                         onClick={handleToday}
                         className="px-4 py-1.5 bg-[#1a1a1a] hover:bg-[#222] border border-[#333] hover:border-[#555] rounded-lg text-sm text-gray-300 font-medium transition-colors"
                     >
@@ -155,8 +155,8 @@ const SchedulerCalendar = ({ schedules, goals, onScheduleAdded, onScheduleUpdate
                         </button>
                     </div>
                 </div>
-                
-                <button 
+
+                <button
                     onClick={() => { setEditingSchedule(null); setSelectedDateForNew(new Date()); setIsModalOpen(true); }}
                     className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2 rounded-xl font-medium transition-colors shadow-lg shadow-blue-500/20 flex items-center gap-2 text-sm"
                 >
@@ -173,7 +173,7 @@ const SchedulerCalendar = ({ schedules, goals, onScheduleAdded, onScheduleUpdate
                     </div>
                 ))}
             </div>
-            
+
             <div className="grid grid-cols-7 gap-3 flex-1">
                 {blanks}
                 {daysInMonthArray}
@@ -181,8 +181,8 @@ const SchedulerCalendar = ({ schedules, goals, onScheduleAdded, onScheduleUpdate
 
             {/* Modal */}
             {isModalOpen && (
-                <ScheduleModal 
-                    isOpen={isModalOpen} 
+                <ScheduleModal
+                    isOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
                     scheduleToEdit={editingSchedule}
                     initialDate={selectedDateForNew}

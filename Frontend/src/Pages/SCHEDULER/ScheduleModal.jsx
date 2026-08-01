@@ -3,7 +3,7 @@ import axios from 'axios';
 import BASE_URL from '../../Pages/auth/baseURL';
 
 const ScheduleModal = ({ isOpen, onClose, scheduleToEdit, initialDate, goals, onScheduleAdded, onScheduleUpdated, onScheduleDeleted }) => {
-    
+
     // Format date for datetime-local input (YYYY-MM-DDTHH:mm)
     const formatDateTimeLocal = (dateObj) => {
         if (!dateObj) return '';
@@ -51,10 +51,10 @@ const ScheduleModal = ({ isOpen, onClose, scheduleToEdit, initialDate, goals, on
         setLoading(true);
         try {
             if (scheduleToEdit) {
-                const res = await axios.patch(`${BASE_URL}/api/schedules/${scheduleToEdit._id}`, formData, { withCredentials: true });
+                const res = await axios.patch(`${BASE_URL}/schedules/${scheduleToEdit._id}`, formData, { withCredentials: true });
                 onScheduleUpdated(res.data);
             } else {
-                const res = await axios.post(`${BASE_URL}/api/schedules`, formData, { withCredentials: true });
+                const res = await axios.post(`${BASE_URL}/schedules`, formData, { withCredentials: true });
                 onScheduleAdded(res.data);
             }
             onClose();
@@ -70,7 +70,7 @@ const ScheduleModal = ({ isOpen, onClose, scheduleToEdit, initialDate, goals, on
         if (!window.confirm("Are you sure you want to delete this schedule?")) return;
         setLoading(true);
         try {
-            await axios.delete(`${BASE_URL}/api/schedules/${scheduleToEdit._id}`, { withCredentials: true });
+            await axios.delete(`${BASE_URL}/schedules/${scheduleToEdit._id}`, { withCredentials: true });
             onScheduleDeleted(scheduleToEdit._id);
             onClose();
         } catch (error) {
@@ -97,17 +97,17 @@ const ScheduleModal = ({ isOpen, onClose, scheduleToEdit, initialDate, goals, on
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
                 </div>
-                
+
                 <form onSubmit={handleSubmit} className="p-6 space-y-5 overflow-y-auto custom-scrollbar flex-1">
-                    
+
                     {/* Goal Selection */}
                     <div>
                         <label className="block text-sm font-medium text-gray-400 mb-1.5">Linked Goal *</label>
-                        <select 
-                            required 
+                        <select
+                            required
                             disabled={!!scheduleToEdit} // Usually don't change goal after scheduling
-                            value={formData.goal} 
-                            onChange={e => setFormData({ ...formData, goal: e.target.value })} 
+                            value={formData.goal}
+                            onChange={e => setFormData({ ...formData, goal: e.target.value })}
                             className="w-full bg-[#1a1a1a] border border-[#333] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 transition-colors disabled:opacity-50"
                         >
                             <option value="" disabled>Select a goal...</option>
@@ -120,13 +120,13 @@ const ScheduleModal = ({ isOpen, onClose, scheduleToEdit, initialDate, goals, on
                     {/* Title */}
                     <div>
                         <label className="block text-sm font-medium text-gray-400 mb-1.5">Title / Event Name *</label>
-                        <input 
-                            required 
-                            type="text" 
-                            value={formData.title} 
-                            onChange={e => setFormData({ ...formData, title: e.target.value })} 
-                            className="w-full bg-[#1a1a1a] border border-[#333] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 transition-colors" 
-                            placeholder="e.g. Design System Mockup session" 
+                        <input
+                            required
+                            type="text"
+                            value={formData.title}
+                            onChange={e => setFormData({ ...formData, title: e.target.value })}
+                            className="w-full bg-[#1a1a1a] border border-[#333] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 transition-colors"
+                            placeholder="e.g. Design System Mockup session"
                         />
                     </div>
 
@@ -134,22 +134,22 @@ const ScheduleModal = ({ isOpen, onClose, scheduleToEdit, initialDate, goals, on
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label className="block text-sm font-medium text-gray-400 mb-1.5">Start Time *</label>
-                            <input 
-                                required 
-                                type="datetime-local" 
-                                value={formData.startTime} 
-                                onChange={e => setFormData({ ...formData, startTime: e.target.value })} 
-                                className="w-full bg-[#1a1a1a] border border-[#333] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 transition-colors [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert" 
+                            <input
+                                required
+                                type="datetime-local"
+                                value={formData.startTime}
+                                onChange={e => setFormData({ ...formData, startTime: e.target.value })}
+                                className="w-full bg-[#1a1a1a] border border-[#333] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 transition-colors [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert"
                             />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-400 mb-1.5">End Time *</label>
-                            <input 
-                                required 
-                                type="datetime-local" 
-                                value={formData.endTime} 
-                                onChange={e => setFormData({ ...formData, endTime: e.target.value })} 
-                                className="w-full bg-[#1a1a1a] border border-[#333] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 transition-colors [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert" 
+                            <input
+                                required
+                                type="datetime-local"
+                                value={formData.endTime}
+                                onChange={e => setFormData({ ...formData, endTime: e.target.value })}
+                                className="w-full bg-[#1a1a1a] border border-[#333] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 transition-colors [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert"
                             />
                         </div>
                     </div>
@@ -164,11 +164,10 @@ const ScheduleModal = ({ isOpen, onClose, scheduleToEdit, initialDate, goals, on
                                         key={s}
                                         type="button"
                                         onClick={() => setFormData({ ...formData, status: s })}
-                                        className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all duration-200 border ${
-                                            formData.status === s 
+                                        className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all duration-200 border ${formData.status === s
                                             ? (s === 'Completed' ? 'bg-green-600/20 border-green-500 text-green-400' : s === 'Missed' ? 'bg-red-600/20 border-red-500 text-red-400' : 'bg-blue-600/20 border-blue-500 text-blue-400')
                                             : 'bg-[#1a1a1a] border-[#333] text-gray-400 hover:bg-[#222]'
-                                        }`}
+                                            }`}
                                     >
                                         {s}
                                     </button>
@@ -180,11 +179,11 @@ const ScheduleModal = ({ isOpen, onClose, scheduleToEdit, initialDate, goals, on
                     {/* Notes */}
                     <div>
                         <label className="block text-sm font-medium text-gray-400 mb-1.5">Notes (Optional)</label>
-                        <textarea 
-                            rows="2" 
-                            value={formData.notes} 
-                            onChange={e => setFormData({ ...formData, notes: e.target.value })} 
-                            className="w-full bg-[#1a1a1a] border border-[#333] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 transition-colors resize-none custom-scrollbar" 
+                        <textarea
+                            rows="2"
+                            value={formData.notes}
+                            onChange={e => setFormData({ ...formData, notes: e.target.value })}
+                            className="w-full bg-[#1a1a1a] border border-[#333] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 transition-colors resize-none custom-scrollbar"
                             placeholder="Any notes about this session..."
                         ></textarea>
                     </div>
