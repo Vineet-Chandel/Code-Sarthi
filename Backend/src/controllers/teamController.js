@@ -35,19 +35,32 @@ async function createTeam(req, res) {
   }
 }
 
-// List teams I belong to
 async function listMyTeams(req, res) {
   try {
     const memberships = await TeamMember.find({ userId: req.user._id, status: 'active' });
     const teamIds = memberships.map(m => m.teamId);
     const teams = await Team.find({ _id: { $in: teamIds }, status: 'active' }).populate('ownerId', 'firstName lastName photoUrl');
     
-    // Attach my role to the team response
+    const allMembers = await TeamMember.find({ teamId: { $in: teamIds }, status: 'active' })
+      .populate('userId', 'firstName lastName photoUrl email');
+
     const teamsWithRole = teams.map(team => {
         const membership = memberships.find(m => m.teamId.toString() === team._id.toString());
+        const teamMembers = allMembers
+          .filter(m => m.teamId.toString() === team._id.toString() && m.userId)
+          .map(m => ({
+            _id: m.userId._id,
+            firstName: m.userId.firstName,
+            lastName: m.userId.lastName,
+            photoUrl: m.userId.photoUrl,
+            email: m.userId.email,
+            role: m.role
+          }));
+
         return {
             ...team.toObject(),
-            myRole: membership.role
+            myRole: membership ? membership.role : 'member',
+            members: teamMembers
         };
     });
 

@@ -93,14 +93,34 @@ const Projects = () => {
                                 </p>
 
                                 <div className="flex items-center justify-between pt-4 border-t border-white/10">
-                                    <div className="flex items-center gap-2">
-                                        <div className="flex -space-x-2">
-                                            {/* Dummy avatars for visual weight */}
-                                            <div className="w-7 h-7 rounded-full bg-zinc-800 border-2 border-[#121215] flex items-center justify-center text-[10px] text-zinc-400">
-                                                {team.memberCount > 1 ? '+' + (team.memberCount - 1) : 'U'}
-                                            </div>
+                                    <div className="flex items-center gap-2.5">
+                                        <div className="flex -space-x-2 overflow-hidden">
+                                            {(team.members && team.members.length > 0 ? team.members.slice(0, 4) : team.ownerId ? [team.ownerId] : []).map((member, idx) => {
+                                                const hasPhoto = member?.photoUrl?.url && member.photoUrl.url !== "https://geographyandyou.com/images/user-profile.png";
+                                                return (
+                                                    <div
+                                                        key={member._id || idx}
+                                                        title={`${member.firstName || ''} ${member.lastName || ''} (${member.role || 'Leader'})`}
+                                                        className={`w-7 h-7 rounded-full border-2 border-[#121215] flex items-center justify-center overflow-hidden shrink-0 ${member.role === 'leader' || idx === 0 ? 'bg-gradient-to-br from-[#534AB7] to-[#A7A0F8] text-white' : 'bg-zinc-800 text-zinc-300'}`}
+                                                    >
+                                                        {hasPhoto ? (
+                                                            <img src={member.photoUrl.url} alt={member.firstName || 'Member'} className="w-full h-full object-cover" />
+                                                        ) : (
+                                                            <span className="text-[10px] font-extrabold tracking-tight">
+                                                                {member.firstName ? member.firstName.charAt(0).toUpperCase() : 'U'}
+                                                                {member.lastName ? member.lastName.charAt(0).toUpperCase() : ''}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                );
+                                            })}
+                                            {team.memberCount > 4 && (
+                                                <div className="w-7 h-7 rounded-full bg-zinc-900 border-2 border-[#121215] flex items-center justify-center text-[9px] font-bold text-[#A7A0F8] shrink-0">
+                                                    +{team.memberCount - 4}
+                                                </div>
+                                            )}
                                         </div>
-                                        <span className="text-xs text-zinc-500 font-medium">{team.memberCount} Members</span>
+                                        <span className="text-xs text-zinc-400 font-semibold">{team.memberCount} {team.memberCount === 1 ? 'Member' : 'Members'}</span>
                                     </div>
                                     <div className="text-zinc-600 group-hover:text-[#A7A0F8] transition-colors">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-7-7l7 7l-7 7" /></svg>

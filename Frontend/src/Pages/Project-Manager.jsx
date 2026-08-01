@@ -1,142 +1,912 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect, useMemo } from 'react';
+import axios from 'axios';
+import { motion } from 'framer-motion';
+import {
+    BarChart, Bar, LineChart, Line, PieChart, Pie, AreaChart, Area,
+    XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell
+} from 'recharts';
+import BASE_URL from './auth/baseURL';
 
-const ProjectManager = () => {
-    const user = useSelector((store) => store.user);
+// Semantic Color Palette as mandated by build brief
+const COLORS = {
+    primary: '#534AB7',    // Primary series & core metrics
+    secondary: '#A7A0F8',  // Secondary series & highlights
+    amber: '#D9A441',      // Warning, urgent, & idle indicators
+    green: '#10B981',      // Completed, done, & success states
+};
+
+// Array helper for pie/donut charts
+const CHART_PALETTE = [COLORS.primary, COLORS.secondary, COLORS.green, COLORS.amber];
+
+// Time conversion utilities — never display raw seconds to users
+const formatTimeFromSeconds = (seconds) => {
+    if (!seconds || isNaN(seconds) || seconds <= 0) return "0h 0m";
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    return hrs > 0 ? `${hrs}h ${mins}m` : `${mins}m`;
+};
+
+const secondsToHoursDecimal = (seconds) => {
+    if (!seconds || isNaN(seconds) || seconds <= 0) return 0;
+    return Number((seconds / 3600).toFixed(2));
+};
+
+// Custom Recharts Tooltips with dark glassmorphic UI
+const CustomTimeTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+        return (
+            <div className="bg-[#121215]/95 border border-white/10 rounded-xl p-3 shadow-2xl backdrop-blur-md text-xs font-mono">
+                <p className="text-zinc-400 mb-1.5 border-b border-white/10 pb-1 font-sans font-bold">{label}</p>
+                {payload.map((entry, idx) => {
+                    const formatted = entry.payload?.formattedTime || formatTimeFromSeconds((entry.value || 0) * 3600);
+                    return (
+                        <div key={idx} className="flex items-center justify-between gap-4 py-0.5">
+                            <span className="flex items-center gap-1.5 text-white font-sans">
+                                <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: entry.color || entry.fill }} />
+                                {entry.name}:
+                            </span>
+                            <span className="font-extrabold text-[#A7A0F8]">{formatted}</span>
+                        </div>
+                    );
+                })}
+            </div>
+        );
+    }
+    return null;
+};
+
+const CustomCountTooltip = ({ active, payload, label, valueSuffix = '' }) => {
+    if (active && payload && payload.length) {
+        return (
+            <div className="bg-[#121215]/95 border border-white/10 rounded-xl p-3 shadow-2xl backdrop-blur-md text-xs font-mono">
+                {label && <p className="text-zinc-400 mb-1.5 border-b border-white/10 pb-1 font-sans font-bold">{label}</p>}
+                {payload.map((entry, idx) => (
+                    <div key={idx} className="flex items-center justify-between gap-4 py-0.5">
+                        <span className="flex items-center gap-1.5 text-white font-sans">
+                            <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: entry.color || entry.fill || entry.payload.fill }} />
+                            {entry.name || entry.payload.name}:
+                        </span>
+                        <span className="font-extrabold text-white">
+                            {entry.value}{valueSuffix}
+                            {entry.payload.completed !== undefined && ` (${entry.payload.completed}/${entry.payload.totalAssigned})`}
+                        </span>
+                    </div>
+                ))}
+            </div>
+        );
+    }
+    return null;
+};
+
+// Reusable empty state wrapper
+const ChartEmptyState = ({ message = "No analytics data available for this period" }) => (
+    <div className="w-full h-full flex flex-col items-center justify-center min-h-[220px] bg-black/20 rounded-lg border border-dashed border-white/10 p-6 text-center">
+        <svg className="w-8 h-8 text-zinc-600 mb-2 stroke-current" fill="none" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+        <span className="text-xs text-zinc-400 font-medium">{message}</span>
+    </div>
+);
+
+// Reusable Chart Card wrapper with Framer Motion and consistent header style
+const ChartCard = ({ title, category, snapshot = false, children, extraHeader, index = 0 }) => (
+    <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: index * 0.05 }}
+        className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-5 shadow-xl flex flex-col h-full relative overflow-hidden group hover:border-[#534AB7]/40 transition-colors"
+    >
+        <div className="flex items-start justify-between gap-2 mb-4 border-b border-white/10 pb-3">
+            <div>
+                <div className="flex items-center gap-2">
+                    <span className="text-[10px] uppercase tracking-widest font-extrabold text-[#A7A0F8] font-mono">{category}</span>
+                    {snapshot && (
+                        <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-white/10 text-zinc-400 font-sans uppercase tracking-wider" title="Based on current workspace state; ignores historical date filters">
+                            Current Snapshot
+                        </span>
+                    )}
+                </div>
+                <h3 className="text-base font-bold text-white mt-0.5 tracking-tight">{title}</h3>
+            </div>
+            {extraHeader && <div>{extraHeader}</div>}
+        </div>
+        <div className="flex-1 w-full min-h-[250px] flex items-center justify-center">
+            {children}
+        </div>
+    </motion.div>
+);
+
+const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
+    const [activeTeamId, setActiveTeamId] = useState(propTeamId || null);
+    const [userTeams, setUserTeams] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
+    const [error, setError] = useState(null);
+    const [timeRange, setTimeRange] = useState('30'); // '7', '30', 'all'
+    const [selectedTrendUser, setSelectedTrendUser] = useState('all');
+
+    // API Data state
+    const [teamInfo, setTeamInfo] = useState(null);
+    const [projectInfo, setProjectInfo] = useState(null);
+    const [members, setMembers] = useState([]);
+    const [memberActivity, setMemberActivity] = useState([]);
+    const [trendRaw, setTrendRaw] = useState([]);
+    const [idleMembers, setIdleMembers] = useState([]);
+    const [completionRate, setCompletionRate] = useState([]);
+    const [assignmentSplit, setAssignmentSplit] = useState([]);
+    const [projectBreakdown, setProjectBreakdown] = useState({ byStatus: [], byPriority: [] });
+    const [allIssues, setAllIssues] = useState([]);
+
+    useEffect(() => {
+        if (propTeamId) {
+            setActiveTeamId(propTeamId);
+        } else if (!activeTeamId) {
+            // Standalone mode (/manager route) — fetch user's teams first
+            axios.get(`${BASE_URL}/teams/mine`, { withCredentials: true })
+                .then(res => {
+                    const teams = res.data.teams || [];
+                    setUserTeams(teams);
+                    if (teams.length > 0) {
+                        setActiveTeamId(teams[0]._id);
+                    } else {
+                        setLoading(false);
+                    }
+                })
+                .catch(() => setLoading(false));
+        }
+    }, [propTeamId]);
+
+    useEffect(() => {
+        if (activeTeamId) {
+            fetchAllData();
+        }
+    }, [activeTeamId, projectId, timeRange]);
+
+    const fetchAllData = async (isRefresh = false) => {
+        if (isRefresh) setRefreshing(true);
+        else if (!memberActivity.length) setLoading(true);
+        setError(null);
+
+        try {
+            const days = timeRange === 'all' ? 3650 : Number(timeRange);
+            const since = timeRange === 'all' ? '' : new Date(Date.now() - days * 24 * 3600 * 1000).toISOString();
+
+            // Fetch all required data concurrently using Promise.all
+            const [
+                teamRes,
+                membersRes,
+                activityRes,
+                trendRes,
+                idleRes,
+                completionRes,
+                splitRes,
+                breakdownRes,
+                projectsRes
+            ] = await Promise.all([
+                axios.get(`${BASE_URL}/teams/${activeTeamId}`, { withCredentials: true }).catch(() => null),
+                axios.get(`${BASE_URL}/teams/${activeTeamId}/members`, { withCredentials: true }).catch(() => ({ data: { members: [] } })),
+                axios.get(`${BASE_URL}/teams/${activeTeamId}/analytics/member-activity?since=${since}`, { withCredentials: true }).catch(() => ({ data: { results: [] } })),
+                axios.get(`${BASE_URL}/teams/${activeTeamId}/analytics/contribution-trend?days=${days}`, { withCredentials: true }).catch(() => ({ data: { results: [] } })),
+                axios.get(`${BASE_URL}/teams/${activeTeamId}/analytics/idle-members?days=${days === 3650 ? 30 : days}`, { withCredentials: true }).catch(() => ({ data: { idleMembers: [] } })),
+                axios.get(`${BASE_URL}/teams/${activeTeamId}/analytics/completion-rate`, { withCredentials: true }).catch(() => ({ data: { results: [] } })),
+                axios.get(`${BASE_URL}/teams/${activeTeamId}/analytics/assignment-split`, { withCredentials: true }).catch(() => ({ data: { results: [] } })),
+                axios.get(`${BASE_URL}/teams/${activeTeamId}/analytics/project-breakdown`, { withCredentials: true }).catch(() => ({ data: { byStatus: [], byPriority: [] } })),
+                axios.get(`${BASE_URL}/teams/${activeTeamId}/projects`, { withCredentials: true }).catch(() => ({ data: { projects: [] } }))
+            ]);
+
+            if (teamRes?.data?.team) setTeamInfo(teamRes.data.team);
+            setMembers(membersRes.data.members || []);
+            setMemberActivity(activityRes.data.results || []);
+            setTrendRaw(trendRes.data.results || []);
+            setIdleMembers(idleRes.data.idleMembers || []);
+            setCompletionRate(completionRes.data.results || []);
+            setAssignmentSplit(splitRes.data.results || []);
+            setProjectBreakdown({
+                byStatus: breakdownRes.data.byStatus || [],
+                byPriority: breakdownRes.data.byPriority || []
+            });
+
+            // NOTE: Currently aggregating issue metrics client-side by fetching issue lists across team projects.
+            // A dedicated backend aggregation endpoint (e.g., /teams/:teamId/analytics/issue-flow) is recommended for optimal performance at scale.
+            let issuesList = [];
+            const projectList = projectsRes.data.projects || [];
+            if (projectId) {
+                const pRes = await axios.get(`${BASE_URL}/teams/${activeTeamId}/projects/${projectId}/issues`, { withCredentials: true }).catch(() => null);
+                if (pRes?.data?.issues) issuesList = pRes.data.issues;
+                const currentP = projectList.find(p => String(p._id) === String(projectId));
+                if (currentP) setProjectInfo(currentP);
+            } else if (projectList.length > 0) {
+                const issuePromises = projectList.map(p =>
+                    axios.get(`${BASE_URL}/teams/${activeTeamId}/projects/${p._id}/issues`, { withCredentials: true })
+                        .catch(() => ({ data: { issues: [] } }))
+                );
+                const issueResults = await Promise.all(issuePromises);
+                issuesList = issueResults.flatMap(r => r.data.issues || []);
+            }
+            setAllIssues(issuesList);
+
+        } catch (err) {
+            console.error("Failed to load Project Manager analytics:", err);
+            setError("Unable to synthesize analytics data. Please check connection and try again.");
+        } finally {
+            setLoading(false);
+            setRefreshing(false);
+        }
+    };
+
+    // --- DATA TRANSFORMATION FOR SECTION A ---
+    const memberActivityData = useMemo(() => {
+        return (memberActivity || []).map(item => ({
+            name: item.name || 'Anonymous',
+            userId: item.userId,
+            hours: secondsToHoursDecimal(item.totalSeconds),
+            formattedTime: formatTimeFromSeconds(item.totalSeconds),
+            sessions: item.sessionCount || 0
+        })).sort((a, b) => b.hours - a.hours);
+    }, [memberActivity]);
+
+    const contributionTrendData = useMemo(() => {
+        if (!trendRaw || trendRaw.length === 0) return [];
+        const dayMap = {};
+
+        trendRaw.forEach(item => {
+            const day = item._id?.day || 'Unknown';
+            const itemUserId = item._id?.userId;
+            const sec = item.totalSeconds || 0;
+
+            if (selectedTrendUser === 'all' || String(itemUserId) === String(selectedTrendUser)) {
+                if (!dayMap[day]) dayMap[day] = { date: day, seconds: 0 };
+                dayMap[day].seconds += sec;
+            }
+        });
+
+        return Object.values(dayMap)
+            .sort((a, b) => a.date.localeCompare(b.date))
+            .map(row => ({
+                date: row.date.slice(5), // MM-DD display
+                fullDate: row.date,
+                hours: secondsToHoursDecimal(row.seconds),
+                formattedTime: formatTimeFromSeconds(row.seconds)
+            }));
+    }, [trendRaw, selectedTrendUser]);
+
+    // --- DATA TRANSFORMATION FOR SECTION B ---
+    const issuesOverTimeData = useMemo(() => {
+        if (!allIssues || allIssues.length === 0) return [];
+        const dateMap = {};
+
+        const filterDate = timeRange === 'all' ? null : new Date(Date.now() - Number(timeRange) * 24 * 3600 * 1000);
+
+        allIssues.forEach(issue => {
+            if (!issue.createdAt) return;
+            const created = new Date(issue.createdAt);
+            if (filterDate && created < filterDate) return;
+
+            const day = issue.createdAt.slice(0, 10);
+            if (!dateMap[day]) {
+                dateMap[day] = { date: day.slice(5), fullDate: day, Feature: 0, Problem: 0, Task: 0, Total: 0 };
+            }
+            const type = (issue.type || 'issue').toLowerCase();
+            if (type === 'feature') dateMap[day].Feature += 1;
+            else if (type === 'problem') dateMap[day].Problem += 1;
+            else dateMap[day].Task += 1;
+            dateMap[day].Total += 1;
+        });
+
+        return Object.values(dateMap).sort((a, b) => a.fullDate.localeCompare(b.fullDate));
+    }, [allIssues, timeRange]);
+
+    const issueStatusData = useMemo(() => {
+        const counts = { Open: 0, 'In Progress': 0, Done: 0 };
+        allIssues.forEach(issue => {
+            const status = (issue.status || 'open').toLowerCase();
+            if (status === 'done' || status === 'completed') counts.Done += 1;
+            else if (status === 'in_progress' || status === 'active') counts['In Progress'] += 1;
+            else counts.Open += 1;
+        });
+        return [
+            { name: 'Open', value: counts.Open, color: COLORS.primary },
+            { name: 'In Progress', value: counts['In Progress'], color: COLORS.secondary },
+            { name: 'Done', value: counts.Done, color: COLORS.green }
+        ].filter(d => d.value > 0);
+    }, [allIssues]);
+
+    const issueTypeData = useMemo(() => {
+        const counts = { Feature: 0, Problem: 0, Task: 0 };
+        allIssues.forEach(issue => {
+            const type = (issue.type || 'issue').toLowerCase();
+            if (type === 'feature') counts.Feature += 1;
+            else if (type === 'problem') counts.Problem += 1;
+            else counts.Task += 1;
+        });
+        return [
+            { name: 'Feature', value: counts.Feature, color: COLORS.primary },
+            { name: 'Problem', value: counts.Problem, color: COLORS.amber },
+            { name: 'Task / Other', value: counts.Task, color: COLORS.secondary }
+        ].filter(d => d.value > 0);
+    }, [allIssues]);
+
+    const issuePriorityData = useMemo(() => {
+        const counts = { Low: 0, Medium: 0, High: 0, Urgent: 0 };
+        allIssues.forEach(issue => {
+            const p = (issue.priority || 'medium').toLowerCase();
+            if (p === 'low') counts.Low += 1;
+            else if (p === 'high') counts.High += 1;
+            else if (p === 'urgent') counts.Urgent += 1;
+            else counts.Medium += 1;
+        });
+        return [
+            { name: 'Low', value: counts.Low, color: COLORS.secondary },
+            { name: 'Medium', value: counts.Medium, color: COLORS.primary },
+            { name: 'High', value: counts.High, color: COLORS.green },
+            { name: 'Urgent', value: counts.Urgent, color: COLORS.amber }
+        ].filter(d => d.value > 0);
+    }, [allIssues]);
+
+    const completionRateData = useMemo(() => {
+        return (completionRate || []).map(item => ({
+            name: item.name || 'Member',
+            rate: Number((Number(item.completionRate || 0) * 100).toFixed(1)),
+            completed: item.completed || 0,
+            totalAssigned: item.totalAssigned || 0
+        }));
+    }, [completionRate]);
+
+    const assignmentSplitData = useMemo(() => {
+        return (assignmentSplit || []).map(item => ({
+            name: item.name || 'Member',
+            SelfClaimed: item.self_claimed || 0,
+            LeaderAssigned: item.leader_assigned || 0
+        }));
+    }, [assignmentSplit]);
+
+    // --- DATA TRANSFORMATION FOR SECTION C ---
+    const projectStatusData = useMemo(() => {
+        const mapping = { planning: 'Planning', active: 'Active', on_hold: 'On Hold', completed: 'Completed' };
+        const colorMap = { planning: COLORS.secondary, active: COLORS.primary, on_hold: COLORS.amber, completed: COLORS.green };
+        return (projectBreakdown.byStatus || []).map(item => ({
+            name: mapping[item._id] || item._id || 'Unknown',
+            value: item.count || 0,
+            color: colorMap[item._id] || COLORS.primary
+        })).filter(d => d.value > 0);
+    }, [projectBreakdown.byStatus]);
+
+    const projectPriorityData = useMemo(() => {
+        const mapping = { low: 'Low', medium: 'Medium', high: 'High', urgent: 'Urgent' };
+        const colorMap = { low: COLORS.secondary, medium: COLORS.primary, high: COLORS.green, urgent: COLORS.amber };
+        return (projectBreakdown.byPriority || []).map(item => ({
+            name: mapping[item._id] || item._id || 'Unknown',
+            value: item.count || 0,
+            color: colorMap[item._id] || COLORS.primary
+        })).filter(d => d.value > 0);
+    }, [projectBreakdown.byPriority]);
+
+    // --- SUMMARY STAT CARDS CALCULATION ---
+    const stats = useMemo(() => {
+        const totalSecs = memberActivity.reduce((acc, curr) => acc + (curr.totalSeconds || 0), 0);
+        const totalIssues = allIssues.length;
+        const completedIssues = allIssues.filter(i => (i.status || '').toLowerCase() === 'done' || (i.status || '').toLowerCase() === 'completed').length;
+        const activeCount = memberActivity.filter(m => m.totalSeconds > 0).length;
+
+        return [
+            {
+                label: "Total Hours Logged",
+                value: formatTimeFromSeconds(totalSecs),
+                subText: `${secondsToHoursDecimal(totalSecs)}h decimal equv.`,
+                icon: <svg className="w-5 h-5 text-[#A7A0F8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
+                color: "from-[#534AB7]/20 to-transparent border-[#534AB7]/40"
+            },
+            {
+                label: "Total Issues Raised",
+                value: totalIssues,
+                subText: `${projectId ? "Project scoped" : "Across team projects"}`,
+                icon: <svg className="w-5 h-5 text-[#534AB7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>,
+                color: "from-white/5 to-transparent border-white/10"
+            },
+            {
+                label: "Issues Completed",
+                value: completedIssues,
+                subText: `${totalIssues > 0 ? ((completedIssues / totalIssues) * 100).toFixed(1) : 0}% success rate`,
+                icon: <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
+                color: "from-emerald-500/10 to-transparent border-emerald-500/30"
+            },
+            {
+                label: "Active Contributors",
+                value: activeCount,
+                subText: `In selected ${timeRange === 'all' ? 'all-time' : `${timeRange}d`} range`,
+                icon: <svg className="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>,
+                color: "from-amber-500/10 to-transparent border-amber-500/30"
+            }
+        ];
+    }, [memberActivity, allIssues, projectId, timeRange]);
+
+    // --- INITIAL LOADING SKELETON ---
+    if (loading) {
+        return (
+            <div className="w-full min-h-[600px] p-6 bg-[#09090B] text-white space-y-6 animate-pulse">
+                <div className="h-16 bg-white/5 border border-white/10 rounded-2xl w-full flex items-center justify-between px-6">
+                    <div className="w-48 h-6 bg-white/10 rounded-lg" />
+                    <div className="w-64 h-8 bg-white/10 rounded-xl" />
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {[1, 2, 3, 4].map(i => <div key={i} className="h-28 bg-white/5 border border-white/10 rounded-xl" />)}
+                </div>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {[1, 2, 3, 4].map(i => <div key={i} className="h-80 bg-white/5 border border-white/10 rounded-xl" />)}
+                </div>
+            </div>
+        );
+    }
+
+    if (!activeTeamId) {
+        return (
+            <div className="w-full min-h-[600px] flex flex-col items-center justify-center p-6 bg-[#09090B] text-white">
+                <div className="bg-[#121215]/80 border border-white/10 p-8 rounded-2xl max-w-md text-center backdrop-blur-xl shadow-2xl">
+                    <svg className="w-12 h-12 text-[#534AB7] mx-auto mb-4 stroke-current" fill="none" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <h2 className="text-xl font-black mb-2">No Active Teams</h2>
+                    <p className="text-sm text-zinc-400">Join or create a workspace team in CodeSarthi to start monitoring contribution tracking and issue execution analytics.</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
+        <div className="w-full bg-[#09090B] text-white space-y-8 pb-20 px-2 sm:px-4 selection:bg-[#534AB7]/30 relative">
+            {/* SUBTLE OVERLAY WHEN REFETCHING ON FILTER CHANGE */}
+            {refreshing && (
+                <div className="fixed top-6 right-6 z-50 bg-[#121215]/95 border border-[#534AB7] text-[#A7A0F8] text-xs px-4 py-2 rounded-full shadow-2xl backdrop-blur-md flex items-center gap-2.5 font-mono animate-bounce">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                    Synthesizing Analytics...
+                </div>
+            )}
 
-        <AnimatePresence>
-
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                className="fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-hidden bg-[#030303] px-4 antialiased selection:bg-white/10"
-            >
-                {/* Premium Ambient Background */}
-                <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                    <motion.div
-                        animate={{
-                            x: [0, 15, -10, 0],
-                            y: [0, -20, 10, 0],
-                        }}
-                        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute top-[-20%] left-[-10%] h-[60%] w-[60%] rounded-full bg-white/[0.02] blur-[140px]"
-                    />
-                    <motion.div
-                        animate={{
-                            x: [0, -10, 15, 0],
-                            y: [0, 15, -15, 0],
-                        }}
-                        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute bottom-[-20%] right-[-10%] h-[60%] w-[60%] rounded-full bg-white/[0.015] blur-[140px]"
-                    />
+            {/* 1. HEADER BAR */}
+            <header className="bg-[#121215]/90 border border-white/10 rounded-2xl p-5 sm:p-6 backdrop-blur-xl shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 border-t border-t-white/15">
+                <div>
+                    <div className="flex items-center gap-2.5">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#534AB7] animate-pulse" />
+                        <span className="text-[10px] font-mono font-black tracking-[0.25em] text-zinc-400 uppercase">
+                            Deep-Analysis Dashboard
+                        </span>
+                    </div>
+                    <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white mt-1 flex flex-wrap items-center gap-2">
+                        {!propTeamId && userTeams.length > 0 ? (
+                            <select
+                                value={activeTeamId || ''}
+                                onChange={(e) => setActiveTeamId(e.target.value)}
+                                className="bg-black/60 border border-white/10 text-white font-black px-3 py-1.5 rounded-xl focus:outline-none focus:border-[#534AB7] cursor-pointer"
+                            >
+                                {userTeams.map(t => (
+                                    <option key={t._id} value={t._id}>{t.name}</option>
+                                ))}
+                            </select>
+                        ) : (
+                            <span>{teamInfo?.name || "Workspace Team"}</span>
+                        )}
+                        {projectInfo && <span className="text-zinc-500 font-normal text-lg">/ {projectInfo.title}</span>}
+                    </h1>
                 </div>
 
-                {/* Main Container */}
-                <div className="relative z-10 flex flex-col items-center text-center">
-
-                    {/* Top Label */}
-                    <motion.span
-                        initial={{ opacity: 0, y: 10, letterSpacing: "0.3em" }}
-                        animate={{ opacity: 1, y: 0, letterSpacing: "0.5em" }}
-                        transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                        className="mb-6 text-[9px] uppercase tracking-[0.5em] text-zinc-500 font-medium font-sans"
-                    >
-                        Developer Ecosystem
-                    </motion.span>
-
-                    {/* Title Sequence */}
-                    <div className="flex flex-col items-center space-y-1">
-                        <motion.h2
-                            initial={{ opacity: 0, y: 15 }}
-                            animate={{ opacity: 0.4 }}
-                            transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                            className="text-xl sm:text-2xl font-light text-white font-serif tracking-wide"
-                        >
-                            Welcome to
-                        </motion.h2>
-
-                        <motion.h1
-                            initial={{ opacity: 0, y: 25, filter: "blur(8px)" }}
-                            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                            transition={{ duration: 1.2, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                            className="text-5xl sm:text-7xl md:text-8xl font-sans font-extrabold tracking-tight text-white leading-none bg-clip-text"
-                        >
-                            CodeSarthi
-                        </motion.h1>
+                <div className="flex flex-wrap items-center gap-3">
+                    <div className="bg-black/50 border border-white/10 rounded-xl p-1 flex items-center shadow-inner">
+                        {[
+                            { label: 'Last 7 Days', value: '7' },
+                            { label: 'Last 30 Days', value: '30' },
+                            { label: 'All Time', value: 'all' }
+                        ].map(tab => (
+                            <button
+                                key={tab.value}
+                                onClick={() => setTimeRange(tab.value)}
+                                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${timeRange === tab.value
+                                    ? 'bg-gradient-to-r from-[#534AB7] to-[#6358D4] text-white shadow-md shadow-[#534AB7]/30'
+                                    : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                                    }`}
+                            >
+                                {tab.label}
+                            </button>
+                        ))}
                     </div>
 
-                    {/* Tagline */}
-                    <motion.p
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 0.35, y: 0 }}
-                        transition={{ duration: 1, delay: 0.8 }}
-                        className="mt-6 text-[10px] uppercase tracking-[0.35em] text-white font-light"
+                    <button
+                        onClick={() => fetchAllData(true)}
+                        disabled={refreshing}
+                        title="Refresh Intelligence Data"
+                        className="bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white p-2.5 rounded-xl transition-all hover:scale-105 active:scale-95 flex items-center justify-center shrink-0 disabled:opacity-50"
                     >
-                        Architecting the Future
-                    </motion.p>
+                        <svg className={`w-4 h-4 stroke-current ${refreshing ? 'animate-spin text-[#A7A0F8]' : ''}`} fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                    </button>
+                </div>
+            </header>
 
-                    {/* Premium Minimalist Loader Container */}
-                    <div className="relative w-48 sm:w-64 h-[2px] mt-14 rounded-full bg-white/[0.06] overflow-visible">
-                        {/* Fluid Minimal Track */}
-                        <motion.div
-                            className="absolute left-0 top-0 h-full rounded-full bg-gradient-to-r from-zinc-500 via-zinc-200 to-white"
-                            style={{ width: `100%` }}
-                            transition={{ type: "spring", damping: 25, stiffness: 80 }}
-                        />
+            {error && (
+                <div className="bg-red-500/10 border border-red-500/30 text-red-400 p-4 rounded-xl text-xs font-medium">
+                    {error}
+                </div>
+            )}
 
-                        {/* Ultra-fine ethereal trailing glow */}
-                        <div
-                            className="absolute left-0 top-0 h-full bg-white/40 blur-[4px] rounded-full transition-all duration-300 pointer-events-none"
-                            style={{ width: `100%` }}
-                        />
-                    </div>
-
-                    {/* Smooth Counting Metric */}
-                    <motion.span
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 0.25 }}
-                        transition={{ delay: 0.9 }}
-                        className="mt-4 font-mono text-[10px] text-white tracking-widest tabular-nums"
+            {/* 2. SUMMARY STAT CARDS ROW */}
+            <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {stats.map((stat, idx) => (
+                    <motion.div
+                        key={idx}
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: idx * 0.05 }}
+                        className={`bg-gradient-to-br ${stat.color} bg-[#121215]/80 backdrop-blur-md border rounded-2xl p-5 shadow-lg relative overflow-hidden group hover:scale-[1.02] transition-transform`}
                     >
-                        {Math.round(100)}%
-                    </motion.span>
+                        <div className="flex items-center justify-between mb-3">
+                            <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider">{stat.label}</span>
+                            <div className="p-2 rounded-xl bg-black/40 border border-white/5 shadow-sm group-hover:scale-110 transition-transform">
+                                {stat.icon}
+                            </div>
+                        </div>
+                        <div className="text-2xl sm:text-3xl font-black text-white font-mono tracking-tight">{stat.value}</div>
+                        <div className="text-[11px] text-zinc-500 mt-1 font-sans font-medium">{stat.subText}</div>
+                    </motion.div>
+                ))}
+            </section>
+
+            {/* 3. CHARTS GRID — SECTION A: CONTRIBUTION ANALYSIS */}
+            <div className="space-y-4">
+                <div className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-[#A7A0F8] font-mono pl-1 border-l-2 border-[#534AB7]">
+                    Section A — Contribution Analysis
+                </div>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                    {/* A1. MEMBER ACTIVITY RANKING */}
+                    <ChartCard
+                        title="Member Activity Ranking"
+                        category="Time Contribution"
+                        index={0}
+                        extraHeader={
+                            <span className="text-[10px] text-zinc-500 font-mono italic">Click bar to filter Trend →</span>
+                        }
+                    >
+                        {memberActivityData.length > 0 ? (
+                            <ResponsiveContainer width="100%" height={260}>
+                                <BarChart
+                                    data={memberActivityData}
+                                    layout="vertical"
+                                    margin={{ top: 10, right: 30, left: 40, bottom: 5 }}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#27272A" horizontal={false} />
+                                    <XAxis type="number" stroke="#71717A" fontSize={11} unit="h" />
+                                    <YAxis dataKey="name" type="category" stroke="#E4E4E7" fontSize={11} width={80} tick={{ fill: '#E4E4E7' }} />
+                                    <Tooltip content={<CustomTimeTooltip />} />
+                                    <Bar
+                                        dataKey="hours"
+                                        name="Working Duration"
+                                        radius={[0, 6, 6, 0]}
+                                        cursor="pointer"
+                                        onClick={(data) => {
+                                            if (data?.payload?.userId) setSelectedTrendUser(String(data.payload.userId));
+                                        }}
+                                    >
+                                        {memberActivityData.map((entry, index) => (
+                                            <Cell
+                                                key={`cell-${index}`}
+                                                fill={String(entry.userId) === String(selectedTrendUser) ? COLORS.secondary : index === 0 ? COLORS.primary : '#3F3F4E'}
+                                            />
+                                        ))}
+                                    </Bar>
+                                </BarChart>
+                            </ResponsiveContainer>
+                        ) : (
+                            <ChartEmptyState message="No recorded contribution hours in this time window" />
+                        )}
+                    </ChartCard>
+
+                    {/* A2. CONTRIBUTION TREND OVER TIME */}
+                    <ChartCard
+                        title="Contribution Trend Over Time"
+                        category="Timeline Analytics"
+                        index={1}
+                        extraHeader={
+                            <select
+                                value={selectedTrendUser}
+                                onChange={(e) => setSelectedTrendUser(e.target.value)}
+                                className="bg-black/60 border border-white/10 text-xs text-[#A7A0F8] font-bold px-2.5 py-1 rounded-lg focus:outline-none focus:border-[#534AB7]"
+                            >
+                                <option value="all">Team Total</option>
+                                {memberActivityData.map(m => (
+                                    <option key={m.userId || m.name} value={m.userId}>{m.name}</option>
+                                ))}
+                            </select>
+                        }
+                    >
+                        {contributionTrendData.length > 0 ? (
+                            <ResponsiveContainer width="100%" height={260}>
+                                <LineChart data={contributionTrendData} margin={{ top: 10, right: 20, left: 10, bottom: 5 }}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#27272A" />
+                                    <XAxis dataKey="date" stroke="#71717A" fontSize={11} />
+                                    <YAxis stroke="#71717A" fontSize={11} unit="h" />
+                                    <Tooltip content={<CustomTimeTooltip />} />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="hours"
+                                        name="Time Logged"
+                                        stroke={selectedTrendUser === 'all' ? COLORS.primary : COLORS.secondary}
+                                        strokeWidth={3}
+                                        dot={{ r: 4, fill: '#121215', strokeWidth: 2 }}
+                                        activeDot={{ r: 6, fill: COLORS.secondary, stroke: '#fff' }}
+                                    />
+                                </LineChart>
+                            </ResponsiveContainer>
+                        ) : (
+                            <ChartEmptyState message="No trend data points found for selected filter" />
+                        )}
+                    </ChartCard>
                 </div>
 
-                {/* Subtle Human-Crafted Footer */}
+                {/* A3. IDLE MEMBER WATCHLIST (DISTINCT FLAGGED TABLE COMPONENT) */}
                 <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1.1, duration: 1 }}
-                    className="absolute bottom-8 flex flex-col items-center gap-3"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: 0.1 }}
+                    className="bg-[#121215]/80 border border-white/10 rounded-2xl p-6 shadow-xl relative overflow-hidden"
                 >
-                    <div className="h-4 w-[1px] bg-gradient-to-b from-zinc-700 to-transparent" />
-
-                    <span className="flex items-center gap-2 text-[9px] uppercase tracking-[0.25em] text-zinc-600 font-medium">
-                        Made in India
-                        <svg
-                            className="inline-block h-3.5 w-3.5 opacity-60 filter grayscale contrast-125"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 64 64"
-                            fill="none"
-                        >
-                            <path fill="#e6e7e8" d="M0 24h64v14H0z"></path>
-                            <path fill="#f93" d="M54 9H10C3.373 9 0 13.925 0 20v4h64v-4c0-6.075-3.373-11-10-11"></path>
-                            <path fill="#128807" d="M0 42c0 6.075 3.373 11 10 11h44c6.627 0 10-4.925 10-11v-4H0z"></path>
-                            <g fill="#010088" fillRule="evenodd">
-                                <path d="M32.31 24.583a6.458 6.458 0 1 1-6.458 6.448a6.46 6.46 0 0 1 6.458-6.448m-4.305 2.795c.111.126.131.261.057.374a.26.26 0 0 1-.137.112a.29.29 0 0 1-.267-.034a5.5 5.5 0 0 0-.457.786c.151.099.201.223.151.36a.287.287 0 0 1-.363.168c-.072.144-.231.752-.233.88a.3.3 0 0 1 .168.101a.27.27 0 0 1 .064.188c-.019.188-.135.268-.312.275c-.028.181-.025.787.003.906q.28.03.303.245c.022.154-.052.254-.232.324q.08.446.232.875a.34.34 0 0 1 .215.007c.067.029.12.079.148.148q.037.08.017.169a.29.29 0 0 1-.161.202c.134.278.282.54.457.786c.156-.077.292-.059.384.051a.26.26 0 0 1 .065.164a.28.28 0 0 1-.104.236q.299.35.645.645c.131-.115.267-.133.384-.051q.08.056.107.146a.3.3 0 0 1-.042.252q.379.26.787.454q.16-.224.358-.149a.3.3 0 0 1 .142.107q.073.12.028.262c.288.102.578.18.878.233c.059-.169.161-.248.297-.238c.063.005.12.024.17.067q.105.096.097.245q.46.034.908 0c.022-.193.099-.29.254-.312a.26.26 0 0 1 .17.034a.29.29 0 0 1 .142.204q.453-.083.878-.234c-.025-.189.021-.302.148-.361a.3.3 0 0 1 .147-.023q.079.005.137.054c.037.031.068.069.104.108a5.5 5.5 0 0 0 .782-.451c-.102-.16-.042-.313.041-.381a.287.287 0 0 1 .408.035c.231-.198.448-.413.642-.644c-.113-.129-.135-.265-.052-.382a.26.26 0 0 1 .145-.108a.29.29 0 0 1 .255.039q.262-.377.457-.787q-.22-.147-.155-.344a.27.27 0 0 1 .1-.145a.3.3 0 0 1 .27-.04c.065-.141.227-.735.236-.879a.3.3 0 0 1-.176-.104a.26.26 0 0 1-.061-.198a.27.27 0 0 1 .074-.169a.3.3 0 0 1 .236-.09a5.5 5.5 0 0 0 0-.909c-.191-.019-.282-.093-.307-.244a.26.26 0 0 1 .024-.168a.29.29 0 0 1 .209-.153a5.3 5.3 0 0 0-.233-.878c-.185.031-.299-.019-.36-.147a.284.284 0 0 1 .143-.379a5.3 5.3 0 0 0-.457-.787c-.161.077-.292.059-.384-.051a.26.26 0 0 1-.064-.168a.28.28 0 0 1 .104-.231a6 6 0 0 0-.643-.645c-.138.118-.272.133-.386.051a.26.26 0 0 1-.107-.146a.29.29 0 0 1 .042-.249a5.5 5.5 0 0 0-.787-.457q-.154.22-.35.153a.3.3 0 0 1-.145-.104a.3.3 0 0 1-.034-.269a5 5 0 0 0-.878-.233c-.057.162-.16.246-.293.238a.3.3 0 0 1-.17-.064a.29.29 0 0 1-.101-.248a5.3 5.3 0 0 0-.908.001q-.032.271-.232.305a.27.27 0 0 1-.177-.022a.29.29 0 0 1-.156-.211a5.6 5.6 0 0 0-.879.235c.032.177-.018.293-.14.356q-.079.042-.171.027a.27.27 0 0 1-.213-.163c-.171.064-.715.379-.787.458c.074.148.057.279-.045.373a.287.287 0 0 1-.411-.032a6 6 0 0 0-.643.643"></path>
-                                <path d="M35.08 35.827c-.012-.013-.024-.022-.033-.036a869 869 0 0 0-1.749-2.663l-.04-.078c-.136-.317-.269-.634-.408-.95a.2.2 0 0 0-.019-.047c-.056.021-.107.045-.167.068l.02.051c.125.307.245.615.372.922c.034.082.048.168.066.254c.098.459.19.92.289 1.38l.338 1.643a.02.02 0 0 1-.003.024l-.014-.035c-.274-.839-.555-1.677-.83-2.516c-.055-.164-.104-.326-.164-.49c-.028-.082-.037-.166-.05-.251c-.035-.238-.065-.478-.104-.716q-.009-.085-.022-.168l-.011-.068c-.06.006-.115.014-.175.021q0 .036.004.074c.035.293.065.587.107.879c.022.16.011.317.002.477l-.021.406c-.018.274-.032.547-.051.82l-.03.564l-.054.957c-.008.09-.01.182-.019.27l-.024-.303l-.031-.656l-.036-.585q-.016-.3-.034-.599l-.022-.391l-.034-.619a1.4 1.4 0 0 1 .008-.328q.03-.223.055-.449q.029-.223.055-.443l.005-.074l-.175-.023q-.009.06-.021.119l-.128.916c-.012.119-.059.229-.099.34q-.462 1.408-.929 2.814c-.007.017-.01.033-.023.049q-.001-.017.005-.032q.193-.949.393-1.897l.26-1.258l.024-.069c.129-.317.253-.637.385-.954a.3.3 0 0 1 .02-.054l-.166-.069c-.007.018-.018.033-.024.051l-.411.955a.4.4 0 0 1-.032.069a828 828 0 0 0-1.765 2.685a.1.1 0 0 1-.031.035l.02-.043l1.446-2.867a.4.4 0 0 1 .046-.073l.618-.829c.013-.014.021-.027.033-.042c-.051-.037-.092-.071-.143-.11q-.017.019-.03.037q-.324.408-.64.814q-.034.038-.073.074c-.788.705-1.576 1.406-2.367 2.112q-.023.021-.052.036l.02-.027q.972-1.087 1.939-2.174q.056-.06.109-.123q.111-.128.247-.23l.718-.565c.016-.012.028-.025.046-.037l-.11-.141l-.044.031l-.826.617a1 1 0 0 1-.098.061c-.939.474-1.883.948-2.824 1.422c-.018.008-.035.018-.056.018l.038-.027l1.756-1.15q.46-.301.917-.604l.076-.04q.479-.203.953-.407q.022-.008.048-.021l-.067-.165c-.019.005-.031.01-.046.015c-.324.129-.645.26-.971.388c-.067.025-.14.037-.211.052l-2.185.454c-.275.059-.555.117-.831.174a.05.05 0 0 1-.033-.004q.114-.037.227-.076q1.416-.466 2.828-.934c.074-.025.153-.032.228-.044l.908-.129l.055-.012l-.02-.176l-.146.016l-.604.073l-.336.041q-.04.005-.079.003l-.636-.037l-.376-.021l-.648-.038l-.945-.052c-.228-.012-.45-.027-.677-.043c.036-.003.076-.009.115-.009l.775-.044l1.024-.058l.848-.048l.532-.032q.034 0 .067.004l.61.073l.432.052h.044c.005-.057.014-.111.02-.173c-.037-.008-.079-.014-.116-.021q-.4-.056-.799-.115l-.166-.022a.5.5 0 0 1-.09-.021c-.795-.261-1.585-.524-2.379-.785l-.662-.22a.2.2 0 0 1-.053-.025l.139.028l1.697.353c.454.095.915.189 1.369.285l.08.025c.32.126.637.256.96.384l.048.019q.033-.081.07-.165a.4.4 0 0 0-.051-.025q-.477-.202-.952-.408l-.072-.037c-.897-.587-1.79-1.177-2.688-1.765a.06.06 0 0 1-.027-.029l.036.02q1.341.675 2.685 1.349c.148.074.292.163.424.264c.218.169.44.331.662.497l.044.031l.11-.139l-.039-.034l-.813-.639q-.04-.033-.074-.069q-1.063-1.19-2.123-2.38a.1.1 0 0 1-.023-.031c.021.002.029.016.038.025q.642.57 1.28 1.14l1.102.982q.03.029.057.06l.631.802c.016.018.028.037.046.061l.145-.111c-.009-.014-.021-.025-.028-.038q-.308-.413-.619-.825a1 1 0 0 1-.059-.1q-.719-1.42-1.433-2.84c-.009-.018-.018-.032-.02-.051l.024.028l1.022 1.562l.723 1.1c.025.042.053.086.069.132q.201.462.396.925q.012.02.024.047l.166-.069l-.018-.042q-.186-.468-.374-.934c-.035-.079-.048-.161-.065-.243c-.109-.521-.214-1.043-.323-1.565c-.107-.502-.209-1-.314-1.504q-.002-.003.004-.017l.088.267q.471 1.415.933 2.833c.026.074.035.155.046.232q.054.394.116.79c.007.05.01.1.02.155l.174-.022v-.066l-.076-.627c-.015-.122-.026-.241-.043-.36a1 1 0 0 1 0-.241l.023-.406l.049-.815c.009-.146.012-.294.021-.44q.019-.286.034-.574q.013-.21.022-.42q.013-.247.035-.493q.005.067.008.139q.02.301.036.604l.052.916l.031.514l.047.892l.01.131c.013.116-.01.231-.02.346l-.064.524c-.01.099-.025.198-.037.298c-.002.024-.002.05-.009.079c.062.009.118.015.18.023c.009-.043.013-.083.02-.125q.072-.487.14-.977c.004-.024.014-.049.02-.074c.326-.978.646-1.957.97-2.937c.016-.045.028-.088.053-.131l-.011.068c-.146.708-.298 1.414-.443 2.12q-.098.497-.203.994a.3.3 0 0 1-.026.079l-.386.965q-.01.02-.019.047c.06.023.109.046.167.069l.023-.048l.403-.947c.016-.032.028-.063.049-.089l1.745-2.662c.011-.014.02-.028.037-.038q-.009.021-.021.042l-1.435 2.85q-.022.041-.048.078l-.622.829l-.033.045l.142.111l.031-.038q.317-.405.638-.811a.6.6 0 0 1 .079-.084q1.185-1.059 2.372-2.115c.013-.011.022-.022.043-.028l-.026.032q-.483.547-.974 1.091q-.583.652-1.162 1.304q-.032.033-.065.059l-.813.639l-.04.032c.038.048.072.094.112.142l.043-.032l.833-.624l.066-.042q1.438-.722 2.868-1.444q.022-.012.046-.013q-.064.043-.129.084l-2.592 1.701q-.035.022-.072.039c-.319.138-.641.274-.957.411l-.051.02c.027.056.046.109.07.165l.046-.015c.321-.127.64-.26.964-.383c.08-.032.168-.046.255-.064l1.473-.306c.458-.094.912-.19 1.371-.285q.061-.014.125-.026c.011 0 .021-.002.037.004l-.14.046q-1.464.485-2.928.964c-.074.026-.156.033-.233.045l-.648.093l-.233.033l-.057.01c.006.059.015.114.019.178l.151-.016l.54-.064c.135-.017.276-.036.417-.049c.063-.005.127.001.192.004c.137.006.274.018.417.024l.808.048l.364.02l.824.047c.195.012.396.021.59.033a2 2 0 0 1 .144.013l-.146.012l-.605.033l-.749.044l-.565.03c-.26.016-.525.031-.787.048c-.144.006-.292.02-.437.021c-.083.002-.17-.014-.251-.023l-.533-.064l-.341-.041h-.033q-.008.086-.019.176l1.058.153c.104.013.195.054.293.085l2.844.939a.1.1 0 0 1 .051.023q-.035-.006-.071-.01l-2.47-.515l-.652-.136c-.021-.006-.049-.014-.072-.025q-.481-.191-.966-.386l-.043-.015l-.073.163l.053.025q.478.203.953.408q.037.016.076.042l2.662 1.744c.013.01.03.022.041.041q-.021-.01-.039-.021l-1.387-.696q-.727-.368-1.461-.736a.4.4 0 0 1-.087-.057l-.828-.618l-.039-.028c-.038.046-.072.091-.112.139l.038.03c.268.214.541.428.81.641a.5.5 0 0 1 .083.076l2.119 2.371a.1.1 0 0 1 .02.039c-.011-.012-.026-.02-.037-.029Q35 33.869 33.805 32.806a.3.3 0 0 1-.048-.054l-.648-.826q-.014-.019-.031-.038c-.046.038-.091.072-.137.112q.007.019.021.037l.629.838a1 1 0 0 1 .048.077l1.429 2.841a.1.1 0 0 1 .015.042h-.003z"></path>
-                                <path d="m35.07 35.827l.024.03c-.005.002-.005.005-.011.006c-.002-.014-.009-.023-.011-.036z"></path>
-                            </g>
-                        </svg>
-                    </span>
+                    <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/10">
+                        <div>
+                            <span className="text-[10px] uppercase tracking-widest font-extrabold text-[#D9A441] font-mono">Risk & Engagement</span>
+                            <h3 className="text-base font-bold text-white mt-0.5">Idle Member Watchlist</h3>
+                        </div>
+                        <span className="px-2 py-1 rounded bg-[#D9A441]/10 border border-[#D9A441]/30 text-[#D9A441] text-xs font-mono font-bold">
+                            Threshold: {timeRange === 'all' ? '30+ Days Inactive' : `${timeRange} Days Inactive`}
+                        </span>
+                    </div>
+                    {idleMembers.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {idleMembers.map((member, idx) => {
+                                const daysIdle = member.lastActive
+                                    ? Math.floor((Date.now() - new Date(member.lastActive).getTime()) / (1000 * 3600 * 24))
+                                    : null;
+                                return (
+                                    <div
+                                        key={member.userId || idx}
+                                        className="border-l-4 border-[#D9A441] bg-white/[0.02] hover:bg-white/[0.04] p-4 rounded-r-xl border-t border-r border-b border-t-white/5 border-r-white/5 border-b-white/5 flex items-center justify-between gap-3 transition-colors"
+                                    >
+                                        <div className="min-w-0">
+                                            <div className="text-sm font-bold text-white truncate">{member.name || 'Member'}</div>
+                                            <div className="text-xs text-zinc-500 capitalize font-medium">{member.role || 'Contributor'} • {member.email}</div>
+                                        </div>
+                                        <div className="text-right shrink-0">
+                                            <div className="text-xs font-black font-mono text-[#D9A441]">
+                                                {daysIdle !== null ? `Idle ${daysIdle}d` : 'No history'}
+                                            </div>
+                                            <div className="text-[10px] text-zinc-600">
+                                                {member.lastActive ? new Date(member.lastActive).toLocaleDateString() : 'Never logged'}
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    ) : (
+                        <div className="w-full py-8 text-center bg-emerald-500/5 rounded-xl border border-emerald-500/20 text-emerald-400 font-medium text-xs">
+                            ✓ All active team members have recorded contributions within this operational window. Zero idle anomalies detected.
+                        </div>
+                    )}
                 </motion.div>
-            </motion.div>
+            </div>
 
-        </AnimatePresence>
+            {/* 4. CHARTS GRID — SECTION B: ISSUE ANALYSIS */}
+            <div className="space-y-4 pt-4">
+                <div className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-[#A7A0F8] font-mono pl-1 border-l-2 border-[#A7A0F8]">
+                    Section B — Issue Flow & Execution Analysis
+                </div>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-    )
-}
+                    {/* B1. ISSUES RAISED OVER TIME */}
+                    <ChartCard title="Issues Raised Over Time" category="Creation Velocity" index={2}>
+                        {issuesOverTimeData.length > 0 ? (
+                            <ResponsiveContainer width="100%" height={260}>
+                                <AreaChart data={issuesOverTimeData} margin={{ top: 10, right: 20, left: 10, bottom: 5 }}>
+                                    <defs>
+                                        <linearGradient id="colorFeature" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="5%" stopColor={COLORS.primary} stopOpacity={0.7} />
+                                            <stop offset="95%" stopColor={COLORS.primary} stopOpacity={0.1} />
+                                        </linearGradient>
+                                        <linearGradient id="colorProblem" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="5%" stopColor={COLORS.amber} stopOpacity={0.7} />
+                                            <stop offset="95%" stopColor={COLORS.amber} stopOpacity={0.1} />
+                                        </linearGradient>
+                                        <linearGradient id="colorTask" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="5%" stopColor={COLORS.secondary} stopOpacity={0.7} />
+                                            <stop offset="95%" stopColor={COLORS.secondary} stopOpacity={0.1} />
+                                        </linearGradient>
+                                    </defs>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#27272A" />
+                                    <XAxis dataKey="date" stroke="#71717A" fontSize={11} />
+                                    <YAxis stroke="#71717A" fontSize={11} allowDecimals={false} />
+                                    <Tooltip content={<CustomCountTooltip valueSuffix=" items" />} />
+                                    <Legend wrapperStyle={{ fontSize: '11px', color: '#A1A1AA' }} />
+                                    <Area type="monotone" dataKey="Feature" stackId="1" stroke={COLORS.primary} fill="url(#colorFeature)" />
+                                    <Area type="monotone" dataKey="Problem" stackId="1" stroke={COLORS.amber} fill="url(#colorProblem)" />
+                                    <Area type="monotone" dataKey="Task" stackId="1" stroke={COLORS.secondary} fill="url(#colorTask)" />
+                                </AreaChart>
+                            </ResponsiveContainer>
+                        ) : (
+                            <ChartEmptyState message="No issues created during this operational window" />
+                        )}
+                    </ChartCard>
+
+                    {/* B2. ISSUE STATUS BREAKDOWN */}
+                    <ChartCard title="Issue Status Breakdown" category="Workflow State" snapshot={true} index={3}>
+                        {issueStatusData.length > 0 ? (
+                            <ResponsiveContainer width="100%" height={260}>
+                                <PieChart>
+                                    <Pie
+                                        data={issueStatusData}
+                                        cx="50%"
+                                        cy="50%"
+                                        innerRadius={60}
+                                        outerRadius={85}
+                                        paddingAngle={4}
+                                        dataKey="value"
+                                    >
+                                        {issueStatusData.map((entry, idx) => (
+                                            <Cell key={`cell-${idx}`} fill={entry.color || CHART_PALETTE[idx % CHART_PALETTE.length]} stroke="#121215" strokeWidth={2} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip content={<CustomCountTooltip valueSuffix=" issues" />} />
+                                    <Legend wrapperStyle={{ fontSize: '11px', color: '#A1A1AA' }} />
+                                </PieChart>
+                            </ResponsiveContainer>
+                        ) : (
+                            <ChartEmptyState message="No issues currently active in workspace" />
+                        )}
+                    </ChartCard>
+
+                    {/* B3. ISSUE TYPE DISTRIBUTION */}
+                    <ChartCard title="Issue Type Distribution" category="Composition" snapshot={true} index={4}>
+                        {issueTypeData.length > 0 ? (
+                            <ResponsiveContainer width="100%" height={260}>
+                                <PieChart>
+                                    <Pie
+                                        data={issueTypeData}
+                                        cx="50%"
+                                        cy="50%"
+                                        outerRadius={80}
+                                        dataKey="value"
+                                    >
+                                        {issueTypeData.map((entry, idx) => (
+                                            <Cell key={`cell-${idx}`} fill={entry.color || CHART_PALETTE[idx % CHART_PALETTE.length]} stroke="#121215" strokeWidth={2} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip content={<CustomCountTooltip valueSuffix=" items" />} />
+                                    <Legend wrapperStyle={{ fontSize: '11px', color: '#A1A1AA' }} />
+                                </PieChart>
+                            </ResponsiveContainer>
+                        ) : (
+                            <ChartEmptyState message="No issue types classified yet" />
+                        )}
+                    </ChartCard>
+
+                    {/* B4. ISSUE PRIORITY DISTRIBUTION */}
+                    <ChartCard title="Issue Priority Distribution" category="Triage Matrix" snapshot={true} index={5}>
+                        {issuePriorityData.length > 0 ? (
+                            <ResponsiveContainer width="100%" height={260}>
+                                <BarChart data={issuePriorityData} layout="vertical" margin={{ top: 10, right: 30, left: 40, bottom: 5 }}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#27272A" horizontal={false} />
+                                    <XAxis type="number" stroke="#71717A" fontSize={11} allowDecimals={false} />
+                                    <YAxis dataKey="name" type="category" stroke="#E4E4E7" fontSize={11} width={60} />
+                                    <Tooltip content={<CustomCountTooltip valueSuffix=" tasks" />} />
+                                    <Bar dataKey="value" name="Task Count" radius={[0, 6, 6, 0]}>
+                                        {issuePriorityData.map((entry, idx) => (
+                                            <Cell key={`cell-${idx}`} fill={entry.color || CHART_PALETTE[idx % CHART_PALETTE.length]} />
+                                        ))}
+                                    </Bar>
+                                </BarChart>
+                            </ResponsiveContainer>
+                        ) : (
+                            <ChartEmptyState message="No prioritized tasks in database" />
+                        )}
+                    </ChartCard>
+
+                    {/* B5. COMPLETION RATE PER MEMBER */}
+                    <ChartCard title="Completion Rate Per Member" category="Execution Efficacy" index={6}>
+                        {completionRateData.length > 0 ? (
+                            <ResponsiveContainer width="100%" height={260}>
+                                <BarChart data={completionRateData} layout="vertical" margin={{ top: 10, right: 30, left: 40, bottom: 5 }}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#27272A" horizontal={false} />
+                                    <XAxis type="number" domain={[0, 100]} unit="%" stroke="#71717A" fontSize={11} />
+                                    <YAxis dataKey="name" type="category" stroke="#E4E4E7" fontSize={11} width={80} />
+                                    <Tooltip content={<CustomCountTooltip valueSuffix="%" />} />
+                                    <Bar dataKey="rate" name="Completion Rate" fill={COLORS.green} radius={[0, 6, 6, 0]} />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        ) : (
+                            <ChartEmptyState message="No task assignment data to calculate completion rate" />
+                        )}
+                    </ChartCard>
+
+                    {/* B6. SELF-CLAIMED VS LEADER-ASSIGNED SPLIT */}
+                    <ChartCard title="Self-Claimed vs Leader-Assigned" category="Initiative Split" index={7}>
+                        {assignmentSplitData.length > 0 ? (
+                            <ResponsiveContainer width="100%" height={260}>
+                                <BarChart data={assignmentSplitData} margin={{ top: 10, right: 20, left: 10, bottom: 5 }}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#27272A" />
+                                    <XAxis dataKey="name" stroke="#71717A" fontSize={11} />
+                                    <YAxis stroke="#71717A" fontSize={11} allowDecimals={false} />
+                                    <Tooltip content={<CustomCountTooltip valueSuffix=" tasks" />} />
+                                    <Legend wrapperStyle={{ fontSize: '11px', color: '#A1A1AA' }} />
+                                    <Bar dataKey="SelfClaimed" name="Self Claimed" stackId="a" fill={COLORS.primary} radius={[0, 0, 0, 0]} />
+                                    <Bar dataKey="LeaderAssigned" name="Leader Assigned" stackId="a" fill={COLORS.secondary} radius={[6, 6, 0, 0]} />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        ) : (
+                            <ChartEmptyState message="No assignment splits recorded for active members" />
+                        )}
+                    </ChartCard>
+                </div>
+            </div>
+
+            {/* 5. CHARTS GRID — SECTION C: PROJECT HEALTH */}
+            <div className="space-y-4 pt-4">
+                <div className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-emerald-400 font-mono pl-1 border-l-2 border-emerald-500">
+                    Section C — Portfolio & Project Health
+                </div>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                    {/* C1. PROJECT STATUS BREAKDOWN */}
+                    <ChartCard title="Project Status Breakdown" category="Portfolio States" snapshot={true} index={8}>
+                        {projectStatusData.length > 0 ? (
+                            <ResponsiveContainer width="100%" height={260}>
+                                <PieChart>
+                                    <Pie
+                                        data={projectStatusData}
+                                        cx="50%"
+                                        cy="50%"
+                                        innerRadius={65}
+                                        outerRadius={88}
+                                        paddingAngle={4}
+                                        dataKey="value"
+                                    >
+                                        {projectStatusData.map((entry, idx) => (
+                                            <Cell key={`cell-${idx}`} fill={entry.color || CHART_PALETTE[idx % CHART_PALETTE.length]} stroke="#121215" strokeWidth={2} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip content={<CustomCountTooltip valueSuffix=" projects" />} />
+                                    <Legend wrapperStyle={{ fontSize: '11px', color: '#A1A1AA' }} />
+                                </PieChart>
+                            </ResponsiveContainer>
+                        ) : (
+                            <ChartEmptyState message="No project status entries in current team" />
+                        )}
+                    </ChartCard>
+
+                    {/* C2. PROJECT PRIORITY BREAKDOWN */}
+                    <ChartCard title="Project Priority Breakdown" category="Strategic Weight" snapshot={true} index={9}>
+                        {projectPriorityData.length > 0 ? (
+                            <ResponsiveContainer width="100%" height={260}>
+                                <PieChart>
+                                    <Pie
+                                        data={projectPriorityData}
+                                        cx="50%"
+                                        cy="50%"
+                                        innerRadius={65}
+                                        outerRadius={88}
+                                        paddingAngle={4}
+                                        dataKey="value"
+                                    >
+                                        {projectPriorityData.map((entry, idx) => (
+                                            <Cell key={`cell-${idx}`} fill={entry.color || CHART_PALETTE[idx % CHART_PALETTE.length]} stroke="#121215" strokeWidth={2} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip content={<CustomCountTooltip valueSuffix=" projects" />} />
+                                    <Legend wrapperStyle={{ fontSize: '11px', color: '#A1A1AA' }} />
+                                </PieChart>
+                            </ResponsiveContainer>
+                        ) : (
+                            <ChartEmptyState message="No prioritized projects established yet" />
+                        )}
+                    </ChartCard>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 export default ProjectManager;

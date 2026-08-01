@@ -86,10 +86,10 @@ const AssignIssueDropdown = ({ teamId, issueId, currentAssigneeId, onAssign }) =
                                             }`}
                                     >
                                         <div className="w-6 h-6 rounded-full bg-zinc-800 flex items-center justify-center overflow-hidden shrink-0">
-                                            {user.avatar ? (
-                                                <img src={user.avatar} alt={user.firstName} className="w-full h-full object-cover" />
+                                            {user.photoUrl?.url && user.photoUrl.url !== "https://geographyandyou.com/images/user-profile.png" ? (
+                                                <img src={user.photoUrl.url} alt={user.firstName} className="w-full h-full object-cover" />
                                             ) : (
-                                                <span className="text-[10px] font-bold text-white">{user.firstName.charAt(0)}{user.lastName.charAt(0)}</span>
+                                                <span className="text-[10px] font-bold text-white">{user.firstName?.charAt(0).toUpperCase()}{user.lastName?.charAt(0).toUpperCase()}</span>
                                             )}
                                         </div>
                                         <span className="truncate">{user.firstName} {user.lastName}</span>

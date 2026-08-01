@@ -5,7 +5,7 @@ import TeamMembersPanel from './TeamMembersPanel';
 import TeamSettingsPanel from './TeamSettingsPanel';
 import ProjectListView from '../Projects/ProjectListView';
 import ProjectDetailPanel from '../Projects/ProjectDetailPanel';
-import AnalyticsDashboard from '../Analytics/AnalyticsDashboard';
+import ProjectManager from '../../Project-Manager';
 import TimerWidget from '../TimerWidget';
 
 const TeamDetail = ({ teamId, onBack }) => {
@@ -165,7 +165,7 @@ const TeamDetail = ({ teamId, onBack }) => {
                         />
                     )}
                     {activeTab === 'analytics' && (
-                        <AnalyticsDashboard teamId={teamId} />
+                        <ProjectManager teamId={teamId} />
                     )}
                 </div>
             )}

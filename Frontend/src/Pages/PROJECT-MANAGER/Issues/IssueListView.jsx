@@ -175,10 +175,10 @@ const IssueListView = ({ teamId, projectId, myRole }) => {
                                         {issue.assignedTo ? (
                                             <div className="flex items-center gap-2">
                                                 <div className="w-5 h-5 rounded-full bg-zinc-800 flex items-center justify-center overflow-hidden">
-                                                    {issue.assignedTo.avatar ? (
-                                                        <img src={issue.assignedTo.avatar} alt={issue.assignedTo.firstName} className="w-full h-full object-cover" />
+                                                    {issue.assignedTo.photoUrl?.url && issue.assignedTo.photoUrl.url !== "https://geographyandyou.com/images/user-profile.png" ? (
+                                                        <img src={issue.assignedTo.photoUrl.url} alt={issue.assignedTo.firstName} className="w-full h-full object-cover" />
                                                     ) : (
-                                                        <span className="text-[9px] font-bold text-white">{issue.assignedTo.firstName.charAt(0)}{issue.assignedTo.lastName.charAt(0)}</span>
+                                                        <span className="text-[9px] font-bold text-white">{issue.assignedTo.firstName?.charAt(0).toUpperCase()}{issue.assignedTo.lastName?.charAt(0).toUpperCase()}</span>
                                                     )}
                                                 </div>
                                                 <span className="text-zinc-300">{issue.assignedTo.firstName} {issue.assignedTo.lastName}</span>

@@ -30,17 +30,17 @@ async function createIssue(req, res) {
 
 async function listIssues(req, res) {
   try {
-    const { projectId } = req.params;
+    const { projectId, teamId } = req.params;
     const { type, status, priority } = req.query;
 
-    const filter = { projectId, archivedAt: null };
+    const filter = { teamId, projectId, archivedAt: null };
     if (type) filter.type = type;
     if (status) filter.status = status;
     if (priority) filter.priority = priority;
 
     const issues = await Issue.find(filter)
       .sort({ createdAt: -1 })
-      .populate('assignedTo', 'firstName lastName avatar');
+      .populate('assignedTo', 'firstName lastName photoUrl email');
     res.json({ issues });
   } catch (err) {
     return handleRouteError(err, res);
@@ -49,9 +49,9 @@ async function listIssues(req, res) {
 
 async function getIssueDetails(req, res) {
   try {
-    const { issueId } = req.params;
-    const issue = await Issue.findOne({ _id: issueId, archivedAt: null })
-      .populate('assignedTo', 'firstName lastName avatar');
+    const { issueId, teamId } = req.params;
+    const issue = await Issue.findOne({ _id: issueId, teamId, archivedAt: null })
+      .populate('assignedTo', 'firstName lastName photoUrl email');
     if (!issue) return res.status(404).json({ error: 'Issue not found' });
     res.json({ issue });
   } catch (err) {
@@ -61,7 +61,7 @@ async function getIssueDetails(req, res) {
 
 async function updateIssue(req, res) {
   try {
-    const { issueId } = req.params;
+    const { issueId, teamId } = req.params;
     const allowedFields = ['title', 'description', 'status', 'priority'];
     const updates = {};
     for (const field of allowedFields) {
@@ -69,7 +69,7 @@ async function updateIssue(req, res) {
     }
 
     const issue = await Issue.findOneAndUpdate(
-      { _id: issueId, teamId: req.params.teamId, archivedAt: null },
+      { _id: issueId, teamId, archivedAt: null },
       updates,
       { new: true, runValidators: true }
     );
@@ -82,9 +82,9 @@ async function updateIssue(req, res) {
 
 async function archiveIssue(req, res) {
   try {
-    const { issueId } = req.params;
+    const { issueId, teamId } = req.params;
     const issue = await Issue.findOneAndUpdate(
-      { _id: issueId, archivedAt: null },
+      { _id: issueId, teamId, archivedAt: null },
       { archivedAt: new Date() },
       { new: true }
     );

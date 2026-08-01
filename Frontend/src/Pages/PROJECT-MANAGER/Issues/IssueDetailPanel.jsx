@@ -211,11 +211,11 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                             {issue.assignedTo ? (
                                 <div className="bg-white/5 border border-white/10 rounded-lg p-4">
                                     <div className="flex items-center gap-3 mb-3">
-                                        <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center overflow-hidden">
-                                            {issue.assignedTo.avatar ? (
-                                                <img src={issue.assignedTo.avatar} alt={issue.assignedTo.firstName} className="w-full h-full object-cover" />
+                                        <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center overflow-hidden shrink-0">
+                                            {issue.assignedTo.photoUrl?.url && issue.assignedTo.photoUrl.url !== "https://geographyandyou.com/images/user-profile.png" ? (
+                                                <img src={issue.assignedTo.photoUrl.url} alt={issue.assignedTo.firstName} className="w-full h-full object-cover" />
                                             ) : (
-                                                <span className="text-xs font-bold text-white">{issue.assignedTo.firstName.charAt(0)}{issue.assignedTo.lastName.charAt(0)}</span>
+                                                <span className="text-xs font-bold text-white">{issue.assignedTo.firstName?.charAt(0).toUpperCase()}{issue.assignedTo.lastName?.charAt(0).toUpperCase()}</span>
                                             )}
                                         </div>
                                         <div>
