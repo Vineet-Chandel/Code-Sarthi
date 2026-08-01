@@ -4,10 +4,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import BASE_URL from '../../Pages/auth/baseURL';
 import { setGoals } from '../../utils/goalSlice';
 import SchedulerCalendar from './SchedulerCalendar';
-import SchedulerAnalytics from './SchedulerAnalytics';
+import GoalAnalytics from './GoalAnalytics';
 
 const Scheduler = () => {
     const dispatch = useDispatch();
+    const user = useSelector(store => store.user);
     const goals = useSelector(store => store.goals.goals || []);
     const isFetched = useSelector(store => store.goals.isFetched);
     const [activeTab, setActiveTab] = useState('Calendar');
@@ -98,7 +99,7 @@ const Scheduler = () => {
                             onScheduleDeleted={handleScheduleDeleted}
                         />
                     ) : (
-                        <SchedulerAnalytics analytics={analytics} />
+                        <GoalAnalytics userId={user?._id} />
                     )}
                 </div>
             )}

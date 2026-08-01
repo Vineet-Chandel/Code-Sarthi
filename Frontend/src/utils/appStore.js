@@ -12,6 +12,7 @@ import chatsReducer from "./chat-user-slice";
 import resReducer from "./resStore";
 import messageReducer from "./messageSlice";
 import goalReducer from "./goalSlice";
+import projectReducer from "./projectSlice";
 
 const appStore = configureStore({
     reducer: {
@@ -24,7 +25,8 @@ const appStore = configureStore({
         chats: chatsReducer,
         res: resReducer,
         messages: messageReducer,
-        goals: goalReducer
+        goals: goalReducer,
+        projects: projectReducer
     }
 });
 

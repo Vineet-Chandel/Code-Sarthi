@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import BASE_URL from '../../auth/baseURL';
+import { setTeamDetail, removeTeam } from '../../../utils/projectSlice';
 import TeamMembersPanel from './TeamMembersPanel';
 import TeamSettingsPanel from './TeamSettingsPanel';
 import ProjectListView from '../Projects/ProjectListView';
@@ -9,22 +11,32 @@ import ProjectManager from '../../Project-Manager';
 import TimerWidget from '../TimerWidget';
 
 const TeamDetail = ({ teamId, onBack }) => {
-    const [team, setTeam] = useState(null);
-    const [membership, setMembership] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const dispatch = useDispatch();
+    const cachedDetail = useSelector(store => store.projects?.teamDetails?.[teamId]);
+    const [team, setTeam] = useState(cachedDetail?.team || null);
+    const [membership, setMembership] = useState(cachedDetail?.membership || null);
+    const [loading, setLoading] = useState(!cachedDetail?.isFetched);
     const [error, setError] = useState(null);
     const [activeTab, setActiveTab] = useState('projects');
     const [selectedProjectId, setSelectedProjectId] = useState(null);
 
     useEffect(() => {
-        fetchTeam();
-    }, [teamId]);
+        if (!cachedDetail?.isFetched) {
+            fetchTeam();
+        } else {
+            setTeam(cachedDetail.team);
+            setMembership(cachedDetail.membership);
+            setLoading(false);
+        }
+    }, [teamId, cachedDetail?.isFetched]);
 
     const fetchTeam = async () => {
+        setLoading(true);
         try {
             const res = await axios.get(`${BASE_URL}/teams/${teamId}`, { withCredentials: true });
             setTeam(res.data.team);
             setMembership(res.data.membership);
+            dispatch(setTeamDetail({ teamId, team: res.data.team, membership: res.data.membership }));
         } catch (err) {
             setError(err.response?.data?.error || "Failed to load team");
         } finally {
@@ -36,6 +48,7 @@ const TeamDetail = ({ teamId, onBack }) => {
         if (!confirm("Are you sure you want to leave this team?")) return;
         try {
             await axios.post(`${BASE_URL}/teams/${teamId}/leave`, {}, { withCredentials: true });
+            dispatch(removeTeam(teamId));
             onBack();
         } catch (err) {
             alert(err.response?.data?.error || "Failed to leave team");
@@ -46,6 +59,7 @@ const TeamDetail = ({ teamId, onBack }) => {
         if (!confirm("Are you sure you want to archive this team? This is a soft delete.")) return;
         try {
             await axios.delete(`${BASE_URL}/teams/${teamId}`, { withCredentials: true });
+            dispatch(removeTeam(teamId));
             onBack();
         } catch (err) {
             alert(err.response?.data?.error || "Failed to archive team");

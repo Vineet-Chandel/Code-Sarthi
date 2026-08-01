@@ -481,13 +481,28 @@ const GoalDetail = () => {
 
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative z-10  pt-12 md:pt-0 mt-5">
                         <div>
-                            <div className="flex items-center gap-3 mb-3">
+                            <div className="flex items-center gap-3 mb-3 flex-wrap">
                                 <span className={`px-3 py-1 rounded-full text-xs font-bold ${statusColors[goal.status] || statusColors["Not Started"]}`}>
                                     {goal.status}
                                 </span>
                                 <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[#2a2a2a] text-gray-300">
                                     Priority: {goal.priority}
                                 </span>
+                                {goal.sourceIssueId && (
+                                    <span
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            navigate('/app/projects', { state: { teamId: goal.sourceTeamId, issueId: goal.sourceIssueId } });
+                                        }}
+                                        title="Linked to TeamOS Issue — Click to view in TeamOS"
+                                        className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-zinc-300 font-semibold whitespace-nowrap hover:border-[#A7A0F8]/60 hover:bg-[#A7A0F8]/15 transition-all cursor-pointer shadow-sm"
+                                    >
+                                        <svg className="w-3.5 h-3.5 text-[#A7A0F8] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                        </svg>
+                                        <span>TeamOS Issue</span>
+                                    </span>
+                                )}
                             </div>
                             <h1 className="text-4xl font-bold tracking-tight mb-2">{goal.name}</h1>
                             <p className="text-gray-400 text-lg">{goal.description}</p>

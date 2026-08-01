@@ -453,7 +453,7 @@ const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
     }
 
     return (
-        <div className="w-full bg-[#09090B] text-white space-y-8 pb-20 px-2 sm:px-4 selection:bg-[#534AB7]/30 relative">
+        <div className="w-full bg-[#09090B] text-white space-y-8 py-10 px-2 sm:px-4 selection:bg-[#534AB7]/30 relative">
             {/* SUBTLE OVERLAY WHEN REFETCHING ON FILTER CHANGE */}
             {refreshing && (
                 <div className="fixed top-6 right-6 z-50 bg-[#121215]/95 border border-[#534AB7] text-[#A7A0F8] text-xs px-4 py-2 rounded-full shadow-2xl backdrop-blur-md flex items-center gap-2.5 font-mono animate-bounce">
@@ -464,7 +464,7 @@ const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
 
             {/* 1. HEADER BAR */}
             <header className="bg-[#121215]/90 border border-white/10 rounded-2xl p-5 sm:p-6 backdrop-blur-xl shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 border-t border-t-white/15">
-                <div>
+                <div >
                     <div className="flex items-center gap-2.5">
                         <span className="w-2.5 h-2.5 rounded-full bg-[#534AB7] animate-pulse" />
                         <span className="text-[10px] font-mono font-black tracking-[0.25em] text-zinc-400 uppercase">

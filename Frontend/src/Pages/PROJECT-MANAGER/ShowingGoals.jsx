@@ -276,16 +276,31 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
                                 <div
                                     key={goal._id}
                                     onClick={() => navigate(`/app/goals/${goal._id}`)}
-                                    className="group relative bg-[#101017] hover:bg-[#14141d] border border-white/[0.04] hover:border-white/[0.1] rounded-2xl p-6 cursor-pointer overflow-hidden transition-all duration-300 hover:-translate-y-1 shadow-xl shadow-black/30"
+                                    className="group relative bg-[#121215] hover:bg-blue-500/10 border border-white/10 hover:border-[#534AB7]/50 rounded-2xl p-6 cursor-pointer transition-all hover:shadow-[0_8px_30px_rgba(83,74,183,0.12)] overflow-hidden"
                                 >
-                                    <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-transparent to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#534AB7]/10 rounded-full blur-3xl group-hover:bg-[#534AB7]/20 transition-colors pointer-events-none" />
 
                                     <div className="relative z-10 flex flex-col h-full">
                                         <div className="flex justify-between items-start mb-4">
                                             <span className={`px-3 py-1 rounded-xl text-xs font-bold ${statusColors[goal.status] || statusColors["Not Started"]}`}>
                                                 {goal.status}
                                             </span>
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex items-center gap-2 flex-wrap">
+                                                {goal.sourceIssueId && (
+                                                    <span
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            navigate('/app/projects', { state: { teamId: goal.sourceTeamId, issueId: goal.sourceIssueId } });
+                                                        }}
+                                                        title="Linked to TeamOS Issue — Click to view in TeamOS"
+                                                        className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[11px] text-zinc-300 font-medium whitespace-nowrap hover:border-[#A7A0F8]/60 hover:bg-[#A7A0F8]/15 transition-all cursor-pointer shadow-sm z-20"
+                                                    >
+                                                        <svg className="w-3.5 h-3.5 text-[#A7A0F8] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                                        </svg>
+                                                        <span>TeamOS Issue</span>
+                                                    </span>
+                                                )}
                                                 {goal.category && (
                                                     <span className="text-[11px] font-semibold text-purple-300 bg-purple-500/15 px-2.5 py-1 rounded-lg flex items-center gap-1">
                                                         <Folder className="w-3 h-3 text-purple-400" />
@@ -301,40 +316,43 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
                                             </div>
                                         </div>
 
-                                        <h3 className="text-xl font-bold text-white mb-2 line-clamp-1 group-hover:text-blue-400 transition-colors">
+                                        <h3 className="text-xl font-bold text-white mb-2 line-clamp-1 group-hover:text-[#A7A0F8] transition-colors pr-2">
                                             {goal.name}
                                         </h3>
 
-                                        <p className="text-gray-400 text-sm line-clamp-2 mb-6 flex-1 font-normal">
-                                            {goal.description}
+                                        <p className="text-zinc-400 text-sm line-clamp-2 mb-6 flex-1 font-normal min-h-[40px]">
+                                            {goal.description || "No description provided."}
                                         </p>
 
                                         <div className="mt-auto">
-                                            <div className="flex justify-between text-xs text-gray-400 mb-2 font-medium">
+                                            <div className="flex justify-between text-xs text-zinc-400 mb-2 font-semibold">
                                                 <span>Completion Progress</span>
-                                                <span className="text-blue-400 font-bold">{goal.progress || 0}%</span>
+                                                <span className="text-[#A7A0F8] font-bold">{goal.progress || 0}%</span>
                                             </div>
-                                            <div className="w-full bg-white/[0.05] rounded-full h-2 overflow-hidden mb-4">
+                                            <div className="w-full bg-white/5 border border-white/5 rounded-full h-2 overflow-hidden mb-4">
                                                 <div
-                                                    className="bg-blue-600 h-full rounded-full transition-all duration-300"
+                                                    className="bg-gradient-to-r from-[#534AB7] to-[#A7A0F8] h-full rounded-full transition-all duration-300"
                                                     style={{ width: `${Math.min(Math.max(goal.progress || 0, 4), 100)}%` }}
                                                 ></div>
                                             </div>
 
-                                            <div className="flex justify-between items-center pt-4 border-t border-white/[0.05]">
-                                                <div className="flex flex-wrap gap-1.5">
+                                            <div className="flex justify-between items-center pt-4 border-t border-white/10">
+                                                <div className="flex flex-wrap gap-1.5 items-center">
+                                                    <div className="text-xs font-semibold text-zinc-300 flex items-center gap-1.5 bg-white/5 px-2.5 py-1 rounded-lg border border-white/5">
+                                                        <Calendar className="w-3.5 h-3.5 text-[#A7A0F8]" />
+                                                        {goal.targetDate ? new Date(goal.targetDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : 'No date'}
+                                                    </div>
                                                     {goal.tags && goal.tags.slice(0, 2).map((tag, idx) => (
-                                                        <span key={idx} className="text-[10px] uppercase font-bold tracking-wider text-gray-400 bg-white/[0.05] px-2 py-1 rounded-md">
+                                                        <span key={idx} className="text-[10px] uppercase font-bold tracking-wider text-zinc-400 bg-white/5 px-2 py-1 rounded-md border border-white/5">
                                                             #{tag}
                                                         </span>
                                                     ))}
                                                     {goal.tags && goal.tags.length > 2 && (
-                                                        <span className="text-[10px] font-semibold text-gray-400 bg-white/[0.05] px-1.5 py-1 rounded-md">+{goal.tags.length - 2}</span>
+                                                        <span className="text-[10px] font-semibold text-zinc-400 bg-white/5 px-1.5 py-1 rounded-md border border-white/5">+{goal.tags.length - 2}</span>
                                                     )}
                                                 </div>
-                                                <div className="text-xs font-medium text-gray-300 flex items-center gap-1.5 bg-white/[0.05] px-3 py-1 rounded-lg">
-                                                    <Calendar className="w-3.5 h-3.5 text-blue-400" />
-                                                    {goal.targetDate ? new Date(goal.targetDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : 'No date'}
+                                                <div className="text-zinc-600 group-hover:text-[#A7A0F8] transition-colors ml-2">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-7-7l7 7l-7 7" /></svg>
                                                 </div>
                                             </div>
                                         </div>
@@ -348,24 +366,41 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
                                 <div
                                     key={goal._id}
                                     onClick={() => navigate(`/app/goals/${goal._id}`)}
-                                    className="group relative bg-[#101017] hover:bg-[#14141d] border border-white/[0.04] hover:border-white/[0.1] rounded-2xl px-6 py-4 cursor-pointer transition-all duration-200 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-lg shadow-black/20"
+                                    className="group relative bg-[#121215] hover:bg-blue-500/10 border border-white/10 hover:border-[#534AB7]/50 rounded-2xl px-6 py-4 cursor-pointer transition-all hover:shadow-[0_8px_30px_rgba(83,74,183,0.12)] flex flex-col md:flex-row md:items-center justify-between gap-4 overflow-hidden"
                                 >
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#534AB7]/10 rounded-full blur-3xl group-hover:bg-[#534AB7]/20 transition-colors pointer-events-none" />
+
                                     {/* Left section: Status & Title */}
-                                    <div className="flex items-center gap-4 md:w-1/3 min-w-0">
+                                    <div className="flex items-center gap-4 md:w-1/3 min-w-0 relative z-10">
                                         <span className={`px-3 py-1 rounded-xl text-[11px] font-bold shrink-0 ${statusColors[goal.status] || statusColors["Not Started"]}`}>
                                             {goal.status}
                                         </span>
                                         <div className="min-w-0 flex-1">
-                                            <div className="flex items-center gap-2">
-                                                <h3 className="text-base font-bold text-white group-hover:text-blue-400 transition-colors truncate">
+                                            <div className="flex items-center gap-2 flex-wrap">
+                                                <h3 className="text-base font-bold text-white group-hover:text-[#A7A0F8] transition-colors truncate">
                                                     {goal.name}
                                                 </h3>
+                                                {goal.sourceIssueId && (
+                                                    <span
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            navigate('/app/projects', { state: { teamId: goal.sourceTeamId, issueId: goal.sourceIssueId } });
+                                                        }}
+                                                        title="Linked to TeamOS Issue — Click to view in TeamOS"
+                                                        className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-[10px] text-zinc-300 font-medium whitespace-nowrap hover:border-[#A7A0F8]/60 hover:bg-[#A7A0F8]/15 transition-all cursor-pointer shadow-sm z-20"
+                                                    >
+                                                        <svg className="w-3 h-3 text-[#A7A0F8] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                                        </svg>
+                                                        <span>TeamOS Issue</span>
+                                                    </span>
+                                                )}
                                                 {goal.priority === 'Critical' && (
                                                     <span className="w-2 h-2 rounded-full bg-red-500 shrink-0" title="Critical Priority"></span>
                                                 )}
                                             </div>
                                             {goal.category && (
-                                                <p className="text-xs text-purple-400 font-medium truncate mt-0.5 flex items-center gap-1">
+                                                <p className="text-xs text-[#A7A0F8] font-medium truncate mt-0.5 flex items-center gap-1">
                                                     <Folder className="w-3 h-3" /> {goal.category}
                                                 </p>
                                             )}
@@ -373,38 +408,38 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
                                     </div>
 
                                     {/* Middle section: Crisp info */}
-                                    <div className="flex items-center justify-between md:justify-start gap-6 md:w-1/3 text-sm text-gray-400 min-w-0">
-                                        <p className="truncate text-gray-400 text-xs md:text-sm max-w-[240px] xl:max-w-[320px] hidden sm:block">
+                                    <div className="flex items-center justify-between md:justify-start gap-6 md:w-1/3 text-sm text-zinc-400 min-w-0 relative z-10">
+                                        <p className="truncate text-zinc-400 text-xs md:text-sm max-w-[240px] xl:max-w-[320px] hidden sm:block">
                                             {goal.description}
                                         </p>
-                                        <div className="text-xs font-medium text-gray-300 shrink-0 flex items-center gap-1.5 bg-white/[0.05] px-3 py-1.5 rounded-xl">
-                                            <Calendar className="w-3.5 h-3.5 text-blue-400" />
+                                        <div className="text-xs font-semibold text-zinc-300 shrink-0 flex items-center gap-1.5 bg-white/5 border border-white/5 px-3 py-1.5 rounded-xl">
+                                            <Calendar className="w-3.5 h-3.5 text-[#A7A0F8]" />
                                             {goal.targetDate ? new Date(goal.targetDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: '2-digit' }) : 'No date'}
                                         </div>
                                     </div>
 
                                     {/* Right section: Progress bar */}
-                                    <div className="flex items-center justify-between md:justify-end gap-6 md:w-1/3 shrink-0">
+                                    <div className="flex items-center justify-between md:justify-end gap-6 md:w-1/3 shrink-0 relative z-10">
                                         <div className="flex flex-col gap-1.5 w-full max-w-[150px]">
                                             <div className="flex justify-between text-[11px] font-bold">
-                                                <span className="text-gray-400">Progress</span>
-                                                <span className="text-blue-400">{goal.progress || 0}%</span>
+                                                <span className="text-zinc-400">Progress</span>
+                                                <span className="text-[#A7A0F8]">{goal.progress || 0}%</span>
                                             </div>
-                                            <div className="w-full bg-white/[0.05] rounded-full h-1.5 overflow-hidden">
+                                            <div className="w-full bg-white/5 border border-white/5 rounded-full h-1.5 overflow-hidden">
                                                 <div
-                                                    className="bg-blue-600 h-full rounded-full"
+                                                    className="bg-gradient-to-r from-[#534AB7] to-[#A7A0F8] h-full rounded-full"
                                                     style={{ width: `${Math.min(Math.max(goal.progress || 0, 4), 100)}%` }}
                                                 ></div>
                                             </div>
                                         </div>
 
-                                        <span className={`hidden xl:inline-block text-xs font-bold px-3 py-1 rounded-xl ${goal.priority === 'High' || goal.priority === 'Critical' ? 'bg-red-500/20 text-red-400' :
-                                            goal.priority === 'Medium' ? 'bg-blue-500/20 text-blue-400' : 'bg-gray-500/20 text-gray-300'
+                                        <span className={`hidden xl:inline-block text-xs font-bold px-3 py-1 rounded-xl ${goal.priority === 'High' || goal.priority === 'Critical' ? 'bg-red-500/20 text-red-400 border border-red-500/20' :
+                                            goal.priority === 'Medium' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/20' : 'bg-white/5 text-zinc-300 border border-white/10'
                                             }`}>
                                             {goal.priority || 'Low'}
                                         </span>
 
-                                        <div className="w-9 h-9 rounded-xl bg-white/[0.05] group-hover:bg-blue-600 text-gray-400 group-hover:text-white flex items-center justify-center transition-all shrink-0">
+                                        <div className="w-9 h-9 rounded-xl bg-white/5 group-hover:bg-[#534AB7] border border-white/10 text-zinc-400 group-hover:text-white flex items-center justify-center transition-all shrink-0">
                                             <ChevronRight className="w-4 h-4 transform group-hover:translate-x-0.5 transition-transform" />
                                         </div>
                                     </div>

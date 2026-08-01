@@ -1,4 +1,7 @@
 const Goals = require("../models/goals");
+const Issue = require("../models/issue");
+const { mapGoalStatusToIssueStatus } = require("../utils/statusMapping");
+
 
 // @desc    Get all goals for the logged-in user
 // @route   GET /api/goals
@@ -54,7 +57,7 @@ const createGoal = async (req, res) => {
         }
 
         //status validation
-        if (!["Completed", "In Progress", "On Track", "At Risk", "Not Started", "On Hold"].includes(status.trim()) || typeof status !== "string" || status.trim().length < 3 || status.trim().length > 100) {
+        if (!["Completed", "In Progress", "On Track", "At Risk", "Not Started", "On Hold", "Removed", "Reassigned", "not_started", "in_progress", "on_hold", "completed", "abandoned", "Abandoned"].includes(status.trim()) || typeof status !== "string" || status.trim().length < 3 || status.trim().length > 100) {
             return res.status(404).json({
                 success: false,
                 message: "Invalid status",
@@ -102,16 +105,22 @@ const createGoal = async (req, res) => {
         }
 
 
+        const initialStatus = status.trim();
+        const now = new Date();
         const newGoal = new Goals({
             name: name.trim(),
-            status: status.trim(),
+            status: initialStatus,
             targetDate,
             owner: req.user._id,
             priority: priority.trim(),
             category: category.trim(),
             description: description.trim(),
             tags: tags.map(tag => tag.trim()),
-            lastUpdated: Date.now()
+            lastUpdated: now,
+            startedAt: ["In Progress", "in_progress", "On Track", "At Risk"].includes(initialStatus) ? now : null,
+            pausedAt: ["On Hold", "on_hold"].includes(initialStatus) ? now : null,
+            completedAt: ["Completed", "completed"].includes(initialStatus) ? now : null,
+            abandonedAt: ["Removed", "abandoned", "Abandoned"].includes(initialStatus) ? now : null
         });
 
         const savedGoal = await newGoal.save();
@@ -134,7 +143,25 @@ const updateGoal = async (req, res) => {
         }
 
         if (name) goal.name = name.trim();
-        if (status) goal.status = status.trim();
+        if (status) {
+            const newStatus = status.trim();
+            const now = new Date();
+            if (newStatus !== goal.status) {
+                if (["In Progress", "in_progress", "On Track", "At Risk"].includes(newStatus) && !goal.startedAt) {
+                    goal.startedAt = now;
+                }
+                if (["On Hold", "on_hold"].includes(newStatus)) {
+                    goal.pausedAt = now;
+                }
+                if (["Completed", "completed"].includes(newStatus)) {
+                    goal.completedAt = now;
+                }
+                if (["Removed", "abandoned", "Abandoned"].includes(newStatus)) {
+                    goal.abandonedAt = now;
+                }
+            }
+            goal.status = newStatus;
+        }
         if (targetDate) goal.targetDate = targetDate;
         if (priority) goal.priority = priority.trim();
         if (category) goal.category = category.trim();
@@ -146,6 +173,14 @@ const updateGoal = async (req, res) => {
         goal.lastUpdated = Date.now();
 
         const updatedGoal = await goal.save();
+
+        if (status && updatedGoal.sourceIssueId) {
+            await Issue.updateOne(
+                { _id: updatedGoal.sourceIssueId },
+                { status: mapGoalStatusToIssueStatus(updatedGoal.status) }
+            );
+        }
+
         res.status(200).json(updatedGoal);
     } catch (error) {
         console.error("Error in updateGoal:", error);
@@ -160,6 +195,9 @@ const deleteGoal = async (req, res) => {
         const goal = await Goals.findOneAndDelete({ _id: req.params.id, owner: req.user._id });
         if (!goal) {
             return res.status(404).json({ message: "Goal not found" });
+        }
+        if (goal.sourceIssueId) {
+            await Issue.updateOne({ _id: goal.sourceIssueId }, { linkedGoalId: null });
         }
         res.status(200).json({ message: "Goal deleted successfully" });
     } catch (error) {

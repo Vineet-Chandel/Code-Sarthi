@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import BASE_URL from '../../auth/baseURL';
+import { setTeamProjects, addProjectToTeam } from '../../../utils/projectSlice';
 import CreateProjectModal from './CreateProjectModal';
 
 const ProjectListView = ({ teamId, onProjectSelect }) => {
-    const [projects, setProjects] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const dispatch = useDispatch();
+    const cachedProjects = useSelector(store => store.projects?.teamProjects?.[teamId]);
+    const [projects, setProjects] = useState(cachedProjects?.projects || []);
+    const [loading, setLoading] = useState(!cachedProjects?.isFetched);
     const [createModalOpen, setCreateModalOpen] = useState(false);
 
     // Filters
@@ -13,8 +17,19 @@ const ProjectListView = ({ teamId, onProjectSelect }) => {
     const [priorityFilter, setPriorityFilter] = useState('');
 
     useEffect(() => {
-        fetchProjects();
-    }, [teamId, statusFilter, priorityFilter]);
+        if (!statusFilter && !priorityFilter && cachedProjects?.isFetched) {
+            setProjects(cachedProjects.projects);
+            setLoading(false);
+        } else if (cachedProjects?.isFetched) {
+            let filtered = cachedProjects.projects;
+            if (statusFilter) filtered = filtered.filter(p => p.status === statusFilter);
+            if (priorityFilter) filtered = filtered.filter(p => p.priority === priorityFilter);
+            setProjects(filtered);
+            setLoading(false);
+        } else {
+            fetchProjects();
+        }
+    }, [teamId, statusFilter, priorityFilter, cachedProjects?.isFetched, cachedProjects?.projects]);
 
     const fetchProjects = async () => {
         setLoading(true);
@@ -25,6 +40,9 @@ const ProjectListView = ({ teamId, onProjectSelect }) => {
 
             const res = await axios.get(`${BASE_URL}/teams/${teamId}/projects?${params.toString()}`, { withCredentials: true });
             setProjects(res.data.projects);
+            if (!statusFilter && !priorityFilter) {
+                dispatch(setTeamProjects({ teamId, projects: res.data.projects }));
+            }
         } catch (err) {
             console.error("Failed to fetch projects", err);
         } finally {
@@ -130,7 +148,7 @@ const ProjectListView = ({ teamId, onProjectSelect }) => {
                 teamId={teamId}
                 onSuccess={(newProject) => {
                     setCreateModalOpen(false);
-                    fetchProjects();
+                    dispatch(addProjectToTeam({ teamId, project: newProject }));
                 }}
             />
         </div>

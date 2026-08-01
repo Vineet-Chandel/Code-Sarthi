@@ -1,29 +1,35 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 import BASE_URL from "./auth/baseURL";
+import { setTeams, addTeam } from "../utils/projectSlice";
 import CreateTeamModal from "./PROJECT-MANAGER/Teams/CreateTeamModal";
 import JoinTeamForm from "./PROJECT-MANAGER/Teams/JoinTeamForm";
 import TeamDetail from "./PROJECT-MANAGER/Teams/TeamDetail";
 
 const Projects = () => {
+    const location = useLocation();
+    const dispatch = useDispatch();
     const user = useSelector((store) => store.user);
-    const [teams, setTeams] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const { teams, isTeamsFetched } = useSelector((store) => store.projects || { teams: [], isTeamsFetched: false });
+    const [loading, setLoading] = useState(!isTeamsFetched);
     const [createModalOpen, setCreateModalOpen] = useState(false);
-    const [selectedTeamId, setSelectedTeamId] = useState(null);
+    const [selectedTeamId, setSelectedTeamId] = useState(location.state?.teamId || null);
 
     useEffect(() => {
-        if (!selectedTeamId) {
+        if (!selectedTeamId && !isTeamsFetched) {
             fetchMyTeams();
+        } else if (!selectedTeamId && isTeamsFetched) {
+            setLoading(false);
         }
-    }, [selectedTeamId]);
+    }, [selectedTeamId, isTeamsFetched]);
 
     const fetchMyTeams = async () => {
         setLoading(true);
         try {
             const res = await axios.get(`${BASE_URL}/teams/mine`, { withCredentials: true });
-            setTeams(res.data.teams);
+            dispatch(setTeams(res.data.teams));
         } catch (err) {
             console.error("Failed to fetch teams", err);
         } finally {
@@ -44,7 +50,10 @@ const Projects = () => {
                         <p className="text-zinc-400">Collaborate, manage, and build together.</p>
                     </div>
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full md:w-auto">
-                        <JoinTeamForm onSuccess={(newTeam) => setSelectedTeamId(newTeam._id)} />
+                        <JoinTeamForm onSuccess={(newTeam) => {
+                            dispatch(addTeam(newTeam));
+                            setSelectedTeamId(newTeam._id);
+                        }} />
                         <button
                             onClick={() => setCreateModalOpen(true)}
                             className="bg-[#ffffff] hover:opacity-90 text-black font-semibold py-3.5 px-6 rounded-xl transition-all shadow-[0_0_20px_rgba(83,74,183,0.2)] whitespace-nowrap"
@@ -135,7 +144,10 @@ const Projects = () => {
             <CreateTeamModal
                 isOpen={createModalOpen}
                 onClose={() => setCreateModalOpen(false)}
-                onSuccess={(newTeam) => setSelectedTeamId(newTeam._id)}
+                onSuccess={(newTeam) => {
+                    dispatch(addTeam(newTeam));
+                    setSelectedTeamId(newTeam._id);
+                }}
             />
         </div>
     );

@@ -1,23 +1,44 @@
 import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import BASE_URL from '../../auth/baseURL';
+import { setProjectDetail, updateProjectInTeam, removeProjectFromTeam } from '../../../utils/projectSlice';
 import IssueListView from '../Issues/IssueListView';
 
 const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
-    const [project, setProject] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const dispatch = useDispatch();
+    const cachedDetail = useSelector(store => store.projects?.projectDetails?.[projectId]);
+    const [project, setProject] = useState(cachedDetail?.project || null);
+    const [loading, setLoading] = useState(!cachedDetail?.isFetched);
     const [error, setError] = useState(null);
 
     // Inline edit state
     const [isEditing, setIsEditing] = useState(false);
-    const [editData, setEditData] = useState({ title: '', description: '', status: '', priority: '' });
+    const [editData, setEditData] = useState({ 
+        title: cachedDetail?.project?.title || '', 
+        description: cachedDetail?.project?.description || '', 
+        status: cachedDetail?.project?.status || '', 
+        priority: cachedDetail?.project?.priority || '' 
+    });
     const [saving, setSaving] = useState(false);
 
     useEffect(() => {
-        fetchProject();
-    }, [projectId]);
+        if (!cachedDetail?.isFetched) {
+            fetchProject();
+        } else {
+            setProject(cachedDetail.project);
+            setEditData({
+                title: cachedDetail.project.title,
+                description: cachedDetail.project.description,
+                status: cachedDetail.project.status,
+                priority: cachedDetail.project.priority
+            });
+            setLoading(false);
+        }
+    }, [projectId, cachedDetail?.isFetched]);
 
     const fetchProject = async () => {
+        setLoading(true);
         try {
             const res = await axios.get(`${BASE_URL}/teams/${teamId}/projects/${projectId}`, { withCredentials: true });
             setProject(res.data.project);
@@ -27,6 +48,7 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
                 status: res.data.project.status,
                 priority: res.data.project.priority
             });
+            dispatch(setProjectDetail({ projectId, project: res.data.project }));
         } catch (err) {
             setError(err.response?.data?.error || "Failed to load project");
         } finally {
@@ -40,6 +62,8 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
             const res = await axios.patch(`${BASE_URL}/teams/${teamId}/projects/${projectId}`, editData, { withCredentials: true });
             setProject(res.data.project);
             setIsEditing(false);
+            dispatch(setProjectDetail({ projectId, project: res.data.project }));
+            dispatch(updateProjectInTeam({ teamId, project: res.data.project }));
         } catch (err) {
             alert(err.response?.data?.error || "Failed to update project");
         } finally {
@@ -51,6 +75,7 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
         if (!confirm("Are you sure you want to archive this project?")) return;
         try {
             await axios.delete(`${BASE_URL}/teams/${teamId}/projects/${projectId}`, { withCredentials: true });
+            dispatch(removeProjectFromTeam({ teamId, projectId }));
             onBack();
         } catch (err) {
             alert(err.response?.data?.error || "Failed to archive project");

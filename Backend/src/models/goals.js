@@ -18,8 +18,7 @@ const goalSchema = new Schema(
             required: true,
             trim: true,
             minlength: 3,
-            maxength: 100,
-            enum: ["Completed", "In Progress", "On Track", "At Risk", "Not Started", "On Hold"]
+            enum: ["Completed", "In Progress", "On Track", "At Risk", "Not Started", "On Hold", "Removed", "Reassigned", "not_started", "in_progress", "on_hold", "completed", "abandoned", "Abandoned"]
         },
         progress: {
             type: Number,
@@ -110,9 +109,17 @@ const goalSchema = new Schema(
                     }
                 ]
             }
-        ]
+        ],
+        startedAt: { type: Date, default: null },
+        pausedAt: { type: Date, default: null },
+        completedAt: { type: Date, default: null },
+        abandonedAt: { type: Date, default: null },
+        sourceIssueId: { type: Schema.Types.ObjectId, ref: "Issue", default: null },
+        sourceTeamId: { type: Schema.Types.ObjectId, ref: "Team", default: null }
     },
-
+    { timestamps: true }
 )
+
+goalSchema.index({ sourceIssueId: 1 });
 
 module.exports = mongoose.model("Goals", goalSchema, "Goals")

@@ -15,6 +15,7 @@ const IssueSchema = new Schema({
   },
   createdBy: { type: Schema.Types.ObjectId, ref: 'Users', required: true },
   assignedTo: { type: Schema.Types.ObjectId, ref: 'Users', default: null }, // stays null this phase
+  linkedGoalId: { type: Schema.Types.ObjectId, ref: 'Goals', default: null },
   assignmentSource: {
     type: String,
     enum: ['unassigned', 'self_claimed', 'leader_assigned'],
