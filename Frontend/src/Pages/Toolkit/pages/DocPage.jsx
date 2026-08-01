@@ -11,6 +11,7 @@ import {
   ChevronRight,
   Sparkles,
   BookOpen,
+  ZoomIn,
 } from "lucide-react";
 import { technologies, getTechById } from "../data/technologies";
 import { getContentForTech } from "../data/content";
@@ -29,10 +30,22 @@ export default function DocPage() {
   const [activeTopic, setActiveTopic] = useState(content?.topics[0]?.id);
   const [filterQuery, setFilterQuery] = useState("");
   const [mobileTocOpen, setMobileTocOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
   const observerRef = useRef(null);
   const mainRef = useRef(null);
   // Flag to suppress IntersectionObserver updates during programmatic scrolls
   const isProgrammaticScrollRef = useRef(false);
+
+  // Close lightbox modal on Escape key press
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape" && selectedImage) {
+        setSelectedImage(null);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedImage]);
 
   // Helper: find the app-level scroll container (marked with data-scroll-root in Body.jsx)
   const getScrollContainer = () => {
@@ -278,8 +291,23 @@ export default function DocPage() {
                           </div>
                         )}
                         {section.image && (
-                          <div className="mt-3 overflow-hidden rounded-xl border border-white/10 bg-white/[0.02]">
-                            <img src={section.image.url} alt={section.image.alt || "Output"} className="w-full object-cover" />
+                          <div 
+                            onClick={() => setSelectedImage(section.image)}
+                            className="group relative mt-3 cursor-pointer overflow-hidden rounded-xl border border-white/10 bg-white/[0.02] transition-all duration-300 hover:border-white/30 hover:shadow-2xl hover:shadow-accent/5"
+                          >
+                            <div className="relative overflow-hidden">
+                              <img
+                                src={section.image.url}
+                                alt={section.image.alt || "Output"}
+                                className="w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                              />
+                              <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100 backdrop-blur-[2px]">
+                                <div className="flex items-center gap-2 rounded-full bg-black/80 border border-white/20 px-4 py-2 text-xs font-semibold text-white shadow-lg">
+                                  <ZoomIn size={15} className="text-accent" />
+                                  <span>Click to view larger</span>
+                                </div>
+                              </div>
+                            </div>
                             {section.image.caption && (
                               <div className="p-3 border-t border-white/5 text-xs text-white/40 bg-black/20 text-center">
                                 {section.image.caption}
@@ -416,6 +444,55 @@ export default function DocPage() {
                   </button>
                 ))}
               </nav>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Image Lightbox Modal */}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setSelectedImage(null)}
+            className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black/85 backdrop-blur-md p-4 md:p-10 cursor-zoom-out"
+          >
+            {/* Close Cross Button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedImage(null);
+              }}
+              className="fixed top-6 right-6 z-[110] flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white/80 transition-all hover:scale-105 hover:bg-white/20 hover:text-white hover:border-white/40 active:scale-95 shadow-xl"
+              title="Close modal (Esc)"
+            >
+              <X size={24} />
+            </button>
+
+            {/* Enlarged Image Container */}
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 10 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 10 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative max-h-[85vh] max-w-[92vw] overflow-hidden rounded-2xl border border-white/20 bg-[#121216] shadow-2xl flex flex-col cursor-default"
+            >
+              <div className="overflow-auto max-h-[80vh] flex items-center justify-center bg-black/60 p-2">
+                <img
+                  src={selectedImage.url}
+                  alt={selectedImage.alt || "Enlarged view"}
+                  className="max-h-full max-w-full object-contain rounded-lg mx-auto"
+                />
+              </div>
+              {selectedImage.caption && (
+                <div className="border-t border-white/10 bg-white/[0.04] p-4 text-center text-sm text-white/80 font-medium">
+                  {selectedImage.caption}
+                </div>
+              )}
             </motion.div>
           </motion.div>
         )}
