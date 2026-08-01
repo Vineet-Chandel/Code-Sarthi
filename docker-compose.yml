@@ -1,0 +1,59 @@
+services:
+
+  nginx:
+    build:
+      context: ./nginx
+
+    container_name: nginx
+
+    depends_on:
+      - frontend
+      - backend
+
+    ports:
+      - "80:80"
+      - "443:443"
+
+
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+
+    restart: unless-stopped
+
+    networks:
+      - codesarthi-network
+
+  frontend:
+    build:
+      context: ./Frontend
+
+    container_name: frontend
+
+    expose:
+      - "80"
+
+    restart: unless-stopped
+
+    networks:
+      - codesarthi-network
+
+  backend:
+    build:
+      context: ./Backend
+
+    container_name: backend
+
+    env_file:
+      - ./Backend/.env
+
+    expose:
+      - "3000"
+
+    restart: unless-stopped
+
+    networks:
+      - codesarthi-network
+
+networks:
+  codesarthi-network:
+    driver: bridge
