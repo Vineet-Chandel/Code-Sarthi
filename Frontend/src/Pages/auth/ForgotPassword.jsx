@@ -1,6 +1,6 @@
 const ForgotPassword = () => {
     return (
-        <div>ForgotPasswordssss</div>
+        <div>ForgotPasswordscevsss</div>
     )
 }
 
