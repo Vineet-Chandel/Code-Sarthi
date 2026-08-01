@@ -33,7 +33,7 @@ export function useBotStream() {
         abortRef.current = controller;
 
         try {
-            const response = await fetch(`${BASE_URL}/api/bot/chat`, {
+            const response = await fetch(`${BASE_URL}/bot/chat`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
