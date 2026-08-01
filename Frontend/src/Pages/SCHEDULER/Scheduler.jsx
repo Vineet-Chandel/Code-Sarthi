@@ -1,27 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
 import BASE_URL from '../../Pages/auth/baseURL';
+import { setGoals } from '../../utils/goalSlice';
 import SchedulerCalendar from './SchedulerCalendar';
 import SchedulerAnalytics from './SchedulerAnalytics';
 
 const Scheduler = () => {
+    const dispatch = useDispatch();
+    const goals = useSelector(store => store.goals.goals || []);
+    const isFetched = useSelector(store => store.goals.isFetched);
     const [activeTab, setActiveTab] = useState('Calendar');
     const [schedules, setSchedules] = useState([]);
-    const [goals, setGoals] = useState([]);
     const [loading, setLoading] = useState(true);
     const [analytics, setAnalytics] = useState([]);
 
     const fetchData = async () => {
         try {
             setLoading(true);
-            const [schedRes, goalsRes, analyticsRes] = await Promise.all([
-                axios.get(`${BASE_URL}/api/schedules`, { withCredentials: true }),
-                axios.get(`${BASE_URL}/api/goals`, { withCredentials: true }),
-                axios.get(`${BASE_URL}/api/schedules/analytics`, { withCredentials: true })
-            ]);
-            setSchedules(schedRes.data);
-            setGoals(goalsRes.data);
-            setAnalytics(analyticsRes.data);
+            const requests = [
+                axios.get(`${BASE_URL}/schedules`, { withCredentials: true }),
+                axios.get(`${BASE_URL}/schedules/analytics`, { withCredentials: true })
+            ];
+            if (!isFetched) {
+                requests.push(axios.get(`${BASE_URL}/goals`, { withCredentials: true }));
+            }
+            const results = await Promise.all(requests);
+            setSchedules(results[0].data);
+            setAnalytics(results[1].data);
+            if (!isFetched && results[2]) {
+                dispatch(setGoals(results[2].data));
+            }
         } catch (error) {
             console.error("Failed to fetch scheduler data", error);
         } finally {
@@ -31,7 +40,7 @@ const Scheduler = () => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [isFetched]);
 
     const handleScheduleAdded = (newSchedule) => {
         setSchedules(prev => [...prev, newSchedule].sort((a, b) => new Date(a.startTime) - new Date(b.startTime)));

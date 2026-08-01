@@ -1,4 +1,5 @@
 import React from 'react'
+import { Search, X } from 'lucide-react'
 
 const GoalsHeader = ({ searchQuery, setSearchQuery, primaryFilter, setPrimaryFilter }) => {
     const data1 = [
@@ -8,39 +9,49 @@ const GoalsHeader = ({ searchQuery, setSearchQuery, primaryFilter, setPrimaryFil
     ]
 
     return (
-        <div>
-            <div className='' >
-                <nav className='flex items-end justify-between'>
-                    <div className='flex items-end gap-4'>
-                        <div className='text-2xl font-poppins font-semibold text-white'>
-                            Goals
-                        </div>
-                        <ul className='flex items-end gap-4'>
-                            {data1.map((item, idx) => (
-                                <li 
-                                    onClick={() => setPrimaryFilter(item.title)} 
-                                    key={idx} 
-                                    className={`cursor-pointer font-poppins font-normal border border-[#3a3a3a] hover:border-[#5a5a5a] px-3 py-1 rounded-xl transition-all duration-300 ${primaryFilter === item.title ? " bg-white text-black " : "text-white"}`}
-                                >
-                                    {item.title}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                    <div className='flex items-center gap-2 border border-[#3a3a3a] rounded-xl px-3 py-1'>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24">
-                            <path fill="#fff" d="m19.485 20.154l-6.262-6.262q-.75.639-1.725.989t-1.96.35q-2.398 0-4.064-1.666Q3.808 11.898 3.808 9.5t1.666-4.064t4.064-1.667t4.065 1.667T15.269 9.5q0 1.042-.369 2.017t-.97 1.668l6.262 6.261zM9.539 14.23q1.99 0 3.36-1.37t1.37-3.361t-1.37-3.36t-3.36-1.37t-3.361 1.37t-1.37 3.36t1.37 3.36t3.36 1.37"></path>
-                        </svg>
-                        <input 
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className=' bg-transparent text-white border-none focus:outline-none h-[20px]' 
-                            type="text" 
-                            placeholder='Search' 
-                        />
-                    </div>
-                </nav>
-            </div>
+        <div className='w-full'>
+            <nav className='flex flex-wrap items-center justify-between gap-4'>
+                <div className='flex flex-wrap items-center gap-6'>
+                    <h1 className='text-3xl font-poppins font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-400 tracking-tight'>
+                        Goals Studio
+                    </h1>
+                    <ul className='flex items-center gap-1.5 bg-white/[0.04] p-1 rounded-xl'>
+                        {data1.map((item, idx) => (
+                            <li 
+                                onClick={() => setPrimaryFilter(item.title)} 
+                                key={idx} 
+                                className={`cursor-pointer font-poppins text-xs font-medium px-4 py-1.5 rounded-lg transition-all duration-200 ${
+                                    primaryFilter === item.title 
+                                        ? "bg-blue-600 text-white font-semibold" 
+                                        : "text-gray-400 hover:text-white hover:bg-white/5"
+                                }`}
+                            >
+                                {item.title}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                {/* Modern search box */}
+                <div className='flex items-center gap-3 bg-white/[0.04] hover:bg-white/[0.06] focus-within:bg-white/[0.08] rounded-xl px-4 py-2.5 transition-all duration-200 min-w-[280px] w-full sm:w-auto'>
+                    <Search className="w-4 h-4 text-gray-400 shrink-0" />
+                    <input 
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className='bg-transparent text-white text-sm border-none focus:outline-none w-full placeholder-gray-500 font-poppins' 
+                        type="text" 
+                        placeholder='Search goals by title or details...' 
+                    />
+                    {searchQuery && (
+                        <button 
+                            onClick={() => setSearchQuery('')}
+                            className="text-gray-400 hover:text-white bg-white/10 hover:bg-white/20 rounded-full w-5 h-5 flex items-center justify-center transition-colors"
+                        >
+                            <X className="w-3.5 h-3.5" />
+                        </button>
+                    )}
+                </div>
+            </nav>
         </div>
     )
 }
