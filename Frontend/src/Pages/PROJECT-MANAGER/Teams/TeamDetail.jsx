@@ -5,6 +5,8 @@ import TeamMembersPanel from './TeamMembersPanel';
 import TeamSettingsPanel from './TeamSettingsPanel';
 import ProjectListView from '../Projects/ProjectListView';
 import ProjectDetailPanel from '../Projects/ProjectDetailPanel';
+import AnalyticsDashboard from '../Analytics/AnalyticsDashboard';
+import TimerWidget from '../TimerWidget';
 
 const TeamDetail = ({ teamId, onBack }) => {
     const [team, setTeam] = useState(null);
@@ -116,6 +118,13 @@ const TeamDetail = ({ teamId, onBack }) => {
                         {activeTab === 'members' && <div className="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-[#534AB7] rounded-t-full" />}
                     </button>
                     <button
+                        onClick={() => setActiveTab('analytics')}
+                        className={`pb-3 text-sm font-medium transition-colors relative ${activeTab === 'analytics' ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
+                    >
+                        Analytics
+                        {activeTab === 'analytics' && <div className="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-[#534AB7] rounded-t-full" />}
+                    </button>
+                    <button
                         onClick={() => setActiveTab('settings')}
                         className={`pb-3 text-sm font-medium transition-colors relative ${activeTab === 'settings' ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
                     >
@@ -155,8 +164,12 @@ const TeamDetail = ({ teamId, onBack }) => {
                             onUpdate={fetchTeam} 
                         />
                     )}
+                    {activeTab === 'analytics' && (
+                        <AnalyticsDashboard teamId={teamId} />
+                    )}
                 </div>
             )}
+            <TimerWidget teamId={teamId} inline={false} />
         </div>
     );
 };

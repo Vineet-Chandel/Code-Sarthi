@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const projectRoutes = require('./projectRoutes');
 const issueRoutes = require('./issueRoutes');
+const contributionRoutes = require('./contributionRoutes');
+const analyticsRoutes = require('./analyticsRoutes');
 const { userAuth } = require('../middlewares/userAuth');
 const { requireTeamMembership, requireTeamLeader } = require('../middleware/team');
 const rateLimit = require('express-rate-limit');
@@ -49,5 +51,7 @@ router.post('/:teamId/transfer-ownership', requireTeamMembership, requireTeamLea
 // Mount Sub-modules
 router.use('/:teamId/projects', projectRoutes);
 router.use('/:teamId/issues', requireTeamMembership, issueRoutes);
+router.use('/:teamId/contributions', requireTeamMembership, contributionRoutes);
+router.use('/:teamId/analytics', requireTeamMembership, analyticsRoutes);
 
 module.exports = router;

@@ -4,6 +4,7 @@ import BASE_URL from '../../auth/baseURL';
 import { useSelector } from 'react-redux';
 import AssignmentBadge from './AssignmentBadge';
 import AssignIssueDropdown from './AssignIssueDropdown';
+import TimerWidget from '../TimerWidget';
 
 const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
     const user = useSelector(store => store.user);
@@ -191,6 +192,10 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                         <span className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded border ${getPriorityColor(issue.priority)}`}>
                             {issue.priority}
                         </span>
+                    </div>
+
+                    <div className="mb-8">
+                        <TimerWidget teamId={teamId} issueId={issueId} issueTitle={issue.title} inline={true} />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
