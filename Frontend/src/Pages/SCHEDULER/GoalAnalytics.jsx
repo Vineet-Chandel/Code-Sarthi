@@ -11,145 +11,157 @@ import BASE_URL from '../../Pages/auth/baseURL';
  * GoalAnalytics.jsx
  * Single-file deep analysis dashboard tracking every goal through its full lifecycle.
  * Features 5-stage funnel, timing analysis, interactive priority filtering, and completion trends.
+ * Rebuilt with monochrome visual language (#000000 panels, #FFFFFF positive accent) and cross-stage jump navigation.
  */
 
-// Colors per visual spec: #534AB7 (primary accent), #A7A0F8 (secondary accent), soft green (completed), muted amber (warning)
+// Monochrome palette: #FFFFFF reserved for completed/positive/primary emphasis, zinc grays for secondary elements
 const PALETTE = {
-    primary: '#534AB7',
-    secondary: '#A7A0F8',
-    completed: '#22c55e', // soft green
-    warning: '#f59e0b',   // muted amber
-    neutral: '#71717a',   // zinc-500 for neutral/abandoned
-    darkBg: '#09090B',
-    cardBg: 'rgba(255, 255, 255, 0.04)',
-    border: 'rgba(255, 255, 255, 0.1)',
-    grid: 'rgba(255, 255, 255, 0.08)'
+    completed: '#FFFFFF',    // positive focus accent
+    in_progress: '#A1A1AA',  // zinc-400
+    on_hold: '#71717A',      // zinc-500
+    not_started: '#52525B',  // zinc-600
+    abandoned: '#3F3F46',    // zinc-700
+    darkBg: '#000000',
+    cardBg: '#000000',
+    border: 'rgba(255, 255, 255, 0.06)',
+    grid: 'rgba(255, 255, 255, 0.06)'
 };
 
 const PRIORITY_COLORS = {
-    Low: '#A7A0F8',
-    Medium: '#3b82f6',
-    High: '#f59e0b',
-    Urgent: '#ef4444'
+    Urgent: '#FFFFFF',
+    High: '#D4D4D8',
+    Medium: '#71717A',
+    Low: '#3F3F46'
 };
 
-// Animation variants
 const containerVariants = {
     hidden: { opacity: 0 },
     show: {
         opacity: 1,
-        transition: { staggerChildren: 0.08 }
+        transition: { staggerChildren: 0.05 }
     }
 };
 
 const itemVariants = {
-    hidden: { opacity: 0, y: 15 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } }
+    hidden: { opacity: 0, y: 10 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeOut" } }
 };
 
-const GoalAnalytics = ({ userId }) => {
-    const [goals, setGoals] = useState([]);
-    const [loading, setLoading] = useState(true);
+const GoalAnalytics = ({ userId, externalGoals = null, dateRange: propDateRange, setDateRange: propSetDateRange, onJumpToCalendarDate }) => {
+    const [fetchedGoals, setFetchedGoals] = useState([]);
+    const [loading, setLoading] = useState(externalGoals === null);
     const [error, setError] = useState(null);
-    const [dateRange, setDateRange] = useState('30'); // '7', '30', '90', 'all'
-    const [selectedPriority, setSelectedPriority] = useState(null); // Local interactive filter from A3
 
-    // Fetch goals whenever dateRange changes or on initial mount
+    // Fallback local state if not provided by parent
+    const [localDateRange, setLocalDateRange] = useState('30');
+    const dateRange = propDateRange || localDateRange;
+    const setDateRange = propSetDateRange || setLocalDateRange;
+
+    // Interactive filter for charts (click A3 pie to filter B section)
+    const [selectedPriority, setSelectedPriority] = useState(null);
+
+    const goals = externalGoals !== null ? externalGoals : fetchedGoals;
+
     useEffect(() => {
+        if (externalGoals !== null) {
+            setLoading(false);
+            return;
+        }
         const fetchGoals = async () => {
-            setLoading(true);
-            setError(null);
             try {
-                // Fetch all user goals once per date-range change; all chart deriving is client-side
-                const url = userId ? `${BASE_URL}/goals?userId=${userId}` : `${BASE_URL}/goals`;
-                const res = await axios.get(url, { withCredentials: true });
-                setGoals(Array.isArray(res.data) ? res.data : []);
+                setLoading(true);
+                const res = await axios.get(`${BASE_URL}/goals`, { withCredentials: true });
+                setFetchedGoals(res.data || []);
+                setError(null);
             } catch (err) {
-                console.error("Error fetching goals for analytics:", err);
-                setError("Failed to load goals analytics data.");
+                console.error("Failed to fetch analytics goals:", err);
+                setError("Unable to load goal data. Please check connection.");
             } finally {
                 setLoading(false);
             }
         };
         fetchGoals();
-    }, [dateRange, userId]);
+    }, [userId, externalGoals]);
 
-    // --- HELPER NORMALIZATION & DERIVATIONS ---
-    const parseDate = (val, fallbackMongoId) => {
-        if (val) return new Date(val);
-        if (fallbackMongoId && typeof fallbackMongoId === 'string' && fallbackMongoId.length === 24) {
-            // Recover accurate timestamp from MongoDB ObjectId
-            return new Date(parseInt(fallbackMongoId.substring(0, 8), 16) * 1000);
+    // Parse date safely with ObjectId timestamp fallback
+    const parseDate = (dateVal, fallbackId) => {
+        if (dateVal) {
+            const d = new Date(dateVal);
+            if (!isNaN(d.getTime())) return d;
+        }
+        if (fallbackId && typeof fallbackId === 'string' && fallbackId.length === 24) {
+            const timestamp = parseInt(fallbackId.substring(0, 8), 16) * 1000;
+            return new Date(timestamp);
         }
         return new Date();
     };
 
+    // Determine lifecycle stage from status
     const getStage = (goal) => {
-        const status = (goal.status || '').toLowerCase();
-        if (status === 'completed' || status === 'done') return 'completed';
-        if (status === 'abandoned' || status === 'removed' || status === 'reassigned') return 'abandoned';
-        if (status === 'on hold' || status === 'on_hold') return 'on_hold';
-        if (status === 'in progress' || status === 'in_progress' || status === 'on track' || status === 'at risk') return 'in_progress';
+        const s = (goal.status || '').toLowerCase();
+        if (['completed', 'done'].includes(s)) return 'completed';
+        if (['abandoned', 'cancelled'].includes(s)) return 'abandoned';
+        if (['on hold', 'on_hold', 'paused'].includes(s)) return 'on_hold';
+        if (['in progress', 'in_progress', 'active'].includes(s)) return 'in_progress';
         return 'not_started';
     };
 
     const getPriorityLabel = (goal) => {
-        const p = (goal.priority || 'Medium').trim();
-        if (p === 'Critical') return 'Urgent';
-        return p;
+        const p = (goal.priority || 'Medium');
+        return ['Low', 'Medium', 'High', 'Urgent'].includes(p) ? p : 'Medium';
     };
 
     const isOverdue = (goal) => {
-        if (!goal.targetDate) return false;
-        const stage = getStage(goal);
-        if (stage === 'completed' || stage === 'abandoned') return false;
-        return new Date(goal.targetDate) < new Date();
+        const st = getStage(goal);
+        if (st === 'completed' || st === 'abandoned') return false;
+        if (!goal.targetDate && !goal.dueDate) return false;
+        const target = new Date(goal.targetDate || goal.dueDate);
+        const now = new Date();
+        now.setHours(0, 0, 0, 0);
+        return target < now;
     };
 
-    // --- MEMOIZED DATA AGGREGATION ---
+    // --- MEMOIZED ANALYTICS COMPUTATION ---
     const analyticsData = useMemo(() => {
         const now = new Date();
-        let cutoffDate = new Date(0); // all time
-        if (dateRange !== 'all') {
-            const days = parseInt(dateRange, 10);
-            cutoffDate = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
-        }
+        const cutoffDate = new Date();
+        if (dateRange === '7') cutoffDate.setDate(now.getDate() - 7);
+        else if (dateRange === '30') cutoffDate.setDate(now.getDate() - 30);
+        else if (dateRange === '90') cutoffDate.setDate(now.getDate() - 90);
+        else cutoffDate.setTime(0);
 
-        // Filtered dataset by creation/completion within period for time-sensitive charts
         const periodGoals = goals.filter(g => {
-            const created = parseDate(g.createdAt, g._id);
-            const completed = g.completedAt ? new Date(g.completedAt) : null;
-            if (dateRange === 'all') return true;
-            return created >= cutoffDate || (completed && completed >= cutoffDate);
+            const dt = parseDate(g.createdAt, g._id);
+            return dt >= cutoffDate;
         });
 
-        // 1. Summary Stat Cards Data
         const totalCount = periodGoals.length;
-        const completedThisPeriod = periodGoals.filter(g => {
-            if (getStage(g) !== 'completed') return false;
-            const compDate = g.completedAt ? new Date(g.completedAt) : parseDate(g.lastUpdated, g._id);
-            return dateRange === 'all' || compDate >= cutoffDate;
-        }).length;
-        const currentInProgress = goals.filter(g => getStage(g) === 'in_progress').length; // Snapshot
-        const overdueCount = goals.filter(g => isOverdue(g)).length; // Snapshot
-        const completionRate = totalCount > 0 ? Math.round((completedThisPeriod / totalCount) * 100) : 0;
 
-        // 2. Section A — Stage & status analysis
-        // A1. Goal stage funnel (Current Snapshot)
+        // Stage counts
         const stageCounts = { not_started: 0, in_progress: 0, on_hold: 0, completed: 0, abandoned: 0 };
         goals.forEach(g => {
-            stageCounts[getStage(g)] = (stageCounts[getStage(g)] || 0) + 1;
+            const st = getStage(g);
+            if (stageCounts[st] !== undefined) stageCounts[st] += 1;
+            else stageCounts.not_started += 1;
         });
-        const totalSnapshot = goals.length || 1;
+
+        const completedThisPeriod = periodGoals.filter(g => getStage(g) === 'completed').length;
+        const currentInProgress = stageCounts.in_progress;
+        const overdueCount = goals.filter(g => isOverdue(g)).length;
+        const completionRate = totalCount > 0 ? Math.round((completedThisPeriod / totalCount) * 100) : 
+                               (goals.length > 0 ? Math.round((stageCounts.completed / goals.length) * 100) : 0);
+
+        // A1. Stage Funnel
+        const totalAll = goals.length || 1;
         const stageFunnelData = [
-            { name: 'Not Started', count: stageCounts.not_started, pct: Math.round((stageCounts.not_started / totalSnapshot) * 100), color: PALETTE.secondary },
-            { name: 'In Progress', count: stageCounts.in_progress, pct: Math.round((stageCounts.in_progress / totalSnapshot) * 100), color: PALETTE.primary },
-            { name: 'On Hold', count: stageCounts.on_hold, pct: Math.round((stageCounts.on_hold / totalSnapshot) * 100), color: PALETTE.warning },
-            { name: 'Completed', count: stageCounts.completed, pct: Math.round((stageCounts.completed / totalSnapshot) * 100), color: PALETTE.completed },
-            { name: 'Abandoned', count: stageCounts.abandoned, pct: Math.round((stageCounts.abandoned / totalSnapshot) * 100), color: PALETTE.neutral }
+            { name: 'Completed', count: stageCounts.completed, pct: Math.round((stageCounts.completed / totalAll) * 100), color: PALETTE.completed },
+            { name: 'In Progress', count: stageCounts.in_progress, pct: Math.round((stageCounts.in_progress / totalAll) * 100), color: PALETTE.in_progress },
+            { name: 'On Hold', count: stageCounts.on_hold, pct: Math.round((stageCounts.on_hold / totalAll) * 100), color: PALETTE.on_hold },
+            { name: 'Not Started', count: stageCounts.not_started, pct: Math.round((stageCounts.not_started / totalAll) * 100), color: PALETTE.not_started },
+            { name: 'Abandoned', count: stageCounts.abandoned, pct: Math.round((stageCounts.abandoned / totalAll) * 100), color: PALETTE.abandoned }
         ];
 
-        // A2. Goals started vs. completed over time
+        // A2. Started vs Completed over time
         const timeBucketMap = {};
         periodGoals.forEach(g => {
             const created = parseDate(g.createdAt, g._id);
@@ -165,7 +177,7 @@ const GoalAnalytics = ({ userId }) => {
         });
         const startedVsCompletedData = Object.values(timeBucketMap).sort((a, b) => a.date.localeCompare(b.date));
 
-        // A3. Priority distribution (Donut of Active goals)
+        // A3. Priority Distribution (Donut of Active goals)
         const activeGoals = goals.filter(g => {
             const s = getStage(g);
             return s !== 'completed' && s !== 'abandoned';
@@ -195,21 +207,24 @@ const GoalAnalytics = ({ userId }) => {
             name: p,
             rate: prioTotals[p].total > 0 ? Math.round((prioTotals[p].completed / prioTotals[p].total) * 100) : 0,
             total: prioTotals[p].total,
-            color: PRIORITY_COLORS[p] || PALETTE.primary
+            color: PRIORITY_COLORS[p]
         }));
 
-        // 3. Section B — Timing & duration analysis
         // B1. Average time-to-completion (days per priority)
+        // RESILIENCE NOTE: Goals created before stage-timestamp tracking existed may lack startedAt, completedAt, or abandonedAt.
+        // Missing timestamps are treated as excluded from duration averaging rather than defaulted to zero or producing NaN.
         const durationByPrio = { Low: [], Medium: [], High: [], Urgent: [] };
         goals.filter(g => getStage(g) === 'completed').forEach(g => {
             const p = getPriorityLabel(g);
-            const start = parseDate(g.startedAt || g.createdAt, g._id);
-            const end = parseDate(g.completedAt || g.lastUpdated, g._id);
-            const diffDays = Math.max(0, (end.getTime() - start.getTime()) / (1000 * 3600 * 24));
-            if (durationByPrio[p]) durationByPrio[p].push(diffDays);
+            const start = g.startedAt ? new Date(g.startedAt) : (g.createdAt ? new Date(g.createdAt) : null);
+            const end = g.completedAt ? new Date(g.completedAt) : (g.lastUpdated ? new Date(g.lastUpdated) : null);
+            if (start && end && !isNaN(start.getTime()) && !isNaN(end.getTime()) && end >= start) {
+                const diffDays = Math.max(0, (end.getTime() - start.getTime()) / (1000 * 3600 * 24));
+                if (durationByPrio[p]) durationByPrio[p].push(diffDays);
+            }
         });
         const avgTimeByPrioData = Object.keys(durationByPrio)
-            .filter(p => !selectedPriority || p === selectedPriority) // Interact with A3 click
+            .filter(p => !selectedPriority || p === selectedPriority)
             .map(p => {
                 const arr = durationByPrio[p];
                 const avg = arr.length > 0 ? parseFloat((arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(1)) : 0;
@@ -217,45 +232,46 @@ const GoalAnalytics = ({ userId }) => {
             });
 
         // B2. Time-in-stage breakdown (Aggregated average across completed goals)
-        // Tradeoff comment: Calculated client-side from the four timestamps; for >10,000 goals server-side aggregation is recommended.
         const completedGoalsList = goals.filter(g => getStage(g) === 'completed');
-        let totalNotStartedDays = 0, totalInProgressDays = 0, totalOnHoldDays = 0;
+        let totalNotStartedDays = 0, totalInProgressDays = 0, totalOnHoldDays = 0, validCount = 0;
         completedGoalsList.forEach(g => {
             const created = parseDate(g.createdAt, g._id);
             const started = g.startedAt ? new Date(g.startedAt) : created;
             const paused = g.pausedAt ? new Date(g.pausedAt) : null;
             const completed = parseDate(g.completedAt || g.lastUpdated, g._id);
 
-            const nsDays = Math.max(0, (started.getTime() - created.getTime()) / (1000 * 3600 * 24));
-            let holdDays = paused ? Math.max(0.5, (completed.getTime() - paused.getTime()) / (1000 * 3600 * 24) * 0.3) : 0;
-            let ipDays = Math.max(0.5, ((completed.getTime() - started.getTime()) / (1000 * 3600 * 24)) - holdDays);
+            if (!isNaN(created.getTime()) && !isNaN(completed.getTime())) {
+                validCount += 1;
+                const nsDays = Math.max(0, (started.getTime() - created.getTime()) / (1000 * 3600 * 24));
+                let holdDays = paused ? Math.max(0.2, (completed.getTime() - paused.getTime()) / (1000 * 3600 * 24) * 0.3) : 0;
+                let ipDays = Math.max(0.5, ((completed.getTime() - started.getTime()) / (1000 * 3600 * 24)) - holdDays);
 
-            totalNotStartedDays += nsDays;
-            totalInProgressDays += ipDays;
-            totalOnHoldDays += holdDays;
+                totalNotStartedDays += nsDays;
+                totalInProgressDays += ipDays;
+                totalOnHoldDays += holdDays;
+            }
         });
-        const compCount = completedGoalsList.length || 1;
+        const divisor = validCount || 1;
         const timeInStageData = [
             {
                 name: 'Avg Days per Stage',
-                not_started: parseFloat((totalNotStartedDays / compCount).toFixed(1)),
-                in_progress: parseFloat((totalInProgressDays / compCount).toFixed(1)),
-                on_hold: parseFloat((totalOnHoldDays / compCount).toFixed(1))
+                not_started: parseFloat((totalNotStartedDays / divisor).toFixed(1)),
+                in_progress: parseFloat((totalInProgressDays / divisor).toFixed(1)),
+                on_hold: parseFloat((totalOnHoldDays / divisor).toFixed(1))
             }
         ];
 
-        // B3. Overdue goals list (Flagged table)
+        // B3. Overdue goals list
         const overdueList = goals
             .filter(g => isOverdue(g))
             .filter(g => !selectedPriority || getPriorityLabel(g) === selectedPriority)
             .map(g => {
-                const due = new Date(g.targetDate);
+                const due = new Date(g.targetDate || g.dueDate);
                 const diffDays = Math.ceil((now.getTime() - due.getTime()) / (1000 * 3600 * 24));
-                return { ...g, daysOverdue: diffDays, priorityLabel: getPriorityLabel(g) };
+                return { ...g, daysOverdue: diffDays, priorityLabel: getPriorityLabel(g), targetDate: due.toISOString() };
             })
             .sort((a, b) => b.daysOverdue - a.daysOverdue);
 
-        // 4. Section C — Completion trends & composition
         // C1. Cumulative goals completed over time
         const allCompleted = goals
             .filter(g => getStage(g) === 'completed')
@@ -271,24 +287,24 @@ const GoalAnalytics = ({ userId }) => {
         });
         const cumulativeData = Object.values(cumulativeMap);
 
-        // C2. Abandonment rate (Reflective neutral tone)
+        // C2. Abandonment rate
         const totalEverCreated = goals.length;
-        const abandonedCount = goals.filter(g => getStage(g) === 'abandoned').length;
+        const abandonedCount = stageCounts.abandoned;
         const abandonmentRate = totalEverCreated > 0 ? Math.round((abandonedCount / totalEverCreated) * 100) : 0;
         const abandonmentDonut = [
-            { name: 'Abandoned', value: abandonedCount, color: PALETTE.neutral },
-            { name: 'Completed/Active', value: Math.max(0, totalEverCreated - abandonedCount), color: '#27272a' }
+            { name: 'Abandoned', value: abandonedCount, color: '#3F3F46' },
+            { name: 'Active/Completed', value: Math.max(0, totalEverCreated - abandonedCount), color: '#FFFFFF' }
         ];
 
-        // C3. Personal vs. team-linked goals split
+        // C3. Composition split
         let teamLinked = 0, personal = 0;
         goals.forEach(g => {
             if (g.sourceIssueId || g.sourceTeamId) teamLinked += 1;
             else personal += 1;
         });
         const compositionData = [
-            { name: 'TeamOS Linked', value: teamLinked, color: PALETTE.primary },
-            { name: 'Personal Goals', value: personal, color: PALETTE.secondary }
+            { name: 'Team Linked', value: teamLinked, color: '#A1A1AA' },
+            { name: 'Personal', value: personal, color: '#FFFFFF' }
         ].filter(i => i.value > 0);
 
         return {
@@ -321,40 +337,32 @@ const GoalAnalytics = ({ userId }) => {
     };
 
     return (
-        <div className="w-full min-h-screen bg-[#09090B] text-white font-poppins p-4 sm:p-6 md:p-8 overflow-y-auto selection:bg-[#534AB7]/30">
-            {/* Ambient Lighting Background */}
-            <div className="pointer-events-none fixed top-0 right-0 w-[500px] h-[500px] bg-[#534AB7]/10 rounded-full blur-[160px] -z-10"></div>
-            <div className="pointer-events-none fixed bottom-1/4 left-0 w-[400px] h-[400px] bg-[#A7A0F8]/10 rounded-full blur-[140px] -z-10"></div>
-
-            {/* 1. Header Bar with Date-Range Filter */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 pb-6 border-b border-white/10">
+        <div className="w-full text-white font-sans overflow-y-auto scrollbar-none">
+            {/* Header & Date Range Toolbar */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 pb-4 border-b border-white/[0.06]">
                 <div>
-                    <span className="text-xs uppercase font-bold tracking-widest text-[#A7A0F8] bg-[#534AB7]/20 px-3 py-1 rounded-full border border-[#534AB7]/30">
-                        Lifecycle Analytics
-                    </span>
-                    <h2 className="text-2xl sm:text-3xl font-extrabold mt-3 tracking-tight text-white">
+                    <h2 className="text-xl font-bold text-white tracking-tight">
                         Goals Deep-Analysis Dashboard
                     </h2>
-                    <p className="text-sm text-zinc-400 mt-1">
-                        Comprehensive stage-by-stage breakdowns, timing analysis, and lifetime completion trends.
+                    <p className="text-xs text-zinc-400 mt-1">
+                        Comprehensive stage-by-stage breakdowns, duration analysis, and lifetime completion momentum.
                     </p>
                 </div>
 
-                {/* Date range selection */}
-                <div className="flex items-center gap-1.5 bg-white/[0.03] p-1.5 rounded-xl border border-white/10 backdrop-blur-md">
+                <div className="flex items-center gap-1 bg-[#121215] p-1 rounded-xl border border-white/10 shrink-0">
                     {[
-                        { key: '7', label: 'Last 7 Days' },
-                        { key: '30', label: 'Last 30 Days' },
-                        { key: '90', label: 'Last 90 Days' },
+                        { key: '7', label: '7 Days' },
+                        { key: '30', label: '30 Days' },
+                        { key: '90', label: '90 Days' },
                         { key: 'all', label: 'All Time' }
                     ].map((btn) => (
                         <button
                             key={btn.key}
                             onClick={() => setDateRange(btn.key)}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-300 ${
+                            className={`px-3.5 py-1 rounded-lg text-xs font-bold transition-colors ${
                                 dateRange === btn.key 
-                                    ? 'bg-[#534AB7] text-white shadow-[0_0_15px_rgba(83,74,183,0.4)] font-bold' 
-                                    : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                                    ? 'bg-white text-black shadow-sm' 
+                                    : 'text-zinc-400 hover:text-white hover:bg-white/[0.04]'
                             }`}
                         >
                             {btn.label}
@@ -365,11 +373,10 @@ const GoalAnalytics = ({ userId }) => {
 
             {loading ? (
                 <div className="flex flex-col items-center justify-center h-64 gap-4">
-                    <div className="w-10 h-10 border-4 border-[#534AB7] border-t-transparent rounded-full animate-spin"></div>
-                    <p className="text-sm text-zinc-400 font-medium">Computing lifecycle metrics...</p>
+                    <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
                 </div>
             ) : error ? (
-                <div className="bg-red-500/10 border border-red-500/30 p-6 rounded-2xl text-center text-red-400 my-10">
+                <div className="bg-zinc-900 border border-white/10 p-6 rounded-2xl text-center text-zinc-300 my-10 font-mono text-xs">
                     <p>{error}</p>
                 </div>
             ) : (
@@ -377,66 +384,66 @@ const GoalAnalytics = ({ userId }) => {
                     variants={containerVariants}
                     initial="hidden"
                     animate="show"
-                    className="flex flex-col gap-10"
+                    className="flex flex-col gap-8"
                 >
-                    {/* 2. Summary Stat Cards Row (5 cards) */}
-                    <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                        <div className="bg-white/5 backdrop-blur-md border border-white/10 p-5 rounded-2xl relative overflow-hidden group hover:border-[#534AB7]/50 transition-all">
-                            <p className="text-xs uppercase text-zinc-400 font-semibold mb-1">Total Goals</p>
-                            <h3 className="text-3xl font-black text-white">{analyticsData.totalCount}</h3>
-                            <span className="text-[11px] text-zinc-500 mt-1 block">In selected period</span>
+                    {/* 2. Summary Stat Cards Row */}
+                    <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+                        <div className="bg-[#000000] border border-white/[0.06] p-4 rounded-xl flex flex-col justify-between">
+                            <p className="text-[11px] uppercase font-mono text-zinc-400">Total Goals</p>
+                            <h3 className="text-2xl font-bold text-white mt-2">{analyticsData.totalCount}</h3>
+                            <span className="text-[10px] text-zinc-500 mt-1">In selected timeframe</span>
                         </div>
 
-                        <div className="bg-white/5 backdrop-blur-md border border-white/10 p-5 rounded-2xl relative overflow-hidden group hover:border-emerald-500/40 transition-all">
-                            <div className="absolute top-0 right-0 w-20 h-20 bg-emerald-500/10 rounded-full blur-xl -mr-6 -mt-6"></div>
-                            <p className="text-xs uppercase text-zinc-400 font-semibold mb-1">Completed Period</p>
-                            <h3 className="text-3xl font-black text-emerald-400">{analyticsData.completedThisPeriod}</h3>
-                            <span className="text-[11px] text-emerald-500/60 mt-1 block">Successfully achieved</span>
+                        <div className="bg-[#000000] border border-white/[0.06] p-4 rounded-xl flex flex-col justify-between">
+                            <p className="text-[11px] uppercase font-mono text-zinc-400">Completed Period</p>
+                            <h3 className="text-2xl font-bold text-white mt-2">{analyticsData.completedThisPeriod}</h3>
+                            <span className="text-[10px] text-zinc-400 mt-1">Successfully finished</span>
                         </div>
 
-                        <div className="bg-white/5 backdrop-blur-md border border-white/10 p-5 rounded-2xl relative overflow-hidden group hover:border-[#A7A0F8]/40 transition-all">
-                            <p className="text-xs uppercase text-zinc-400 font-semibold mb-1">In Progress</p>
-                            <h3 className="text-3xl font-black text-[#A7A0F8]">{analyticsData.currentInProgress}</h3>
-                            <span className="text-[11px] text-zinc-500 mt-1 block">Current active snapshot</span>
+                        <div className="bg-[#000000] border border-white/[0.06] p-4 rounded-xl flex flex-col justify-between">
+                            <p className="text-[11px] uppercase font-mono text-zinc-400">In Progress</p>
+                            <h3 className="text-2xl font-bold text-zinc-300 mt-2">{analyticsData.currentInProgress}</h3>
+                            <span className="text-[10px] text-zinc-500 mt-1">Active execution</span>
                         </div>
 
-                        <div className="bg-white/5 backdrop-blur-md border border-white/10 p-5 rounded-2xl relative overflow-hidden group hover:border-amber-500/40 transition-all">
-                            <div className="absolute top-0 right-0 w-20 h-20 bg-amber-500/10 rounded-full blur-xl -mr-6 -mt-6"></div>
-                            <p className="text-xs uppercase text-zinc-400 font-semibold mb-1">Overdue Goals</p>
-                            <h3 className="text-3xl font-black text-amber-400">{analyticsData.overdueCount}</h3>
-                            <span className="text-[11px] text-amber-500/60 mt-1 block">Past target date</span>
+                        <div className="bg-[#000000] border border-white/[0.06] p-4 rounded-xl flex flex-col justify-between">
+                            <p className="text-[11px] uppercase font-mono text-zinc-400">Overdue Goals</p>
+                            <h3 className={`text-2xl font-bold mt-2 ${analyticsData.overdueCount > 0 ? 'text-zinc-100 underline decoration-zinc-500 underline-offset-4' : 'text-zinc-400'}`}>
+                                {analyticsData.overdueCount}
+                            </h3>
+                            <span className="text-[10px] text-zinc-400 mt-1">Past target date</span>
                         </div>
 
-                        <div className="bg-white/5 backdrop-blur-md border border-white/10 p-5 rounded-2xl relative overflow-hidden group hover:border-[#534AB7]/60 transition-all">
-                            <p className="text-xs uppercase text-zinc-400 font-semibold mb-1">Completion Rate</p>
-                            <h3 className="text-3xl font-black text-white">{analyticsData.completionRate}%</h3>
-                            <div className="w-full bg-white/10 h-1.5 rounded-full mt-2 overflow-hidden">
+                        <div className="bg-[#000000] border border-white/[0.06] p-4 rounded-xl flex flex-col justify-between">
+                            <p className="text-[11px] uppercase font-mono text-zinc-400">Completion Rate</p>
+                            <h3 className="text-2xl font-bold text-white mt-2">{analyticsData.completionRate}%</h3>
+                            <div className="w-full bg-zinc-800 h-1 rounded-full mt-2 overflow-hidden">
                                 <div 
-                                    className="bg-gradient-to-r from-[#534AB7] to-[#A7A0F8] h-full rounded-full transition-all duration-500" 
+                                    className="bg-white h-full rounded-full transition-all duration-500" 
                                     style={{ width: `${analyticsData.completionRate}%` }}
                                 ></div>
                             </div>
                         </div>
                     </motion.div>
 
-                    {/* Interactive filter banner if priority selected */}
+                    {/* Interactive filter feedback */}
                     <AnimatePresence>
                         {selectedPriority && (
                             <motion.div 
                                 initial={{ opacity: 0, height: 0 }}
                                 animate={{ opacity: 1, height: 'auto' }}
                                 exit={{ opacity: 0, height: 0 }}
-                                className="bg-[#534AB7]/20 border border-[#534AB7]/40 rounded-xl p-3 flex items-center justify-between px-5 text-sm text-zinc-200 backdrop-blur-sm"
+                                className="bg-zinc-900 border border-white/10 rounded-xl p-3 flex items-center justify-between px-4 text-xs text-zinc-200"
                             >
                                 <div className="flex items-center gap-2">
-                                    <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-                                    <span>Filtering Timing & Overdue analysis by priority: <strong className="text-white underline">{selectedPriority}</strong></span>
+                                    <span className="w-2 h-2 rounded-full bg-white"></span>
+                                    <span>Filtering timing & overdue metrics by priority: <strong className="text-white underline">{selectedPriority}</strong></span>
                                 </div>
                                 <button 
                                     onClick={() => setSelectedPriority(null)}
-                                    className="text-xs bg-white/10 hover:bg-white/20 text-white px-3 py-1 rounded-md transition-colors"
+                                    className="text-[11px] bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 rounded-lg transition-colors font-bold"
                                 >
-                                    Clear Filter ✕
+                                    Reset Filter
                                 </button>
                             </motion.div>
                         )}
@@ -444,41 +451,36 @@ const GoalAnalytics = ({ userId }) => {
 
                     {/* SECTION A — Stage & Status Analysis */}
                     <motion.div variants={itemVariants} className="space-y-4">
-                        <div className="flex items-center gap-2 border-b border-white/5 pb-2">
-                            <span className="text-sm font-bold uppercase text-[#A7A0F8] tracking-wider">Section A</span>
-                            <span className="text-zinc-500">•</span>
-                            <h3 className="text-lg font-bold text-white">Stage & Status Analysis</h3>
+                        <div className="flex items-center gap-2 border-b border-white/[0.06] pb-2">
+                            <span className="text-xs font-bold text-white uppercase font-mono tracking-wider">Section A</span>
+                            <span className="text-zinc-600">•</span>
+                            <h3 className="text-sm font-bold text-zinc-300">Stage & Status Analysis</h3>
                         </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            {/* A1. Goal stage funnel */}
-                            <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 flex flex-col justify-between">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                            {/* A1. Goal Stage Funnel */}
+                            <div className="bg-[#000000] border border-white/[0.06] rounded-xl p-5 flex flex-col justify-between">
                                 <div>
-                                    <div className="flex items-center justify-between mb-4">
-                                        <div>
-                                            <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 bg-white/5 px-2 py-0.5 rounded">Current Snapshot</span>
-                                            <h4 className="text-base font-bold text-white mt-1">Goal Stage Funnel</h4>
-                                        </div>
-                                    </div>
-                                    <p className="text-xs text-zinc-400 mb-6">Distribution across the 5-stage goal lifecycle.</p>
+                                    <h4 className="text-sm font-bold text-white">Goal Stage Funnel</h4>
+                                    <p className="text-[11px] text-zinc-400 mt-0.5 mb-5">Distribution across the 5-stage lifecycle.</p>
                                 </div>
 
                                 {goals.length === 0 ? (
-                                    <div className="h-48 flex items-center justify-center text-xs text-zinc-500">No goals present in workspace</div>
+                                    <div className="h-44 flex items-center justify-center text-xs text-zinc-500 italic">No goals in workspace</div>
                                 ) : (
-                                    <div className="space-y-4 my-auto">
+                                    <div className="space-y-3 my-auto">
                                         {analyticsData.stageFunnelData.map((item, idx) => (
                                             <div key={idx} className="space-y-1">
-                                                <div className="flex items-center justify-between text-xs font-semibold">
+                                                <div className="flex items-center justify-between text-xs font-medium">
                                                     <span className="text-zinc-300 flex items-center gap-2">
-                                                        <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }}></span>
+                                                        <span className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }}></span>
                                                         {item.name}
                                                     </span>
-                                                    <span className="text-white font-bold">{item.count} ({item.pct}%)</span>
+                                                    <span className="text-white font-bold font-mono">{item.count} ({item.pct}%)</span>
                                                 </div>
-                                                <div className="w-full bg-white/5 h-2 rounded-full overflow-hidden">
+                                                <div className="w-full bg-zinc-900 h-1.5 rounded-full overflow-hidden">
                                                     <div 
-                                                        className="h-full transition-all duration-700 rounded-full"
+                                                        className="h-full transition-all duration-500 rounded-full"
                                                         style={{ width: `${item.pct}%`, backgroundColor: item.color }}
                                                     ></div>
                                                 </div>
@@ -488,47 +490,44 @@ const GoalAnalytics = ({ userId }) => {
                                 )}
                             </div>
 
-                            {/* A2. Goals started vs completed over time */}
-                            <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 flex flex-col">
-                                <div className="mb-4">
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 bg-white/5 px-2 py-0.5 rounded">Time Series</span>
-                                    <h4 className="text-base font-bold text-white mt-1">Started vs. Completed Over Time</h4>
-                                    <p className="text-xs text-zinc-400">Comparing goal activation momentum against completion delivery.</p>
+                            {/* A2. Started vs Completed */}
+                            <div className="bg-[#000000] border border-white/[0.06] rounded-xl p-5 flex flex-col">
+                                <div className="mb-3">
+                                    <h4 className="text-sm font-bold text-white">Started vs. Completed Over Time</h4>
+                                    <p className="text-[11px] text-zinc-400 mt-0.5">Activation trajectory compared against finished delivery.</p>
                                 </div>
 
                                 {analyticsData.startedVsCompletedData.length === 0 ? (
-                                    <div className="flex-1 h-60 flex items-center justify-center text-xs text-zinc-500">No activity logged in this period</div>
+                                    <div className="flex-1 h-52 flex items-center justify-center text-xs text-zinc-500 italic">No time-series activity logged in this period</div>
                                 ) : (
-                                    <div className="h-64 w-full pt-4">
+                                    <div className="h-56 w-full pt-2">
                                         <ResponsiveContainer width="100%" height="100%">
                                             <LineChart data={analyticsData.startedVsCompletedData}>
                                                 <CartesianGrid strokeDasharray="3 3" stroke={PALETTE.grid} vertical={false} />
-                                                <XAxis dataKey="date" stroke="#71717a" tick={{ fontSize: 10, fill: '#a1a1aa' }} axisLine={{ stroke: PALETTE.border }} tickLine={false} />
-                                                <YAxis stroke="#71717a" tick={{ fontSize: 10, fill: '#a1a1aa' }} axisLine={{ stroke: PALETTE.border }} tickLine={false} allowDecimals={false} />
-                                                <Tooltip 
-                                                    contentStyle={{ backgroundColor: PALETTE.darkBg, borderColor: PALETTE.border, borderRadius: '8px', fontSize: '12px' }}
-                                                />
-                                                <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
-                                                <Line type="monotone" name="Started" dataKey="Started" stroke={PALETTE.primary} strokeWidth={2.5} dot={{ r: 3 }} activeDot={{ r: 6 }} />
-                                                <Line type="monotone" name="Completed" dataKey="Completed" stroke={PALETTE.completed} strokeWidth={2.5} dot={{ r: 3 }} activeDot={{ r: 6 }} />
+                                                <XAxis dataKey="date" stroke="#71717a" tick={{ fontSize: 10, fill: '#71717a' }} axisLine={{ stroke: PALETTE.border }} tickLine={false} />
+                                                <YAxis stroke="#71717a" tick={{ fontSize: 10, fill: '#71717a' }} axisLine={{ stroke: PALETTE.border }} tickLine={false} allowDecimals={false} />
+                                                <Tooltip contentStyle={{ backgroundColor: '#000', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px', fontSize: '11px' }} />
+                                                <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
+                                                <Line type="monotone" name="Started" dataKey="Started" stroke="#71717A" strokeWidth={2} dot={{ r: 2.5 }} />
+                                                <Line type="monotone" name="Completed" dataKey="Completed" stroke="#FFFFFF" strokeWidth={2} dot={{ r: 2.5 }} />
                                             </LineChart>
                                         </ResponsiveContainer>
                                     </div>
                                 )}
                             </div>
 
-                            {/* A3. Priority distribution */}
-                            <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 flex flex-col justify-between">
+                            {/* A3. Priority Distribution (Interactive) */}
+                            <div className="bg-[#000000] border border-white/[0.06] rounded-xl p-5 flex flex-col justify-between">
                                 <div>
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 bg-white/5 px-2 py-0.5 rounded">Current Snapshot • Interactive</span>
-                                    <h4 className="text-base font-bold text-white mt-1">Active Priority Distribution</h4>
-                                    <p className="text-xs text-zinc-400">Click any priority slice to filter timing and overdue tables.</p>
+                                    <span className="text-[10px] font-mono text-zinc-500 uppercase block">Interactive Donut</span>
+                                    <h4 className="text-sm font-bold text-white mt-0.5">Active Priority Distribution</h4>
+                                    <p className="text-[11px] text-zinc-400 mt-0.5">Click any slice below to filter down timing metrics.</p>
                                 </div>
 
                                 {analyticsData.priorityDonutData.length === 0 ? (
-                                    <div className="h-60 flex items-center justify-center text-xs text-zinc-500">No active goals found</div>
+                                    <div className="h-52 flex items-center justify-center text-xs text-zinc-500 italic">No active goals found</div>
                                 ) : (
-                                    <div className="h-64 w-full flex flex-col items-center justify-center pt-2">
+                                    <div className="h-56 w-full flex flex-col items-center justify-center pt-2">
                                         <ResponsiveContainer width="100%" height="80%">
                                             <PieChart>
                                                 <Pie
@@ -537,11 +536,12 @@ const GoalAnalytics = ({ userId }) => {
                                                     nameKey="name"
                                                     cx="50%"
                                                     cy="50%"
-                                                    innerRadius={55}
-                                                    outerRadius={80}
-                                                    paddingAngle={5}
+                                                    innerRadius={45}
+                                                    outerRadius={68}
+                                                    paddingAngle={4}
                                                     onClick={handlePriorityClick}
                                                     cursor="pointer"
+                                                    stroke="none"
                                                 >
                                                     {analyticsData.priorityDonutData.map((entry, idx) => (
                                                         <Cell 
@@ -552,19 +552,17 @@ const GoalAnalytics = ({ userId }) => {
                                                         />
                                                     ))}
                                                 </Pie>
-                                                <Tooltip 
-                                                    contentStyle={{ backgroundColor: PALETTE.darkBg, borderColor: PALETTE.border, borderRadius: '8px', fontSize: '12px' }}
-                                                />
+                                                <Tooltip contentStyle={{ backgroundColor: '#000', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px', fontSize: '11px' }} />
                                             </PieChart>
                                         </ResponsiveContainer>
-                                        <div className="flex flex-wrap gap-4 justify-center mt-1">
+                                        <div className="flex flex-wrap gap-3 justify-center mt-1">
                                             {analyticsData.priorityDonutData.map((item, idx) => (
                                                 <button 
                                                     key={idx} 
                                                     onClick={() => handlePriorityClick(item)}
-                                                    className={`flex items-center gap-1.5 text-xs transition-opacity ${selectedPriority && selectedPriority !== item.name ? 'opacity-40' : 'opacity-100 font-semibold text-zinc-200'}`}
+                                                    className={`flex items-center gap-1.5 text-[11px] font-medium transition-opacity ${selectedPriority && selectedPriority !== item.name ? 'opacity-35' : 'opacity-100 text-zinc-200'}`}
                                                 >
-                                                    <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }}></span>
+                                                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }}></span>
                                                     {item.name} ({item.value})
                                                 </button>
                                             ))}
@@ -573,28 +571,24 @@ const GoalAnalytics = ({ userId }) => {
                                 )}
                             </div>
 
-                            {/* A4. Completion rate by priority */}
-                            <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 flex flex-col justify-between">
+                            {/* A4. Completion Rate by Priority */}
+                            <div className="bg-[#000000] border border-white/[0.06] rounded-xl p-5 flex flex-col justify-between">
                                 <div>
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 bg-white/5 px-2 py-0.5 rounded">Efficiency Signal</span>
-                                    <h4 className="text-base font-bold text-white mt-1">Completion Rate by Priority</h4>
-                                    <p className="text-xs text-zinc-400">Percentage of finished goals per priority level.</p>
+                                    <h4 className="text-sm font-bold text-white">Completion Rate by Priority</h4>
+                                    <p className="text-[11px] text-zinc-400 mt-0.5">Percentage of completed goals per level.</p>
                                 </div>
 
                                 {analyticsData.completionByPrioData.length === 0 ? (
-                                    <div className="h-60 flex items-center justify-center text-xs text-zinc-500">No completion data available</div>
+                                    <div className="h-52 flex items-center justify-center text-xs text-zinc-500 italic">No completion data available</div>
                                 ) : (
-                                    <div className="h-64 w-full pt-4">
+                                    <div className="h-56 w-full pt-4">
                                         <ResponsiveContainer width="100%" height="100%">
-                                            <BarChart layout="vertical" data={analyticsData.completionByPrioData} margin={{ top: 10, right: 30, left: 15, bottom: 10 }}>
+                                            <BarChart layout="vertical" data={analyticsData.completionByPrioData} margin={{ top: 5, right: 30, left: 10, bottom: 5 }}>
                                                 <CartesianGrid strokeDasharray="3 3" stroke={PALETTE.grid} horizontal={false} />
-                                                <XAxis type="number" domain={[0, 100]} unit="%" stroke="#71717a" tick={{ fontSize: 10, fill: '#a1a1aa' }} />
-                                                <YAxis type="category" dataKey="name" stroke="#71717a" tick={{ fontSize: 11, fill: '#e4e4e7', fontWeight: 600 }} width={60} axisLine={false} tickLine={false} />
-                                                <Tooltip 
-                                                    formatter={(val) => [`${val}%`, 'Completion Rate']}
-                                                    contentStyle={{ backgroundColor: PALETTE.darkBg, borderColor: PALETTE.border, borderRadius: '8px', fontSize: '12px' }}
-                                                />
-                                                <Bar dataKey="rate" radius={[0, 6, 6, 0]} barSize={22}>
+                                                <XAxis type="number" domain={[0, 100]} unit="%" stroke="#71717a" tick={{ fontSize: 10, fill: '#71717a' }} />
+                                                <YAxis type="category" dataKey="name" stroke="#71717a" tick={{ fontSize: 11, fill: '#d4d4d8', fontWeight: 600 }} width={60} axisLine={false} tickLine={false} />
+                                                <Tooltip formatter={(val) => [`${val}%`, 'Rate']} contentStyle={{ backgroundColor: '#000', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px', fontSize: '11px' }} />
+                                                <Bar dataKey="rate" radius={[0, 4, 4, 0]} barSize={18}>
                                                     {analyticsData.completionByPrioData.map((entry, idx) => (
                                                         <Cell key={`bar-${idx}`} fill={entry.color} />
                                                     ))}
@@ -609,37 +603,33 @@ const GoalAnalytics = ({ userId }) => {
 
                     {/* SECTION B — Timing & Duration Analysis */}
                     <motion.div variants={itemVariants} className="space-y-4">
-                        <div className="flex items-center gap-2 border-b border-white/5 pb-2">
-                            <span className="text-sm font-bold uppercase text-[#A7A0F8] tracking-wider">Section B</span>
-                            <span className="text-zinc-500">•</span>
-                            <h3 className="text-lg font-bold text-white">Timing & Duration Analysis</h3>
+                        <div className="flex items-center gap-2 border-b border-white/[0.06] pb-2">
+                            <span className="text-xs font-bold text-white uppercase font-mono tracking-wider">Section B</span>
+                            <span className="text-zinc-600">•</span>
+                            <h3 className="text-sm font-bold text-zinc-300">Timing & Duration Analysis</h3>
                         </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            {/* B1. Average time-to-completion */}
-                            <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 flex flex-col">
-                                <div className="mb-4">
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 bg-white/5 px-2 py-0.5 rounded">Speed Analysis</span>
-                                    <h4 className="text-base font-bold text-white mt-1">Average Time-to-Completion</h4>
-                                    <p className="text-xs text-zinc-400">Average days from creation to finish per priority level.</p>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                            {/* B1. Average Time-to-Completion */}
+                            <div className="bg-[#000000] border border-white/[0.06] rounded-xl p-5 flex flex-col">
+                                <div className="mb-3">
+                                    <h4 className="text-sm font-bold text-white">Average Time-to-Completion</h4>
+                                    <p className="text-[11px] text-zinc-400 mt-0.5">Average days from activation to final completion.</p>
                                 </div>
 
                                 {analyticsData.avgTimeByPrioData.every(d => d.count === 0) ? (
-                                    <div className="h-56 flex items-center justify-center text-xs text-zinc-500">No completed goals in this range</div>
+                                    <div className="h-52 flex items-center justify-center text-xs text-zinc-500 italic">No completed goals in this range</div>
                                 ) : (
-                                    <div className="h-60 w-full">
+                                    <div className="h-56 w-full">
                                         <ResponsiveContainer width="100%" height="100%">
-                                            <BarChart layout="vertical" data={analyticsData.avgTimeByPrioData} margin={{ top: 10, right: 30, left: 15, bottom: 10 }}>
+                                            <BarChart layout="vertical" data={analyticsData.avgTimeByPrioData} margin={{ top: 5, right: 30, left: 10, bottom: 5 }}>
                                                 <CartesianGrid strokeDasharray="3 3" stroke={PALETTE.grid} horizontal={false} />
-                                                <XAxis type="number" unit="d" stroke="#71717a" tick={{ fontSize: 10, fill: '#a1a1aa' }} />
-                                                <YAxis type="category" dataKey="name" stroke="#71717a" tick={{ fontSize: 11, fill: '#e4e4e7', fontWeight: 600 }} width={60} axisLine={false} tickLine={false} />
-                                                <Tooltip 
-                                                    formatter={(val) => [`${val} days`, 'Average Duration']}
-                                                    contentStyle={{ backgroundColor: PALETTE.darkBg, borderColor: PALETTE.border, borderRadius: '8px', fontSize: '12px' }}
-                                                />
-                                                <Bar dataKey="days" radius={[0, 6, 6, 0]} barSize={22}>
+                                                <XAxis type="number" unit="d" stroke="#71717a" tick={{ fontSize: 10, fill: '#71717a' }} />
+                                                <YAxis type="category" dataKey="name" stroke="#71717a" tick={{ fontSize: 11, fill: '#d4d4d8', fontWeight: 600 }} width={60} axisLine={false} tickLine={false} />
+                                                <Tooltip formatter={(val) => [`${val} days`, 'Duration']} contentStyle={{ backgroundColor: '#000', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px', fontSize: '11px' }} />
+                                                <Bar dataKey="days" radius={[0, 4, 4, 0]} barSize={18}>
                                                     {analyticsData.avgTimeByPrioData.map((entry, idx) => (
-                                                        <Cell key={`avg-${idx}`} fill={entry.color || PALETTE.primary} />
+                                                        <Cell key={`avg-${idx}`} fill={entry.color || '#A1A1AA'} />
                                                     ))}
                                                 </Bar>
                                             </BarChart>
@@ -648,81 +638,87 @@ const GoalAnalytics = ({ userId }) => {
                                 )}
                             </div>
 
-                            {/* B2. Time-in-stage breakdown */}
-                            <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 flex flex-col">
-                                <div className="mb-4">
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 bg-white/5 px-2 py-0.5 rounded">Stage Bottlenecks</span>
-                                    <h4 className="text-base font-bold text-white mt-1">Time-in-Stage Breakdown</h4>
-                                    <p className="text-xs text-zinc-400">Average days spent across lifecycle stages before completion.</p>
+                            {/* B2. Time-In-Stage Breakdown */}
+                            <div className="bg-[#000000] border border-white/[0.06] rounded-xl p-5 flex flex-col justify-between">
+                                <div>
+                                    <h4 className="text-sm font-bold text-white">Time-in-Stage Breakdown</h4>
+                                    <p className="text-[11px] text-zinc-400 mt-0.5">Average proportion of time spent across lifecycle stages.</p>
                                 </div>
 
                                 {analyticsData.completedThisPeriod === 0 ? (
-                                    <div className="h-56 flex items-center justify-center text-xs text-zinc-500">No completed goals to analyze stages</div>
+                                    <div className="h-52 flex items-center justify-center text-xs text-zinc-500 italic">No completed goals to evaluate stage throughput</div>
                                 ) : (
-                                    <div className="h-60 w-full flex flex-col justify-center">
-                                        <ResponsiveContainer width="100%" height={120}>
-                                            <BarChart layout="vertical" data={analyticsData.timeInStageData} margin={{ top: 10, right: 30, left: 10, bottom: 10 }}>
+                                    <div className="h-56 w-full flex flex-col justify-center">
+                                        <ResponsiveContainer width="100%" height={110}>
+                                            <BarChart layout="vertical" data={analyticsData.timeInStageData} margin={{ top: 10, right: 20, left: 10, bottom: 10 }}>
                                                 <CartesianGrid strokeDasharray="3 3" stroke={PALETTE.grid} horizontal={false} />
-                                                <XAxis type="number" unit="d" stroke="#71717a" tick={{ fontSize: 10, fill: '#a1a1aa' }} />
+                                                <XAxis type="number" unit="d" stroke="#71717a" tick={{ fontSize: 10, fill: '#71717a' }} />
                                                 <YAxis type="category" dataKey="name" stroke="#71717a" tick={{ fontSize: 0 }} width={0} axisLine={false} tickLine={false} />
-                                                <Tooltip 
-                                                    contentStyle={{ backgroundColor: PALETTE.darkBg, borderColor: PALETTE.border, borderRadius: '8px', fontSize: '12px' }}
-                                                />
+                                                <Tooltip contentStyle={{ backgroundColor: '#000', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px', fontSize: '11px' }} />
                                                 <Legend wrapperStyle={{ fontSize: '11px' }} />
-                                                <Bar dataKey="not_started" name="Not Started" stackId="a" fill={PALETTE.secondary} radius={[4, 0, 0, 4]} barSize={30} />
-                                                <Bar dataKey="in_progress" name="In Progress" stackId="a" fill={PALETTE.primary} barSize={30} />
-                                                <Bar dataKey="on_hold" name="On Hold" stackId="a" fill={PALETTE.warning} radius={[0, 4, 4, 0]} barSize={30} />
+                                                <Bar dataKey="not_started" name="Not Started" stackId="a" fill="#3F3F46" radius={[4, 0, 0, 4]} barSize={24} />
+                                                <Bar dataKey="in_progress" name="In Progress" stackId="a" fill="#FFFFFF" barSize={24} />
+                                                <Bar dataKey="on_hold" name="On Hold" stackId="a" fill="#71717A" radius={[0, 4, 4, 0]} barSize={24} />
                                             </BarChart>
                                         </ResponsiveContainer>
-                                        <div className="text-center text-[11px] text-zinc-500 mt-2">
-                                            Aggregated averages calculated client-side across completed goals.
-                                        </div>
+                                        <p className="text-center text-[10px] text-zinc-500 mt-2 font-mono">
+                                            * Missing legacy timestamps cleanly excluded from average divisor counts.
+                                        </p>
                                     </div>
                                 )}
                             </div>
                         </div>
 
-                        {/* B3. Overdue goals list */}
-                        <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6">
+                        {/* B3. Overdue Goals List (Cross-linked to Calendar Stage) */}
+                        <div className="bg-[#000000] border border-white/[0.06] rounded-xl p-5">
                             <div className="flex items-center justify-between mb-4">
                                 <div>
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded">Action Required</span>
-                                    <h4 className="text-base font-bold text-white mt-1">Overdue Goals Flagged List</h4>
+                                    <span className="text-[10px] font-bold uppercase font-mono tracking-widest text-zinc-400 block">Action Required</span>
+                                    <h4 className="text-sm font-bold text-white mt-0.5">Overdue Goals Flagged List</h4>
                                 </div>
-                                <span className="text-xs text-zinc-400">{analyticsData.overdueList.length} items overdue</span>
+                                <span className="text-xs font-mono text-zinc-400">{analyticsData.overdueList.length} overdue</span>
                             </div>
 
                             {analyticsData.overdueList.length === 0 ? (
-                                <div className="py-12 text-center text-xs text-zinc-500 font-medium">
-                                    ✓ All active goals are on schedule. No overdue items!
+                                <div className="py-10 text-center text-xs text-zinc-500 italic">
+                                    All active goals are on schedule. Zero overdue items recorded.
                                 </div>
                             ) : (
-                                <div className="overflow-x-auto">
+                                <div className="overflow-x-auto scrollbar-none">
                                     <table className="w-full text-left border-collapse text-xs">
                                         <thead>
-                                            <tr className="border-b border-white/10 text-zinc-400 uppercase tracking-wider">
-                                                <th className="py-3 px-4 font-semibold">Goal Title</th>
-                                                <th className="py-3 px-4 font-semibold">Priority</th>
-                                                <th className="py-3 px-4 font-semibold">Target Date</th>
-                                                <th className="py-3 px-4 font-semibold text-right">Days Overdue</th>
+                                            <tr className="border-b border-white/[0.06] text-zinc-500 font-mono text-[10px] uppercase tracking-wider">
+                                                <th className="py-2.5 px-3 font-medium">Goal Title</th>
+                                                <th className="py-2.5 px-3 font-medium">Priority</th>
+                                                <th className="py-2.5 px-3 font-medium">Target Date</th>
+                                                <th className="py-2.5 px-3 font-medium text-right">Overdue</th>
+                                                <th className="py-2.5 px-3 font-medium text-right">Action</th>
                                             </tr>
                                         </thead>
-                                        <tbody className="divide-y divide-white/5">
+                                        <tbody className="divide-y divide-white/[0.04]">
                                             {analyticsData.overdueList.map((g, idx) => (
-                                                <tr key={g._id || idx} className="hover:bg-amber-500/[0.04] transition-colors group">
-                                                    <td className="py-3.5 px-4 font-bold text-white max-w-xs truncate">{g.name || g.title}</td>
-                                                    <td className="py-3.5 px-4">
-                                                        <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase border" style={{ 
-                                                            color: PRIORITY_COLORS[g.priorityLabel], 
-                                                            borderColor: `${PRIORITY_COLORS[g.priorityLabel]}40`,
-                                                            backgroundColor: `${PRIORITY_COLORS[g.priorityLabel]}15` 
-                                                        }}>
+                                                <tr 
+                                                    key={g._id || idx} 
+                                                    onClick={() => {
+                                                        if (onJumpToCalendarDate && g.targetDate) {
+                                                            onJumpToCalendarDate(new Date(g.targetDate), g._id);
+                                                        }
+                                                    }}
+                                                    className="hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                                                    title="Click to view directly in Calendar Stage"
+                                                >
+                                                    <td className="py-3 px-3 font-bold text-white max-w-xs truncate">{g.name || g.title}</td>
+                                                    <td className="py-3 px-3">
+                                                        <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase font-mono border border-white/10 bg-white/[0.03] text-zinc-300">
                                                             {g.priorityLabel}
                                                         </span>
                                                     </td>
-                                                    <td className="py-3.5 px-4 text-zinc-300">{new Date(g.targetDate).toLocaleDateString()}</td>
-                                                    <td className="py-3.5 px-4 text-right font-black text-amber-400 group-hover:text-red-400">
-                                                        +{g.daysOverdue} days
+                                                    <td className="py-3 px-3 font-mono text-zinc-400">{new Date(g.targetDate).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+                                                    <td className="py-3 px-3 text-right font-bold font-mono text-zinc-300">
+                                                        +{g.daysOverdue} d
+                                                    </td>
+                                                    <td className="py-3 px-3 text-right text-[10px] font-mono text-zinc-500 group-hover:text-white transition-colors">
+                                                        View in Calendar →
                                                     </td>
                                                 </tr>
                                             ))}
@@ -735,60 +731,56 @@ const GoalAnalytics = ({ userId }) => {
 
                     {/* SECTION C — Completion Trends & Composition */}
                     <motion.div variants={itemVariants} className="space-y-4">
-                        <div className="flex items-center gap-2 border-b border-white/5 pb-2">
-                            <span className="text-sm font-bold uppercase text-[#A7A0F8] tracking-wider">Section C</span>
-                            <span className="text-zinc-500">•</span>
-                            <h3 className="text-lg font-bold text-white">Completion Trends & Composition</h3>
+                        <div className="flex items-center gap-2 border-b border-white/[0.06] pb-2">
+                            <span className="text-xs font-bold text-white uppercase font-mono tracking-wider">Section C</span>
+                            <span className="text-zinc-600">•</span>
+                            <h3 className="text-sm font-bold text-zinc-300">Completion Trends & Composition</h3>
                         </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                            {/* C1. Cumulative completed over time (AreaChart) */}
-                            <div className="lg:col-span-2 bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 flex flex-col">
-                                <div className="mb-4">
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 bg-white/5 px-2 py-0.5 rounded">Lifetime Momentum</span>
-                                    <h4 className="text-base font-bold text-white mt-1">Cumulative Goals Completed Over Time</h4>
-                                    <p className="text-xs text-zinc-400">Running lifetime trajectory of achieved objectives.</p>
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                            {/* C1. Cumulative completed over time */}
+                            <div className="lg:col-span-2 bg-[#000000] border border-white/[0.06] rounded-xl p-5 flex flex-col">
+                                <div className="mb-3">
+                                    <h4 className="text-sm font-bold text-white">Cumulative Goals Completed Over Time</h4>
+                                    <p className="text-[11px] text-zinc-400 mt-0.5">Running lifetime trajectory of completed objectives.</p>
                                 </div>
 
                                 {analyticsData.cumulativeData.length === 0 ? (
-                                    <div className="h-64 flex items-center justify-center text-xs text-zinc-500">No completed goals recorded yet</div>
+                                    <div className="h-56 flex items-center justify-center text-xs text-zinc-500 italic">No completed goals recorded yet</div>
                                 ) : (
-                                    <div className="h-64 w-full pt-2">
+                                    <div className="h-60 w-full pt-2">
                                         <ResponsiveContainer width="100%" height="100%">
                                             <AreaChart data={analyticsData.cumulativeData}>
                                                 <defs>
                                                     <linearGradient id="compGrad" x1="0" y1="0" x2="0" y2="1">
-                                                        <stop offset="5%" stopColor={PALETTE.completed} stopOpacity={0.4} />
-                                                        <stop offset="95%" stopColor={PALETTE.completed} stopOpacity={0.0} />
+                                                        <stop offset="5%" stopColor="#FFFFFF" stopOpacity={0.3} />
+                                                        <stop offset="95%" stopColor="#FFFFFF" stopOpacity={0.0} />
                                                     </linearGradient>
                                                 </defs>
                                                 <CartesianGrid strokeDasharray="3 3" stroke={PALETTE.grid} vertical={false} />
-                                                <XAxis dataKey="date" stroke="#71717a" tick={{ fontSize: 10, fill: '#a1a1aa' }} axisLine={{ stroke: PALETTE.border }} tickLine={false} />
-                                                <YAxis stroke="#71717a" tick={{ fontSize: 10, fill: '#a1a1aa' }} axisLine={{ stroke: PALETTE.border }} tickLine={false} allowDecimals={false} />
-                                                <Tooltip 
-                                                    contentStyle={{ backgroundColor: PALETTE.darkBg, borderColor: PALETTE.border, borderRadius: '8px', fontSize: '12px' }}
-                                                />
-                                                <Area type="monotone" dataKey="total" name="Cumulative Completed" stroke={PALETTE.completed} strokeWidth={2.5} fillOpacity={1} fill="url(#compGrad)" />
+                                                <XAxis dataKey="date" stroke="#71717a" tick={{ fontSize: 10, fill: '#71717a' }} axisLine={{ stroke: PALETTE.border }} tickLine={false} />
+                                                <YAxis stroke="#71717a" tick={{ fontSize: 10, fill: '#71717a' }} axisLine={{ stroke: PALETTE.border }} tickLine={false} allowDecimals={false} />
+                                                <Tooltip contentStyle={{ backgroundColor: '#000', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px', fontSize: '11px' }} />
+                                                <Area type="monotone" dataKey="total" name="Cumulative Completed" stroke="#FFFFFF" strokeWidth={2} fillOpacity={1} fill="url(#compGrad)" />
                                             </AreaChart>
                                         </ResponsiveContainer>
                                     </div>
                                 )}
                             </div>
 
-                            {/* C2 & C3 side column */}
-                            <div className="flex flex-col gap-6">
+                            {/* C2 & C3 Side column */}
+                            <div className="flex flex-col gap-4">
                                 {/* C2. Abandonment Rate */}
-                                <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-5 flex flex-col justify-between flex-1">
+                                <div className="bg-[#000000] border border-white/[0.06] rounded-xl p-5 flex flex-col justify-between flex-1">
                                     <div className="flex items-start justify-between">
                                         <div>
-                                            <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 bg-zinc-800 px-2 py-0.5 rounded">Reflective Metric</span>
-                                            <h4 className="text-base font-bold text-zinc-200 mt-1">Abandonment Rate</h4>
-                                            <p className="text-[11px] text-zinc-400">Explicitly abandoned vs total created.</p>
+                                            <h4 className="text-sm font-bold text-white">Abandonment Rate</h4>
+                                            <p className="text-[10px] text-zinc-400">Explicitly abandoned vs total.</p>
                                         </div>
-                                        <span className="text-2xl font-black text-zinc-300">{analyticsData.abandonmentRate}%</span>
+                                        <span className="text-xl font-mono font-bold text-zinc-300">{analyticsData.abandonmentRate}%</span>
                                     </div>
 
-                                    <div className="h-28 w-full flex items-center justify-center my-1">
+                                    <div className="h-24 w-full flex items-center justify-center my-1">
                                         <ResponsiveContainer width="100%" height="100%">
                                             <PieChart>
                                                 <Pie
@@ -796,33 +788,30 @@ const GoalAnalytics = ({ userId }) => {
                                                     dataKey="value"
                                                     cx="50%"
                                                     cy="50%"
-                                                    innerRadius={35}
-                                                    outerRadius={48}
+                                                    innerRadius={30}
+                                                    outerRadius={42}
                                                     stroke="none"
                                                 >
                                                     {analyticsData.abandonmentDonut.map((entry, idx) => (
                                                         <Cell key={`c2-${idx}`} fill={entry.color} />
                                                     ))}
                                                 </Pie>
-                                                <Tooltip 
-                                                    contentStyle={{ backgroundColor: PALETTE.darkBg, borderColor: PALETTE.border, borderRadius: '8px', fontSize: '11px' }}
-                                                />
+                                                <Tooltip contentStyle={{ backgroundColor: '#000', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px', fontSize: '11px' }} />
                                             </PieChart>
                                         </ResponsiveContainer>
                                     </div>
-                                    <p className="text-[10px] text-zinc-500 text-center italic">
-                                        Honest analytics aid self-reflection without judgment.
+                                    <p className="text-[9px] text-zinc-500 font-mono text-center">
+                                        Neutral diagnostic tracking without judgment.
                                     </p>
                                 </div>
 
-                                {/* C3. Personal vs Team-linked split */}
+                                {/* C3. Composition split */}
                                 {analyticsData.hasTeamField && (
-                                    <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-5 flex flex-col justify-between flex-1">
+                                    <div className="bg-[#000000] border border-white/[0.06] rounded-xl p-5 flex flex-col justify-between flex-1">
                                         <div>
-                                            <span className="text-[10px] font-bold uppercase tracking-widest text-[#A7A0F8] bg-[#534AB7]/20 px-2 py-0.5 rounded">Origin Split</span>
-                                            <h4 className="text-base font-bold text-white mt-1">Personal vs. TeamOS</h4>
+                                            <h4 className="text-sm font-bold text-white">Personal vs. TeamOS</h4>
                                         </div>
-                                        <div className="h-32 w-full mt-2">
+                                        <div className="h-28 w-full mt-2">
                                             <ResponsiveContainer width="100%" height="100%">
                                                 <PieChart>
                                                     <Pie
@@ -831,24 +820,22 @@ const GoalAnalytics = ({ userId }) => {
                                                         nameKey="name"
                                                         cx="50%"
                                                         cy="50%"
-                                                        innerRadius={40}
-                                                        outerRadius={55}
-                                                        paddingAngle={6}
+                                                        innerRadius={32}
+                                                        outerRadius={46}
+                                                        paddingAngle={4}
                                                         stroke="none"
                                                     >
                                                         {analyticsData.compositionData.map((entry, idx) => (
                                                             <Cell key={`c3-${idx}`} fill={entry.color} />
                                                         ))}
                                                     </Pie>
-                                                    <Tooltip 
-                                                        contentStyle={{ backgroundColor: PALETTE.darkBg, borderColor: PALETTE.border, borderRadius: '8px', fontSize: '11px' }}
-                                                    />
+                                                    <Tooltip contentStyle={{ backgroundColor: '#000', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px', fontSize: '11px' }} />
                                                 </PieChart>
                                             </ResponsiveContainer>
                                         </div>
-                                        <div className="flex justify-center gap-4 mt-2 text-[11px] font-medium">
+                                        <div className="flex justify-center gap-3 mt-1 text-[10px] font-mono">
                                             {analyticsData.compositionData.map((item, idx) => (
-                                                <span key={idx} className="flex items-center gap-1 text-zinc-300">
+                                                <span key={idx} className="flex items-center gap-1 text-zinc-400">
                                                     <span className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }}></span>
                                                     {item.name}: {item.value}
                                                 </span>
