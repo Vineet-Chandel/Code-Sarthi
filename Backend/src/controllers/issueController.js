@@ -89,7 +89,7 @@ async function getIssueDetails(req, res) {
 async function updateIssue(req, res) {
   try {
     const { issueId, teamId } = req.params;
-    const allowedFields = ['title', 'description', 'status', 'priority'];
+    const allowedFields = ['title', 'description', 'status', 'priority', 'links'];
     const updates = {};
     for (const field of allowedFields) {
       if (req.body[field] !== undefined) updates[field] = req.body[field];
@@ -99,7 +99,7 @@ async function updateIssue(req, res) {
       { _id: issueId, teamId, archivedAt: null },
       updates,
       { new: true, runValidators: true }
-    );
+    ).populate('assignedTo', 'firstName lastName photoUrl email');
     if (!issue) return res.status(404).json({ error: 'Issue not found' });
 
     if (updates.status && issue.linkedGoalId) {

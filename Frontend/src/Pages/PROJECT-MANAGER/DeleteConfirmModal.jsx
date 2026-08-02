@@ -39,9 +39,9 @@ const DeleteConfirmModal = ({
     const iconBoxClass = isAmber ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' : 'bg-red-500/10 border-red-500/20 text-red-400';
     const warningBoxClass = isAmber ? 'bg-amber-500/10 border-amber-500/20 text-amber-400/90' : 'bg-red-500/10 border-red-500/20 text-red-400/90';
     const focusClass = isAmber ? 'focus:border-amber-500/60 focus:ring-amber-500/20' : 'focus:border-red-500/60 focus:ring-red-500/20';
-    const submitBtnClass = isAmber 
-        ? 'bg-amber-600 hover:bg-amber-500 active:bg-amber-700 shadow-[0_0_15px_rgba(245,158,11,0.25)] disabled:hover:bg-amber-600' 
-        : 'bg-red-600 hover:bg-red-500 active:bg-red-700 shadow-[0_0_15px_rgba(239,68,68,0.25)] disabled:hover:bg-red-600';
+    const submitBtnClass = isAmber
+        ? 'bg-amber-600 hover:bg-amber-500 active:bg-amber-700  disabled:hover:bg-amber-600'
+        : 'bg-red-600 hover:bg-red-500 active:bg-red-700  disabled:hover:bg-red-600';
 
     const defaultTitle = requiredText === 'DELETE' ? `Delete ${itemType}` : `${requiredText.charAt(0) + requiredText.slice(1).toLowerCase()} ${itemType}`;
     const defaultButtonText = buttonText || (requiredText === 'DELETE' ? 'Permanently Delete' : `Confirm ${requiredText.charAt(0) + requiredText.slice(1).toLowerCase()}`);
@@ -64,14 +64,16 @@ const DeleteConfirmModal = ({
                         className={`relative w-full max-w-md bg-[#09090B] border ${borderClass} rounded-2xl p-6 shadow-2xl overflow-hidden`}
                     >
                         {/* Top warning accent */}
-                        <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${accentLine}`} />
+                        {/* <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${accentLine}`} /> */}
 
                         <h2 className="text-xl font-bold text-white mb-2 tracking-tight flex items-center gap-2.5">
                             <span className={`w-8 h-8 rounded-lg border flex items-center justify-center shrink-0 ${iconBoxClass}`}>
                                 {requiredText === 'DELETE' ? (
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2m-6 5v6m4-6v6" /></svg>
                                 ) : (
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16">
+                                        <path fill="currentColor" d="M7.134 2.5a1 1 0 0 1 1.732 0L14.928 13a1 1 0 0 1-.866 1.5H1.938a1 1 0 0 1-.866-1.5zM8 11a1 1 0 1 0 0 2a1 1 0 0 0 0-2m0-6a1 1 0 0 0-1 1v3a1 1 0 1 0 2 0V6a1 1 0 0 0-1-1"></path>
+                                    </svg>
                                 )}
                             </span>
                             {title || defaultTitle}
@@ -87,10 +89,12 @@ const DeleteConfirmModal = ({
 
                         {warning !== false && (
                             <div className={`text-xs mb-5 p-3.5 rounded-xl border leading-relaxed flex items-start gap-2.5 ${warningBoxClass}`}>
-                                <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16">
+                                    <path fill="currentColor" d="M7.134 2.5a1 1 0 0 1 1.732 0L14.928 13a1 1 0 0 1-.866 1.5H1.938a1 1 0 0 1-.866-1.5zM8 11a1 1 0 1 0 0 2a1 1 0 0 0 0-2m0-6a1 1 0 0 0-1 1v3a1 1 0 1 0 2 0V6a1 1 0 0 0-1-1"></path>
+                                </svg>
                                 <span>
                                     {warning || (
-                                        requiredText === 'DELETE' 
+                                        requiredText === 'DELETE'
                                             ? <span><strong>Warning:</strong> This action is irreversible. All associated data and sub-items will be permanently eradicated from our servers.</span>
                                             : <span><strong>Warning:</strong> Please make sure you intend to perform this strategic action before confirming.</span>
                                     )}

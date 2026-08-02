@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import BASE_URL from './auth/baseURL';
 import { setTeams } from '../utils/projectSlice';
@@ -8,6 +9,7 @@ import ProjectDetailPanel from './PROJECT-MANAGER/Projects/ProjectDetailPanel';
 
 const Projects = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { teams, isTeamsFetched } = useSelector((store) => store.projects || { teams: [], isTeamsFetched: false });
 
     const [allProjects, setAllProjects] = useState([]);
@@ -177,6 +179,69 @@ const Projects = () => {
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 4v16m8-8H4" /></svg>
                             New Project
                         </button>
+                    </div>
+                </div>
+
+                {/* Summary Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    {/* Total Projects Card */}
+                    <div
+                        onClick={() => { resetFilters(); navigate('/projects'); }}
+                        className="group relative bg-gradient-to-br from-[#121215] to-[#09090b] border border-white/10 hover:border-[#534AB7]/60 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:shadow-[0_0_30px_rgba(83,74,183,0.2)] hover:-translate-y-0.5 overflow-hidden flex items-center justify-between"
+                    >
+                        <div className="absolute -right-6 -bottom-6 w-36 h-36 bg-[#534AB7]/10 rounded-full blur-2xl group-hover:bg-[#534AB7]/25 transition-all duration-500 pointer-events-none" />
+                        <div className="relative z-10">
+                            <div className="flex items-center gap-2.5 mb-3">
+                                <div className="w-10 h-10 rounded-xl bg-[#534AB7]/20 border border-[#534AB7]/30 flex items-center justify-center text-[#A7A0F8] shadow-inner">
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                    </svg>
+                                </div>
+                                <span className="text-xs font-extrabold uppercase tracking-wider text-zinc-400 group-hover:text-zinc-200 transition-colors">
+                                    Total Projects
+                                </span>
+                            </div>
+                            <div className="text-3xl md:text-4xl font-black text-white tracking-tight flex items-baseline gap-2">
+                                {loading ? <span className="text-2xl text-zinc-600 animate-pulse">---</span> : allProjects.length}
+                                <span className="text-xs font-semibold text-[#A7A0F8] opacity-80 font-normal">Across all teams</span>
+                            </div>
+                        </div>
+                        <div className="relative z-10 flex flex-col items-end justify-between h-full">
+                            <span className="text-xs font-bold text-[#A7A0F8] group-hover:underline flex items-center gap-1 mt-2">
+                                View Initiatives
+                                <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* Total Teams Card */}
+                    <div
+                        onClick={() => navigate('/teams')}
+                        className="group relative bg-gradient-to-br from-[#121215] to-[#09090b] border border-white/10 hover:border-emerald-500/50 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] hover:-translate-y-0.5 overflow-hidden flex items-center justify-between"
+                    >
+                        <div className="absolute -right-6 -bottom-6 w-36 h-36 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/25 transition-all duration-500 pointer-events-none" />
+                        <div className="relative z-10">
+                            <div className="flex items-center gap-2.5 mb-3">
+                                <div className="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shadow-inner">
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    </svg>
+                                </div>
+                                <span className="text-xs font-extrabold uppercase tracking-wider text-zinc-400 group-hover:text-zinc-200 transition-colors">
+                                    Total Teams
+                                </span>
+                            </div>
+                            <div className="text-3xl md:text-4xl font-black text-white tracking-tight flex items-baseline gap-2">
+                                {!isTeamsFetched && teams.length === 0 ? <span className="text-2xl text-zinc-600 animate-pulse">---</span> : teams.length}
+                                <span className="text-xs font-semibold text-emerald-400/80 font-normal">Active workspaces</span>
+                            </div>
+                        </div>
+                        <div className="relative z-10 flex flex-col items-end justify-between h-full">
+                            <span className="text-xs font-bold text-emerald-400 group-hover:underline flex items-center gap-1 mt-2">
+                                Manage Teams
+                                <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
+                            </span>
+                        </div>
                     </div>
                 </div>
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import BASE_URL from '../../auth/baseURL';
 import { useSelector } from 'react-redux';
@@ -7,6 +7,7 @@ import AssignIssueDropdown from './AssignIssueDropdown';
 import TimerWidget from '../TimerWidget';
 import DeleteConfirmModal from '../DeleteConfirmModal';
 import AlertModal from '../AlertModal';
+import IssueLinksModal from './IssueLinksModal';
 
 const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
     const user = useSelector(store => store.user);
@@ -18,6 +19,47 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
     const [isArchiveModalOpen, setIsArchiveModalOpen] = useState(false);
     const [archiving, setArchiving] = useState(false);
     const [alertData, setAlertData] = useState(null);
+    const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
+    const [addingLink, setAddingLink] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const menuRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setIsMenuOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const handleAddLink = async (linkData, callback) => {
+        setAddingLink(true);
+        try {
+            const updatedLinks = [...(issue.links || []), linkData];
+            const res = await axios.patch(`${BASE_URL}/teams/${teamId}/issues/${issueId}`, { links: updatedLinks }, { withCredentials: true });
+            setIssue(res.data.issue);
+            setAlertData({ type: 'success', message: 'Issue link saved successfully!' });
+            if (callback) callback(true);
+        } catch (err) {
+            setAlertData({ type: 'error', message: err.response?.data?.error || "Failed to add issue link" });
+            if (callback) callback(false);
+        } finally {
+            setAddingLink(false);
+        }
+    };
+
+    const handleRemoveLink = async (indexToRemove) => {
+        try {
+            const updatedLinks = (issue.links || []).filter((_, i) => i !== indexToRemove);
+            const res = await axios.patch(`${BASE_URL}/teams/${teamId}/issues/${issueId}`, { links: updatedLinks }, { withCredentials: true });
+            setIssue(res.data.issue);
+            setAlertData({ type: 'info', message: 'Link removed.' });
+        } catch (err) {
+            setAlertData({ type: 'error', message: err.response?.data?.error || "Failed to remove issue link" });
+        }
+    };
 
     // Inline edit state
     const [isEditing, setIsEditing] = useState(false);
@@ -142,22 +184,53 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                 Back to Issues
             </button>
 
-            <div className="absolute top-6 right-6 flex items-center gap-4">
-                {canArchive && (
-                    <button
-                        onClick={() => setIsArchiveModalOpen(true)}
-                        className="text-xs text-zinc-400 hover:text-white hover:underline transition-colors font-medium"
-                    >
-                        Archive Issue
-                    </button>
-                )}
-                {canDelete && (
-                    <button
-                        onClick={() => setIsDeleteModalOpen(true)}
-                        className="text-xs text-red-400 hover:text-red-300 hover:underline transition-colors font-medium"
-                    >
-                        Delete Issue
-                    </button>
+            <div className="absolute top-6 right-6 z-20" ref={menuRef}>
+                <button
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    title="Issue Options"
+                    className="p-2 text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl transition-colors border border-white/5 flex items-center justify-center"
+                >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                    </svg>
+                </button>
+
+                {isMenuOpen && (
+                    <div className="absolute right-0 mt-2 w-52 bg-[#121215] border border-white/10 rounded-xl shadow-2xl py-2 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+                        <button
+                            onClick={() => { setIsMenuOpen(false); setIsLinkModalOpen(true); }}
+                            className="w-full text-left px-4 py-2.5 text-xs font-bold text-white hover:bg-white/5 flex items-center justify-between transition-colors"
+                        >
+                            <span className="flex items-center gap-2.5">
+                                <svg className="w-4 h-4 text-[#A7A0F8] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
+                                Issue Links
+                            </span>
+                            <span className="text-[10px] bg-white/10 px-2 py-0.5 rounded-full font-semibold text-zinc-300">
+                                {issue?.links?.length || 0}
+                            </span>
+                        </button>
+                        {(canArchive || canDelete) && (
+                            <div className="border-t border-white/10 my-1" />
+                        )}
+                        {canArchive && (
+                            <button
+                                onClick={() => { setIsMenuOpen(false); setIsArchiveModalOpen(true); }}
+                                className="w-full text-left px-4 py-2.5 text-xs font-semibold text-amber-400 hover:bg-amber-500/10 flex items-center gap-2.5 transition-colors"
+                            >
+                                <svg className="w-4 h-4 text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
+                                Archive Issue
+                            </button>
+                        )}
+                        {canDelete && (
+                            <button
+                                onClick={() => { setIsMenuOpen(false); setIsDeleteModalOpen(true); }}
+                                className="w-full text-left px-4 py-2.5 text-xs font-semibold text-red-400 hover:bg-red-500/10 flex items-center gap-2.5 transition-colors"
+                            >
+                                <svg className="w-4 h-4 text-red-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                Delete Issue
+                            </button>
+                        )}
+                    </div>
                 )}
             </div>
 
@@ -336,6 +409,15 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                 isOpen={!!alertData}
                 onClose={() => setAlertData(null)}
                 {...alertData}
+            />
+            <IssueLinksModal
+                isOpen={isLinkModalOpen}
+                onClose={() => setIsLinkModalOpen(false)}
+                issue={issue}
+                myRole={myRole}
+                onAddLink={handleAddLink}
+                onRemoveLink={handleRemoveLink}
+                loading={addingLink}
             />
         </div>
     );

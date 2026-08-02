@@ -29,6 +29,7 @@ import typescript from "./typescript.js";
 import python     from "./python.js";
 import java       from "./java.js";
 import c          from "./c.js";
+import cpp        from "./cpp.js";
 import csharp     from "./csharp.js";
 import rust       from "./rust.js";
 import ruby       from "./ruby.js";
@@ -74,7 +75,7 @@ const contentMap = {
 
   // Programming Languages
   javascript, typescript, python, java,
-  c, csharp, rust, ruby, bash, matlab, numpy, pandas,
+  c, cpp, csharp, rust, ruby, bash, matlab, numpy, pandas,
 
   // App Development
   swift, dart, reactnative, flutter,
