@@ -5,12 +5,19 @@ import { useSelector } from 'react-redux';
 import AssignmentBadge from './AssignmentBadge';
 import AssignIssueDropdown from './AssignIssueDropdown';
 import TimerWidget from '../TimerWidget';
+import DeleteConfirmModal from '../DeleteConfirmModal';
+import AlertModal from '../AlertModal';
 
 const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
     const user = useSelector(store => store.user);
     const [issue, setIssue] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [deleting, setDeleting] = useState(false);
+    const [isArchiveModalOpen, setIsArchiveModalOpen] = useState(false);
+    const [archiving, setArchiving] = useState(false);
+    const [alertData, setAlertData] = useState(null);
 
     // Inline edit state
     const [isEditing, setIsEditing] = useState(false);
@@ -48,7 +55,7 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
             fetchIssue();
             setIsEditing(false);
         } catch (err) {
-            alert(err.response?.data?.error || "Failed to update issue");
+            setAlertData({ type: 'error', message: err.response?.data?.error || "Failed to update issue" });
         } finally {
             setSaving(false);
         }
@@ -59,7 +66,7 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
             await axios.post(`${BASE_URL}/teams/${teamId}/issues/${issueId}/claim`, {}, { withCredentials: true });
             fetchIssue();
         } catch (err) {
-            alert(err.response?.data?.error || "Failed to claim issue");
+            setAlertData({ type: 'error', message: err.response?.data?.error || "Failed to claim issue" });
         }
     };
 
@@ -68,17 +75,31 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
             await axios.post(`${BASE_URL}/teams/${teamId}/issues/${issueId}/unclaim`, {}, { withCredentials: true });
             fetchIssue();
         } catch (err) {
-            alert(err.response?.data?.error || "Failed to unclaim issue");
+            setAlertData({ type: 'error', message: err.response?.data?.error || "Failed to unclaim issue" });
         }
     };
 
     const handleArchive = async () => {
-        if (!confirm("Are you sure you want to archive this issue?")) return;
+        setArchiving(true);
         try {
-            await axios.delete(`${BASE_URL}/teams/${teamId}/issues/${issueId}`, { withCredentials: true });
+            await axios.patch(`${BASE_URL}/teams/${teamId}/issues/${issueId}/archive`, {}, { withCredentials: true });
+            setIsArchiveModalOpen(false);
             onBack();
         } catch (err) {
-            alert(err.response?.data?.error || "Failed to archive issue");
+            setAlertData({ type: 'error', message: err.response?.data?.error || "Failed to archive issue" });
+            setArchiving(false);
+        }
+    };
+
+    const handleDelete = async () => {
+        setDeleting(true);
+        try {
+            await axios.delete(`${BASE_URL}/teams/${teamId}/issues/${issueId}`, { withCredentials: true });
+            setIsDeleteModalOpen(false);
+            onBack();
+        } catch (err) {
+            setAlertData({ type: 'error', message: err.response?.data?.error || "Failed to delete issue" });
+            setDeleting(false);
         }
     };
 
@@ -111,7 +132,8 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
         }
     };
 
-    const canArchive = myRole === 'leader' || String(issue.createdBy) === String(user._id);
+    const canArchive = myRole === 'leader' || myRole === 'admin' || String(issue.createdBy) === String(user._id);
+    const canDelete = myRole === 'leader' || myRole === 'admin';
 
     return (
         <div className="bg-[#121215] border border-white/10 rounded-2xl p-6 relative animate-in fade-in slide-in-from-bottom-4 duration-300">
@@ -120,14 +142,24 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                 Back to Issues
             </button>
 
-            {canArchive && (
-                <button
-                    onClick={handleArchive}
-                    className="absolute top-6 right-6 text-xs text-red-400 hover:text-red-300 hover:underline"
-                >
-                    Archive Issue
-                </button>
-            )}
+            <div className="absolute top-6 right-6 flex items-center gap-4">
+                {canArchive && (
+                    <button
+                        onClick={() => setIsArchiveModalOpen(true)}
+                        className="text-xs text-zinc-400 hover:text-white hover:underline transition-colors font-medium"
+                    >
+                        Archive Issue
+                    </button>
+                )}
+                {canDelete && (
+                    <button
+                        onClick={() => setIsDeleteModalOpen(true)}
+                        className="text-xs text-red-400 hover:text-red-300 hover:underline transition-colors font-medium"
+                    >
+                        Delete Issue
+                    </button>
+                )}
+            </div>
 
             {isEditing ? (
                 <div className="space-y-4 max-w-2xl">
@@ -233,7 +265,7 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                                                 Unclaim Issue
                                             </button>
                                         )}
-                                        {myRole === 'leader' && (
+                                        {(myRole === 'leader' || myRole === 'admin') && (
                                             <div className="flex-1">
                                                 <AssignIssueDropdown 
                                                     teamId={teamId} 
@@ -260,7 +292,7 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                                             Claim this Issue
                                         </button>
                                         
-                                        {myRole === 'leader' && (
+                                        {(myRole === 'leader' || myRole === 'admin') && (
                                             <div className="mt-2">
                                                 <AssignIssueDropdown 
                                                     teamId={teamId} 
@@ -277,6 +309,34 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                     </div>
                 </div>
             )}
+
+            <DeleteConfirmModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={handleDelete}
+                itemType="Issue"
+                itemName={issue?.title}
+                loading={deleting}
+            />
+            <DeleteConfirmModal
+                isOpen={isArchiveModalOpen}
+                onClose={() => setIsArchiveModalOpen(false)}
+                onConfirm={handleArchive}
+                title="Archive Issue"
+                itemType="Issue"
+                itemName={issue?.title}
+                requiredText="ARCHIVE"
+                description="You are about to archive this issue. It will be removed from active board listings."
+                warning="Archived issues are hidden from ongoing sprint tasks."
+                buttonText="Archive Issue"
+                theme="amber"
+                loading={archiving}
+            />
+            <AlertModal
+                isOpen={!!alertData}
+                onClose={() => setAlertData(null)}
+                {...alertData}
+            />
         </div>
     );
 };

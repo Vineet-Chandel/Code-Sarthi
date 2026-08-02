@@ -16,6 +16,15 @@ const ProjectSchema = new Schema({
     default: 'medium'
   },
   createdBy: { type: Schema.Types.ObjectId, ref: 'Users', required: true },
+  links: [{
+    title: { type: String, required: true, trim: true, maxlength: 100 },
+    url: { type: String, required: true, trim: true, maxlength: 500 },
+    category: {
+      type: String,
+      enum: ['vcs', 'website', 'social', 'other'],
+      default: 'website'
+    }
+  }],
   archivedAt: { type: Date, default: null } // soft delete
 }, { timestamps: true });
 

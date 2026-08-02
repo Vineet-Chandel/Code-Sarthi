@@ -1,13 +1,17 @@
 import { useState } from 'react';
 import axios from 'axios';
 import BASE_URL from '../../auth/baseURL';
+import DeleteConfirmModal from '../DeleteConfirmModal';
+import AlertModal from '../AlertModal';
 
-const TeamSettingsPanel = ({ team, myRole, onUpdate }) => {
+const TeamSettingsPanel = ({ team, myRole, onUpdate, onArchive, onDelete }) => {
     const [name, setName] = useState(team.name);
     const [description, setDescription] = useState(team.description || '');
     const [loading, setLoading] = useState(false);
     const [inviteCode, setInviteCode] = useState(team.inviteCode);
     const [generatingCode, setGeneratingCode] = useState(false);
+    const [isRegenerateModalOpen, setIsRegenerateModalOpen] = useState(false);
+    const [alertData, setAlertData] = useState(null);
 
     const isLeader = myRole === 'leader';
 
@@ -19,22 +23,24 @@ const TeamSettingsPanel = ({ team, myRole, onUpdate }) => {
         try {
             const res = await axios.patch(`${BASE_URL}/teams/${team._id}`, { name, description }, { withCredentials: true });
             onUpdate(res.data.team);
-            alert("Settings saved successfully");
+            setAlertData({ type: 'success', title: 'Settings Saved', message: "Settings saved successfully" });
         } catch (err) {
-            alert(err.response?.data?.error || "Failed to save settings");
+            setAlertData({ type: 'error', message: err.response?.data?.error || "Failed to save settings" });
         } finally {
             setLoading(false);
         }
     };
 
     const handleRegenerateCode = async () => {
-        if (!isLeader || !confirm("Generating a new code will invalidate the old one. Continue?")) return;
+        if (!isLeader) return;
         setGeneratingCode(true);
         try {
             const res = await axios.post(`${BASE_URL}/teams/${team._id}/invite`, {}, { withCredentials: true });
             setInviteCode(res.data.inviteCode);
+            setIsRegenerateModalOpen(false);
+            setAlertData({ type: 'success', title: 'Code Regenerated', message: "New team invite code is ready to share." });
         } catch (err) {
-            alert(err.response?.data?.error || "Failed to regenerate invite code");
+            setAlertData({ type: 'error', message: err.response?.data?.error || "Failed to regenerate invite code" });
         } finally {
             setGeneratingCode(false);
         }
@@ -42,7 +48,7 @@ const TeamSettingsPanel = ({ team, myRole, onUpdate }) => {
 
     const copyCode = () => {
         navigator.clipboard.writeText(inviteCode);
-        alert("Invite code copied to clipboard!");
+        setAlertData({ type: 'success', title: 'Copied!', message: "Invite code copied to clipboard!" });
     };
 
     return (
@@ -97,7 +103,7 @@ const TeamSettingsPanel = ({ team, myRole, onUpdate }) => {
                             </button>
                         </div>
                         <button
-                            onClick={handleRegenerateCode}
+                            onClick={() => setIsRegenerateModalOpen(true)}
                             disabled={generatingCode}
                             className="bg-white/5 hover:bg-white/10 border border-white/10 text-white font-medium py-3 px-4 rounded-xl transition-colors disabled:opacity-50 whitespace-nowrap"
                         >
@@ -106,6 +112,61 @@ const TeamSettingsPanel = ({ team, myRole, onUpdate }) => {
                     </div>
                 </div>
             )}
+
+            {isLeader && (
+                <div className="bg-red-500/[0.02] border border-red-500/20 rounded-2xl p-6 space-y-6">
+                    <div>
+                        <h3 className="text-lg font-medium text-red-400 mb-1">Danger Zone</h3>
+                        <p className="text-sm text-zinc-400">Irreversible and destructive team governance actions.</p>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 py-4 border-t border-red-500/10">
+                        <div>
+                            <div className="text-sm font-medium text-white mb-0.5">Archive Team</div>
+                            <div className="text-xs text-zinc-400">Temporarily deactivate this team and hide it from active workspaces.</div>
+                        </div>
+                        <button
+                            onClick={onArchive}
+                            className="bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/20 px-5 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all hover:scale-105 active:scale-95 shrink-0"
+                        >
+                            Archive Team
+                        </button>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2 border-t border-red-500/10">
+                        <div>
+                            <div className="text-sm font-medium text-white mb-0.5">Delete Team</div>
+                            <div className="text-xs text-zinc-400">Permanently eradicate this team along with all associated projects, issues, and contributions.</div>
+                        </div>
+                        <button
+                            onClick={onDelete}
+                            className="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 px-5 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all hover:scale-105 active:scale-95 shrink-0"
+                        >
+                            Delete Team
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            <DeleteConfirmModal
+                isOpen={isRegenerateModalOpen}
+                onClose={() => setIsRegenerateModalOpen(false)}
+                onConfirm={handleRegenerateCode}
+                title="Regenerate Invite Code"
+                itemType="Code"
+                itemName={team?.name}
+                requiredText="REGENERATE"
+                description="You are about to generate a new invitation code for this team."
+                warning="Generating a new code will immediately invalidate the existing invite code."
+                buttonText="Regenerate Code"
+                theme="amber"
+                loading={generatingCode}
+            />
+            <AlertModal
+                isOpen={!!alertData}
+                onClose={() => setAlertData(null)}
+                {...alertData}
+            />
         </div>
     );
 };

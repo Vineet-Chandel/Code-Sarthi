@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import BASE_URL from '../../auth/baseURL';
+import AlertModal from '../AlertModal';
 
 const AssignIssueDropdown = ({ teamId, issueId, currentAssigneeId, onAssign }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [members, setMembers] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [alertData, setAlertData] = useState(null);
     const dropdownRef = useRef(null);
 
     useEffect(() => {
@@ -45,7 +47,7 @@ const AssignIssueDropdown = ({ teamId, issueId, currentAssigneeId, onAssign }) =
             const res = await axios.post(`${BASE_URL}/teams/${teamId}/issues/${issueId}/assign`, { userId }, { withCredentials: true });
             onAssign(res.data.issue);
         } catch (err) {
-            alert(err.response?.data?.error || "Failed to assign issue");
+            setAlertData({ type: 'error', message: err.response?.data?.error || "Failed to assign issue" });
         }
     };
 
@@ -101,6 +103,11 @@ const AssignIssueDropdown = ({ teamId, issueId, currentAssigneeId, onAssign }) =
                     )}
                 </div>
             )}
+            <AlertModal
+                isOpen={!!alertData}
+                onClose={() => setAlertData(null)}
+                {...alertData}
+            />
         </div>
     );
 };

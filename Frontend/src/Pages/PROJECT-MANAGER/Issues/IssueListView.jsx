@@ -6,6 +6,7 @@ import IssueDetailPanel from './IssueDetailPanel';
 import AssignmentBadge from './AssignmentBadge';
 import AssignIssueDropdown from './AssignIssueDropdown';
 import { useSelector } from 'react-redux';
+import AlertModal from '../AlertModal';
 
 const IssueListView = ({ teamId, projectId, myRole }) => {
     const user = useSelector(store => store.user);
@@ -13,6 +14,7 @@ const IssueListView = ({ teamId, projectId, myRole }) => {
     const [loading, setLoading] = useState(true);
     const [createModalOpen, setCreateModalOpen] = useState(false);
     const [selectedIssueId, setSelectedIssueId] = useState(null);
+    const [alertData, setAlertData] = useState(null);
 
     // Filters
     const [typeFilter, setTypeFilter] = useState('');
@@ -49,7 +51,7 @@ const IssueListView = ({ teamId, projectId, myRole }) => {
             setIssues(issues.map(i => i._id === issueId ? res.data.issue : i));
             fetchIssues(); // Refresh to get populated assignedTo
         } catch (err) {
-            alert(err.response?.data?.error || "Failed to claim issue");
+            setAlertData({ type: 'error', message: err.response?.data?.error || "Failed to claim issue" });
         }
     };
 
@@ -60,7 +62,7 @@ const IssueListView = ({ teamId, projectId, myRole }) => {
             setIssues(issues.map(i => i._id === issueId ? res.data.issue : i));
             fetchIssues(); // Refresh
         } catch (err) {
-            alert(err.response?.data?.error || "Failed to unclaim issue");
+            setAlertData({ type: 'error', message: err.response?.data?.error || "Failed to unclaim issue" });
         }
     };
 
@@ -192,7 +194,7 @@ const IssueListView = ({ teamId, projectId, myRole }) => {
                                                         Unclaim
                                                     </button>
                                                 )}
-                                                {myRole === 'leader' && (
+                                                {(myRole === 'leader' || myRole === 'admin') && (
                                                     <div className="ml-2">
                                                         <AssignIssueDropdown 
                                                             teamId={teamId} 
@@ -215,7 +217,7 @@ const IssueListView = ({ teamId, projectId, myRole }) => {
                                                 >
                                                     Claim
                                                 </button>
-                                                {myRole === 'leader' && (
+                                                {(myRole === 'leader' || myRole === 'admin') && (
                                                     <div className="ml-2">
                                                         <AssignIssueDropdown 
                                                             teamId={teamId} 
@@ -253,6 +255,11 @@ const IssueListView = ({ teamId, projectId, myRole }) => {
                     setCreateModalOpen(false);
                     fetchIssues();
                 }}
+            />
+            <AlertModal
+                isOpen={!!alertData}
+                onClose={() => setAlertData(null)}
+                {...alertData}
             />
         </div>
     );

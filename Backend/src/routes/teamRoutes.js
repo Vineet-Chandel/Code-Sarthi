@@ -14,10 +14,12 @@ const {
   getTeamDetails,
   updateTeam,
   archiveTeam,
+  deleteTeam,
   generateInviteCode,
   joinTeam,
   listMembers,
   removeMember,
+  updateMemberRole,
   leaveTeam,
   transferOwnership
 } = require('../controllers/teamController');
@@ -43,9 +45,11 @@ router.post('/:teamId/leave', requireTeamMembership, leaveTeam);
 
 // Routes requiring leader access
 router.patch('/:teamId', requireTeamMembership, requireTeamLeader, updateTeam);
-router.delete('/:teamId', requireTeamMembership, requireTeamLeader, archiveTeam);
+router.patch('/:teamId/archive', requireTeamMembership, requireTeamLeader, archiveTeam);
+router.delete('/:teamId', requireTeamMembership, requireTeamLeader, deleteTeam);
 router.post('/:teamId/invite', requireTeamMembership, requireTeamLeader, generateInviteCode);
 router.delete('/:teamId/members/:userId', requireTeamMembership, requireTeamLeader, removeMember);
+router.patch('/:teamId/members/:userId/role', requireTeamMembership, requireTeamLeader, updateMemberRole);
 router.post('/:teamId/transfer-ownership', requireTeamMembership, requireTeamLeader, transferOwnership);
 
 // Mount Sub-modules

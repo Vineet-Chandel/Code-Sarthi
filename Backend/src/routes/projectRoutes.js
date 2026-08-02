@@ -7,7 +7,8 @@ const {
   listProjects,
   getProjectDetails,
   updateProject,
-  archiveProject
+  archiveProject,
+  deleteProject
 } = require('../controllers/projectController');
 
 const {
@@ -22,7 +23,8 @@ router.post('/', createProject);
 router.get('/', listProjects);
 router.get('/:projectId', getProjectDetails);
 router.patch('/:projectId', updateProject);
-router.delete('/:projectId', requireTeamLeader, archiveProject);
+router.patch('/:projectId/archive', requireTeamLeader, archiveProject);
+router.delete('/:projectId', requireTeamLeader, deleteProject);
 
 // Issue endpoints tied to projects
 router.post('/:projectId/issues', createIssue);

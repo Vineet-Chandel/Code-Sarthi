@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import BASE_URL from '../auth/baseURL';
+import AlertModal from './AlertModal';
 
 const TimerWidget = ({ teamId, issueId, issueTitle, inline = false }) => {
     const [activeTimer, setActiveTimer] = useState(null);
@@ -9,6 +10,7 @@ const TimerWidget = ({ teamId, issueId, issueTitle, inline = false }) => {
     const [elapsedSeconds, setElapsedSeconds] = useState(0);
     const [conflictData, setConflictData] = useState(null);
     const [error, setError] = useState(null);
+    const [alertData, setAlertData] = useState(null);
 
     useEffect(() => {
         if (!teamId) return;
@@ -94,7 +96,7 @@ const TimerWidget = ({ teamId, issueId, issueTitle, inline = false }) => {
             setConflictData(null);
             notifyChange();
         } catch (err) {
-            alert(err.response?.data?.error || "Failed to stop timer");
+            setAlertData({ type: 'error', message: err.response?.data?.error || "Failed to stop timer" });
         } finally {
             setActionLoading(false);
         }
@@ -111,11 +113,19 @@ const TimerWidget = ({ teamId, issueId, issueTitle, inline = false }) => {
             await axios.post(`${BASE_URL}/teams/${teamId}/contributions/start`, { issueId }, { withCredentials: true });
             notifyChange();
         } catch (err) {
-            alert(err.response?.data?.error || "Failed to switch timer");
+            setAlertData({ type: 'error', message: err.response?.data?.error || "Failed to switch timer" });
         } finally {
             setActionLoading(false);
         }
     };
+
+    const modalComponent = (
+        <AlertModal
+            isOpen={!!alertData}
+            onClose={() => setAlertData(null)}
+            {...alertData}
+        />
+    );
 
     if (loading && !inline) return null;
 
@@ -183,6 +193,7 @@ const TimerWidget = ({ teamId, issueId, issueTitle, inline = false }) => {
                             {actionLoading ? 'Stopping...' : 'Stop Timer'}
                         </button>
                     </div>
+                    {modalComponent}
                 </div>
             );
         }
@@ -202,12 +213,13 @@ const TimerWidget = ({ teamId, issueId, issueTitle, inline = false }) => {
                     <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z" /></svg>
                     {actionLoading ? 'Starting...' : 'Start Timer'}
                 </button>
+                {modalComponent}
             </div>
         );
     }
 
     // --- FLOATING MODE (Persistent corner widget when timer is running) ---
-    if (!activeTimer) return null;
+    if (!activeTimer) return alertData ? modalComponent : null;
 
     const currentTitle = activeTimer.issueId?.title || issueTitle || "Active Task";
     const currentStatus = activeTimer.issueId?.status;
@@ -246,6 +258,7 @@ const TimerWidget = ({ teamId, issueId, issueTitle, inline = false }) => {
                     </button>
                 </div>
             </div>
+            {modalComponent}
         </div>
     );
 };

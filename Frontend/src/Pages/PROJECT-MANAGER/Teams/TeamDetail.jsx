@@ -9,6 +9,8 @@ import ProjectListView from '../Projects/ProjectListView';
 import ProjectDetailPanel from '../Projects/ProjectDetailPanel';
 import ProjectManager from '../../Project-Manager';
 import TimerWidget from '../TimerWidget';
+import DeleteConfirmModal from '../DeleteConfirmModal';
+import AlertModal from '../AlertModal';
 
 const TeamDetail = ({ teamId, onBack }) => {
     const dispatch = useDispatch();
@@ -19,6 +21,13 @@ const TeamDetail = ({ teamId, onBack }) => {
     const [error, setError] = useState(null);
     const [activeTab, setActiveTab] = useState('projects');
     const [selectedProjectId, setSelectedProjectId] = useState(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [deleting, setDeleting] = useState(false);
+    const [isArchiveModalOpen, setIsArchiveModalOpen] = useState(false);
+    const [archiving, setArchiving] = useState(false);
+    const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
+    const [leaving, setLeaving] = useState(false);
+    const [alertData, setAlertData] = useState(null);
 
     useEffect(() => {
         if (!cachedDetail?.isFetched) {
@@ -45,24 +54,41 @@ const TeamDetail = ({ teamId, onBack }) => {
     };
 
     const handleLeave = async () => {
-        if (!confirm("Are you sure you want to leave this team?")) return;
+        setLeaving(true);
         try {
             await axios.post(`${BASE_URL}/teams/${teamId}/leave`, {}, { withCredentials: true });
             dispatch(removeTeam(teamId));
+            setIsLeaveModalOpen(false);
             onBack();
         } catch (err) {
-            alert(err.response?.data?.error || "Failed to leave team");
+            setAlertData({ type: 'error', message: err.response?.data?.error || "Failed to leave team" });
+            setLeaving(false);
         }
     };
 
     const handleArchive = async () => {
-        if (!confirm("Are you sure you want to archive this team? This is a soft delete.")) return;
+        setArchiving(true);
+        try {
+            await axios.patch(`${BASE_URL}/teams/${teamId}/archive`, {}, { withCredentials: true });
+            dispatch(removeTeam(teamId));
+            setIsArchiveModalOpen(false);
+            onBack();
+        } catch (err) {
+            setAlertData({ type: 'error', message: err.response?.data?.error || "Failed to archive team" });
+            setArchiving(false);
+        }
+    };
+
+    const handleDelete = async () => {
+        setDeleting(true);
         try {
             await axios.delete(`${BASE_URL}/teams/${teamId}`, { withCredentials: true });
             dispatch(removeTeam(teamId));
+            setIsDeleteModalOpen(false);
             onBack();
         } catch (err) {
-            alert(err.response?.data?.error || "Failed to archive team");
+            setAlertData({ type: 'error', message: err.response?.data?.error || "Failed to delete team" });
+            setDeleting(false);
         }
     };
 
@@ -102,12 +128,8 @@ const TeamDetail = ({ teamId, onBack }) => {
                 </div>
 
                 <div className="flex gap-2">
-                    {membership.role === 'leader' ? (
-                        <button onClick={handleArchive} className="bg-white/5 hover:bg-white/10 text-zinc-300 px-4 py-2 rounded-xl text-sm font-medium transition-colors border border-white/5">
-                            Archive Team
-                        </button>
-                    ) : (
-                        <button onClick={handleLeave} className="bg-red-500/10 hover:bg-red-500/20 text-red-400 px-4 py-2 rounded-xl text-sm font-medium transition-colors border border-red-500/20">
+                    {membership.role !== 'leader' && (
+                        <button onClick={() => setIsLeaveModalOpen(true)} className="bg-red-500/10 hover:bg-red-500/20 text-red-400 px-4 py-2 rounded-xl text-sm font-medium transition-colors border border-red-500/20">
                             Leave Team
                         </button>
                     )}
@@ -176,6 +198,8 @@ const TeamDetail = ({ teamId, onBack }) => {
                             team={team} 
                             myRole={membership.role} 
                             onUpdate={fetchTeam} 
+                            onArchive={() => setIsArchiveModalOpen(true)}
+                            onDelete={() => setIsDeleteModalOpen(true)}
                         />
                     )}
                     {activeTab === 'analytics' && (
@@ -184,6 +208,47 @@ const TeamDetail = ({ teamId, onBack }) => {
                 </div>
             )}
             <TimerWidget teamId={teamId} inline={false} />
+            <DeleteConfirmModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={handleDelete}
+                itemType="Team"
+                itemName={team?.name}
+                loading={deleting}
+            />
+            <DeleteConfirmModal
+                isOpen={isArchiveModalOpen}
+                onClose={() => setIsArchiveModalOpen(false)}
+                onConfirm={handleArchive}
+                title="Archive Team"
+                itemType="Team"
+                itemName={team?.name}
+                requiredText="ARCHIVE"
+                description="You are about to archive this team. This will perform a soft-delete and hide it from active lists."
+                warning="Archived teams are moved out of active workflow."
+                buttonText="Archive Team"
+                theme="amber"
+                loading={archiving}
+            />
+            <DeleteConfirmModal
+                isOpen={isLeaveModalOpen}
+                onClose={() => setIsLeaveModalOpen(false)}
+                onConfirm={handleLeave}
+                title="Leave Team"
+                itemType="Team"
+                itemName={team?.name}
+                requiredText="LEAVE"
+                description="You are about to leave this team and renounce your access."
+                warning="You will need a new invitation code to rejoin this team."
+                buttonText="Leave Team"
+                theme="red"
+                loading={leaving}
+            />
+            <AlertModal
+                isOpen={!!alertData}
+                onClose={() => setAlertData(null)}
+                {...alertData}
+            />
         </div>
     );
 };

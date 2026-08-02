@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import BASE_URL from '../../auth/baseURL';
@@ -6,6 +6,13 @@ import BASE_URL from '../../auth/baseURL';
 const TransferOwnershipModal = ({ isOpen, onClose, teamId, targetUserId, members, onSuccess }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [confirmText, setConfirmText] = useState('');
+
+    useEffect(() => {
+        if (!isOpen) setConfirmText('');
+    }, [isOpen]);
+
+    const isConfirmed = confirmText.trim().toLowerCase() === 'transfer';
 
     const targetUser = members.find(m => m.userId._id === targetUserId)?.userId;
 
@@ -61,19 +68,34 @@ const TransferOwnershipModal = ({ isOpen, onClose, teamId, targetUserId, members
                             </div>
                         )}
 
+                        <div className="mb-6">
+                            <label className="block text-xs text-zinc-400 font-medium mb-2">
+                                To confirm transfer, type <strong className="text-white select-all font-mono bg-white/10 px-1.5 py-0.5 rounded">TRANSFER</strong> below:
+                            </label>
+                            <input
+                                type="text"
+                                value={confirmText}
+                                onChange={(e) => setConfirmText(e.target.value)}
+                                placeholder="Type TRANSFER to confirm"
+                                disabled={loading}
+                                autoFocus
+                                className="w-full bg-white/5 border border-white/10 focus:border-amber-500/60 focus:outline-none focus:ring-2 focus:ring-amber-500/20 rounded-xl px-3.5 py-2.5 text-white font-mono text-sm tracking-widest uppercase placeholder:text-zinc-600 placeholder:tracking-normal placeholder:font-sans transition-all"
+                            />
+                        </div>
+
                         <div className="flex gap-3">
                             <button
                                 type="button"
                                 onClick={onClose}
-                                className="flex-1 bg-white/5 hover:bg-white/10 text-white font-medium py-2.5 px-4 rounded-xl transition-colors border border-white/5"
+                                className="flex-1 bg-white/5 hover:bg-white/10 text-white font-medium py-2.5 px-4 rounded-xl transition-colors border border-white/5 text-sm"
                             >
                                 Cancel
                             </button>
                             <button
                                 type="button"
                                 onClick={handleTransfer}
-                                disabled={loading}
-                                className="flex-1 bg-amber-500/90 hover:bg-amber-500 text-white font-medium py-2.5 px-4 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(245,158,11,0.2)]"
+                                disabled={!isConfirmed || loading}
+                                className="flex-1 bg-amber-500/90 hover:bg-amber-500 text-white font-medium py-2.5 px-4 rounded-xl transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(245,158,11,0.2)] text-sm flex items-center justify-center gap-2"
                             >
                                 {loading ? 'Transferring...' : 'Yes, Transfer'}
                             </button>

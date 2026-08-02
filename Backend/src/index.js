@@ -44,24 +44,6 @@ cloudinary.config({
     api_secret: process.env.CLOUD_SECRET
 });
 
-
-app.use("/api", authRouter);
-app.use("/api", profileRouter);
-app.use("/api", requestRouter);
-app.use("/api", userPreference);
-app.use("/api", passwordManagment);
-app.use("/api", fileUpload);
-app.use("/api", chatRouter);
-app.use("/api", feedbackRouter);
-app.use("/api", reviewRouter);
-app.use("/api", aiWorkRouter);
-app.use("/api", newsletterRouter);
-app.use("/api", resRouter);
-app.use("/api", botRouter);
-app.use("/api", goalsRouter);
-app.use("/api", schedulesRouter);
-app.use("/api/teams", teamRoutes);
-
 app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);

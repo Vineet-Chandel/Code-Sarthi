@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 const Team = require("../models/team");
 const TeamMember = require("../models/teamMember");
+const Project = require("../models/project");
+const Issue = require("../models/issue");
+const ContributionLog = require("../models/contributionLog");
+const AssignmentEvent = require("../models/assignmentEvent");
 const { handleRouteError } = require("../utils/handleRouteError");
 const { nanoid } = require("nanoid");
 
@@ -26,7 +30,20 @@ async function createTeam(req, res) {
     }], { session });
 
     await session.commitTransaction();
-    res.status(201).json({ team });
+    const populatedTeam = await Team.findById(team._id).populate('ownerId', 'firstName lastName photoUrl');
+    const teamObj = {
+      ...populatedTeam.toObject(),
+      myRole: 'leader',
+      members: [{
+        _id: req.user._id,
+        firstName: req.user.firstName,
+        lastName: req.user.lastName,
+        photoUrl: req.user.photoUrl,
+        email: req.user.email,
+        role: 'leader'
+      }]
+    };
+    res.status(201).json({ team: teamObj });
   } catch (err) {
     await session.abortTransaction();
     return handleRouteError(err, res);
@@ -144,7 +161,22 @@ async function joinTeam(req, res) {
       }
       await Team.updateOne({ _id: team._id }, { $inc: { memberCount: 1 } }, { session });
       await session.commitTransaction();
-      res.json({ success: true, team });
+      const populatedTeam = await Team.findById(team._id).populate('ownerId', 'firstName lastName photoUrl');
+      const teamMembers = await TeamMember.find({ teamId: team._id, status: 'active' }).populate('userId', 'firstName lastName photoUrl email');
+      const formattedMembers = teamMembers.filter(m => m.userId).map(m => ({
+        _id: m.userId._id,
+        firstName: m.userId.firstName,
+        lastName: m.userId.lastName,
+        photoUrl: m.userId.photoUrl,
+        email: m.userId.email,
+        role: m.role
+      }));
+      const teamObj = {
+        ...populatedTeam.toObject(),
+        myRole: 'member',
+        members: formattedMembers
+      };
+      res.json({ success: true, team: teamObj });
     } catch (err) {
       await session.abortTransaction();
       throw err;
@@ -275,16 +307,61 @@ async function transferOwnership(req, res) {
   }
 }
 
+// Permanently delete team and clean up related entities
+async function deleteTeam(req, res) {
+  try {
+    const teamId = req.params.teamId;
+    await Team.findByIdAndDelete(teamId);
+    await TeamMember.deleteMany({ teamId });
+    await Project.deleteMany({ teamId });
+    await Issue.deleteMany({ teamId });
+    await ContributionLog.deleteMany({ teamId });
+    await AssignmentEvent.deleteMany({ teamId });
+    res.json({ success: true });
+  } catch (err) {
+    return handleRouteError(err, res);
+  }
+}
+
+// Update member role (leader only)
+async function updateMemberRole(req, res) {
+  const { teamId, userId } = req.params;
+  const { role } = req.body; // 'admin' or 'member'
+  try {
+    if (!['admin', 'member'].includes(role)) {
+      return res.status(400).json({ error: 'Invalid role. Can only be admin or member.' });
+    }
+    const team = await Team.findById(teamId);
+    if (!team) return res.status(404).json({ error: 'Team not found' });
+    if (String(userId) === String(team.ownerId)) {
+      return res.status(403).json({ error: 'Cannot change role of team leader.' });
+    }
+    const member = await TeamMember.findOneAndUpdate(
+      { teamId, userId, status: 'active' },
+      { role },
+      { new: true }
+    );
+    if (!member) {
+      return res.status(404).json({ error: 'Active member not found.' });
+    }
+    res.json({ success: true, member });
+  } catch (err) {
+    return handleRouteError(err, res);
+  }
+}
+
 module.exports = {
   createTeam,
   listMyTeams,
   getTeamDetails,
   updateTeam,
   archiveTeam,
+  deleteTeam,
   generateInviteCode,
   joinTeam,
   listMembers,
   removeMember,
+  updateMemberRole,
   leaveTeam,
   transferOwnership
 };

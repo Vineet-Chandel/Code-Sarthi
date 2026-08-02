@@ -22,4 +22,11 @@ function requireTeamLeader(req, res, next) {
   next();
 }
 
-module.exports = { requireTeamMembership, requireTeamLeader };
+function requireTeamLeaderOrAdmin(req, res, next) {
+  if (req.membership.role !== 'leader' && req.membership.role !== 'admin') {
+    return res.status(403).json({ error: 'Leader or Admin access required' });
+  }
+  next();
+}
+
+module.exports = { requireTeamMembership, requireTeamLeader, requireTeamLeaderOrAdmin };

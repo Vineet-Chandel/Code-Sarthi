@@ -290,12 +290,32 @@ async function unclaimIssue(req, res) {
   }
 }
 
+async function deleteIssue(req, res) {
+  try {
+    const { issueId, teamId } = req.params;
+    const issue = await Issue.findOneAndDelete({ _id: issueId, teamId });
+    if (!issue) return res.status(404).json({ error: 'Issue not found' });
+
+    if (issue.linkedGoalId) {
+      await Goals.updateOne(
+        { _id: issue.linkedGoalId },
+        { status: 'Removed', isArchived: true, lastUpdated: Date.now() }
+      );
+    }
+
+    res.json({ success: true });
+  } catch (err) {
+    return handleRouteError(err, res);
+  }
+}
+
 module.exports = {
   createIssue,
   listIssues,
   getIssueDetails,
   updateIssue,
   archiveIssue,
+  deleteIssue,
   claimIssue,
   assignIssue,
   unclaimIssue
