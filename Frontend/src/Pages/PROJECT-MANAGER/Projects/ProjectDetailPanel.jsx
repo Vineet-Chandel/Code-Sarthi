@@ -6,7 +6,7 @@ import { setProjectDetail, updateProjectInTeam, removeProjectFromTeam } from '..
 import IssueListView from '../Issues/IssueListView';
 import DeleteConfirmModal from '../DeleteConfirmModal';
 import AlertModal from '../AlertModal';
-import AddLinkModal from './AddLinkModal';
+import ProjectLinksModal from './ProjectLinksModal';
 
 const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
     const dispatch = useDispatch();
@@ -150,36 +150,6 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
         }
     };
 
-    const getLinkCategoryDetails = (category) => {
-        switch (category) {
-            case 'vcs':
-                return {
-                    label: 'VCS / Repo',
-                    badge: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
-                    icon: (
-                        <svg className="w-3.5 h-3.5 text-purple-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
-                    )
-                };
-            case 'social':
-                return {
-                    label: 'Social',
-                    badge: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
-                    icon: (
-                        <svg className="w-3.5 h-3.5 text-blue-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
-                    )
-                };
-            case 'website':
-            default:
-                return {
-                    label: 'Website',
-                    badge: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-                    icon: (
-                        <svg className="w-3.5 h-3.5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" /></svg>
-                    )
-                };
-        }
-    };
-
     if (loading) return <div className="text-zinc-500 animate-pulse">Loading project details...</div>;
     if (error) return <div className="text-red-400">{error}</div>;
 
@@ -211,38 +181,53 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
             </button>
 
             <div className="bg-[#09090B] border border-white/10 rounded-2xl p-6 relative">
-                {myRole === 'leader' && (
-                    <div className="absolute top-6 right-6 z-20" ref={menuRef}>
-                        <button
-                            onClick={() => setIsMenuOpen(!isMenuOpen)}
-                            title="Project Options"
-                            className="p-2 text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl transition-colors border border-white/5 flex items-center justify-center"
-                        >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-                            </svg>
-                        </button>
+                <div className="absolute top-6 right-6 z-20" ref={menuRef}>
+                    <button
+                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                        title="Project Options"
+                        className="p-2 text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl transition-colors border border-white/5 flex items-center justify-center"
+                    >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                        </svg>
+                    </button>
 
-                        {isMenuOpen && (
-                            <div className="absolute right-0 mt-2 w-48 bg-[#121215] border border-white/10 rounded-xl shadow-2xl py-2 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
-                                <button
-                                    onClick={() => { setIsMenuOpen(false); setIsArchiveModalOpen(true); }}
-                                    className="w-full text-left px-4 py-2.5 text-xs font-semibold text-amber-400 hover:bg-amber-500/10 flex items-center gap-2.5 transition-colors"
-                                >
-                                    <svg className="w-4 h-4 text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
-                                    Archive Project
-                                </button>
-                                <button
-                                    onClick={() => { setIsMenuOpen(false); setIsDeleteModalOpen(true); }}
-                                    className="w-full text-left px-4 py-2.5 text-xs font-semibold text-red-400 hover:bg-red-500/10 flex items-center gap-2.5 transition-colors"
-                                >
-                                    <svg className="w-4 h-4 text-red-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                                    Delete Project
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                )}
+                    {isMenuOpen && (
+                        <div className="absolute right-0 mt-2 w-52 bg-[#121215] border border-white/10 rounded-xl shadow-2xl py-2 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+                            <button
+                                onClick={() => { setIsMenuOpen(false); setIsLinkModalOpen(true); }}
+                                className="w-full text-left px-4 py-2.5 text-xs font-bold text-white hover:bg-white/5 flex items-center justify-between transition-colors"
+                            >
+                                <span className="flex items-center gap-2.5">
+                                    <svg className="w-4 h-4 text-[#A7A0F8] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
+                                    Project Links
+                                </span>
+                                <span className="text-[10px] bg-white/10 px-2 py-0.5 rounded-full font-semibold text-zinc-300">
+                                    {project.links?.length || 0}
+                                </span>
+                            </button>
+                            {myRole === 'leader' && (
+                                <>
+                                    <div className="border-t border-white/10 my-1" />
+                                    <button
+                                        onClick={() => { setIsMenuOpen(false); setIsArchiveModalOpen(true); }}
+                                        className="w-full text-left px-4 py-2.5 text-xs font-semibold text-amber-400 hover:bg-amber-500/10 flex items-center gap-2.5 transition-colors"
+                                    >
+                                        <svg className="w-4 h-4 text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
+                                        Archive Project
+                                    </button>
+                                    <button
+                                        onClick={() => { setIsMenuOpen(false); setIsDeleteModalOpen(true); }}
+                                        className="w-full text-left px-4 py-2.5 text-xs font-semibold text-red-400 hover:bg-red-500/10 flex items-center gap-2.5 transition-colors"
+                                    >
+                                        <svg className="w-4 h-4 text-red-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                        Delete Project
+                                    </button>
+                                </>
+                            )}
+                        </div>
+                    )}
+                </div>
 
                 {isEditing ? (
                     <div className="space-y-4 max-w-2xl">
@@ -308,73 +293,6 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
                         <p className="text-sm text-zinc-400 max-w-3xl whitespace-pre-wrap">
                             {project.description || "No description provided."}
                         </p>
-
-                        {/* Project Links Section */}
-                        <div className="mt-8 pt-6 border-t border-white/10">
-                            <div className="flex items-center justify-between mb-4">
-                                <div className="flex items-center gap-2.5">
-                                    <h3 className="text-sm font-bold text-white uppercase tracking-wider">Project Links</h3>
-                                    <span className="text-xs bg-white/10 text-zinc-400 px-2 py-0.5 rounded-full font-bold">
-                                        {project.links?.length || 0}
-                                    </span>
-                                </div>
-                                <button
-                                    onClick={() => setIsLinkModalOpen(true)}
-                                    className="bg-[#534AB7]/20 hover:bg-[#534AB7]/30 text-[#A7A0F8] border border-[#534AB7]/40 text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all shadow-sm hover:scale-105 active:scale-95 flex items-center gap-1.5"
-                                >
-                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" /></svg>
-                                    Links +
-                                </button>
-                            </div>
-
-                            {(!project.links || project.links.length === 0) ? (
-                                <div className="bg-white/[0.015] border border-dashed border-white/10 rounded-xl p-6 text-center text-xs text-zinc-500">
-                                    No project links added yet. Click &apos;Links +&apos; to attach repositories, demos, or community links.
-                                </div>
-                            ) : (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5">
-                                    {project.links.map((link, index) => {
-                                        const catDetails = getLinkCategoryDetails(link.category);
-                                        return (
-                                            <div
-                                                key={index}
-                                                className="group bg-[#09090B] hover:bg-[#121215] border border-white/10 hover:border-[#534AB7]/50 rounded-xl p-3.5 transition-all flex flex-col justify-between"
-                                            >
-                                                <div className="flex items-center justify-between gap-2 mb-2.5">
-                                                    <span className={`text-[10px] uppercase font-extrabold px-2 py-0.5 rounded border flex items-center gap-1.5 ${catDetails.badge}`}>
-                                                        {catDetails.icon}
-                                                        {catDetails.label}
-                                                    </span>
-                                                    {(myRole === 'leader' || myRole === 'admin') && (
-                                                        <button
-                                                            onClick={(e) => { e.stopPropagation(); handleRemoveLink(index); }}
-                                                            title="Remove link"
-                                                            className="opacity-0 group-hover:opacity-100 text-zinc-500 hover:text-red-400 transition-all p-1 rounded hover:bg-white/5"
-                                                        >
-                                                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                                                        </button>
-                                                    )}
-                                                </div>
-                                                <a
-                                                    href={link.url}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="block group-hover:text-[#A7A0F8] transition-colors"
-                                                >
-                                                    <div className="text-sm font-bold text-white truncate group-hover:underline flex items-center gap-1.5">
-                                                        <span>{link.title}</span>
-                                                        <svg className="w-3 h-3 text-zinc-500 group-hover:text-[#A7A0F8] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
-                                                    </div>
-                                                    <div className="text-xs font-mono text-zinc-500 truncate mt-0.5">
-                                                        {link.url.replace(/^https?:\/\//i, '')}
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            )}
-                        </div>
                     </div>
                 )}
             </div>
@@ -411,10 +329,13 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
                 onClose={() => setAlertData(null)}
                 {...alertData}
             />
-            <AddLinkModal
+            <ProjectLinksModal
                 isOpen={isLinkModalOpen}
                 onClose={() => setIsLinkModalOpen(false)}
+                project={project}
+                myRole={myRole}
                 onAddLink={handleAddLink}
+                onRemoveLink={handleRemoveLink}
                 loading={addingLink}
             />
         </div>

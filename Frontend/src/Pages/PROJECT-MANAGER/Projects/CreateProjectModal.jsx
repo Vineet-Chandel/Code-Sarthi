@@ -1,25 +1,39 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import BASE_URL from '../../auth/baseURL';
 
-const CreateProjectModal = ({ isOpen, onClose, teamId, onSuccess }) => {
+const CreateProjectModal = ({ isOpen, onClose, teamId, availableTeams = [], onSuccess }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [status, setStatus] = useState('planning');
     const [priority, setPriority] = useState('medium');
+    const [selectedTeamId, setSelectedTeamId] = useState(teamId || availableTeams[0]?._id || '');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    useEffect(() => {
+        if (teamId) {
+            setSelectedTeamId(teamId);
+        } else if (availableTeams.length > 0 && !selectedTeamId) {
+            setSelectedTeamId(availableTeams[0]._id);
+        }
+    }, [teamId, availableTeams]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const targetTeamId = teamId || selectedTeamId;
+        if (!targetTeamId) {
+            setError('Please select a team for this project.');
+            return;
+        }
         setLoading(true);
         setError(null);
         try {
-            const res = await axios.post(`${BASE_URL}/teams/${teamId}/projects`, {
+            const res = await axios.post(`${BASE_URL}/teams/${targetTeamId}/projects`, {
                 title, description, status, priority
             }, { withCredentials: true });
-            onSuccess(res.data.project);
+            onSuccess(res.data.project, targetTeamId);
             setTitle('');
             setDescription('');
             setStatus('planning');
@@ -55,6 +69,24 @@ const CreateProjectModal = ({ isOpen, onClose, teamId, onSuccess }) => {
                         <p className="text-sm text-zinc-400 mb-6">Define a new initiative for your team.</p>
 
                         <form onSubmit={handleSubmit} className="space-y-4">
+                            {!teamId && availableTeams.length > 0 && (
+                                <div>
+                                    <label className="block text-xs font-medium text-zinc-400 uppercase tracking-wider mb-1.5">Target Team *</label>
+                                    <select
+                                        value={selectedTeamId}
+                                        onChange={(e) => setSelectedTeamId(e.target.value)}
+                                        className="w-full bg-[#09090B] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#534AB7] focus:ring-1 focus:ring-[#534AB7] transition-all"
+                                        required
+                                    >
+                                        {availableTeams.map((t) => (
+                                            <option key={t._id} value={t._id}>
+                                                {t.name} ({t.myRole ? t.myRole.toUpperCase() : 'MEMBER'})
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            )}
+
                             <div>
                                 <label className="block text-xs font-medium text-zinc-400 uppercase tracking-wider mb-1.5">Project Title *</label>
                                 <input
