@@ -98,7 +98,7 @@ const ScheduleModal = ({ isOpen, onClose, scheduleToEdit, initialDate, goals, on
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="p-6 space-y-5 overflow-y-auto custom-scrollbar flex-1">
+                <form onSubmit={handleSubmit} className="p-6 space-y-5 overflow-y-auto scrollbar-none flex-1">
 
                     {/* Goal Selection */}
                     <div>

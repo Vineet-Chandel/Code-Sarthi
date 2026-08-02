@@ -37,7 +37,7 @@ import Login from "./Pages/auth/Login";
 import Signup from "./Pages/auth/Signup";
 
 /* ===== APP (PROTECTED) ===== */
-import Dashboard from "./Pages/Dashboard";
+import Dashboard from "./Pages/MainDashboard";
 import Discussions from "./Pages/DISCUSSION/Discussion";
 import Meeting from "./Pages/Meeting";
 import Explore from "./Pages/Explore";

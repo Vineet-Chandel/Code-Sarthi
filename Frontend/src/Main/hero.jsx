@@ -92,7 +92,7 @@ const Hero = () => {
             <ContentSecond2 />
 
 
-            <div className="relative">
+            <div className="relative ">
 
                 <div
                     className="

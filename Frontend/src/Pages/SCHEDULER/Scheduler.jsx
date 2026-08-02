@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import BASE_URL from '../../Pages/auth/baseURL';
@@ -6,10 +7,14 @@ import { setGoals } from '../../utils/goalSlice';
 import SchedulerCalendar from './SchedulerCalendar';
 import GoalAnalytics from './GoalAnalytics';
 
-const Scheduler = () => {
+const Scheduler = ({ embedded = false, goals: externalGoals = null, onGoalCreated }) => {
+    const location = useLocation();
+    const initialDate = location?.state?.targetDate ? new Date(location.state.targetDate) : null;
+    const initialOpenModal = Boolean(location?.state?.openModal);
     const dispatch = useDispatch();
     const user = useSelector(store => store.user);
-    const goals = useSelector(store => store.goals.goals || []);
+    const reduxGoals = useSelector(store => store.goals.goals || []);
+    const goals = externalGoals !== null ? externalGoals : reduxGoals;
     const isFetched = useSelector(store => store.goals.isFetched);
     const [activeTab, setActiveTab] = useState('Calendar');
     const [schedules, setSchedules] = useState([]);
@@ -23,13 +28,13 @@ const Scheduler = () => {
                 axios.get(`${BASE_URL}/schedules`, { withCredentials: true }),
                 axios.get(`${BASE_URL}/schedules/analytics`, { withCredentials: true })
             ];
-            if (!isFetched) {
+            if (!isFetched && externalGoals === null) {
                 requests.push(axios.get(`${BASE_URL}/goals`, { withCredentials: true }));
             }
             const results = await Promise.all(requests);
             setSchedules(results[0].data);
             setAnalytics(results[1].data);
-            if (!isFetched && results[2]) {
+            if (!isFetched && externalGoals === null && results[2]) {
                 dispatch(setGoals(results[2].data));
             }
         } catch (error) {
@@ -41,27 +46,56 @@ const Scheduler = () => {
 
     useEffect(() => {
         fetchData();
-    }, [isFetched]);
+    }, [isFetched, externalGoals]);
 
     const handleScheduleAdded = (newSchedule) => {
         setSchedules(prev => [...prev, newSchedule].sort((a, b) => new Date(a.startTime) - new Date(b.startTime)));
-        fetchData(); // Refresh analytics
+        fetchData();
     };
 
     const handleScheduleUpdated = (updatedSchedule) => {
         setSchedules(prev => prev.map(s => s._id === updatedSchedule._id ? updatedSchedule : s));
-        fetchData(); // Refresh analytics
+        fetchData();
     };
 
     const handleScheduleDeleted = (deletedId) => {
         setSchedules(prev => prev.filter(s => s._id !== deletedId));
-        fetchData(); // Refresh analytics
+        fetchData();
     };
 
+    const handleGoalAdded = (newGoal) => {
+        if (externalGoals === null) {
+            dispatch(setGoals([...goals, newGoal]));
+        }
+        if (onGoalCreated) {
+            onGoalCreated(newGoal);
+        }
+    };
+
+    if (embedded) {
+        return (
+            <div className="w-full h-full flex flex-col font-sans text-white">
+                {loading ? (
+                    <div className="flex justify-center items-center flex-1 py-10">
+                        <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
+                    </div>
+                ) : (
+                    <SchedulerCalendar 
+                        schedules={schedules} 
+                        goals={goals} 
+                        onScheduleAdded={handleScheduleAdded}
+                        onScheduleUpdated={handleScheduleUpdated}
+                        onScheduleDeleted={handleScheduleDeleted}
+                        onGoalCreated={handleGoalAdded}
+                        embedded={true}
+                    />
+                )}
+            </div>
+        );
+    }
+
     return (
-        <div className='bg-[#000] min-h-screen px-5 py-10 flex flex-col w-full text-white overflow-y-auto custom-scrollbar relative pb-20'>
-            
-            {/* Header section with title and tabs */}
+        <div className='bg-[#000] min-h-screen px-5 py-10 flex flex-col w-full text-white overflow-y-auto scrollbar-none relative pb-20'>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-8 w-full sticky top-0 bg-[#000] z-40 py-2 border-b border-[#222]">
                 <div>
                     <h1 className="text-4xl font-bold font-poppins mb-2">Goal Scheduler</h1>
@@ -97,6 +131,10 @@ const Scheduler = () => {
                             onScheduleAdded={handleScheduleAdded}
                             onScheduleUpdated={handleScheduleUpdated}
                             onScheduleDeleted={handleScheduleDeleted}
+                            onGoalCreated={handleGoalAdded}
+                            embedded={false}
+                            initialDate={initialDate}
+                            initialOpenModal={initialOpenModal}
                         />
                     ) : (
                         <GoalAnalytics userId={user?._id} />

@@ -97,9 +97,9 @@ const Dashboard = () => {
 
 
     return (
-        <div data-theme="caramellatte" className="h-auto bg-white  p-1  ">
+        <div data-theme="caramellatte" className="h-auto bg-black  p-1  ">
 
-            <div className="w-full h-full mx-auto flex xl:flex-row flex-col gap-2 ">
+            <div className="w-full h-full mx-auto flex xl:flex-row flex-col gap-2 bg-black">
 
                 {/* LEFT PROFILE CARD */}
                 <div

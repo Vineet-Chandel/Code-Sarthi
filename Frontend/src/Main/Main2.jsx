@@ -884,7 +884,7 @@ const Main2 = ({ ctaData }) => {
                     <Nav />
                 </div>
 
-                <div className='w-full sm:p-6   flex flex-col items-start justify-start  mt-[250px]'>
+                <div className='w-full sm:p-6   flex flex-col items-start justify-start  mt-[150px]'>
                     <div className='   text-[#f9f9f9] font-poppins font-medium text-2xl min-[450px]:text-3xl sm:text-4xl lg:text-5xl xl:text-7xl flex flex-col gap-2 justify-start'>
                         <span> CodeSarthi is an Ecosystem </span> <span>designed for the Developers.</span>
                     </div>
