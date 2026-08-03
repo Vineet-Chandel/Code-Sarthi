@@ -62,11 +62,7 @@ const validateEditProfileData = (req) => {
         throw new Error("Please specify your gender properly");
     }
 
-    if (skills && skills.length > 15) {
-        throw new Error("Skills can't be more than 15");
-    }
-
-    throw new Error(true)
+    return true;
 };
 
 const validateHeaderData = (data) => {

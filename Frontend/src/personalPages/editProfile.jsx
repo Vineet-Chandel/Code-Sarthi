@@ -1,24 +1,100 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from "axios";
 import BASE_URL from "../Pages/auth/baseURL";
-import { Pencil } from "lucide-react";
-
-import Toast from '../Pages/CARRER-PROFILE-CREATION/2/Toast';
+import { Pencil, Copy, Check, Sparkles, User, Building2, Briefcase, Code2, FileText, Calendar, Loader2 } from "lucide-react";
+import Toast from "../Pages/CARRER-PROFILE-CREATION/2/Toast";
 import { AnimatePresence } from "framer-motion";
 import { addNewUser } from "@/utils/userSlice";
 
+function parseFlatSkills(input) {
+    if (!input || typeof input !== "string") return [];
+    return input
+        .split(',')
+        .map(s => s.trim())
+        .filter(Boolean)
+        .map(name => ({ name, category: null }));
+}
+
+function parseCategorizedSkills(rows) {
+    if (!Array.isArray(rows)) return [];
+    return rows.flatMap(row => {
+        let category = (row.category || "").trim().toLowerCase() || null;
+        if (category === "uncategorized") category = null;
+        return (row.skillsInput || "")
+            .split(',')
+            .map(s => s.trim())
+            .filter(Boolean)
+            .map(name => ({ name, category }));
+    });
+}
+
+function toFlatString(skills) {
+    if (!Array.isArray(skills)) return "";
+    return skills.map(s => (s?.name || s)).join(', ');
+}
+
+function toCategorizedRows(skills) {
+    if (!Array.isArray(skills)) return [];
+    const grouped = {};
+    for (const s of skills) {
+        const name = s?.name || s;
+        if (!name || typeof name !== "string") continue;
+        const key = s?.category || 'Uncategorized';
+        if (!grouped[key]) grouped[key] = [];
+        grouped[key].push(name.trim());
+    }
+    return Object.entries(grouped).map(([category, names]) => ({
+        id: Math.random().toString(36).substring(2, 9),
+        category,
+        skillsInput: names.join(', ')
+    }));
+}
+
+function normalizeSkillsArray(skills) {
+    if (!Array.isArray(skills)) return [];
+    return skills.map(s => {
+        if (typeof s === 'string') {
+            if (s === "No skills added yet") return null;
+            return { name: s, category: null };
+        }
+        if (s && typeof s === 'object' && s.name) {
+            return {
+                name: String(s.name).trim(),
+                category: s.category ? String(s.category).trim().toLowerCase() : null
+            };
+        }
+        return null;
+    }).filter(Boolean);
+}
+
+function deduplicateSkills(skills) {
+    if (!Array.isArray(skills)) return [];
+    const seen = new Map();
+    skills.forEach(s => {
+        if (!s || !s.name) return;
+        const cleanName = String(s.name).trim();
+        if (!cleanName || cleanName.toLowerCase() === "no skills added yet") return;
+        const cleanCat = s.category && s.category !== "uncategorized" ? String(s.category).trim().toLowerCase() : null;
+        seen.set(cleanName.toLowerCase(), { name: cleanName, category: cleanCat });
+    });
+    return Array.from(seen.values());
+}
+
 const EditProfile = () => {
     const dispatch = useDispatch();
+    const user = useSelector(store => store.user.user?.DATA || store.user.user);
 
-
-    const [errorisOpen, errorsetIsOpen] = useState(false);
     const [editProfileIMG, editProfileIMGisOpen] = useState(false);
     const [uploading, setUploading] = useState(false);
+    const [saving, setSaving] = useState(false);
     const [hoveringImg, setHoveringImg] = useState(false);
-    const user = useSelector(store => store.user.user.DATA);
-    const [copied1, setCopied1] = useState(false);
+    const [copiedEmail, setCopiedEmail] = useState(false);
+
+    const [skillInputMode, setSkillInputMode] = useState("simple");
+    const [flatSkillsInput, setFlatSkillsInput] = useState("");
+    const [categorizedRows, setCategorizedRows] = useState([]);
+
     const [formData, setFormData] = useState({
         firstName: '',
         middleName: '',
@@ -28,7 +104,32 @@ const EditProfile = () => {
         profession: '',
         college: '',
         about: '',
+        skills: []
     });
+
+    // Populate existing user data into form with fallback migration to structured objects
+    useEffect(() => {
+        if (user) {
+            const normalized = normalizeSkillsArray(user.skills || []);
+            setFormData({
+                firstName: user.firstName || '',
+                middleName: user.middleName || '',
+                lastName: user.lastName || '',
+                gender: user.gender || '',
+                age: user.age || '',
+                profession: user.profession || '',
+                college: user.college || '',
+                about: user.about || '',
+                skills: normalized
+            });
+            setFlatSkillsInput(toFlatString(normalized));
+            const initRows = toCategorizedRows(normalized);
+            if (initRows.length === 0) {
+                initRows.push({ id: Math.random().toString(36).substring(2, 9), category: "frontend", skillsInput: "" });
+            }
+            setCategorizedRows(initRows);
+        }
+    }, [user]);
 
     const ToastContainer = ({ toasts, removeToast }) => {
         return (
@@ -45,9 +146,10 @@ const EditProfile = () => {
             </div>
         );
     };
+
     const [toasts, setToasts] = useState([]);
     const addToast = ({ type = "success", title, message }) => {
-        const id = Date.now();
+        const id = Date.now() + Math.random();
         setToasts((prev) => [...prev, { id, type, title, message }]);
     };
 
@@ -55,98 +157,134 @@ const EditProfile = () => {
         setToasts((prev) => prev.filter((t) => t.id !== id));
     };
 
+    const handleSwitchSkillMode = (newMode) => {
+        if (newMode === skillInputMode) return;
+        const currentSkills = formData.skills || [];
+        if (newMode === "simple") {
+            setFlatSkillsInput(toFlatString(currentSkills));
+        } else if (newMode === "categorized") {
+            const rows = toCategorizedRows(currentSkills);
+            if (rows.length === 0) {
+                rows.push({ id: Math.random().toString(36).substring(2, 9), category: "frontend", skillsInput: "" });
+            }
+            setCategorizedRows(rows);
+        }
+        setSkillInputMode(newMode);
+    };
 
+    const handleFlatSkillsChange = (e) => {
+        const val = e.target.value;
+        setFlatSkillsInput(val);
+        setFormData(prev => ({
+            ...prev,
+            skills: parseFlatSkills(val)
+        }));
+    };
 
+    const handleRowChange = (index, field, value) => {
+        const updatedRows = [...categorizedRows];
+        updatedRows[index] = { ...updatedRows[index], [field]: value };
+        setCategorizedRows(updatedRows);
+        setFormData(prev => ({
+            ...prev,
+            skills: parseCategorizedSkills(updatedRows)
+        }));
+    };
+
+    const handleAddCategoryRow = () => {
+        setCategorizedRows(prev => [...prev, { id: Math.random().toString(36).substring(2, 9), category: "", skillsInput: "" }]);
+    };
+
+    const handleRemoveCategoryRow = (index) => {
+        const updatedRows = categorizedRows.filter((_, idx) => idx !== index);
+        setCategorizedRows(updatedRows);
+        setFormData(prev => ({
+            ...prev,
+            skills: parseCategorizedSkills(updatedRows)
+        }));
+    };
 
     const handleUpdate = async (e) => {
         e.preventDefault();
-
         const updatedData = {};
 
         Object.keys(formData).forEach((key) => {
-            if (
-                formData[key]?.trim() !== '' &&
-                formData[key] !== user?.[key]
-            ) {
-                updatedData[key] = formData[key];
+            let val = formData[key];
+            if (key === 'skills') {
+                const finalSkills = deduplicateSkills(formData.skills || []);
+                const orig = normalizeSkillsArray(user?.skills || []);
+                if (JSON.stringify(finalSkills) !== JSON.stringify(orig)) {
+                    updatedData[key] = finalSkills;
+                }
+            } else if (key === 'age') {
+                if (val !== '' && Number(val) !== Number(user?.age)) {
+                    updatedData[key] = Number(val);
+                }
+            } else if (typeof val === 'string' && val.trim() !== '' && val !== user?.[key]) {
+                updatedData[key] = val.trim();
             }
         });
+
         if (Object.keys(updatedData).length === 0) {
             addToast({
                 type: "error",
-                title: "Oh Snap!",
-                message: "Please Enter the enteries you want to change"
+                title: "No Changes",
+                message: "You haven't modified any details yet."
             });
-
             return;
-        };
+        }
+
         try {
-
-
+            setSaving(true);
             const res = await axios.patch(
-
                 `${BASE_URL}/profile/me/edit`,
                 updatedData,
                 { withCredentials: true }
-
             );
 
-
-
-            dispatch(addNewUser(res.data.data))
-
-            setFormData({
-                firstName: '',
-                middleName: '',
-                lastName: '',
-                gender: '',
-                age: '',
-                profession: '',
-                college: '',
-                about: '',
-            })
+            dispatch(addNewUser(res.data.data));
 
             addToast({
                 type: "success",
                 title: "Success!",
-                message: "Profile Updated Sucessfully"
+                message: "Profile updated successfully ✨"
             });
-
         } catch (err) {
-
             addToast({
                 type: "error",
-                title: "error!",
-                message: err.response.data || err.message
-            })
-            errorsetIsOpen(true)
-        };
+                title: "Error",
+                message: err?.response?.data || err.message || "Failed to update profile"
+            });
+        } finally {
+            setSaving(false);
+        }
     };
 
-    const handleCopy = async (text) => {
+    const handleCopyEmail = async (text) => {
         try {
-            await navigator.clipboard.writeText(text);
-
+            await navigator.clipboard.writeText(text || '');
+            setCopiedEmail(true);
+            setTimeout(() => setCopiedEmail(false), 3500);
         } catch (err) {
             console.error("Failed to copy", err);
         }
     };
+
     const handleChange = (e) => {
         const { id, value } = e.target;
         setFormData(prev => ({
             ...prev,
             [id]: value
         }));
-    }
+    };
+
     const removeProfilePic = async () => {
         try {
             setUploading(true);
             const res = await axios.post(
                 `${BASE_URL}/remove-profile-pic/upload`,
                 {},
-                {
-                    withCredentials: true,
-                }
+                { withCredentials: true }
             );
 
             dispatch(addNewUser(res.data.data));
@@ -154,450 +292,559 @@ const EditProfile = () => {
             addToast({
                 type: "success",
                 title: "Removed!",
-                message: "Profile photo removed successfully",
+                message: "Profile photo reset to default",
             });
 
             editProfileIMGisOpen(false);
-
         } catch (err) {
-
             addToast({
                 type: "error",
                 title: "Error",
-                message:
-                    err?.response?.data?.message || err.message,
+                message: err?.response?.data?.message || err.message || "Could not remove photo",
             });
-
-        } finally {
-            setUploading(false)
-        }
-    };
-    const handleFileChange = async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        const formData = new FormData();
-
-        // ⭐ must match backend multer field
-        formData.append("profilePic", file);
-
-        try {
-            setUploading(true);
-
-            const responsePic = await axios.post(
-                `${BASE_URL}/profile-pic/upload`,
-                formData,
-                { withCredentials: true }
-            );
-
-            addToast({
-                type: "success",
-                title: "Success!",
-                message: "Profile Updated Sucessfully"
-            });
-
-
-
-            dispatch(addNewUser(responsePic.data.data))
-            editProfileIMGisOpen(false);
-        } catch (err) {
-            addToast({
-                type: "error",
-                title: "error!",
-                message: err.response.data || err.message
-            })
         } finally {
             setUploading(false);
         }
     };
 
+    const handleFileChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
 
+        const uploadForm = new FormData();
+        uploadForm.append("profilePic", file);
 
+        try {
+            setUploading(true);
+            const responsePic = await axios.post(
+                `${BASE_URL}/profile-pic/upload`,
+                uploadForm,
+                { withCredentials: true }
+            );
+
+            dispatch(addNewUser(responsePic.data.data));
+            editProfileIMGisOpen(false);
+
+            addToast({
+                type: "success",
+                title: "Uploaded!",
+                message: "Profile photo updated successfully"
+            });
+        } catch (err) {
+            addToast({
+                type: "error",
+                title: "Upload Failed",
+                message: err?.response?.data?.message || err.message || "Failed to upload photo"
+            });
+        } finally {
+            setUploading(false);
+        }
+    };
 
     return (
-        <div className=" w-screen min-h-screen bg-bg-100 flex justify-center items-start px-3 sm:px-5 md:px-8 lg:px-10 py-3 overflow-y-auto">
+        <div className="w-screen min-h-screen bg-bg-100 flex justify-center items-start px-3 sm:px-6 md:px-10 py-6 overflow-y-auto bg-black">
             <ToastContainer toasts={toasts} removeToast={removeToast} />
-            <div className=" w-full  max-w-[1600px] relative mx-auto p-3 sm:p-5 md:p-6 lg:p-4 sm:p-6 lg:p-8 rounded-[32px] bg-base-100  border-secondary border-[3px] flex flex-col gap-6">
-                <div className="pointer-events-none absolute inset-0 rounded-[32px] bg-[radial-gradient`(circle_at_30%_20%,rgba(0,255,255,0.08),transparent_60%)]"></div>
-                {/* ================= HEADER ================= */}
-                <div className="w-full flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
 
+            <div className="w-full  relative mx-auto p-5 sm:p-8 md:p-10 rounded-[36px] bg-base-100 border border-white/10 shadow-[0_20px_80px_rgba(0,0,0,0.5)] flex flex-col gap-8 overflow-hidden">
+
+                {/* Ambient Background Gradients */}
+                <div className="pointer-events-none absolute -top-40 -left-40 w-96 h-96 bg-cyan-500/10 rounded-full blur-[120px]" />
+                <div className="pointer-events-none absolute top-1/2 -right-40 w-96 h-96 bg-indigo-500/10 rounded-full blur-[140px]" />
+                <div className="pointer-events-none absolute inset-0 rounded-[36px] bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.02),transparent_70%)]" />
+
+                {/* ================= HERO HEADER ================= */}
+                <div className="w-full flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 pb-6 border-b border-white/10 z-10">
                     <div>
-                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold     bg-gradient-to-b from-[#ffffff] to-accent bg-clip-text   text-transparent flex items-center gap-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                                <path fill="#ffffff" fillRule="evenodd" d="M10.826 4.503C8.622 3.378 6.706 3.151 5.76 4.1c-1.63 1.63.214 6.117 4.12 10.022c3.905 3.905 8.392 5.75 10.022 4.12c.948-.948.72-2.863-.404-5.067c-.203.035-.427.04-.667-.004c-.945-.17-2.435-.896-4.77-3.23S11 6.115 10.83 5.17a1.9 1.9 0 0 1-.004-.667m1.88 8.204a1 1 0 1 1-1.413-1.414a1 1 0 0 1 1.414 1.414M8.465 8.464A1 1 0 1 0 9.878 7.05a1 1 0 0 0-1.414 1.414m8.486 7.071a1 1 0 1 1-1.415-1.414a1 1 0 0 1 1.415 1.414" clipRule="evenodd"></path>
-                                <path fill="#ffffff" d="M8.287 16.773a.75.75 0 0 0-1.06-1.06l-4.122 4.12a.75.75 0 0 0 1.061 1.061z"></path>
-                                <path fill="#ffffff" d="M12.302 4.79a4.73 4.73 0 0 1 5.87.655l.384.383a4.73 4.73 0 0 1 .654 5.87a.4.4 0 0 1-.115-.004c-.496-.09-1.718-.56-3.974-2.815c-2.255-2.256-2.725-3.477-2.815-3.974a.4.4 0 0 1-.004-.115m-7.501 6.979a.75.75 0 0 0-1.16-.952l-2.22 2.707a.75.75 0 1 0 1.159.952zm8.486 7.534a.75.75 0 0 1-.104 1.055l-2.707 2.221a.75.75 0 0 1-.952-1.16l2.707-2.22a.75.75 0 0 1 1.056.103" opacity={0.5}></path>
-                            </svg>
+                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 mb-3">
+                            <Sparkles className="text-cyan-400 w-4 h-4" />
+                            <span className="text-xs font-semibold uppercase tracking-wider text-cyan-300">Identity Hub</span>
+                        </div>
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black bg-gradient-to-r from-white via-gray-100 to-cyan-400 bg-clip-text text-transparent tracking-tight">
                             Edit Main Profile
                         </h1>
-                        <p className="text-lg text-info mt-2">
-                            Your profile is your first impression — make it unforgettable ✨
+                        <p className="text-base sm:text-lg text-gray-400 mt-2 max-w-2xl font-normal leading-relaxed">
+                            Your developer identity is your primary impression on CodeSarthi. Craft your bio, refine your tech stack, and make it unforgettable.
                         </p>
                     </div>
-
-
                 </div>
 
-                {/* ================= CONTENT ================= */}
-                <div className="w-full flex flex-col lg:flex-row gap-3">
+                {/* ================= MAIN CONTENT GRID ================= */}
+                <div className="w-full grid grid-cols-1 xl:grid-cols-12 gap-8 z-10">
 
-                    {/* ========== ProfilePreview Panel ========== */}
-                    <div className="w-full xl:w-[30%] rounded-2xl p-6 bg-base-300 border border-secondary border-[2px] flex flex-col items-center">
-                        {/* Avatar */}
-                        <div className="relative w-[120px] h-[120px]
-sm:w-[150px] sm:h-[150px]
-md:w-[180px] md:h-[180px] rounded-2xl bg-gray-900 border border-gray-700 flex items-center justify-center " onClick={() => editProfileIMGisOpen(true)} onMouseEnter={() => setHoveringImg(true)} onMouseLeave={() => setHoveringImg(false)}>
-                            <div className="absolute inset-0 rounded-2xl "></div>
-                            <span className="relative text-5xl rounded-2xl font-bold text-cyan-400 ">
-                                <div
-                                    className={`absolute inset-0 rounded-2xl bg-black/60 flex justify-center items-center transition-all duration-300 ease-out ${hoveringImg ? "opacity-100 scale-100" : "opacity-0 scale-95"}
-`}
-                                >
-                                    <Pencil className="text-white" size={35} />
+                    {/* ========== LEFT: DEVELOPER IDENTITY PREVIEW ========== */}
+                    <div className="xl:col-span-4 rounded-[32px] p-6 sm:p-8 bg-gradient-to-b from-white/[0.05] via-white/[0.02] to-transparent border border-white/10 flex flex-col items-center shadow-2xl relative overflow-hidden self-start">
+                        <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent" />
+
+                        {/* Interactive Avatar Card */}
+                        <div
+                            className="relative group w-[150px] h-[150px] sm:w-[170px] sm:h-[170px] rounded-3xl p-1.5 bg-gradient-to-tr from-cyan-500/40 via-purple-500/30 to-white/10 cursor-pointer transition-all duration-300 shadow-xl hover:shadow-[0_0_35px_rgba(34,211,238,0.25)]"
+                            onClick={() => editProfileIMGisOpen(true)}
+                            onMouseEnter={() => setHoveringImg(true)}
+                            onMouseLeave={() => setHoveringImg(false)}
+                        >
+                            <div className="relative w-full h-full rounded-[22px] overflow-hidden bg-base-300">
+                                <img
+                                    src={user?.photoUrl?.url || "https://geographyandyou.com/images/user-profile.png"}
+                                    alt="Profile avatar"
+                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                />
+                                <div className={`absolute inset-0 bg-black/60 backdrop-blur-sm flex flex-col gap-1 justify-center items-center transition-all duration-300 ${hoveringImg ? "opacity-100" : "opacity-0"}`}>
+                                    <Pencil className="text-cyan-400 w-8 h-8 drop-shadow-md" />
+                                    <span className="text-[11px] font-semibold tracking-wider uppercase text-white mt-1">Change Photo</span>
                                 </div>
-
-                                <img src={user?.photoUrl?.url} className="h-full rounded-2xl w-full object-cover transition-transform duration-500 group-hover:scale-110 border border-secondary border-[2px]" alt="" />
-                            </span>
+                            </div>
+                            <div className="absolute -bottom-2 -right-2 bg-base-100 border border-white/20 rounded-full p-2 text-white shadow-lg group-hover:bg-cyan-500 group-hover:text-black transition-colors duration-300">
+                                <Pencil className="w-4 h-4" />
+                            </div>
                         </div>
-                        {/* Name */}
-                        <p className="text-3xl font-semibold text-white mt-5 tracking-wide text-center">
-                            {user?.firstName || "First"} {user?.middleName || ""} {user?.lastName || "Last"}
-                        </p>
-                        {/* Username */}
-                        <p className="text-base text-info mt-1 flex justify-center items-center gap-1">
-                            @{user?.username || "username"} {user?.isVerified && < span className="text-blue-400" >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" viewBox="0 0 24 24">
-                                    <path fill="currentColor" fillRule="evenodd" d="M9.592 3.2a6 6 0 0 1-.495.399c-.298.2-.633.338-.985.408c-.153.03-.313.043-.632.068c-.801.064-1.202.096-1.536.214a2.71 2.71 0 0 0-1.655 1.655c-.118.334-.15.735-.214 1.536a6 6 0 0 1-.068.632c-.07.352-.208.687-.408.985c-.087.13-.191.252-.399.495c-.521.612-.782.918-.935 1.238c-.353.74-.353 1.6 0 2.34c.153.32.414.626.935 1.238c.208.243.312.365.399.495c.2.298.338.633.408.985c.03.153.043.313.068.632c.064.801.096 1.202.214 1.536a2.71 2.71 0 0 0 1.655 1.655c.334.118.735.15 1.536.214c.319.025.479.038.632.068c.352.07.687.209.985.408c.13.087.252.191.495.399c.612.521.918.782 1.238.935c.74.353 1.6.353 2.34 0c.32-.153.626-.414 1.238-.935c.243-.208.365-.312.495-.399c.298-.2.633-.338.985-.408c.153-.03.313-.043.632-.068c.801-.064 1.202-.096 1.536-.214a2.71 2.71 0 0 0 1.655-1.655c.118-.334.15-.735.214-1.536c.025-.319.038-.479.068-.632c.07-.352.209-.687.408-.985c.087-.13.191-.252.399-.495c.521-.612.782-.918.935-1.238c.353-.74.353-1.6 0-2.34c-.153-.32-.414-.626-.935-1.238a6 6 0 0 1-.399-.495a2.7 2.7 0 0 1-.408-.985a6 6 0 0 1-.068-.632c-.064-.801-.096-1.202-.214-1.536a2.71 2.71 0 0 0-1.655-1.655c-.334-.118-.735-.15-1.536-.214a6 6 0 0 1-.632-.068a2.7 2.7 0 0 1-.985-.408a6 6 0 0 1-.495-.399c-.612-.521-.918-.782-1.238-.935a2.71 2.71 0 0 0-2.34 0c-.32.153-.626.414-1.238.935m6.781 6.663a.814.814 0 0 0-1.15-1.15l-4.85 4.85l-1.596-1.595a.814.814 0 0 0-1.15 1.15l2.17 2.17a.814.814 0 0 0 1.15 0z" clipRule="evenodd"></path>
-                                </svg>
 
-                            </span>}
-                        </p>
-                        <p className="text-base text-info hover:text-white border px-5 py-3 mt-2 rounded-3xl bg-base-100 flex flex-wrap justify-center items-center gap-2
-break-all text-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
-                                <path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 4l-8 5l-8-5V6l8 5l8-5z"></path>
-                            </svg> {user?.gmail || "gmail"}
-
-
-                            <span onClick={() => {
-                                handleCopy(user.username); setCopied1(true); setCopied2(false); setTimeout(() => {
-
-                                    setCopied1(false)
-                                }, 5000);
-                            }} className="cursor-copy">
-                                {!copied1 ? (
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="1.4em" height="1.4em" viewBox="0 0 24 24">
-                                        <g fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}>
-                                            <path d="M16 3H4v13"></path>
-                                            <path d="M8 7h12v12a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z"></path>
-                                        </g>
-                                    </svg>
-                                ) : (
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
-                                        <path fill="#61ff3b" fillRule="evenodd" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10m-1.177-7.86l-2.765-2.767L7 12.431l3.119 3.121a1 1 0 0 0 1.414 0l5.952-5.95l-1.062-1.062z"></path>
-                                    </svg>
-                                )}
-
-                            </span>
-                        </p>
-                        {/* Divider */}
-                        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent my-6"></div>
-
-                        {/* Info Pills */}
-                        <div className="w-full flex flex-col gap-3">
-
-                            <div className="flex flex-col sm:flex-row
-justify-between
-items-start sm:items-center
- gap-3 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-gray-300">
-                                <div className="flex justify-center items-center gap-2 text-white">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><g fill="none"><path fill="#ffffff" d="M21.087 3.87H2.913V23h18.174z" /><path fill="#ffffff" d="M19.89 3.87H2.914v16.978z" /><path stroke="#301a01ff" strokeLinecap="round" strokeLinejoin="round" d="M1 23h22M21.087 3.87H2.913V23h18.174zM1 3.87h22" strokeWidth="1" /><path fill="#301a01ff" stroke="#301a01ff" strokeLinecap="round" strokeLinejoin="round" d="M20.13 3.87V1.957A.956.956 0 0 0 19.174 1H4.826a.957.957 0 0 0-.956.957V3.87z" strokeWidth="1" /><path fill="#301a01ff" stroke="#301a01ff" strokeLinecap="round" strokeLinejoin="round" d="M10.565 23v-3.348a1.435 1.435 0 0 1 2.87 0V23z" strokeWidth="1" /><path stroke="#301a01ff" strokeLinecap="round" strokeLinejoin="round" d="M5.782 19.174h2.87m6.696 0h2.87M5.782 15.348h3.826m4.782 0h3.827M5.782 11.522h3.826m4.782 0h3.827M5.782 7.696h3.826m4.782 0h3.827" strokeWidth="1" /></g></svg>
-
-                                    <span>{user?.college || "College Name"}</span></div>
-
-                                <div className="flex justify-center items-center gap-2 text-white">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><g fill="none"><path fill="#ffffff" d="M17.754 14a2.25 2.25 0 0 1 2.249 2.249v.918a2.75 2.75 0 0 1-.513 1.6C17.945 20.93 15.42 22 12 22s-5.944-1.072-7.486-3.236a2.75 2.75 0 0 1-.51-1.596v-.92A2.25 2.25 0 0 1 6.251 14z" /><path fill="#ffffff" d="M17.754 14a2.25 2.25 0 0 1 2.249 2.249v.918a2.75 2.75 0 0 1-.513 1.6C17.945 20.93 15.42 22 12 22s-5.944-1.072-7.486-3.236a2.75 2.75 0 0 1-.51-1.596v-.92A2.25 2.25 0 0 1 6.251 14z" /><path fill="#ffffff" d="M12 2.005a5 5 0 1 1 0 10a5 5 0 0 1 0-10" /><defs><linearGradient id="SVGPusuadEO" x1="7.808" x2="10.394" y1="15.064" y2="23.319" gradientUnits="userSpaceOnUse"><stop offset=".125" stopColor="#00c6ff" /><stop offset="1" stopColor="#41d1dc" /></linearGradient><linearGradient id="SVG2f7L8cLU" x1="12.003" x2="15.623" y1="13.047" y2="26.573" gradientUnits="userSpaceOnUse"><stop stopColor="#5edadb" stopOpacity="0" /><stop offset="1" stopColor="#62f8ef" /></linearGradient><linearGradient id="SVG9AhnabtW" x1="9.379" x2="14.475" y1="3.334" y2="11.472" gradientUnits="userSpaceOnUse"><stop offset=".125" stopColor="#00c6ff" /><stop offset="1" stopColor="#41d1dc" /></linearGradient></defs></g></svg>
-
-                                    <span>{user?.profession || "Profession"}</span></div>
-
-                            </div>
-                            <div className="flex flex-col sm:flex-row
-justify-between
-items-start sm:items-center
- gap-3 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-gray-300">
-                                <div className="flex justify-center items-center gap-2 text-white">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><g fill="none"><path fill="#ffffff" d="M12.95 13.891a3.816 3.816 0 1 0 0-7.632a3.816 3.816 0 0 0 0 7.632" /><path fill="#4a2a05ff" d="M7.21 15.826a3.815 3.815 0 1 0 0-7.63a3.815 3.815 0 0 0 0 7.63" /><path stroke="#7a7a7a" strokeLinecap="round" strokeLinejoin="round" d="M9.61 14.146a5.26 5.26 0 1 1 3.826 1.18" strokeWidth="1" /><path stroke="#7a7a7a" strokeLinecap="round" strokeLinejoin="round" d="M10.578 7.952A5.26 5.26 0 1 1 6.74 6.76m10.043-.5L22.044 1m0 3.826V1h-3.826M6.74 17.26V23m-1.913-1.913h3.826" strokeWidth="1" /></g></svg>
-                                    Gender :<span className="text-white">{user?.gender || "Gender"}</span></div>
-                                <div className="flex justify-center items-center gap-2 text-white">
-                                    <svg width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M20 1C20 0.447715 20.4477 0 21 0C21.5523 0 22 0.447715 22 1V2H23C23.5523 2 24 2.44772 24 3C24 3.55228 23.5523 4 23 4H22V5C22 5.55228 21.5523 6 21 6C20.4477 6 20 5.55228 20 5V4H19C18.4477 4 18 3.55228 18 3C18 2.44772 18.4477 2 19 2H20V1Z" fill="#ff808c" />
-                                        <path d="M21.1936 8.07463C21.7016 7.85776 22.297 8.09138 22.4668 8.6169C23.145 10.7148 23.1792 12.9766 22.5523 15.1064C21.8308 17.5572 20.2788 19.6804 18.1626 21.1117C16.0464 22.5429 13.498 23.193 10.9548 22.9502C8.41165 22.7075 6.03225 21.5871 4.22503 19.7814C2.4178 17.9757 1.29545 15.5972 1.05062 13.0542C0.805783 10.5112 1.45373 7.96227 2.88325 5.84491C4.31277 3.72755 6.43471 2.17379 8.88488 1.4503C11.0142 0.821568 13.2759 0.853957 15.3744 1.53036C15.9001 1.69979 16.1342 2.29501 15.9178 2.80311C15.7013 3.31122 15.1136 3.54496 14.5846 3.38623C12.9184 2.88626 11.1353 2.8783 9.4532 3.37498C7.45003 3.96647 5.71522 5.23677 4.5465 6.96784C3.37778 8.69891 2.84804 10.7828 3.04821 12.8619C3.24838 14.9409 4.16596 16.8855 5.64348 18.3618C7.121 19.8381 9.06631 20.754 11.1455 20.9525C13.2247 21.1509 15.3082 20.6195 17.0383 19.4493C18.7684 18.2792 20.0373 16.5433 20.6271 14.5397C21.1224 12.8572 21.113 11.074 20.6116 9.40826C20.4525 8.87941 20.6857 8.29149 21.1936 8.07463Z" fill="#ffffff" />
-                                        <path d="M7.71054 9.14472L7.29441 9.35279C6.69971 9.65014 5.99999 9.21769 5.99999 8.55279C5.99999 8.214 6.1914 7.9043 6.49441 7.75279L7.78884 7.10557C7.9277 7.03615 8.08081 7 8.23605 7H8.99999C9.55227 7 9.99999 7.44772 9.99999 8V16C9.99999 16.5523 9.55227 17 8.99999 17C8.4477 17 7.99999 16.5523 7.99999 16V9.32361C7.99999 9.17493 7.84352 9.07823 7.71054 9.14472Z" fill="#ffffff" />
-                                        <path fillRule="evenodd" clipRule="evenodd" d="M16 7C17.1046 7 18 7.89543 18 9V15C18 16.1046 17.1046 17 16 17H14C12.8954 17 12 16.1046 12 15V9C12 7.89543 12.8954 7 14 7H16ZM15 9C15.5523 9 16 9.44772 16 10V14C16 14.5523 15.5523 15 15 15C14.4477 15 14 14.5523 14 14V10C14 9.44772 14.4477 9 15 9Z" fill="#ffffff" />
-                                    </svg> Age : <span className="text-white">{user?.age || "Age"}</span></div>
-                            </div>
-
-                            <div className="flex flex-col gap-1 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-white">
-                                <div className="flex gap-1 font-bold text-xl"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="#ffffff" d="M12 21.577L9.423 19H5.615q-.69 0-1.153-.462T4 17.384V4.616q0-.691.463-1.153T5.616 3h12.769q.69 0 1.153.463T20 4.616v12.769q0 .69-.462 1.153T18.384 19h-3.807zm0-9.5q1.258 0 2.129-.871T15 9.077t-.871-2.129T12 6.077t-2.129.871T9 9.077t.871 2.129t2.129.871M5.423 18h13.154q.211-.133.288-.354t.135-.412q-1.35-1.325-3.138-2.087T12 14.385t-3.863.762T5 17.235q.058.19.134.411t.289.354" /></svg>  About : </div>
-                                <span className="text-info">{user?.about}</span>
-                            </div>
-                            <div className="flex flex-col gap-1 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-white">
-                                <div className="flex gap-1 font-bold text-xl">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width={23} height={23} viewBox="0 0 384 512">
-                                        <path fill="#ffffff" d="M290.7 311L95 269.7L86.8 309l195.7 41zm51-87L188.2 95.7l-25.5 30.8l153.5 128.3zm-31.2 39.7L129.2 179l-16.7 36.5L293.7 300zM262 32l-32 24l119.3 160.3l32-24zm20.5 328h-200v39.7h200zm39.7 80H42.7V320h-40v160h359.5V320h-40z"></path>
-                                    </svg> Tech Stacks:</div>
-                                <span className="text-info">{user?.skills}</span>
-                            </div>
-                            {/* <div className="flex flex-col gap-1 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-gray-300">
-                                <div className="flex gap-1 font-bold text-xl"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><g fill="none" stroke="#5decff" stroke-miterlimit="10" strokeWidth="1"><path fill="#5decff" fill-opacity="0.16" d="M18.6 3H5.4A2.4 2.4 0 0 0 3 5.4v13.2A2.4 2.4 0 0 0 5.4 21h13.2a2.4 2.4 0 0 0 2.4-2.4V5.4A2.4 2.4 0 0 0 18.6 3Z" /><path strokeLinecap="round" strokeLinejoin="round" d="M10 21V3m-7 7h18M5.4 3h13.2A2.4 2.4 0 0 1 21 5.4v13.2a2.4 2.4 0 0 1-2.4 2.4H5.4A2.4 2.4 0 0 1 3 18.6V5.4A2.4 2.4 0 0 1 5.4 3" /></g></svg>  Projects :</div>  this segment used when second segment start showing his AURA !!
-                            </div> */}
-
-                        </div>
-                    </div>
-
-                    {/* ========== RIGHT PANEL ========== */}
-                    <div className={`w-full lg:w-[70%] rounded-3xl p-4 sm:p-6 lg:p-8 bg-base-300 border border-secondary border-[2px] flex-col gap-5 `}>
-
-
-                        <div className="mb-3">
-                            <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-semibold text-white">
-                                Profile Information
+                        {/* Name & Username */}
+                        <div className="text-center mt-6">
+                            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center justify-center gap-2">
+                                {user?.firstName || "User"} {user?.middleName ? `${user.middleName} ` : ""}{user?.lastName || ""}
                             </h2>
-
-                            <p className="text-info">
-                                Update your personal details below to update them in the main profile !!
+                            <p className="text-sm font-medium text-gray-400 mt-1 flex justify-center items-center gap-1.5">
+                                @{user?.username || "username"}
+                                {user?.isVerified && (
+                                    <span className="text-cyan-400" title="Verified Member">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                                            <path fill="currentColor" fillRule="evenodd" d="M9.592 3.2a6 6 0 0 1-.495.399c-.298.2-.633.338-.985.408c-.153.03-.313.043-.632.068c-.801.064-1.202.096-1.536.214a2.71 2.71 0 0 0-1.655 1.655c-.118.334-.15.735-.214 1.536a6 6 0 0 1-.068.632c-.07.352-.208.687-.408.985c-.087.13-.191.252-.399.495c-.521.612-.782.918-.935 1.238c-.353.74-.353 1.6 0 2.34c.153.32.414.626.935 1.238c.208.243.312.365.399.495c.2.298.338.633.408.985c.03.153.043.313.068.632c.064.801.096 1.202.214 1.536a2.71 2.71 0 0 0 1.655 1.655c.334.118.735.15 1.536.214c.319.025.479.038.632.068c.352.07.687.209.985.408c.13.087.252.191.495.399c.612.521.918.782 1.238.935c.74.353 1.6.353 2.34 0c.32-.153.626-.414 1.238-.935c.243-.208.365-.312.495-.399c.298-.2.633-.338.985-.408c.153-.03.313-.043.632-.068c.801-.064 1.202-.096 1.536-.214a2.71 2.71 0 0 0 1.655-1.655c.118-.334.15-.735.214-1.536c.025-.319.038-.479.068-.632c.07-.352.209-.687.408-.985c.087-.13.191-.252.399-.495c.521-.612.782-.918.935-1.238c.353-.74.353-1.6 0-2.34c-.153-.32-.414-.626-.935-1.238a6 6 0 0 1-.399-.495a2.7 2.7 0 0 1-.408-.985a6 6 0 0 1-.068-.632c-.064-.801-.096-1.202-.214-1.536a2.71 2.71 0 0 0-1.655-1.655c-.334-.118-.735-.15-1.536-.214a6 6 0 0 1-.632-.068a2.7 2.7 0 0 1-.985-.408a6 6 0 0 1-.495-.399c-.612-.521-.918-.782-1.238-.935a2.71 2.71 0 0 0-2.34 0c-.32.153-.626.414-1.238.935" clipRule="evenodd" />
+                                        </svg>
+                                    </span>
+                                )}
                             </p>
                         </div>
 
+                        {/* Email Copy Badge */}
+                        <div className="w-full mt-5 px-4 py-2.5 rounded-2xl bg-base-200/80 border border-white/5 flex items-center justify-between gap-3 text-sm transition-colors hover:border-white/15">
+                            <span className="text-gray-300 font-medium truncate flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" className="text-gray-400 shrink-0">
+                                    <path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 4l-8 5l-8-5V6l8 5l8-5z" />
+                                </svg>
+                                {user?.gmail || "no-email@codesarthi.in"}
+                            </span>
+                            <button
+                                onClick={() => handleCopyEmail(user?.gmail)}
+                                title="Copy Email"
+                                className="p-1.5 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition-all duration-200 shrink-0"
+                            >
+                                {copiedEmail ? <Check className="w-4 h-4 text-emerald-400 animate-in zoom-in-50" /> : <Copy className="w-4 h-4" />}
+                            </button>
+                        </div>
 
-                        {/* Inputs go here */}
-                        <div className="mt-10 p-5 border border-dashed border-white/20 rounded-xl flex  justify-center text-gray-500 ">
-                            <form action="" onSubmit={handleUpdate} className="flex flex-col gap-[20px] w-full mt-2">
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-white">
-                                    <div className="space-y-2 ">
-                                        <label htmlFor="firstName" className="text-md ml-3 block">
-                                            First Name
-                                        </label>
-                                        <div className={"flex items-center rounded-2xl px-4 py-3  transition-all duration-300  bg-base-100 border border-secondary border-[2px] focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 "}>
-                                            <span className="mr-3">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2">
-                                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                                    <circle cx="12" cy="7" r="4" />
-                                                </svg>
-                                            </span>
+                        {/* Divider */}
+                        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-6" />
+
+                        {/* Attribute Cards */}
+                        <div className="w-full flex flex-col gap-3">
+
+                            {/* Institution / College */}
+                            <div className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-colors">
+                                <div className="p-2.5 rounded-xl  text-white">
+                                    <Building2 className="w-6 h-6" />
+                                </div>
+                                <div className="flex flex-col min-w-0">
+                                    <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Institution / Organization</span>
+                                    <span className="text-sm font-semibold text-white truncate">{user?.college || "Not specified"}</span>
+                                </div>
+                            </div>
+
+                            {/* Profession */}
+                            <div className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-colors">
+                                <div className="p-2.5 rounded-xl text-white">
+                                    <Briefcase className="w-6 h-6" />
+                                </div>
+                                <div className="flex flex-col min-w-0">
+                                    <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Professional Title</span>
+                                    <span className="text-sm font-semibold text-white truncate">{user?.profession || "Developer"}</span>
+                                </div>
+                            </div>
+
+                            {/* Demographics */}
+                            <div className="grid grid-cols-2 gap-3">
+                                <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 flex flex-col">
+                                    <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Gender</span>
+                                    <span className="text-sm font-semibold text-white capitalize mt-1">{user?.gender || "Unspecified"}</span>
+                                </div>
+                                <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 flex flex-col">
+                                    <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Age</span>
+                                    <span className="text-sm font-semibold text-white mt-1">{user?.age ? `${user.age} yrs` : "N/A"}</span>
+                                </div>
+                            </div>
+
+                            {/* About Bio */}
+                            <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-2">
+                                <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                                    <FileText className="w-3.5 h-3.5 text-white" /> Bio & About
+                                </span>
+                                <p className="text-xs sm:text-sm text-gray-300 leading-relaxed break-words">
+                                    {user?.about || "Complete your profile to share your journey and background here!"}
+                                </p>
+                            </div>
+
+                            {/* Tech Stack Chips */}
+                            <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-3">
+                                <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                                    <Code2 className="w-3.5 h-3.5 text-cyan-400" /> Primary Tech Stack
+                                </span>
+                                <div className="flex flex-wrap gap-2">
+                                    {Array.isArray(user?.skills) && user.skills.length > 0 ? (
+                                        user.skills.map((skill, index) => {
+                                            const sName = skill?.name || skill;
+                                            const sCat = skill?.category && skill.category !== "uncategorized" ? skill.category : null;
+                                            if (sName === "No skills added yet") return null;
+                                            return (
+                                                <span key={index} className="px-3 py-1 text-xs font-semibold rounded-xl bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 shadow-sm transition-transform duration-200 hover:scale-105 inline-flex items-center gap-1">
+                                                    <span>{sName}</span>
+                                                    {sCat && (
+                                                        <span className="text-[9px] font-mono uppercase tracking-tighter text-cyan-400/60 ml-0.5">
+                                                            [{sCat}]
+                                                        </span>
+                                                    )}
+                                                </span>
+                                            );
+                                        })
+                                    ) : (
+                                        <span className="text-xs text-gray-500 italic">No technologies added yet. Add some in the form!</span>
+                                    )}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    {/* ========== RIGHT: EDIT PROFILE FORM ========== */}
+                    <div className="xl:col-span-8 rounded-[32px] p-6 sm:p-10 bg-base-200/60 border border-white/10 shadow-xl flex flex-col justify-between relative overflow-hidden">
+
+                        <div>
+                            <div className="mb-8 border-b border-white/10 pb-5">
+                                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white tracking-tight">
+                                    Profile Settings
+                                </h2>
+                                <p className="text-sm sm:text-base text-gray-400 mt-1">
+                                    Update your personal identity, background details, and showcased technical proficiencies.
+                                </p>
+                            </div>
+
+                            <form onSubmit={handleUpdate} className="space-y-8">
+
+                                {/* SECTION 1: PERSONAL IDENTITY */}
+                                <div className="space-y-4">
+                                    <h3 className="text-sm font-semibold text-cyan-400 uppercase tracking-wider flex items-center gap-2">
+                                        <User className="w-4 h-4" /> 1. Personal Identity
+                                    </h3>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                                        <div className="space-y-1.5">
+                                            <label htmlFor="firstName" className="text-xs font-semibold text-gray-300 ml-1">First Name</label>
                                             <input
                                                 id="firstName"
                                                 type="text"
-                                                placeholder={user?.firstName}
-                                                className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base text-white"
-                                                value={formData['firstName']}
+                                                placeholder="e.g. Vineet"
+                                                className="w-full rounded-2xl bg-[#212121] px-4 py-3 bg-base-100/90 border border-white/10 text-white placeholder-gray-600 text-sm transition-all duration-200 focus:outline-none focus:border-cyan-400/70 focus:ring-4 focus:ring-cyan-400/10"
+                                                value={formData.firstName}
                                                 onChange={handleChange}
-
                                             />
                                         </div>
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label htmlFor="middleName" className="text-md ml-3 block">
-                                            Middle Name
-                                        </label>
-                                        <div className={"flex items-center rounded-2xl px-4 py-3  transition-all duration-300  bg-base-100 border border-secondary border-[2px] focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 "}>
-                                            <span className="mr-3">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2">
-                                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                                    <circle cx="12" cy="7" r="4" />
-                                                </svg>
-                                            </span>
+
+                                        <div className="space-y-1.5">
+                                            <label htmlFor="middleName" className="text-xs font-semibold text-gray-300 ml-1">Middle Name (Optional)</label>
                                             <input
                                                 id="middleName"
                                                 type="text"
-                                                placeholder={user?.middleName}
-                                                className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base text-white"
-                                                value={formData['middleName']}
+                                                placeholder="Middle Name"
+                                                className="w-full rounded-2xl bg-[#212121] px-4 py-3 bg-base-100/90 border border-white/10 text-white placeholder-gray-600 text-sm transition-all duration-200 focus:outline-none focus:border-cyan-400/70 focus:ring-4 focus:ring-cyan-400/10"
+                                                value={formData.middleName}
                                                 onChange={handleChange}
-                                                required={false}
                                             />
                                         </div>
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label htmlFor="lastName" className="text-md ml-3 block">
-                                            Last Name
-                                        </label>
-                                        <div className={"flex items-center rounded-2xl px-4 py-3  transition-all duration-300  bg-base-100 border border-secondary border-[2px] focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 "}>
-                                            <span className="mr-3">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2">
-                                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                                    <circle cx="12" cy="7" r="4" />
-                                                </svg>
-                                            </span>
+
+                                        <div className="space-y-1.5">
+                                            <label htmlFor="lastName" className="text-xs font-semibold text-gray-300 ml-1">Last Name</label>
                                             <input
                                                 id="lastName"
                                                 type="text"
-                                                placeholder={user?.lastName}
-                                                className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base text-white"
-                                                value={formData['lastName']}
+                                                placeholder="e.g. Chandel"
+                                                className="w-full rounded-2xl bg-[#212121] px-4 py-3 bg-base-100/90 border border-white/10 text-white placeholder-gray-600 text-sm transition-all duration-200 focus:outline-none focus:border-cyan-400/70 focus:ring-4 focus:ring-cyan-400/10"
+                                                value={formData.lastName}
                                                 onChange={handleChange}
-
                                             />
                                         </div>
                                     </div>
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 text-white">
-                                    <div className="space-y-2">
-                                        <label htmlFor="gender" className="text-md ml-3 block">
-                                            Gender
-                                        </label>
-                                        <div className={`flex items-center rounded-2xl px-4 py-3  transition-all duration-300  bg-base-100 border border-secondary border-[2px] focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 `}>
-                                            <span className="mr-3">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2">
-                                                    <circle cx="12" cy="12" r="10" />
-                                                    <path d="M12 2v10M12 22v-10M2 12h10M22 12H12" />
-                                                </svg>
-                                            </span>
-                                            <select
-                                                id="gender"
-                                                className="w-full outline-none text-gray-200 bg-transparent text-base appearance-none cursor-pointer text-white"
-                                                value={formData.gender}
-                                                onChange={handleChange}
 
-                                            >
-                                                <option value="" disabled hidden className="text-gray-500"></option>
-                                                <option value="male" className="bg-gray-900 text-white">Male</option>
-                                                <option value="female" className="bg-gray-900 text-white">Female</option>
-                                                <option value="other" className="bg-gray-900 text-white">Other</option>
-
-                                            </select>
-                                            <svg className="ml-2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                                            </svg>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-2">
+                                        <div className="space-y-1.5">
+                                            <label htmlFor="gender" className="text-xs font-semibold text-gray-300 ml-1">Gender Identity</label>
+                                            <div className="relative">
+                                                <select
+                                                    id="gender"
+                                                    className="w-full rounded-2xl bg-[#212121] px-4 py-3 bg-base-100/90 border border-white/10 text-white text-sm appearance-none cursor-pointer transition-all duration-200 focus:outline-none focus:border-cyan-400/70 focus:ring-4 focus:ring-cyan-400/10"
+                                                    value={formData.gender}
+                                                    onChange={handleChange}
+                                                >
+                                                    <option value="" disabled className="text-gray-500">Select Gender</option>
+                                                    <option value="male" className="bg-gray-900 text-white">Male</option>
+                                                    <option value="female" className="bg-gray-900 text-white">Female</option>
+                                                    <option value="other" className="bg-gray-900 text-white">Other</option>
+                                                </select>
+                                                <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center px-2 text-gray-400">
+                                                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label htmlFor="age" className="text-md ml-3 block">
-                                            Age
-                                        </label>
-                                        <div className={`flex items-center rounded-2xl px-4 py-3  transition-all duration-300  bg-base-100 border border-secondary border-[2px] focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 `}>
-                                            <span className="mr-3">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2">
-                                                    <circle cx="12" cy="12" r="10" />
-                                                    <polyline points="12 6 12 12 16 14" />
-                                                </svg>
-                                            </span>
+
+                                        <div className="space-y-1.5">
+                                            <label htmlFor="age" className="text-xs font-semibold text-gray-300 ml-1">Age</label>
                                             <input
                                                 id="age"
                                                 type="number"
                                                 min="10"
                                                 max="100"
-                                                placeholder={user?.age}
-                                                className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none text-white"
-                                                value={formData?.age}
+                                                placeholder="e.g. 21"
+                                                className="w-full rounded-2xl bg-[#212121] px-4 py-3 bg-base-100/90 border border-white/10 text-white placeholder-gray-600 text-sm transition-all duration-200 focus:outline-none focus:border-cyan-400/70 focus:ring-4 focus:ring-cyan-400/10 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                                value={formData.age}
                                                 onChange={handleChange}
-
                                             />
                                         </div>
                                     </div>
-                                    <div className="space-y-2 ">
-                                        <label htmlFor="college" className="text-md ml-3 block ">
-                                            College or Company
-                                        </label>
-                                        <div className={`flex items-center rounded-2xl px-4 py-3  transition-all duration-300  bg-base-100 border border-secondary border-[2px] focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 `}>
-                                            <span className="mr-3">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 50 50">
-                                                    <g fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.4">
-                                                        <path stroke="#ffffff" d="M33.333 8.333A2.083 2.083 0 0 0 31.25 6.25h-12.5a2.083 2.083 0 0 0-2.083 2.083v6.25h16.666zM43.75 41.667v-25a2.083 2.083 0 0 0-2.083-2.084H8.333a2.083 2.083 0 0 0-2.083 2.084v25a2.083 2.083 0 0 0 2.083 2.083h33.334a2.083 2.083 0 0 0 2.083-2.083" />
-                                                        <path stroke="#ffffff" d="M22.917 29.167H18a8.33 8.33 0 0 1-7.583-5.042l-3.792-8.646a2.08 2.08 0 0 1 1.708-.896h33.334a2.08 2.08 0 0 1 1.708.896l-3.792 8.646A8.33 8.33 0 0 1 32 29.167h-4.917" />
-                                                        <path stroke="#ffffff" d="M27.083 27.083h-4.166v4.167h4.166z" />
-                                                    </g>
-                                                </svg>
-                                            </span>
+                                </div>
+
+                                {/* SECTION 2: PROFESSIONAL & ACADEMICS */}
+                                <div className="space-y-4 pt-4 border-t border-white/10">
+                                    <h3 className="text-sm font-semibold text-cyan-400 uppercase tracking-wider flex items-center gap-2">
+                                        <Briefcase className="w-4 h-4" /> 2. Academic & Professional Background
+                                    </h3>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                        <div className="space-y-1.5">
+                                            <label htmlFor="college" className="text-xs font-semibold text-gray-300 ml-1">University / Company Name</label>
                                             <input
                                                 id="college"
                                                 type="text"
-                                                placeholder={user?.college}
-                                                className="outline-none w-full  bg-transparent placeholder-gray-500 text-base text-white"
-                                                value={formData?.college}
+                                                placeholder="e.g. IIT Kanpur / Google"
+                                                className="w-full rounded-2xl bg-[#212121] px-4 py-3 bg-base-100/90 border border-white/10 text-white placeholder-gray-600 text-sm transition-all duration-200 focus:outline-none focus:border-cyan-400/70 focus:ring-4 focus:ring-cyan-400/10"
+                                                value={formData.college}
                                                 onChange={handleChange}
-
                                             />
                                         </div>
-                                    </div>
-                                </div>
-                                <div className='flex flex-col lg:flex-row
-justify-between
-items-stretch
-gap-4  w-full text-white'>
 
-                                    <div className="space-y-2  w-full lg:w-[48.5%]">
-                                        <label htmlFor="profession" className="text-md ml-3 block">
-                                            Professionaly what you are !
-                                        </label>
-                                        <div className={`flex items-center rounded-2xl px-4 py-3  transition-all duration-300  bg-base-100 border border-secondary border-[2px]  `}>
-                                            <span className="mr-3 ">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 50 50">
-                                                    <g fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.4">
-                                                        <path stroke="#ffffff" d="M33.333 8.333A2.083 2.083 0 0 0 31.25 6.25h-12.5a2.083 2.083 0 0 0-2.083 2.083v6.25h16.666zM43.75 41.667v-25a2.083 2.083 0 0 0-2.083-2.084H8.333a2.083 2.083 0 0 0-2.083 2.084v25a2.083 2.083 0 0 0 2.083 2.083h33.334a2.083 2.083 0 0 0 2.083-2.083" />
-                                                        <path stroke="#ffffff" d="M22.917 29.167H18a8.33 8.33 0 0 1-7.583-5.042l-3.792-8.646a2.08 2.08 0 0 1 1.708-.896h33.334a2.08 2.08 0 0 1 1.708.896l-3.792 8.646A8.33 8.33 0 0 1 32 29.167h-4.917" />
-                                                        <path stroke="#ffffff" d="M27.083 27.083h-4.166v4.167h4.166z" />
-                                                    </g>
-                                                </svg>
-                                            </span>
+                                        <div className="space-y-1.5">
+                                            <label htmlFor="profession" className="text-xs font-semibold text-gray-300 ml-1">Professional Headline</label>
                                             <input
                                                 id="profession"
                                                 type="text"
-                                                placeholder={user?.profession}
-                                                className="w-full outline-none text-gray-200 bg-transparent placeholder-gray-500 text-base text-white"
-                                                value={formData?.profession}
+                                                placeholder="e.g. Full-Stack Engineer / AI Researcher"
+                                                className="w-full rounded-2xl bg-[#212121] px-4 py-3 bg-base-100/90 border border-white/10 text-white placeholder-gray-600 text-sm transition-all duration-200 focus:outline-none focus:border-cyan-400/70 focus:ring-4 focus:ring-cyan-400/10"
+                                                value={formData.profession}
                                                 onChange={handleChange}
                                             />
                                         </div>
                                     </div>
-                                    {/* ABOUT EDITS */}
-                                    <div className="space-y-2 w-full lg:w-[48.5%]">
-
-                                        <div className="flex flex-col lg:flex-row
-justify-between
-items-stretch
-gap-4">
-                                            <label htmlFor="about" className="text-md ml-3 block">
-                                                About                                        </label>
-
-                                        </div>
-                                        <div className={`flex items-center rounded-2xl px-4 py-3  transition-all duration-300  bg-base-100 border border-secondary border-[2px] focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 `}>
-                                            <span className="mr-3">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 14 14">
-                                                    <g fill="none">
-                                                        <path stroke="#ffffff" d="M13.5 10.5v2a1 1 0 0 1-1 1h-2m0-13h2a1 1 0 0 1 1 1v2m-13 0v-2a1 1 0 0 1 1-1h2m0 13h-2a1 1 0 0 1-1-1v-2" />
-                                                        <path fill="#ffffff" d="M7 6.5a2 2 0 1 0 0-4a2 2 0 0 0 0 4m3.803 4.5a3.994 3.994 0 0 0-7.606 0z" />
-                                                    </g>
-                                                </svg>
-                                            </span>
-                                            <textarea
-                                                id="about"
-                                                placeholder={user?.about}
-                                                className="w-full outline-none text-white bg-transparent placeholder-gray-500 text-base "
-                                                value={formData?.about}
-                                                onChange={handleChange}
-
-                                            />
-                                        </div>
-
-                                    </div>
-
                                 </div>
 
+                                {/* SECTION 3: BIO & TECH STACK */}
+                                <div className="space-y-6 pt-4 border-t border-white/10">
+                                    <div>
+                                        <h3 className="text-sm font-semibold text-cyan-400 uppercase tracking-wider flex items-center gap-2">
+                                            <Code2 className="w-4 h-4" /> 3. Bio & Tech Stack Studio
+                                        </h3>
+                                        <p className="text-xs text-gray-400 mt-1">
+                                            Manage your technical proficiencies using either a simple flat list or a structured category-by-category view. Both modes stay entirely in sync!
+                                        </p>
 
+                                        {/* Segmented Mode Toggle Control */}
+                                        <div className="inline-flex rounded-xl bg-[#171717] p-1 border border-white/10 mt-4 mb-1">
+                                            <button
+                                                type="button"
+                                                onClick={() => handleSwitchSkillMode("simple")}
+                                                className={`px-5 py-2 rounded-lg text-xs font-semibold transition-all duration-200 cursor-pointer ${
+                                                    skillInputMode === "simple"
+                                                        ? "bg-[#2b2b2b] text-white shadow-sm"
+                                                        : "text-gray-400 hover:text-gray-200"
+                                                }`}
+                                            >
+                                                Simple list
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => handleSwitchSkillMode("categorized")}
+                                                className={`px-5 py-2 rounded-lg text-xs font-semibold transition-all duration-200 cursor-pointer ${
+                                                    skillInputMode === "categorized"
+                                                        ? "bg-[#2b2b2b] text-white shadow-sm"
+                                                        : "text-gray-400 hover:text-gray-200"
+                                                }`}
+                                            >
+                                                By category
+                                            </button>
+                                        </div>
+                                    </div>
 
+                                    {/* MODE A: SIMPLE LIST */}
+                                    {skillInputMode === "simple" ? (
+                                        <div className="space-y-4">
+                                            <div className="p-4 rounded-2xl bg-[#000000] border border-white/10 space-y-2.5 shadow-inner">
+                                                <div className="flex justify-between items-center text-xs text-gray-300 font-semibold">
+                                                    <span>Active Tech Stack ({formData.skills?.length || 0} configured)</span>
+                                                    {formData.skills?.length > 0 && (
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => { setFlatSkillsInput(""); setFormData(prev => ({ ...prev, skills: [] })); }}
+                                                            className="text-[11px] text-red-400 hover:text-red-300 underline transition-colors cursor-pointer"
+                                                        >
+                                                            Clear All
+                                                        </button>
+                                                    )}
+                                                </div>
+                                                
+                                                <div className="flex flex-wrap gap-2 items-center min-h-[36px]">
+                                                    {formData.skills && formData.skills.length > 0 ? (
+                                                        formData.skills.map((s, idx) => (
+                                                            <span 
+                                                                key={idx} 
+                                                                className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-xl bg-[#1f1f1f] text-gray-200 border border-white/15 shadow-sm transition-all"
+                                                            >
+                                                                <span>{s?.name || s}</span>
+                                                                {s?.category && s.category !== "uncategorized" && (
+                                                                    <span className="text-[9px] font-mono text-gray-400 uppercase tracking-tight ml-0.5">
+                                                                        [{s.category}]
+                                                                    </span>
+                                                                )}
+                                                            </span>
+                                                        ))
+                                                    ) : (
+                                                        <span className="text-xs text-gray-500 italic py-1">
+                                                            No skills configured yet. Type below to populate your stack!
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
 
+                                            <div className="space-y-1.5">
+                                                <label htmlFor="flat-skills-input" className="text-xs font-bold text-gray-300 ml-1 flex items-center justify-between">
+                                                    <span>Flat Comma-Separated List</span>
+                                                    <span className="text-gray-500 font-normal text-[11px]">(Separate with commas, e.g. react, nextjs, nodejs, css)</span>
+                                                </label>
+                                                <input
+                                                    id="flat-skills-input"
+                                                    type="text"
+                                                    placeholder="e.g. react, nextjs, nodejs, css"
+                                                    className="w-full rounded-2xl bg-[#212121] px-4 py-3 border border-white/10 text-white placeholder-gray-600 text-sm transition-all duration-200 focus:outline-none focus:border-white/40 focus:ring-2 focus:ring-white/5"
+                                                    value={flatSkillsInput}
+                                                    onChange={handleFlatSkillsChange}
+                                                />
+                                                <p className="text-[11px] text-gray-500 ml-1 italic">
+                                                    New entries here are uncategorized by default and sync smoothly with the categorized mode.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        /* MODE B: CATEGORIZED ENTRY */
+                                        <div className="space-y-4">
+                                            <div className="space-y-3">
+                                                {categorizedRows.map((row, index) => (
+                                                    <div key={row.id || index} className="p-4 rounded-2xl bg-[#000000] border border-white/10 space-y-3 shadow-inner">
+                                                        <div className="flex items-center justify-between gap-3">
+                                                            <div className="w-[200px] sm:w-[260px]">
+                                                                <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">
+                                                                    Category Name
+                                                                </label>
+                                                                <input
+                                                                    type="text"
+                                                                    placeholder="e.g. frontend, backend, database"
+                                                                    value={row.category}
+                                                                    onChange={(e) => handleRowChange(index, "category", e.target.value)}
+                                                                    className="w-full rounded-xl bg-[#212121] px-3 py-1.5 border border-white/10 text-white text-xs uppercase tracking-wider font-semibold placeholder:normal-case placeholder:font-normal placeholder-gray-600 focus:outline-none focus:border-white/40"
+                                                                />
+                                                            </div>
+                                                            {categorizedRows.length > 1 && (
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => handleRemoveCategoryRow(index)}
+                                                                    className="text-gray-400 hover:text-red-400 text-xs px-2.5 py-1.5 rounded-lg border border-white/5 hover:border-red-400/30 transition-colors cursor-pointer self-end mb-0.5"
+                                                                    title="Remove category row"
+                                                                >
+                                                                    ✕ Remove
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                        <div>
+                                                            <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">
+                                                                Skills (comma-separated)
+                                                            </label>
+                                                            <input
+                                                                type="text"
+                                                                placeholder="e.g. react, tailwind, nextjs"
+                                                                value={row.skillsInput}
+                                                                onChange={(e) => handleRowChange(index, "skillsInput", e.target.value)}
+                                                                className="w-full rounded-xl bg-[#212121] px-3.5 py-2.5 border border-white/10 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-white/40"
+                                                            />
+                                                        </div>
+                                                        {/* Live chips preview for this category row */}
+                                                        <div className="flex flex-wrap gap-1.5 pt-0.5">
+                                                            {row.skillsInput
+                                                                .split(",")
+                                                                .map(s => s.trim())
+                                                                .filter(Boolean)
+                                                                .map((sName, sIdx) => (
+                                                                    <span
+                                                                        key={sIdx}
+                                                                        className="inline-flex items-center px-2.5 py-0.5 rounded-lg bg-[#1a1a1a] border border-white/10 text-gray-300 text-[11px] font-medium"
+                                                                    >
+                                                                        {sName}
+                                                                    </span>
+                                                                ))}
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
 
+                                            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pt-1">
+                                                <button
+                                                    type="button"
+                                                    onClick={handleAddCategoryRow}
+                                                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#212121] border border-white/10 hover:bg-[#2a2a2a] text-white text-xs font-semibold transition-all cursor-pointer shadow-sm"
+                                                >
+                                                    <span>+ Add Category</span>
+                                                </button>
+                                                <span className="text-[11px] text-gray-500 italic">
+                                                    Unlabeled category names default to "Uncategorized".
+                                                </span>
+                                            </div>
+                                        </div>
+                                    )}
 
+                                    {/* ABOUT BIO TEXTAREA */}
+                                    <div className="space-y-1.5 pt-2">
+                                        <label htmlFor="about" className="text-xs font-semibold text-gray-300 ml-1">About Me & Professional Bio</label>
+                                        <textarea
+                                            id="about"
+                                            rows={4}
+                                            placeholder="Tell the community about your passions, achievements, and technical goals..."
+                                            className="w-full rounded-2xl bg-[#212121] px-4 py-3 bg-base-100/90 border border-white/10 text-white placeholder-gray-600 text-sm leading-relaxed resize-y transition-all duration-200 focus:outline-none focus:border-cyan-400/70 focus:ring-4 focus:ring-cyan-400/10"
+                                            value={formData.about}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                </div>
 
-
-                                <div className="w-[100%] flex justify-center">
-                                    <button type="submit" className="group relative w-full sm:w-[70%] md:w-[50%] lg:w-[30%] py-3  mt-4 rounded-full text-xl font-bold bg-[#000] border-[2px] border-accent hover:border-secondary  transition-all duration-300 overflow-hidden text-white shadow-md hover:shadow-lg">
-                                        Save Changes
-                                        <div className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-[#fff]/70 to-transparent"></div>
-                                        <div className="absolute inset-x-0 bottom-0 h-[2px] w-[50%] mx-auto bg-gradient-to-r from-transparent via-accent to-transparent"></div>
-                                        <div className="absolute inset-x-0 bottom-0 h-[1px] w-[50%] mx-auto cursor-pointer group-hover:h-[4px] transition-all duration-300 bg-gradient-to-r from-transparent via-[#ffffff] to-transparent"></div>
+                                {/* SUBMIT BUTTON */}
+                                <div className="pt-6 border-t border-white/10 flex justify-end">
+                                    <button
+                                        type="submit"
+                                        disabled={saving}
+                                        className="relative inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-2xl font-bold text-sm sm:text-base text-black bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 shadow-[0_0_25px_rgba(34,211,238,0.35)] hover:shadow-[0_0_40px_rgba(34,211,238,0.6)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:pointer-events-none cursor-pointer overflow-hidden"
+                                    >
+                                        {saving ? (
+                                            <>
+                                                <Loader2 className="w-5 h-5 animate-spin text-black" />
+                                                <span>Synchronizing Changes...</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Sparkles className="w-5 h-5 text-black" />
+                                                <span>Save Profile Changes</span>
+                                            </>
+                                        )}
                                     </button>
                                 </div>
 
@@ -606,329 +853,131 @@ gap-4">
 
                     </div>
                 </div>
-            </div >
+            </div>
 
-            {
-                editProfileIMG && (<div className=" z-10 fixed inset-0 bg-black/80  animate-fadeIn flex justify-center items-center " onClick={() => editProfileIMGisOpen(false)}>
-
-                    {/* CARD */}
-                    {/* MODAL CARD */}
+            {/* ================= PROFILE PHOTO MODAL ================= */}
+            {editProfileIMG && (
+                <div
+                    className="z-50 fixed inset-0 bg-black/80 backdrop-blur-sm animate-fadeIn flex justify-center items-center p-4"
+                    onClick={() => editProfileIMGisOpen(false)}
+                >
                     <div
                         onClick={(e) => e.stopPropagation()}
-                        className="
-    relative  w-full max-w-[420px] mx-4
-    overflow-hidden rounded-3xl
-    border border-white/10
-    bg-base-100
-
-    shadow-[0_20px_80px_rgba(0,0,0,0.45)]
-    animate-in fade-in zoom-in-95 duration-200
-"
+                        className="relative w-full max-w-[440px] overflow-hidden rounded-3xl border border-white/15 bg-base-100 shadow-[0_25px_90px_rgba(0,0,0,0.7)] animate-in fade-in zoom-in-95 duration-200"
                     >
-
-                        {/* TOP GLOW */}
-                        <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-white to-transparent opacity-80" />
+                        <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-80" />
 
                         {/* HEADER */}
                         <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
-
-                            <div className="flex items-start sm:items-center gap-3 sm:gap-4">
-                                {/* ICON */}
-                                <div className="
-            flex items-center justify-center
-            w-12 h-12 rounded-2xl
-            bg-base-100 border border-blue-400/20
-        ">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 14 14">
-                                        <g fill="none" fillRule="evenodd" clipRule="evenodd">
-                                            <path
-                                                fill="#fff"
-                                                d="M1.573 1.573A.25.25 0 0 1 1.75 1.5h1.5a.75.75 0 0 0 0-1.5h-1.5A1.75 1.75 0 0 0 0 1.75v1.5a.75.75 0 0 0 1.5 0v-1.5a.25.25 0 0 1 .073-.177M14 10.75a.75.75 0 0 0-1.5 0v1.5a.25.25 0 0 1-.25.25h-1.5a.75.75 0 0 0 0 1.5h1.5A1.75 1.75 0 0 0 14 12.25zM.75 10a.75.75 0 0 1 .75.75v1.5a.25.25 0 0 0 .25.25h1.5a.75.75 0 0 1 0 1.5h-1.5A1.75 1.75 0 0 1 0 12.25v-1.5A.75.75 0 0 1 .75 10m10-10a.75.75 0 0 0 0 1.5h1.5a.25.25 0 0 1 .25.25v1.5a.75.75 0 0 0 1.5 0v-1.5A1.75 1.75 0 0 0 12.25 0z"
-                                            />
-                                            <path
-                                                fill="#3b82f6"
-                                                d="M9.208 4.46a2.21 2.21 0 1 1-4.421 0a2.21 2.21 0 0 1 4.421 0m-6.353 6.195a4.423 4.423 0 0 1 8.288 0c.112.299-.126.595-.446.595H3.301c-.32 0-.558-.296-.446-.595"
-                                            />
-                                        </g>
-                                    </svg>
+                            <div className="flex items-center gap-3.5">
+                                <div className="flex items-center justify-center w-11 h-11 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
+                                    <Sparkles className="w-5 h-5" />
                                 </div>
-
-                                {/* TEXT */}
                                 <div>
-                                    <h2 className="text-xl font-semibold tracking-tight text-white">
-                                        Change Profile Photo
+                                    <h2 className="text-lg font-bold tracking-tight text-white">
+                                        Update Profile Avatar
                                     </h2>
-
-                                    <p className="text-sm text-gray-400 mt-0.5">
-                                        Upload a new avatar or remove the current one.
+                                    <p className="text-xs text-gray-400">
+                                        Upload a crisp photo or reset to default
                                     </p>
                                 </div>
                             </div>
 
-                            {/* CLOSE */}
                             <button
                                 onClick={() => editProfileIMGisOpen(false)}
-                                className="
-            flex items-center justify-center
-            w-9 h-9 rounded-xl
-            text-gray-400 hover:text-white
-            hover:bg-white/10
-            transition-all duration-200
-        "
+                                className="w-8 h-8 rounded-xl flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all"
                             >
                                 ✕
                             </button>
                         </div>
 
                         {/* BODY */}
-                        <div className="p-6 space-y-4">
-
-                            {/* PREVIEW */}
+                        <div className="p-6 space-y-5">
                             <div className="flex justify-center">
-                                <div className="relative">
+                                <div className="relative p-1.5 rounded-full bg-gradient-to-tr from-cyan-400 to-indigo-500 shadow-2xl">
                                     <img
-                                        src={user?.photoUrl?.url}
-                                        alt="profile"
-                                        className="
-                    w-24 h-24 rounded-full
-                    object-cover
-                    border-4 border-white/10
-                    shadow-xl
-                "
+                                        src={user?.photoUrl?.url || "https://geographyandyou.com/images/user-profile.png"}
+                                        alt="Current avatar preview"
+                                        className="w-28 h-28 rounded-full object-cover border-4 border-base-100 shadow-inner"
                                     />
-
-
                                 </div>
                             </div>
 
-                            {/* UPLOAD */}
-                            <label
-                                className="
-            group cursor-pointer
-            flex items-center justify-center gap-3
-            w-full py-3.5 rounded-2xl
-            bg-base-300 hover:bg-white
-            text-white font-medium
-            transition-all duration-200
-            shadow-lg hover:text-base-100
-        "
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="20"
-                                    height="20"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    className="group-hover:-translate-y-0.5 transition"
+                            <div className="space-y-2.5">
+                                <label className="group cursor-pointer flex items-center justify-center gap-2.5 w-full py-3.5 rounded-2xl bg-gradient-to-r from-cyan-400 to-teal-400 text-black font-bold text-sm shadow-lg hover:shadow-[0_0_25px_rgba(34,211,238,0.4)] hover:scale-[1.01] active:scale-[0.99] transition-all duration-200">
+                                    <Sparkles className="w-4 h-4" />
+                                    <span>Upload New Avatar</span>
+                                    <input
+                                        type="file"
+                                        className="hidden"
+                                        accept="image/*"
+                                        onChange={handleFileChange}
+                                    />
+                                </label>
+
+                                <button
+                                    className="w-full py-3.5 rounded-2xl border border-red-500/25 bg-red-500/5 text-red-400 font-semibold text-sm hover:bg-red-500/10 hover:border-red-500/40 transition-all duration-200"
+                                    onClick={removeProfilePic}
                                 >
-                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                    <polyline points="17 8 12 3 7 8" />
-                                    <line x1="12" x2="12" y1="3" y2="15" />
-                                </svg>
-
-                                Upload New Photo
-
-                                <input
-                                    type="file"
-                                    className="hidden"
-                                    accept="image/*"
-                                    onChange={handleFileChange}
-                                />
-                            </label>
-
-                            {/* REMOVE */}
-                            <button
-                                className="
-            w-full py-3.5 rounded-2xl
-            border border-red-500/20
-            bg-red-500/5
-            text-red-400 font-medium
-            hover:bg-red-500/10
-            hover:border-red-500/40
-            transition-all duration-200
-        "
-                                onClick={() => { removeProfilePic(); }}
-                            >
-                                Remove Current Photo
-                            </button>
+                                    Remove & Reset to Default
+                                </button>
+                            </div>
                         </div>
 
                         {/* FOOTER */}
                         <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-white/10 bg-white/[0.02]">
-
                             <button
                                 onClick={() => editProfileIMGisOpen(false)}
-                                className="
-            px-5 py-2.5 rounded-xl
-            text-sm font-medium text-gray-300
-            hover:bg-white/10 hover:text-white
-            transition-all
-        "
+                                className="px-5 py-2 rounded-xl text-sm font-medium text-gray-400 hover:bg-white/5 hover:text-white transition-all"
                             >
-                                Cancel
-                            </button>
-
-                            <button
-                                className="
-            px-5 py-2.5 rounded-xl
-            bg-white text-black
-            text-sm font-semibold
-            hover:scale-[1.02]
-            active:scale-[0.98]
-            transition-all duration-200
-        "
-                            >
-                                Save Changes
+                                Close
                             </button>
                         </div>
                     </div>
-                </div>)
-            }
+                </div>
+            )}
 
+            {/* ================= UPLOADING LOADER MODAL ================= */}
+            {uploading && (
+                <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-md px-4 animate-in fade-in duration-200">
+                    <div className="absolute w-[450px] h-[450px] bg-cyan-500/10 blur-[120px] rounded-full animate-pulse" />
 
-            {
-                uploading && (<div className="fixed inset-0 z-[999] flex items-center justify-center overflow-hidden bg-black/70  px-4">
+                    <div className="relative w-full max-w-[640px] overflow-hidden rounded-[36px] border border-white/15 bg-base-200 shadow-[0_25px_80px_rgba(0,0,0,0.7)] p-8 sm:p-12 flex flex-col items-center text-center">
+                        <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-90" />
 
-                    {/* Animated Background Glow */}
-                    <div className="absolute w-[500px] h-[500px] bg-black/20 blur-[120px] rounded-full animate-pulse" />
-
-                    {/* MAIN CARD */}
-                    <div
-                        className="
-                        relative
-                        w-full max-w-[760px]
-                        overflow-hidden
-                        rounded-[36px]
-                        border border-white/10
-                        bg-base-200
-                        shadow-[0_25px_80px_rgba(0,0,0,0.65)]
-
-                        px-6 py-10 md:px-12 md:py-14
-                        flex flex-col items-center text-center
-                        animate-in fade-in zoom-in-95 duration-300
-                    "
-                    >
-
-                        {/* TOP BORDER GLOW */}
-                        <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-white to-transparent opacity-80" />
-
-                        {/* Floating Accent */}
-
-
-                        {/* STATUS BADGE */}
-                        <div className="
-                        relative z-10
-                        mb-6
-                        flex items-center gap-2
-                        rounded-full
-                        border border-white
-                        bg-cyan-400/10
-                        px-4 py-1.5
-                        text-sm font-medium text-white
-
-                    ">
-                            <div className="h-2 w-2 rounded-full bg-white animate-pulse" />
-                            Secure Profile Synchronization
+                        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-1.5 text-xs font-semibold text-cyan-300">
+                            <span className="h-2 w-2 rounded-full bg-cyan-400 animate-ping" />
+                            Secure Cloud Synchronization
                         </div>
 
-                        {/* IMAGE CONTAINER */}
-                        <div className="relative z-10">
-
-                            {/* Outer Glow */}
-
-
-                            {/* Image */}
-                            <div className="
-                            relative
-                            overflow-hidden
-                            rounded-[32px]
-                            border border-white/10
-                            bg-white/5
-
-                        ">
+                        <div className="relative my-2">
+                            <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/5 shadow-2xl">
                                 <img
                                     src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778989004/CS_Identity_Manager_amyjyi.webp"
                                     alt="NOVA Identity Manager"
-                                    className="
-                                    w-[120px] h-[120px]
-sm:w-[160px] sm:h-[160px]
-md:w-[220px] md:h-[220px]
-                                    object-cover
-                                    scale-[1.02]
-                                "
+                                    className="w-[140px] h-[140px] sm:w-[180px] sm:h-[180px] object-cover scale-[1.02]"
                                 />
-
-                                {/* Shine Effect */}
-                                <div className="
-                                absolute inset-0
-                                bg-gradient-to-tr from-transparent via-white/10 to-transparent
-                            " />
+                                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent" />
                             </div>
                         </div>
 
-                        {/* TITLE */}
-                        <div className="relative z-10 mt-8">
+                        <h3 className="text-2xl sm:text-3xl font-black text-white mt-6 tracking-tight">
+                            NOVA is upgrading <span className="bg-gradient-to-r from-cyan-400 to-teal-300 bg-clip-text text-transparent">your digital avatar</span>
+                        </h3>
 
-                            <h1
-                                className="
-                                text-3xl
-                                md:text-5xl
-                                font-black
-                                tracking-tight
-                                leading-tight
-                                text-white
-                            "
-                            >
-                                NOVA is updating
-                                <span className="block mt-1 bg-gradient-to-r from-base-100 via-white to-base-100 bg-clip-text text-transparent">
-                                    your digital identity
-                                </span>
-                            </h1>
-
-                            {/* Animated Loader */}
-                            <div className="flex justify-center mt-6">
-
-                                <div className="flex gap-2">
-
-                                    <span className="w-3 h-3 rounded-full bg-white animate-bounce [animation-delay:-0.3s]" />
-                                    <span className="w-3 h-3 rounded-full bg-white animate-bounce [animation-delay:-0.15s]" />
-                                    <span className="w-3 h-3 rounded-full bg-white animate-bounce" />
-
-                                </div>
-
-                            </div>
-
-                            {/* SUBTEXT */}
-                            <p
-                                className="
-                                mt-6
-                                max-w-[560px]
-                                text-sm md:text-base
-                                leading-relaxed
-                                text-gray-400
-                                font-medium
-                            "
-                            >
-                                Please wait while NOVA securely synchronizes your profile,
-                                optimizes your identity assets, and updates your personalized
-                                experience across the platform.
-                            </p>
-
+                        <div className="flex justify-center mt-5 gap-2">
+                            <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-bounce [animation-delay:-0.3s]" />
+                            <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-bounce [animation-delay:-0.15s]" />
+                            <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-bounce" />
                         </div>
 
-
-
+                        <p className="mt-5 max-w-[480px] text-xs sm:text-sm text-gray-400 leading-relaxed">
+                            Please wait while we process, crop, and securely synchronize your avatar across all CodeSarthi developer services.
+                        </p>
                     </div>
-                </div>)
-            }
-
-        </div >
-
-
+                </div>
+            )}
+        </div>
     );
 };
 

@@ -95,7 +95,7 @@ const ChatProfile = ({ selectedChatUser, setSelectedChatUser }) => {
                         {selectedChatUser?.info?._id && (
                             <span className="text-md text-info font-medium flex justify-center items-center gap-3">
                                 <BarChart3 color="#fff" />
-                                {selectedChatUser?.info?.skills?.join(", ")}
+                                {selectedChatUser?.info?.skills?.map(s => s?.name || s).join(", ")}
                             </span>
                         )}
                     </div>

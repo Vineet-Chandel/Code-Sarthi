@@ -272,7 +272,7 @@ text-blue-500
                                                             className=" px-3 py-1.5 text-xs font-medium rounded-xl bg-white/10 border border-white/10 text-gray-300  border border-secondary border-[2px] transition-all duration-300 group relative overflow-hidden "
                                                         >
                                                             <div className="absolute inset-0 bg-accent/10 "></div>
-                                                            <span className="relative text-white/50">{skill}</span>
+                                                            <span className="relative text-white/50">{skill?.name || skill}</span>
                                                         </span>
                                                     )) || (
                                                             <span className="px-3 py-1.5 text-xs text-gray-500 bg-gray-900/50 rounded-lg border border-gray-700/30">

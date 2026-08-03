@@ -226,6 +226,9 @@ const App = () => {
               <Route path="requestreceived" element={<ReceivedRequests />} />
 
               <Route path="toolkit" element={<Home />} />
+              <Route path="toolkit/blogs/:categoryId/:postId" element={<Home initialTab="blogs" />} />
+              <Route path="toolkit/blogs/:categoryId" element={<Home initialTab="blogs" />} />
+              <Route path="toolkit/blogs" element={<Home initialTab="blogs" />} />
               <Route
                 path="toolkit/docs/:techId"
                 element={

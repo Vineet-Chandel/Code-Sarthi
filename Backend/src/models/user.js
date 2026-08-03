@@ -95,8 +95,24 @@ const userSchema = new Schema(
             required: true,
         },
         skills: {
-            type: [String],
-            default: ["No skills added yet"],
+            type: [Schema.Types.Mixed],
+            default: [],
+            get: function (skills) {
+                if (!Array.isArray(skills)) return [];
+                return skills.map(skill => {
+                    if (typeof skill === "string") {
+                        if (skill === "No skills added yet") return null;
+                        return { name: skill, category: null };
+                    }
+                    if (skill && typeof skill === "object" && skill.name) {
+                        return {
+                            name: String(skill.name).trim(),
+                            category: skill.category ? String(skill.category).trim().toLowerCase() : null
+                        };
+                    }
+                    return null;
+                }).filter(Boolean);
+            }
         },
         profession: {
             type: String,
@@ -113,6 +129,8 @@ const userSchema = new Schema(
     },
     {
         timestamps: true,
+        toJSON: { getters: true },
+        toObject: { getters: true }
     }
 );
 

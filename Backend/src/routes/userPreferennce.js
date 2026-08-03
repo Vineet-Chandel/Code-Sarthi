@@ -6,6 +6,7 @@ const ConnectionRequest = require("../models/connectionRequest");
 const User = require("../models/user");
 const blockConnection = require("../models/blockConnection")
 const connections = require("../models/connections");
+const { validateEditProfileData } = require("../utils/validation");
 
 
 // GET all accepted connections
@@ -388,6 +389,53 @@ userPreference.get("/user/feed", userAuth, async (req, res) => {
         res.json({ data: users });
     } catch (err) {
         res.status(400).json({ message: err.message });
+    }
+});
+
+// Edit user profile
+userPreference.patch("/profile/me/edit", userAuth, async (req, res) => {
+    try {
+        if (req.body.skills !== undefined) {
+            let rawSkills = req.body.skills;
+            if (typeof rawSkills === "string") {
+                rawSkills = rawSkills.split(",").map(s => s.trim()).filter(Boolean).map(name => ({ name, category: null }));
+            }
+            if (Array.isArray(rawSkills)) {
+                const seen = new Map();
+                rawSkills.forEach(skill => {
+                    let name = "";
+                    let category = null;
+                    if (typeof skill === "string") {
+                        name = skill.trim();
+                    } else if (skill && typeof skill === "object") {
+                        name = (skill.name || "").trim();
+                        if (skill.category && typeof skill.category === "string") {
+                            const catTrim = skill.category.trim().toLowerCase();
+                            category = (catTrim === "" || catTrim === "uncategorized") ? null : catTrim;
+                        }
+                    }
+                    if (name && name.toLowerCase() !== "no skills added yet") {
+                        seen.set(name.toLowerCase(), { name, category });
+                    }
+                });
+                req.body.skills = Array.from(seen.values());
+            }
+        }
+
+        validateEditProfileData(req);
+
+        const loggedInUser = req.user;
+
+        Object.keys(req.body).forEach((key) => (loggedInUser[key] = req.body[key]));
+
+        await loggedInUser.save();
+
+        res.status(200).json({
+            message: `${loggedInUser.firstName}, your profile updated successfully!`,
+            data: loggedInUser
+        });
+    } catch (err) {
+        res.status(400).send(err.message || "Something went wrong");
     }
 });
 

@@ -3,7 +3,6 @@ const profileRouter = express.Router();
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const { userAuth } = require("../middlewares/userAuth");
-const { validateEditProfileData } = require("../utils/validation");
 const validator = require("validator");
 
 const redis = require("../configs/redis");
@@ -44,25 +43,6 @@ profileRouter.get("/profile/me", userAuth, async (req, res) => {
                 isVerified: user.isVerified,
             }
 
-        });
-    } catch (err) {
-        res.status(400).send("ERROR : " + err.message);
-    }
-});
-profileRouter.patch("/profile/me/edit", userAuth, async (req, res) => {
-    try {
-
-        validateEditProfileData(req);
-
-        const loggedInUser = req.user;
-
-        Object.keys(req.body).forEach((key) => (loggedInUser[key] = req.body[key]));
-
-        await loggedInUser.save();
-
-        res.status(200).json({
-            message: `${loggedInUser.firstName}, your profile updated successfuly`,
-            data: loggedInUser
         });
     } catch (err) {
         res.status(400).send("ERROR : " + err.message);
