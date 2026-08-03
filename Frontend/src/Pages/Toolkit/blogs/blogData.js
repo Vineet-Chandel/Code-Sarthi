@@ -8,6 +8,382 @@ export const blogData = {
       icon: 'Trophy',
       posts: [
         {
+          id: 'sih-presentation-resources-winners',
+          title: 'SIH Winning Presentation Resources, PPT Templates & GitHub Repos',
+          excerpt: 'A comprehensive curated archive of official SIH PPT templates, grand finale winner lists, confirmed winning GitHub repositories, SlideShare decks, and scoring rubrics.',
+          author: { name: 'CodeSarthi Team', credential: 'SIH 2022 Winner' },
+          tags: ['SIH', 'Presentation', 'PPT', 'GitHub', 'Winners', 'Resources'],
+          publishedAt: '2025-02-24',
+          content: [
+            {
+              type: 'paragraph',
+              text: "Creating a winning pitch deck for Smart India Hackathon (SIH) requires more than just a revolutionary idea—it demands strict adherence to the evaluated problem statements and official presentation structure. To give you the greatest competitive advantage, we have curated the definitive collection of official templates, open-source repositories from confirmed winning teams, slide deck archives, and evaluator mentorship guides."
+            },
+
+            {
+              type: 'heading',
+              level: 2,
+              text: '1. Official SIH Resources (Templates & Winner Lists)'
+            },
+            {
+              type: 'image',
+              src: 'https://res.cloudinary.com/dj0ivep44/image/upload/v1785781282/0188a989-180c-4453-a71e-eb9faecb0b4c.png',
+              alt: 'SIH Official Resources & Winners Overview'
+            },
+            {
+              type: 'paragraph',
+              text: "The foundation of any winning presentation is using the exact official format and understanding the evaluated problem statements. Always cross-reference your chosen theme with previous winning solutions."
+            },
+            {
+              type: 'resourceList',
+              items: [
+                {
+                  title: 'Official SIH Idea Presentation Template (PPTX)',
+                  displayUrl: 'sih.gov.in',
+                  url: 'https://sih.gov.in',
+                  badge: 'Official Template',
+                  type: 'official',
+                  description: 'Download the official SIH PPT format directly from the portal. Never deviate from the required slide titles and sequence.'
+                },
+                {
+                  title: 'SIH 2024 Grand Finale Winners List',
+                  displayUrl: 'sih.gov.in/sih2024-grand-finale-result',
+                  url: 'https://sih.gov.in/sih2024-grand-finale-result',
+                  badge: '2024 Winners',
+                  type: 'official',
+                  description: 'Comprehensive evaluation result archives of all winning teams across software and hardware editions in 2024.'
+                },
+                {
+                  title: 'SIH 2023 Grand Finale Winners List',
+                  displayUrl: 'sih.gov.in/sih2023-grand-finale-result',
+                  url: 'https://sih.gov.in/sih2023-grand-finale-result',
+                  badge: '2023 Winners',
+                  type: 'official',
+                  description: 'Official results and evaluation logs for the 2023 Smart India Hackathon Grand Finale.'
+                },
+                {
+                  title: 'SIH 2022 Grand Finale Winners List',
+                  displayUrl: 'sih.gov.in/sih2022s',
+                  url: 'https://sih.gov.in/sih2022s',
+                  badge: '2022 Winners',
+                  type: 'official',
+                  description: 'Archive of SIH 2022 winning ideas, teams, and problem statement codes.'
+                },
+                {
+                  title: 'Official Problem Statements Archive',
+                  displayUrl: 'sih.gov.in/sih2024PS',
+                  url: 'https://sih.gov.in/sih2024PS',
+                  badge: 'PS Archive',
+                  type: 'official',
+                  description: 'Cross-reference winner names with these official problem statement codes to discover what solutions succeeded in your domain.'
+                }
+              ]
+            },
+            {
+              type: 'heading',
+              level: 2,
+              text: '2. GitHub Repositories — Known Winning & Reference Teams'
+            },
+            {
+              type: 'paragraph',
+              text: "Many winning teams open-source their projects. Their repositories often contain README.md files with pitch deck structures, architecture diagrams, and presentation slides — an excellent source of structural (not content) inspiration."
+            },
+            {
+              type: 'heading',
+              level: 3,
+              text: 'Confirmed SIH Winners'
+            },
+            {
+              type: 'resourceList',
+              items: [
+                {
+                  title: 'KnitKraft — Wool from Farm to Fabric Monitoring',
+                  displayUrl: 'github.com/uzibytes/KnitKraft',
+                  url: 'https://github.com/uzibytes/KnitKraft',
+                  badge: 'SIH 2023 Winner, Team Vision',
+                  type: 'github',
+                  description: 'An open-source farm-to-fabric lifecycle monitoring solution. Features exceptional technical architecture diagrams and presentation slides.'
+                },
+                {
+                  title: 'Voco App — Advanced Vocational Training Application',
+                  displayUrl: 'github.com/uzibytes/Voco_App',
+                  url: 'https://github.com/uzibytes/Voco_App',
+                  badge: 'SIH 2022 Winner, Team Vision',
+                  type: 'github',
+                  description: 'Award-winning vocational training application platform. Includes full project documentation and structural presentation reference.'
+                },
+                {
+                  title: 'DhwaniSarathi — App-Based Audiometer',
+                  displayUrl: 'github.com/S1ddh4rthaG/DhwaniSarathi',
+                  url: 'https://github.com/S1ddh4rthaG/DhwaniSarathi',
+                  badge: 'SIH 2023 Winner',
+                  type: 'github',
+                  description: 'A clinical-grade diagnostic audiometry app designed for accessibility in remote healthcare areas.'
+                },
+                {
+                  title: 'SmartAttendance — Smart Attendance System',
+                  displayUrl: 'github.com/Gowtham2543/SmartAttendance',
+                  url: 'https://github.com/Gowtham2543/SmartAttendance',
+                  badge: 'SIH 2022 Winner',
+                  type: 'github',
+                  description: 'Automated biometric and AI-based attendance verification system for academic institutions.'
+                },
+                {
+                  title: 'KisanSeva2 — Farmer Support System',
+                  displayUrl: 'github.com/droidbaker/KisanSeva2',
+                  url: 'https://github.com/droidbaker/KisanSeva2',
+                  badge: 'SIH 2020 Winning Idea',
+                  type: 'github',
+                  description: 'Comprehensive digital agriculture support and advisory platform built for rural connectivity.'
+                }
+              ]
+            },
+            {
+              type: 'heading',
+              level: 3,
+              text: 'Additional Reference Projects'
+            },
+            {
+              type: 'resourceList',
+              items: [
+                {
+                  title: 'ArogyaKrishi — Crop Disease Predictor',
+                  displayUrl: 'github.com/Blacksujit/ArogyaKrishi',
+                  url: 'https://github.com/Blacksujit/ArogyaKrishi',
+                  type: 'github',
+                  description: 'AI-powered diagnostic assistant for detecting plant diseases and recommending organic remedies.'
+                },
+                {
+                  title: 'Jan-Dhan-Darshak — Financial Inclusion Tracker',
+                  displayUrl: 'github.com/rudrakshi99/Jan-Dhan-Darshak',
+                  url: 'https://github.com/rudrakshi99/Jan-Dhan-Darshak',
+                  type: 'github',
+                  description: 'Geospatial financial inclusion locator designed to track public banking touchpoints across India.'
+                },
+                {
+                  title: 'SIH2020_MK95_Hashtag — Job & Educational Portal',
+                  displayUrl: 'github.com/PragatiVerma18/SIH2020_MK95_Hashtag',
+                  url: 'https://github.com/PragatiVerma18/SIH2020_MK95_Hashtag',
+                  type: 'github',
+                  description: 'Integrated employment and talent mapping portal created for vocational stream graduates.'
+                },
+                {
+                  title: 'eVault-SIH-2023 — Legal Ledger',
+                  displayUrl: 'github.com/kunalkeshan/eVault-SIH-2023',
+                  url: 'https://github.com/kunalkeshan/eVault-SIH-2023',
+                  badge: 'SIH 2023',
+                  type: 'github',
+                  description: 'Decentralized legal document verification and custody management system.'
+                },
+                {
+                  title: 'advo — advocate.ai',
+                  displayUrl: 'github.com/TheCleverIdiott/advo',
+                  url: 'https://github.com/TheCleverIdiott/advo',
+                  type: 'github',
+                  description: 'AI-driven legal assistant designed for case analysis, automated drafting, and judicial precedent retrieval.'
+                },
+                {
+                  title: 'MindSpace — Digital Mental Health Support Platform',
+                  displayUrl: 'github.com/Saurabhtbj1201/MindSpace-Digital-Mental-Health-Support-Platform',
+                  url: 'https://github.com/Saurabhtbj1201/MindSpace-Digital-Mental-Health-Support-Platform',
+                  type: 'github',
+                  description: 'Confidential digital counseling, assessment, and peer support platform for university students.'
+                },
+                {
+                  title: 'SIH2020-SehYatri — Travel Domain Platform',
+                  displayUrl: 'github.com/Hard-Coder05/SIH2020-SehYatri',
+                  url: 'https://github.com/Hard-Coder05/SIH2020-SehYatri',
+                  badge: 'SIH 2020',
+                  type: 'github',
+                  description: 'Smart transit and crowd safety management system for public transit authorities.'
+                },
+                {
+                  title: 'SIH-2025 — Smart Water Management System',
+                  displayUrl: 'github.com/Mausam5055/SIH-2025',
+                  url: 'https://github.com/Mausam5055/SIH-2025',
+                  badge: 'SIH 2025 Reference',
+                  type: 'github',
+                  description: 'IoT and data-driven civic water conservation and leak tracking system.'
+                },
+                {
+                  title: 'Browse 100+ SIH Projects Topic Archive',
+                  displayUrl: 'github.com/topics/smart-india-hackathon',
+                  url: 'https://github.com/topics/smart-india-hackathon',
+                  badge: 'GitHub Topic',
+                  type: 'github',
+                  description: 'Explore over 100+ open-source smart-india-hackathon repositories tagged directly by participating developers.'
+                }
+              ]
+            },
+            {
+              type: 'heading',
+              level: 2,
+              text: '3. Aggregated PPT Reference Collections'
+            },
+            {
+              type: 'paragraph',
+              text: "Community-driven repositories and document collections specifically created to collect and share SIH presentation references, slide formatting rules, and historical problem statement evaluations."
+            },
+            {
+              type: 'resourceList',
+              items: [
+                {
+                  title: 'SIH PPT References Repo (GitHub)',
+                  displayUrl: 'github.com/mohitjoping/SIH-ppt-references',
+                  url: 'https://github.com/mohitjoping/SIH-ppt-references',
+                  badge: 'Reference Archive',
+                  type: 'github',
+                  description: 'Contains multiple PPT and PDF slide deck references, including NTRO problem statements and verified SIH 2022/2024 presentation formatting examples.'
+                },
+                {
+                  title: 'SIH Hackathon Winners Overview (Scribd)',
+                  displayUrl: 'www.scribd.com',
+                  url: 'https://www.scribd.com/search?query=SIH+Hackathon+Winners+Overview',
+                  badge: 'Scribd Document',
+                  type: 'slides',
+                  description: 'Comprehensive document listing winners from 2017–2024 with problem statements, GitHub repository links, and slide presentation references.'
+                },
+                {
+                  title: 'SIH Winning Projects & AI Tools (Scribd)',
+                  displayUrl: 'www.scribd.com',
+                  url: 'https://www.scribd.com/search?query=SIH+Winning+Projects+%26+AI+Tools',
+                  badge: 'AI Tools Guide',
+                  type: 'slides',
+                  description: 'Detailed analysis of winning projects and AI developer utilities tailored for rapid prototype creation.'
+                }
+              ]
+            },
+            {
+              type: 'heading',
+              level: 2,
+              text: '4. Public SlideShare & Scribd Uploads'
+            },
+            {
+              type: 'paragraph',
+              text: "Participants and mentors frequently upload sample or actual SIH presentations to public document platforms — highly useful for visual benchmarking of layout, typography, and architectural diagrams."
+            },
+            {
+              type: 'resourceList',
+              items: [
+                {
+                  title: 'SIH 2024 Winning Team Presentation Example (Scribd)',
+                  displayUrl: 'www.scribd.com',
+                  url: 'https://www.scribd.com/search?query=SIH+2024+Winning+Team+Presentation+Example',
+                  type: 'slides',
+                  description: 'Actual pitch deck example showcasing the layout and visual structure of a winning SIH 2024 solution.'
+                },
+                {
+                  title: 'SIH Hackathon PPT Collection — Multiple Uploads (SlideShare)',
+                  displayUrl: 'www.slideshare.net',
+                  url: 'https://www.slideshare.net/search/presentations?searchfrom=header&q=SIH+Hackathon+PPT',
+                  type: 'slides',
+                  description: 'Explore hundreds of real team presentation uploads on SlideShare to evaluate different design treatments and content structures.'
+                },
+                {
+                  title: 'SIH 2024 Presentation Example (SlideShare)',
+                  displayUrl: 'www.slideshare.net',
+                  url: 'https://www.slideshare.net/search/presentations?searchfrom=header&q=SIH+2024+Presentation+Example',
+                  type: 'slides',
+                  description: 'High-rated SlideShare deck demonstrating optimal formatting for the 2024 idea presentation round.'
+                },
+                {
+                  title: 'SIH 2023 Presentation Example (SlideShare)',
+                  displayUrl: 'www.slideshare.net',
+                  url: 'https://www.slideshare.net/search/presentations?searchfrom=header&q=SIH+2023+Presentation+Example',
+                  type: 'slides',
+                  description: 'Reference presentation from SIH 2023 highlighting clean problem breakdown and feasibility slides.'
+                }
+              ]
+            },
+            {
+              type: 'calloutBox',
+              variant: 'info',
+              text: "📌 Note on General Links: Some source links (official portal pages, Scribd/SlideShare uploads, and LinkedIn posts) point to the general platform domain because exact deep links may shift or require login. Search the respective platform using the exact document titles above to instantly locate the resource."
+            },
+            {
+              type: 'heading',
+              level: 2,
+              text: '5. Winning PPT Guides & Mentorship Resources'
+            },
+            {
+              type: 'paragraph',
+              text: "Guides from past winners and official evaluators are often more valuable than raw PPTs, as they reveal the exact scoring rubrics, psychological biases, and criteria evaluators use when judging hundreds of slides in minutes."
+            },
+            {
+              type: 'resourceList',
+              items: [
+                {
+                  title: "Let's Code: SIH Complete Guide & PPT Template",
+                  displayUrl: 'lets-code.co.in/sih-2025-complete-guide-ppt-template',
+                  url: 'https://lets-code.co.in/sih-2025-complete-guide-ppt-template',
+                  badge: 'Complete Guide',
+                  type: 'guide',
+                  description: 'Breaks down the exact slide-by-slide presentation structure based on patterns observed across past winning submissions.'
+                },
+                {
+                  title: 'LinkedIn Guide by 2x SIH Winner: How to Win SIH with a Great PPT',
+                  displayUrl: 'www.linkedin.com',
+                  url: 'https://www.linkedin.com/search/results/content/?keywords=How%20to%20Win%20SIH%20with%20a%20Great%20PPT%20Jatin%20Vishwakarma',
+                  badge: 'Post by Jatin Vishwakarma',
+                  type: 'guide',
+                  description: 'Practical deck design rules and storytelling tactics authored by a two-time Smart India Hackathon champion.'
+                },
+                {
+                  title: 'LinkedIn Guide by SIH Evaluator: How to Create a Winning PPT for SIH',
+                  displayUrl: 'www.linkedin.com',
+                  url: 'https://www.linkedin.com/search/results/content/?keywords=How%20to%20Create%20a%20Winning%20PPT%20for%20SIH%20Gaus%20Mohiuddin%20Sayyad',
+                  badge: 'Post by Gaus Mohiuddin Sayyad',
+                  type: 'guide',
+                  description: 'An official SIH evaluator reveals what judges actively look for during shortlists and common formatting red flags.'
+                }
+              ]
+            },
+            {
+              type: 'heading',
+              level: 2,
+              text: '6. Recommended Slide Structure (Based on Winning Patterns)'
+            },
+            {
+              type: 'paragraph',
+              text: "Synthesized directly from evaluator rubrics and confirmed winning presentations, this is the proven 6-slide skeleton for your Idea Presentation PPT. Treat every bullet below as an essential deliverable."
+            },
+            {
+              type: 'numberedList',
+              items: [
+                {
+                  title: 'Slide 1: Title Slide & Administrative Alignment',
+                  body: 'Must clearly state the official Problem Statement ID, exact PS Title, Category (Hardware/Software), Theme, your Team Name, institution, and team logo. Avoid clutter.'
+                },
+                {
+                  title: 'Slide 2: Proposed Solution & Core Value Proposition',
+                  body: 'State concisely what your product does, how it solves the specific root cause, and its key uniqueness (USP). Highlight how it differs from traditional approaches.'
+                },
+                {
+                  title: 'Slide 3: Technical Approach & System Architecture',
+                  body: 'Include a crisp system architecture diagram, your exact technical stack (Frontend, Backend, AI/ML, Cloud, IoT sensors), and a visual data workflow/flowchart.'
+                },
+                {
+                  title: 'Slide 4: Feasibility & Viability Analysis',
+                  body: 'Transparently address execution feasibility within the hackathon timeline. Identify technical/regulatory risks, deployment challenges, and clear mitigation strategies.'
+                },
+                {
+                  title: 'Slide 5: Impact & Benefits Breakdown',
+                  body: 'Quantify the projected impact across social, economic, and environmental metrics. Identify primary beneficiaries (citizens, ministries, enterprises) and scalability path.'
+                },
+                {
+                  title: 'Slide 6: Research, References & Competitor Matrix',
+                  body: 'Provide academic citations, government datasets used, prior research work, and a brief comparison table proving superiority over existing commercial solutions.'
+                }
+              ]
+            },
+            {
+              type: 'calloutBox',
+              variant: 'tip',
+              text: "🏆 Final Pro-Tip: Evaluators spend less than 3 minutes screening initial PPT decks. Ensure every diagram is high-resolution, fonts are high-contrast, and key metrics are highlighted clearly in bold!"
+            }
+          ]
+        },
+        {
           id: 'sih-tips-common-mistakes',
           title: 'SIH Tips and Common Mistakes',
           excerpt: 'Learn from a Smart India Hackathon 2022 winner about critical tips for success and common mistakes to avoid this year.',

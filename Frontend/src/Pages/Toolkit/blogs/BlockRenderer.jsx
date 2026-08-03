@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { Sparkles, AlertTriangle, Info, CheckCircle2 } from "lucide-react";
+import { Sparkles, AlertTriangle, Info, CheckCircle2, ExternalLink, Github, Globe, BookOpen, Presentation, Layers, Award, Tag, Trophy, FileText } from "lucide-react";
 import PromptBlock from "./PromptBlock";
 
 export const slugify = (text = "") => {
@@ -351,16 +351,134 @@ export default function BlockRenderer({ blocks = [] }) {
   if (!Array.isArray(blocks)) return null;
 
   return (
-    <div className="space-y-1">
+    <div className="flex flex-col gap-6 sm:gap-7">
       {blocks.map((block, index) => {
         switch (block.type) {
+          case "heading": {
+            const id = slugify(block.text);
+            const TagName = `h${block.level || 2}`;
+            const styles = block.level === 3
+              ? "text-xl sm:text-2xl font-bold text-indigo-300 mt-2 tracking-tight"
+              : "text-2xl sm:text-3xl font-black text-white mt-6 pt-6 border-t border-white/[0.08] tracking-tight scroll-mt-28 first:mt-0 first:pt-0 first:border-none";
+            return (
+              <TagName key={index} id={id} className={styles}>
+                {block.text}
+              </TagName>
+            );
+          }
 
+          case "paragraph": {
+            return (
+              <p key={index} className="text-white/80 text-base sm:text-[17px] leading-relaxed font-normal">
+                {block.text}
+              </p>
+            );
+          }
 
+          case "image": {
+            return (
+              <div key={index} className="rounded-3xl overflow-hidden bg-[#0A0A0F] border border-white/[0.08] shadow-2xl relative group">
+                <img
+                  src={block.src || block.url}
+                  alt={block.alt || "Article illustration"}
+                  className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.01]"
+                />
+                {block.caption && (
+                  <div className="px-6 py-3 bg-[#0B0B10] border-t border-white/[0.06] text-center text-xs sm:text-sm font-mono text-white/60">
+                    {block.caption}
+                  </div>
+                )}
+              </div>
+            );
+          }
 
+          case "resourceList": {
+            return (
+              <div key={index} className="grid grid-cols-1 gap-4">
+                {(block.items || []).map((item, idx) => {
+                  let IconComponent = Globe;
+                  let badgeColor = "bg-emerald-500/15 text-emerald-300 border-emerald-500/30";
+                  let glowGradient = "from-emerald-500/10 via-teal-500/5 to-transparent";
+                  let linkStyle = "from-emerald-500/20 to-teal-500/20 hover:from-emerald-500/30 hover:to-teal-500/30 text-emerald-300 hover:text-emerald-200 border-emerald-500/40 hover:border-emerald-400";
+
+                  if (item.type === "github" || (item.displayUrl && item.displayUrl.includes("github"))) {
+                    IconComponent = Github;
+                    badgeColor = "bg-purple-500/15 text-purple-300 border-purple-500/30";
+                    glowGradient = "from-purple-500/10 via-indigo-500/5 to-transparent";
+                    linkStyle = "from-purple-500/20 to-indigo-500/20 hover:from-purple-500/30 hover:to-indigo-500/30 text-purple-300 hover:text-purple-200 border-purple-500/40 hover:border-purple-400";
+                  } else if (item.type === "guide" || (item.displayUrl && (item.displayUrl.includes("linkedin") || item.displayUrl.includes("lets-code")))) {
+                    IconComponent = BookOpen;
+                    badgeColor = "bg-indigo-500/15 text-indigo-300 border-indigo-500/30";
+                    glowGradient = "from-indigo-500/10 via-blue-500/5 to-transparent";
+                    linkStyle = "from-indigo-500/20 to-blue-500/20 hover:from-indigo-500/30 hover:to-blue-500/30 text-indigo-300 hover:text-indigo-200 border-indigo-500/40 hover:border-indigo-400";
+                  } else if (item.type === "slides" || (item.displayUrl && (item.displayUrl.includes("scribd") || item.displayUrl.includes("slideshare")))) {
+                    IconComponent = Presentation;
+                    badgeColor = "bg-amber-500/15 text-amber-300 border-amber-500/30";
+                    glowGradient = "from-amber-500/10 via-orange-500/5 to-transparent";
+                    linkStyle = "from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 text-amber-300 hover:text-amber-200 border-amber-500/40 hover:border-amber-400";
+                  } else if (item.type === "official" || (item.displayUrl && item.displayUrl.includes("sih.gov.in"))) {
+                    IconComponent = Award;
+                    badgeColor = "bg-cyan-500/15 text-cyan-300 border-cyan-500/30";
+                    glowGradient = "from-cyan-500/10 via-blue-500/5 to-transparent";
+                    linkStyle = "from-cyan-500/20 to-blue-500/20 hover:from-cyan-500/30 hover:to-blue-500/30 text-cyan-300 hover:text-cyan-200 border-cyan-500/40 hover:border-cyan-400";
+                  }
+
+                  const targetUrl = item.url || (item.displayUrl ? (item.displayUrl.startsWith("http") ? item.displayUrl : `https://${item.displayUrl}`) : "#");
+
+                  return (
+                    <div
+                      key={idx}
+                      className="group relative rounded-2xl bg-[#0B0B10] hover:bg-[#101017] border border-white/[0.08] hover:border-white/20 p-5 sm:p-6 transition-all duration-300 shadow-xl overflow-hidden flex flex-col justify-between gap-4"
+                    >
+                      <div className={`absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl ${glowGradient} rounded-full blur-3xl group-hover:scale-125 transition-all duration-500 pointer-events-none`} />
+
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
+                        <div className="flex items-start sm:items-center gap-3.5 flex-1 min-w-0">
+                          <div className="p-2.5 rounded-xl bg-white/[0.05] border border-white/10 shrink-0 mt-0.5 sm:mt-0">
+                            <IconComponent size={20} className="text-white/90" />
+                          </div>
+                          <div className="space-y-1 min-w-0 flex-1">
+                            <h4 className="font-extrabold text-white text-base sm:text-lg tracking-tight truncate sm:whitespace-normal">
+                              {item.title}
+                            </h4>
+                            {item.badge && (
+                              <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-mono font-black uppercase tracking-wider border ${badgeColor}`}>
+                                <Award size={11} className="shrink-0" />
+                                <span>{item.badge}</span>
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        {item.displayUrl && (
+                          <a
+                            href={targetUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r border font-mono text-xs sm:text-sm font-extrabold tracking-wide transition-all duration-300 shrink-0 transform group-hover:-translate-y-0.5 ${linkStyle}`}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <ExternalLink size={14} className="animate-pulse shrink-0" />
+                            <span className="truncate max-w-[280px] sm:max-w-none">{item.displayUrl}</span>
+                          </a>
+                        )}
+                      </div>
+
+                      {item.description && (
+                        <p className="text-sm sm:text-[15px] text-white/70 leading-relaxed font-normal pt-2 border-t border-white/[0.06] relative z-10">
+                          {item.description}
+                        </p>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          }
 
           case "bulletList": {
             return (
-              <ul key={index} className="space-y-2.5 mb-6 pl-4 my-3">
+              <ul key={index} className="space-y-3 pl-4">
                 {(block.items || []).map((item, i) => (
                   <li key={i} className="flex items-start gap-3 text-white/80 text-sm sm:text-base leading-relaxed">
                     <span className="w-1.5 h-1.5 rounded-full bg-white/50 mt-2.5 shrink-0" />
@@ -373,7 +491,7 @@ export default function BlockRenderer({ blocks = [] }) {
 
           case "numberedList": {
             return (
-              <div key={index} className="space-y-3.5 mb-8 my-4">
+              <div key={index} className="space-y-3.5">
                 {(block.items || []).map((item, idx) => {
                   const title = item.title;
                   const body = item.body || (typeof item === "string" ? item : "");
@@ -424,7 +542,7 @@ export default function BlockRenderer({ blocks = [] }) {
             return (
               <div
                 key={index}
-                className={`my-6 p-5 sm:p-6 rounded-2xl ${bgStyle} shadow-lg flex items-start gap-4`}
+                className={`p-5 sm:p-6 rounded-2xl ${bgStyle} shadow-lg flex items-start gap-4`}
               >
                 <div className={`p-2.5 rounded-xl shrink-0 ${iconStyle}`}>
                   <IconComp size={20} />
@@ -460,7 +578,7 @@ export default function BlockRenderer({ blocks = [] }) {
             return (
               <blockquote
                 key={index}
-                className="pl-6 py-4 my-6 text-base sm:text-lg italic text-white/80 bg-[#0B0B0E] rounded-2xl shadow-sm border-l-2 border-white/20"
+                className="pl-6 py-4 text-base sm:text-lg italic text-white/80 bg-[#0B0B0E] rounded-2xl shadow-sm border-l-2 border-white/20"
               >
                 "{block.text}"
               </blockquote>

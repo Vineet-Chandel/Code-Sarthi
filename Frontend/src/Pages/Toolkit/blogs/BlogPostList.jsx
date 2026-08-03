@@ -10,7 +10,7 @@ export default function BlogPostList({ category, onBack, onSelectPost, bookmarke
     if (!post?.content) return 3;
     let wordCount = 0;
     post.content.forEach((block) => {
-      const text = block.text || (Array.isArray(block.items) ? block.items.map(i => typeof i === "string" ? i : i.body || "").join(" ") : "");
+      const text = block.text || (Array.isArray(block.items) ? block.items.map(i => typeof i === "string" ? i : (i.body || i.description || i.title || "")).join(" ") : "");
       wordCount += text.split(/\s+/).filter(Boolean).length;
     });
     return Math.max(1, Math.ceil(wordCount / 200));

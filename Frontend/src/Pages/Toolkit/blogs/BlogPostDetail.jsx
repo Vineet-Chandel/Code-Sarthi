@@ -21,9 +21,9 @@ export default function BlogPostDetail({ post, category, onBack, onSelectPost, i
       if (block.type === "paragraph" || block.type === "quote") {
         const text = block.text || "";
         wordCount += text.split(/\s+/).filter(Boolean).length;
-      } else if (block.type === "bulletList" || block.type === "numberedList") {
+      } else if (block.type === "bulletList" || block.type === "numberedList" || block.type === "resourceList") {
         (block.items || []).forEach((item) => {
-          const content = typeof item === "string" ? item : `${item.title || ""} ${item.body || item.text || ""}`;
+          const content = typeof item === "string" ? item : `${item.title || ""} ${item.body || item.text || item.description || ""}`;
           wordCount += content.split(/\s+/).filter(Boolean).length;
         });
       } else if (block.type === "promptBlock") {
@@ -50,7 +50,13 @@ export default function BlogPostDetail({ post, category, onBack, onSelectPost, i
 
   // Key takeaways mapping per specification
   const keyTakeaways = useMemo(() => {
-    if (post?.id === "sih-tips-common-mistakes") {
+    if (post?.id === "sih-presentation-resources-winners") {
+      return [
+        "Use the exact official SIH presentation format — structural compliance is the critical first step to getting shortlisted.",
+        "Reference open-source GitHub repositories from confirmed winners (like KnitKraft, Voco App, DhwaniSarathi) to benchmark architectural diagrams.",
+        "Strictly adhere to the proven 6-slide structure covering Solution, Technical Approach, Feasibility, Impact, and References."
+      ];
+    } else if (post?.id === "sih-tips-common-mistakes") {
       return [
         "Address every word of the problem statement — drift kills strong solutions.",
         "A working prototype, even basic, outweighs polish.",
@@ -187,7 +193,7 @@ export default function BlogPostDetail({ post, category, onBack, onSelectPost, i
           </header>
 
           {/* ── Main Article Blocks Renderer ──────────────────────────────────── */}
-          <div className="prose prose-invert max-w-none space-y-6 text-white/80">
+          <div className="w-full text-white/80">
             <BlockRenderer blocks={post.content} />
           </div>
 
