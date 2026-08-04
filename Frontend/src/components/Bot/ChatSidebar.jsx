@@ -16,13 +16,14 @@ import {
     ChevronLeft,
     PanelLeftClose,
     PanelLeftOpen,
+    MoreVertical,
 } from "lucide-react";
 
 /**
  * Helper: topic badge color coding
  */
 const TOPIC_COLORS = {
-    Resume: "bg-purple-400 border-purple-500/30 text-purple-300",
+    Resume: "bg-purple-400 border-white/30 text-purple-300",
     Interview: "bg-emerald-400 border-emerald-500/30 text-emerald-300",
     DevConnect: "bg-blue-400 border-blue-500/30 text-blue-300",
     ProjectManager: "bg-pink-400 border-pink-500/30 text-pink-300",
@@ -133,7 +134,7 @@ const ConversationItem = ({
     if (isRenaming) {
         return (
             <div
-                className="flex items-center gap-1.5 p-1.5 rounded-xl bg-white/[0.06] border border-purple-500/40 my-1"
+                className="flex items-center gap-1.5 p-1.5 rounded-xl bg-white/[0.06] border border-white/40 my-1"
                 onClick={(e) => e.stopPropagation()}
             >
                 <input
@@ -167,7 +168,7 @@ const ConversationItem = ({
         <div
             onClick={() => onSelect(convo._id)}
             className={`group relative flex items-center gap-2.5 px-3 py-2.5 my-0.5 rounded-xl cursor-pointer transition-all duration-200 select-none ${isActive
-                ? "bg-purple-500/15 border border-purple-500/30 text-white shadow-[0_4px_15px_rgba(168,85,247,0.1)]"
+                ? "bg-[#212121] text-white "
                 : "bg-transparent border border-transparent text-zinc-300 hover:bg-white/[0.04] hover:text-zinc-100"
                 }`}
         >
@@ -200,7 +201,7 @@ const ConversationItem = ({
                     }}
                     className="p-1 rounded-lg bg-[#1a1a1e] hover:bg-white/15 text-zinc-300 transition-colors shadow-md border border-white/10"
                 >
-                    <MoreHorizontal className="w-3.5 h-3.5" />
+                    <MoreVertical className="w-3.5 h-3.5" />
                 </button>
             </div>
 
@@ -326,13 +327,11 @@ export default function ChatSidebar({
 
     return (
         <div
-            className={`${
-                isMobile
-                    ? `fixed inset-y-0 left-0 z-50 w-80 max-w-[85vw] shadow-[0_10px_40px_rgba(0,0,0,0.8)] transform transition-transform duration-300 ease-in-out ${
-                          isCollapsed ? "-translate-x-full pointer-events-none" : "translate-x-0"
-                      }`
-                    : "relative w-72 flex-shrink-0 transition-all duration-300"
-            } flex flex-col h-full bg-[#0d0d0f]/95 backdrop-blur-3xl border-r border-white/[0.08] z-50`}
+            className={`${isMobile
+                ? `fixed inset-y-0 left-0 z-50 w-80 max-w-[85vw] shadow-[0_10px_40px_rgba(0,0,0,0.8)] transform transition-transform duration-300 ease-in-out ${isCollapsed ? "-translate-x-full pointer-events-none" : "translate-x-0"
+                }`
+                : "relative w-72 flex-shrink-0 transition-all duration-300"
+                } flex flex-col h-full bg-[#0d0d0f]/95 backdrop-blur-3xl border-r border-white/[0.08] z-50`}
         >
             {/* Header: Brand Tag & Collapse Toggle */}
             <div className="flex items-center justify-between p-4 pb-2">
@@ -366,7 +365,7 @@ export default function ChatSidebar({
 
             {/* Search Box */}
             <div className="px-4 py-2">
-                <div className="relative flex items-center w-full rounded-xl bg-[#16161a] border border-white/10 focus-within:border-purple-500/50 transition-colors px-3 py-1.5 shadow-inner">
+                <div className="relative flex items-center w-full rounded-xl bg-[#16161a] border border-white/10 focus-within:border-white/50 transition-colors px-3 py-1.5 shadow-inner">
                     <Search className="w-3.5 h-3.5 text-zinc-500 mr-2 flex-shrink-0" />
                     <input
                         type="text"
