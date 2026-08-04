@@ -7,7 +7,13 @@ import MessageBubble from "./MessageBubble";
  * Responsive container for the conversation flow. Auto-scrolls smoothly to bottom on new updates.
  * Designed with clean spacing between conversation turns (Gemini/ChatGPT UX).
  */
-export default function MessageList({ messages, isStreaming }) {
+export default function MessageList({
+    messages,
+    isStreaming,
+    onToggleReaction,
+    onRegenerate,
+    onEditUserMessage,
+}) {
     const bottomRef = useRef(null);
 
     useEffect(() => {
@@ -20,10 +26,13 @@ export default function MessageList({ messages, isStreaming }) {
                 {messages.map((msg, index) => {
                     const isLast = index === messages.length - 1;
                     return (
-                        <MessageBubble 
-                            key={msg.id} 
-                            message={msg} 
-                            isStreaming={isStreaming && isLast} 
+                        <MessageBubble
+                            key={msg.id || msg._id || index}
+                            message={msg}
+                            isStreaming={isStreaming && isLast}
+                            onToggleReaction={onToggleReaction}
+                            onRegenerate={onRegenerate}
+                            onEditUserMessage={onEditUserMessage}
                         />
                     );
                 })}
@@ -32,4 +41,3 @@ export default function MessageList({ messages, isStreaming }) {
         </div>
     );
 }
-

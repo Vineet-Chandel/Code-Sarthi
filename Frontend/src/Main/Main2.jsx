@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Nav from './Nav'
 import { useNavigate } from 'react-router-dom';
-
+import Brands from './Brands'
 const MainCTAbutton = ({ ClassName = "" }) => {
     const navigate = useNavigate()
     return (
@@ -907,7 +907,7 @@ const Main2 = ({ ctaData }) => {
                 <div className='h-[1.5px] w-[95%] mx-auto bg-white/30 mt-3'>
 
                 </div>
-
+                <Brands />
 
             </div>
         </div>
