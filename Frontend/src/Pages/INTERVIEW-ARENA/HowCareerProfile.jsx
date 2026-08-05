@@ -1,6 +1,9 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const HowCareerProfile = () => {
+
+    const navigate = useNavigate()
     const resumeCompletionChecklist = [
         {
             id: 1,
@@ -9,7 +12,8 @@ const HowCareerProfile = () => {
             section: "contact",
             action: "Add Contact Details",
             completed: false,
-            icon: "contact"
+            icon: "contact",
+            path: "/app/build-resume/header-content"
         },
         {
             id: 2,
@@ -18,7 +22,8 @@ const HowCareerProfile = () => {
             section: "professional-summary",
             action: "Write Professional Summary",
             completed: false,
-            icon: "summary"
+            icon: "summary",
+            path: "/app/build-resume/summary-content"
         },
         {
             id: 3,
@@ -27,7 +32,8 @@ const HowCareerProfile = () => {
             section: "experience",
             action: "Add Work Experience",
             completed: false,
-            icon: "experience"
+            icon: "experience",
+            path: "/app/build-resume/experience-content"
         },
         {
             id: 4,
@@ -36,7 +42,8 @@ const HowCareerProfile = () => {
             section: "skills",
             action: "Add Skills",
             completed: false,
-            icon: "skills"
+            icon: "skills",
+            path: "/app/build-resume/skill-content"
         },
         {
             id: 5,
@@ -45,7 +52,8 @@ const HowCareerProfile = () => {
             section: "education",
             action: "Add Education",
             completed: false,
-            icon: "education"
+            icon: "education",
+            path: "/app/build-resume/education-content"
         }
     ];
     return (
@@ -103,7 +111,7 @@ const HowCareerProfile = () => {
 
                                 <div className="mt-4 pt-4 border-t border-[#212121] flex items-center justify-between text-xs font-bold uppercase tracking-wider text-zinc-500">
                                     <span>Section &bull; {item.section}</span>
-                                    <span className="text-white bg-white/10 group-hover:bg-white group-hover:text-black px-3 py-1.5 rounded-xl transition-all duration-300 flex items-center gap-1">
+                                    <span onClick={() => navigate(item.path)} className="cursor-pointer text-white bg-white/10 group-hover:bg-white group-hover:text-black px-3 py-1.5 rounded-xl transition-all duration-300 flex items-center gap-1">
                                         {item.action} &rarr;
                                     </span>
                                 </div>

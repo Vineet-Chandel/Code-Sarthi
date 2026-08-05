@@ -106,7 +106,7 @@ const CrediRight = () => {
     const toggle = (id) => setOpenId(openId === id ? null : id);
 
     return (
-        <div>
+        <div className="h-full">
 
             <div className="w-full h-full bg-white text-accent rounded-2xl p-2 lg:p-4  relative overflow-hidden group">
 

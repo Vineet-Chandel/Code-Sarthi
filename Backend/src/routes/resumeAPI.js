@@ -319,9 +319,10 @@ resRouter.get("/build-resume/get-resume", userAuth, async (req, res) => {
         const resume = await ResumeProfileSchema.findOne({ userId: req.user._id });
 
         if (!resume) {
-            return res.status(404).json({
+            return res.status(200).json({
                 success: false,
                 message: "No resume found for this user.",
+                data: null,
             });
         }
 

@@ -579,6 +579,8 @@ const Signup = () => {
                 </span>
                 <input
                   id="username"
+                  name="new-username"
+                  autoComplete="off"
                   type="text"
                   placeholder="vinay_chandel"
                   className="w-full outline-none text-accent-content bg-transparent placeholder-info placeholder:opacity-70 text-lg"
@@ -605,7 +607,9 @@ const Signup = () => {
                 </span>
                 <input
                   id="gmail"
+                  name="email"
                   type="email"
+                  autoComplete="email"
                   placeholder="vinay@example.com"
                   className="w-full outline-none text-accent-content bg-transparent placeholder-info placeholder:opacity-70 text-lg"
                   value={formData.gmail}
@@ -631,7 +635,10 @@ const Signup = () => {
                   </span>
                   <input
                     id="password"
+                    name="new-password"
                     type={showPassword ? "text" : "password"}
+                    autoComplete="new-password"
+
                     placeholder="••••••••"
                     className="w-full outline-none text-accent-content bg-transparent placeholder-info placeholder:opacity-70 text-lg"
                     value={formData.password}

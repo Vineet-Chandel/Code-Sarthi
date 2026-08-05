@@ -7,13 +7,13 @@ import ClickedInterviews from "./ClickedInterviews";
 import ClickedResume from "./ClickedResume";
 import ContentSecond2 from './ContentSecond2';
 import HowCareerProfile from './HowCareerProfile';
-import { Lock, Sparkles, TrendingUp, ShieldCheck, Cpu, Layers, Target, Award, ArrowRight, Check, X, Zap } from 'lucide-react';
+import { Lock, Sparkles, TrendingUp, ShieldCheck, Cpu, Layers, Target, Award, ArrowRight, Check, X, Zap, LockIcon } from 'lucide-react';
 
 const Card = ({ item, index }) => {
     const navigate = useNavigate();
 
     return (
-        <div 
+        <div
             onClick={() => item.path && navigate(item.path)}
             className="group relative bg-[#0a0a0a] border border-[#212121] hover:border-zinc-700 hover:bg-[#121212] rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 hover:shadow-2xl cursor-pointer h-full min-h-[240px]"
         >
@@ -33,7 +33,7 @@ const Card = ({ item, index }) => {
                     {item.subHeading}
                 </p>
             </div>
-            
+
             <div className="mt-6 pt-4 border-t border-[#212121] flex items-center justify-between text-xs font-bold text-zinc-500 group-hover:text-white transition-colors uppercase tracking-wider">
                 <span>Configure Feature</span>
                 <span className="w-8 h-8 rounded-full bg-black border border-[#212121] flex items-center justify-center text-white group-hover:bg-white group-hover:text-black transition-all duration-300">
@@ -123,6 +123,7 @@ const Landing = () => {
             <div className='flex flex-col sm:flex-row gap-4 justify-center items-center mt-10 w-full max-w-2xl mx-auto'>
                 {/* Important primary action button -> Pure White with Black text */}
                 <button
+                    disabled={true}
                     onClick={() => {
                         if (type === "career") {
                             setClicked(prev => !prev);
@@ -160,12 +161,12 @@ const Landing = () => {
         <div className="w-full bg-black min-h-screen text-white font-poppins px-4 py-8 md:px-8 lg:px-12 selection:bg-white selection:text-black">
             {/* Main Arena Content */}
             <div className="max-w-7xl mx-auto flex flex-col gap-16">
-                
+
                 {/* Hero Header Section */}
                 <div className="text-center flex flex-col items-center pt-8 pb-4">
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0a0a0a] border border-[#212121] text-zinc-300 text-xs font-bold uppercase tracking-widest mb-6 shadow-md">
                         <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                        CodeSarthi Intelligence Suite &bull; V2.4
+                        SHASTRA AI Intelligence
                     </div>
 
                     <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-white tracking-tight leading-none mb-6">
@@ -221,8 +222,8 @@ const Landing = () => {
                     <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 border-b border-[#212121] pb-6">
                         <div>
                             <span className="text-xs font-bold uppercase tracking-widest text-zinc-500 block mb-1">Phase 01 &bull; Preparation</span>
-                            <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white flex items-center gap-3">
-                                Build Resume with <span className="text-white bg-[#212121] px-4 py-1 rounded-2xl border border-zinc-700 font-mono text-2xl sm:text-4xl lg:text-5xl">SHASTRA AI</span>
+                            <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white ">
+                                Build Resume with <p className=" inline-block text-white bg-[#212121] px:2 sm:px-4 py-1 mx-auto rounded-2xl border border-zinc-700 font-mono text-2xl sm:text-4xl lg:text-5xl">SHASTRA</p>
                             </h2>
                         </div>
                         <p className="text-zinc-400 text-sm sm:text-base max-w-md">
@@ -244,7 +245,7 @@ const Landing = () => {
                                 <span className="text-xs font-bold uppercase tracking-widest text-zinc-500 block">Interactive Preview</span>
                                 <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white">Your Live Career Profile</h3>
                             </div>
-                            <button 
+                            <button
                                 onClick={() => navigate('/app/build-resume/preview-content')}
                                 className="bg-[#0a0a0a] hover:bg-zinc-900 border border-[#212121] hover:border-zinc-700 text-white text-sm font-bold px-5 py-2.5 rounded-2xl transition-all shadow-md flex items-center gap-2"
                             >
@@ -252,7 +253,7 @@ const Landing = () => {
                                 <ArrowRight className="w-4 h-4" />
                             </button>
                         </div>
-                        
+
                         <div className="rounded-3xl overflow-hidden bg-[#0a0a0a] border border-[#212121] p-2 shadow-2xl">
                             <ShortPreview />
                         </div>
@@ -275,15 +276,15 @@ const Landing = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {[
-                            { step: "01", title: "Profile Synthesis", desc: "AI organizes your technical proficiencies, GitHub projects, and work achievements into clean data structures.", icon: <Target className="w-6 h-6 text-white" /> },
-                            { step: "02", title: "ATS Calibration", desc: "We cross-verify semantic density and keyword alignment against target company job descriptions.", icon: <ShieldCheck className="w-6 h-6 text-white" /> },
-                            { step: "03", title: "Project Defense Roast", desc: "Shastra AI scrutinizes your actual code, architecture choices, and database trade-offs in real time.", icon: <Cpu className="w-6 h-6 text-white" /> },
-                            { step: "04", title: "HR & Behavioral Sim", desc: "Pressure-test your soft skills and situational judgment using standardized STAR response evaluation.", icon: <Award className="w-6 h-6 text-white" /> }
+                            { step: "01", title: "Profile Synthesis", desc: "AI organizes your technical proficiencies, GitHub projects, and work achievements into clean data structures.", icon: <Target className="w-6 h-6 " /> },
+                            { step: "02", title: "ATS Calibration", desc: "We cross-verify semantic density and keyword alignment against target company job descriptions.", icon: <ShieldCheck className="w-6 h-6 " /> },
+                            { step: "03", title: "Project Defense Roast", desc: "Shastra AI scrutinizes your actual code, architecture choices, and database trade-offs in real time.", icon: <Cpu className="w-6 h-6 " /> },
+                            { step: "04", title: "HR & Behavioral Sim", desc: "Pressure-test your soft skills and situational judgment using standardized STAR response evaluation.", icon: <Award className="w-6 h-6 " /> }
                         ].map((s, i) => (
                             <div key={i} className="bg-[#0a0a0a] border border-[#212121] rounded-3xl p-7 hover:border-zinc-700 transition-all flex flex-col justify-between group relative">
                                 <div className="text-xs font-mono text-zinc-500 font-bold mb-4 flex items-center justify-between">
                                     <span>STAGE // {s.step}</span>
-                                    <div className="p-2 rounded-xl bg-black border border-[#212121] text-white group-hover:bg-white group-hover:text-black transition-colors">
+                                    <div className="p-2 rounded-xl bg-black border border-[#212121] text-white group-hover:bg-white  group-hover:text-black transition-colors">
                                         {s.icon}
                                     </div>
                                 </div>
@@ -309,7 +310,7 @@ const Landing = () => {
                                 <span>Studio Preview &bull; Early Beta Rolling Out</span>
                             </div>
                             <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight">
-                                AI Mock Interview Studio
+                                AI Mock Interview Studio <span className='text-orange-500 text-sm border border-orange-500 px-3 py-1 rounded-full font-medium flex items-center justify-center gap-2 mt-2 w-fit inline-block '><LockIcon width={16} /> COMING SOON</span>
                             </h2>
                         </div>
                         <p className="text-zinc-400 text-sm sm:text-base max-w-md lg:text-right">
@@ -329,10 +330,10 @@ const Landing = () => {
                             </div>
 
                             <div className="relative overflow-hidden rounded-2xl border border-[#212121] bg-zinc-950 aspect-video flex items-center justify-center">
-                                <img 
-                                    src="https://res.cloudinary.com/dj0ivep44/image/upload/v1784994346/resume-examples-anatomy-image_n9yxhz.avif" 
+                                <img
+                                    src="https://res.cloudinary.com/dj0ivep44/image/upload/v1784994346/resume-examples-anatomy-image_n9yxhz.avif"
                                     alt="AI Virtual Interviewer screen displaying real-time eye contact, facial demeanor, and tone speech analytics"
-                                    className="w-full h-full object-cover opacity-60 filter grayscale hover:grayscale-0 transition-all duration-500" 
+                                    className="w-full h-full object-cover opacity-60 filter grayscale hover:grayscale-0 transition-all duration-500"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex items-end p-4">
                                     <div className="w-full flex justify-between items-center bg-black/80 backdrop-blur-md border border-[#212121] rounded-xl px-4 py-2.5">
