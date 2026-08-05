@@ -34,7 +34,7 @@ const socials = [
     },
 ];
 
-const Nav = () => {
+const Nav = ({ ctaData }) => {
     const navigate = useNavigate();
     const [hoveredItem, setHoveredItem] = useState(null);
 
@@ -50,11 +50,17 @@ const Nav = () => {
             setOpenHam(true)
         }
     }
-    const MainCTAbutton = ({ ClassName = "" }) => {
+    const MainCTAbutton = ({ ClassName = "", ctaData }) => {
         return (
 
 
-            <div onClick={() => navigate("/login")} className={` flex items-center justify-between cursor-pointer text-black  font-bold ${ClassName}`}>
+            <div onClick={() => {
+                if (ctaData === "Open Codesarthi") {
+                    navigate("/app/dashboard")
+                } else {
+                    navigate("/login")
+                }
+            }} className={` flex items-center justify-between cursor-pointer text-black  font-bold ${ClassName}`}>
 
                 <span className="text-white relative -right-[1px]" >
                     <svg height="40" viewBox="0 0 15 40" width="15" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" transform="matrix(-1,0,0,1,0,0)">
@@ -63,7 +69,7 @@ const Nav = () => {
                         ></path>
                     </svg>
                 </span>
-                <button className="bg-white  px-4 py-[7.5px] ">Open CodeSarthi</button>
+                <button className="bg-white  px-4 py-[7.5px] ">{ctaData ? ctaData : "Log in"}</button>
                 <span className="text-white relative -left-[1px]">
                     <svg height="40" viewBox="0 0 15 40" width="15" xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -206,10 +212,10 @@ const Nav = () => {
         }
     }, [openHam]);
     return (
-        <div className="relative w-full">
+        <div className="w-full relative">
             {/* NAVBAR */}
-            <div className=" top-5 z-30  xl:px-10 px-4   w-screen text-white">
-                <div className="flex items-center  justify-between">
+            <div className="w-full relative z-30 px-3 sm:px-6 lg:px-10 pt-2 text-white">
+                <div className="w-full max-w-[1600px] mx-auto flex items-center justify-between">
 
                     {/* LOGO */}
                     <div
@@ -264,11 +270,11 @@ const Nav = () => {
                     </div>
 
                     {/* CTA */}
-                    <div className="relarive z-30  flex justify-center items-center gap-3 pr-3">
+                    <div className="relarive z-30  flex justify-center items-center gap-3 ">
 
 
                         <div className="hidden lg:flex">
-                            <MainCTAbutton />
+                            <MainCTAbutton ctaData={ctaData} />
                         </div>
 
                         <div className="lg:hidden bg-white/30 p-1 border border-transparent rounded-lg" onClick={handleClickHamburger}>
@@ -284,7 +290,7 @@ const Nav = () => {
                                     <div className="flex items-center justify-center gap-2">
 
                                         <div className="flex justify-center ">
-                                            <MainCTAbutton />
+                                            <MainCTAbutton ctaData={ctaData} />
                                         </div>
 
                                         <div className="bg-gray-600/30 p-1 border border-gray-600 rounded-lg w-[40px] flex  justify-center items-center justify-self-end  h-10 w-10 border border-white " onClick={handleClickHamburger}>

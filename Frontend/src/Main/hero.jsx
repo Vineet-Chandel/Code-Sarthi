@@ -39,9 +39,13 @@ const Hero = () => {
                     }
                 );
 
+
+
                 if (res.data.success) {
                     seCtaData("Open Codesarthi");
                 }
+
+                console.log(ctaData);
             } catch (err) { }
         };
 

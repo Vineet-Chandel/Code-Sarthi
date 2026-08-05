@@ -2,23 +2,28 @@ import React, { useEffect, useRef, useState } from 'react'
 import Nav from './Nav'
 import { useNavigate } from 'react-router-dom';
 import Brands from './Brands'
-const MainCTAbutton = ({ ClassName = "" }) => {
-    const navigate = useNavigate()
+const MainCTAbutton = ({ ClassName = "", ctaData }) => {
     return (
 
 
-        <div onClick={() => navigate("/signup")} className={` flex items-center justify-between cursor-pointer text-black  font-bold ${ClassName}`}>
+        <div onClick={() => {
+            if (ctaData === "Open Codesarthi") {
+                navigate("/app/dashboard")
+            } else {
+                navigate("/login")
+            }
+        }} className={` flex items-center justify-between cursor-pointer text-black  font-bold ${ClassName}`}>
 
             <span className="text-white relative -right-[1px]" >
-                <svg className='h-[33px] sm:h-[40px]' viewBox="0 0 15 40" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" transform="matrix(-1,0,0,1,0,0)">
+                <svg height="40" viewBox="0 0 15 40" width="15" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" transform="matrix(-1,0,0,1,0,0)">
                     <path d="M0 .5h11A3.5 3.5 0 0 1 14.5 4v20.523a5.5 5.5 0 0 1-1.416 3.684l-8.547 9.477A5.5 5.5 0 0 1 .453 39.5H0" data-stroke="true"
                         fill="#fff"
                     ></path>
                 </svg>
             </span>
-            <button className="bg-white  px-2  sm:px-4 py-[4px]  sm:py-[7.5px] ">Get Started</button>
+            <button className="bg-white  px-4 py-[7.5px] ">{ctaData}</button>
             <span className="text-white relative -left-[1px]">
-                <svg className='h-[33px] sm:h-[40px]' viewBox="0 0 15 40" xmlns="http://www.w3.org/2000/svg">
+                <svg height="40" viewBox="0 0 15 40" width="15" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M0 .5h11A3.5 3.5 0 0 1 14.5 4v20.523a5.5 5.5 0 0 1-1.416 3.684l-8.547 9.477A5.5 5.5 0 0 1 .453 39.5H0"
                         fill="#fff"
@@ -28,6 +33,7 @@ const MainCTAbutton = ({ ClassName = "" }) => {
         </div>
     )
 }
+
 const MainCTAbutton2 = ({ ClassName = "" }) => {
     const navigate = useNavigate()
     return (
@@ -869,19 +875,11 @@ const Main2 = ({ ctaData }) => {
 
     return (
         <div id="home"
-            className=' w-screen bg-gray-200 p-1.5 min-h-screen 
-'>
-
-            <div className='w-full h-[100%] bg-black  
-
- rounded-3xl flex flex-col  items-start justify-start py-5 px-2'  >
-
-
-
-
-                <div>
-
-                    <Nav />
+            className="w-full min-h-screen bg-gray-200 p-1.5 sm:p-2 overflow-x-hidden"
+        >
+            <div className="w-full min-h-[calc(100vh-1rem)] bg-black rounded-3xl flex flex-col items-start justify-start py-4 sm:py-6 px-1 sm:px-4 relative shadow-2xl">
+                <div className="w-full">
+                    <Nav ctaData={ctaData} />
                 </div>
 
                 <div className='w-full sm:p-6   flex flex-col items-start justify-start  mt-[150px]'>
@@ -890,7 +888,7 @@ const Main2 = ({ ctaData }) => {
                     </div>
 
                     <div className='relative z-30 mt-7 sm:mt-10 flex gap-2 sm:gap-4'>
-                        <MainCTAbutton />
+                        <MainCTAbutton ctaData={ctaData} />
                         <MainCTAbutton2 />
                     </div>
 

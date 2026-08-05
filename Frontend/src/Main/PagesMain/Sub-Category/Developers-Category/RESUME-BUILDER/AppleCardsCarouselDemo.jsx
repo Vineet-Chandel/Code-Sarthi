@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Carousel, Card } from "@/components/ui/apple-cards-carousel";
+import { motion } from "framer-motion";
 
 export function AppleCardsCarouselDemo() {
     const cards = data.map((card, index) => (

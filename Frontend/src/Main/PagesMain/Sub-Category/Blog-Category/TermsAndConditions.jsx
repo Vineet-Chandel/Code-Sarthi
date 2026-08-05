@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Nav from '../../../Nav';
 import Footer from '../../../Footer';
+import { ShieldCheck, Mail, MapPin, AlertTriangle, ArrowRight, ExternalLink, FileText, CheckCircle, HelpCircle } from 'lucide-react';
 
 // ─── DATA ─────────────────────────────────────────────────────────────────────
 
@@ -191,29 +192,33 @@ const SECTIONS = [
 
 function TableOfContents({ active, onJump }) {
     return (
-        <nav style={{
-            position: 'sticky', top: '120px', alignSelf: 'flex-start',
-            width: '220px', flexShrink: 0,
-        }}>
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '10px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(26,108,246,0.5)', marginBottom: '16px' }}>
-                Contents
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                {SECTIONS.map(sec => (
-                    <button
-                        key={sec.id}
-                        onClick={() => onJump(sec.id)}
-                        style={{
-                            display: 'flex', alignItems: 'center', gap: '10px',
-                            background: active === sec.id ? 'rgba(26,108,246,0.1)' : 'transparent',
-                            border: 'none', borderRadius: '8px', padding: '7px 10px',
-                            cursor: 'pointer', textAlign: 'left', transition: 'all 0.18s', width: '100%',
-                        }}
-                    >
-                        <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '10px', fontWeight: 700, color: active === sec.id ? '#6ba3ff' : 'rgba(255,255,255,0.2)', minWidth: '20px', fontVariantNumeric: 'tabular-nums' }}>{sec.num}</span>
-                        <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', color: active === sec.id ? '#6ba3ff' : 'rgba(255,255,255,0.35)', lineHeight: 1.4, transition: 'color 0.18s' }}>{sec.title}</span>
-                    </button>
-                ))}
+        <nav className="hidden lg:flex flex-col sticky top-28 w-72 shrink-0 bg-[#0a0a0a] p-6 rounded-3xl h-fit max-h-[calc(100vh-8rem)] overflow-y-auto [scrollbar-width:none]">
+            <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-widest text-neutral-400 mb-4 px-2">
+                <FileText className="w-4 h-4 text-white" />
+                <span>Legal Index</span>
+            </div>
+            <div className="flex flex-col gap-1">
+                {SECTIONS.map(sec => {
+                    const isActive = active === sec.id;
+                    return (
+                        <button
+                            key={sec.id}
+                            onClick={() => onJump(sec.id)}
+                            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all duration-200 ${
+                                isActive 
+                                    ? 'bg-black text-white font-bold shadow-inner border border-[#222222]' 
+                                    : 'text-neutral-500 hover:text-neutral-300 hover:bg-white/[0.02]'
+                            }`}
+                        >
+                            <span className={`text-xs font-mono w-5 ${isActive ? 'text-white font-bold' : 'text-neutral-600'}`}>
+                                {sec.num}
+                            </span>
+                            <span className="text-xs truncate tracking-tight">
+                                {sec.title}
+                            </span>
+                        </button>
+                    );
+                })}
             </div>
         </nav>
     );
@@ -221,60 +226,47 @@ function TableOfContents({ active, onJump }) {
 
 function SectionBlock({ sec }) {
     return (
-        <section id={sec.id} style={{ marginBottom: '64px', scrollMarginTop: '140px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '28px', justifyContent: 'center' }}>
-                <div style={{
-                    fontFamily: "'Syne', sans-serif", fontSize: '50px', fontWeight: 800,
-                    color: 'rgba(26,108,246,0.4)', letterSpacing: '0.08em',
-                    flexShrink: 0, minWidth: '28px',
-                }}>{sec.num}</div>
-                <div style={{
-                    fontFamily: "'Syne', sans-serif", fontSize: 'clamp(25px, 3vw, 30px)',
-                    fontWeight: 800, color: '#010000ff', letterSpacing: '-0.02em', lineHeight: 1.1,
-                    borderBottom: '1px solid rgba(26,108,246,0.15)', paddingBottom: '16px',
-                    width: '100%', backgroundColor: '#1a6cf6', borderRadius: '8px', padding: '7px 10px', height: '100%',
-                }}>{sec.title}
-                </div>
-
+        <section id={sec.id} className="scroll-mt-36 p-6 sm:p-10 rounded-3xl bg-[#0a0a0a] transition-all duration-300 hover:bg-[#0d0d0d] shadow-xl">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-8 border-b border-[#1f1f1f] pb-6">
+                <span className="text-3xl sm:text-4xl font-mono font-extrabold text-neutral-600 tracking-tighter">
+                    #{sec.num}
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                    {sec.title}
+                </h2>
             </div>
 
             {sec.intro && (
-                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.55)', lineHeight: 1.75, marginBottom: '16px', marginLeft: '48px' }}>
+                <p className="text-base text-neutral-300 font-normal mb-6 leading-relaxed bg-black/60 p-5 rounded-2xl border border-[#1b1b1b]">
                     {sec.intro}
                 </p>
             )}
 
             {sec.bullets && (
-                <ul style={{ listStyle: 'none', padding: 0, marginLeft: '48px', marginBottom: sec.footer ? '16px' : 0 }}>
+                <ul className="space-y-3 mb-6 pl-2">
                     {sec.bullets.map((b, i) => (
-                        <li key={i} style={{ display: 'flex', gap: '12px', marginBottom: '10px' }}>
-                            <span style={{ color: 'rgba(26,108,246,0.6)', fontSize: '14px', flexShrink: 0, lineHeight: 1.75 }}>—</span>
-                            <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.75 }}>{b}</span>
+                        <li key={i} className="flex items-start gap-3 text-sm sm:text-base text-neutral-400 font-light leading-relaxed">
+                            <span className="w-2 h-2 rounded-full bg-white mt-2.5 shrink-0" />
+                            <span>{b}</span>
                         </li>
                     ))}
                 </ul>
             )}
 
             {sec.footer && (
-                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.35)', fontStyle: 'italic', lineHeight: 1.7, marginLeft: '48px', marginTop: '8px' }}>
+                <p className="text-sm text-neutral-500 italic mt-4 border-l-2 border-neutral-700 pl-4 py-1">
                     {sec.footer}
                 </p>
             )}
 
             {sec.content && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginLeft: '48px' }}>
+                <div className="flex flex-col gap-4">
                     {sec.content.map((item, i) => (
-                        <div key={i} style={{
-                            background: 'rgba(255,255,255,0.02)',
-                            border: '1px solid rgba(255,255,255,0.05)',
-                            borderLeft: '2px solid rgba(26,108,246,0.25)',
-                            borderRadius: '0 10px 10px 0',
-                            padding: '16px 20px',
-                        }}>
-                            <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, color: 'rgba(26,108,246,0.7)', letterSpacing: '0.04em', marginBottom: '6px', textTransform: 'uppercase', fontSize: '11px' }}>
+                        <div key={i} className="bg-black/60 rounded-2xl p-5 sm:p-6 transition-colors hover:bg-black border border-[#171717]">
+                            <h4 className="text-xs sm:text-sm font-mono font-bold uppercase text-neutral-200 tracking-wider mb-2">
                                 {item.heading}
-                            </p>
-                            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.8, margin: 0 }}>
+                            </h4>
+                            <p className="text-sm sm:text-base text-neutral-400 font-light leading-relaxed">
                                 {item.text}
                             </p>
                         </div>
@@ -291,9 +283,6 @@ const TermsAndConditions = () => {
     const navigate = useNavigate();
     const [visible, setVisible] = useState(false);
     const [activeId, setActiveId] = useState(SECTIONS[0].id);
-    const [accepted, setAccepted] = useState(false);
-    const [showBanner, setShowBanner] = useState(false);
-    const observerRef = useRef(null);
 
     useEffect(() => {
         const t = setTimeout(() => setVisible(true), 80);
@@ -307,11 +296,11 @@ const TermsAndConditions = () => {
             if (!el) return;
             const obs = new IntersectionObserver(
                 ([entry]) => {
-                    if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+                    if (entry.isIntersecting && entry.intersectionRatio > 0.4) {
                         setActiveId(sec.id);
                     }
                 },
-                { rootMargin: '-30% 0px -60% 0px' }
+                { rootMargin: '-20% 0px -60% 0px' }
             );
             obs.observe(el);
             observers.push(obs);
@@ -319,140 +308,182 @@ const TermsAndConditions = () => {
         return () => observers.forEach(o => o.disconnect());
     }, [visible]);
 
-    // Show acceptance banner after 3s
-    useEffect(() => {
-        const t = setTimeout(() => setShowBanner(true), 3000);
-        return () => clearTimeout(t);
-    }, []);
-
     const jumpTo = (id) => {
-        setActiveId(id); // 🔥 ADD THIS
+        setActiveId(id);
         const el = document.getElementById(id);
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
 
     return (
-        <div style={{ minHeight: '100vh', width: '100%', background: '#06060b', overflowX: 'hidden', position: 'relative' }}>
-            <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
-
-            {/* Ambient glow */}
-            <div style={{ position: 'fixed', top: '-200px', left: '50%', transform: 'translateX(-50%)', width: '900px', height: '600px', background: 'radial-gradient(ellipse, rgba(26,108,246,0.05) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
+        <div className="min-h-screen w-full bg-black text-white selection:bg-white selection:text-black font-sans overflow-x-hidden relative">
+            
+            {/* Ambient background depth */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] bg-radial from-neutral-900/40 via-black to-black pointer-events-none -z-10" />
 
             <Nav />
 
-            {/* ── HERO ── */}
-            <div style={{
-                position: 'relative', zIndex: 1, maxWidth: '90%', margin: '0 auto',
-                padding: '0 32px', paddingTop: '130px', paddingBottom: '72px',
-                opacity: visible ? 1 : 0,
-                transform: visible ? 'translateY(0)' : 'translateY(28px)',
-                transition: 'opacity 0.7s ease, transform 0.7s ease',
-            }}>
-                {/* Brand bar */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '36px' }}>
-                    <div style={{ width: '45px', height: '45px', borderRadius: '7px', background: 'rgba(26,108,246,0.15)', border: '1px solid rgba(26,108,246,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'DM Sans',sans-serif", fontSize: '11px', fontWeight: 700, color: '#6ba3ff', letterSpacing: '-0.5px' }}>
-                        <img src="https://res.cloudinary.com/dggoaxqxl/image/upload/v1776693732/image_wxefat.png" alt="" className='rounded-xl' />
-                    </div>
-                    <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '12px', fontWeight: 600, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>CodeSarthi</span>
-                    <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '11px', color: 'rgba(255,255,255,0.2)' }}>·</span>
-                    <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '11px', color: 'rgba(26,108,246,0.55)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Legal</span>
-                </div>
+            {/* ── HERO SECTION ── */}
+            <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-28 sm:pt-36 pb-16 transition-all duration-700 ${
+                visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+            }`}>
+                
+                <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10">
+                    <div className="flex-1">
+                        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#0a0a0a] border border-[#1d1d1d] text-neutral-300 text-xs font-mono uppercase tracking-widest mb-6">
+                            <ShieldCheck className="w-4 h-4 text-white" />
+                            <span>Binding Legal Agreement &bull; v2026.4</span>
+                        </div>
 
-                <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: '24px' }}>
-                    <div>
-                        <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '11px', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(26,108,246,0.65)', marginBottom: '14px' }}>
-                            Binding Legal Agreement
-                        </p>
-                        <h1 style={{ fontFamily: "'Syne',sans-serif", fontSize: 'clamp(36px,6vw,64px)', fontWeight: 800, color: '#fff', lineHeight: 1.0, letterSpacing: '-0.03em', marginBottom: '16px' }}>
-                            Terms &amp;<br /><span style={{ color: '#1a6cf6' }}>Conditions</span>
+                        <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold text-white tracking-tight leading-[1.05] mb-6">
+                            Terms &amp; <br />
+                            <span className="text-neutral-400 font-light">Conditions</span>
                         </h1>
-                        <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.35)', lineHeight: 1.75, maxWidth: '520px' }}>
-                            These Terms govern your access to and use of the CodeSarthi platform — including all features, AI tools, collaboration workspaces, and integrations. By using the platform, you agree to be legally bound by the provisions below.
+                        <p className="text-base sm:text-lg text-neutral-400 max-w-2xl leading-relaxed font-light">
+                            These architectural rules and contractual obligations govern your access to and use of the CodeSarthi developer ecosystem—including our AI engines, code collaboration workspaces, and API integrations.
                         </p>
                     </div>
-                    <div style={{
-                        background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(26,108,246,0.15)',
-                        borderRadius: '14px', padding: '20px 24px', flexShrink: 0, minWidth: '220px',
-                    }}>
-                        <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '11px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '8px' }}>Last updated</div>
-                        <div style={{ fontFamily: "'Syne',sans-serif", fontSize: '18px', fontWeight: 700, color: '#fff', marginBottom: '12px' }}>April 20, 2026</div>
-                        <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '11px', color: 'rgba(255,255,255,0.25)', marginBottom: '4px' }}>Effective immediately</div>
-                        <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '11px', color: 'rgba(255,255,255,0.25)' }}>Governed under Indian law</div>
-                        <div style={{ marginTop: '14px', paddingTop: '14px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
 
-                            <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '12px', fontWeight: 500, color: 'rgba(255,255,255,0.5)' }}>Kanpur, Uttar Pradesh</div>
+                    {/* Metadata summary card */}
+                    <div className="bg-[#0a0a0a] p-6 sm:p-8 rounded-3xl border border-[#1b1b1b] shrink-0 w-full lg:w-80 shadow-2xl flex flex-col gap-4">
+                        <div>
+                            <span className="text-xs font-mono font-bold uppercase text-neutral-500 tracking-wider block mb-1">
+                                Last Updated
+                            </span>
+                            <span className="text-xl font-bold text-white tracking-tight block">
+                                April 20, 2026
+                            </span>
+                            <span className="text-xs text-emerald-400 font-mono flex items-center gap-1.5 mt-1">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse" />
+                                Effective Immediately
+                            </span>
+                        </div>
+                        
+                        <div className="h-[1px] w-full bg-[#1c1c1c]" />
+                        
+                        <div>
+                            <span className="text-xs font-mono uppercase text-neutral-500 tracking-wider block mb-1">
+                                Jurisdiction &amp; Governance
+                            </span>
+                            <span className="text-sm font-medium text-neutral-300 flex items-center gap-2">
+                                <MapPin className="w-4 h-4 text-white shrink-0" />
+                                Kanpur, Uttar Pradesh, India
+                            </span>
                         </div>
                     </div>
                 </div>
 
-                {/* Alert banner */}
-                <div style={{ marginTop: '32px', display: 'flex', alignItems: 'flex-start', gap: '14px', background: 'rgba(239,68,68,0.05)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '12px', padding: '16px 20px' }}>
-                    <span style={{ fontSize: '16px', flexShrink: 0, marginTop: '1px' }}>⚠️</span>
-                    <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.7, margin: 0 }}>
-                        <strong style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 600 }}>These Terms form a binding legal agreement.</strong>{' '}
-                        Consult a qualified lawyer before agreeing if you are unsure about any provision. By accessing, registering for, or using the Platform, you confirm you are at least 18 years old and agree to be legally bound by these Terms.
-                    </p>
+                {/* Legal Advisory Notice Banner */}
+                <div className="mt-10 p-5 sm:p-6 rounded-2xl bg-[#0a0a0a] border border-[#1f1f1f] flex flex-col sm:flex-row items-start gap-4 shadow-lg">
+                    <div className="p-2.5 rounded-xl bg-black text-amber-400 shrink-0 border border-[#262626]">
+                        <AlertTriangle className="w-6 h-6" />
+                    </div>
+                    <div>
+                        <h4 className="text-sm font-bold text-white mb-1 tracking-wide uppercase font-mono">
+                            Important Advisory
+                        </h4>
+                        <p className="text-xs sm:text-sm text-neutral-400 font-light leading-relaxed">
+                            <strong className="text-white font-semibold">These Terms constitute an enlivened digital contract under Indian law.</strong> By continuing to use, interact with, or register inside CodeSarthi workspaces, you formally verify that you possess the statutory legal capacity (18+ years) and assent to be bound unconditionally by every covenant documented below.
+                        </p>
+                    </div>
                 </div>
             </div>
 
-            {/* ── BODY: TOC + CONTENT ── */}
-            <div style={{
-                position: 'relative', zIndex: 1, maxWidth: '90%', margin: '0 auto',
-                padding: '0 32px 120px', display: 'flex', gap: '48px', alignItems: 'flex-start',
-                opacity: visible ? 1 : 0, transition: 'opacity 0.7s ease 0.2s',
-            }}>
-                {/* Left TOC — hidden on small screens via inline media won't work, but the layout flexes */}
+            {/* ── MAIN BODY: TOC + CONTENT ── */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pb-24 flex gap-10 items-start">
+                
+                {/* Desktop Sticky Table of Contents */}
                 <TableOfContents active={activeId} onJump={jumpTo} />
 
-                {/* Right content */}
-                <div style={{ flex: 1, minWidth: 0 }}>
+                {/* Right Side Content Sections */}
+                <div className="flex-1 min-w-0 flex flex-col gap-10">
                     {SECTIONS.map(sec => <SectionBlock key={sec.id} sec={sec} />)}
 
                     {/* Contact block */}
-                    <section style={{ marginBottom: '64px', scrollMarginTop: '140px' }}>
-                        <div style={{ display: 'flex', alignItems: 'flex-end', gap: '20px', marginBottom: '28px', justifyContent: 'center' }}>
-                            <div style={{ fontFamily: "'Syne',sans-serif", fontSize: '50px', fontWeight: 800, color: 'rgba(26,108,246,0.4)', letterSpacing: '0.08em', paddingTop: '6px', flexShrink: 0, minWidth: '28px' }}>18</div>
-                            <h2 style={{ fontFamily: "'Syne',sans-serif", fontSize: 'clamp(25px,3vw,30px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.1, borderBottom: '1px solid rgba(26,108,246,0.15)', paddingBottom: '16px', width: '100%' }}>Contact Us</h2>
+                    <section className="p-8 sm:p-12 rounded-3xl bg-[#0a0a0a] transition-all shadow-2xl mt-4">
+                        <div className="flex items-center gap-4 mb-6 border-b border-[#1f1f1f] pb-6">
+                            <span className="text-3xl sm:text-4xl font-mono font-extrabold text-neutral-600 tracking-tighter">
+                                #18
+                            </span>
+                            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                                Contact &amp; Legal Support
+                            </h2>
                         </div>
-                        <div style={{ marginLeft: '48px', background: 'rgba(26,108,246,0.04)', border: '1px solid rgba(26,108,246,0.15)', borderRadius: '14px', padding: '28px 32px' }}>
-                            <div style={{ fontFamily: "'Syne',sans-serif", fontSize: '18px', fontWeight: 700, color: '#fff', marginBottom: '6px' }}>CodeSarthi </div>
-                            <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.35)', marginBottom: '20px' }}>Made in INDIA 🇮🇳 — open to contributors & collaborators</div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <span style={{ fontSize: '14px' }}>📧</span>
-                                    <a href="mailto:codesarthi.help@gmail.com" style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '14px', color: '#6ba3ff', textDecoration: 'none', letterSpacing: '0.01em' }}>codesarthi.help@gmail.com</a>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <span style={{ fontSize: '14px' }}>📍</span>
-                                    <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.45)' }}>Kanpur, Uttar Pradesh, India</span>
+                        
+                        <div className="bg-black/60 rounded-2xl p-6 sm:p-8 border border-[#171717] flex flex-col gap-6">
+                            <div>
+                                <h3 className="text-lg sm:text-xl font-bold text-white mb-1">
+                                    CodeSarthi Technologies Private Limited
+                                </h3>
+                                <p className="text-sm text-neutral-400 font-light">
+                                    Engineered with passion in INDIA 🇮🇳 &mdash; Dedicated to radical software craftsmanship.
+                                </p>
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-[#1a1a1a]">
+                                <a 
+                                    href="mailto:codesarthi.help@gmail.com" 
+                                    className="flex items-center gap-3 p-4 rounded-xl bg-[#0a0a0a] hover:bg-black transition-colors group"
+                                >
+                                    <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center text-neutral-400 group-hover:text-white transition-colors border border-[#222]">
+                                        <Mail className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <span className="text-xs text-neutral-500 font-mono block">Legal Inquiry Desk</span>
+                                        <span className="text-sm font-medium text-white group-hover:underline">codesarthi.help@gmail.com</span>
+                                    </div>
+                                </a>
+
+                                <div className="flex items-center gap-3 p-4 rounded-xl bg-[#0a0a0a]">
+                                    <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center text-neutral-400 border border-[#222]">
+                                        <MapPin className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <span className="text-xs text-neutral-500 font-mono block">Registered Office</span>
+                                        <span className="text-sm font-medium text-white">Kanpur, Uttar Pradesh, India</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </section>
                 </div>
-
-
             </div>
-            <div style={{ background: 'rgba(16, 67, 185, 0.22)', border: '1px solid rgba(16, 95, 185, 0.15)', borderRadius: '16px', padding: '28px 32px', textAlign: 'center', width: '50%', justifySelf: 'center' }}>
-                <div style={{ fontSize: '24px', marginBottom: '12px', widt: 'full', display: 'flex', justifyContent: 'center' }}><svg xmlns="http://www.w3.org/2000/svg" width={55} height={55} viewBox="0 0 80 80"><g fill="none" fillRule="evenodd" clipRule="evenodd"><path fill="#f2c94c" d="M19.833 38.25c-1.012 0-1.833.82-1.833 1.833v26.334c0 1.012.82 1.833 1.833 1.833h40.334c1.012 0 1.833-.82 1.833-1.833V40.083c0-1.012-.82-1.833-1.833-1.833zM43 56.25a4.243 4.243 0 1 1-6-6a4.243 4.243 0 0 1 6 6"></path><path fill="#828282" d="M40 14.25c-8.56 0-15.5 6.94-15.5 15.5v8.5h4v-8.5c0-6.351 5.149-11.5 11.5-11.5s11.5 5.149 11.5 11.5v8.5h4v-8.5c0-8.56-6.94-15.5-15.5-15.5"></path></g></svg></div>
-                <p style={{ fontFamily: "'Syne',sans-serif", fontSize: '18px', fontWeight: 700, color: '#fff', marginBottom: '10px' }}>
-                    We prioritise your privacy
-                </p>
-                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.75, maxWidth: '480px', margin: '0 auto 20px' }}>
-                    This Policy complies with the Digital Personal Data Protection Act 2023. We are committed to transparent, secure, and responsible data handling — always.
-                </p>
-                <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                    <button
-                        onClick={() => navigate('/privacy-&-policy-hub')}
-                        style={{ background: 'rgba(16, 123, 185, 0.1)', border: '1px solid rgba(87, 105, 186, 0.25)', borderRadius: '10px', padding: '10px 22px', fontSize: '13px', fontWeight: 600, color: '#ffffffff', cursor: 'pointer', fontFamily: "'DM Sans',sans-serif" }}
-                    >
-                        Privacy Policy Hub →
-                    </button>
-                    <a href="mailto:codesarthi.help@gmail.com" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', padding: '10px 22px', fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.45)', textDecoration: 'none', fontFamily: "'DM Sans',sans-serif" }}>
-                        Contact Support
-                    </a>
+
+            {/* ── BOTTOM ACCEPTANCE BANNER ── */}
+            <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 pb-28">
+                <div className="p-8 sm:p-12 rounded-3xl bg-[#0a0a0a] text-center flex flex-col items-center justify-center gap-6 shadow-2xl relative overflow-hidden">
+                    <div className="w-16 h-16 rounded-full bg-white text-black flex items-center justify-center shadow-xl font-extrabold text-2xl mb-2 animate-pulse">
+                        <CheckCircle className="w-8 h-8 text-black stroke-[2.5]" />
+                    </div>
+
+                    <h3 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight max-w-xl">
+                        Commitment to Ethical Software &amp; Data Care
+                    </h3>
+                    
+                    <p className="text-neutral-400 text-sm sm:text-base max-w-2xl font-light leading-relaxed">
+                        These operational Terms operate strictly alongside our comprehensive Privacy Policy and DPDP Act 2023 guarantees. We stand completely committed to honest, secure, and developer-first data treatment.
+                    </p>
+
+                    <div className="flex flex-col sm:flex-row items-center gap-4 mt-4 w-full sm:w-auto justify-center">
+                        {/* MOST IMPORTANT BUTTON -> PURE WHITE */}
+                        <button
+                            onClick={() => navigate('/privacy-&-policy-hub')}
+                            className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white hover:bg-neutral-200 text-black font-extrabold text-base transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.25)] hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
+                        >
+                            <span>Open Privacy Hub</span>
+                            <ExternalLink className="w-4 h-4 text-black" />
+                        </button>
+
+                        {/* SECONDARY BUTTON -> #000000 / #0a0a0a styling */}
+                        <a 
+                            href="mailto:codesarthi.help@gmail.com"
+                            className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-[#000000] hover:bg-[#141414] text-neutral-300 hover:text-white font-bold text-base transition-all duration-300 border border-[#252525] flex items-center justify-center gap-2"
+                        >
+                            <span>Contact Support Desk</span>
+                        </a>
+                    </div>
                 </div>
             </div>
+
             <Footer />
         </div>
     );
