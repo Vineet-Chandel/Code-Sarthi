@@ -16,12 +16,12 @@ const ShortPreview = () => {
                             ease-in-out
                             max-h-[400px]
 
-                        bg-base-100
+                        bg-[#0a0a0a]
                         border
-                        border-base-300
+                        border-[#212121]
                         rounded-3xl
-                        p-3
-                        shadow-xl
+                        p-4 md:p-6
+                        shadow-2xl text-white
   ">
 
                 <div className="flex justify-between items-center mb-5">

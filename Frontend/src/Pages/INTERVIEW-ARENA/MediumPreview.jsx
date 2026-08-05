@@ -11,6 +11,7 @@ const ShortPreview = () => {
                             scrollbar-none overflow-y-auto
                             ease-in-out
                             max-h-[600px]
+                            bg-[#0a0a0a] border border-[#212121] rounded-3xl p-4 sm:p-6 shadow-2xl text-white
   ">
 
 

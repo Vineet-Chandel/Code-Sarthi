@@ -76,15 +76,14 @@ const ContentSecond2 = () => {
                 <div
                     key={currentId}
                     onClick={() => toggleFaq(currentId)}
-
-                    className=" group rounded-2xl border border-white/10 bg-white/[0.03] p-5 lg:p-6 hover:bg-white/[0.06] hover:border-white/20 transition-all duration-300 h-fit cursor-pointer select-none"
+                    className="group rounded-3xl border border-[#212121] bg-[#0a0a0a] p-6 lg:p-7 hover:bg-[#121212] hover:border-zinc-700 transition-all duration-300 h-fit cursor-pointer select-none shadow-xl"
                 >
                     <div className="flex justify-between items-start gap-4">
-                        <h3 className="text-lg lg:text-xl text-white font-semibold group-hover:text-blue-400 transition-colors duration-200">
+                        <h3 className="text-lg lg:text-xl text-white font-bold group-hover:text-zinc-200 transition-colors duration-200">
                             {faq.question}
                         </h3>
                         <button
-                            className="text-white/80 border rounded-xl border-white/10 bg-white/5 p-1.5 h-9 w-9 flex items-center justify-center shrink-0 transition-all duration-300 group-hover:border-white/30"
+                            className="text-white border rounded-2xl border-[#212121] bg-black group-hover:bg-white group-hover:text-black group-hover:border-white p-2 h-10 w-10 flex items-center justify-center shrink-0 transition-all duration-300 shadow-sm"
                             aria-label="Toggle Answer"
                         >
                             <svg
@@ -93,7 +92,7 @@ const ContentSecond2 = () => {
                                 viewBox="0 0 24 24"
                                 fill="none"
                                 stroke="currentColor"
-                                strokeWidth="2"
+                                strokeWidth="2.5"
                             >
                                 {isOpen ? (
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M18 12H6" />
@@ -105,9 +104,9 @@ const ContentSecond2 = () => {
                     </div>
 
                     {/* CSS Smooth Transition Container */}
-                    <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100 mt-4' : 'grid-rows-[0fr] opacity-0 mt-0'}`}>
+                    <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100 mt-5 pt-4 border-t border-[#212121]' : 'grid-rows-[0fr] opacity-0 mt-0'}`}>
                         <div className="overflow-hidden">
-                            <p className="text-gray-400 leading-relaxed text-sm lg:text-base">
+                            <p className="text-zinc-400 leading-relaxed text-sm lg:text-base">
                                 {faq.answer}
                             </p>
                         </div>

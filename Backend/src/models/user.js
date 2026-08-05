@@ -65,7 +65,7 @@ const userSchema = new Schema(
         age: {
             type: Number,
             min: 10,
-            required: true
+
         },
         gender: {
             type: String,
@@ -92,7 +92,7 @@ const userSchema = new Schema(
         },
         college: {
             type: String,
-            required: true,
+
         },
         skills: {
             type: [Schema.Types.Mixed],
@@ -116,7 +116,7 @@ const userSchema = new Schema(
         },
         profession: {
             type: String,
-            required: true,
+
         },
         dateOfPasswordChange: {
             type: Date,

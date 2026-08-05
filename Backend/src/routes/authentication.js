@@ -22,7 +22,7 @@ const resend = new Resend(String(process.env.RESEND_API_KEY));
 authRouter.post("/auth/signup", async (req, res) => {
     try {
 
-        const { firstName, middleName, lastName, gmail, password, username, age, gender, college, profession, termsAccepted } = req.body;
+        const { firstName, middleName, lastName, gmail, password, username, termsAccepted } = req.body;
         // Validation of data
         validateSignUpData(req.body);
 
@@ -58,11 +58,9 @@ authRouter.post("/auth/signup", async (req, res) => {
             middleName,
             lastName,
             username,
-            age,
-            gender,
-            college,
-            profession,
+
         });
+
         let rate = Math.floor(Math.random() * 100);
         if (rate < 12.5) {
             user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778848890/robo6_qerfgw.jpg";
@@ -82,6 +80,8 @@ authRouter.post("/auth/signup", async (req, res) => {
             user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778848888/robo8_jhm1p8.jpg";
         }
 
+
+        // this token is essential once the user want to unsubscribe with the newsletter 
         const unsubscribeToken = crypto.randomBytes(32).toString("hex");
 
         // if user is subscribed to newsletter, update the isActive to true

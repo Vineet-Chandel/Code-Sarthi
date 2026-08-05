@@ -383,12 +383,8 @@ const Signup = () => {
     middleName: '',
     lastName: '',
     username: '',
-    gender: '',
-    age: '',
     gmail: '',
     password: '',
-    profession: '',
-    college: '',
     termsAccepted: false,
   });
 
@@ -431,7 +427,7 @@ const Signup = () => {
       setIsSubmitting(true);
       const payload = {
         ...formData,
-        age: Number(formData.age),
+
         gmail: formData.gmail.toLowerCase()
       };
 
@@ -707,61 +703,6 @@ const Signup = () => {
 
             </div>
 
-            {/* Gender & Age */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label htmlFor="gender" className="text-md ml-3 block text-accent-content-content">
-                  Gender <span className="text-white ml-1">*</span>
-                </label>
-                <div className="flex items-center rounded-2xl px-4 py-3 border  bg-base-200 border-base-300    focus-within:  transition-all duration-300">
-                  <span className="mr-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2">
-                      <circle cx="12" cy="12" r="10" />
-                      <path d="M12 2v10M12 22v-10M2 12h10M22 12H12" />
-                    </svg>
-                  </span>
-                  <select
-                    id="gender"
-                    className="w-full outline-none text-accent-content bg-transparent placeholder-info placeholder:opacity-70 text-lg"
-                    value={formData.gender}
-                    onChange={handleChange}
-                    required={true}
-                  >
-                    <option value="" disabled hidden className="text-gray-500">Select Gender</option>
-                    <option value="male" className="bg-gray-900 text-white">Male</option>
-                    <option value="female" className="bg-gray-900 text-white">Female</option>
-                    <option value="other" className="bg-gray-900 text-white">Other</option>
-
-                  </select>
-
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label htmlFor="age" className="text-md ml-3 block text-accent-content-content">
-                  Age <span className="text-white ml-1">*</span>
-                </label>
-                <div className="flex items-center rounded-2xl px-4 py-3 border  bg-base-200 border-base-300    focus-within:  transition-all duration-300">
-                  <span className="mr-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2">
-                      <circle cx="12" cy="12" r="10" />
-                      <polyline points="12 6 12 12 16 14" />
-                    </svg>
-                  </span>
-                  <input
-                    id="age"
-                    type="number"
-                    min="10"
-                    max="100"
-                    placeholder="25"
-                    className="w-full outline-none text-accent-content bg-transparent placeholder-info placeholder:opacity-70 text-lg"
-                    value={formData.age}
-                    onChange={handleChange}
-                    required={true}
-                  />
-                </div>
-              </div>
-            </div>
 
             {/* Email */}
             <div className="space-y-2">
@@ -874,58 +815,6 @@ const Signup = () => {
             </div>
 
 
-            <div className='flex justify-between items-center w-full'>
-              <div className="space-y-2 w-[48.5%]">
-                <label htmlFor="college" className="text-md ml-3 block text-accent-content-content">
-                  Oganization <span className="text-white ml-1">*</span>
-                </label>
-                <div className="flex items-center rounded-2xl px-4 py-3 border  bg-base-200 border-base-300    focus-within:  transition-all duration-300">
-                  <span className="mr-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 50 50">
-                      <g fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.4">
-                        <path stroke="#ffffff" d="M33.333 8.333A2.083 2.083 0 0 0 31.25 6.25h-12.5a2.083 2.083 0 0 0-2.083 2.083v6.25h16.666zM43.75 41.667v-25a2.083 2.083 0 0 0-2.083-2.084H8.333a2.083 2.083 0 0 0-2.083 2.084v25a2.083 2.083 0 0 0 2.083 2.083h33.334a2.083 2.083 0 0 0 2.083-2.083" />
-                        <path stroke="#ffffff" d="M22.917 29.167H18a8.33 8.33 0 0 1-7.583-5.042l-3.792-8.646a2.08 2.08 0 0 1 1.708-.896h33.334a2.08 2.08 0 0 1 1.708.896l-3.792 8.646A8.33 8.33 0 0 1 32 29.167h-4.917" />
-                        <path stroke="#ffffff" d="M27.083 27.083h-4.166v4.167h4.166z" />
-                      </g>
-                    </svg>
-                  </span>
-                  <input
-                    id="college"
-                    type="text"
-                    placeholder="Institute | Organization"
-                    className="w-full outline-none text-accent-content bg-transparent placeholder-info placeholder:opacity-70 text-lg"
-                    value={formData.college}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-              </div>
-              <div className="space-y-2  w-[48.5%]">
-                <label htmlFor="profession" className="text-md ml-3 block text-accent-content-content">
-                  Profession <span className="text-white ml-1">*</span>
-                </label>
-                <div className="flex items-center rounded-2xl px-4 py-3 border  bg-base-200 border-base-300    focus-within:  transition-all duration-300">
-                  <span className="mr-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 50 50">
-                      <g fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.4">
-                        <path stroke="#ffffff" d="M33.333 8.333A2.083 2.083 0 0 0 31.25 6.25h-12.5a2.083 2.083 0 0 0-2.083 2.083v6.25h16.666zM43.75 41.667v-25a2.083 2.083 0 0 0-2.083-2.084H8.333a2.083 2.083 0 0 0-2.083 2.084v25a2.083 2.083 0 0 0 2.083 2.083h33.334a2.083 2.083 0 0 0 2.083-2.083" />
-                        <path stroke="#ffffff" d="M22.917 29.167H18a8.33 8.33 0 0 1-7.583-5.042l-3.792-8.646a2.08 2.08 0 0 1 1.708-.896h33.334a2.08 2.08 0 0 1 1.708.896l-3.792 8.646A8.33 8.33 0 0 1 32 29.167h-4.917" />
-                        <path stroke="#ffffff" d="M27.083 27.083h-4.166v4.167h4.166z" />
-                      </g>
-                    </svg>
-                  </span>
-                  <input
-                    id="profession"
-                    type="text"
-                    placeholder="Student | Developer | Designer"
-                    className="w-full outline-none text-accent-content bg-transparent placeholder-info placeholder:opacity-70 text-lg"
-                    value={formData.profession}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-              </div>
-            </div>
 
 
 

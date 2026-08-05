@@ -568,7 +568,7 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
                             {/* Description */}
                             <div>
                                 <label className="block text-sm font-medium text-zinc-400 mb-1">Description *</label>
-                                <textarea required rows="2" value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} className="w-full bg-black border border-[#212121] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-white transition-colors resize-none" placeholder="What does achieving this goal look like?"></textarea>
+                                <textarea required rows="5" value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} className="w-full bg-black border border-[#212121] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-0 transition-colors resize-none scrollbar-none" placeholder="What does achieving this goal look like?"></textarea>
                             </div>
 
                             <hr className="border-[#212121]" />

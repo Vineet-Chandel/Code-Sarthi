@@ -49,61 +49,71 @@ const HowCareerProfile = () => {
         }
     ];
     return (
-        <div className='   flex items-center gap-10 justify-center mx-auto'>
-            <div className='w-[45%] '>
-                <img className='w-full' src="https://res.cloudinary.com/dj0ivep44/image/upload/v1784994346/resume-examples-anatomy-image_n9yxhz.avif" alt="" />
+        <div className="flex flex-col lg:flex-row items-center lg:items-start gap-10 lg:gap-16 justify-between max-w-7xl mx-auto py-12 px-4 w-full">
+            {/* Left sticky anatomy showcase */}
+            <div className="w-full lg:w-5/12 lg:sticky lg:top-24 bg-[#0a0a0a] border border-[#212121] rounded-3xl p-5 sm:p-7 shadow-2xl">
+                <div className="relative overflow-hidden rounded-2xl border border-[#212121] bg-black">
+                    <img
+                        className="w-full h-auto object-cover opacity-95 hover:opacity-100 transition-opacity duration-300"
+                        src="https://res.cloudinary.com/dj0ivep44/image/upload/v1784994346/resume-examples-anatomy-image_n9yxhz.avif"
+                        alt="Resume examples anatomy image illustrating proper contact, summary, skills, and experience section placement"
+                    />
+                </div>
+                <div className="mt-6 p-5 rounded-2xl bg-black border border-[#212121] text-zinc-400 text-sm leading-relaxed flex flex-col gap-2">
+                    <div className="flex items-center gap-2 text-white font-bold text-base">
+                        <span className="w-2.5 h-2.5 rounded-full bg-white inline-block"></span>
+                        Shastra AI Intelligence
+                    </div>
+                    <p>
+                        Recruiters and hiring managers spend an average of <strong className="text-white font-semibold">6 seconds</strong> scanning a profile. Our system automatically optimizes section hierarchy so your top technical competencies and high-impact achievements appear in the primary scanning pattern.
+                    </p>
+                </div>
             </div>
-            <div className='w-[55%] '>
-                <div className="w-full  mb-14 text-center md:text-start mt-10">
-                    <h2 className="font-semibold text-3xl sm:text-4xl lg:text-5xl leading-tight text-white mb-4">
-                        How to Customize the Career Profile
+
+            {/* Right checklist column */}
+            <div className="w-full lg:w-7/12">
+                <div className="w-full mb-10 text-center lg:text-left">
+                    <h2 className="font-extrabold text-3xl sm:text-4xl lg:text-5xl leading-tight text-white mb-4 tracking-tight">
+                        How to Customize Your Career Profile
                     </h2>
-                    <p className="text-gray-400 text-base md:text-lg w-[80%] leading-relaxed">
-                        Your career page is your professional highlight reel. Here’s how to customize it to impress recruiters and stand out from the crowd.
+                    <p className="text-zinc-400 text-base sm:text-lg leading-relaxed max-w-2xl">
+                        Your career page is your definitive professional highlight reel. Follow this structured AI checklist to bypass ATS filters and stand out to technical hiring committees.
                     </p>
                 </div>
 
-                <div className="space-y-5 ml-[50px]">
-
-
+                <div className="space-y-6 sm:pl-4">
                     {resumeCompletionChecklist.map((item) => (
                         <div
                             key={item.id}
-                            className="relative rounded-2xl  p-6 transition-all duration-300 hover:border-blue-400 hover:shadow-lg"
+                            className="relative rounded-3xl bg-[#0a0a0a] border border-[#212121] hover:border-zinc-700 p-6 sm:p-8 transition-all duration-300 hover:shadow-2xl group overflow-visible"
                         >
-                            <div className="absolute -top-2 -left-2">
-                                <div className="relative w-[35px] h-[35px]">
-                                    <img
-                                        className="w-full h-full"
-                                        src="https://res.cloudinary.com/dj0ivep44/image/upload/v1784996512/orange-circle_sgm0gg.png"
-                                        alt=""
-                                    />
+                            {/* Step badge */}
+                            <div className="absolute -top-3.5 -left-3.5 w-11 h-11 rounded-2xl bg-white text-black font-black text-sm flex items-center justify-center shadow-xl border border-black/10 transition-transform duration-300 group-hover:scale-105">
+                                0{item.id}
+                            </div>
 
-                                    <span className="absolute inset-0 flex items-center justify-center text-black text-md font-bold">
-                                        {item.id}
+                            <div className="flex flex-col gap-2 pl-2 sm:pl-4">
+                                <h3 className="text-xl font-bold text-white group-hover:text-zinc-200 transition-colors">
+                                    {item.title}
+                                </h3>
+
+                                <p className="text-sm sm:text-base leading-relaxed text-zinc-400">
+                                    {item.description}
+                                </p>
+
+                                <div className="mt-4 pt-4 border-t border-[#212121] flex items-center justify-between text-xs font-bold uppercase tracking-wider text-zinc-500">
+                                    <span>Section &bull; {item.section}</span>
+                                    <span className="text-white bg-white/10 group-hover:bg-white group-hover:text-black px-3 py-1.5 rounded-xl transition-all duration-300 flex items-center gap-1">
+                                        {item.action} &rarr;
                                     </span>
                                 </div>
-                            </div>
-                            <div className=" flex items-start justify-between gap-6">
-                                <div className="flex-1">
-                                    <h3 className="text-xl font-bold text-white">
-                                        {item.title}
-                                    </h3>
-
-                                    <p className="mt-3 text-base leading-7 text-white/90">
-                                        {item.description}
-                                    </p>
-
-
-                                </div>
-
                             </div>
                         </div>
                     ))}
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default HowCareerProfile
+export default HowCareerProfile;
