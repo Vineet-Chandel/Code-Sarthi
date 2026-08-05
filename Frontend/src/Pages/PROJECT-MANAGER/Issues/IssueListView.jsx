@@ -81,9 +81,10 @@ const IssueListView = ({ teamId, projectId, myRole }) => {
 
     const getStatusColor = (status) => {
         switch (status) {
+            case 'open': return 'bg-[#000000] text-zinc-300 border-white/[0.08]';
             case 'in_progress': return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
-            case 'done': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
-            default: return 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20';
+            case 'done': return 'bg-white/[0.08] text-white border-white/[0.12]';
+            default: return 'bg-[#000000] text-zinc-400 border-white/[0.06]';
         }
     };
 
@@ -91,9 +92,9 @@ const IssueListView = ({ teamId, projectId, myRole }) => {
         switch (priority) {
             case 'urgent': return 'bg-red-500/10 text-red-400 border-red-500/20';
             case 'high': return 'bg-orange-500/10 text-orange-400 border-orange-500/20';
-            case 'medium': return 'bg-[#534AB7]/20 text-[#A7A0F8] border-[#534AB7]/30';
-            case 'low': return 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20';
-            default: return 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20';
+            case 'medium': return 'bg-white/[0.06] text-zinc-300 border-white/[0.08]';
+            case 'low': return 'bg-[#000000] text-zinc-400 border-white/[0.06]';
+            default: return 'bg-[#000000] text-zinc-400 border-white/[0.06]';
         }
     };
 
@@ -115,7 +116,7 @@ const IssueListView = ({ teamId, projectId, myRole }) => {
                     <select
                         value={typeFilter}
                         onChange={(e) => setTypeFilter(e.target.value)}
-                        className="bg-[#09090B] border border-white/10 text-sm text-zinc-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#534AB7]"
+                        className="bg-[#0a0a0a] border border-white/[0.06] text-sm font-semibold text-zinc-300 rounded-xl px-3.5 py-2 focus:outline-none focus:border-white/[0.2] transition-colors cursor-pointer"
                     >
                         <option value="">All Types</option>
                         <option value="issue">Issue</option>
@@ -125,7 +126,7 @@ const IssueListView = ({ teamId, projectId, myRole }) => {
                     <select
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
-                        className="bg-[#09090B] border border-white/10 text-sm text-zinc-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#534AB7]"
+                        className="bg-[#0a0a0a] border border-white/[0.06] text-sm font-semibold text-zinc-300 rounded-xl px-3.5 py-2 focus:outline-none focus:border-white/[0.2] transition-colors cursor-pointer"
                     >
                         <option value="">All Statuses</option>
                         <option value="open">Open</option>
@@ -135,7 +136,7 @@ const IssueListView = ({ teamId, projectId, myRole }) => {
                     <select
                         value={priorityFilter}
                         onChange={(e) => setPriorityFilter(e.target.value)}
-                        className="bg-[#09090B] border border-white/10 text-sm text-zinc-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#534AB7]"
+                        className="bg-[#0a0a0a] border border-white/[0.06] text-sm font-semibold text-zinc-300 rounded-xl px-3.5 py-2 focus:outline-none focus:border-white/[0.2] transition-colors cursor-pointer"
                     >
                         <option value="">All Priorities</option>
                         <option value="urgent">Urgent</option>
@@ -147,19 +148,20 @@ const IssueListView = ({ teamId, projectId, myRole }) => {
 
                 <button
                     onClick={() => setCreateModalOpen(true)}
-                    className="bg-[#534AB7] hover:bg-[#6F64E6] text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm whitespace-nowrap"
+                    className="bg-white hover:bg-zinc-200 text-black font-bold py-2 px-4 rounded-xl transition-all duration-200 shadow-[0_0_15px_rgba(255,255,255,0.1)] text-sm whitespace-nowrap active:scale-95 flex items-center gap-1.5"
                 >
-                    + New Issue
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 4v16m8-8H4" /></svg>
+                    New Issue
                 </button>
             </div>
 
             {loading ? (
                 <div className="space-y-3">
-                    {[1, 2, 3].map(i => <div key={i} className="h-16 bg-white/[0.02] border border-white/5 rounded-xl animate-pulse"></div>)}
+                    {[1, 2, 3].map(i => <div key={i} className="h-16 bg-[#0a0a0a] border border-white/[0.05] rounded-xl animate-pulse"></div>)}
                 </div>
             ) : issues.length === 0 ? (
-                <div className="text-center py-12 bg-[#09090B] border border-white/10 rounded-2xl">
-                    <p className="text-zinc-500">No issues found. Create one to get started.</p>
+                <div className="text-center py-12 bg-[#0a0a0a] border border-white/[0.05] rounded-2xl">
+                    <p className="text-zinc-400 font-medium">No issues found. Create one to get started.</p>
                 </div>
             ) : (
                 <div className="space-y-3">
@@ -167,12 +169,12 @@ const IssueListView = ({ teamId, projectId, myRole }) => {
                         <div
                             key={issue._id}
                             onClick={() => setSelectedIssueId(issue._id)}
-                            className="bg-[#09090B] hover:bg-white/[0.03] border border-white/10 hover:border-[#534AB7]/50 rounded-xl p-4 cursor-pointer transition-all flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between group"
+                            className="bg-[#0a0a0a] hover:bg-[#111111] border border-white/[0.05] hover:border-white/[0.12] rounded-xl p-4 cursor-pointer transition-all duration-300 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between group"
                         >
                             <div className="flex items-start gap-4 flex-1 min-w-0">
                                 <div className="mt-1" title={issue.type}>{getTypeIcon(issue.type)}</div>
                                 <div className="min-w-0 flex-1">
-                                    <h4 className="text-white font-medium truncate group-hover:text-[#A7A0F8] transition-colors">{issue.title}</h4>
+                                    <h4 className="text-white font-bold truncate group-hover:text-zinc-200 transition-colors">{issue.title}</h4>
                                     <div className="flex items-center gap-3 mt-1 text-xs text-zinc-500">
                                         {issue.assignedTo ? (
                                             <div className="flex items-center gap-2">
@@ -189,7 +191,7 @@ const IssueListView = ({ teamId, projectId, myRole }) => {
                                                 {String(issue.assignedTo._id) === String(user._id) && (
                                                     <button 
                                                         onClick={(e) => handleUnclaim(e, issue._id)}
-                                                        className="ml-2 text-xs font-medium text-zinc-400 hover:text-red-400 transition-colors px-2 py-0.5 rounded hover:bg-white/5"
+                                                        className="ml-2 text-xs font-medium text-zinc-400 hover:text-red-400 transition-colors px-2 py-0.5 rounded hover:bg-white/[0.05]"
                                                     >
                                                         Unclaim
                                                     </button>
@@ -213,7 +215,7 @@ const IssueListView = ({ teamId, projectId, myRole }) => {
                                                 <span>Unassigned</span>
                                                 <button 
                                                     onClick={(e) => handleClaim(e, issue._id)}
-                                                    className="ml-2 text-xs font-medium text-[#A7A0F8] hover:text-white border border-[#534AB7] hover:bg-[#534AB7] transition-colors px-2 py-0.5 rounded"
+                                                    className="ml-2 text-xs font-bold text-white hover:text-black bg-white/10 hover:bg-white border border-white/20 transition-all duration-200 px-2.5 py-1 rounded-lg shadow-sm active:scale-95"
                                                 >
                                                     Claim
                                                 </button>
@@ -234,10 +236,10 @@ const IssueListView = ({ teamId, projectId, myRole }) => {
                             </div>
 
                             <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
-                                <span className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded border ${getStatusColor(issue.status)}`}>
+                                <span className={`text-[10px] uppercase tracking-wider font-extrabold px-2.5 py-1 rounded-lg border ${getStatusColor(issue.status)}`}>
                                     {issue.status.replace('_', ' ')}
                                 </span>
-                                <span className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded border ${getPriorityColor(issue.priority)}`}>
+                                <span className={`text-[10px] uppercase tracking-wider font-extrabold px-2.5 py-1 rounded-lg border ${getPriorityColor(issue.priority)}`}>
                                     {issue.priority}
                                 </span>
                             </div>

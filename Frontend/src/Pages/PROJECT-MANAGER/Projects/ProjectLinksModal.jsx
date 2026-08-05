@@ -112,21 +112,21 @@ const ProjectLinksModal = ({ isOpen, onClose, project, myRole, onAddLink, onRemo
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                        className="relative w-full max-w-2xl bg-[#121215] border border-white/10 rounded-2xl shadow-2xl overflow-hidden p-6 z-10 flex flex-col max-h-[85vh]"
+                        className="relative w-full max-w-2xl bg-[#0a0a0a] border border-white/[0.06] rounded-2xl shadow-2xl overflow-hidden p-6 z-10 flex flex-col max-h-[85vh]"
                         onClick={(e) => e.stopPropagation()}
                     >
                         {/* Header */}
-                        <div className="flex justify-between items-center pb-4 border-b border-white/10 mb-5 shrink-0">
+                        <div className="flex justify-between items-center pb-4 border-b border-white/[0.06] mb-5 shrink-0">
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-[#534AB7]/20 border border-[#534AB7]/30 flex items-center justify-center text-[#A7A0F8]">
+                                <div className="w-10 h-10 rounded-xl bg-[#000000] border border-white/[0.08] flex items-center justify-center text-white shadow-sm">
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                                    <h3 className="text-lg font-bold text-white flex items-center gap-2 tracking-tight">
                                         Project Links
-                                        <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-white/10 text-zinc-300 border border-white/10">
+                                        <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#000000] text-zinc-300 border border-white/[0.08]">
                                             {links.length}
                                         </span>
                                     </h3>
@@ -139,7 +139,7 @@ const ProjectLinksModal = ({ isOpen, onClose, project, myRole, onAddLink, onRemo
                                 {!isAdding ? (
                                     <button
                                         onClick={() => setIsAdding(true)}
-                                        className="bg-[#534AB7] hover:bg-[#6F64E6] text-white text-xs font-bold px-3.5 py-2 rounded-xl transition-all shadow-md hover:scale-105 active:scale-95 flex items-center gap-1.5"
+                                        className="bg-white hover:bg-zinc-200 text-black text-xs font-bold px-3.5 py-2 rounded-xl transition-all shadow-[0_0_15px_rgba(255,255,255,0.1)] active:scale-95 flex items-center gap-1.5"
                                     >
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 4v16m8-8H4" /></svg>
                                         Add Link
@@ -147,7 +147,7 @@ const ProjectLinksModal = ({ isOpen, onClose, project, myRole, onAddLink, onRemo
                                 ) : (
                                     <button
                                         onClick={() => { setIsAdding(false); setError(''); }}
-                                        className="bg-white/10 hover:bg-white/20 text-zinc-300 text-xs font-semibold px-3 py-1.5 rounded-xl transition-colors flex items-center gap-1"
+                                        className="bg-[#000000] hover:bg-white/[0.05] border border-white/[0.06] text-zinc-300 text-xs font-semibold px-3 py-1.5 rounded-xl transition-colors flex items-center gap-1"
                                     >
                                         ← View Links
                                     </button>
@@ -168,7 +168,7 @@ const ProjectLinksModal = ({ isOpen, onClose, project, myRole, onAddLink, onRemo
                         <div className="overflow-y-auto flex-1 pr-1 space-y-4">
                             {isAdding ? (
                                 <form onSubmit={handleSubmit} className="space-y-4 pt-1">
-                                    <div className="text-sm font-bold text-white mb-2">Create a New Resource Link</div>
+                                    <div className="text-sm font-bold text-white mb-2 tracking-tight">Create a New Resource Link</div>
                                     
                                     {error && (
                                         <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-3 text-xs text-red-400 font-medium flex items-center gap-2">
@@ -189,7 +189,7 @@ const ProjectLinksModal = ({ isOpen, onClose, project, myRole, onAddLink, onRemo
                                                         key={cat.id}
                                                         onClick={() => setCategory(cat.id)}
                                                         className={`p-3 rounded-xl border cursor-pointer transition-all flex items-center gap-3.5 ${
-                                                            isSelected ? cat.activeColor : 'border-white/10 bg-white/[0.02] hover:bg-white/5'
+                                                            isSelected ? 'border-white/[0.3] bg-white/[0.05] shadow-md' : 'border-white/[0.06] bg-[#000000] hover:bg-white/[0.02]'
                                                         }`}
                                                     >
                                                         <div className={`w-8 h-8 rounded-lg border ${cat.borderColor} ${cat.bgColor} flex items-center justify-center shrink-0`}>
@@ -219,7 +219,7 @@ const ProjectLinksModal = ({ isOpen, onClose, project, myRole, onAddLink, onRemo
                                             value={title}
                                             onChange={(e) => setTitle(e.target.value)}
                                             placeholder="e.g., GitHub Frontend Repo, Live Production App"
-                                            className="w-full bg-[#09090B] border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-[#534AB7] transition-colors"
+                                            className="w-full bg-[#000000] border border-white/[0.06] rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-white/[0.2] transition-colors"
                                             required
                                         />
                                     </div>
@@ -235,27 +235,27 @@ const ProjectLinksModal = ({ isOpen, onClose, project, myRole, onAddLink, onRemo
                                                 value={url.replace(/^https?:\/\//i, '')}
                                                 onChange={(e) => setUrl(e.target.value)}
                                                 placeholder="github.com/vineet/project"
-                                                className="w-full bg-[#09090B] border border-white/10 rounded-xl pl-20 pr-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-[#534AB7] transition-colors font-mono"
+                                                className="w-full bg-[#000000] border border-white/[0.06] rounded-xl pl-20 pr-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-white/[0.2] transition-colors font-mono"
                                                 required
                                             />
                                         </div>
                                     </div>
 
-                                    <div className="flex justify-end gap-3 pt-3 border-t border-white/10">
+                                    <div className="flex justify-end gap-3 pt-3 border-t border-white/[0.06]">
                                         <button
                                             type="button"
                                             onClick={() => setIsAdding(false)}
                                             disabled={loading}
-                                            className="px-4 py-2.5 bg-white/5 hover:bg-white/10 text-zinc-300 rounded-xl text-sm font-semibold transition-colors"
+                                            className="px-5 py-2.5 bg-[#000000] hover:bg-white/[0.05] border border-white/[0.06] text-zinc-300 rounded-xl text-sm font-semibold transition-colors"
                                         >
                                             Cancel
                                         </button>
                                         <button
                                             type="submit"
                                             disabled={loading}
-                                            className="px-6 py-2.5 bg-[#534AB7] hover:bg-[#6F64E6] text-white rounded-xl text-sm font-bold transition-all shadow-[0_0_20px_rgba(83,74,183,0.3)] disabled:opacity-50 flex items-center gap-2"
+                                            className="px-6 py-2.5 bg-white hover:bg-zinc-200 text-black rounded-xl text-sm font-bold transition-all shadow-[0_0_15px_rgba(255,255,255,0.15)] disabled:opacity-40 flex items-center gap-2 active:scale-95"
                                         >
-                                            {loading && <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>}
+                                            {loading && <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-black" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>}
                                             {loading ? 'Saving...' : 'Save Link'}
                                         </button>
                                     </div>
@@ -263,8 +263,8 @@ const ProjectLinksModal = ({ isOpen, onClose, project, myRole, onAddLink, onRemo
                             ) : (
                                 <>
                                     {links.length === 0 ? (
-                                        <div className="bg-white/[0.015] border border-dashed border-white/10 rounded-2xl p-10 text-center flex flex-col items-center justify-center my-2">
-                                            <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-500 mb-3">
+                                        <div className="bg-[#000000] border border-dashed border-white/[0.08] rounded-2xl p-10 text-center flex flex-col items-center justify-center my-2">
+                                            <div className="w-12 h-12 rounded-full bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-zinc-500 mb-3">
                                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
                                             </div>
                                             <div className="text-sm font-bold text-white mb-1">No links added yet</div>
@@ -273,7 +273,7 @@ const ProjectLinksModal = ({ isOpen, onClose, project, myRole, onAddLink, onRemo
                                             </p>
                                             <button
                                                 onClick={() => setIsAdding(true)}
-                                                className="bg-[#534AB7] hover:bg-[#6F64E6] text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-md hover:scale-105 active:scale-95 flex items-center gap-2"
+                                                className="bg-white hover:bg-zinc-200 text-black text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-[0_0_15px_rgba(255,255,255,0.1)] active:scale-95 flex items-center gap-2"
                                             >
                                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" /></svg>
                                                 Add First Link
@@ -286,7 +286,7 @@ const ProjectLinksModal = ({ isOpen, onClose, project, myRole, onAddLink, onRemo
                                                 return (
                                                     <div
                                                         key={idx}
-                                                        className="group bg-[#09090B] hover:bg-white/[0.03] border border-white/10 hover:border-[#534AB7]/50 rounded-xl p-4 transition-all flex flex-col justify-between relative shadow-sm"
+                                                        className="group bg-[#000000] hover:bg-white/[0.03] border border-white/[0.06] hover:border-white/[0.15] rounded-xl p-4 transition-all flex flex-col justify-between relative shadow-sm"
                                                     >
                                                         <div>
                                                             <div className="flex items-center justify-between gap-2 mb-2.5">
@@ -298,13 +298,13 @@ const ProjectLinksModal = ({ isOpen, onClose, project, myRole, onAddLink, onRemo
                                                                     <button
                                                                         onClick={() => onRemoveLink(idx)}
                                                                         title="Remove link"
-                                                                        className="text-zinc-500 hover:text-red-400 transition-colors p-1 rounded hover:bg-white/5"
+                                                                        className="text-zinc-500 hover:text-red-400 transition-colors p-1 rounded hover:bg-white/[0.05]"
                                                                     >
                                                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                                                                     </button>
                                                                 )}
                                                             </div>
-                                                            <div className="text-base font-bold text-white group-hover:text-[#A7A0F8] transition-colors flex items-center gap-1.5 mb-1">
+                                                            <div className="text-base font-bold text-white group-hover:text-zinc-200 transition-colors flex items-center gap-1.5 mb-1">
                                                                 <span className="truncate">{link.title}</span>
                                                             </div>
                                                         </div>
@@ -313,7 +313,7 @@ const ProjectLinksModal = ({ isOpen, onClose, project, myRole, onAddLink, onRemo
                                                             href={link.url}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
-                                                            className="mt-3 pt-2.5 border-t border-white/5 flex items-center justify-between text-xs font-mono text-zinc-400 hover:text-white transition-colors"
+                                                            className="mt-3 pt-2.5 border-t border-white/[0.05] flex items-center justify-between text-xs font-mono text-zinc-400 hover:text-white transition-colors"
                                                         >
                                                             <span className="truncate max-w-[200px]">{link.url.replace(/^https?:\/\//i, '')}</span>
                                                             <svg className="w-3.5 h-3.5 shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>

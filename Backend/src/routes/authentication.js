@@ -61,6 +61,8 @@ authRouter.post("/auth/signup", async (req, res) => {
 
         });
 
+
+
         let rate = Math.floor(Math.random() * 100);
         if (rate < 12.5) {
             user.photoUrl.url = "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778848890/robo6_qerfgw.jpg";

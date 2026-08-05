@@ -93,18 +93,18 @@ const AddLinkModal = ({ isOpen, onClose, onAddLink, loading }) => {
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                        className="relative w-full max-w-lg bg-[#121215] border border-white/10 rounded-2xl shadow-2xl overflow-hidden p-6 z-10"
+                        className="relative w-full max-w-lg bg-[#0a0a0a] border border-white/[0.06] rounded-2xl shadow-2xl overflow-hidden p-6 z-10"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="flex justify-between items-center pb-4 border-b border-white/10 mb-5">
+                        <div className="flex justify-between items-center pb-4 border-b border-white/[0.06] mb-5">
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-[#534AB7]/20 border border-[#534AB7]/30 flex items-center justify-center text-[#A7A0F8]">
+                                <div className="w-10 h-10 rounded-xl bg-[#000000] border border-white/[0.08] flex items-center justify-center text-white shadow-sm">
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-bold text-white">Add Project Link</h3>
+                                    <h3 className="text-lg font-bold text-white tracking-tight">Add Project Link</h3>
                                     <p className="text-xs text-zinc-400">Attach repositories, live demos, or community pages.</p>
                                 </div>
                             </div>
@@ -139,7 +139,7 @@ const AddLinkModal = ({ isOpen, onClose, onAddLink, loading }) => {
                                                 key={cat.id}
                                                 onClick={() => setCategory(cat.id)}
                                                 className={`p-3.5 rounded-xl border cursor-pointer transition-all flex items-center gap-3.5 ${
-                                                    isSelected ? cat.activeColor : 'border-white/10 bg-white/[0.02] hover:bg-white/5'
+                                                    isSelected ? 'border-white/[0.3] bg-white/[0.05] shadow-md' : 'border-white/[0.06] bg-[#000000] hover:bg-white/[0.02]'
                                                 }`}
                                             >
                                                 <div className={`w-9 h-9 rounded-lg border ${cat.borderColor} ${cat.bgColor} flex items-center justify-center shrink-0`}>
@@ -169,7 +169,7 @@ const AddLinkModal = ({ isOpen, onClose, onAddLink, loading }) => {
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
                                     placeholder="e.g., GitHub Frontend Repo or Live Production Web"
-                                    className="w-full bg-[#09090B] border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-[#534AB7] transition-colors"
+                                    className="w-full bg-[#000000] border border-white/[0.06] rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-white/[0.2] transition-colors"
                                     required
                                 />
                             </div>
@@ -185,27 +185,27 @@ const AddLinkModal = ({ isOpen, onClose, onAddLink, loading }) => {
                                         value={url.replace(/^https?:\/\//i, '')}
                                         onChange={(e) => setUrl(e.target.value)}
                                         placeholder="github.com/vineet/project"
-                                        className="w-full bg-[#09090B] border border-white/10 rounded-xl pl-20 pr-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-[#534AB7] transition-colors font-mono"
+                                        className="w-full bg-[#000000] border border-white/[0.06] rounded-xl pl-20 pr-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-white/[0.2] transition-colors font-mono"
                                         required
                                     />
                                 </div>
                             </div>
 
-                            <div className="flex justify-end gap-3 pt-3 border-t border-white/10">
+                            <div className="flex justify-end gap-3 pt-3 border-t border-white/[0.06]">
                                 <button
                                     type="button"
                                     onClick={onClose}
                                     disabled={loading}
-                                    className="px-4 py-2.5 bg-white/5 hover:bg-white/10 text-zinc-300 rounded-xl text-sm font-semibold transition-colors"
+                                    className="px-5 py-2.5 bg-[#000000] hover:bg-white/[0.05] border border-white/[0.06] text-zinc-300 rounded-xl text-sm font-semibold transition-colors"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="px-6 py-2.5 bg-[#534AB7] hover:bg-[#6F64E6] text-white rounded-xl text-sm font-bold transition-all shadow-[0_0_20px_rgba(83,74,183,0.3)] disabled:opacity-50 flex items-center gap-2"
+                                    className="px-6 py-2.5 bg-white hover:bg-zinc-200 text-black rounded-xl text-sm font-bold transition-all shadow-[0_0_15px_rgba(255,255,255,0.15)] disabled:opacity-40 flex items-center gap-2 active:scale-95"
                                 >
-                                    {loading && <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>}
+                                    {loading && <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-black" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>}
                                     {loading ? 'Adding Link...' : 'Save Link'}
                                 </button>
                             </div>

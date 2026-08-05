@@ -158,9 +158,10 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
 
     const getStatusColor = (status) => {
         switch (status) {
+            case 'open': return 'bg-[#000000] text-zinc-300 border-white/[0.08]';
             case 'in_progress': return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
-            case 'done': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
-            default: return 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20';
+            case 'done': return 'bg-white/[0.08] text-white border-white/[0.12]';
+            default: return 'bg-[#000000] text-zinc-400 border-white/[0.06]';
         }
     };
 
@@ -168,9 +169,9 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
         switch (priority) {
             case 'urgent': return 'bg-red-500/10 text-red-400 border-red-500/20';
             case 'high': return 'bg-orange-500/10 text-orange-400 border-orange-500/20';
-            case 'medium': return 'bg-[#534AB7]/20 text-[#A7A0F8] border-[#534AB7]/30';
-            case 'low': return 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20';
-            default: return 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20';
+            case 'medium': return 'bg-white/[0.06] text-zinc-300 border-white/[0.08]';
+            case 'low': return 'bg-[#000000] text-zinc-400 border-white/[0.06]';
+            default: return 'bg-[#000000] text-zinc-400 border-white/[0.06]';
         }
     };
 
@@ -178,8 +179,8 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
     const canDelete = myRole === 'leader' || myRole === 'admin';
 
     return (
-        <div className="bg-[#121215] border border-white/10 rounded-2xl p-6 relative animate-in fade-in slide-in-from-bottom-4 duration-300">
-            <button onClick={onBack} className="text-zinc-500 hover:text-white flex items-center gap-2 text-sm mb-6 transition-colors">
+        <div className="bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 sm:p-8 relative animate-in fade-in slide-in-from-bottom-4 duration-300 shadow-xl">
+            <button onClick={onBack} className="text-zinc-500 hover:text-white flex items-center gap-2 text-sm mb-6 transition-colors font-semibold">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m15 18l-6-6l6-6" /></svg>
                 Back to Issues
             </button>
@@ -188,7 +189,7 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                 <button
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                     title="Issue Options"
-                    className="p-2 text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl transition-colors border border-white/5 flex items-center justify-center"
+                    className="p-2.5 text-zinc-400 hover:text-white bg-[#000000] hover:bg-white/[0.05] rounded-xl transition-colors border border-white/[0.06] flex items-center justify-center shadow-sm"
                 >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
@@ -196,13 +197,13 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                 </button>
 
                 {isMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-52 bg-[#121215] border border-white/10 rounded-xl shadow-2xl py-2 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+                    <div className="absolute right-0 mt-2 w-52 bg-[#0a0a0a] border border-white/[0.08] rounded-xl shadow-2xl py-2 overflow-hidden animate-in fade-in zoom-in-95 duration-150 z-30">
                         <button
                             onClick={() => { setIsMenuOpen(false); setIsLinkModalOpen(true); }}
-                            className="w-full text-left px-4 py-2.5 text-xs font-bold text-white hover:bg-white/5 flex items-center justify-between transition-colors"
+                            className="w-full text-left px-4 py-2.5 text-xs font-bold text-white hover:bg-white/[0.05] flex items-center justify-between transition-colors"
                         >
                             <span className="flex items-center gap-2.5">
-                                <svg className="w-4 h-4 text-[#A7A0F8] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
+                                <svg className="w-4 h-4 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
                                 Issue Links
                             </span>
                             <span className="text-[10px] bg-white/10 px-2 py-0.5 rounded-full font-semibold text-zinc-300">
@@ -210,7 +211,7 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                             </span>
                         </button>
                         {(canArchive || canDelete) && (
-                            <div className="border-t border-white/10 my-1" />
+                            <div className="border-t border-white/[0.06] my-1" />
                         )}
                         {canArchive && (
                             <button
@@ -240,19 +241,19 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                         type="text"
                         value={editData.title}
                         onChange={e => setEditData({ ...editData, title: e.target.value })}
-                        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white font-bold text-xl"
+                        className="w-full bg-[#000000] border border-white/[0.08] rounded-xl px-4 py-2.5 text-white font-bold text-xl focus:outline-none focus:border-white/[0.2] transition-colors"
                     />
                     <textarea
                         value={editData.description}
                         onChange={e => setEditData({ ...editData, description: e.target.value })}
                         rows={4}
-                        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm resize-none"
+                        className="w-full bg-[#000000] border border-white/[0.08] rounded-xl px-4 py-2.5 text-white text-sm resize-none focus:outline-none focus:border-white/[0.2] transition-colors"
                     />
-                    <div className="flex gap-4">
+                    <div className="flex gap-3">
                         <select
                             value={editData.status}
                             onChange={e => setEditData({ ...editData, status: e.target.value })}
-                            className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm"
+                            className="bg-[#000000] border border-white/[0.08] rounded-xl px-3.5 py-2 text-white text-sm font-semibold focus:outline-none focus:border-white/[0.2] transition-colors"
                         >
                             <option value="open">Open</option>
                             <option value="in_progress">In Progress</option>
@@ -261,7 +262,7 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                         <select
                             value={editData.priority}
                             onChange={e => setEditData({ ...editData, priority: e.target.value })}
-                            className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm"
+                            className="bg-[#000000] border border-white/[0.08] rounded-xl px-3.5 py-2 text-white text-sm font-semibold focus:outline-none focus:border-white/[0.2] transition-colors"
                         >
                             <option value="low">Low</option>
                             <option value="medium">Medium</option>
@@ -269,11 +270,11 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                             <option value="urgent">Urgent</option>
                         </select>
                     </div>
-                    <div className="flex gap-2">
-                        <button onClick={handleSave} disabled={saving} className="bg-[#534AB7] hover:bg-[#6F64E6] text-white px-4 py-2 rounded-lg text-sm">
-                            {saving ? 'Saving...' : 'Save'}
+                    <div className="flex gap-2 pt-2">
+                        <button onClick={handleSave} disabled={saving} className="bg-white hover:bg-zinc-200 text-black font-bold px-5 py-2 rounded-xl text-sm transition-all shadow-[0_0_15px_rgba(255,255,255,0.15)] active:scale-95">
+                            {saving ? 'Saving...' : 'Save Changes'}
                         </button>
-                        <button onClick={() => setIsEditing(false)} className="bg-white/5 hover:bg-white/10 text-white px-4 py-2 rounded-lg text-sm">
+                        <button onClick={() => setIsEditing(false)} className="bg-[#000000] hover:bg-white/[0.05] border border-white/[0.06] text-zinc-300 font-semibold px-4 py-2 rounded-xl text-sm transition-colors">
                             Cancel
                         </button>
                     </div>
@@ -283,18 +284,18 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                     <div className="mb-4">
                         {getTypeIcon(issue.type)}
                     </div>
-                    <div className="flex items-center gap-3 mb-2">
-                        <h2 className="text-2xl font-bold text-white">{issue.title}</h2>
-                        <button onClick={() => setIsEditing(true)} className="text-zinc-500 hover:text-white transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75zM20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83l3.75 3.75z" /></svg>
+                    <div className="flex items-center gap-3 mb-3">
+                        <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">{issue.title}</h2>
+                        <button onClick={() => setIsEditing(true)} className="text-zinc-500 hover:text-white transition-colors p-1 rounded hover:bg-white/[0.05]" title="Edit Issue">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75zM20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83l3.75 3.75z" /></svg>
                         </button>
                     </div>
 
-                    <div className="flex items-center gap-2 mb-6">
-                        <span className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded border ${getStatusColor(issue.status)}`}>
+                    <div className="flex items-center gap-2.5 mb-8">
+                        <span className={`text-[11px] uppercase tracking-wider font-extrabold px-3 py-1 rounded-lg border ${getStatusColor(issue.status)}`}>
                             {issue.status.replace('_', ' ')}
                         </span>
-                        <span className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded border ${getPriorityColor(issue.priority)}`}>
+                        <span className={`text-[11px] uppercase tracking-wider font-extrabold px-3 py-1 rounded-lg border ${getPriorityColor(issue.priority)}`}>
                             {issue.priority}
                         </span>
                     </div>
@@ -303,37 +304,37 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                         <TimerWidget teamId={teamId} issueId={issueId} issueTitle={issue.title} inline={true} />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-4 border-t border-white/[0.06]">
                         <div className="md:col-span-2">
-                            <h3 className="text-sm font-bold text-zinc-400 uppercase tracking-wider mb-2">Description</h3>
-                            <p className="text-sm text-zinc-300 whitespace-pre-wrap">
-                                {issue.description || "No description provided."}
-                            </p>
+                            <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2.5">Description</h3>
+                            <div className="bg-[#000000] border border-white/[0.05] rounded-xl p-5 text-sm text-zinc-300 whitespace-pre-wrap leading-relaxed min-h-[120px]">
+                                {issue.description || <span className="text-zinc-600 italic">No description provided for this issue.</span>}
+                            </div>
                         </div>
                         <div>
-                            <h3 className="text-sm font-bold text-zinc-400 uppercase tracking-wider mb-3">Assignment</h3>
+                            <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2.5">Assignment</h3>
                             
                             {issue.assignedTo ? (
-                                <div className="bg-white/5 border border-white/10 rounded-lg p-4">
-                                    <div className="flex items-center gap-3 mb-3">
-                                        <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center overflow-hidden shrink-0">
+                                <div className="bg-[#000000] border border-white/[0.06] rounded-xl p-5 shadow-sm">
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center overflow-hidden shrink-0 border border-white/10">
                                             {issue.assignedTo.photoUrl?.url && issue.assignedTo.photoUrl.url !== "https://geographyandyou.com/images/user-profile.png" ? (
                                                 <img src={issue.assignedTo.photoUrl.url} alt={issue.assignedTo.firstName} className="w-full h-full object-cover" />
                                             ) : (
                                                 <span className="text-xs font-bold text-white">{issue.assignedTo.firstName?.charAt(0).toUpperCase()}{issue.assignedTo.lastName?.charAt(0).toUpperCase()}</span>
                                             )}
                                         </div>
-                                        <div>
-                                            <div className="text-sm font-medium text-white">{issue.assignedTo.firstName} {issue.assignedTo.lastName}</div>
-                                            <AssignmentBadge source={issue.assignmentSource} />
+                                        <div className="min-w-0">
+                                            <div className="text-sm font-bold text-white truncate">{issue.assignedTo.firstName} {issue.assignedTo.lastName}</div>
+                                            <div className="mt-1"><AssignmentBadge source={issue.assignmentSource} /></div>
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-2 pt-3 border-t border-white/[0.06]">
                                         {String(issue.assignedTo._id) === String(user._id) && (
                                             <button 
                                                 onClick={handleUnclaim}
-                                                className="text-xs font-medium text-zinc-400 hover:text-red-400 transition-colors px-3 py-1.5 rounded hover:bg-white/5 w-full text-center border border-transparent hover:border-red-400/20"
+                                                className="text-xs font-semibold text-zinc-400 hover:text-red-400 transition-colors px-3 py-1.5 rounded-lg hover:bg-white/[0.05] w-full text-center border border-transparent hover:border-red-400/20"
                                             >
                                                 Unclaim Issue
                                             </button>
@@ -351,22 +352,23 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                                     </div>
                                 </div>
                             ) : (
-                                <div className="bg-white/5 border border-white/10 rounded-lg p-4 text-center">
-                                    <div className="w-10 h-10 mx-auto rounded-full border-2 border-dashed border-zinc-600 flex items-center justify-center mb-3">
-                                        <span className="text-zinc-500">?</span>
+                                <div className="bg-[#000000] border border-dashed border-white/[0.08] rounded-xl p-6 text-center">
+                                    <div className="w-10 h-10 mx-auto rounded-full bg-white/[0.03] border border-white/[0.08] flex items-center justify-center mb-2.5">
+                                        <span className="text-zinc-400 text-sm font-bold">?</span>
                                     </div>
-                                    <div className="text-sm font-medium text-zinc-300 mb-4">Unassigned</div>
+                                    <div className="text-sm font-bold text-zinc-300 mb-1">Unassigned</div>
+                                    <p className="text-xs text-zinc-500 mb-4">No team member is currently taking ownership of this task.</p>
                                     
-                                    <div className="flex flex-col gap-2">
+                                    <div className="flex flex-col gap-2.5">
                                         <button 
                                             onClick={handleClaim}
-                                            className="w-full text-sm font-medium text-[#A7A0F8] hover:text-white border border-[#534AB7] hover:bg-[#534AB7] transition-colors px-4 py-2 rounded-lg"
+                                            className="w-full text-sm font-bold text-white hover:text-black bg-white/10 hover:bg-white border border-white/20 transition-all px-4 py-2.5 rounded-xl shadow-sm active:scale-95"
                                         >
                                             Claim this Issue
                                         </button>
                                         
                                         {(myRole === 'leader' || myRole === 'admin') && (
-                                            <div className="mt-2">
+                                            <div className="mt-1">
                                                 <AssignIssueDropdown 
                                                     teamId={teamId} 
                                                     issueId={issue._id} 

@@ -61,13 +61,12 @@ const CreateProjectModal = ({ isOpen, onClose, teamId, availableTeams = [], onSu
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                        className="relative w-full max-w-md bg-[#09090B] border border-white/10 rounded-2xl p-6 shadow-2xl overflow-hidden"
+                        className="relative w-full max-w-md bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 shadow-2xl overflow-hidden"
                     >
-                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#534AB7] to-[#A7A0F8] opacity-80" />
+                        <div className="absolute top-0 left-0 right-0 h-px bg-white/20" />
 
                         <h2 className="text-2xl font-bold text-white mb-2 font-sans tracking-tight">Create a Project</h2>
                         <p className="text-sm text-zinc-400 mb-6">Define a new initiative for your team.</p>
-
                         <form onSubmit={handleSubmit} className="space-y-4">
                             {!teamId && availableTeams.length > 0 && (
                                 <div>
@@ -75,7 +74,7 @@ const CreateProjectModal = ({ isOpen, onClose, teamId, availableTeams = [], onSu
                                     <select
                                         value={selectedTeamId}
                                         onChange={(e) => setSelectedTeamId(e.target.value)}
-                                        className="w-full bg-[#09090B] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#534AB7] focus:ring-1 focus:ring-[#534AB7] transition-all"
+                                        className="w-full bg-[#000000] border border-white/[0.06] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white/[0.2] transition-all"
                                         required
                                     >
                                         {availableTeams.map((t) => (
@@ -96,7 +95,7 @@ const CreateProjectModal = ({ isOpen, onClose, teamId, availableTeams = [], onSu
                                     onChange={(e) => setTitle(e.target.value)}
                                     maxLength={100}
                                     placeholder="e.g. Website Redesign"
-                                    className="w-full bg-[#09090B] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:border-[#534AB7] focus:ring-1 focus:ring-[#534AB7] transition-all"
+                                    className="w-full bg-[#000000] border border-white/[0.06] rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:border-white/[0.2] transition-all"
                                 />
                             </div>
 
@@ -108,7 +107,7 @@ const CreateProjectModal = ({ isOpen, onClose, teamId, availableTeams = [], onSu
                                     maxLength={1000}
                                     placeholder="What are the goals of this project?"
                                     rows={3}
-                                    className="w-full bg-[#09090B] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:border-[#534AB7] focus:ring-1 focus:ring-[#534AB7] transition-all resize-none"
+                                    className="w-full bg-[#000000] border border-white/[0.06] rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:border-white/[0.2] transition-all resize-none"
                                 />
                             </div>
 
@@ -118,7 +117,7 @@ const CreateProjectModal = ({ isOpen, onClose, teamId, availableTeams = [], onSu
                                     <select
                                         value={status}
                                         onChange={(e) => setStatus(e.target.value)}
-                                        className="w-full bg-[#09090B] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#534AB7] focus:ring-1 focus:ring-[#534AB7] transition-all"
+                                        className="w-full bg-[#000000] border border-white/[0.06] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white/[0.2] transition-all"
                                     >
                                         <option value="planning">Planning</option>
                                         <option value="active">Active</option>
@@ -131,7 +130,7 @@ const CreateProjectModal = ({ isOpen, onClose, teamId, availableTeams = [], onSu
                                     <select
                                         value={priority}
                                         onChange={(e) => setPriority(e.target.value)}
-                                        className="w-full bg-[#09090B] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#534AB7] focus:ring-1 focus:ring-[#534AB7] transition-all"
+                                        className="w-full bg-[#000000] border border-white/[0.06] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white/[0.2] transition-all"
                                     >
                                         <option value="low">Low</option>
                                         <option value="medium">Medium</option>
@@ -151,14 +150,14 @@ const CreateProjectModal = ({ isOpen, onClose, teamId, availableTeams = [], onSu
                                 <button
                                     type="button"
                                     onClick={onClose}
-                                    className="flex-1 bg-white/5 hover:bg-white/10 text-white font-medium py-3 px-4 rounded-xl transition-colors border border-white/5"
+                                    className="flex-1 bg-[#000000] hover:bg-white/[0.05] text-zinc-300 font-semibold py-3 px-4 rounded-xl transition-colors border border-white/[0.06]"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
                                     disabled={loading || !title.trim()}
-                                    className="flex-1 bg-gradient-to-r from-[#534AB7] to-[#8075FF] hover:from-[#433B9B] hover:to-[#6F64E6] text-white font-medium py-3 px-4 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(83,74,183,0.3)]"
+                                    className="flex-1 bg-white hover:bg-zinc-200 text-black font-bold py-3 px-4 rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(255,255,255,0.15)] active:scale-95"
                                 >
                                     {loading ? 'Creating...' : 'Create Project'}
                                 </button>

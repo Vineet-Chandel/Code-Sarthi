@@ -47,9 +47,9 @@ const CreateIssueModal = ({ isOpen, onClose, teamId, projectId, onSuccess }) => 
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                        className="relative w-full max-w-md bg-[#09090B] border border-white/10 rounded-2xl p-6 shadow-2xl overflow-hidden"
+                        className="relative w-full max-w-md bg-[#0a0a0a] border border-white/[0.06] rounded-2xl p-6 shadow-2xl overflow-hidden"
                     >
-                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#534AB7] to-[#A7A0F8] opacity-80" />
+                        <div className="absolute top-0 left-0 right-0 h-px bg-white/20" />
 
                         <h2 className="text-2xl font-bold text-white mb-2 font-sans tracking-tight">Create Issue</h2>
                         <p className="text-sm text-zinc-400 mb-6">Log a bug, propose a feature, or track a task.</p>
@@ -59,15 +59,15 @@ const CreateIssueModal = ({ isOpen, onClose, teamId, projectId, onSuccess }) => 
                             {/* Segmented Control for Type */}
                             <div>
                                 <label className="block text-xs font-medium text-zinc-400 uppercase tracking-wider mb-1.5">Type *</label>
-                                <div className="flex bg-white/5 border border-white/10 rounded-xl p-1">
+                                <div className="flex bg-[#000000] border border-white/[0.06] rounded-xl p-1 gap-1">
                                     {['issue', 'feature', 'problem'].map(t => (
                                         <button
                                             key={t}
                                             type="button"
                                             onClick={() => setType(t)}
-                                            className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all capitalize ${type === t
-                                                    ? 'bg-[#534AB7] text-white shadow-sm'
-                                                    : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                                            className={`flex-1 py-2 text-sm rounded-lg transition-all capitalize font-semibold ${type === t
+                                                    ? 'bg-white/[0.12] text-white shadow-sm'
+                                                    : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.03]'
                                                 }`}
                                         >
                                             {t}
@@ -85,7 +85,7 @@ const CreateIssueModal = ({ isOpen, onClose, teamId, projectId, onSuccess }) => 
                                     onChange={(e) => setTitle(e.target.value)}
                                     maxLength={150}
                                     placeholder="Brief summary..."
-                                    className="w-full bg-[#09090B] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:border-[#534AB7] focus:ring-1 focus:ring-[#534AB7] transition-all"
+                                    className="w-full bg-[#000000] border border-white/[0.06] rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:border-white/[0.2] transition-all"
                                 />
                             </div>
 
@@ -97,7 +97,7 @@ const CreateIssueModal = ({ isOpen, onClose, teamId, projectId, onSuccess }) => 
                                     maxLength={2000}
                                     placeholder="Provide more details..."
                                     rows={4}
-                                    className="w-full bg-[#09090B] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:border-[#534AB7] focus:ring-1 focus:ring-[#534AB7] transition-all resize-none"
+                                    className="w-full bg-[#000000] border border-white/[0.06] rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:border-white/[0.2] transition-all resize-none"
                                 />
                             </div>
 
@@ -106,7 +106,7 @@ const CreateIssueModal = ({ isOpen, onClose, teamId, projectId, onSuccess }) => 
                                 <select
                                     value={priority}
                                     onChange={(e) => setPriority(e.target.value)}
-                                    className="w-full bg-[#09090B] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#534AB7] focus:ring-1 focus:ring-[#534AB7] transition-all"
+                                    className="w-full bg-[#000000] border border-white/[0.06] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white/[0.2] transition-all"
                                 >
                                     <option value="low">Low</option>
                                     <option value="medium">Medium</option>
@@ -125,14 +125,14 @@ const CreateIssueModal = ({ isOpen, onClose, teamId, projectId, onSuccess }) => 
                                 <button
                                     type="button"
                                     onClick={onClose}
-                                    className="flex-1 bg-white/5 hover:bg-white/10 text-white font-medium py-3 px-4 rounded-xl transition-colors border border-white/5"
+                                    className="flex-1 bg-[#000000] hover:bg-white/[0.05] border border-white/[0.06] text-zinc-300 font-semibold py-3 px-4 rounded-xl transition-colors"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
                                     disabled={loading || !title.trim()}
-                                    className="flex-1 bg-gradient-to-r from-[#534AB7] to-[#8075FF] hover:from-[#433B9B] hover:to-[#6F64E6] text-white font-medium py-3 px-4 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(83,74,183,0.3)]"
+                                    className="flex-1 bg-white hover:bg-zinc-200 text-black font-bold py-3 px-4 rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(255,255,255,0.15)] active:scale-95"
                                 >
                                     {loading ? 'Creating...' : 'Create'}
                                 </button>

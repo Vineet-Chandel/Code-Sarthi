@@ -155,11 +155,11 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
 
     const getStatusColor = (status) => {
         switch (status) {
-            case 'planning': return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+            case 'planning': return 'bg-[#000000] text-zinc-300 border-white/[0.08]';
             case 'active': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
             case 'on_hold': return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
-            case 'completed': return 'bg-purple-500/10 text-purple-400 border-purple-500/20';
-            default: return 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20';
+            case 'completed': return 'bg-white/[0.08] text-white border-white/[0.12]';
+            default: return 'bg-[#000000] text-zinc-400 border-white/[0.06]';
         }
     };
 
@@ -167,25 +167,25 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
         switch (priority) {
             case 'urgent': return 'bg-red-500/10 text-red-400 border-red-500/20';
             case 'high': return 'bg-orange-500/10 text-orange-400 border-orange-500/20';
-            case 'medium': return 'bg-[#534AB7]/20 text-[#A7A0F8] border-[#534AB7]/30';
-            case 'low': return 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20';
-            default: return 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20';
+            case 'medium': return 'bg-white/[0.06] text-zinc-300 border-white/[0.08]';
+            case 'low': return 'bg-[#000000] text-zinc-400 border-white/[0.06]';
+            default: return 'bg-[#000000] text-zinc-400 border-white/[0.06]';
         }
     };
 
     return (
         <div className="space-y-6">
-            <button onClick={onBack} className="text-zinc-500 hover:text-white flex items-center gap-2 text-sm transition-colors">
+            <button onClick={onBack} className="text-zinc-400 hover:text-white flex items-center gap-2 text-sm font-semibold transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m15 18l-6-6l6-6" /></svg>
                 Back to Projects
             </button>
 
-            <div className="bg-[#09090B] border border-white/10 rounded-2xl p-6 relative">
+            <div className="bg-[#0a0a0a] border border-white/[0.05] rounded-2xl p-6 relative shadow-lg">
                 <div className="absolute top-6 right-6 z-20" ref={menuRef}>
                     <button
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
                         title="Project Options"
-                        className="p-2 text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl transition-colors border border-white/5 flex items-center justify-center"
+                        className="p-2 text-zinc-400 hover:text-white bg-[#000000] hover:bg-white/[0.05] rounded-xl transition-colors border border-white/[0.06] flex items-center justify-center"
                     >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
@@ -193,22 +193,22 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
                     </button>
 
                     {isMenuOpen && (
-                        <div className="absolute right-0 mt-2 w-52 bg-[#121215] border border-white/10 rounded-xl shadow-2xl py-2 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+                        <div className="absolute right-0 mt-2 w-52 bg-[#0a0a0a] border border-white/[0.08] rounded-xl shadow-2xl py-2 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
                             <button
                                 onClick={() => { setIsMenuOpen(false); setIsLinkModalOpen(true); }}
-                                className="w-full text-left px-4 py-2.5 text-xs font-bold text-white hover:bg-white/5 flex items-center justify-between transition-colors"
+                                className="w-full text-left px-4 py-2.5 text-xs font-bold text-white hover:bg-white/[0.05] flex items-center justify-between transition-colors"
                             >
                                 <span className="flex items-center gap-2.5">
-                                    <svg className="w-4 h-4 text-[#A7A0F8] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
+                                    <svg className="w-4 h-4 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
                                     Project Links
                                 </span>
-                                <span className="text-[10px] bg-white/10 px-2 py-0.5 rounded-full font-semibold text-zinc-300">
+                                <span className="text-[10px] bg-[#000000] border border-white/[0.06] px-2 py-0.5 rounded-full font-semibold text-zinc-300">
                                     {project.links?.length || 0}
                                 </span>
                             </button>
                             {myRole === 'leader' && (
                                 <>
-                                    <div className="border-t border-white/10 my-1" />
+                                    <div className="border-t border-white/[0.06] my-1" />
                                     <button
                                         onClick={() => { setIsMenuOpen(false); setIsArchiveModalOpen(true); }}
                                         className="w-full text-left px-4 py-2.5 text-xs font-semibold text-amber-400 hover:bg-amber-500/10 flex items-center gap-2.5 transition-colors"
@@ -235,19 +235,19 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
                             type="text"
                             value={editData.title}
                             onChange={e => setEditData({ ...editData, title: e.target.value })}
-                            className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white font-bold text-xl"
+                            className="w-full bg-[#000000] border border-white/[0.06] rounded-xl px-4 py-2.5 text-white font-bold text-xl focus:outline-none focus:border-white/[0.2]"
                         />
                         <textarea
                             value={editData.description}
                             onChange={e => setEditData({ ...editData, description: e.target.value })}
                             rows={3}
-                            className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm resize-none"
+                            className="w-full bg-[#000000] border border-white/[0.06] rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-white/[0.2] resize-none"
                         />
                         <div className="flex gap-4">
                             <select
                                 value={editData.status}
                                 onChange={e => setEditData({ ...editData, status: e.target.value })}
-                                className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm"
+                                className="bg-[#000000] border border-white/[0.06] rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-white/[0.2]"
                             >
                                 <option value="planning">Planning</option>
                                 <option value="active">Active</option>
@@ -257,7 +257,7 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
                             <select
                                 value={editData.priority}
                                 onChange={e => setEditData({ ...editData, priority: e.target.value })}
-                                className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm"
+                                className="bg-[#000000] border border-white/[0.06] rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-white/[0.2]"
                             >
                                 <option value="low">Low</option>
                                 <option value="medium">Medium</option>
@@ -265,11 +265,11 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
                                 <option value="urgent">Urgent</option>
                             </select>
                         </div>
-                        <div className="flex gap-2">
-                            <button onClick={handleSave} disabled={saving} className="bg-[#534AB7] hover:bg-[#6F64E6] text-white px-4 py-2 rounded-lg text-sm">
+                        <div className="flex gap-3 pt-2">
+                            <button onClick={handleSave} disabled={saving} className="bg-white hover:bg-zinc-200 text-black font-bold px-5 py-2.5 rounded-xl text-sm transition-all shadow-[0_0_15px_rgba(255,255,255,0.1)] active:scale-95">
                                 {saving ? 'Saving...' : 'Save'}
                             </button>
-                            <button onClick={() => setIsEditing(false)} className="bg-white/5 hover:bg-white/10 text-white px-4 py-2 rounded-lg text-sm">
+                            <button onClick={() => setIsEditing(false)} className="bg-[#000000] hover:bg-white/[0.05] border border-white/[0.06] text-zinc-300 font-semibold px-5 py-2.5 rounded-xl text-sm transition-colors">
                                 Cancel
                             </button>
                         </div>
@@ -277,20 +277,20 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
                 ) : (
                     <div>
                         <div className="flex items-center gap-3 mb-2">
-                            <h2 className="text-2xl font-bold text-white">{project.title}</h2>
-                            <button onClick={() => setIsEditing(true)} className="text-zinc-500 hover:text-white transition-colors">
+                            <h2 className="text-2xl font-black text-white tracking-tight">{project.title}</h2>
+                            <button onClick={() => setIsEditing(true)} className="text-zinc-500 hover:text-white transition-colors p-1 rounded-lg hover:bg-white/[0.05]">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75zM20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83l3.75 3.75z" /></svg>
                             </button>
                         </div>
                         <div className="flex items-center gap-2 mb-4">
-                            <span className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded border ${getStatusColor(project.status)}`}>
+                            <span className={`text-[10px] uppercase tracking-wider font-extrabold px-2.5 py-1 rounded-lg border ${getStatusColor(project.status)}`}>
                                 {project.status.replace('_', ' ')}
                             </span>
-                            <span className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded border ${getPriorityColor(project.priority)}`}>
+                            <span className={`text-[10px] uppercase tracking-wider font-extrabold px-2.5 py-1 rounded-lg border ${getPriorityColor(project.priority)}`}>
                                 {project.priority}
                             </span>
                         </div>
-                        <p className="text-sm text-zinc-400 max-w-3xl whitespace-pre-wrap">
+                        <p className="text-sm text-zinc-400 max-w-3xl whitespace-pre-wrap font-normal">
                             {project.description || "No description provided."}
                         </p>
                     </div>
