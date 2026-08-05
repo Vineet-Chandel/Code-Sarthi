@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import ScheduleModal from './ScheduleModal';
 import axios from 'axios';
 import BASE_URL from '../../Pages/auth/baseURL';
+import { Camera } from 'lucide-react';
 
 const SchedulerCalendar = ({ 
     schedules = [], 
@@ -466,7 +467,15 @@ const SchedulerCalendar = ({
                                                     <span className={`w-2 h-2 rounded-full shrink-0 ${isDone ? 'bg-white' : isOverdue ? 'border border-zinc-400 bg-transparent' : 'bg-white/70'}`} />
                                                     <span className="truncate">{goal.name || goal.title}</span>
                                                 </div>
-                                                {isOverdue && <span className="text-[9px] font-mono uppercase bg-zinc-800 text-zinc-300 px-1.5 py-0.5 rounded">Overdue</span>}
+                                                <div className="flex items-center gap-1 shrink-0">
+                                                    {goal.photos && goal.photos.length > 0 && (
+                                                        <span title={`${goal.photos.length} attached photo${goal.photos.length > 1 ? 's' : ''}`} className="flex items-center gap-0.5 text-[9px] font-bold text-purple-300 bg-purple-500/20 px-1 py-0.5 rounded">
+                                                            <Camera className="w-2.5 h-2.5" />
+                                                            {goal.photos.length}
+                                                        </span>
+                                                    )}
+                                                    {isOverdue && <span className="text-[9px] font-mono uppercase bg-zinc-800 text-zinc-300 px-1.5 py-0.5 rounded">Overdue</span>}
+                                                </div>
                                             </div>
                                         );
                                     })}
@@ -811,6 +820,12 @@ const SchedulerCalendar = ({
                                                     <span className={`text-xs font-medium truncate ${isDone ? 'line-through text-zinc-500' : 'text-zinc-100'}`}>
                                                         {g.name || g.title}
                                                     </span>
+                                                    {g.photos && g.photos.length > 0 && (
+                                                        <span title={`${g.photos.length} attached photos`} className="flex items-center gap-1 text-[10px] font-semibold text-purple-300 bg-purple-500/10 px-2 py-0.5 rounded-md border border-purple-500/20 shrink-0">
+                                                            <Camera className="w-3 h-3 text-purple-400" />
+                                                            {g.photos.length}
+                                                        </span>
+                                                    )}
                                                 </div>
                                                 <span className="text-[10px] text-zinc-400 uppercase font-mono px-2 py-0.5 rounded bg-white/[0.04] border border-white/5 shrink-0">
                                                     {g.priority || 'Medium'}

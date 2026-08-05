@@ -1,5 +1,76 @@
 const validator = require("validator");
 
+
+/**
+ * weakPasswordPatterns.js
+ * Blocklist of common weak/predictable password patterns for client or server-side
+ * password-strength validation. Use with String.includes() / regex, not exact-match only,
+ * since users often pad these (e.g. "qwerty!23").
+ */
+
+const weakPatterns = [
+    // Sequential digits
+    '1234', '12345', '123456', '1234567', '12345678', '123456789',
+    '0123456789', '1234567890', '0987654321',
+    '234567', '345678', '456789', '567890',
+    '987654', '876543', '765432', '654321',
+
+    // Repeated single characters
+    '111111', '222222', '333333', '444444', '555555',
+    '666666', '777777', '888888', '999999', '000000',
+    'aaaaaa', 'bbbbbb', 'cccccc', 'zzzzzz', 'AAAAAA', 'BBBBBB',
+
+    // Doubled words
+    'hellohello', 'passwordpassword', 'adminadmin', 'abcabcabc', 'loveLoveLove',
+
+    // Keyboard row/pattern walks
+    'qwerty', 'qwertyui', 'qwerty123', 'qwertyuiop',
+    'asdfgh', 'asdfghjkl',
+    'zxcvbn', 'zxcvbnm',
+    '1q2w3e', '1qaz2wsx', 'qazwsx', 'zaq12wsx',
+    'poiuyt', 'lkjhg', 'mnbvc',
+    '1qaz', '2wsx', '3edc',
+
+    // Alphabet sequences
+    'abc', 'abcd', 'abcde', 'abcdef', 'abcdefg', 'abcdefgh',
+    'abcdefghijklmnopqrstuvwxyz',
+    'zyx', 'zyxw', 'zyxwvuts',
+
+    // Repeating short blocks
+    '12121212', 'abababab', 'abcabcabc', 'xyzxyzxyz',
+
+    // Calendar words
+    'january', 'february', 'march', 'april', 'may', 'june',
+    'july', 'august', 'september', 'october', 'november', 'december',
+    'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday',
+
+    // "password" variants
+    'password', 'Password', 'PASSWORD', 'Password1', 'Password123',
+    'P@ssword', 'P@ssword1', 'password1', 'password123', 'passw0rd',
+
+    // Default/system credentials
+    'admin', 'administrator', 'guest', 'welcome',
+    'letmein', 'login', 'root', 'default', 'changeme',
+    'user', 'test', 'demo', 'system',
+
+    // Common pets/animals
+    'dog', 'cat', 'tiger', 'lion', 'monkey', 'dragon', 'shadow',
+
+    // Common first names
+    'john', 'michael', 'david', 'james', 'daniel', 'robert', 'jennifer',
+
+    // Pop culture / fictional characters
+    'avatar', 'batman', 'superman', 'spiderman', 'harrypotter', 'ironman',
+
+    // Sports
+    'football', 'cricket', 'soccer', 'basketball', 'baseball',
+
+    // Sentiment / phrase-based
+    'iloveyou', 'trustno1', 'sunshine', 'master', 'freedom', 'whatever',
+    'starwars', 'princess', 'monkey123', 'flower', 'hunter2',
+];
+
+module.exports = weakPatterns;
 const validateSignUpData = (data) => {
     const { firstName, lastName, gmail, age, password, username, profession, college, termsAccepted, gender } = data;
     if (!firstName || !lastName) {
@@ -11,7 +82,13 @@ const validateSignUpData = (data) => {
         }
     } else if (!validator.isStrongPassword(password)) {
         throw new Error("Please enter a strong Password!");
-    } else if (!validator.matches(username, /^[a-z0-9._]{3,20}$/)) {
+    }
+    else if (weakPatterns.some((item) =>
+        password.toLowerCase().trim().includes(item.toLowerCase())
+    )) {
+        throw new Error("Please enter a strong Password!");
+    }
+    else if (!validator.matches(username, /^[a-z0-9._]{3,20}$/)) {
         throw new Error("Please enter a username! which has lowercase letters , underscores and numbers");
     } else if (age === undefined || age === null || age === "") {
         throw new Error("Age is required");

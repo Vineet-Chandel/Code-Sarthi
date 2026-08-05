@@ -1,9 +1,14 @@
 const express = require("express");
 const authRouter = express.Router();
 const { validateSignUpData } = require("../utils/validation");
+
+// models import 
 const User = require("../models/user");
 const NewsletterSubscriber = require("../models/newsLetter");
+
 const bcrypt = require("bcryptjs");
+
+// the most important middleware 
 const { userAuth } = require("../middlewares/userAuth");
 
 const redis = require("../configs/redis");

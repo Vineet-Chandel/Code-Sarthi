@@ -73,6 +73,12 @@ const goalSchema = new Schema(
                 maxength: 50
             }
         ],
+        photos: [
+            {
+                url: { type: String, required: true },
+                id: { type: String, required: true }
+            }
+        ],
         isArchived: {
             type: Boolean,
             default: false

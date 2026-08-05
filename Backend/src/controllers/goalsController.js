@@ -1,6 +1,8 @@
 const Goals = require("../models/goals");
 const Issue = require("../models/issue");
 const { mapGoalStatusToIssueStatus } = require("../utils/statusMapping");
+const cloudinary = require("cloudinary").v2;
+const getDataUrl = require("../utils/buffer");
 
 
 // @desc    Get all goals for the logged-in user
@@ -39,83 +41,46 @@ const getGoalById = async (req, res) => {
 // @route   POST /api/goals
 const createGoal = async (req, res) => {
     try {
-        const { name, status, targetDate, priority, category, description, tags } = req.body;
+        let { name, status = "Not Started", targetDate = new Date().toISOString(), priority = "Medium", category = "General", description = "No description provided.", tags = [], photos = [] } = req.body;
 
-        if (!name || !status || !targetDate || !priority || !category || !description || !tags) {
-            return res.status(404).json({
+        if (!name) {
+            return res.status(400).json({
                 success: false,
-                message: "All fields are required",
+                message: "Goal name is required",
             })
         }
 
         //name validation
         if (typeof name !== "string" || name.trim().length < 3 || name.trim().length > 500) {
-            return res.status(404).json({
+            return res.status(400).json({
                 success: false,
-                message: "Invalid name",
+                message: "Invalid name (must be between 3 and 500 characters)",
             })
         }
 
-        //status validation
-        if (!["Completed", "In Progress", "On Track", "At Risk", "Not Started", "On Hold", "Removed", "Reassigned", "not_started", "in_progress", "on_hold", "completed", "abandoned", "Abandoned"].includes(status.trim()) || typeof status !== "string" || status.trim().length < 3 || status.trim().length > 100) {
-            return res.status(404).json({
-                success: false,
-                message: "Invalid status",
-            })
+        if (!Array.isArray(tags)) {
+            tags = typeof tags === "string" ? tags.split(",").map(t => t.trim()).filter(Boolean) : [];
         }
 
-        //targetDate validation
-        if (typeof targetDate !== "string") {
-            return res.status(404).json({
+        if (photos && (!Array.isArray(photos) || photos.length > 5)) {
+            return res.status(400).json({
                 success: false,
-                message: "Invalid targetDate",
-            })
+                message: "Invalid photos format or exceeded maximum limit of 5 photos",
+            });
         }
 
-        //priority validation
-        if (!["Critical", "High", "Medium", "Low"].includes(priority.trim()) || typeof priority !== "string" || priority.trim().length < 3 || priority.trim().length > 100) {
-            return res.status(404).json({
-                success: false,
-                message: "Invalid priority",
-            })
-        }
-
-        //category validation
-        if (typeof category !== "string" || category.trim().length < 3 || category.trim().length > 100) {
-            return res.status(404).json({
-                success: false,
-                message: "Invalid category",
-            })
-        }
-
-        //description validation
-        if (typeof description !== "string" || description.trim().length < 3 || description.trim().length > 1000) {
-            return res.status(404).json({
-                success: false,
-                message: "Invalid description",
-            })
-        }
-
-        //tags validation
-        if (typeof tags !== "object") {
-            return res.status(404).json({
-                success: false,
-                message: "Invalid tags",
-            })
-        }
-
-
-        const initialStatus = status.trim();
+        const initialStatus = String(status || "Not Started").trim();
         const now = new Date();
         const newGoal = new Goals({
             name: name.trim(),
             status: initialStatus,
             targetDate,
             owner: req.user._id,
-            priority: priority.trim(),
-            category: category.trim(),
-            description: description.trim(),
-            tags: tags.map(tag => tag.trim()),
+            priority: String(priority || "Medium").trim(),
+            category: String(category || "General").trim(),
+            description: String(description || "No description provided.").trim(),
+            tags: tags.map(tag => String(tag).trim()),
+            photos: Array.isArray(photos) ? photos.slice(0, 5) : [],
             lastUpdated: now,
             startedAt: ["In Progress", "in_progress", "On Track", "At Risk"].includes(initialStatus) ? now : null,
             pausedAt: ["On Hold", "on_hold"].includes(initialStatus) ? now : null,
@@ -135,7 +100,7 @@ const createGoal = async (req, res) => {
 // @route   PUT /api/goals/:id
 const updateGoal = async (req, res) => {
     try {
-        const { name, status, targetDate, priority, category, description, tags, progress, following } = req.body;
+        const { name, status, targetDate, priority, category, description, tags, progress, following, photos } = req.body;
         
         let goal = await Goals.findOne({ _id: req.params.id, owner: req.user._id });
         if (!goal) {
@@ -169,6 +134,12 @@ const updateGoal = async (req, res) => {
         if (tags && Array.isArray(tags)) goal.tags = tags.map(tag => tag.trim());
         if (progress !== undefined) goal.progress = progress;
         if (following !== undefined) goal.following = following;
+        if (photos !== undefined) {
+            if (!Array.isArray(photos) || photos.length > 5) {
+                return res.status(400).json({ message: "Invalid photos array or exceeds 5 photos limit" });
+            }
+            goal.photos = photos.slice(0, 5);
+        }
         
         goal.lastUpdated = Date.now();
 
@@ -351,6 +322,92 @@ const toggleReaction = async (req, res) => {
     }
 };
 
+// @desc    Upload photos for goals to cloudinary
+// @route   POST /api/goals/upload-photos
+const uploadGoalPhotos = async (req, res) => {
+    try {
+        const user = req.user;
+        if (!user) {
+            throw new Error("Please Re-login");
+        }
+
+        const files = req.files || (req.file ? [req.file] : []);
+        if (!files || files.length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: "No files uploaded",
+            });
+        }
+
+        if (files.length > 5) {
+            return res.status(400).json({
+                success: false,
+                message: "Maximum 5 photos allowed at a time",
+            });
+        }
+
+        const uploadedPhotos = await Promise.all(
+            files.map(async (file) => {
+                const fileBuffer = getDataUrl(file);
+                const cloud = await cloudinary.uploader.upload(fileBuffer.content, {
+                    folder: "CodeSarthi-ProfileCloud",
+                    resource_type: "image",
+                    quality: "auto",
+                    fetch_format: "auto",
+                });
+                return {
+                    url: cloud.secure_url,
+                    id: cloud.public_id,
+                };
+            })
+        );
+
+        res.json({
+            success: true,
+            photos: uploadedPhotos,
+            message: "Photos uploaded successfully",
+        });
+    } catch (err) {
+        console.error("Error in uploadGoalPhotos:", err);
+        res.status(500).json({
+            success: false,
+            message: err.message || "Something went wrong during upload",
+        });
+    }
+};
+
+// @desc    Remove photo from cloudinary when removed from goal
+// @route   DELETE /api/goals/photo
+const removeGoalPhoto = async (req, res) => {
+    try {
+        const user = req.user;
+        if (!user) {
+            throw new Error("Please Re-login");
+        }
+
+        const { id } = req.body; // cloudinary public_id
+        if (!id) {
+            return res.status(400).json({
+                success: false,
+                message: "No image ID provided",
+            });
+        }
+
+        await cloudinary.uploader.destroy(id);
+
+        res.json({
+            success: true,
+            message: "Photo deleted successfully from Cloudinary",
+        });
+    } catch (err) {
+        console.error("Error in removeGoalPhoto:", err);
+        res.status(500).json({
+            success: false,
+            message: err.message || "Could not delete photo",
+        });
+    }
+};
+
 module.exports = {
     getGoals,
     getGoalById,
@@ -361,5 +418,7 @@ module.exports = {
     addComment,
     editComment,
     deleteComment,
-    toggleReaction
+    toggleReaction,
+    uploadGoalPhotos,
+    removeGoalPhoto
 };

@@ -61,7 +61,7 @@ const DeleteConfirmModal = ({
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                        className={`relative w-full max-w-md bg-[#09090B] border ${borderClass} rounded-2xl p-6 shadow-2xl overflow-hidden`}
+                        className={`relative w-full max-w-md bg-[#0a0a0a] border ${borderClass} rounded-2xl p-6 shadow-2xl overflow-hidden`}
                     >
                         {/* Top warning accent */}
                         {/* <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${accentLine}`} /> */}
@@ -120,7 +120,7 @@ const DeleteConfirmModal = ({
                                     placeholder={`Type ${requiredText} to confirm`}
                                     disabled={loading}
                                     autoFocus
-                                    className={`w-full bg-white/5 border border-white/10 ${focusClass} focus:outline-none focus:ring-2 rounded-xl px-3.5 py-2.5 text-white font-mono text-sm tracking-widest uppercase placeholder:text-zinc-600 placeholder:tracking-normal placeholder:font-sans transition-all`}
+                                    className={`w-full bg-black border border-[#212121] ${focusClass} focus:outline-none focus:ring-1 rounded-xl px-3.5 py-2.5 text-white font-mono text-sm tracking-widest uppercase placeholder:text-zinc-600 placeholder:tracking-normal placeholder:font-sans transition-all`}
                                 />
                             </div>
 
@@ -129,7 +129,7 @@ const DeleteConfirmModal = ({
                                     type="button"
                                     onClick={onClose}
                                     disabled={loading}
-                                    className="flex-1 bg-white/5 hover:bg-white/10 text-zinc-300 font-medium py-2.5 px-4 rounded-xl transition-colors border border-white/5 text-sm"
+                                    className="flex-1 bg-[#212121] hover:bg-zinc-800 text-zinc-300 font-bold py-2.5 px-4 rounded-xl transition-colors border border-transparent text-sm"
                                 >
                                     Cancel
                                 </button>

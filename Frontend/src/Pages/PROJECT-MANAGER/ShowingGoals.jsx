@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Plus, Calendar, ChevronRight, X, Sparkles, Folder, AlertCircle } from 'lucide-react';
+import { Plus, Calendar, ChevronRight, X, Sparkles, Folder, AlertCircle, Camera, Image as ImageIcon, Trash2, ExternalLink, Loader2 } from 'lucide-react';
 import BASE_URL from '../../Pages/auth/baseURL';
 
 const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
     const [errorModal, setErrorModal] = useState({ show: false, message: '' });
+    const [uploadingBlocks, setUploadingBlocks] = useState([]);
+    const [lightboxImage, setLightboxImage] = useState(null);
 
     // Modal Form State
     const [formData, setFormData] = useState({
@@ -17,7 +19,8 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
         priority: 'Low',
         category: '',
         status: 'Not Started',
-        tags: ''
+        tags: '',
+        photos: []
     });
 
     const statusColors = {
@@ -60,10 +63,59 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
             const res = await axios.post(`${BASE_URL}/goals`, dataToSubmit, { withCredentials: true });
             onGoalAdded(res.data);
             setShowModal(false);
-            setFormData({ name: '', description: '', targetDate: '', priority: 'Low', category: '', status: 'Not Started', tags: '' });
+            setFormData({ name: '', description: '', targetDate: '', priority: 'Low', category: '', status: 'Not Started', tags: '', photos: [] });
+            setUploadingBlocks([]);
         } catch (error) {
             console.error("Failed to create goal", error);
             setErrorModal({ show: true, message: "Error creating goal. Please check the form data and try again." });
+        }
+    };
+
+    const handlePhotoUpload = async (e) => {
+        const files = Array.from(e.target.files);
+        if (!files.length) return;
+
+        const currentPhotos = formData.photos || [];
+        if (currentPhotos.length + uploadingBlocks.length + files.length > 5) {
+            setErrorModal({ show: true, message: "You can upload a maximum of 5 photos per goal." });
+            return;
+        }
+
+        // Add loading placeholders
+        const newBlocks = files.map((file, i) => ({ id: `${Date.now()}-${i}`, name: file.name }));
+        setUploadingBlocks(prev => [...prev, ...newBlocks]);
+
+        const uploadForm = new FormData();
+        files.forEach(file => uploadForm.append("photos", file));
+
+        try {
+            const res = await axios.post(`${BASE_URL}/goals/upload-photos`, uploadForm, { withCredentials: true });
+            if (res.data.success && res.data.photos) {
+                setFormData(prev => ({
+                    ...prev,
+                    photos: [...(prev.photos || []), ...res.data.photos].slice(0, 5)
+                }));
+            }
+        } catch (error) {
+            console.error("Failed to upload photos:", error);
+            setErrorModal({ show: true, message: error?.response?.data?.message || "Error uploading photos to Cloudinary." });
+        } finally {
+            setUploadingBlocks(prev => prev.filter(b => !newBlocks.some(nb => nb.id === b.id)));
+            if (e.target) e.target.value = '';
+        }
+    };
+
+    const handleRemovePhoto = async (indexToRemove, photoId) => {
+        setFormData(prev => ({
+            ...prev,
+            photos: prev.photos.filter((_, idx) => idx !== indexToRemove)
+        }));
+        if (photoId) {
+            try {
+                await axios.delete(`${BASE_URL}/goals/photo`, { data: { id: photoId }, withCredentials: true });
+            } catch (err) {
+                console.error("Error removing photo from cloud:", err);
+            }
         }
     };
 
@@ -89,7 +141,7 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
                 <h2 className="text-2xl font-bold text-white">Your Goals</h2>
                 <button
                     onClick={() => setShowModal(true)}
-                    className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2 rounded-xl font-medium transition-colors flex items-center gap-2"
+                    className="bg-white hover:bg-zinc-200 text-black px-5 py-2 rounded-xl font-bold transition-all shadow-sm flex items-center gap-2"
                 >
                     <Plus className="w-5 h-5" />
                     New Goal
@@ -98,10 +150,10 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
 
             {loading ? (
                 <div className="flex justify-center py-20">
-                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
                 </div>
             ) : goals.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-20 text-gray-500 gap-1.5">
+                <div className="flex flex-col items-center justify-center py-20 text-zinc-500 gap-1.5">
 
                     <div className='p-3 bg-white rounded-t-[100px] rounded-b-xl flex flex-col items-center justify-center'>
                         <svg width="260" height="260" viewBox="0 0 960 960" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -265,8 +317,8 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
                             </g>
                         </svg>
                     </div>
-                    <p className="text-lg font-medium text-gray-400 mt-4">No goals found</p>
-                    <p className="text-xs text-gray-500">Click on "New Goal" above to start tracking your targets.</p>
+                    <p className="text-lg font-medium text-zinc-400 mt-4">No goals found</p>
+                    <p className="text-xs text-zinc-500">Click on "New Goal" above to start tracking your targets.</p>
                 </div>
             ) : (
                 <>
@@ -276,9 +328,9 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
                                 <div
                                     key={goal._id}
                                     onClick={() => navigate(`/app/goals/${goal._id}`)}
-                                    className="group relative bg-[#121215] hover:bg-blue-500/10 border border-white/10 hover:border-[#534AB7]/50 rounded-2xl p-6 cursor-pointer transition-all hover:shadow-[0_8px_30px_rgba(83,74,183,0.12)] overflow-hidden"
+                                    className="group relative bg-[#0a0a0a] hover:bg-[#121212] border border-[#212121] hover:border-zinc-700 rounded-2xl p-6 cursor-pointer transition-all hover:shadow-lg overflow-hidden"
                                 >
-                                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#534AB7]/10 rounded-full blur-3xl group-hover:bg-[#534AB7]/20 transition-colors pointer-events-none" />
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/[0.02] rounded-full blur-3xl group-hover:bg-white/[0.05] transition-colors pointer-events-none" />
 
                                     <div className="relative z-10 flex flex-col h-full">
                                         <div className="flex justify-between items-start mb-4">
@@ -293,17 +345,17 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
                                                             navigate('/app/projects', { state: { teamId: goal.sourceTeamId, issueId: goal.sourceIssueId } });
                                                         }}
                                                         title="Linked to TeamOS Issue — Click to view in TeamOS"
-                                                        className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[11px] text-zinc-300 font-medium whitespace-nowrap hover:border-[#A7A0F8]/60 hover:bg-[#A7A0F8]/15 transition-all cursor-pointer shadow-sm z-20"
+                                                        className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black border border-[#212121] text-[11px] text-zinc-300 font-medium whitespace-nowrap hover:border-zinc-600 hover:bg-[#212121] transition-all cursor-pointer shadow-sm z-20"
                                                     >
-                                                        <svg className="w-3.5 h-3.5 text-[#A7A0F8] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <svg className="w-3.5 h-3.5 text-zinc-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                                                         </svg>
                                                         <span>TeamOS Issue</span>
                                                     </span>
                                                 )}
                                                 {goal.category && (
-                                                    <span className="text-[11px] font-semibold text-purple-300 bg-purple-500/15 px-2.5 py-1 rounded-lg flex items-center gap-1">
-                                                        <Folder className="w-3 h-3 text-purple-400" />
+                                                    <span className="text-[11px] font-semibold text-zinc-300 bg-black border border-[#212121] px-2.5 py-1 rounded-lg flex items-center gap-1">
+                                                        <Folder className="w-3 h-3 text-zinc-400" />
                                                         {goal.category}
                                                     </span>
                                                 )}
@@ -316,42 +368,66 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
                                             </div>
                                         </div>
 
-                                        <h3 className="text-xl font-bold text-white mb-2 line-clamp-1 group-hover:text-[#A7A0F8] transition-colors pr-2">
+                                        <h3 className="text-xl font-bold text-white mb-2 line-clamp-1 group-hover:text-white transition-colors pr-2">
                                             {goal.name}
                                         </h3>
 
-                                        <p className="text-zinc-400 text-sm line-clamp-2 mb-6 flex-1 font-normal min-h-[40px]">
+                                        <p className="text-zinc-400 text-sm line-clamp-2 mb-4 flex-1 font-normal min-h-[40px]">
                                             {goal.description || "No description provided."}
                                         </p>
+
+                                        {goal.photos && goal.photos.length > 0 && (
+                                            <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-1 scrollbar-none" onClick={e => e.stopPropagation()}>
+                                                {goal.photos.slice(0, 4).map((photo, pIdx) => (
+                                                    <div
+                                                        key={pIdx}
+                                                        onClick={() => setLightboxImage(photo.url)}
+                                                        title="Click to view high-res photo"
+                                                        className="relative group/thumb w-11 h-11 rounded-xl overflow-hidden bg-black border border-[#212121] shrink-0 cursor-pointer hover:border-zinc-500 hover:shadow-md transition-all duration-200"
+                                                    >
+                                                        <img src={photo.url} alt="Goal attachment" className="w-full h-full object-cover group-hover/thumb:scale-110 transition-transform duration-300" />
+                                                        {pIdx === 3 && goal.photos.length > 4 && (
+                                                            <div className="absolute inset-0 bg-black/70 backdrop-blur-[2px] flex items-center justify-center text-[10px] font-bold text-white">
+                                                                +{goal.photos.length - 3}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                                <span className="text-[11px] font-semibold text-zinc-500 ml-1 flex items-center gap-1">
+                                                    <Camera className="w-3.5 h-3.5 text-zinc-400" />
+                                                    {goal.photos.length}
+                                                </span>
+                                            </div>
+                                        )}
 
                                         <div className="mt-auto">
                                             <div className="flex justify-between text-xs text-zinc-400 mb-2 font-semibold">
                                                 <span>Completion Progress</span>
-                                                <span className="text-[#A7A0F8] font-bold">{goal.progress || 0}%</span>
+                                                <span className="text-white font-bold">{goal.progress || 0}%</span>
                                             </div>
-                                            <div className="w-full bg-white/5 border border-white/5 rounded-full h-2 overflow-hidden mb-4">
+                                            <div className="w-full bg-black border border-[#212121] rounded-full h-2 overflow-hidden mb-4">
                                                 <div
-                                                    className="bg-gradient-to-r from-[#534AB7] to-[#A7A0F8] h-full rounded-full transition-all duration-300"
+                                                    className="bg-white h-full rounded-full transition-all duration-300"
                                                     style={{ width: `${Math.min(Math.max(goal.progress || 0, 4), 100)}%` }}
                                                 ></div>
                                             </div>
 
-                                            <div className="flex justify-between items-center pt-4 border-t border-white/10">
+                                            <div className="flex justify-between items-center pt-4 border-t border-[#212121]">
                                                 <div className="flex flex-wrap gap-1.5 items-center">
-                                                    <div className="text-xs font-semibold text-zinc-300 flex items-center gap-1.5 bg-white/5 px-2.5 py-1 rounded-lg border border-white/5">
-                                                        <Calendar className="w-3.5 h-3.5 text-[#A7A0F8]" />
+                                                    <div className="text-xs font-semibold text-zinc-300 flex items-center gap-1.5 bg-black px-2.5 py-1 rounded-lg border border-[#212121]">
+                                                        <Calendar className="w-3.5 h-3.5 text-zinc-400" />
                                                         {goal.targetDate ? new Date(goal.targetDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : 'No date'}
                                                     </div>
                                                     {goal.tags && goal.tags.slice(0, 2).map((tag, idx) => (
-                                                        <span key={idx} className="text-[10px] uppercase font-bold tracking-wider text-zinc-400 bg-white/5 px-2 py-1 rounded-md border border-white/5">
+                                                        <span key={idx} className="text-[10px] uppercase font-bold tracking-wider text-zinc-400 bg-black px-2 py-1 rounded-md border border-[#212121]">
                                                             #{tag}
                                                         </span>
                                                     ))}
                                                     {goal.tags && goal.tags.length > 2 && (
-                                                        <span className="text-[10px] font-semibold text-zinc-400 bg-white/5 px-1.5 py-1 rounded-md border border-white/5">+{goal.tags.length - 2}</span>
+                                                        <span className="text-[10px] font-semibold text-zinc-400 bg-black px-1.5 py-1 rounded-md border border-[#212121]">+{goal.tags.length - 2}</span>
                                                     )}
                                                 </div>
-                                                <div className="text-zinc-600 group-hover:text-[#A7A0F8] transition-colors ml-2">
+                                                <div className="text-zinc-600 group-hover:text-white transition-colors ml-2">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-7-7l7 7l-7 7" /></svg>
                                                 </div>
                                             </div>
@@ -366,9 +442,9 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
                                 <div
                                     key={goal._id}
                                     onClick={() => navigate(`/app/goals/${goal._id}`)}
-                                    className="group relative bg-[#121215] hover:bg-blue-500/10 border border-white/10 hover:border-[#534AB7]/50 rounded-2xl px-6 py-4 cursor-pointer transition-all hover:shadow-[0_8px_30px_rgba(83,74,183,0.12)] flex flex-col md:flex-row md:items-center justify-between gap-4 overflow-hidden"
+                                    className="group relative bg-[#0a0a0a] hover:bg-[#121212] border border-[#212121] hover:border-zinc-700 rounded-2xl px-6 py-4 cursor-pointer transition-all hover:shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4 overflow-hidden"
                                 >
-                                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#534AB7]/10 rounded-full blur-3xl group-hover:bg-[#534AB7]/20 transition-colors pointer-events-none" />
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/[0.02] rounded-full blur-3xl group-hover:bg-white/[0.05] transition-colors pointer-events-none" />
 
                                     {/* Left section: Status & Title */}
                                     <div className="flex items-center gap-4 md:w-1/3 min-w-0 relative z-10">
@@ -377,7 +453,7 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
                                         </span>
                                         <div className="min-w-0 flex-1">
                                             <div className="flex items-center gap-2 flex-wrap">
-                                                <h3 className="text-base font-bold text-white group-hover:text-[#A7A0F8] transition-colors truncate">
+                                                <h3 className="text-base font-bold text-white group-hover:text-white transition-colors truncate">
                                                     {goal.name}
                                                 </h3>
                                                 {goal.sourceIssueId && (
@@ -387,9 +463,9 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
                                                             navigate('/app/projects', { state: { teamId: goal.sourceTeamId, issueId: goal.sourceIssueId } });
                                                         }}
                                                         title="Linked to TeamOS Issue — Click to view in TeamOS"
-                                                        className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-[10px] text-zinc-300 font-medium whitespace-nowrap hover:border-[#A7A0F8]/60 hover:bg-[#A7A0F8]/15 transition-all cursor-pointer shadow-sm z-20"
+                                                        className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-black border border-[#212121] text-[10px] text-zinc-300 font-medium whitespace-nowrap hover:border-zinc-600 hover:bg-[#212121] transition-all cursor-pointer shadow-sm z-20"
                                                     >
-                                                        <svg className="w-3 h-3 text-[#A7A0F8] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <svg className="w-3 h-3 text-zinc-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                                                         </svg>
                                                         <span>TeamOS Issue</span>
@@ -400,8 +476,8 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
                                                 )}
                                             </div>
                                             {goal.category && (
-                                                <p className="text-xs text-[#A7A0F8] font-medium truncate mt-0.5 flex items-center gap-1">
-                                                    <Folder className="w-3 h-3" /> {goal.category}
+                                                <p className="text-xs text-zinc-400 font-medium truncate mt-0.5 flex items-center gap-1">
+                                                    <Folder className="w-3 h-3 text-zinc-500" /> {goal.category}
                                                 </p>
                                             )}
                                         </div>
@@ -412,10 +488,20 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
                                         <p className="truncate text-zinc-400 text-xs md:text-sm max-w-[240px] xl:max-w-[320px] hidden sm:block">
                                             {goal.description}
                                         </p>
-                                        <div className="text-xs font-semibold text-zinc-300 shrink-0 flex items-center gap-1.5 bg-white/5 border border-white/5 px-3 py-1.5 rounded-xl">
-                                            <Calendar className="w-3.5 h-3.5 text-[#A7A0F8]" />
+                                        <div className="text-xs font-semibold text-zinc-300 shrink-0 flex items-center gap-1.5 bg-black border border-[#212121] px-3 py-1.5 rounded-xl">
+                                            <Calendar className="w-3.5 h-3.5 text-zinc-400" />
                                             {goal.targetDate ? new Date(goal.targetDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: '2-digit' }) : 'No date'}
                                         </div>
+                                        {goal.photos && goal.photos.length > 0 && (
+                                            <div
+                                                onClick={(e) => { e.stopPropagation(); setLightboxImage(goal.photos[0]?.url); }}
+                                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black border border-[#212121] text-zinc-300 text-xs font-semibold cursor-pointer hover:bg-[#212121] transition-all shrink-0"
+                                                title="Click to view photo preview"
+                                            >
+                                                <Camera className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
+                                                <span>{goal.photos.length} Photo{goal.photos.length > 1 ? 's' : ''}</span>
+                                            </div>
+                                        )}
                                     </div>
 
                                     {/* Right section: Progress bar */}
@@ -423,23 +509,23 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
                                         <div className="flex flex-col gap-1.5 w-full max-w-[150px]">
                                             <div className="flex justify-between text-[11px] font-bold">
                                                 <span className="text-zinc-400">Progress</span>
-                                                <span className="text-[#A7A0F8]">{goal.progress || 0}%</span>
+                                                <span className="text-white">{goal.progress || 0}%</span>
                                             </div>
-                                            <div className="w-full bg-white/5 border border-white/5 rounded-full h-1.5 overflow-hidden">
+                                            <div className="w-full bg-black border border-[#212121] rounded-full h-1.5 overflow-hidden">
                                                 <div
-                                                    className="bg-gradient-to-r from-[#534AB7] to-[#A7A0F8] h-full rounded-full"
+                                                    className="bg-white h-full rounded-full"
                                                     style={{ width: `${Math.min(Math.max(goal.progress || 0, 4), 100)}%` }}
                                                 ></div>
                                             </div>
                                         </div>
 
                                         <span className={`hidden xl:inline-block text-xs font-bold px-3 py-1 rounded-xl ${goal.priority === 'High' || goal.priority === 'Critical' ? 'bg-red-500/20 text-red-400 border border-red-500/20' :
-                                            goal.priority === 'Medium' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/20' : 'bg-white/5 text-zinc-300 border border-white/10'
+                                            goal.priority === 'Medium' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/20' : 'bg-black text-zinc-300 border border-[#212121]'
                                             }`}>
                                             {goal.priority || 'Low'}
                                         </span>
 
-                                        <div className="w-9 h-9 rounded-xl bg-white/5 group-hover:bg-[#534AB7] border border-white/10 text-zinc-400 group-hover:text-white flex items-center justify-center transition-all shrink-0">
+                                        <div className="w-9 h-9 rounded-xl bg-black group-hover:bg-white border border-[#212121] text-zinc-400 group-hover:text-black flex items-center justify-center transition-all shrink-0">
                                             <ChevronRight className="w-4 h-4 transform group-hover:translate-x-0.5 transition-transform" />
                                         </div>
                                     </div>
@@ -454,14 +540,14 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
 
             {/* Add Goal Modal */}
             {showModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-                    <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
-                        <div className="p-6 border-b border-[#2a2a2a] flex justify-between items-center bg-[#1a1a1a]">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+                    <div className="bg-[#0a0a0a] border border-[#212121] rounded-2xl w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in duration-300 shadow-2xl">
+                        <div className="p-6 border-b border-[#212121] flex justify-between items-center bg-black">
                             <h3 className="text-xl font-bold text-white flex gap-2 items-center">
-                                <Sparkles className="w-5 h-5 text-blue-500" />
+                                <Sparkles className="w-5 h-5 text-white" />
                                 Create New Goal
                             </h3>
-                            <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-white transition-colors bg-[#222] hover:bg-[#333] p-1.5 rounded-lg">
+                            <button onClick={() => setShowModal(false)} className="text-zinc-400 hover:text-white transition-colors bg-[#212121] hover:bg-zinc-800 p-1.5 rounded-lg">
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
@@ -470,40 +556,40 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
                             {/* Name & Category */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-400 mb-1">Goal Name *</label>
-                                    <input required type="text" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} className="w-full bg-[#1a1a1a] border border-[#333] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 transition-colors" placeholder="e.g. Launch Beta Version" />
+                                    <label className="block text-sm font-medium text-zinc-400 mb-1">Goal Name *</label>
+                                    <input required type="text" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} className="w-full bg-black border border-[#212121] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-white transition-colors" placeholder="e.g. Launch Beta Version" />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-400 mb-1">Category *</label>
-                                    <input required type="text" value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })} className="w-full bg-[#1a1a1a] border border-[#333] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 transition-colors" placeholder="e.g. Product" />
+                                    <label className="block text-sm font-medium text-zinc-400 mb-1">Category *</label>
+                                    <input required type="text" value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })} className="w-full bg-black border border-[#212121] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-white transition-colors" placeholder="e.g. Product" />
                                 </div>
                             </div>
 
                             {/* Description */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-400 mb-1">Description *</label>
-                                <textarea required rows="2" value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} className="w-full bg-[#1a1a1a] border border-[#333] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 transition-colors resize-none" placeholder="What does achieving this goal look like?"></textarea>
+                                <label className="block text-sm font-medium text-zinc-400 mb-1">Description *</label>
+                                <textarea required rows="2" value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} className="w-full bg-black border border-[#212121] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-white transition-colors resize-none" placeholder="What does achieving this goal look like?"></textarea>
                             </div>
 
-                            <hr className="border-[#2a2a2a]" />
+                            <hr className="border-[#212121]" />
 
                             {/* Interactive Date Chooser */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-400 mb-2">Target Date *</label>
+                                <label className="block text-sm font-medium text-zinc-400 mb-2">Target Date *</label>
                                 <div className="flex flex-col sm:flex-row gap-3">
-                                    <input required type="date" value={formData.targetDate} onChange={e => setFormData({ ...formData, targetDate: e.target.value })} className="bg-[#181822] rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert w-full sm:w-auto border border-white/[0.06]" />
+                                    <input required type="date" value={formData.targetDate} onChange={e => setFormData({ ...formData, targetDate: e.target.value })} className="bg-black rounded-lg px-4 py-2 text-white focus:outline-none focus:border-white transition-all [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert w-full sm:w-auto border border-[#212121]" />
                                     <div className="flex gap-2 overflow-x-auto custom-scrollbar pb-1">
-                                        <button type="button" onClick={() => setQuickDate(0)} className="whitespace-nowrap px-3 py-2 rounded-lg text-sm bg-white/5 text-gray-300 hover:bg-white/10 hover:text-white transition-colors font-medium">Today</button>
-                                        <button type="button" onClick={() => setQuickDate(1)} className="whitespace-nowrap px-3 py-2 rounded-lg text-sm bg-white/5 text-gray-300 hover:bg-white/10 hover:text-white transition-colors font-medium">Tomorrow</button>
-                                        <button type="button" onClick={() => setQuickDate(7)} className="whitespace-nowrap px-3 py-2 rounded-lg text-sm bg-white/5 text-gray-300 hover:bg-white/10 hover:text-white transition-colors font-medium">Next Week</button>
-                                        <button type="button" onClick={() => setQuickDate(30)} className="whitespace-nowrap px-3 py-2 rounded-lg text-sm bg-white/5 text-gray-300 hover:bg-white/10 hover:text-white transition-colors font-medium">Next Month</button>
+                                        <button type="button" onClick={() => setQuickDate(0)} className="whitespace-nowrap px-3 py-2 rounded-lg text-sm bg-[#212121] text-zinc-400 hover:bg-zinc-800 hover:text-white transition-colors font-medium">Today</button>
+                                        <button type="button" onClick={() => setQuickDate(1)} className="whitespace-nowrap px-3 py-2 rounded-lg text-sm bg-[#212121] text-zinc-400 hover:bg-zinc-800 hover:text-white transition-colors font-medium">Tomorrow</button>
+                                        <button type="button" onClick={() => setQuickDate(7)} className="whitespace-nowrap px-3 py-2 rounded-lg text-sm bg-[#212121] text-zinc-400 hover:bg-zinc-800 hover:text-white transition-colors font-medium">Next Week</button>
+                                        <button type="button" onClick={() => setQuickDate(30)} className="whitespace-nowrap px-3 py-2 rounded-lg text-sm bg-[#212121] text-zinc-400 hover:bg-zinc-800 hover:text-white transition-colors font-medium">Next Month</button>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Interactive Priority Chooser */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-400 mb-2">Priority</label>
+                                <label className="block text-sm font-medium text-zinc-400 mb-2">Priority</label>
                                 <div className="flex flex-wrap gap-2">
                                     {priorities.map(p => (
                                         <button
@@ -511,8 +597,8 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
                                             type="button"
                                             onClick={() => setFormData({ ...formData, priority: p })}
                                             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${formData.priority === p
-                                                ? 'bg-blue-600 text-white font-bold shadow-lg shadow-blue-500/20'
-                                                : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-gray-200'
+                                                ? 'bg-white text-black font-bold shadow-sm'
+                                                : 'bg-black border border-[#212121] text-zinc-400 hover:bg-[#212121] hover:text-white'
                                                 }`}
                                         >
                                             {p}
@@ -523,7 +609,7 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
 
                             {/* Interactive Status Chooser */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-400 mb-2.5">Status</label>
+                                <label className="block text-sm font-medium text-zinc-400 mb-2.5">Status</label>
                                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                                     {statuses.map(s => {
                                         const isSelected = formData.status === s;
@@ -533,13 +619,13 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
                                                 type="button"
                                                 onClick={() => setFormData({ ...formData, status: s })}
                                                 className={`group px-3.5 py-2.5 rounded-xl text-sm transition-all duration-200 flex items-center gap-2.5 ${isSelected
-                                                    ? statusButtonStyles[s]
-                                                    : 'bg-white/[0.04] text-gray-400 hover:bg-white/[0.08] hover:text-gray-200 border border-transparent font-medium'
+                                                    ? 'bg-white text-black font-bold shadow-sm'
+                                                    : 'bg-black border border-[#212121] text-zinc-400 hover:bg-[#212121] hover:text-white font-medium'
                                                     }`}
                                             >
                                                 <span className={`w-2.5 h-2.5 rounded-full shrink-0 transition-all ${isSelected
                                                     ? statusIndicators[s]
-                                                    : `${statusIndicators[s]?.split(' ')[0]} opacity-40 group-hover:opacity-80`
+                                                    : `${statusIndicators[s]?.split(' ')[0]} opacity-50 group-hover:opacity-100`
                                                     }`}></span>
                                                 <span className="truncate">{s}</span>
                                             </button>
@@ -550,7 +636,7 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
 
                             {/* Interactive Tags Chooser */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-400 mb-2">Tags</label>
+                                <label className="block text-sm font-medium text-zinc-400 mb-2">Tags</label>
                                 <div className="flex flex-wrap gap-2 mb-3">
                                     {popularTags.map(t => {
                                         const currentTagsArray = formData.tags.split(',').map(tag => tag.trim()).filter(Boolean);
@@ -561,8 +647,8 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
                                                 type="button"
                                                 onClick={() => toggleTag(t)}
                                                 className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${isSelected
-                                                    ? 'bg-indigo-500/20 text-indigo-300'
-                                                    : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-gray-200'
+                                                    ? 'bg-white text-black font-bold'
+                                                    : 'bg-black border border-[#212121] text-zinc-400 hover:bg-[#212121] hover:text-white'
                                                     }`}
                                             >
                                                 {isSelected ? '✓ ' : '+ '}{t}
@@ -574,16 +660,76 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
                                     type="text"
                                     value={formData.tags}
                                     onChange={e => setFormData({ ...formData, tags: e.target.value })}
-                                    className="w-full bg-[#1a1a1a] border border-[#333] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 transition-colors"
+                                    className="w-full bg-black border border-[#212121] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-white transition-colors"
                                     placeholder="Or type custom tags (comma separated)..."
                                 />
                             </div>
 
-                            <div className="pt-4 border-t border-[#2a2a2a] flex justify-end gap-3">
-                                <button type="button" onClick={() => setShowModal(false)} className="px-5 py-2.5 rounded-xl font-medium text-gray-400 hover:text-white hover:bg-[#2a2a2a] transition-colors">
+                            {/* Photo Attachments (Max 5) */}
+                            <div>
+                                <div className="flex justify-between items-center mb-2">
+                                    <label className="block text-sm font-medium text-zinc-400 flex items-center gap-2">
+                                        <Camera className="w-4 h-4 text-zinc-400" />
+                                        Related Photos (Max 5)
+                                    </label>
+                                    <span className="text-xs font-semibold text-zinc-500">
+                                        {(formData.photos?.length || 0) + uploadingBlocks.length}/5 photos
+                                    </span>
+                                </div>
+                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-3">
+                                    {formData.photos && formData.photos.map((photo, idx) => (
+                                        <div key={idx} className="relative group rounded-xl overflow-hidden bg-black border border-[#212121] aspect-video flex items-center justify-center">
+                                            <img src={photo.url} alt={`Attachment ${idx + 1}`} className="w-full h-full object-cover" />
+                                            <button
+                                                type="button"
+                                                onClick={() => handleRemovePhoto(idx, photo.id)}
+                                                className="absolute top-2 right-2 bg-black/70 hover:bg-red-600 text-white p-1.5 rounded-lg opacity-80 group-hover:opacity-100 transition-all shadow-md"
+                                                title="Remove photo"
+                                            >
+                                                <Trash2 className="w-3.5 h-3.5" />
+                                            </button>
+                                            <span className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-black/60 backdrop-blur-sm text-[10px] text-zinc-300 font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                                                Photo {idx + 1}
+                                            </span>
+                                        </div>
+                                    ))}
+                                    {uploadingBlocks.map((block) => (
+                                        <div key={block.id} className="relative rounded-xl overflow-hidden bg-[#212121] border border-zinc-700 aspect-video flex flex-col items-center justify-center gap-2 animate-pulse">
+                                            <Loader2 className="w-6 h-6 text-white animate-spin" />
+                                            <span className="text-xs font-semibold text-zinc-300 text-center px-2 truncate w-full">
+                                                Uploading...
+                                            </span>
+                                            <span className="text-[10px] text-zinc-500 px-2 truncate w-full text-center">
+                                                {block.name}
+                                            </span>
+                                        </div>
+                                    ))}
+                                    {(formData.photos?.length || 0) + uploadingBlocks.length < 5 && (
+                                        <label className="border border-dashed border-[#212121] hover:border-zinc-500 rounded-xl bg-black hover:bg-[#121212] cursor-pointer aspect-video flex flex-col items-center justify-center gap-2 transition-all group">
+                                            <div className="w-8 h-8 rounded-full bg-[#212121] group-hover:bg-white flex items-center justify-center text-zinc-400 group-hover:text-black transition-colors">
+                                                <Plus className="w-4 h-4" />
+                                            </div>
+                                            <span className="text-xs font-medium text-zinc-400 group-hover:text-white transition-colors">
+                                                Add Photo
+                                            </span>
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                multiple
+                                                onChange={handlePhotoUpload}
+                                                className="hidden"
+                                                disabled={uploadingBlocks.length > 0}
+                                            />
+                                        </label>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="pt-4 border-t border-[#212121] flex justify-end gap-3">
+                                <button type="button" onClick={() => setShowModal(false)} className="px-5 py-2.5 rounded-xl font-medium text-zinc-400 hover:text-white hover:bg-[#212121] transition-colors">
                                     Cancel
                                 </button>
-                                <button type="submit" className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2.5 rounded-xl font-medium transition-colors">
+                                <button type="submit" className="bg-white hover:bg-zinc-200 text-black font-bold px-6 py-2.5 rounded-xl transition-all shadow-sm">
                                     Create Goal
                                 </button>
                             </div>
@@ -594,13 +740,13 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
 
             {/* Custom Error / Notice Modal */}
             {errorModal.show && (
-                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 backdrop-blur-md p-4 animate-in fade-in duration-200">
-                    <div className="bg-[#141420] border border-red-500/30 rounded-2xl w-full max-w-md p-6 overflow-hidden shadow-2xl text-center flex flex-col items-center">
+                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
+                    <div className="bg-[#0a0a0a] border border-red-500/30 rounded-2xl w-full max-w-md p-6 overflow-hidden shadow-2xl text-center flex flex-col items-center">
                         <div className="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center text-red-400 mb-4">
                             <AlertCircle className="w-6 h-6" />
                         </div>
                         <h3 className="text-lg font-bold text-white mb-2">Notice</h3>
-                        <p className="text-gray-300 text-sm mb-6 leading-relaxed">
+                        <p className="text-zinc-300 text-sm mb-6 leading-relaxed">
                             {errorModal.message}
                         </p>
                         <button
@@ -610,6 +756,22 @@ const ShowingGoals = ({ goals, loading, onGoalAdded, viewMode = 'grid' }) => {
                         >
                             Understood
                         </button>
+                    </div>
+                </div>
+            )}
+
+            {/* Fullscreen Lightbox Modal */}
+            {lightboxImage && (
+                <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/90 backdrop-blur-lg p-4 animate-in fade-in duration-200" onClick={() => setLightboxImage(null)}>
+                    <div className="relative max-w-5xl max-h-[90vh] flex items-center justify-center w-full" onClick={e => e.stopPropagation()}>
+                        <button
+                            onClick={() => setLightboxImage(null)}
+                            className="absolute -top-12 right-0 md:-right-12 bg-white/10 hover:bg-red-600/80 text-white p-2.5 rounded-full transition-all"
+                            title="Close preview"
+                        >
+                            <X className="w-6 h-6" />
+                        </button>
+                        <img src={lightboxImage} alt="Goal high-res view" className="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl border border-white/10" />
                     </div>
                 </div>
             )}

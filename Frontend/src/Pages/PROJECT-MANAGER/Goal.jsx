@@ -59,11 +59,7 @@ const Goal = () => {
     };
 
     return (
-        <div className='min-h-full bg-[#070709] relative overflow-x-hidden px-5 sm:px-8 py-10 flex flex-col text-white font-poppins selection:bg-blue-500/30'>
-            {/* Ambient background glows */}
-            <div className="pointer-events-none absolute -top-40 -left-40 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px]"></div>
-            <div className="pointer-events-none absolute top-1/3 -right-40 w-96 h-96 bg-purple-600/10 rounded-full blur-[140px]"></div>
-
+        <div className='min-h-full bg-black relative overflow-x-hidden px-5 sm:px-8 py-10 flex flex-col text-white font-poppins selection:bg-white/20'>
             <div className="relative z-10 max-w-[1600px] w-full mx-auto flex flex-col h-full">
                 <GoalsHeader
                     searchQuery={searchQuery}
@@ -71,7 +67,7 @@ const Goal = () => {
                     primaryFilter={primaryFilter}
                     setPrimaryFilter={setPrimaryFilter}
                 />
-                <div className='w-full h-[1px] bg-gradient-to-r from-transparent via-[#2a2a35] to-transparent my-4'></div>
+                <div className='w-full h-[1px] bg-gradient-to-r from-transparent via-[#212121] to-transparent my-4'></div>
                 <GoalsSecondHeader
                     selectedStatus={selectedStatus}
                     setSelectedStatus={setSelectedStatus}

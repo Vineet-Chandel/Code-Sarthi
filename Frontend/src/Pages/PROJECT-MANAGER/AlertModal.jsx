@@ -63,7 +63,7 @@ const AlertModal = ({ isOpen, onClose, title, message, type = 'info' }) => {
                     initial={{ opacity: 0, scale: 0.95, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                    className={`relative w-full max-w-sm bg-[#09090B] border ${theme.border} rounded-2xl p-6 shadow-2xl overflow-hidden`}
+                    className={`relative w-full max-w-sm bg-[#0a0a0a] border ${theme.border} rounded-2xl p-6 shadow-2xl overflow-hidden`}
                 >
                     {/* Top gradient accent line */}
                     <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${theme.accent}`} />

@@ -26,19 +26,19 @@ const GoalsSecondHeader = ({ selectedStatus, setSelectedStatus, selectedPriority
         <div className='hidden lg:flex flex-col gap-3 py-1 w-full font-poppins'>
             {/* Status filters */}
             <div className='flex items-center gap-4 overflow-x-auto custom-scrollbar pb-1 w-full'>
-                <span className='text-gray-400 text-xs shrink-0 font-bold uppercase tracking-widest min-w-[70px]'>Status:</span>
+                <span className='text-zinc-500 text-xs shrink-0 font-bold uppercase tracking-widest min-w-[70px]'>Status:</span>
                 <div className="flex items-center gap-2">
                     {statuses.map(status => (
                         <button
                             key={status}
                             onClick={() => setSelectedStatus(status)}
                             className={`whitespace-nowrap px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 flex items-center gap-2 ${selectedStatus === status
-                                ? (status === 'All' ? 'bg-white text-black font-bold' : `${statusColors[status]} font-bold`)
-                                : 'bg-white/[0.04] text-gray-400 hover:bg-white/[0.08] hover:text-gray-200'
+                                ? (status === 'All' ? 'bg-white text-black font-bold' : `${statusColors[status]} border border-zinc-700 font-bold bg-[#212121]`)
+                                : 'bg-[#0a0a0a] border border-[#212121] text-zinc-400 hover:bg-[#212121] hover:text-white'
                                 }`}
                         >
                             {status !== 'All' && (
-                                <span className={`w-2 h-2 rounded-full ${dotColors[status] || 'bg-blue-500'}`}></span>
+                                <span className={`w-2 h-2 rounded-full ${dotColors[status] || 'bg-white'}`}></span>
                             )}
                             {status}
                         </button>
@@ -48,18 +48,18 @@ const GoalsSecondHeader = ({ selectedStatus, setSelectedStatus, selectedPriority
 
             {/* Priority filters */}
             <div className='flex items-center gap-4 overflow-x-auto custom-scrollbar pb-1 w-full'>
-                <span className='text-gray-400 text-xs shrink-0 font-bold uppercase tracking-widest min-w-[70px]'>Priority:</span>
+                <span className='text-zinc-500 text-xs shrink-0 font-bold uppercase tracking-widest min-w-[70px]'>Priority:</span>
                 <div className="flex items-center gap-2">
                     {priorities.map(priority => (
                         <button
                             key={priority}
                             onClick={() => setSelectedPriority(priority)}
                             className={`whitespace-nowrap px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 ${selectedPriority === priority
-                                ? (priority === 'All' ? 'bg-white text-black font-bold' : 'bg-blue-600 text-white font-bold')
-                                : 'bg-white/[0.04] text-gray-400 hover:bg-white/[0.08] hover:text-gray-200'
+                                ? 'bg-white text-black font-bold'
+                                : 'bg-[#0a0a0a] border border-[#212121] text-zinc-400 hover:bg-[#212121] hover:text-white'
                                 }`}
                         >
-                            {priority === 'Critical' && <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-ping mr-1"></span>}
+                            {priority === 'Critical' && <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping mr-1"></span>}
                             {priority}
                         </button>
                     ))}
