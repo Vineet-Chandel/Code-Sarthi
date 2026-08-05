@@ -360,7 +360,7 @@ const Signup = () => {
 
 
   const validatePasswordStrength = (password) => {
-    let strength = 0;
+    strength = Math.max(0, strength - 1);
     if (password.length >= 8) strength++;
     if (/[A-Z]/.test(password)) strength++;
     if (/[0-9]/.test(password)) strength++;
@@ -694,7 +694,7 @@ const Signup = () => {
                   <li className={`flex items-center gap-2 ${(weakPatterns.some((item) =>
                     formData.password.toLowerCase().trim().includes(item.toLowerCase()))) ? 'text-red-500' : ''}`}>
                     <span>{(weakPatterns.some((item) =>
-                      formData.password.toLowerCase().trim().includes(item.toLowerCase()))) ? '✓' : '○'}</span>
+                      formData.password.toLowerCase().trim().includes(item.toLowerCase()))) ? '✗' : '○'}</span>
                     Weak Pattern
                   </li>
                 </ul>
@@ -833,15 +833,7 @@ const Signup = () => {
                       </svg>
                     </div>
 
-                    <span className="text-center text-black text-sm md:text-base lg:text-xl xl:text-2xl ">
 
-                      <div className="flex items-end gap-1">
-                        <span className="w-2 h-2 rounded-full bg-black/70 animate-bounce [animation-delay:0ms]" />
-                        <span className="w-2 h-2 rounded-full bg-black/70 animate-bounce [animation-delay:200ms]" />
-                        <span className="w-2 h-2 rounded-full bg-black/70 animate-bounce [animation-delay:400ms]" />
-                      </div>
-
-                    </span>
 
                   </div>
                 ) : (
