@@ -10,7 +10,7 @@ const ContentFirst = () => {
 
             <div
 
-                className="w-[95%] sm:w-[90%] mx-auto flex flex-col items-start text-center m-2 lg:mb-4"
+                className="w-[95%]  mx-auto flex flex-col items-start text-center m-2 lg:mb-4"
             >
                 <div className="flex sm:flex-row flex-col">
                     <h2
@@ -48,7 +48,7 @@ text-start
 
             </div>
 
-            <div className="w-full sm:w-[90%] flex flex-col items-center gap-2">
+            <div className="w-[95%] flex flex-col items-center gap-2">
                 {/* Top Cards */}
                 <div className="w-full flex flex-col lg:flex-row gap-2">
 

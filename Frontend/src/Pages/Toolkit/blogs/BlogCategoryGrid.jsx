@@ -1,11 +1,15 @@
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import * as Icons from "lucide-react";
 import { Search, Trophy, Bookmark, Sparkles, Clock, Award, User, Tag, ChevronRight, BookOpen, Layers } from "lucide-react";
 
-export default function BlogCategoryGrid({ categories = [], onSelectCategory, onSelectPost, bookmarkedIds = [], onToggleBookmark }) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [showSavedOnly, setShowSavedOnly] = useState(false);
-
+export default function BlogCategoryGrid({ 
+  categories = [], 
+  onSelectCategory, 
+  onSelectPost, 
+  bookmarkedIds = [], 
+  onToggleBookmark,
+  showSavedOnly
+}) {
   // Collect all posts across all categories for searching & saved view
   const allPosts = useMemo(() => {
     const list = [];
@@ -17,24 +21,11 @@ export default function BlogCategoryGrid({ categories = [], onSelectCategory, on
     return list;
   }, [categories]);
 
-  // Filter posts based on query or saved view
+  // Filter posts based on saved view
   const filteredPosts = useMemo(() => {
-    let result = allPosts;
-    if (showSavedOnly) {
-      result = result.filter((p) => bookmarkedIds.includes(p.id));
-    }
-    const q = searchQuery.trim().toLowerCase();
-    if (q) {
-      result = result.filter((p) => {
-        const titleMatch = p.title.toLowerCase().includes(q);
-        const excerptMatch = (p.excerpt || "").toLowerCase().includes(q);
-        const tagMatch = (p.tags || []).some((t) => t.toLowerCase().includes(q));
-        const authorMatch = (p.author?.name || "").toLowerCase().includes(q);
-        return titleMatch || excerptMatch || tagMatch || authorMatch;
-      });
-    }
-    return result;
-  }, [allPosts, searchQuery, showSavedOnly, bookmarkedIds]);
+    if (!showSavedOnly) return [];
+    return allPosts.filter((p) => bookmarkedIds.includes(p.id));
+  }, [allPosts, showSavedOnly, bookmarkedIds]);
 
   const getReadTime = (post) => {
     if (!post?.content) return 3;
@@ -46,98 +37,44 @@ export default function BlogCategoryGrid({ categories = [], onSelectCategory, on
     return Math.max(1, Math.ceil(wordCount / 200));
   };
 
-  const isFilterActive = Boolean(searchQuery.trim()) || showSavedOnly;
-
   return (
     <div className="w-full bg-[#000000] text-white py-8 px-4 sm:px-6 mx-auto space-y-12 selection:bg-white/20 font-sans">
 
-      {/* ── Hero Banner & Search Bar ────────────────────────────────────────── */}
+      {/* ── Hero Banner ────────────────────────────────────────── */}
       <div className="rounded-3xl bg-[#08080B] p-6 sm:p-12 shadow-2xl relative overflow-hidden flex flex-col items-center text-center group">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-white/[0.02] rounded-full blur-3xl pointer-events-none transition-all duration-700" />
 
-        <div className="inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-4 py-1.5 text-xs font-mono font-bold uppercase tracking-widest text-white/90 mb-5 shadow-inner">
+        <div className="inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-4 py-1.5 text-xs font-mono font-bold uppercase tracking-widest text-white/90 mb-5 shadow-inner relative z-10">
           <Sparkles size={13} className="text-amber-300" />
           <span>Toolkit Content Hub & Strategy Studio</span>
         </div>
 
-        <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight text-white leading-tight max-w-4xl">
+        <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight text-white leading-tight max-w-4xl relative z-10">
           Deep-Dive Guides & <span className="text-white/70">Hackathon Strategy</span>
         </h1>
-
-        <p className="text-base sm:text-lg text-white/70 max-w-2xl mt-4 leading-relaxed font-normal">
-          Structured insights, common pitfalls to avoid, and copy-ready AI prompts directly from winning creators.
-        </p>
-
-        {/* Search Input & Saved Filter Row */}
-        <div className="mt-8 w-full max-w-3xl flex flex-col sm:flex-row items-stretch sm:items-center gap-3 relative z-10">
-          <div className="relative flex-1 flex items-center rounded-2xl bg-[#0F0F14] p-2 shadow-2xl focus-within:bg-[#14141C] transition-all">
-            <Search size={19} className="ml-3 text-white/50 shrink-0" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search across guides, prompts, tags, or topics (e.g., SIH, hackathon, AI)..."
-              className="w-full bg-transparent px-3 py-2 text-xs sm:text-sm text-white placeholder-white/40 font-sans focus:outline-none"
-            />
-            {searchQuery && (
-              <button
-                type="button"
-                onClick={() => setSearchQuery("")}
-                className="px-2.5 py-1 text-xs text-white/60 hover:text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer mr-1 shrink-0"
-              >
-                Clear
-              </button>
-            )}
-          </div>
-
-          {/* Saved Posts Toggle Button */}
-          <button
-            type="button"
-            onClick={() => setShowSavedOnly(!showSavedOnly)}
-            className={`flex items-center justify-center gap-2 px-5 py-3 rounded-2xl text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0 ${showSavedOnly
-              ? "bg-white/20 text-white shadow-lg"
-              : "bg-[#0F0F14] text-white/70 hover:bg-[#14141C] hover:text-white"
-              }`}
-          >
-            <Bookmark size={16} className={showSavedOnly ? "fill-white text-white" : "text-white/70"} />
-            <span>Saved ({bookmarkedIds.length})</span>
-          </button>
-        </div>
       </div>
 
-      {/* ── Search / Saved Filter View ──────────────────────────────────────── */}
-      {isFilterActive ? (
+      {/* ── Saved Filter View ──────────────────────────────────────── */}
+      {showSavedOnly ? (
         <section className="space-y-6">
           <div className="flex items-center justify-between border-b border-white/[0.06] pb-3">
             <h2 className="text-sm font-mono font-extrabold uppercase tracking-widest text-white/80 pl-2 border-l-2 border-white/40 flex items-center gap-2">
-              <span>{showSavedOnly ? "Saved Bookmarks" : `Search Results for "${searchQuery}"`}</span>
-              <span className="text-xs font-normal text-white/50">({filteredPosts.length} found)</span>
+              <span>Saved Strategy Blogs</span>
             </h2>
-            <button
-              onClick={() => {
-                setSearchQuery("");
-                setShowSavedOnly(false);
-              }}
-              className="text-xs text-white/70 hover:text-white hover:underline font-bold cursor-pointer"
-            >
-              Reset view
-            </button>
           </div>
 
           {filteredPosts.length === 0 ? (
             <div className="py-20 text-center rounded-3xl bg-[#08080B] space-y-3">
               <BookOpen size={40} className="text-white/30 mx-auto stroke-[1.5]" />
-              <div className="text-base font-bold text-white/80">No matching articles found</div>
+              <div className="text-base font-bold text-white/80">No saved blogs yet</div>
               <p className="text-xs text-white/50 max-w-sm mx-auto">
-                {showSavedOnly
-                  ? "You haven't saved any blog posts to your bookmarks yet. Click the bookmark icon on any article to save it here!"
-                  : `No blog posts matched your search for "${searchQuery}". Try searching a broader keyword like "SIH" or "prompt".`}
+                You haven't saved any blog posts to your bookmarks yet. Click the bookmark icon on any article to save it here!
               </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {filteredPosts.map((post) => {
-                const isSaved = bookmarkedIds.includes(post.id);
+                const isSaved = true; // since this view only shows saved posts
                 const mins = getReadTime(post);
 
                 return (
@@ -231,11 +168,22 @@ export default function BlogCategoryGrid({ categories = [], onSelectCategory, on
                 <div
                   key={cat.id}
                   onClick={() => onSelectCategory(cat)}
-                  className="group relative rounded-3xl bg-[#08080B] hover:bg-[#0B0B10] p-7 cursor-pointer transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 flex flex-col justify-between overflow-hidden min-h-[260px]"
+                  className="group relative rounded-3xl bg-[#08080B] hover:bg-[#0B0B10] border border-white/[0.06] hover:border-white/[0.15] p-6 sm:p-7 cursor-pointer transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 flex flex-col justify-between overflow-hidden min-h-[260px]"
                 >
                   <div className="absolute -right-10 -top-10 w-48 h-48 bg-white/[0.02] rounded-full blur-2xl pointer-events-none transition-all duration-500" />
 
                   <div className="space-y-4 relative z-10">
+                    {cat.image && (
+                      <div className="w-full h-48 sm:h-56 rounded-2xl overflow-hidden relative shadow-lg group-hover:shadow-2xl transition-all duration-500 mb-2 border border-white/[0.08]">
+                        <img
+                          src={cat.image}
+                          alt={cat.name}
+                          className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#08080B] via-transparent to-transparent opacity-70 pointer-events-none" />
+                      </div>
+                    )}
+
                     <div className="flex items-center justify-between">
                       <div className="w-12 h-12 rounded-2xl bg-white/[0.06] text-white flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300">
                         <IconComp size={24} />

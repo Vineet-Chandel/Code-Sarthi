@@ -19,6 +19,7 @@ import axios from "axios";
 import ContentSecond2 from "./ContentSecond2";
 import Third from "./Third";
 import Ropes from "./Ropes";
+import DashboardBento from "./DashboardBento";
 
 
 
@@ -84,6 +85,7 @@ const Hero = () => {
             <ContentFirst />
 
             <SecondLanding />
+            <DashboardBento />
             <Third />
             <ContentSecond />
             <Lines2 />

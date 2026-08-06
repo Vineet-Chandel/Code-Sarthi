@@ -218,7 +218,7 @@ export default function DocPage() {
               type="text"
               value={filterQuery}
               onChange={(e) => setFilterQuery(e.target.value)}
-              placeholder={`Quick filter inside ${tech.name} cheat sheet…`}
+              placeholder={`Quick filter inside ${tech.name} docs…`}
               className="w-full bg-transparent text-xs text-white placeholder:text-white/35 focus:outline-none"
             />
             {filterQuery && (

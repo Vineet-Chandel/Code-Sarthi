@@ -8,7 +8,7 @@ export default function EmptyState({ techName }) {
         <Hammer size={20} />
       </span>
       <h2 className="text-lg font-semibold text-white/80">
-        {techName} cheat sheet isn't written yet
+        {techName} docs aren't written yet
       </h2>
       <p className="mt-2 max-w-sm text-sm text-white/40">
         This block is registered but its content file hasn't been added. Drop a

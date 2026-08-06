@@ -1,9 +1,12 @@
 import { ArrowLeft, Bookmark, Clock, Award, User, Tag, Trophy, BookOpen, ChevronRight } from "lucide-react";
 
-export default function BlogPostList({ category, onBack, onSelectPost, bookmarkedIds = [], onToggleBookmark }) {
+export default function BlogPostList({ category, onBack, onSelectPost, bookmarkedIds = [], onToggleBookmark, showSavedOnly }) {
   if (!category) return null;
 
-  const posts = category.posts || [];
+  let posts = category.posts || [];
+  if (showSavedOnly) {
+    posts = posts.filter(post => bookmarkedIds.includes(post.id));
+  }
 
   // Helper to compute quick read time
   const getReadTime = (post) => {
@@ -45,11 +48,23 @@ export default function BlogPostList({ category, onBack, onSelectPost, bookmarke
             </p>
           </div>
 
-          <div className="shrink-0 flex items-center gap-4 bg-[#0F0F14] px-6 py-4 rounded-2xl relative z-10 shadow-lg">
-            <BookOpen size={24} className="text-white/80" />
-            <div className="text-left">
-              <div className="text-xl font-black text-white">{posts.length}</div>
-              <div className="text-[11px] font-mono uppercase tracking-wider text-white/50">Articles Available</div>
+          <div className="shrink-0 flex flex-col sm:flex-row md:flex-col lg:flex-row items-stretch sm:items-center gap-4 relative z-10">
+            {category.image && (
+              <div className="w-full sm:w-64 md:w-72 h-36 sm:h-40 rounded-2xl overflow-hidden shadow-2xl relative border border-white/10 group-hover:border-white/20 transition-all duration-500">
+                <img
+                  src={category.image}
+                  alt={category.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#08080B] via-transparent to-transparent opacity-60 pointer-events-none" />
+              </div>
+            )}
+            <div className="flex items-center gap-4 bg-[#0F0F14] px-6 py-4 rounded-2xl shadow-lg border border-white/[0.06]">
+              <BookOpen size={24} className="text-white/80" />
+              <div className="text-left">
+                <div className="text-xl font-black text-white">{posts.length}</div>
+                <div className="text-[11px] font-mono uppercase tracking-wider text-white/50">Articles Available</div>
+              </div>
             </div>
           </div>
         </div>

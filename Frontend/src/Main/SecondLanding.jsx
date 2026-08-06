@@ -29,17 +29,17 @@ const SecondLanding = () => {
 
         <div id="resume" className="w-full flex flex-col items-center justify-center">
             < div
-                className=" w-[95%] sm:w-[90%] mx-auto mt-10  bg-gray-200 flex flex-col items-center justify-between    " >
-                <div className="w-full justify-start  flex sm:flex-row flex-col mt-10 mb-[-40px]">
+                className=" w-[95%]  mx-auto mt-10  bg-gray-200 flex flex-col items-center justify-between    " >
+                <div className="w-full justify-start  flex sm:flex-row flex-col mt-10 mb-[-20px]">
                     <h2
                         className="
                     font-poppins
-                    font-extrabold
+                    font-bold
                    text-2xl sm:text-5xl
                     lg:text-6xl
                     leading-tight
                     text-black
-text-start
+text-start 
 
                     lg:ml-1
                 "
@@ -50,7 +50,7 @@ text-start
                     <h2
                         className="
                     font-poppins
-                    font-extrabold
+                    font-bold
                text-2xl sm:text-5xl
                     lg:text-6xl
                     leading-tight

@@ -4,19 +4,15 @@ import BlogCategoryGrid from "./BlogCategoryGrid";
 import BlogPostList from "./BlogPostList";
 import BlogPostDetail from "./BlogPostDetail";
 
-const BOOKMARKS_KEY = "codesarthi_toolkit_blog_bookmarks";
-
-export default function BlogsSection({ initialCategoryId = null, initialPostId = null }) {
+export default function BlogsSection({ 
+  initialCategoryId = null, 
+  initialPostId = null,
+  showSavedOnly = false,
+  savedBlogs = [],
+  onToggleBlogSave
+}) {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedPost, setSelectedPost] = useState(null);
-  const [bookmarkedIds, setBookmarkedIds] = useState(() => {
-    try {
-      const saved = localStorage.getItem(BOOKMARKS_KEY);
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) {
-      return [];
-    }
-  });
 
   // Handle deep link / initial props mounting or updates
   useEffect(() => {
@@ -48,20 +44,6 @@ export default function BlogsSection({ initialCategoryId = null, initialPostId =
     }
   }, [initialCategoryId, initialPostId]);
 
-  // Save bookmarks to localStorage whenever they change
-  const handleToggleBookmark = (postId) => {
-    setBookmarkedIds((prev) => {
-      const isSaved = prev.includes(postId);
-      const updated = isSaved ? prev.filter((id) => id !== postId) : [...prev, postId];
-      try {
-        localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(updated));
-      } catch (e) {
-        console.error("Error saving blog bookmark to localStorage", e);
-      }
-      return updated;
-    });
-  };
-
   const handleSelectCategory = (cat) => {
     setSelectedCategory(cat);
     setSelectedPost(null);
@@ -90,8 +72,8 @@ export default function BlogsSection({ initialCategoryId = null, initialPostId =
         category={selectedCategory}
         onBack={handleBackToCategoryList}
         onSelectPost={(id) => handleSelectPost(id, selectedCategory)}
-        isBookmarked={bookmarkedIds.includes(selectedPost.id)}
-        onToggleBookmark={handleToggleBookmark}
+        isBookmarked={savedBlogs.includes(selectedPost.id)}
+        onToggleBookmark={onToggleBlogSave}
       />
     );
   }
@@ -102,8 +84,9 @@ export default function BlogsSection({ initialCategoryId = null, initialPostId =
         category={selectedCategory}
         onBack={handleBackToCategories}
         onSelectPost={(id) => handleSelectPost(id, selectedCategory)}
-        bookmarkedIds={bookmarkedIds}
-        onToggleBookmark={handleToggleBookmark}
+        bookmarkedIds={savedBlogs}
+        onToggleBookmark={onToggleBlogSave}
+        showSavedOnly={showSavedOnly}
       />
     );
   }
@@ -113,8 +96,9 @@ export default function BlogsSection({ initialCategoryId = null, initialPostId =
       categories={blogData.categories}
       onSelectCategory={handleSelectCategory}
       onSelectPost={handleSelectPost}
-      bookmarkedIds={bookmarkedIds}
-      onToggleBookmark={handleToggleBookmark}
+      bookmarkedIds={savedBlogs}
+      onToggleBookmark={onToggleBlogSave}
+      showSavedOnly={showSavedOnly}
     />
   );
 }

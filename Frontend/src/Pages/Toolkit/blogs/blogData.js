@@ -6,6 +6,7 @@ export const blogData = {
       fullName: 'Smart India Hackathon',
       description: 'Insights, strategy, and prompts for winning SIH',
       icon: 'Trophy',
+      image: 'https://res.cloudinary.com/dj0ivep44/image/upload/v1786022266/ac810989-429b-4ba2-9305-5d7c25f1b895.png',
       posts: [
         {
           id: 'sih-presentation-resources-winners',

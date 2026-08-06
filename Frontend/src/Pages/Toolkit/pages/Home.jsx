@@ -1,8 +1,8 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import * as Icons from "lucide-react";
-import { Search, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { technologies, categories } from "../data/technologies";
 import { getContentForTech } from "../data/content";
 import TechBlock from "../components/home/TechBlock";
@@ -10,7 +10,7 @@ import Navbar from "../components/layout/Navbar";
 import SearchPalette from "../components/docs/SearchPalette";
 import BlogsSection from "../blogs/BlogsSection";
 
-export default function Home({ initialTab = "cheatsheets" }) {
+export default function Home({ initialTab = "docs" }) {
   const navigate = useNavigate();
   const { categoryId, postId } = useParams();
   const [searchParams] = useSearchParams();
@@ -18,7 +18,7 @@ export default function Home({ initialTab = "cheatsheets" }) {
     if (initialTab === "blogs" || categoryId || postId || searchParams.get("tab") === "blogs") {
       return "blogs";
     }
-    return "cheatsheets";
+    return "docs";
   });
 
   useEffect(() => {
@@ -27,88 +27,71 @@ export default function Home({ initialTab = "cheatsheets" }) {
     }
   }, [initialTab, categoryId, postId, searchParams]);
 
-  const [searchQuery, setSearchQuery] = useState("");
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    if ((tab === "docs" || tab === "cheatsheets") && window.location.pathname.includes("/blogs")) {
+      navigate("/app/toolkit");
+    } else if (tab === "blogs" && !window.location.pathname.includes("/blogs")) {
+      navigate("/app/toolkit/blogs");
+    }
+  };
+
   const [searchOpen, setSearchOpen] = useState(false);
-  const totalCount = technologies.length;
+  const [showSavedOnly, setShowSavedOnly] = useState(false);
 
-  // Compute matched technologies and their sub-topics when searching
-  const searchResults = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-    if (!q) return null;
-
-    const matchedTechs = [];
-
-    technologies.forEach((tech) => {
-      const content = getContentForTech(tech.id);
-      const nameMatch = tech.name.toLowerCase().includes(q) || tech.id.toLowerCase().includes(q);
-
-      let matchedTopics = [];
-      if (content) {
-        matchedTopics = content.topics.filter(
-          (topic) =>
-            topic.title.toLowerCase().includes(q) ||
-            topic.sections?.some((s) => s.heading.toLowerCase().includes(q))
-        );
-      }
-
-      if (nameMatch || matchedTopics.length > 0) {
-        matchedTechs.push({
-          ...tech,
-          content,
-          matchedTopics,
-        });
-      }
+  // --- Docs Bookmarks ---
+  const [savedDocs, setSavedDocs] = useState(() => {
+    try {
+      const saved = localStorage.getItem("codesarthi_toolkit_docs_bookmarks");
+      return saved ? JSON.parse(saved) : [];
+    } catch { return []; }
+  });
+  const handleToggleDocSave = (id) => {
+    setSavedDocs(prev => {
+      const next = prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id];
+      localStorage.setItem("codesarthi_toolkit_docs_bookmarks", JSON.stringify(next));
+      return next;
     });
+  };
 
-    return matchedTechs;
-  }, [searchQuery]);
+  // --- Blogs Bookmarks ---
+  const [savedBlogs, setSavedBlogs] = useState(() => {
+    try {
+      const saved = localStorage.getItem("codesarthi_toolkit_blog_bookmarks");
+      return saved ? JSON.parse(saved) : [];
+    } catch { return []; }
+  });
+  const handleToggleBlogSave = (id) => {
+    setSavedBlogs(prev => {
+      const next = prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id];
+      localStorage.setItem("codesarthi_toolkit_blog_bookmarks", JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const totalCount = technologies.length;
+  const savedCount = activeTab === "docs" ? savedDocs.length : savedBlogs.length;
 
   return (
     <div className="pt-5 bg-black min-h-screen">
-      <Navbar onOpenSearch={() => setSearchOpen(true)} />
+      <Navbar
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+        onOpenSearch={() => setSearchOpen(true)}
+        showSavedOnly={showSavedOnly}
+        onToggleSaved={setShowSavedOnly}
+        savedCount={savedCount}
+      />
       <SearchPalette open={searchOpen} onClose={() => setSearchOpen(false)} />
-      <main className="mx-auto px-6 pb-24 bg-black">
-        {/* ── Top-Level Content Pillar Tabs ─────────────────────────────────── */}
-        <div className="flex justify-center pt-6 pb-2">
-          <div className="inline-flex items-center gap-1 rounded-2xl bg-[#09090B] border border-white/10 p-1.5 shadow-2xl backdrop-blur-xl">
-            <button
-              onClick={() => {
-                setActiveTab("cheatsheets");
-                if (window.location.pathname.includes("/blogs")) {
-                  navigate("/app/toolkit");
-                }
-              }}
-              className={`flex items-center gap-2 px-5 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${activeTab === "cheatsheets"
-                ? "bg-[#ffffff] text-black shadow-[0_0_20px_rgba(83,74,183,0.4)]"
-                : "text-zinc-400 hover:text-white hover:bg-white/5"
-                }`}
-            >
-
-              <span>Docs</span>
-            </button>
-            <button
-              onClick={() => {
-                setActiveTab("blogs");
-                if (!window.location.pathname.includes("/blogs")) {
-                  navigate("/app/toolkit/blogs");
-                }
-              }}
-              className={`flex items-center gap-2 px-5 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${activeTab === "blogs"
-                ? "bg-[#ffffff] text-black shadow-[0_0_20px_rgba(83,74,183,0.4)]"
-                : "text-zinc-400 hover:text-white hover:bg-white/5"
-                }`}
-            >
-
-              <span>Blogs </span>
-
-            </button>
-          </div>
-        </div>
+      <main className="mx-auto px-6 pb-24 pt-4 bg-black">
 
         {activeTab === "blogs" ? (
           <BlogsSection
             initialCategoryId={categoryId || searchParams.get("cat")}
             initialPostId={postId || searchParams.get("post")}
+            showSavedOnly={showSavedOnly}
+            savedBlogs={savedBlogs}
+            onToggleBlogSave={handleToggleBlogSave}
           />
         ) : (
           <>
@@ -140,119 +123,40 @@ export default function Home({ initialTab = "cheatsheets" }) {
                 transition={{ duration: 0.5, delay: 0.1 }}
                 className="mt-4 max-w-xl text-base text-white/50 md:text-lg"
               >
-                Instant, production-ready cheat sheets for web dev, languages, mobile apps, databases, and core dev tools.
+                Instant, production-ready developer docs and guides for web dev, languages, mobile apps, databases, and core dev tools.
               </motion.p>
-
-              {/* Hero Search Bar */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.15 }}
-                className="mt-8 w-full max-w-2xl"
-              >
-                <div className="relative flex items-center rounded-2xl border border-white/15 bg-white/[0.04] p-2 backdrop-blur-xl shadow-2xl transition-all focus-within:border-blue-300/50 focus-within:bg-white/[0.06]">
-                  <Search size={20} className="ml-3 text-white/40" />
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search cheat sheets or sub-topics… (e.g. HTML, Flexbox, Docker, MongoDB)"
-                    className="w-full bg-transparent px-3 py-2 text-sm text-white placeholder:text-white/35 focus:outline-none"
-                  />
-                  {searchQuery ? (
-                    <button
-                      onClick={() => setSearchQuery("")}
-                      className="rounded-lg px-2.5 py-1 text-xs text-white/40 hover:bg-white/10 hover:text-white"
-                    >
-                      Clear
-                    </button>
-                  ) : (
-                    <span className="mr-2 hidden rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-xs text-white/30 sm:inline-block">
-                      Press <kbd className="font-mono">⌘K</kbd>
-                    </span>
-                  )}
-                </div>
-              </motion.div>
             </section>
 
-            {/* ── Search Mode Active ──────────────────────────────────────────────── */}
-            {searchResults !== null ? (
-              <section className="flex flex-col gap-6 pt-4">
+            {/* ── Content Grid ────────────────────────────────────────── */}
+            {showSavedOnly ? (
+              <div className="flex flex-col gap-8">
                 <div className="flex items-center justify-between border-b border-white/10 pb-4">
                   <h2 className="text-lg font-semibold text-white">
-                    Search Results for "{searchQuery}"
+                    Saved Documentation
                   </h2>
-                  <span className="text-xs text-white/40">
-                    Found {searchResults.length} matching technologies
-                  </span>
                 </div>
-
-                {searchResults.length === 0 ? (
-                  <div className="py-16 text-center text-sm text-white/40">
-                    No technology or sub-topic matches "{searchQuery}"
+                {savedDocs.length === 0 ? (
+                  <div className="py-16 text-center text-sm text-white/40 bg-white/[0.02] rounded-2xl border border-white/[0.05]">
+                    You haven't saved any docs yet. Click the bookmark icon on any stack to save it!
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    {searchResults.map((tech) => {
-                      const IconComp = Icons[tech.icon] ?? Icons.Code2;
-                      return (
-                        <div
+                  <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                    {technologies
+                      .filter((t) => savedDocs.includes(t.id))
+                      .map((tech, i) => (
+                        <TechBlock
                           key={tech.id}
-                          className="flex flex-col justify-between rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-sm transition-all hover:border-white/20"
-                        >
-                          <div>
-                            {/* Tech Header */}
-                            <div className="flex items-center gap-3">
-                              <span
-                                className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04]"
-                                style={{ color: tech.color }}
-                              >
-                                <IconComp size={20} />
-                              </span>
-                              <div>
-                                <h3 className="font-bold text-white text-base">
-                                  {tech.name}
-                                </h3>
-                                <p className="text-xs text-white/40">{tech.tagline}</p>
-                              </div>
-                            </div>
-
-                            {/* Sub Table of Contents / Topics Preview */}
-                            {tech.matchedTopics && tech.matchedTopics.length > 0 && (
-                              <div className="mt-4 pt-3 border-t border-white/[0.06]">
-                                <p className="text-[11px] font-medium uppercase tracking-wider text-white/35 mb-2">
-                                  Sub Table of Contents ({tech.matchedTopics.length} matched)
-                                </p>
-                                <div className="flex flex-wrap gap-1.5">
-                                  {tech.matchedTopics.slice(0, 4).map((topic) => (
-                                    <button
-                                      key={topic.id}
-                                      onClick={() => navigate(`/docs/${tech.id}#${topic.id}`)}
-                                      className="rounded-md border border-white/10 bg-white/[0.04] px-2 py-1 text-left text-xs text-white/70 hover:border-blue-300/40 hover:text-blue-300 transition-colors"
-                                    >
-                                      {topic.title}
-                                    </button>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Open Full Cheat Sheet button */}
-                          <button
-                            onClick={() => navigate(`/app/toolkit/docs/${tech.id}`)}
-                            className="mt-5 w-full rounded-xl border border-blue-300/30 bg-blue-300/10 py-2.5 text-center text-xs font-semibold text-blue-300 transition-all hover:bg-blue-300/20"
-                          >
-                            Open Full {tech.name} Cheat Sheet →
-                          </button>
-                        </div>
-                      );
-                    })}
+                          tech={tech}
+                          index={i}
+                          available={Boolean(getContentForTech(tech.id))}
+                          isSaved={true}
+                          onToggleSave={handleToggleDocSave}
+                        />
+                      ))}
                   </div>
                 )}
-              </section>
+              </div>
             ) : (
-              /* ── Standard Categorized View ────────────────────────────────────────── */
               <div className="flex flex-col gap-16">
                 {categories.map((cat, catIdx) => {
                   const catTechs = technologies.filter((t) => t.category === cat.id);
@@ -287,6 +191,8 @@ export default function Home({ initialTab = "cheatsheets" }) {
                             tech={tech}
                             index={i}
                             available={Boolean(getContentForTech(tech.id))}
+                            isSaved={savedDocs.includes(tech.id)}
+                            onToggleSave={handleToggleDocSave}
                           />
                         ))}
                       </div>

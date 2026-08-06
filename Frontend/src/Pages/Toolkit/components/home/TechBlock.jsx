@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import * as Icons from "lucide-react";
 import { ArrowUpRight } from "lucide-react";
 
-export default function TechBlock({ tech, index, available }) {
+export default function TechBlock({ tech, index, available, isSaved, onToggleSave }) {
   const navigate = useNavigate();
   const Icon = Icons[tech.icon] ?? Icons.Code2;
   const cardRef = useRef(null);
@@ -82,17 +82,28 @@ export default function TechBlock({ tech, index, available }) {
           }}
         />
 
-        <div className="flex w-full items-start justify-between">
+        <div className="flex w-full items-start justify-between relative z-10">
           <span
             className="flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] shadow-sm"
             style={{ color: tech.color }}
           >
             <Icon size={24} strokeWidth={2} />
           </span>
-          <ArrowUpRight
-            size={18}
-            className="text-white/20 transition-all duration-200 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-accent"
-          />
+          <div className="flex items-center gap-2">
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleSave?.(tech.id);
+              }}
+              className="p-1.5 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
+            >
+              <Icons.Bookmark size={16} className={isSaved ? "fill-amber-400 text-amber-400" : "text-white/40 group-hover:text-white/70"} />
+            </div>
+            <ArrowUpRight
+              size={18}
+              className="text-white/20 transition-all duration-200 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-accent"
+            />
+          </div>
         </div>
 
         <div className="flex flex-col gap-1.5 mt-2">
