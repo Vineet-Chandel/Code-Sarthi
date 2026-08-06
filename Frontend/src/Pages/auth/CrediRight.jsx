@@ -108,61 +108,61 @@ const CrediRight = () => {
     return (
         <div className="h-full">
 
-            <div className="w-full h-full bg-white text-accent rounded-2xl p-2 lg:p-4  relative overflow-hidden group">
+            <div className=" w-full h-full bg-transparent  text-accent rounded-2xl p-2 lg:p-4  relative overflow-hidden group">
+
 
                 <div className="relative z-10 flex flex-col justify-between h-full">
 
-                    <div className="flex flex-col justify-between items-center h-fit gap-3">
-                        <div className="relative overflow-hidden w-full  rounded-3xl bg-black p-4 flex flex-col sm:flex-col gap-4">
+                    <div className="flex flex-col justify-between items-center h-fit gap-4">
+                        <div className="relative w-full rounded-2xl border border-white/20 hover:border-white/40 transition-all duration-300 bg-black p-4 sm:p-6 flex flex-col gap-4 shadow-xl group/hero">
+                            {/* Corner Plus Icons */}
+                            <span className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 text-white/70 text-2xl font-light leading-none select-none z-20 pointer-events-none group-hover/hero:text-white transition-colors duration-300">+</span>
+                            <span className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 text-white/70 text-2xl font-light leading-none select-none z-20 pointer-events-none group-hover/hero:text-white transition-colors duration-300">+</span>
+                            <span className="absolute bottom-0 left-0 -translate-x-1/2 translate-y-1/2 text-white/70 text-2xl font-light leading-none select-none z-20 pointer-events-none group-hover/hero:text-white transition-colors duration-300">+</span>
+                            <span className="absolute bottom-0 right-0 translate-x-1/2 translate-y-1/2 text-white/70 text-2xl font-light leading-none select-none z-20 pointer-events-none group-hover/hero:text-white transition-colors duration-300">+</span>
 
                             {/* Background */}
-
-                            <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_right,rgba(99,102,241,.18),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(168,85,247,.15),transparent_35%)]" />
+                            <div className="absolute inset-0 rounded-2xl z-0 overflow-hidden pointer-events-none bg-[radial-gradient(circle_at_top_right,rgba(99,102,241,.18),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(168,85,247,.15),transparent_35%)]" />
 
                             {/* Illustration */}
-                            <div className="relative z-10 w-full sm:w-full flex rounded-3xl bg-white/10 flex items-center justify-center p-6">
-
-
-
-
-
-                                <img className="w-32 h-32 sm:w-40 sm:h-40 lg:w-52 lg:h-52 text-white" src="https://res.cloudinary.com/dggoaxqxl/image/upload/v1779801993/Untitled_design_3_-Photoroom_hkidic.webp" alt="" />
+                            <div className="relative z-10 w-full flex rounded-xl bg-white/10 items-center justify-center p-6 border border-white/5">
+                                <img className="w-32 h-32 sm:w-40 sm:h-40 lg:w-52 lg:h-52 text-white object-contain drop-shadow-md" src="https://res.cloudinary.com/dggoaxqxl/image/upload/v1779801993/Untitled_design_3_-Photoroom_hkidic.webp" alt="CodeSarthi Logo" />
                             </div>
 
                             {/* Content */}
-                            <div className="relative z-10 w-full sm:w-full flex-1">
+                            <div className="relative z-10 w-full flex-1">
 
-                                <h2 className="text-3xl sm:text-5xl font-extrabold text-white font-poppins mb-4">
+                                <h2 className="text-3xl sm:text-5xl font-extrabold text-white font-poppins mb-4 tracking-tight">
                                     CodeSarthi
                                 </h2>
 
-                                <div className="grid grid-cols-2 gap-x-8 gap-y-3">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
 
-                                    <div className="flex gap-2">
-                                        <span className="text-white/40">●</span>
-                                        <span className="text-sm text-white/70">
+                                    <div className="flex items-center gap-2.5">
+                                        <span className="text-indigo-400 text-xs">●</span>
+                                        <span className="text-sm text-white/80 font-medium">
                                             Build. Collaborate. Get Hired.
                                         </span>
                                     </div>
 
-                                    <div className="flex gap-2">
-                                        <span className="text-white/40">●</span>
-                                        <span className="text-sm text-white/70">
-                                            An Ecosystem that enpowers the Developers.
+                                    <div className="flex items-center gap-2.5">
+                                        <span className="text-purple-400 text-xs">●</span>
+                                        <span className="text-sm text-white/80 font-medium">
+                                            An ecosystem that empowers developers.
                                         </span>
                                     </div>
 
-                                    <div className="flex gap-2">
-                                        <span className="text-white/40">●</span>
-                                        <span className="text-sm text-white/70">
-                                            Where Developers Build & Collabrate.
+                                    <div className="flex items-center gap-2.5">
+                                        <span className="text-cyan-400 text-xs">●</span>
+                                        <span className="text-sm text-white/80 font-medium">
+                                            Where developers build & collaborate.
                                         </span>
                                     </div>
 
-                                    <div className="flex gap-2">
-                                        <span className="text-white/40">●</span>
-                                        <span className="text-sm text-white/70">
-                                            Build by the Developer for the Developers.
+                                    <div className="flex items-center gap-2.5">
+                                        <span className="text-emerald-400 text-xs">●</span>
+                                        <span className="text-sm text-white/80 font-medium">
+                                            Built by developers, for developers.
                                         </span>
                                     </div>
 

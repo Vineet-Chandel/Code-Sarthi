@@ -55,25 +55,25 @@ const TeamMembersPanel = ({ teamId, myRole, ownerId }) => {
     if (loading) return <div className="text-zinc-500 animate-pulse">Loading members...</div>;
 
     return (
-        <div className="bg-[#09090B] border border-white/10 rounded-2xl overflow-hidden">
-            <div className="px-6 py-4 border-b border-white/10 flex justify-between items-center bg-white/[0.02]">
-                <h3 className="text-lg font-medium text-white">Team Members</h3>
-                <span className="bg-[#534AB7]/20 text-[#A7A0F8] text-xs font-semibold px-2.5 py-1 rounded-full border border-[#534AB7]/30">
+        <div className="bg-[#0a0a0a] rounded-2xl overflow-hidden shadow-2xl">
+            <div className="px-6 py-4 flex justify-between items-center bg-black/40">
+                <h3 className="text-lg font-bold text-white">Team Members</h3>
+                <span className="bg-black text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-inner">
                     {members.length} Members
                 </span>
             </div>
 
-            <div className="divide-y divide-white/5 max-h-[400px] overflow-y-auto custom-scrollbar">
+            <div className="flex flex-col gap-1 p-2 max-h-[400px] overflow-y-auto custom-scrollbar">
                 {members.map(member => {
                     const user = member.userId;
                     const isLeader = member.role === 'leader';
                     const isAdmin = member.role === 'admin';
 
                     return (
-                        <div key={member._id} className="flex items-center justify-between px-6 py-4 hover:bg-white/[0.02] transition-colors">
+                        <div key={member._id} className="flex items-center justify-between px-5 py-3.5 hover:bg-[#121212] rounded-xl transition-colors">
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#534AB7] to-[#A7A0F8] p-[2px]">
-                                    <div className="w-full h-full rounded-full bg-[#09090B] flex items-center justify-center overflow-hidden">
+                                    <div className="w-full h-full rounded-full bg-black flex items-center justify-center overflow-hidden">
                                         {user.photoUrl?.url && user.photoUrl.url !== "https://geographyandyou.com/images/user-profile.png" ? (
                                             <img src={user.photoUrl.url} alt="Profile" className="w-full h-full object-cover" />
                                         ) : (
@@ -83,21 +83,21 @@ const TeamMembersPanel = ({ teamId, myRole, ownerId }) => {
                                 </div>
                                 <div>
                                     <div className="flex items-center gap-2">
-                                        <span className="text-sm font-medium text-white">{user.firstName} {user.lastName}</span>
+                                        <span className="text-sm font-bold text-white">{user.firstName} {user.lastName}</span>
                                         {isLeader && (
-                                            <span className="flex items-center gap-1 text-[10px] uppercase tracking-wider font-bold text-[#A7A0F8] bg-[#A7A0F8]/10 px-2 py-0.5 rounded border border-[#A7A0F8]/20">
+                                            <span className="flex items-center gap-1 text-[10px] uppercase tracking-wider font-bold text-[#A7A0F8] bg-black px-2.5 py-0.5 rounded shadow-inner">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2L9 8H3l5 5l-2 7l6-4l6 4l-2-7l5-5h-6z" /></svg>
                                                 Leader
                                             </span>
                                         )}
                                         {isAdmin && (
-                                            <span className="flex items-center gap-1 text-[10px] uppercase tracking-wider font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                                            <span className="flex items-center gap-1 text-[10px] uppercase tracking-wider font-bold text-emerald-400 bg-black px-2.5 py-0.5 rounded shadow-inner">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12c5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4l1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" /></svg>
                                                 Admin
                                             </span>
                                         )}
                                     </div>
-                                    <span className="text-xs text-zinc-500">{user.email}</span>
+                                    <span className="text-xs text-zinc-500 font-medium">{user.email}</span>
                                 </div>
                             </div>
 
@@ -107,27 +107,27 @@ const TeamMembersPanel = ({ teamId, myRole, ownerId }) => {
                                     {isAdmin ? (
                                         <button
                                             onClick={() => handleRoleChange(user._id, 'member')}
-                                            className="text-xs font-medium text-zinc-400 hover:text-zinc-200 bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded transition-colors border border-white/5"
+                                            className="text-xs font-bold text-zinc-400 hover:text-zinc-200 bg-black hover:bg-[#1a1a1a] px-3.5 py-2 rounded-lg transition-colors shadow-sm"
                                         >
                                             Remove Admin
                                         </button>
                                     ) : (
                                         <button
                                             onClick={() => handleRoleChange(user._id, 'admin')}
-                                            className="text-xs font-medium text-emerald-400/80 hover:text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 px-3 py-1.5 rounded transition-colors border border-emerald-500/20"
+                                            className="text-xs font-bold text-emerald-400/80 hover:text-emerald-400 bg-black hover:bg-[#1a1a1a] px-3.5 py-2 rounded-lg transition-colors shadow-sm"
                                         >
                                             Make Admin
                                         </button>
                                     )}
                                     <button
                                         onClick={() => setTransferModalOpen(user._id)}
-                                        className="text-xs font-medium text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded transition-colors border border-white/5"
+                                        className="text-xs font-bold text-zinc-400 hover:text-white bg-black hover:bg-[#1a1a1a] px-3.5 py-2 rounded-lg transition-colors shadow-sm"
                                     >
                                         Make Leader
                                     </button>
                                     <button
                                         onClick={() => setRemovingUserId(user._id)}
-                                        className="text-xs font-medium text-amber-500/80 hover:text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 px-3 py-1.5 rounded transition-colors border border-amber-500/20"
+                                        className="text-xs font-bold text-amber-500/80 hover:text-amber-400 bg-black hover:bg-[#1a1a1a] px-3.5 py-2 rounded-lg transition-colors shadow-sm"
                                     >
                                         Remove
                                     </button>

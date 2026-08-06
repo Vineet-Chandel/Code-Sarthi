@@ -877,13 +877,41 @@ const Main2 = ({ ctaData }) => {
         <div id="home"
             className="w-full min-h-screen bg-gray-200 p-1.5 sm:p-2 overflow-x-hidden"
         >
-            <div className="w-full min-h-[calc(100vh-1rem)] bg-black rounded-3xl flex flex-col items-start justify-start py-4 sm:py-6 px-1 sm:px-4 relative shadow-2xl">
-                <div className="w-full">
+            <div className="w-full min-h-[calc(100vh-1rem)] bg-black rounded-3xl flex flex-col items-start justify-start py-4 sm:py-6 px-1 sm:px-4 relative shadow-2xl overflow-hidden">
+
+                {/* 🌌 Dashboard Background Preview placed cleanly in the top margin gap */}
+                {/* Ethereal Ambient Backglow */}
+                <div className="absolute top-[65px] sm:top-[85px] left-1/2 -translate-x-1/2 w-[90%] sm:w-[75%] max-w-5xl h-[180px] sm:h-[240px] bg-gradient-to-r from-indigo-600/25 via-purple-600/30 to-blue-600/25 blur-[75px] pointer-events-none rounded-full z-0" />
+
+                {/* Dashboard Screenshot Window */}
+                <div className="absolute top-[65px] sm:top-[85px] left-1/2 -translate-x-1/2 w-[98%] sm:w-[92%] lg:w-[86%] max-w-7xl h-[360px] min-[450px]:h-[440px] sm:h-[580px] lg:h-[680px] overflow-hidden pointer-events-none select-none z-0 rounded-t-xl sm:rounded-t-2xl border-t border-x border-white/10 shadow-[0_-10px_40px_rgba(255,255,255,0.03)]">
+                    <img 
+                        src="https://res.cloudinary.com/dj0ivep44/image/upload/v1785955500/Screenshot_2026-08-06_at_12.14.04_AM_p31mh3.png" 
+                        alt="CodeSarthi Dashboard Preview" 
+                        className="w-full h-full object-cover object-[center_top] sm:object-cover sm:object-[center_top] opacity-85 sm:opacity-95 filter contrast-[1.05] brightness-95 transition-opacity duration-700" 
+                    />
+                    
+                    {/* Multi-layer Precision Dissolve Gradients ("Invisible in Dark Theme" Effect) */}
+                    {/* 1. Primary Vertical Dissolve (Keeps the 250px top gap crystal clear, then dissolves to black before text) */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent via-30% to-black to-80% z-10" />
+
+                    {/* 2. Deep Bottom Darkness to guarantee 100% typography & CTA contrast */}
+                    <div className="absolute inset-x-0 bottom-0 h-[65%] bg-gradient-to-t from-black via-black/90 via-50% to-transparent z-10" />
+
+                    {/* 3. Side Vignettes (Smooth horizontal edge blending into dark theme boundaries) */}
+                    <div className="absolute inset-y-0 left-0 w-[25%] sm:w-[30%] bg-gradient-to-r from-black via-black/65 via-40% to-transparent z-10" />
+                    <div className="absolute inset-y-0 right-0 w-[25%] sm:w-[30%] bg-gradient-to-l from-black via-black/65 via-40% to-transparent z-10" />
+
+                    {/* 4. Top Header Melt (Soft transition beneath the Navbar) */}
+                    <div className="absolute top-0 inset-x-0 h-14 sm:h-20 bg-gradient-to-b from-black via-black/40 to-transparent z-10" />
+                </div>
+
+                <div className="w-full relative z-20">
                     <Nav ctaData={ctaData} />
                 </div>
 
-                <div className='w-full sm:p-6   flex flex-col items-start justify-start  mt-[150px]'>
-                    <div className='   text-[#f9f9f9] font-poppins font-medium text-2xl min-[450px]:text-3xl sm:text-4xl lg:text-5xl xl:text-7xl flex flex-col gap-2 justify-start'>
+                <div className='w-full sm:p-6 relative z-20 flex flex-col items-start justify-start mt-[140px] min-[450px]:mt-[180px] sm:mt-[350px]'>
+                    <div className='text-[#f9f9f9] font-poppins font-medium text-2xl min-[450px]:text-3xl sm:text-4xl lg:text-5xl xl:text-7xl flex flex-col gap-2 justify-start'>
                         <span> CodeSarthi is an Ecosystem </span> <span>designed for the Developers.</span>
                     </div>
 
@@ -894,15 +922,22 @@ const Main2 = ({ ctaData }) => {
 
                 </div>
 
-                <div className='w-full sm:p-6  relative z-30 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 '>
-                    <Card idx={0} />
-                    <Card idx={1} />
-                    <Card idx={2} />
-                    <Card idx={3} />
-
+                <div className='w-full sm:p-6 relative z-30 flex flex-row lg:grid lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-2 overflow-x-auto lg:overflow-x-visible snap-x snap-mandatory pb-6 pt-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]'>
+                    <div className="w-[88vw] sm:w-[46vw] lg:w-full flex-shrink-0 snap-center">
+                        <Card idx={0} />
+                    </div>
+                    <div className="w-[88vw] sm:w-[46vw] lg:w-full flex-shrink-0 snap-center">
+                        <Card idx={1} />
+                    </div>
+                    <div className="w-[88vw] sm:w-[46vw] lg:w-full flex-shrink-0 snap-center">
+                        <Card idx={2} />
+                    </div>
+                    <div className="w-[88vw] sm:w-[46vw] lg:w-full flex-shrink-0 snap-center">
+                        <Card idx={3} />
+                    </div>
                 </div>
 
-                <div className='h-[1.5px] w-[95%] mx-auto bg-white/30 mt-3'>
+                <div className='h-[1.5px] w-[95%] mx-auto bg-white/30 mt-3 sm:mt-5'>
 
                 </div>
                 <Brands />

@@ -35,8 +35,8 @@ const secondsToHoursDecimal = (seconds) => {
 const CustomTimeTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
         return (
-            <div className="bg-[#121215]/95 border border-white/10 rounded-xl p-3 shadow-2xl backdrop-blur-md text-xs font-mono">
-                <p className="text-zinc-400 mb-1.5 border-b border-white/10 pb-1 font-sans font-bold">{label}</p>
+            <div className="bg-[#0a0a0a] rounded-xl p-3.5 shadow-2xl text-xs font-mono">
+                <p className="text-zinc-400 mb-2 pb-1 font-sans font-bold">{label}</p>
                 {payload.map((entry, idx) => {
                     const formatted = entry.payload?.formattedTime || formatTimeFromSeconds((entry.value || 0) * 3600);
                     return (
@@ -45,7 +45,7 @@ const CustomTimeTooltip = ({ active, payload, label }) => {
                                 <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: entry.color || entry.fill }} />
                                 {entry.name}:
                             </span>
-                            <span className="font-extrabold text-[#A7A0F8]">{formatted}</span>
+                            <span className="font-extrabold text-white">{formatted}</span>
                         </div>
                     );
                 })}
@@ -58,8 +58,8 @@ const CustomTimeTooltip = ({ active, payload, label }) => {
 const CustomCountTooltip = ({ active, payload, label, valueSuffix = '' }) => {
     if (active && payload && payload.length) {
         return (
-            <div className="bg-[#121215]/95 border border-white/10 rounded-xl p-3 shadow-2xl backdrop-blur-md text-xs font-mono">
-                {label && <p className="text-zinc-400 mb-1.5 border-b border-white/10 pb-1 font-sans font-bold">{label}</p>}
+            <div className="bg-[#0a0a0a] rounded-xl p-3.5 shadow-2xl text-xs font-mono">
+                {label && <p className="text-zinc-400 mb-2 pb-1 font-sans font-bold">{label}</p>}
                 {payload.map((entry, idx) => (
                     <div key={idx} className="flex items-center justify-between gap-4 py-0.5">
                         <span className="flex items-center gap-1.5 text-white font-sans">
@@ -80,7 +80,7 @@ const CustomCountTooltip = ({ active, payload, label, valueSuffix = '' }) => {
 
 // Reusable empty state wrapper
 const ChartEmptyState = ({ message = "No analytics data available for this period" }) => (
-    <div className="w-full h-full flex flex-col items-center justify-center min-h-[220px] bg-black/20 rounded-lg border border-dashed border-white/10 p-6 text-center">
+    <div className="w-full h-full flex flex-col items-center justify-center min-h-[220px] bg-black/60 rounded-xl p-6 text-center">
         <svg className="w-8 h-8 text-zinc-600 mb-2 stroke-current" fill="none" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
         </svg>
@@ -94,19 +94,19 @@ const ChartCard = ({ title, category, snapshot = false, children, extraHeader, i
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: index * 0.05 }}
-        className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-5 shadow-xl flex flex-col h-full relative overflow-hidden group hover:border-[#534AB7]/40 transition-colors"
+        className="bg-[#0a0a0a] rounded-2xl p-6 shadow-2xl flex flex-col h-full relative overflow-hidden hover:bg-[#0d0d0d] transition-colors"
     >
-        <div className="flex items-start justify-between gap-2 mb-4 border-b border-white/10 pb-3">
+        <div className="flex items-start justify-between gap-2 mb-5 pb-2">
             <div>
                 <div className="flex items-center gap-2">
-                    <span className="text-[10px] uppercase tracking-widest font-extrabold text-[#A7A0F8] font-mono">{category}</span>
+                    <span className="text-[10px] uppercase tracking-widest font-extrabold text-zinc-400 font-mono">{category}</span>
                     {snapshot && (
-                        <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-white/10 text-zinc-400 font-sans uppercase tracking-wider" title="Based on current workspace state; ignores historical date filters">
+                        <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-black text-zinc-300 font-sans uppercase tracking-wider shadow-inner" title="Based on current workspace state; ignores historical date filters">
                             Current Snapshot
                         </span>
                     )}
                 </div>
-                <h3 className="text-base font-bold text-white mt-0.5 tracking-tight">{title}</h3>
+                <h3 className="text-base font-bold text-white mt-1 tracking-tight">{title}</h3>
             </div>
             {extraHeader && <div>{extraHeader}</div>}
         </div>
@@ -423,16 +423,16 @@ const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
     // --- INITIAL LOADING SKELETON ---
     if (loading) {
         return (
-            <div className="w-full min-h-[600px] p-6 bg-[#09090B] text-white space-y-6 animate-pulse">
-                <div className="h-16 bg-white/5 border border-white/10 rounded-2xl w-full flex items-center justify-between px-6">
+            <div className="w-full min-h-[600px] p-6 bg-black text-white space-y-6 animate-pulse">
+                <div className="h-16 bg-[#0a0a0a] rounded-2xl w-full flex items-center justify-between px-6">
                     <div className="w-48 h-6 bg-white/10 rounded-lg" />
                     <div className="w-64 h-8 bg-white/10 rounded-xl" />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {[1, 2, 3, 4].map(i => <div key={i} className="h-28 bg-white/5 border border-white/10 rounded-xl" />)}
+                    {[1, 2, 3, 4].map(i => <div key={i} className="h-28 bg-[#0a0a0a] rounded-2xl" />)}
                 </div>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {[1, 2, 3, 4].map(i => <div key={i} className="h-80 bg-white/5 border border-white/10 rounded-xl" />)}
+                    {[1, 2, 3, 4].map(i => <div key={i} className="h-80 bg-[#0a0a0a] rounded-2xl" />)}
                 </div>
             </div>
         );
@@ -440,9 +440,9 @@ const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
 
     if (!activeTeamId) {
         return (
-            <div className="w-full min-h-[600px] flex flex-col items-center justify-center p-6 bg-[#09090B] text-white">
-                <div className="bg-[#121215]/80 border border-white/10 p-8 rounded-2xl max-w-md text-center backdrop-blur-xl shadow-2xl">
-                    <svg className="w-12 h-12 text-[#534AB7] mx-auto mb-4 stroke-current" fill="none" viewBox="0 0 24 24">
+            <div className="w-full min-h-[600px] flex flex-col items-center justify-center p-6 bg-black text-white">
+                <div className="bg-[#0a0a0a] p-8 rounded-2xl max-w-md text-center shadow-2xl">
+                    <svg className="w-12 h-12 text-white mx-auto mb-4 stroke-current" fill="none" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
                     <h2 className="text-xl font-black mb-2">No Active Teams</h2>
@@ -453,20 +453,20 @@ const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
     }
 
     return (
-        <div className="w-full bg-[#09090B] text-white space-y-8 py-10 px-2 sm:px-4 selection:bg-[#534AB7]/30 relative">
+        <div className="w-full bg-black text-white space-y-8 py-10 px-2 sm:px-6 selection:bg-white/20 relative">
             {/* SUBTLE OVERLAY WHEN REFETCHING ON FILTER CHANGE */}
             {refreshing && (
-                <div className="fixed top-6 right-6 z-50 bg-[#121215]/95 border border-[#534AB7] text-[#A7A0F8] text-xs px-4 py-2 rounded-full shadow-2xl backdrop-blur-md flex items-center gap-2.5 font-mono animate-bounce">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                <div className="fixed top-6 right-6 z-50 bg-[#0a0a0a] text-white text-xs px-5 py-2.5 rounded-full shadow-2xl flex items-center gap-2.5 font-mono animate-bounce">
+                    <span className="w-2 h-2 rounded-full bg-white animate-ping" />
                     Synthesizing Analytics...
                 </div>
             )}
 
             {/* 1. HEADER BAR */}
-            <header className="bg-[#121215]/90 border border-white/10 rounded-2xl p-5 sm:p-6 backdrop-blur-xl shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 border-t border-t-white/15">
-                <div >
+            <header className="bg-[#0a0a0a] rounded-2xl p-5 sm:p-6 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
                     <div className="flex items-center gap-2.5">
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#534AB7] animate-pulse" />
+                        <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
                         <span className="text-[10px] font-mono font-black tracking-[0.25em] text-zinc-400 uppercase">
                             Deep-Analysis Dashboard
                         </span>
@@ -476,7 +476,7 @@ const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
                             <select
                                 value={activeTeamId || ''}
                                 onChange={(e) => setActiveTeamId(e.target.value)}
-                                className="bg-black/60 border border-white/10 text-white font-black px-3 py-1.5 rounded-xl focus:outline-none focus:border-[#534AB7] cursor-pointer"
+                                className="bg-black text-white font-black px-4 py-2 rounded-xl focus:outline-none cursor-pointer shadow-inner"
                             >
                                 {userTeams.map(t => (
                                     <option key={t._id} value={t._id}>{t.name}</option>
@@ -490,7 +490,7 @@ const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3">
-                    <div className="bg-black/50 border border-white/10 rounded-xl p-1 flex items-center shadow-inner">
+                    <div className="bg-black rounded-xl p-1.5 flex items-center shadow-inner gap-1">
                         {[
                             { label: 'Last 7 Days', value: '7' },
                             { label: 'Last 30 Days', value: '30' },
@@ -499,9 +499,9 @@ const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
                             <button
                                 key={tab.value}
                                 onClick={() => setTimeRange(tab.value)}
-                                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${timeRange === tab.value
-                                    ? 'bg-gradient-to-r from-[#534AB7] to-[#6358D4] text-white shadow-md shadow-[#534AB7]/30'
-                                    : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                                className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${timeRange === tab.value
+                                    ? 'bg-white text-black font-black shadow-md'
+                                    : 'text-zinc-400 hover:text-white hover:bg-[#111111]'
                                     }`}
                             >
                                 {tab.label}
@@ -513,15 +513,15 @@ const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
                         onClick={() => fetchAllData(true)}
                         disabled={refreshing}
                         title="Refresh Intelligence Data"
-                        className="bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white p-2.5 rounded-xl transition-all hover:scale-105 active:scale-95 flex items-center justify-center shrink-0 disabled:opacity-50"
+                        className="bg-[#121212] hover:bg-white hover:text-black text-zinc-300 p-3 rounded-xl transition-all hover:scale-105 active:scale-95 flex items-center justify-center shrink-0 disabled:opacity-50 shadow-sm"
                     >
-                        <svg className={`w-4 h-4 stroke-current ${refreshing ? 'animate-spin text-[#A7A0F8]' : ''}`} fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                        <svg className={`w-4 h-4 stroke-current ${refreshing ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                     </button>
                 </div>
             </header>
 
             {error && (
-                <div className="bg-red-500/10 border border-red-500/30 text-red-400 p-4 rounded-xl text-xs font-medium">
+                <div className="bg-red-500/10 text-red-400 p-4 rounded-xl text-xs font-medium">
                     {error}
                 </div>
             )}
@@ -534,11 +534,11 @@ const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
                         initial={{ opacity: 0, y: 12 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3, delay: idx * 0.05 }}
-                        className={`bg-gradient-to-br ${stat.color} bg-[#121215]/80 backdrop-blur-md border rounded-2xl p-5 shadow-lg relative overflow-hidden group hover:scale-[1.02] transition-transform`}
+                        className="bg-[#0a0a0a] rounded-2xl p-6 shadow-2xl relative overflow-hidden hover:bg-[#101010] transition-all"
                     >
-                        <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center justify-between mb-4">
                             <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider">{stat.label}</span>
-                            <div className="p-2 rounded-xl bg-black/40 border border-white/5 shadow-sm group-hover:scale-110 transition-transform">
+                            <div className="p-2.5 rounded-xl bg-black shadow-inner transition-transform">
                                 {stat.icon}
                             </div>
                         </div>
@@ -607,7 +607,7 @@ const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
                             <select
                                 value={selectedTrendUser}
                                 onChange={(e) => setSelectedTrendUser(e.target.value)}
-                                className="bg-black/60 border border-white/10 text-xs text-[#A7A0F8] font-bold px-2.5 py-1 rounded-lg focus:outline-none focus:border-[#534AB7]"
+                                className="bg-black text-xs text-white font-bold px-3 py-1.5 rounded-lg focus:outline-none shadow-sm cursor-pointer"
                             >
                                 <option value="all">Team Total</option>
                                 {memberActivityData.map(m => (
@@ -619,7 +619,7 @@ const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
                         {contributionTrendData.length > 0 ? (
                             <ResponsiveContainer width="100%" height={260}>
                                 <LineChart data={contributionTrendData} margin={{ top: 10, right: 20, left: 10, bottom: 5 }}>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#27272A" />
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#1f1f23" />
                                     <XAxis dataKey="date" stroke="#71717A" fontSize={11} />
                                     <YAxis stroke="#71717A" fontSize={11} unit="h" />
                                     <Tooltip content={<CustomTimeTooltip />} />
@@ -629,7 +629,7 @@ const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
                                         name="Time Logged"
                                         stroke={selectedTrendUser === 'all' ? COLORS.primary : COLORS.secondary}
                                         strokeWidth={3}
-                                        dot={{ r: 4, fill: '#121215', strokeWidth: 2 }}
+                                        dot={{ r: 4, fill: '#0a0a0a', strokeWidth: 2 }}
                                         activeDot={{ r: 6, fill: COLORS.secondary, stroke: '#fff' }}
                                     />
                                 </LineChart>
@@ -645,14 +645,14 @@ const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: 0.1 }}
-                    className="bg-[#121215]/80 border border-white/10 rounded-2xl p-6 shadow-xl relative overflow-hidden"
+                    className="bg-[#0a0a0a] rounded-2xl p-6 shadow-2xl relative overflow-hidden"
                 >
-                    <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/10">
+                    <div className="flex items-center justify-between mb-5 pb-2">
                         <div>
                             <span className="text-[10px] uppercase tracking-widest font-extrabold text-[#D9A441] font-mono">Risk & Engagement</span>
-                            <h3 className="text-base font-bold text-white mt-0.5">Idle Member Watchlist</h3>
+                            <h3 className="text-base font-bold text-white mt-1">Idle Member Watchlist</h3>
                         </div>
-                        <span className="px-2 py-1 rounded bg-[#D9A441]/10 border border-[#D9A441]/30 text-[#D9A441] text-xs font-mono font-bold">
+                        <span className="px-3 py-1.5 rounded-lg bg-black text-[#D9A441] text-xs font-mono font-bold shadow-inner">
                             Threshold: {timeRange === 'all' ? '30+ Days Inactive' : `${timeRange} Days Inactive`}
                         </span>
                     </div>
@@ -665,17 +665,17 @@ const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
                                 return (
                                     <div
                                         key={member.userId || idx}
-                                        className="border-l-4 border-[#D9A441] bg-white/[0.02] hover:bg-white/[0.04] p-4 rounded-r-xl border-t border-r border-b border-t-white/5 border-r-white/5 border-b-white/5 flex items-center justify-between gap-3 transition-colors"
+                                        className="bg-black hover:bg-[#121212] p-5 rounded-xl flex items-center justify-between gap-3 transition-colors shadow-sm"
                                     >
                                         <div className="min-w-0">
                                             <div className="text-sm font-bold text-white truncate">{member.name || 'Member'}</div>
-                                            <div className="text-xs text-zinc-500 capitalize font-medium">{member.role || 'Contributor'} • {member.email}</div>
+                                            <div className="text-xs text-zinc-500 capitalize font-medium mt-0.5">{member.role || 'Contributor'} • {member.email}</div>
                                         </div>
                                         <div className="text-right shrink-0">
                                             <div className="text-xs font-black font-mono text-[#D9A441]">
                                                 {daysIdle !== null ? `Idle ${daysIdle}d` : 'No history'}
                                             </div>
-                                            <div className="text-[10px] text-zinc-600">
+                                            <div className="text-[10px] text-zinc-600 mt-0.5">
                                                 {member.lastActive ? new Date(member.lastActive).toLocaleDateString() : 'Never logged'}
                                             </div>
                                         </div>
@@ -684,7 +684,7 @@ const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
                             })}
                         </div>
                     ) : (
-                        <div className="w-full py-8 text-center bg-emerald-500/5 rounded-xl border border-emerald-500/20 text-emerald-400 font-medium text-xs">
+                        <div className="w-full py-8 text-center bg-black rounded-xl text-emerald-400 font-medium text-xs shadow-inner">
                             ✓ All active team members have recorded contributions within this operational window. Zero idle anomalies detected.
                         </div>
                     )}
@@ -747,7 +747,7 @@ const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
                                         dataKey="value"
                                     >
                                         {issueStatusData.map((entry, idx) => (
-                                            <Cell key={`cell-${idx}`} fill={entry.color || CHART_PALETTE[idx % CHART_PALETTE.length]} stroke="#121215" strokeWidth={2} />
+                                            <Cell key={`cell-${idx}`} fill={entry.color || CHART_PALETTE[idx % CHART_PALETTE.length]} stroke="#0a0a0a" strokeWidth={2} />
                                         ))}
                                     </Pie>
                                     <Tooltip content={<CustomCountTooltip valueSuffix=" issues" />} />
@@ -772,7 +772,7 @@ const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
                                         dataKey="value"
                                     >
                                         {issueTypeData.map((entry, idx) => (
-                                            <Cell key={`cell-${idx}`} fill={entry.color || CHART_PALETTE[idx % CHART_PALETTE.length]} stroke="#121215" strokeWidth={2} />
+                                            <Cell key={`cell-${idx}`} fill={entry.color || CHART_PALETTE[idx % CHART_PALETTE.length]} stroke="#0a0a0a" strokeWidth={2} />
                                         ))}
                                     </Pie>
                                     <Tooltip content={<CustomCountTooltip valueSuffix=" items" />} />
@@ -865,7 +865,7 @@ const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
                                         dataKey="value"
                                     >
                                         {projectStatusData.map((entry, idx) => (
-                                            <Cell key={`cell-${idx}`} fill={entry.color || CHART_PALETTE[idx % CHART_PALETTE.length]} stroke="#121215" strokeWidth={2} />
+                                            <Cell key={`cell-${idx}`} fill={entry.color || CHART_PALETTE[idx % CHART_PALETTE.length]} stroke="#0a0a0a" strokeWidth={2} />
                                         ))}
                                     </Pie>
                                     <Tooltip content={<CustomCountTooltip valueSuffix=" projects" />} />
@@ -892,7 +892,7 @@ const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
                                         dataKey="value"
                                     >
                                         {projectPriorityData.map((entry, idx) => (
-                                            <Cell key={`cell-${idx}`} fill={entry.color || CHART_PALETTE[idx % CHART_PALETTE.length]} stroke="#121215" strokeWidth={2} />
+                                            <Cell key={`cell-${idx}`} fill={entry.color || CHART_PALETTE[idx % CHART_PALETTE.length]} stroke="#0a0a0a" strokeWidth={2} />
                                         ))}
                                     </Pie>
                                     <Tooltip content={<CustomCountTooltip valueSuffix=" projects" />} />

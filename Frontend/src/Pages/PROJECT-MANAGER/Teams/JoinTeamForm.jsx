@@ -33,12 +33,12 @@ const JoinTeamForm = ({ onSuccess }) => {
                     value={code}
                     onChange={(e) => setCode(e.target.value)}
                     placeholder="Enter invite code"
-                    className="w-full bg-[#09090B] border border-white/40 rounded-xl pl-4 pr-24 py-3.5 text-white placeholder-zinc-600 focus:outline-none focus:border-[#ffffff] focus:ring-1 focus:ring-[#ffffff] transition-all shadow-inner"
+                    className="w-full bg-[#0a0a0a] rounded-xl pl-5 pr-24 py-3.5 text-white placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-white transition-all shadow-2xl"
                 />
                 <button
                     type="submit"
                     disabled={loading || !code.trim()}
-                    className="absolute right-1.5 bg-[#5a5a5a] hover:bg-[#ffffff] text-white text-sm hover:text-[#000000] font-medium py-2 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="absolute right-1.5 bg-white hover:bg-zinc-200 text-black text-sm font-black py-2 px-5 rounded-lg transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {loading ? 'Joining...' : 'Join'}
                 </button>

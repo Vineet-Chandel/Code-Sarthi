@@ -452,10 +452,14 @@ const Signup = () => {
   return (
     <div data-theme="caramellatte" className="min-h-screen w-full flex items-center justify-center bg-gray-300   p-1">
       <ToastContainer toasts={toasts} removeToast={removeToast} />
-      <div className="w-full min-h-[98vh] bg-black  rounded-2xl  flex flex-col md:flex-row gap-6 overflow-hidden border border-secondary">
-
+      <div className="relative w-full min-h-[98vh] bg-black  rounded-2xl  flex flex-col md:flex-row gap-6 overflow-hidden border border-secondary">
+        <div className="
+absolute inset-0
+bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08),transparent_65%),linear-gradient(to_right,#1a1a1a_0.8px,transparent_1px),linear-gradient(to_bottom,#1a1a1a_0.8px,transparent_1px)]
+bg-[size:100%_100%,130px_130px,130px_130px]
+"/>
         {/* LEFT - Signup Form */}
-        <div className="flex flex-col gap-8  p-6  md:p-12 w-full md:w-[50%] text-white">
+        <div className="relative z-30 flex flex-col gap-8  p-6  md:p-12 w-full md:w-[50%] text-white">
           <div className="space-y-2">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-secondary-content to-accent leading-tight ">
               <TextType

@@ -45,11 +45,8 @@ const TransferOwnershipModal = ({ isOpen, onClose, teamId, targetUserId, members
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                        className="relative w-full max-w-sm bg-[#09090B] border border-amber-500/20 rounded-2xl p-6 shadow-2xl overflow-hidden"
+                        className="relative w-full max-w-sm bg-[#0a0a0a] rounded-2xl p-7 shadow-2xl overflow-hidden"
                     >
-                        {/* Amber warning accent */}
-                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 to-orange-500 opacity-80" />
-
                         <h2 className="text-xl font-bold text-white mb-2 tracking-tight flex items-center gap-2">
                             <svg className="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                             Transfer Ownership
@@ -58,19 +55,19 @@ const TransferOwnershipModal = ({ isOpen, onClose, teamId, targetUserId, members
                         <p className="text-sm text-zinc-400 mb-4 leading-relaxed">
                             You are about to transfer ownership of this team to <strong className="text-white">{targetUser.firstName} {targetUser.lastName}</strong>.
                         </p>
-                        <p className="text-sm text-amber-500/90 mb-6 bg-amber-500/10 p-3 rounded-lg border border-amber-500/20">
+                        <p className="text-sm text-amber-400 mb-6 bg-amber-500/10 p-3 rounded-xl">
                             This action cannot be undone. You will immediately lose leader privileges and become a standard member.
                         </p>
 
                         {error && (
-                            <div className="text-red-400 text-sm bg-red-400/10 border border-red-400/20 rounded-lg p-3 mb-4">
+                            <div className="text-red-400 text-sm bg-red-400/10 rounded-xl p-3 mb-4">
                                 {error}
                             </div>
                         )}
 
                         <div className="mb-6">
                             <label className="block text-xs text-zinc-400 font-medium mb-2">
-                                To confirm transfer, type <strong className="text-white select-all font-mono bg-white/10 px-1.5 py-0.5 rounded">TRANSFER</strong> below:
+                                To confirm transfer, type <strong className="text-white select-all font-mono bg-black px-2 py-0.5 rounded shadow-inner">TRANSFER</strong> below:
                             </label>
                             <input
                                 type="text"
@@ -79,7 +76,7 @@ const TransferOwnershipModal = ({ isOpen, onClose, teamId, targetUserId, members
                                 placeholder="Type TRANSFER to confirm"
                                 disabled={loading}
                                 autoFocus
-                                className="w-full bg-white/5 border border-white/10 focus:border-amber-500/60 focus:outline-none focus:ring-2 focus:ring-amber-500/20 rounded-xl px-3.5 py-2.5 text-white font-mono text-sm tracking-widest uppercase placeholder:text-zinc-600 placeholder:tracking-normal placeholder:font-sans transition-all"
+                                className="w-full bg-black rounded-xl px-4 py-3 text-white font-mono text-sm tracking-widest uppercase placeholder:text-zinc-600 placeholder:tracking-normal placeholder:font-sans transition-all shadow-inner focus:outline-none focus:ring-1 focus:ring-amber-500"
                             />
                         </div>
 
@@ -87,7 +84,7 @@ const TransferOwnershipModal = ({ isOpen, onClose, teamId, targetUserId, members
                             <button
                                 type="button"
                                 onClick={onClose}
-                                className="flex-1 bg-white/5 hover:bg-white/10 text-white font-medium py-2.5 px-4 rounded-xl transition-colors border border-white/5 text-sm"
+                                className="flex-1 bg-black hover:bg-[#151515] text-zinc-400 hover:text-white font-bold py-3 px-4 rounded-xl transition-colors text-sm shadow-sm"
                             >
                                 Cancel
                             </button>
@@ -95,7 +92,7 @@ const TransferOwnershipModal = ({ isOpen, onClose, teamId, targetUserId, members
                                 type="button"
                                 onClick={handleTransfer}
                                 disabled={!isConfirmed || loading}
-                                className="flex-1 bg-amber-500/90 hover:bg-amber-500 text-white font-medium py-2.5 px-4 rounded-xl transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(245,158,11,0.2)] text-sm flex items-center justify-center gap-2"
+                                className="flex-1 bg-amber-500 hover:bg-amber-400 text-black font-extrabold py-3 px-4 rounded-xl transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-lg text-sm flex items-center justify-center gap-2"
                             >
                                 {loading ? 'Transferring...' : 'Yes, Transfer'}
                             </button>

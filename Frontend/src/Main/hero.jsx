@@ -24,8 +24,7 @@ import Ropes from "./Ropes";
 
 const Hero = () => {
 
-    const [ctaData, seCtaData] = useState("Sign Up")
-    const navigate = useNavigate();
+    const [ctaData, setCtaData] = useState("Sign Up");
     useEffect(() => {
         const controller = new AbortController();
 
@@ -39,13 +38,9 @@ const Hero = () => {
                     }
                 );
 
-
-
                 if (res.data.success) {
-                    seCtaData("Open Codesarthi");
+                    setCtaData("Open Codesarthi");
                 }
-
-                console.log(ctaData);
             } catch (err) { }
         };
 
@@ -81,7 +76,7 @@ const Hero = () => {
     }, [loading]);
 
     return (
-        <div className="bg-gray-200 overflow-y-auto scrollbar-none">
+        <div className="h-screen bg-gray-200 overflow-y-auto scrollbar-none">
             {loading && <Preloader />}
 
             <Main2 ctaData={ctaData} />
