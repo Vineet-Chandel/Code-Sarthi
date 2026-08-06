@@ -20,8 +20,8 @@ import ContentSecond2 from "./ContentSecond2";
 import Third from "./Third";
 import Ropes from "./Ropes";
 import DashboardBento from "./DashboardBento";
-
-
+import GoalTrackerBento from "./GoalTrackerBento";
+import ProjectManagerBento from "./ProjectManagerBento";
 
 const Hero = () => {
 
@@ -86,6 +86,8 @@ const Hero = () => {
 
             <SecondLanding />
             <DashboardBento />
+            <GoalTrackerBento />
+            <ProjectManagerBento />
             <Third />
             <ContentSecond />
             <Lines2 />
