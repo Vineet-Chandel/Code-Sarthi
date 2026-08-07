@@ -88,6 +88,7 @@ const Hero = () => {
             <DashboardBento />
             <GoalTrackerBento />
             <ProjectManagerBento />
+
             <Third />
             <ContentSecond />
             <Lines2 />
@@ -108,6 +109,8 @@ bg-[size:90px_90px]
 
                 <Devs />
                 <Ropes />
+
+                <ContentThird />
                 <Footer />
             </div>
 

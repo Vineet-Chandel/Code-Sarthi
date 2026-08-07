@@ -1,318 +1,9 @@
 import React, { useState } from 'react';
-import Toast from '../Pages/CARRER-PROFILE-CREATION/2/Toast';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-const STYLES = `
-
-
-/* ── CTA cards ── */
-.ct-card {
-  position: relative;
-  border-radius: 28px;
-  background: rgba(10,15,12,0.9);
-  border: 1px solid rgba(255,255,255,0.07);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  padding: 36px 36px 32px;
-  gap: 24px;
-  transition: transform 0.4s cubic-bezier(0.23,1,0.32,1),
-              border-color 0.35s,
-  cursor: default;
-}
-.ct-card:hover {
-  transform: translateY(-7px);
-  border-color: rgba(0,255,135,0.22);
-
-}
-
-/* Top shimmer line */
-.ct-card::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0,255,135,0.5), transparent);
-  opacity: 0;
-  transition: opacity 0.35s;
-}
-.ct-card:hover::before { opacity: 1; }
-
-/* Radial hover glow */
-.ct-card::after {
-  content: '';
-  position: absolute; inset: 0; pointer-events: none;
-  background: radial-gradient(ellipse at 50% 0%, rgba(0,255,135,0.06) 0%, transparent 65%);
-  opacity: 0;
-  transition: opacity 0.4s;
-}
-.ct-card:hover::after { opacity: 1; }
-
-.ct-card-tag {
-  font-family: 'Space Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  color: rgba(0,255,135,0.6);
-  text-transform: uppercase;
-}
-
-.ct-card-title {
-  font-family:head;
-  font-weight: 800;
-  font-size: clamp(1.4rem, 2.2vw, 2rem);
-  letter-spacing: -0.03em;
-  color: #fff;
-  line-height: 1.1;
-}
-
-.ct-card-desc {
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.9rem;
-  color: rgba(255,255,255,0.38);
-  line-height: 1.6;
-  font-weight: 300;
-  flex: 1;
-}
-
-/* Card CTA button */
-.ct-card-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  border-radius: 999px;
-  border: 1px solid rgba(0,255,135,0.2);
-  background: rgba(0,255,135,0.06);
-  color: rgba(0,255,135,0.8);
-  font-family: 'Space Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.25s;
-  position: relative; z-index: 1;
-}
-.ct-card-btn:hover {
-  background: #00ff87;
-  color: #060a07;
-  border-color: #00ff87;
-
-}
-.ct-card-btn svg { transition: transform 0.25s; }
-.ct-card-btn:hover svg { transform: rotate(45deg) scale(1.1); }
-
-/* Corner number */
-.ct-card-num {
-  position: absolute;
-  top: 20px; right: 24px;
-  font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  color: rgba(255,255,255,0.1);
-  letter-spacing: 0.08em;
-}
-
-/* ── Newsletter banner ── */
-.ct-banner {
-  position: relative;
-  border-radius: 32px;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.07);
-  background: rgba(8,13,10,0.95);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 28px;
-  padding: 80px 48px;
-  text-align: center;
-}
-
-/* Diagonal stripe texture */
-.ct-banner-stripes {
-  position: absolute; inset: 0; pointer-events: none; z-index: 0;
-  background-image: repeating-linear-gradient(
-    -55deg,
-    transparent 0px,
-    transparent 40px,
-    rgba(0,255,135,0.018) 40px,
-    rgba(0,255,135,0.018) 41px
-  );
-}
-
-/* Large blurred orb inside banner */
-.ct-banner-orb {
-  position: absolute;
-  width: 700px; height: 700px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(0,255,135,0.08) 0%, transparent 65%);
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none; z-index: 0;
-  animation: ct-breathe 6s ease-in-out infinite;
-}
-@keyframes ct-breathe {
-  0%,100% { transform: translate(-50%,-50%) scale(1);   opacity: 0.7; }
-  50%      { transform: translate(-50%,-50%) scale(1.12); opacity: 1;   }
-}
-
-.ct-banner-label {
-  position: relative; z-index: 1;
-  display: inline-flex; align-items: center; gap: 8px;
-  border: 1px solid rgba(0,255,135,0.2);
-  border-radius: 999px; padding: 6px 18px;
-  font-family: 'Space Mono', monospace;
-  font-size: 11px; letter-spacing: 0.14em;
-  color: rgba(0,255,135,0.7);
-  background: rgba(0,255,135,0.05);
-  text-transform: uppercase;
-}
-.ct-banner-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: #00ff87;
-
-  animation: ct-pulse 2s ease-in-out infinite;
-}
-@keyframes ct-pulse {
-  0%,100% { opacity:1; transform:scale(1); }
-  50%      { opacity:0.35; transform:scale(0.7); }
-}
-
-.ct-banner-title {
-  position: relative; z-index: 1;
-  font-family: head;
-  font-weight: 800;
-  font-size: clamp(3.5rem, 9vw, 8rem);
-  letter-spacing: -0.04em;
-  line-height: 0.95;
-  color: #fff;
-}
-.ct-banner-title span {
-  -webkit-text-stroke: 1px rgba(255,255,255,0.25);
-  color: transparent;
-}
-
-.ct-banner-desc {
-  position: relative; z-index: 1;
-  font-family: 'Outfit', sans-serif;
-  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
-  color: rgba(255,255,255,0.4);
-  font-weight: 300;
-  max-width: 520px;
-  line-height: 1.7;
-}
-.ct-banner-desc b { color: rgba(255,255,255,0.75); font-weight: 600; }
-
-/* Email input row */
-.ct-input-row {
-  position: relative; z-index: 1;
-  display: flex; align-items: center;
-  gap: 10px;
-  background: #ffffff0a;
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 999px;
-  padding: 6px 6px 6px 22px;
-  width: 100%;
-  max-width: 480px;
-  transition: border-color 0.25s,
-}
-.ct-input-row:focus-within {
-  border-color: rgba(0,255,135,0.4);
-
-}
-.ct-input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.9rem;
-  color: #fff;
-  min-width: 0;
-}
-.ct-input::placeholder { color: rgba(255,255,255,0.25); }
-.ct-submit-btn {
-  display: inline-flex; align-items: center; gap: 7px;
-  padding: 10px 20px;
-  border-radius: 999px;
-  background: #00ff87;
-  color: #060a07;
-  font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  border: none; cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.25s;
-  flex-shrink: 0;
-}
-.ct-submit-btn:hover {
-  background: #fff;
-
-}
-.ct-submit-btn svg { transition: transform 0.25s; }
-.ct-submit-btn:hover svg { transform: rotate(45deg) scale(1.1); }
-
-.ct-privacy {
-  position: relative; z-index: 1;
-  font-family: 'Space Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  color: rgba(255,255,255,0.18);
-  text-transform: uppercase;
-}
-
-/* ── Appear animation ── */
-.ct-anim {
-  opacity: 0;
-  transform: translateY(36px);
-  animation: ct-appear 0.7s cubic-bezier(0.23,1,0.32,1) forwards;
-}
-@keyframes ct-appear {
-  to { opacity: 1; transform: translateY(0); }
-}
-`;
-import { AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from 'framer-motion';
 import BASE_URL from '../Pages/auth/baseURL';
 import { Loader2 } from 'lucide-react';
-import path from 'node:path';
-/* Arrow icon reused */
-const ArrowIcon = ({ color = "currentColor" }) => (
-  <svg className="rotate-45" width="12" height="12" viewBox="0 0 14 14" fill="none">
-    <path d="M12.6286 1.04921L0.4829 5.52396C0.290486 5.59619 0.168389 5.78988 0.190123 5.99572C0.211219 6.2022 0.369753 6.36713 0.574952 6.39589L6.95147 7.30682L7.8624 13.6833C7.89116 13.8885 8.05673 14.0477 8.26193 14.0688C8.40128 14.0841 8.53553 14.033 8.6295 13.939C8.67488 13.8937 8.71068 13.8387 8.73369 13.776L13.2084 1.63029C13.2698 1.46408 13.2289 1.2787 13.1042 1.15405C12.9796 1.02939 12.7942 0.988481 12.6286 1.04921Z" fill={color} />
-  </svg>
-);
-
-const ctaCards = [
-  {
-    num: "01",
-    tag: "// Toolkit",
-    title: "Developer Toolkit",
-    desc: "Functional components, AI prompts, smart colour palettes, and schema scripts — all the essentials in one place to help you build faster.",
-    cta: "Visit Toolkit",
-    icon: "⌥",
-    path: "/app/toolkit"
-  },
-  {
-    num: "02",
-    tag: "// Community",
-    title: "Global Dev Community",
-    desc: "Connect and collaborate with developers worldwide. Share skills, learn from peers, and co-build projects across time zones.",
-    cta: "Join Community",
-    icon: "◈",
-    path: "/community"
-  },
-  {
-    num: "03",
-    tag: "// Support",
-    title: "Help & Support",
-    desc: "Stuck? Our support team and ZENITH guardian are on standby. No tickets lost in the void — we actually respond.",
-    cta: "Reach Support",
-    icon: "◉",
-    path: "/help-center"
-  },
-];
+import Toast from '../Pages/CARRER-PROFILE-CREATION/2/Toast';
 
 const ContentThird = () => {
   const [email, setEmail] = useState("");
@@ -320,10 +11,55 @@ const ContentThird = () => {
   const [isStartSubmitting, setIsStartSubmitting] = useState(false);
   const [toasts, setToasts] = useState([]);
 
+  const addToast = ({ type = "success", title, message }) => {
+    const id = Date.now();
+    setToasts((prev) => [...prev, { id, type, title, message }]);
+  };
 
+  const removeToast = (id) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  };
 
-  const ToastContainer = ({ toasts, removeToast }) => {
-    return (
+  const handleSubmit = async (e) => {
+    if (e) e.preventDefault();
+    try {
+      setIsStartSubmitting(true);
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!emailRegex.test(email)) {
+        addToast({
+          type: "error",
+          title: "Invalid Email",
+          message: "Please enter a valid email"
+        });
+        return;
+      }
+
+      const res = await axios.post(
+        `${BASE_URL}/newsletter/subscribe`,
+        { email },
+        { withCredentials: true }
+      );
+      setSubmitted(true);
+      setEmail("");
+      addToast({ type: "success", title: "Success", message: res.data.message });
+    } catch (error) {
+      addToast({
+        type: "error",
+        title: "Error",
+        message:
+          error?.response?.data?.message ||
+          error?.message ||
+          "Something went wrong"
+      });
+    } finally {
+      setIsStartSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="w-full bg-[#000] min-h-[500px] flex items-center justify-center py-20 px-6 font-['Outfit',sans-serif] relative overflow-hidden">
+      {/* Toasts */}
       <div className="fixed top-5 right-5 flex flex-col gap-3 z-50">
         <AnimatePresence>
           {toasts.map((t) => (
@@ -335,189 +71,65 @@ const ContentThird = () => {
           ))}
         </AnimatePresence>
       </div>
-    );
-  };
-  const addToast = ({ type = "success", title, message }) => {
-    const id = Date.now();
-    setToasts((prev) => [...prev, { id, type, title, message }]);
-  };
 
-  const removeToast = (id) => {
-    setToasts((prev) => prev.filter((t) => t.id !== id));
-  };
-  const handleSubmit = async () => {
-    try {
-      setIsStartSubmitting(true);
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-      if (!emailRegex.test(email)) {
-        return addToast({
-          type: "error",
-          title: "Invalid Email",
-          message: "Please enter a valid email"
-        });
-      }
-      const res = await axios.post(
-        `${BASE_URL}/newsletter/subscribe`,
-        { email },
-        { withCredentials: true }
-      );
-      setSubmitted(true);
-      setEmail("");
-      addToast({ type: "success", title: "Success", message: res.data.message })
-    } catch (error) {
-
-      addToast({
-        type: "error",
-        title: "Error",
-        message:
-          error?.response?.data?.message ||
-          error?.message ||
-          "Something went wrong"
-      });
-    } finally {
-      setIsStartSubmitting(false)
-    }
-  };
-
-
-  const navigate = useNavigate();
-
-  return (
-    <>
-      <style>{STYLES}</style>
-
-      <div
-        style={{ background: "#060a07", fontFamily: "'Outfit', sans-serif" }}
-        className="w-full flex flex-col items-center px-4 md:px-10 gap-6 pb-6"
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className=" w-full flex flex-col items-center text-center"
       >
-        <ToastContainer toasts={toasts} removeToast={removeToast} />
-        {/* ── Divider matching other sections ── */}
-        <div className="w-full max-w-[1400px] flex items-center gap-4 mb-4">
-          <div style={{ flex: 1, height: 1, background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.08))" }} />
-          <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, letterSpacing: "0.15em", color: "rgba(255,255,255,0.2)", textTransform: "uppercase" }}>
-            Quick Access
-          </span>
-          <div style={{ flex: 1, height: 1, background: "linear-gradient(90deg, rgba(255,255,255,0.08), transparent)" }} />
-        </div>
+        <h2 className="text-[2.5rem] md:text-[4rem] lg:text-[4.5rem] font-black tracking-tight text-white uppercase leading-[1.1] mb-6" style={{ fontFamily: 'head, sans-serif' }}>
+          JOIN OUR NEWSLETTER<br />AND STAY UP TO DATE
+        </h2>
 
-        {/* ── CTA cards row ── */}
-        <div
-          className="w-full max-w-[1400px]"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-            gap: "16px",
-          }}
-        >
-          {ctaCards.map((card, i) => (
-            <div
-              key={i}
-              className="ct-card ct-anim"
-              style={{ animationDelay: `${i * 0.1}s` }}
+        <p className="text-lg md:text-[22px] text-white/70 font-medium mb-12">
 
-            >
-              <span className="ct-card-num">{card.num}</span>
+        </p>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                <p className="ct-card-tag">{card.tag}</p>
-
-                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <span style={{
-                    fontSize: "1.6rem",
-                    color: "rgba(0,255,135,0.35)",
-                    lineHeight: 1,
-                    fontWeight: 400,
-                  }}>
-                    {card.icon}
-                  </span>
-                  <h3 className="ct-card-title">{card.title}</h3>
-                </div>
-
-                <p className="ct-card-desc">{card.desc}</p>
-              </div>
-
-              <button className="ct-card-btn" onClick={() => navigate(card.path)}>
-                <ArrowIcon />
-                {card.cta}
-              </button>
-            </div>
-          ))}
-        </div>
-
-        {/* ── Newsletter banner ── */}
-        <div className="ct-banner w-full max-w-[1400px] ct-anim" style={{ animationDelay: "0.35s" }}>
-          <div className="ct-banner-stripes" />
-          <div className="ct-banner-orb" />
-
-          {/* Dot-grid same as other sections */}
-          <div style={{
-            position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
-            backgroundImage: "radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)",
-            backgroundSize: "32px 32px",
-          }} />
-
-          <div className="ct-banner-label">
-            <div className="ct-banner-dot" />
-            Newsletter
-          </div>
-
-          <div className="ct-banner-title">
-            Stay<br /><span>Tuned</span>
-          </div>
-
-          <p className="ct-banner-desc">
-            Want to keep up with every update, feature drop, and thing
-            we build for <b>developers</b>? One email. <b>No spam.</b> Ever.
-          </p>
-
-          {/* Email input */}
+        <div className="w-full max-w-[800px] mb-8">
           {!submitted ? (
-            <div className="ct-input-row ">
+            <form onSubmit={handleSubmit} className="w-full bg-[#111] border-[3px] border-[#333] flex flex-col sm:flex-row p-2 shadow-[6px_6px_0px_0px_#fff] hover:shadow-[8px_8px_0px_0px_#fff] transition-shadow duration-300">
               <input
-                className="ct-input"
                 type="email"
-                placeholder="your@email.com"
+                placeholder="Enter Your Email"
                 value={email}
-                onChange={e => setEmail(e.target.value)}
-                onKeyDown={e => e.key === "Enter" && handleSubmit()}
+                onChange={(e) => setEmail(e.target.value)}
+                className="flex-1 px-6 py-4 sm:py-0 bg-transparent text-white text-xl outline-none placeholder:text-gray-500 font-medium min-w-0"
               />
-              <button className="ct-submit-btn flex " onClick={handleSubmit}>
-
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                type="submit"
+                disabled={isStartSubmitting}
+                className="bg-[#fff] border-[3px] border-[#fff] text-black font-black uppercase tracking-wider px-10 py-4 flex items-center justify-center gap-2 hover:bg-[#d441a3] transition-colors whitespace-nowrap"
+              >
                 {isStartSubmitting ? (
-                  <span className="flex items-center">
-                    <Loader2 className="animate-spin" size={20} />
-                  </span>
+                  <Loader2 className="animate-spin w-6 h-6" />
                 ) : (
-                  <span className='flex items-center'> <ArrowIcon color="#060a07" />
-                    <span className='flex ml-2'>Subscribe</span></span>
+                  <span className="text-lg">Subscribe</span>
                 )}
-              </button>
-            </div>
+              </motion.button>
+            </form>
           ) : (
-            <div style={{
-              position: "relative", zIndex: 1,
-              display: "inline-flex", alignItems: "center", gap: 10,
-              padding: "14px 28px", borderRadius: 999,
-              border: "1px solid rgba(0,255,135,0.3)",
-              background: "rgba(0,255,135,0.07)",
-              fontFamily: "'Space Mono', monospace",
-              fontSize: 12, letterSpacing: "0.1em",
-              color: "#00ff87", textTransform: "uppercase",
-            }}>
-              Thanks for subscribing
-              <svg xmlns="http://www.w3.org/2000/svg" width="2.5em" height="2.5em" viewBox="0 0 24 24">
-                <path fill="#1fee07" d="M22 5.5H9c-1.1 0-2 .9-2 2v9a2 2 0 0 0 2 2h13c1.11 0 2-.89 2-2v-9a2 2 0 0 0-2-2m0 3.67l-6.5 3.33L9 9.17V7.5l6.5 3.31L22 7.5zM5 16.5c0 .17.03.33.05.5H1c-.552 0-1-.45-1-1s.448-1 1-1h4zM3 7h2.05c-.02.17-.05.33-.05.5V9H3c-.55 0-1-.45-1-1s.45-1 1-1m-2 5c0-.55.45-1 1-1h3v2H2c-.55 0-1-.45-1-1"></path>
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="w-full bg-[#111] border-[3px] border-[#333] p-6 flex items-center justify-center gap-4 shadow-[6px_6px_0px_0px_#fff]"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24">
+                <path fill="#fff" d="M22 5.5H9c-1.1 0-2 .9-2 2v9a2 2 0 0 0 2 2h13c1.11 0 2-.89 2-2v-9a2 2 0 0 0-2-2m0 3.67l-6.5 3.33L9 9.17V7.5l6.5 3.31L22 7.5zM5 16.5c0 .17.03.33.05.5H1c-.552 0-1-.45-1-1s.448-1 1-1h4zM3 7h2.05c-.02.17-.05.33-.05.5V9H3c-.55 0-1-.45-1-1s.45-1 1-1m-2 5c0-.55.45-1 1-1h3v2H2c-.55 0-1-.45-1-1"></path>
               </svg>
-
-            </div>
+              <span className="text-white font-black text-2xl uppercase tracking-wide">Thanks for subscribing!</span>
+            </motion.div>
           )}
-
-          <p className="ct-privacy">No spam · Unsubscribe anytime · We respect your inbox</p>
         </div>
 
-      </div>
-    </>
+        <p className="text-white/80 text-[18px] font-medium mt-4">
+          Join 1000+ People Reading Our Newsletter
+        </p>
+      </motion.div>
+    </div>
   );
 };
 

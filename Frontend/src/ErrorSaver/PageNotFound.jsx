@@ -1,56 +1,103 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { Home, ArrowLeft } from 'lucide-react';
 
 const PageNotFound = () => {
+    const navigate = useNavigate();
+    
+    // 3D Tilt Logic
+    const cardRef = useRef(null);
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+
+    const rotateX = useTransform(y, [-0.5, 0.5], [12, -12]);
+    const rotateY = useTransform(x, [-0.5, 0.5], [-12, 12]);
+
+    function handleMouseMove(event) {
+        if (!cardRef.current) return;
+        const rect = cardRef.current.getBoundingClientRect();
+        
+        // Calculate normalized values between -0.5 and 0.5
+        const width = rect.width;
+        const height = rect.height;
+        
+        const mouseX = event.clientX - rect.left;
+        const mouseY = event.clientY - rect.top;
+        
+        const xPct = (mouseX / width) - 0.5;
+        const yPct = (mouseY / height) - 0.5;
+        
+        x.set(xPct);
+        y.set(yPct);
+    }
+    
+    function handleMouseLeave() {
+        x.set(0);
+        y.set(0);
+    }
+
+    // A subtle, rapid shaking animation
+    const typingShake = {
+        animate: {
+            x: [0, -3, 3, -3, 0],
+            y: [0, -2, 2, -2, 0],
+            rotate: [0, -1, 1, -1, 0],
+            transition: {
+                repeat: Infinity,
+                duration: 0.15,
+                ease: "linear"
+            }
+        }
+    };
+
     return (
-        <div data-theme="caramellatte" className="relative min-h-screen flex items-center justify-center bg-base-200 overflow-hidden">
-            {/* Decorative background blobs */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-100 rounded-full blur-3xl opacity-50 animate-pulse" />
-            <div className="absolute top-1/4 right-1/4 w-[300px] h-[300px] bg-blue-100 rounded-full blur-3xl opacity-30 animate-bounce" style={{ animationDuration: '8s' }} />
-
-            <div className="relative z-10 text-center px-6">
-                {/* Animated Error Code */}
-                <p className="text-sm font-bold tracking-widest text-accent uppercase mb-4 animate-fade-in">
-                    Error 404
-                </p>
-
-                <h1 className="text-5xl md:text-8xl font-extrabold text-slate-900 tracking-tight mb-4">
-                    Lost in <span className="text-accent">space?</span>
+        <div className="min-h-[100dvh] bg-gray-50 flex flex-col items-center justify-center p-6 text-center font-['Outfit',sans-serif]" style={{ perspective: "1000px" }}>
+            <motion.div 
+                ref={cardRef}
+                className="max-w-2xl w-full flex flex-col items-center justify-center p-12 py-20 bg-white rounded-[3rem] border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] hover:shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] transition-shadow duration-300"
+                style={{
+                    rotateX,
+                    rotateY,
+                    transformStyle: "preserve-3d"
+                }}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            >
+                {/* 404 Text with shake animation */}
+                <motion.h1 
+                    className="text-[10rem] md:text-[14rem] font-black leading-[0.85] text-black tracking-tighter mb-6"
+                    variants={typingShake}
+                    animate="animate"
+                    style={{ transform: "translateZ(80px)" }}
+                >
+                    404
+                </motion.h1>
+                
+                <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-12 tracking-wide" style={{ transform: "translateZ(50px)" }}>
+                    Sorry! Something happened.
                 </h1>
 
-                <p className="max-w-lg mx-auto text-lg md:text-xl text-slate-600 mb-10 leading-relaxed">
-                    We can’t seem to find the page you’re looking for. It might have been moved,
-                    or perhaps it never existed in this dimension.
-                </p>
-
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <div className="flex flex-col sm:flex-row items-center gap-6 mt-2" style={{ transform: "translateZ(60px)" }}>
                     <button
-                        onClick={() => window.history.back()}
-                        className="w-full sm:w-auto px-8 py-3 text-sm font-semibold text-slate-700 bg-white border border-slate-200 rounded-xl shadow-sm hover:bg-slate-50 hover:border-slate-300 transition-all active:scale-95"
+                        onClick={() => navigate('/')}
+                        className="flex items-center gap-3 px-8 py-3.5 bg-black text-white font-bold rounded-full hover:bg-gray-800 transition-all duration-300 active:scale-95 text-[15px]"
                     >
-                        Previous Page
+                        <Home size={20} strokeWidth={2.5} />
+                        Return Home
                     </button>
-
                     <button
-                        onClick={() => window.location.href = '/'}
-                        className="w-full sm:w-auto px-8 py-3 text-sm font-semibold text-secondary-content bg-secondary rounded-2xl  flex items-center justify-center gap-2 group"
+                        onClick={() => navigate(-1)}
+                        className="flex items-center gap-2 px-4 py-3.5 text-gray-500 font-bold hover:text-black transition-colors duration-300 active:scale-95 text-[15px]"
                     >
-                        Take Me Home
-                        <svg
-                            className="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
+                        <ArrowLeft size={20} strokeWidth={2.5} />
+                        Step Back
                     </button>
                 </div>
-
-                {/* Support Link */}
-                <p className="mt-12 text-sm text-slate-500">
-                    Think this is a mistake? <a href="/help-center" className="text-accent font-medium hover:underline underline-offset-4">Contact Support</a>
-                </p>
-            </div>
+            </motion.div>
         </div>
     );
 };
