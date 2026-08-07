@@ -41,11 +41,7 @@ const ProjectManagerBento = () => {
                   Oversee all your active repositories. Initialize new projects, monitor status, and maintain a bird's-eye view of your entire development ecosystem.
                 </p>
               </div>
-              <div className="shrink-0 flex items-center gap-2">
-                <button className="flex items-center gap-2 px-6 py-3 bg-white text-black text-xs font-bold rounded-xl hover:bg-gray-200 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-                  <Plus size={16} /> New Project
-                </button>
-              </div>
+
             </div>
 
             {/* Dashboard Image */}

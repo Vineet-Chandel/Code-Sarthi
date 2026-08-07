@@ -16,6 +16,7 @@ import express    from "./express.js";
 import django     from "./django.js";
 import flask      from "./flask.js";
 import fastapi    from "./fastapi.js";
+import restapi    from "./restapi.js";
 import socketio   from "./socketio.js";
 import graphql    from "./graphql.js";
 import scss       from "./scss.js";
@@ -70,7 +71,7 @@ const contentMap = {
   // Web Development
   html, css, tailwind, react, node,
   jquery, htmx, express, django, flask,
-  fastapi, socketio, graphql, scss,
+  fastapi, restapi, socketio, graphql, scss,
   markdown, yaml, json,
 
   // Programming Languages

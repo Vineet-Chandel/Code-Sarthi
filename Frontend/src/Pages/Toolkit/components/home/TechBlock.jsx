@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import * as Icons from "lucide-react";
 import { ArrowUpRight } from "lucide-react";
 
-export default function TechBlock({ tech, index, available, isSaved, onToggleSave }) {
+export default function TechBlock({ tech, index, available, isSaved, onToggleSave, targetUrl }) {
   const navigate = useNavigate();
   const Icon = Icons[tech.icon] ?? Icons.Code2;
   const cardRef = useRef(null);
@@ -49,7 +49,7 @@ export default function TechBlock({ tech, index, available, isSaved, onToggleSav
       onMouseLeave={handleMouseLeave}
     >
       <motion.button
-        onClick={() => navigate(`/app/toolkit/docs/${tech.id}`)}
+        onClick={() => navigate(targetUrl || `/app/toolkit/docs/${tech.id}`)}
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: index * 0.05, ease: "easeOut" }}

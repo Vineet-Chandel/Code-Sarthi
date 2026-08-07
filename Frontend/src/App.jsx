@@ -79,6 +79,7 @@ import Education from "./Pages/CARRER-PROFILE-CREATION/2/03_EDU/Education";
 import IntroSkill from "./Pages/CARRER-PROFILE-CREATION/2/04_SKILLS/IntroSkills";
 import Skills from "./Pages/CARRER-PROFILE-CREATION/2/04_SKILLS/Skills";
 import PageNotFound from "./ErrorSaver/PageNotFound";
+import FlashcardsPage from "./Pages/Toolkit/pages/FlashcardsPage";
 import Summary from "./Pages/CARRER-PROFILE-CREATION/2/05_PRSUM/ProfileSummary";
 import Project from "./Pages/CARRER-PROFILE-CREATION/2/06_PROJECT/Project";
 import Preview from "./Pages/CARRER-PROFILE-CREATION/2/08_PREVIEW/Preview";
@@ -95,7 +96,7 @@ import GoalDetail from "./Pages/PROJECT-MANAGER/GoalDetail";
 import SearchPalette from "./Pages/Toolkit/components/docs/SearchPalette";
 import ProfileOther from "./BasePages/ProfileOther";
 import Projects from "./Pages/Projects";
-
+// import CustomCursor from "./Cursor"
 
 const App = () => {
 
@@ -117,12 +118,12 @@ const App = () => {
 
 
       <BrowserRouter>
+        {/* <CustomCursor /> */}
         <Routes>
 
           {/* 🌐 PUBLIC ROUTES */}
 
           {/* Route "/" is means the user simple type the domain link example : www.codesarthi.in or the default route of the project */}
-
           <Route path="/" element={<Hero />} />
           {/* 📌 PAGE NOT FOUND ROUTE */}
           <Route path="*" element={<PageNotFound />} />
@@ -234,6 +235,14 @@ const App = () => {
                 element={
                   <Suspense fallback={<div className="min-h-screen bg-base-950" />}>
                     <DocPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="toolkit/docs/:techId/flashcard"
+                element={
+                  <Suspense fallback={<div className="min-h-screen bg-base-950" />}>
+                    <FlashcardsPage />
                   </Suspense>
                 }
               />

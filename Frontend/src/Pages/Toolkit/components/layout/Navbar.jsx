@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Command, Terminal, FileText, BookOpen, Bookmark } from "lucide-react";
+import { Command, Terminal, FileText, BookOpen, Bookmark, Layers } from "lucide-react";
 
 export default function Navbar({
   activeTab = "docs",
@@ -49,6 +49,18 @@ export default function Navbar({
             >
               <FileText size={14} className={activeTab === "docs" || activeTab === "cheatsheets" ? "text-black" : "text-zinc-400"} />
               <span>Docs</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleTabClick("flashcards")}
+              className={`flex items-center gap-2 px-4 sm:px-5 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
+                activeTab === "flashcards"
+                  ? "bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.25)] scale-[1.02]"
+                  : "text-zinc-400 hover:text-white hover:bg-white/5"
+              }`}
+            >
+              <Layers size={14} className={activeTab === "flashcards" ? "text-black" : "text-zinc-400"} />
+              <span>Flashcards</span>
             </button>
             <button
               type="button"

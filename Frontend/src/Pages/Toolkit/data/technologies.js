@@ -24,6 +24,7 @@ export const technologies = [
   { id: "django", name: "Django", tagline: "Python web framework", description: "A high-level Python web framework that encourages rapid development and clean, pragmatic design with batteries included.", color: "#44B78B", icon: "Shield", category: "web" },
   { id: "flask", name: "Flask", tagline: "Micro web framework", description: "A lightweight WSGI web application framework in Python that is designed to make getting started quick and easy.", color: "#9DA1AA", icon: "FlaskConical", category: "web" },
   { id: "fastapi", name: "FastAPI", tagline: "Modern Python API", description: "A modern, fast web framework for building APIs with Python based on standard Python type hints.", color: "#009688", icon: "Rocket", category: "web" },
+  { id: "restapi", name: "REST API", tagline: "Network architecture", description: "A standard architectural style for designing networked applications and web services.", color: "#005C84", icon: "ServerCog", category: "web" },
   { id: "socketio", name: "Socket.IO", tagline: "Realtime communication", description: "Enables real-time, bidirectional and event-based communication between the browser and the server.", color: "#25C2A0", icon: "Radio", category: "web" },
   { id: "graphql", name: "GraphQL", tagline: "Query language for APIs", description: "A query language for your API and a server-side runtime for executing queries using a type system.", color: "#E10098", icon: "Network", category: "web" },
   { id: "scss", name: "Sass / SCSS", tagline: "CSS with superpowers", description: "A preprocessor scripting language that is interpreted or compiled into Cascading Style Sheets (CSS).", color: "#CC6699", icon: "Paintbrush", category: "web" },
@@ -72,6 +73,7 @@ export const technologies = [
   { id: "latex", name: "LaTeX", tagline: "Document typesetting", description: "A software system for document preparation. When writing, the writer uses plain text as opposed to formatted text.", color: "#008080", icon: "BookOpen", category: "tools" },
   { id: "emmet", name: "Emmet", tagline: "HTML/CSS shortcuts", description: "A set of plug-ins for text editors that allow for high-speed coding and editing in HTML, XML, XSLT, and other structured code.", color: "#FC8A24", icon: "Zap", category: "tools" },
   { id: "chatgpt", name: "ChatGPT", tagline: "AI prompts & API", description: "An artificial intelligence chatbot developed by OpenAI, useful for generating boilerplate, debugging, and explaining code.", color: "#10A37F", icon: "Sparkles", category: "tools" },
+  { id: "uiux", name: "UI/UX", tagline: "Design principles", description: "Best practices, design tips, and patterns for creating excellent user interfaces and user experiences.", color: "#E84C88", icon: "Palette", category: "tools" },
 ];
 
 export const getTechById = (id) => technologies.find((t) => t.id === id);

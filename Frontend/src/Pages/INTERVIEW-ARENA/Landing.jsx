@@ -123,7 +123,7 @@ const Landing = () => {
             <div className='flex flex-col sm:flex-row gap-4 justify-center items-center mt-10 w-full max-w-2xl mx-auto'>
                 {/* Important primary action button -> Pure White with Black text */}
                 <button
-                    disabled={true}
+                    // disabled={true}
                     onClick={() => {
                         if (type === "career") {
                             setClicked(prev => !prev);

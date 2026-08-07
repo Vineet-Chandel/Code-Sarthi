@@ -18,6 +18,7 @@ import { getContentForTech } from "../data/content";
 import Sidebar from "../components/docs/Sidebar";
 import CodeBlock from "../components/docs/CodeBlock";
 import EmptyState from "../components/docs/EmptyState";
+import { getFlashcardsForTech } from "../data/flashcards";
 
 export default function DocPage() {
   const { techId } = useParams();
@@ -197,13 +198,22 @@ export default function DocPage() {
               <Icon size={22} />
             </span>
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <h1 className="text-2xl font-bold tracking-tight text-white">
                   {tech.name}
                 </h1>
                 <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-xs text-white/50 font-medium">
                   {totalSnippets} snippets
                 </span>
+                {getFlashcardsForTech(tech.id).length > 0 && (
+                  <button 
+                    onClick={() => navigate(`/app/toolkit/docs/${tech.id}/flashcard`)}
+                    className="flex items-center gap-1.5 rounded-full border border-white/10 bg-[#0a0a0a] px-2.5 py-0.5 text-xs text-white/70 font-medium hover:bg-[#121212] transition-colors"
+                  >
+                    <BookOpen size={12} />
+                    Flashcards
+                  </button>
+                )}
               </div>
               <p className="text-sm text-white/45 mt-0.5">{tech.tagline}</p>
             </div>

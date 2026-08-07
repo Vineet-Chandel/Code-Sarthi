@@ -5,6 +5,7 @@ import * as Icons from "lucide-react";
 import { Sparkles } from "lucide-react";
 import { technologies, categories } from "../data/technologies";
 import { getContentForTech } from "../data/content";
+import { getFlashcardsForTech } from "../data/flashcards";
 import TechBlock from "../components/home/TechBlock";
 import Navbar from "../components/layout/Navbar";
 import SearchPalette from "../components/docs/SearchPalette";
@@ -69,8 +70,23 @@ export default function Home({ initialTab = "docs" }) {
     });
   };
 
+  // --- Flashcards Bookmarks ---
+  const [savedFlashcards, setSavedFlashcards] = useState(() => {
+    try {
+      const saved = localStorage.getItem("codesarthi_toolkit_flashcard_bookmarks");
+      return saved ? JSON.parse(saved) : [];
+    } catch { return []; }
+  });
+  const handleToggleFlashcardSave = (id) => {
+    setSavedFlashcards(prev => {
+      const next = prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id];
+      localStorage.setItem("codesarthi_toolkit_flashcard_bookmarks", JSON.stringify(next));
+      return next;
+    });
+  };
+
   const totalCount = technologies.length;
-  const savedCount = activeTab === "docs" ? savedDocs.length : savedBlogs.length;
+  const savedCount = activeTab === "blogs" ? savedBlogs.length : (activeTab === "flashcards" ? savedFlashcards.length : savedDocs.length);
 
   return (
     <div className="pt-5 bg-black min-h-screen">
@@ -132,17 +148,18 @@ export default function Home({ initialTab = "docs" }) {
               <div className="flex flex-col gap-8">
                 <div className="flex items-center justify-between border-b border-white/10 pb-4">
                   <h2 className="text-lg font-semibold text-white">
-                    Saved Documentation
+                    Saved {activeTab === "flashcards" ? "Flashcards" : "Documentation"}
                   </h2>
                 </div>
-                {savedDocs.length === 0 ? (
+                {(activeTab === "flashcards" ? savedFlashcards.length : savedDocs.length) === 0 ? (
                   <div className="py-16 text-center text-sm text-white/40 bg-white/[0.02] rounded-2xl border border-white/[0.05]">
-                    You haven't saved any docs yet. Click the bookmark icon on any stack to save it!
+                    You haven't saved any {activeTab === "flashcards" ? "flashcards" : "docs"} yet. Click the bookmark icon on any stack to save it!
                   </div>
                 ) : (
                   <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                     {technologies
-                      .filter((t) => savedDocs.includes(t.id))
+                      .filter((t) => activeTab === "flashcards" ? savedFlashcards.includes(t.id) : savedDocs.includes(t.id))
+                      .filter((t) => activeTab === "flashcards" ? getFlashcardsForTech(t.id).length > 0 : true)
                       .map((tech, i) => (
                         <TechBlock
                           key={tech.id}
@@ -150,7 +167,8 @@ export default function Home({ initialTab = "docs" }) {
                           index={i}
                           available={Boolean(getContentForTech(tech.id))}
                           isSaved={true}
-                          onToggleSave={handleToggleDocSave}
+                          onToggleSave={activeTab === "flashcards" ? handleToggleFlashcardSave : handleToggleDocSave}
+                          targetUrl={activeTab === "flashcards" ? `/app/toolkit/docs/${tech.id}/flashcard` : undefined}
                         />
                       ))}
                   </div>
@@ -159,7 +177,12 @@ export default function Home({ initialTab = "docs" }) {
             ) : (
               <div className="flex flex-col gap-16">
                 {categories.map((cat, catIdx) => {
-                  const catTechs = technologies.filter((t) => t.category === cat.id);
+                  let catTechs = technologies.filter((t) => t.category === cat.id);
+                  if (activeTab === "flashcards") {
+                    catTechs = catTechs.filter(t => getFlashcardsForTech(t.id).length > 0);
+                  }
+                  if (catTechs.length === 0) return null;
+
                   const CatIcon = Icons[cat.icon] ?? Icons.Code;
 
                   return (
@@ -191,8 +214,9 @@ export default function Home({ initialTab = "docs" }) {
                             tech={tech}
                             index={i}
                             available={Boolean(getContentForTech(tech.id))}
-                            isSaved={savedDocs.includes(tech.id)}
-                            onToggleSave={handleToggleDocSave}
+                            isSaved={activeTab === "flashcards" ? savedFlashcards.includes(tech.id) : savedDocs.includes(tech.id)}
+                            onToggleSave={activeTab === "flashcards" ? handleToggleFlashcardSave : handleToggleDocSave}
+                            targetUrl={activeTab === "flashcards" ? `/app/toolkit/docs/${tech.id}/flashcard` : undefined}
                           />
                         ))}
                       </div>
