@@ -1,11 +1,11 @@
 const express = require("express");
 const authRouter = express.Router();
 const { validateSignUpData } = require("../utils/validation");
-
+const axios = require("axios");
 // models import 
 const User = require("../models/user");
 const NewsletterSubscriber = require("../models/newsLetter");
-
+const { OAuth2Client } = require("google-auth-library");
 const bcrypt = require("bcryptjs");
 
 // the most important middleware 
@@ -597,7 +597,147 @@ authRouter.post("/auth/signout", async (req, res) => {
 });
 
 
+authRouter.get("/login/google", (req, res) => {
+    const state = crypto.randomBytes(32).toString("hex");
 
+    const params = new URLSearchParams({
+        client_id: process.env.OAUTH_CLIENT,
+        redirect_uri: process.env.GOOGLE_REDIRECT_URI,
+        response_type: "code",
+        scope: "openid profile email",
+        state: state
+    });
+
+    const googleAuthURL =
+        `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+
+
+
+    res.redirect(googleAuthURL);
+});
+authRouter.get("/login/google/callback", async (req, res) => {
+    try {
+
+
+
+        const { code, state } = req.query;
+
+        if (!code) {
+            return res.status(400).json({
+                success: false,
+                message: "Authorization code missing"
+            });
+        }
+
+        console.log("Authorization Code received");
+        console.log("State:", state);
+
+        // 1. Exchange authorization code with Google
+        const tokenResponse = await axios.post(
+            "https://oauth2.googleapis.com/token",
+            new URLSearchParams({
+                code,
+                client_id: process.env.OAUTH_CLIENT,
+                client_secret: process.env.OAUTH_SECRET_KEY,
+                redirect_uri: process.env.GOOGLE_REDIRECT_URI,
+                grant_type: "authorization_code"
+            }).toString(),
+            {
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            }
+        );
+
+        // 2. Get Google's ID token
+        const { id_token } = tokenResponse.data;
+
+        if (!id_token) {
+            return res.status(400).json({
+                success: false,
+                message: "Google ID token missing"
+            });
+        }
+
+        // 3. Verify Google ID token
+        const googleClient = new OAuth2Client(
+            process.env.OAUTH_CLIENT
+        );
+
+        const ticket = await googleClient.verifyIdToken({
+            idToken: id_token,
+            audience: process.env.OAUTH_CLIENT
+        });
+
+        // 4. Get verified Google user information
+        const googleUser = ticket.getPayload();
+
+        console.log("Google User:", {
+            sub: googleUser.sub,
+            email: googleUser.email,
+            email_verified: googleUser.email_verified,
+            name: googleUser.name
+        });
+
+        // 5. Make sure Google's email is verified
+        if (!googleUser.email_verified) {
+            return res.status(400).json({
+                success: false,
+                message: "Google email is not verified"
+            });
+        }
+
+        const gmail = googleUser.email.toLowerCase();
+
+        // 6. Find existing CodeSarthi user
+        let user = await User.findOne({
+            gmail
+        });
+
+        // 7. Create user if this is their first Google login
+        if (!user) {
+            user = await User.create({
+                gmail: gmail,
+                termsAccepted: true,
+                isVerified: true,
+                firstName: googleUser.given_name,
+                lastName: googleUser.family_name,
+                authProvider: "google"
+            });
+
+            console.log("new")
+        }
+
+        // 8. Generate CodeSarthi JWT
+        const token = await user.getJWT();
+
+        // 9. Store JWT in cookie
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite:
+                process.env.NODE_ENV === "production"
+                    ? "none"
+                    : "lax",
+            maxAge: 8 * 60 * 60 * 1000
+        });
+
+        // 10. Redirect user to CodeSarthi
+        return res.redirect("https://codesarthi.in/app");
+        // return res.redirect("http://localhost:5173/app");
+
+    } catch (err) {
+        console.error(
+            "GOOGLE AUTH ERROR:",
+            err.response?.data || err.message
+        );
+
+        return res.status(400).json({
+            success: false,
+            message: "Google authentication failed"
+        });
+    }
+});
 
 //email verification
 //get otp
