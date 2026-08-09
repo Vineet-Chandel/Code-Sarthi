@@ -44,8 +44,6 @@ authRouter.post("/auth/check-username", async (req, res) => {
         return res.status(500).json({ message: "Internal server error" });
     }
 });
-
-
 authRouter.post("/auth/complete-profile", async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -61,7 +59,11 @@ authRouter.post("/auth/complete-profile", async (req, res) => {
 
         const googleData = jwt.verify(
             signupToken,
-            process.env.JWT_SECRET
+            process.env.JWT_SECRET,
+            {
+                issuer: "codesarthi",
+                audience: "google-signup"
+            }
         );
 
         if (googleData.type !== "google-signup") {
@@ -73,7 +75,7 @@ authRouter.post("/auth/complete-profile", async (req, res) => {
 
         // Now check username
         const existingUser = await User.findOne({
-            username: username.toLowerCase()
+            username: username.trim().toLowerCase()
         });
 
         if (existingUser) {
@@ -82,6 +84,45 @@ authRouter.post("/auth/complete-profile", async (req, res) => {
                 message: "Username already exists"
             });
         }
+        let url;
+        let rate = Math.floor(Math.random() * 100);
+        if (rate < 12.5) {
+            url = "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778848890/robo6_qerfgw.jpg";
+        } else if (rate < 25 && rate > 12.5) {
+            url = "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778848891/robo2_th69at.jpg";
+        } else if (rate < 37.5 && rate > 25) {
+            url = "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778848890/robo7_ixkipt.jpg";
+        } else if (rate < 50 && rate > 37.5) {
+            url = "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778848889/robo4_v1qyln.jpg";
+        } else if (rate < 62.5 && rate > 50) {
+            url = "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778848889/robo5_p3bwre.jpg";
+        } else if (rate < 75 && rate > 62.5) {
+            url = "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778848888/robo3_uqaqzv.jpg";
+        } else if (rate < 87.5 && rate > 75) {
+            url = "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778848889/robo1_fyviei.jpg";
+        } else if (rate < 100 && rate > 87.5) {
+            url = "https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1778848888/robo8_jhm1p8.jpg";
+        }
+
+
+        // this token is essential once the user want to unsubscribe with the newsletter 
+        const unsubscribeToken = crypto.randomBytes(32).toString("hex");
+
+        // if user is subscribed to newsletter, update the isActive to true
+        const emailData = await NewsletterSubscriber.findOne({ email: googleData.gmail });
+        if (emailData) {
+            emailData.isActive = true;
+            emailData.unsubscribeToken = unsubscribeToken;
+            await emailData.save();
+        } else {
+            await NewsletterSubscriber.create({
+                email: googleData.gmail,
+                isActive: true,
+                subscribedAt: Date.now(),
+                unsubscribeToken: unsubscribeToken,
+            });
+        }
+        const passwordHash = await bcrypt.hash(password, 10);
 
         // NOW create the actual CodeSarthi account
         const user = await User.create({
@@ -89,9 +130,11 @@ authRouter.post("/auth/complete-profile", async (req, res) => {
             firstName: googleData.firstName,
             lastName: googleData.lastName,
             googleId: googleData.googleId,
-
+            photoUrl: {
+                url: url
+            },
             username: username.toLowerCase(),
-            password: password,
+            password: passwordHash,
 
             termsAccepted: true,
             isVerified: true,
@@ -127,6 +170,180 @@ authRouter.post("/auth/complete-profile", async (req, res) => {
         });
     }
 });
+authRouter.get("/login/google", (req, res) => {
+    const state = crypto.randomBytes(32).toString("hex");
+    res.cookie("oauth_state", state, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 10 * 60 * 1000
+    });
+
+    const params = new URLSearchParams({
+        client_id: process.env.OAUTH_CLIENT,
+        redirect_uri: process.env.GOOGLE_REDIRECT_URI,
+        response_type: "code",
+        scope: "openid profile email",
+        state: state
+    });
+
+    const googleAuthURL =
+        `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+
+
+
+    res.redirect(googleAuthURL);
+});
+authRouter.get("/login/google/callback", async (req, res) => {
+    try {
+
+
+
+        const { code, state } = req.query;
+
+        if (!code) {
+            return res.status(400).json({
+                success: false,
+                message: "Authorization code missing"
+            });
+        }
+
+        const storedState = req.cookies.oauth_state;
+        if (!state || !storedState || state !== storedState) {
+            return res.status(403).json({
+                success: false,
+                message: "Invalid OAuth state"
+            });
+        }
+
+        res.clearCookie("oauth_state");
+
+        // 1. Exchange authorization code with Google
+        const tokenResponse = await axios.post(
+            "https://oauth2.googleapis.com/token",
+            new URLSearchParams({
+                code,
+                client_id: process.env.OAUTH_CLIENT,
+                client_secret: process.env.OAUTH_SECRET_KEY,
+                redirect_uri: process.env.GOOGLE_REDIRECT_URI,
+                grant_type: "authorization_code"
+            }).toString(),
+            {
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            }
+        );
+
+        // 2. Get Google's ID token
+        const { id_token } = tokenResponse.data;
+
+        if (!id_token) {
+            return res.status(400).json({
+                success: false,
+                message: "Google ID token missing"
+            });
+        }
+
+        // 3. Verify Google ID token
+        const googleClient = new OAuth2Client(
+            process.env.OAUTH_CLIENT
+        );
+
+        const ticket = await googleClient.verifyIdToken({
+            idToken: id_token,
+            audience: process.env.OAUTH_CLIENT
+        });
+
+        // 4. Get verified Google user information
+        const googleUser = ticket.getPayload();
+
+
+
+        // 5. Make sure Google's email is verified
+        if (!googleUser.email_verified) {
+            return res.status(400).json({
+                success: false,
+                message: "Google email is not verified"
+            });
+        }
+
+        const gmail = googleUser.email.toLowerCase();
+
+        // 6. Find existing CodeSarthi user
+        let user = await User.findOne({
+            gmail
+        });
+
+        // 7. Create user if this is their first Google login
+        if (!user) {
+
+            const signupToken = jwt.sign(
+                {
+                    googleId: googleUser.sub,
+                    gmail: gmail,
+                    firstName: googleUser.given_name,
+                    lastName: googleUser.family_name,
+                    type: "google-signup"
+                },
+                process.env.JWT_SECRET,
+                {
+                    expiresIn: "10m",
+                    issuer: "codesarthi",
+                    audience: "google-signup"
+                }
+            );
+
+            res.cookie("google_signup", signupToken, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "lax",
+                maxAge: 10 * 60 * 1000
+            });
+
+            return res.redirect(
+                // `${process.env.AT_BACK}/complete-profile`
+                `${process.env.AT_SYSTEM_API}/complete-profile`
+
+            );
+
+        }
+
+        // 8. Generate CodeSarthi JWT
+        const token = await user.getJWT();
+
+        // 9. Store JWT in cookie
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite:
+                process.env.NODE_ENV === "production"
+                    ? "none"
+                    : "lax",
+            maxAge: 8 * 60 * 60 * 1000
+        });
+
+        // 10. Redirect user to CodeSarthi
+
+        // return res.redirect(`${process.env.AT_BACK}/app`);
+        return res.redirect(`${process.env.AT_SYSTEM_API}/app`);
+
+    } catch (err) {
+
+        console.error("========== GOOGLE OAUTH ERROR ==========");
+        console.error("message:", err.message);
+        console.error("response:", err.response?.data);
+        console.error("status:", err.response?.status);
+        console.error("stack:", err.stack);
+        console.error("========================================");
+
+        return res.status(400).json({
+            success: false,
+            message: "Google authentication failed"
+        });
+    }
+});
+
 
 //signUp
 authRouter.post("/auth/signup", async (req, res) => {
@@ -706,182 +923,6 @@ authRouter.post("/auth/signout", async (req, res) => {
     res.send("Logout Successful!!");
 });
 
-
-authRouter.get("/login/google", (req, res) => {
-    const state = crypto.randomBytes(32).toString("hex");
-    res.cookie("oauth_state", state, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 10 * 60 * 1000
-    });
-
-    const params = new URLSearchParams({
-        client_id: process.env.OAUTH_CLIENT,
-        redirect_uri: process.env.GOOGLE_REDIRECT_URI,
-        response_type: "code",
-        scope: "openid profile email",
-        state: state
-    });
-
-    const googleAuthURL =
-        `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
-
-
-
-    res.redirect(googleAuthURL);
-});
-authRouter.get("/login/google/callback", async (req, res) => {
-    try {
-
-
-
-        const { code, state } = req.query;
-
-        if (!code) {
-            return res.status(400).json({
-                success: false,
-                message: "Authorization code missing"
-            });
-        }
-
-        const storedState = req.cookies.oauth_state;
-        if (!state || !storedState || state !== storedState) {
-            return res.status(403).json({
-                success: false,
-                message: "Invalid OAuth state"
-            });
-        }
-
-        res.clearCookie("oauth_state");
-
-        // 1. Exchange authorization code with Google
-        const tokenResponse = await axios.post(
-            "https://oauth2.googleapis.com/token",
-            new URLSearchParams({
-                code,
-                client_id: process.env.OAUTH_CLIENT,
-                client_secret: process.env.OAUTH_SECRET_KEY,
-                redirect_uri: process.env.GOOGLE_REDIRECT_URI,
-                grant_type: "authorization_code"
-            }).toString(),
-            {
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                }
-            }
-        );
-
-        // 2. Get Google's ID token
-        const { id_token } = tokenResponse.data;
-
-        if (!id_token) {
-            return res.status(400).json({
-                success: false,
-                message: "Google ID token missing"
-            });
-        }
-
-        // 3. Verify Google ID token
-        const googleClient = new OAuth2Client(
-            process.env.OAUTH_CLIENT
-        );
-
-        const ticket = await googleClient.verifyIdToken({
-            idToken: id_token,
-            audience: process.env.OAUTH_CLIENT
-        });
-
-        // 4. Get verified Google user information
-        const googleUser = ticket.getPayload();
-
-
-
-        // 5. Make sure Google's email is verified
-        if (!googleUser.email_verified) {
-            return res.status(400).json({
-                success: false,
-                message: "Google email is not verified"
-            });
-        }
-
-        const gmail = googleUser.email.toLowerCase();
-
-        // 6. Find existing CodeSarthi user
-        let user = await User.findOne({
-            gmail
-        });
-
-        // 7. Create user if this is their first Google login
-        if (!user) {
-
-            const signupToken = jwt.sign(
-                {
-                    googleId: googleUser.sub,
-                    gmail: googleUser.email.toLowerCase(),
-                    firstName: googleUser.given_name,
-                    lastName: googleUser.family_name,
-                    authProvider: "google",
-                    type: "google-signup"
-                },
-                process.env.JWT_SECRET,
-                {
-                    expiresIn: "10m"
-                }
-            );
-
-            res.cookie("google_signup", signupToken, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
-                sameSite:
-                    process.env.NODE_ENV === "production"
-                        ? "none"
-                        : "lax",
-                maxAge: 10 * 60 * 1000
-            });
-
-            return res.redirect(
-                // `${process.env.AT_BACK}/complete-profile`
-                `${process.env.AT_SYSTEM_API}/complete-profile`
-
-            );
-
-        }
-
-        // 8. Generate CodeSarthi JWT
-        const token = await user.getJWT();
-
-        // 9. Store JWT in cookie
-        res.cookie("token", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite:
-                process.env.NODE_ENV === "production"
-                    ? "none"
-                    : "lax",
-            maxAge: 8 * 60 * 60 * 1000
-        });
-
-        // 10. Redirect user to CodeSarthi
-
-        // return res.redirect(`${process.env.AT_BACK}/app`);
-        return res.redirect(`${process.env.AT_SYSTEM_API}/app`);
-
-    } catch (err) {
-
-        console.error("========== GOOGLE OAUTH ERROR ==========");
-        console.error("message:", err.message);
-        console.error("response:", err.response?.data);
-        console.error("status:", err.response?.status);
-        console.error("stack:", err.stack);
-        console.error("========================================");
-
-        return res.status(400).json({
-            success: false,
-            message: "Google authentication failed"
-        });
-    }
-});
 
 //email verification
 //get otp
