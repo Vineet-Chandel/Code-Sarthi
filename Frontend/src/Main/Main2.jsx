@@ -885,12 +885,12 @@ const Main2 = ({ ctaData }) => {
 
                 {/* Dashboard Screenshot Window */}
                 <div className="absolute top-[65px] sm:top-[85px] left-1/2 -translate-x-1/2 w-[98%] sm:w-[92%] lg:w-[86%] max-w-7xl h-[360px] min-[450px]:h-[440px] sm:h-[580px] lg:h-[680px] overflow-hidden pointer-events-none select-none z-0 rounded-t-xl sm:rounded-t-2xl border-t border-x border-white/10 shadow-[0_-10px_40px_rgba(255,255,255,0.03)]">
-                    <img 
-                        src="https://res.cloudinary.com/dj0ivep44/image/upload/v1785955500/Screenshot_2026-08-06_at_12.14.04_AM_p31mh3.png" 
-                        alt="CodeSarthi Dashboard Preview" 
-                        className="w-full h-full object-cover object-[center_top] sm:object-cover sm:object-[center_top] opacity-85 sm:opacity-95 filter contrast-[1.05] brightness-95 transition-opacity duration-700" 
+                    <img
+                        src="https://res.cloudinary.com/dj0ivep44/image/upload/v1785955500/Screenshot_2026-08-06_at_12.14.04_AM_p31mh3.png"
+                        alt="CodeSarthi Dashboard Preview"
+                        className="w-full h-full object-cover object-[center_top] sm:object-cover sm:object-[center_top] opacity-85 sm:opacity-95 filter contrast-[1.05] brightness-95 transition-opacity duration-700"
                     />
-                    
+
                     {/* Multi-layer Precision Dissolve Gradients ("Invisible in Dark Theme" Effect) */}
                     {/* 1. Primary Vertical Dissolve (Keeps the 250px top gap crystal clear, then dissolves to black before text) */}
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent via-30% to-black to-80% z-10" />
@@ -910,19 +910,19 @@ const Main2 = ({ ctaData }) => {
                     <Nav ctaData={ctaData} />
                 </div>
 
-                <div className='w-full sm:p-6 relative z-20 flex flex-col items-start justify-start mt-[140px] min-[450px]:mt-[180px] sm:mt-[350px]'>
+                <div className='w-full max-[400px]:px-2 px-4 sm:px-6 py-6 relative  flex flex-col items-start justify-start mt-[140px] min-[450px]:mt-[180px] sm:mt-[350px]'>
                     <div className='text-[#f9f9f9] font-poppins font-medium text-2xl min-[450px]:text-3xl sm:text-4xl lg:text-5xl xl:text-7xl flex flex-col gap-2 justify-start'>
                         <span> CodeSarthi is an Ecosystem </span> <span>designed for the Developers.</span>
                     </div>
 
-                    <div className='relative z-30 mt-7 sm:mt-10 flex gap-2 sm:gap-4'>
+                    <div className='relative  mt-7 sm:mt-10 flex gap-2 sm:gap-4'>
                         <MainCTAbutton ctaData={ctaData} />
                         <MainCTAbutton2 />
                     </div>
 
                 </div>
 
-                <div className='w-full sm:p-6 relative z-30 flex flex-row lg:grid lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-2 overflow-x-auto lg:overflow-x-visible snap-x snap-mandatory pb-6 pt-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]'>
+                <div className='w-full py-6 relative  flex flex-row lg:grid lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-2 overflow-x-auto lg:overflow-x-visible snap-x snap-mandatory  [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]'>
                     <div className="w-[88vw] sm:w-[46vw] lg:w-full flex-shrink-0 snap-center">
                         <Card idx={0} />
                     </div>
