@@ -1,5 +1,6 @@
 const express = require("express");
 const authRouter = express.Router();
+const validator = require("validator");
 const { validateSignUpData } = require("../utils/validation");
 const axios = require("axios");
 // models import 
@@ -7,7 +8,7 @@ const User = require("../models/user");
 const NewsletterSubscriber = require("../models/newsLetter");
 const { OAuth2Client } = require("google-auth-library");
 const bcrypt = require("bcryptjs");
-
+const jwt = require("jsonwebtoken");
 // the most important middleware 
 const { userAuth } = require("../middlewares/userAuth");
 
@@ -17,6 +18,115 @@ const { Resend } = require('resend');
 
 const resend = new Resend(String(process.env.RESEND_API_KEY));
 
+
+// Check username uniqueness
+authRouter.post("/auth/check-username", async (req, res) => {
+    try {
+        const { username } = req.body;
+
+        if (!username) {
+            return res.status(400).json({ message: "Username is required" });
+        }
+
+        if (!validator.matches(username, /^[a-z0-9._]{3,20}$/)) {
+            return res.status(400).json({
+                message: "Please enter a valid username with lowercase letters, numbers, and underscores (3-20 characters)."
+            });
+        }
+
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+            return res.status(409).json({ message: "Username already exists" });
+        }
+
+        return res.status(200).json({ message: "Username is available" });
+    } catch (error) {
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+
+authRouter.post("/auth/complete-profile", async (req, res) => {
+    try {
+        const { username, password } = req.body;
+
+        const signupToken = req.cookies.google_signup;
+
+        if (!signupToken) {
+            return res.status(401).json({
+                success: false,
+                message: "Google signup session expired"
+            });
+        }
+
+        const googleData = jwt.verify(
+            signupToken,
+            process.env.JWT_SECRET
+        );
+
+        if (googleData.type !== "google-signup") {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid signup session"
+            });
+        }
+
+        // Now check username
+        const existingUser = await User.findOne({
+            username: username.toLowerCase()
+        });
+
+        if (existingUser) {
+            return res.status(409).json({
+                success: false,
+                message: "Username already exists"
+            });
+        }
+
+        // NOW create the actual CodeSarthi account
+        const user = await User.create({
+            gmail: googleData.gmail,
+            firstName: googleData.firstName,
+            lastName: googleData.lastName,
+            googleId: googleData.googleId,
+
+            username: username.toLowerCase(),
+            password: password,
+
+            termsAccepted: true,
+            isVerified: true,
+            authProvider: "google"
+        });
+
+        // Generate normal CodeSarthi JWT
+        const token = await user.getJWT();
+
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite:
+                process.env.NODE_ENV === "production"
+                    ? "none"
+                    : "lax",
+            maxAge: 8 * 60 * 60 * 1000
+        });
+
+        // Delete temporary signup cookie
+        res.clearCookie("google_signup");
+
+        return res.json({
+            success: true,
+            message: "Account created successfully"
+        });
+
+    } catch (error) {
+
+        return res.status(400).json({
+            success: false,
+            message: "Unable to complete profile"
+        });
+    }
+});
 
 //signUp
 authRouter.post("/auth/signup", async (req, res) => {
@@ -599,6 +709,12 @@ authRouter.post("/auth/signout", async (req, res) => {
 
 authRouter.get("/login/google", (req, res) => {
     const state = crypto.randomBytes(32).toString("hex");
+    res.cookie("oauth_state", state, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 10 * 60 * 1000
+    });
 
     const params = new URLSearchParams({
         client_id: process.env.OAUTH_CLIENT,
@@ -628,9 +744,14 @@ authRouter.get("/login/google/callback", async (req, res) => {
                 message: "Authorization code missing"
             });
         }
+        if (!state || !storedState || state !== storedState) {
+            return res.status(403).json({
+                success: false,
+                message: "Invalid OAuth state"
+            });
+        }
 
-        console.log("Authorization Code received");
-        console.log("State:", state);
+        res.clearCookie("oauth_state");
 
         // 1. Exchange authorization code with Google
         const tokenResponse = await axios.post(
@@ -672,12 +793,7 @@ authRouter.get("/login/google/callback", async (req, res) => {
         // 4. Get verified Google user information
         const googleUser = ticket.getPayload();
 
-        console.log("Google User:", {
-            sub: googleUser.sub,
-            email: googleUser.email,
-            email_verified: googleUser.email_verified,
-            name: googleUser.name
-        });
+
 
         // 5. Make sure Google's email is verified
         if (!googleUser.email_verified) {
@@ -696,16 +812,38 @@ authRouter.get("/login/google/callback", async (req, res) => {
 
         // 7. Create user if this is their first Google login
         if (!user) {
-            user = await User.create({
-                gmail: gmail,
-                termsAccepted: true,
-                isVerified: true,
-                firstName: googleUser.given_name,
-                lastName: googleUser.family_name,
-                authProvider: "google"
+
+            const signupToken = jwt.sign(
+                {
+                    googleId: googleUser.sub,
+                    gmail: googleUser.email.toLowerCase(),
+                    firstName: googleUser.given_name,
+                    lastName: googleUser.family_name,
+                    authProvider: "google",
+                    type: "google-signup"
+                },
+                process.env.JWT_SECRET,
+                {
+                    expiresIn: "10m"
+                }
+            );
+
+            res.cookie("google_signup", signupToken, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite:
+                    process.env.NODE_ENV === "production"
+                        ? "none"
+                        : "lax",
+                maxAge: 10 * 60 * 1000
             });
 
-            console.log("new")
+            return res.redirect(
+                // `${process.env.AT_BACK}/complete-profile`
+                `${process.env.AT_SYSTEM_API}/complete-profile`
+
+            );
+
         }
 
         // 8. Generate CodeSarthi JWT
@@ -723,14 +861,12 @@ authRouter.get("/login/google/callback", async (req, res) => {
         });
 
         // 10. Redirect user to CodeSarthi
-        return res.redirect("https://codesarthi.in/app");
-        // return res.redirect("http://localhost:5173/app");
+
+        // return res.redirect(`${process.env.AT_BACK}/app`);
+        return res.redirect(`${process.env.AT_SYSTEM_API}/app`);
 
     } catch (err) {
-        console.error(
-            "GOOGLE AUTH ERROR:",
-            err.response?.data || err.message
-        );
+
 
         return res.status(400).json({
             success: false,
@@ -1041,7 +1177,7 @@ authRouter.get("/auth/verify-email", userAuth, async (req, res) => {
         })
 
     } catch (error) {
-        console.error("Verify email error:", error);
+
         return res.status(500).json({
             success: false,
             message: "Failed to send verification email"
@@ -1449,7 +1585,7 @@ authRouter.post("/auth/verify-email", userAuth, async (req, res) => {
         }
 
     } catch (error) {
-        console.error("Verify email error:", error);
+
         return res.status(500).json({
             success: false,
             message: "Failed to verify email"

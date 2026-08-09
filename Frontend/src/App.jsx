@@ -96,6 +96,7 @@ import GoalDetail from "./Pages/PROJECT-MANAGER/GoalDetail";
 import SearchPalette from "./Pages/Toolkit/components/docs/SearchPalette";
 import ProfileOther from "./BasePages/ProfileOther";
 import Projects from "./Pages/Projects";
+import CompleteProfile from "./Pages/auth/CompleteProfile";
 // import CustomCursor from "./Cursor"
 
 const App = () => {
@@ -163,6 +164,7 @@ const App = () => {
           {/* 🔐 AUTH */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/complete-profile" element={<CompleteProfile />} />
 
           {/* 🔒 PROTECTED APP */}
 
