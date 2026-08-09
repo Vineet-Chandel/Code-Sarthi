@@ -867,7 +867,7 @@ authRouter.get("/login/google/callback", async (req, res) => {
 
     } catch (err) {
 
-    } catch (err) {
+
 
         console.error("========== GOOGLE OAUTH ERROR ==========");
         console.error("message:", err.message);
