@@ -1,6 +1,21 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+const fs = require('fs');
 
+const issueModalPath = '/Users/vineetchandel/Developer/CodeSarthi/Frontend/src/Pages/PROJECT-MANAGER/Issues/IssueLinksModal.jsx';
+const projectModalPath = '/Users/vineetchandel/Developer/CodeSarthi/Frontend/src/Pages/PROJECT-MANAGER/Projects/ProjectLinksModal.jsx';
+
+const getBaseModalCode = (isProject) => {
+    const componentName = isProject ? 'ProjectLinksModal' : 'IssueLinksModal';
+    const entityName = isProject ? 'project' : 'issue';
+    const canManageCondition = isProject 
+        ? `myRole === 'leader' || myRole === 'admin'` 
+        : `myRole === 'leader' || myRole === 'admin' || (issue && user && (String(issue.createdBy) === String(user._id) || (issue.assignedTo && String(issue.assignedTo._id || issue.assignedTo) === String(user._id))))`;
+    
+    const extraImports = isProject ? '' : `import { useSelector } from 'react-redux';`;
+    const userHook = isProject ? '' : `const user = useSelector(store => store.user);`;
+
+    return `import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+${extraImports}
 
 const categories = [
     {
@@ -35,8 +50,8 @@ const categories = [
     }
 ];
 
-const ProjectLinksModal = ({ isOpen, onClose, project, myRole, onAddLink, onRemoveLink, onEditLink, loading }) => {
-    
+const ${componentName} = ({ isOpen, onClose, ${entityName}, myRole, onAddLink, onRemoveLink, onEditLink, loading }) => {
+    ${userHook}
     const [isAdding, setIsAdding] = useState(false);
     const [editingIndex, setEditingIndex] = useState(null);
     const [title, setTitle] = useState('');
@@ -46,8 +61,8 @@ const ProjectLinksModal = ({ isOpen, onClose, project, myRole, onAddLink, onRemo
 
     if (!isOpen) return null;
 
-    const links = project?.links || [];
-    const canManage = myRole === 'leader' || myRole === 'admin';
+    const links = ${entityName}?.links || [];
+    const canManage = ${canManageCondition};
 
     const handleCancel = () => {
         setIsAdding(false);
@@ -81,8 +96,8 @@ const ProjectLinksModal = ({ isOpen, onClose, project, myRole, onAddLink, onRemo
         }
 
         let formattedUrl = url.trim();
-        if (!/^https?:\/\//i.test(formattedUrl)) {
-            formattedUrl = `https://${formattedUrl}`;
+        if (!/^https?:\\/\\//i.test(formattedUrl)) {
+            formattedUrl = \`https://\${formattedUrl}\`;
         }
 
         const payload = { title: title.trim(), url: formattedUrl, category };
@@ -137,13 +152,13 @@ const ProjectLinksModal = ({ isOpen, onClose, project, myRole, onAddLink, onRemo
                                 </div>
                                 <div>
                                     <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                                        Project Links
+                                        ${isProject ? 'Project Links' : 'Issue Links'}
                                         <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#000000] text-neutral-300">
                                             {links.length}
                                         </span>
                                     </h3>
                                     <p className="text-xs text-neutral-400 truncate max-w-[250px] sm:max-w-md">
-                                        {project?.title ? `Attached resources for ${project.title}` : 'Manage attached URLs'}
+                                        {${entityName}?.title ? \`Attached resources for \${${entityName}.title}\` : 'Manage attached URLs'}
                                     </p>
                                 </div>
                             </div>
@@ -202,16 +217,16 @@ const ProjectLinksModal = ({ isOpen, onClose, project, myRole, onAddLink, onRemo
                                                     <div
                                                         key={cat.id}
                                                         onClick={() => setCategory(cat.id)}
-                                                        className={`p-3 rounded-xl border-none cursor-pointer transition-all flex items-center gap-3.5 ${
+                                                        className={\`p-3 rounded-xl border-none cursor-pointer transition-all flex items-center gap-3.5 \${
                                                             isSelected ? 'bg-white text-black' : 'bg-[#000000] hover:bg-[#111111] text-neutral-400'
-                                                        }`}
+                                                        }\`}
                                                     >
                                                         <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0">
                                                             {cat.icon}
                                                         </div>
                                                         <div className="flex-1 min-w-0">
-                                                            <div className={`text-sm font-bold ${isSelected ? 'text-black' : 'text-white'}`}>{cat.name}</div>
-                                                            <div className={`text-xs truncate ${isSelected ? 'text-neutral-700' : 'text-neutral-500'}`}>{cat.description}</div>
+                                                            <div className={\`text-sm font-bold \${isSelected ? 'text-black' : 'text-white'}\`}>{cat.name}</div>
+                                                            <div className={\`text-xs truncate \${isSelected ? 'text-neutral-700' : 'text-neutral-500'}\`}>{cat.description}</div>
                                                         </div>
                                                         {isSelected && (
                                                             <svg className="w-5 h-5 text-black ml-auto shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -246,7 +261,7 @@ const ProjectLinksModal = ({ isOpen, onClose, project, myRole, onAddLink, onRemo
                                             <span className="absolute left-4 text-neutral-500 text-sm font-mono select-none">https://</span>
                                             <input
                                                 type="text"
-                                                value={url.replace(/^https?:\/\//i, '')}
+                                                value={url.replace(/^https?:\\/\\//i, '')}
                                                 onChange={(e) => setUrl(e.target.value)}
                                                 placeholder="github.com/org/repo/pull/42"
                                                 className="w-full bg-[#000000] border-none rounded-xl pl-20 pr-4 py-3 text-sm text-white placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-white transition-colors font-mono"
@@ -338,7 +353,7 @@ const ProjectLinksModal = ({ isOpen, onClose, project, myRole, onAddLink, onRemo
                                                             rel="noopener noreferrer"
                                                             className="mt-3 pt-2.5 border-t border-[#1f1f1f] flex items-center justify-between text-xs font-mono text-neutral-400 hover:text-white transition-colors"
                                                         >
-                                                            <span className="truncate max-w-[200px]">{link.url.replace(/^https?:\/\//i, '')}</span>
+                                                            <span className="truncate max-w-[200px]">{link.url.replace(/^https?:\\/\\//i, '')}</span>
                                                             <svg className="w-3.5 h-3.5 shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
                                                         </a>
                                                     </div>
@@ -356,4 +371,11 @@ const ProjectLinksModal = ({ isOpen, onClose, project, myRole, onAddLink, onRemo
     );
 };
 
-export default ProjectLinksModal;
+export default ${componentName};
+`;
+};
+
+fs.writeFileSync(issueModalPath, getBaseModalCode(false));
+fs.writeFileSync(projectModalPath, getBaseModalCode(true));
+
+console.log('Modals rewritten.');

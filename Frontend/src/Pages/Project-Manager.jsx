@@ -6,6 +6,60 @@ import {
     XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell
 } from 'recharts';
 import BASE_URL from './auth/baseURL';
+import ProjectKanbanBoard from './PROJECT-MANAGER/Projects/ProjectKanbanBoard';
+
+
+// Reusable Custom Dropdown Component
+const CustomDropdown = ({ options, value, onChange, placeholder = "Select...", minWidth = "min-w-[160px]" }) => {
+    const [isOpen, setIsOpen] = React.useState(false);
+    const dropdownRef = React.useRef(null);
+    const selectedOption = options.find(o => String(o.value) === String(value));
+
+    React.useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    return (
+        <div className={`relative ${minWidth}`} ref={dropdownRef}>
+            <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="w-full bg-[#111111] hover:bg-[#1a1a1a] text-white font-bold px-4 py-2 rounded-xl border border-white/[0.08] focus:outline-none shadow-sm flex items-center justify-between gap-3 transition-colors"
+            >
+                <span className="truncate">{selectedOption ? selectedOption.label : placeholder}</span>
+                <svg className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
+            </button>
+
+            {isOpen && (
+                <motion.div
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="absolute top-full left-0 mt-2 w-full bg-[#0a0a0a] border border-white/[0.08] rounded-xl shadow-2xl z-50 overflow-hidden"
+                >
+                    <div className="max-h-[250px] overflow-y-auto custom-scrollbar">
+                        {options.map((opt) => (
+                            <div
+                                key={opt.value}
+                                onClick={() => {
+                                    onChange(opt.value);
+                                    setIsOpen(false);
+                                }}
+                                className={`px-4 py-2.5 cursor-pointer text-sm font-semibold transition-colors ${String(value) === String(opt.value) ? 'bg-white/[0.08] text-white' : 'text-zinc-400 hover:bg-white/[0.04] hover:text-white'}`}
+                            >
+                                {opt.label}
+                            </div>
+                        ))}
+                    </div>
+                </motion.div>
+            )}
+        </div>
+    );
+};
 
 // Semantic Color Palette as mandated by build brief
 const COLORS = {
@@ -119,6 +173,8 @@ const ChartCard = ({ title, category, snapshot = false, children, extraHeader, i
 const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
     const [activeTeamId, setActiveTeamId] = useState(propTeamId || null);
     const [userTeams, setUserTeams] = useState([]);
+    const [teamProjects, setTeamProjects] = useState([]);
+    const [selectedProjectId, setSelectedProjectId] = useState(projectId || 'all');
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
     const [error, setError] = useState(null);
@@ -160,7 +216,7 @@ const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
         if (activeTeamId) {
             fetchAllData();
         }
-    }, [activeTeamId, projectId, timeRange]);
+    }, [activeTeamId, selectedProjectId, timeRange]);
 
     const fetchAllData = async (isRefresh = false) => {
         if (isRefresh) setRefreshing(true);
@@ -207,13 +263,14 @@ const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
             });
 
             // NOTE: Currently aggregating issue metrics client-side by fetching issue lists across team projects.
-            // A dedicated backend aggregation endpoint (e.g., /teams/:teamId/analytics/issue-flow) is recommended for optimal performance at scale.
             let issuesList = [];
             const projectList = projectsRes.data.projects || [];
-            if (projectId) {
-                const pRes = await axios.get(`${BASE_URL}/teams/${activeTeamId}/projects/${projectId}/issues`, { withCredentials: true }).catch(() => null);
+            setTeamProjects(projectList);
+
+            if (selectedProjectId && selectedProjectId !== 'all') {
+                const pRes = await axios.get(`${BASE_URL}/teams/${activeTeamId}/projects/${selectedProjectId}/issues`, { withCredentials: true }).catch(() => null);
                 if (pRes?.data?.issues) issuesList = pRes.data.issues;
-                const currentP = projectList.find(p => String(p._id) === String(projectId));
+                const currentP = projectList.find(p => String(p._id) === String(selectedProjectId));
                 if (currentP) setProjectInfo(currentP);
             } else if (projectList.length > 0) {
                 const issuePromises = projectList.map(p =>
@@ -222,6 +279,7 @@ const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
                 );
                 const issueResults = await Promise.all(issuePromises);
                 issuesList = issueResults.flatMap(r => r.data.issues || []);
+                setProjectInfo(null);
             }
             setAllIssues(issuesList);
 
@@ -453,7 +511,7 @@ const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
     }
 
     return (
-        <div className="w-full bg-black text-white space-y-8 py-10 px-2 sm:px-6 selection:bg-white/20 relative">
+        <div className="min-h-screen w-full bg-black text-white space-y-8 py-10 px-2 sm:px-6 selection:bg-white/20 relative">
             {/* SUBTLE OVERLAY WHEN REFETCHING ON FILTER CHANGE */}
             {refreshing && (
                 <div className="fixed top-6 right-6 z-50 bg-[#0a0a0a] text-white text-xs px-5 py-2.5 rounded-full shadow-2xl flex items-center gap-2.5 font-mono animate-bounce">
@@ -471,21 +529,35 @@ const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
                             Deep-Analysis Dashboard
                         </span>
                     </div>
-                    <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white mt-1 flex flex-wrap items-center gap-2">
+                    <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white mt-1 flex flex-wrap items-center gap-3">
                         {!propTeamId && userTeams.length > 0 ? (
-                            <select
+                            <CustomDropdown
                                 value={activeTeamId || ''}
-                                onChange={(e) => setActiveTeamId(e.target.value)}
-                                className="bg-black text-white font-black px-4 py-2 rounded-xl focus:outline-none cursor-pointer shadow-inner"
-                            >
-                                {userTeams.map(t => (
-                                    <option key={t._id} value={t._id}>{t.name}</option>
-                                ))}
-                            </select>
+                                onChange={(val) => {
+                                    setActiveTeamId(val);
+                                    setSelectedProjectId('all');
+                                }}
+                                options={userTeams.map(t => ({ value: t._id, label: t.name }))}
+                                minWidth="min-w-[200px]"
+                            />
                         ) : (
                             <span>{teamInfo?.name || "Workspace Team"}</span>
                         )}
-                        {projectInfo && <span className="text-zinc-500 font-normal text-lg">/ {projectInfo.title}</span>}
+
+                        {teamProjects.length > 0 && (
+                            <>
+                                <svg className="w-4 h-4 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                                <CustomDropdown
+                                    value={selectedProjectId}
+                                    onChange={(val) => setSelectedProjectId(val)}
+                                    options={[
+                                        { value: 'all', label: 'All Projects' },
+                                        ...teamProjects.map(p => ({ value: p._id, label: p.title }))
+                                    ]}
+                                    minWidth="min-w-[180px]"
+                                />
+                            </>
+                        )}
                     </h1>
                 </div>
 
@@ -548,363 +620,378 @@ const ProjectManager = ({ teamId: propTeamId, projectId = null }) => {
                 ))}
             </section>
 
-            {/* 3. CHARTS GRID — SECTION A: CONTRIBUTION ANALYSIS */}
-            <div className="space-y-4">
-                <div className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-[#A7A0F8] font-mono pl-1 border-l-2 border-[#534AB7]">
-                    Section A — Contribution Analysis
-                </div>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-                    {/* A1. MEMBER ACTIVITY RANKING */}
-                    <ChartCard
-                        title="Member Activity Ranking"
-                        category="Time Contribution"
-                        index={0}
-                        extraHeader={
-                            <span className="text-[10px] text-zinc-500 font-mono italic">Click bar to filter Trend →</span>
-                        }
-                    >
-                        {memberActivityData.length > 0 ? (
-                            <ResponsiveContainer width="100%" height={260}>
-                                <BarChart
-                                    data={memberActivityData}
-                                    layout="vertical"
-                                    margin={{ top: 10, right: 30, left: 40, bottom: 5 }}
-                                >
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#27272A" horizontal={false} />
-                                    <XAxis type="number" stroke="#71717A" fontSize={11} unit="h" />
-                                    <YAxis dataKey="name" type="category" stroke="#E4E4E7" fontSize={11} width={80} tick={{ fill: '#E4E4E7' }} />
-                                    <Tooltip content={<CustomTimeTooltip />} />
-                                    <Bar
-                                        dataKey="hours"
-                                        name="Working Duration"
-                                        radius={[0, 6, 6, 0]}
-                                        cursor="pointer"
-                                        onClick={(data) => {
-                                            if (data?.payload?.userId) setSelectedTrendUser(String(data.payload.userId));
-                                        }}
-                                    >
-                                        {memberActivityData.map((entry, index) => (
-                                            <Cell
-                                                key={`cell-${index}`}
-                                                fill={String(entry.userId) === String(selectedTrendUser) ? COLORS.secondary : index === 0 ? COLORS.primary : '#3F3F4E'}
-                                            />
-                                        ))}
-                                    </Bar>
-                                </BarChart>
-                            </ResponsiveContainer>
-                        ) : (
-                            <ChartEmptyState message="No recorded contribution hours in this time window" />
-                        )}
-                    </ChartCard>
-
-                    {/* A2. CONTRIBUTION TREND OVER TIME */}
-                    <ChartCard
-                        title="Contribution Trend Over Time"
-                        category="Timeline Analytics"
-                        index={1}
-                        extraHeader={
-                            <select
-                                value={selectedTrendUser}
-                                onChange={(e) => setSelectedTrendUser(e.target.value)}
-                                className="bg-black text-xs text-white font-bold px-3 py-1.5 rounded-lg focus:outline-none shadow-sm cursor-pointer"
-                            >
-                                <option value="all">Team Total</option>
-                                {memberActivityData.map(m => (
-                                    <option key={m.userId || m.name} value={m.userId}>{m.name}</option>
-                                ))}
-                            </select>
-                        }
-                    >
-                        {contributionTrendData.length > 0 ? (
-                            <ResponsiveContainer width="100%" height={260}>
-                                <LineChart data={contributionTrendData} margin={{ top: 10, right: 20, left: 10, bottom: 5 }}>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#1f1f23" />
-                                    <XAxis dataKey="date" stroke="#71717A" fontSize={11} />
-                                    <YAxis stroke="#71717A" fontSize={11} unit="h" />
-                                    <Tooltip content={<CustomTimeTooltip />} />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="hours"
-                                        name="Time Logged"
-                                        stroke={selectedTrendUser === 'all' ? COLORS.primary : COLORS.secondary}
-                                        strokeWidth={3}
-                                        dot={{ r: 4, fill: '#0a0a0a', strokeWidth: 2 }}
-                                        activeDot={{ r: 6, fill: COLORS.secondary, stroke: '#fff' }}
-                                    />
-                                </LineChart>
-                            </ResponsiveContainer>
-                        ) : (
-                            <ChartEmptyState message="No trend data points found for selected filter" />
-                        )}
-                    </ChartCard>
-                </div>
-
-                {/* A3. IDLE MEMBER WATCHLIST (DISTINCT FLAGGED TABLE COMPONENT) */}
-                <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: 0.1 }}
-                    className="bg-[#0a0a0a] rounded-2xl p-6 shadow-2xl relative overflow-hidden"
-                >
-                    <div className="flex items-center justify-between mb-5 pb-2">
-                        <div>
-                            <span className="text-[10px] uppercase tracking-widest font-extrabold text-[#D9A441] font-mono">Risk & Engagement</span>
-                            <h3 className="text-base font-bold text-white mt-1">Idle Member Watchlist</h3>
+            {selectedProjectId !== 'all' ? (
+                <div className="w-screen relative left-[50%] right-[50%] ml-[-50vw] mr-[-50vw] bg-black border-t border-white/[0.05] mt-6 pt-8 pb-12">
+                    <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+                        <div className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-[#A7A0F8] font-mono pl-1 border-l-2 border-[#534AB7]">
+                            Project Kanban Tracking
                         </div>
-                        <span className="px-3 py-1.5 rounded-lg bg-black text-[#D9A441] text-xs font-mono font-bold shadow-inner">
-                            Threshold: {timeRange === 'all' ? '30+ Days Inactive' : `${timeRange} Days Inactive`}
-                        </span>
+                        <div className="w-full">
+                            <ProjectKanbanBoard issues={allIssues} teamId={activeTeamId} onRefresh={() => fetchAllData(true)} />
+                        </div>
                     </div>
-                    {idleMembers.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {idleMembers.map((member, idx) => {
-                                const daysIdle = member.lastActive
-                                    ? Math.floor((Date.now() - new Date(member.lastActive).getTime()) / (1000 * 3600 * 24))
-                                    : null;
-                                return (
-                                    <div
-                                        key={member.userId || idx}
-                                        className="bg-black hover:bg-[#121212] p-5 rounded-xl flex items-center justify-between gap-3 transition-colors shadow-sm"
-                                    >
-                                        <div className="min-w-0">
-                                            <div className="text-sm font-bold text-white truncate">{member.name || 'Member'}</div>
-                                            <div className="text-xs text-zinc-500 capitalize font-medium mt-0.5">{member.role || 'Contributor'} • {member.email}</div>
-                                        </div>
-                                        <div className="text-right shrink-0">
-                                            <div className="text-xs font-black font-mono text-[#D9A441]">
-                                                {daysIdle !== null ? `Idle ${daysIdle}d` : 'No history'}
-                                            </div>
-                                            <div className="text-[10px] text-zinc-600 mt-0.5">
-                                                {member.lastActive ? new Date(member.lastActive).toLocaleDateString() : 'Never logged'}
-                                            </div>
-                                        </div>
-                                    </div>
-                                );
-                            })}
+                </div>
+            ) : (
+                <>
+                    {/* 3. CHARTS GRID — SECTION A: CONTRIBUTION ANALYSIS */}
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-[#A7A0F8] font-mono pl-1 border-l-2 border-[#534AB7]">
+                            Section A — Contribution Analysis
                         </div>
-                    ) : (
-                        <div className="w-full py-8 text-center bg-black rounded-xl text-emerald-400 font-medium text-xs shadow-inner">
-                            ✓ All active team members have recorded contributions within this operational window. Zero idle anomalies detected.
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                            {/* A1. MEMBER ACTIVITY RANKING */}
+                            <ChartCard
+                                title="Member Activity Ranking"
+                                category="Time Contribution"
+                                index={0}
+                                extraHeader={
+                                    <span className="text-[10px] text-zinc-500 font-mono italic">Click bar to filter Trend →</span>
+                                }
+                            >
+                                {memberActivityData.length > 0 ? (
+                                    <ResponsiveContainer width="100%" height={260}>
+                                        <BarChart
+                                            data={memberActivityData}
+                                            layout="vertical"
+                                            margin={{ top: 10, right: 30, left: 40, bottom: 5 }}
+                                        >
+                                            <CartesianGrid strokeDasharray="3 3" stroke="#27272A" horizontal={false} />
+                                            <XAxis type="number" stroke="#71717A" fontSize={11} unit="h" />
+                                            <YAxis dataKey="name" type="category" stroke="#E4E4E7" fontSize={11} width={80} tick={{ fill: '#E4E4E7' }} />
+                                            <Tooltip content={<CustomTimeTooltip />} />
+                                            <Bar
+                                                dataKey="hours"
+                                                name="Working Duration"
+                                                radius={[0, 6, 6, 0]}
+                                                cursor="pointer"
+                                                onClick={(data) => {
+                                                    if (data?.payload?.userId) setSelectedTrendUser(String(data.payload.userId));
+                                                }}
+                                            >
+                                                {memberActivityData.map((entry, index) => (
+                                                    <Cell
+                                                        key={`cell-${index}`}
+                                                        fill={String(entry.userId) === String(selectedTrendUser) ? COLORS.secondary : index === 0 ? COLORS.primary : '#3F3F4E'}
+                                                    />
+                                                ))}
+                                            </Bar>
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                ) : (
+                                    <ChartEmptyState message="No recorded contribution hours in this time window" />
+                                )}
+                            </ChartCard>
+
+                            {/* A2. CONTRIBUTION TREND OVER TIME */}
+                            <ChartCard
+                                title="Contribution Trend Over Time"
+                                category="Timeline Analytics"
+                                index={1}
+                                extraHeader={
+                                    <select
+                                        value={selectedTrendUser}
+                                        onChange={(e) => setSelectedTrendUser(e.target.value)}
+                                        className="bg-black text-xs text-white font-bold px-3 py-1.5 rounded-lg focus:outline-none shadow-sm cursor-pointer"
+                                    >
+                                        <option value="all">Team Total</option>
+                                        {memberActivityData.map(m => (
+                                            <option key={m.userId || m.name} value={m.userId}>{m.name}</option>
+                                        ))}
+                                    </select>
+                                }
+                            >
+                                {contributionTrendData.length > 0 ? (
+                                    <ResponsiveContainer width="100%" height={260}>
+                                        <LineChart data={contributionTrendData} margin={{ top: 10, right: 20, left: 10, bottom: 5 }}>
+                                            <CartesianGrid strokeDasharray="3 3" stroke="#1f1f23" />
+                                            <XAxis dataKey="date" stroke="#71717A" fontSize={11} />
+                                            <YAxis stroke="#71717A" fontSize={11} unit="h" />
+                                            <Tooltip content={<CustomTimeTooltip />} />
+                                            <Line
+                                                type="monotone"
+                                                dataKey="hours"
+                                                name="Time Logged"
+                                                stroke={selectedTrendUser === 'all' ? COLORS.primary : COLORS.secondary}
+                                                strokeWidth={3}
+                                                dot={{ r: 4, fill: '#0a0a0a', strokeWidth: 2 }}
+                                                activeDot={{ r: 6, fill: COLORS.secondary, stroke: '#fff' }}
+                                            />
+                                        </LineChart>
+                                    </ResponsiveContainer>
+                                ) : (
+                                    <ChartEmptyState message="No trend data points found for selected filter" />
+                                )}
+                            </ChartCard>
                         </div>
-                    )}
-                </motion.div>
-            </div>
 
-            {/* 4. CHARTS GRID — SECTION B: ISSUE ANALYSIS */}
-            <div className="space-y-4 pt-4">
-                <div className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-[#A7A0F8] font-mono pl-1 border-l-2 border-[#A7A0F8]">
-                    Section B — Issue Flow & Execution Analysis
-                </div>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        {/* A3. IDLE MEMBER WATCHLIST (DISTINCT FLAGGED TABLE COMPONENT) */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3, delay: 0.1 }}
+                            className="bg-[#0a0a0a] rounded-2xl p-6 shadow-2xl relative overflow-hidden"
+                        >
+                            <div className="flex items-center justify-between mb-5 pb-2">
+                                <div>
+                                    <span className="text-[10px] uppercase tracking-widest font-extrabold text-[#D9A441] font-mono">Risk & Engagement</span>
+                                    <h3 className="text-base font-bold text-white mt-1">Idle Member Watchlist</h3>
+                                </div>
+                                <span className="px-3 py-1.5 rounded-lg bg-black text-[#D9A441] text-xs font-mono font-bold shadow-inner">
+                                    Threshold: {timeRange === 'all' ? '30+ Days Inactive' : `${timeRange} Days Inactive`}
+                                </span>
+                            </div>
+                            {idleMembers.length > 0 ? (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    {idleMembers.map((member, idx) => {
+                                        const daysIdle = member.lastActive
+                                            ? Math.floor((Date.now() - new Date(member.lastActive).getTime()) / (1000 * 3600 * 24))
+                                            : null;
+                                        return (
+                                            <div
+                                                key={member.userId || idx}
+                                                className="bg-black hover:bg-[#121212] p-5 rounded-xl flex items-center justify-between gap-3 transition-colors shadow-sm"
+                                            >
+                                                <div className="min-w-0">
+                                                    <div className="text-sm font-bold text-white truncate">{member.name || 'Member'}</div>
+                                                    <div className="text-xs text-zinc-500 capitalize font-medium mt-0.5">{member.role || 'Contributor'} • {member.email}</div>
+                                                </div>
+                                                <div className="text-right shrink-0">
+                                                    <div className="text-xs font-black font-mono text-[#D9A441]">
+                                                        {daysIdle !== null ? `Idle ${daysIdle}d` : 'No history'}
+                                                    </div>
+                                                    <div className="text-[10px] text-zinc-600 mt-0.5">
+                                                        {member.lastActive ? new Date(member.lastActive).toLocaleDateString() : 'Never logged'}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            ) : (
+                                <div className="w-full py-8 text-center bg-black rounded-xl text-emerald-400 font-medium text-xs shadow-inner">
+                                    ✓ All active team members have recorded contributions within this operational window. Zero idle anomalies detected.
+                                </div>
+                            )}
+                        </motion.div>
+                    </div>
 
-                    {/* B1. ISSUES RAISED OVER TIME */}
-                    <ChartCard title="Issues Raised Over Time" category="Creation Velocity" index={2}>
-                        {issuesOverTimeData.length > 0 ? (
-                            <ResponsiveContainer width="100%" height={260}>
-                                <AreaChart data={issuesOverTimeData} margin={{ top: 10, right: 20, left: 10, bottom: 5 }}>
-                                    <defs>
-                                        <linearGradient id="colorFeature" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor={COLORS.primary} stopOpacity={0.7} />
-                                            <stop offset="95%" stopColor={COLORS.primary} stopOpacity={0.1} />
-                                        </linearGradient>
-                                        <linearGradient id="colorProblem" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor={COLORS.amber} stopOpacity={0.7} />
-                                            <stop offset="95%" stopColor={COLORS.amber} stopOpacity={0.1} />
-                                        </linearGradient>
-                                        <linearGradient id="colorTask" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor={COLORS.secondary} stopOpacity={0.7} />
-                                            <stop offset="95%" stopColor={COLORS.secondary} stopOpacity={0.1} />
-                                        </linearGradient>
-                                    </defs>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#27272A" />
-                                    <XAxis dataKey="date" stroke="#71717A" fontSize={11} />
-                                    <YAxis stroke="#71717A" fontSize={11} allowDecimals={false} />
-                                    <Tooltip content={<CustomCountTooltip valueSuffix=" items" />} />
-                                    <Legend wrapperStyle={{ fontSize: '11px', color: '#A1A1AA' }} />
-                                    <Area type="monotone" dataKey="Feature" stackId="1" stroke={COLORS.primary} fill="url(#colorFeature)" />
-                                    <Area type="monotone" dataKey="Problem" stackId="1" stroke={COLORS.amber} fill="url(#colorProblem)" />
-                                    <Area type="monotone" dataKey="Task" stackId="1" stroke={COLORS.secondary} fill="url(#colorTask)" />
-                                </AreaChart>
-                            </ResponsiveContainer>
-                        ) : (
-                            <ChartEmptyState message="No issues created during this operational window" />
-                        )}
-                    </ChartCard>
+                    {/* 4. CHARTS GRID — SECTION B: ISSUE ANALYSIS */}
+                    <div className="space-y-4 pt-4">
+                        <div className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-[#A7A0F8] font-mono pl-1 border-l-2 border-[#A7A0F8]">
+                            Section B — Issue Flow & Execution Analysis
+                        </div>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-                    {/* B2. ISSUE STATUS BREAKDOWN */}
-                    <ChartCard title="Issue Status Breakdown" category="Workflow State" snapshot={true} index={3}>
-                        {issueStatusData.length > 0 ? (
-                            <ResponsiveContainer width="100%" height={260}>
-                                <PieChart>
-                                    <Pie
-                                        data={issueStatusData}
-                                        cx="50%"
-                                        cy="50%"
-                                        innerRadius={60}
-                                        outerRadius={85}
-                                        paddingAngle={4}
-                                        dataKey="value"
-                                    >
-                                        {issueStatusData.map((entry, idx) => (
-                                            <Cell key={`cell-${idx}`} fill={entry.color || CHART_PALETTE[idx % CHART_PALETTE.length]} stroke="#0a0a0a" strokeWidth={2} />
-                                        ))}
-                                    </Pie>
-                                    <Tooltip content={<CustomCountTooltip valueSuffix=" issues" />} />
-                                    <Legend wrapperStyle={{ fontSize: '11px', color: '#A1A1AA' }} />
-                                </PieChart>
-                            </ResponsiveContainer>
-                        ) : (
-                            <ChartEmptyState message="No issues currently active in workspace" />
-                        )}
-                    </ChartCard>
+                            {/* B1. ISSUES RAISED OVER TIME */}
+                            <ChartCard title="Issues Raised Over Time" category="Creation Velocity" index={2}>
+                                {issuesOverTimeData.length > 0 ? (
+                                    <ResponsiveContainer width="100%" height={260}>
+                                        <AreaChart data={issuesOverTimeData} margin={{ top: 10, right: 20, left: 10, bottom: 5 }}>
+                                            <defs>
+                                                <linearGradient id="colorFeature" x1="0" y1="0" x2="0" y2="1">
+                                                    <stop offset="5%" stopColor={COLORS.primary} stopOpacity={0.7} />
+                                                    <stop offset="95%" stopColor={COLORS.primary} stopOpacity={0.1} />
+                                                </linearGradient>
+                                                <linearGradient id="colorProblem" x1="0" y1="0" x2="0" y2="1">
+                                                    <stop offset="5%" stopColor={COLORS.amber} stopOpacity={0.7} />
+                                                    <stop offset="95%" stopColor={COLORS.amber} stopOpacity={0.1} />
+                                                </linearGradient>
+                                                <linearGradient id="colorTask" x1="0" y1="0" x2="0" y2="1">
+                                                    <stop offset="5%" stopColor={COLORS.secondary} stopOpacity={0.7} />
+                                                    <stop offset="95%" stopColor={COLORS.secondary} stopOpacity={0.1} />
+                                                </linearGradient>
+                                            </defs>
+                                            <CartesianGrid strokeDasharray="3 3" stroke="#27272A" />
+                                            <XAxis dataKey="date" stroke="#71717A" fontSize={11} />
+                                            <YAxis stroke="#71717A" fontSize={11} allowDecimals={false} />
+                                            <Tooltip content={<CustomCountTooltip valueSuffix=" items" />} />
+                                            <Legend wrapperStyle={{ fontSize: '11px', color: '#A1A1AA' }} />
+                                            <Area type="monotone" dataKey="Feature" stackId="1" stroke={COLORS.primary} fill="url(#colorFeature)" />
+                                            <Area type="monotone" dataKey="Problem" stackId="1" stroke={COLORS.amber} fill="url(#colorProblem)" />
+                                            <Area type="monotone" dataKey="Task" stackId="1" stroke={COLORS.secondary} fill="url(#colorTask)" />
+                                        </AreaChart>
+                                    </ResponsiveContainer>
+                                ) : (
+                                    <ChartEmptyState message="No issues created during this operational window" />
+                                )}
+                            </ChartCard>
 
-                    {/* B3. ISSUE TYPE DISTRIBUTION */}
-                    <ChartCard title="Issue Type Distribution" category="Composition" snapshot={true} index={4}>
-                        {issueTypeData.length > 0 ? (
-                            <ResponsiveContainer width="100%" height={260}>
-                                <PieChart>
-                                    <Pie
-                                        data={issueTypeData}
-                                        cx="50%"
-                                        cy="50%"
-                                        outerRadius={80}
-                                        dataKey="value"
-                                    >
-                                        {issueTypeData.map((entry, idx) => (
-                                            <Cell key={`cell-${idx}`} fill={entry.color || CHART_PALETTE[idx % CHART_PALETTE.length]} stroke="#0a0a0a" strokeWidth={2} />
-                                        ))}
-                                    </Pie>
-                                    <Tooltip content={<CustomCountTooltip valueSuffix=" items" />} />
-                                    <Legend wrapperStyle={{ fontSize: '11px', color: '#A1A1AA' }} />
-                                </PieChart>
-                            </ResponsiveContainer>
-                        ) : (
-                            <ChartEmptyState message="No issue types classified yet" />
-                        )}
-                    </ChartCard>
+                            {/* B2. ISSUE STATUS BREAKDOWN */}
+                            <ChartCard title="Issue Status Breakdown" category="Workflow State" snapshot={true} index={3}>
+                                {issueStatusData.length > 0 ? (
+                                    <ResponsiveContainer width="100%" height={260}>
+                                        <PieChart>
+                                            <Pie
+                                                data={issueStatusData}
+                                                cx="50%"
+                                                cy="50%"
+                                                innerRadius={60}
+                                                outerRadius={85}
+                                                paddingAngle={4}
+                                                dataKey="value"
+                                            >
+                                                {issueStatusData.map((entry, idx) => (
+                                                    <Cell key={`cell-${idx}`} fill={entry.color || CHART_PALETTE[idx % CHART_PALETTE.length]} stroke="#0a0a0a" strokeWidth={2} />
+                                                ))}
+                                            </Pie>
+                                            <Tooltip content={<CustomCountTooltip valueSuffix=" issues" />} />
+                                            <Legend wrapperStyle={{ fontSize: '11px', color: '#A1A1AA' }} />
+                                        </PieChart>
+                                    </ResponsiveContainer>
+                                ) : (
+                                    <ChartEmptyState message="No issues currently active in workspace" />
+                                )}
+                            </ChartCard>
 
-                    {/* B4. ISSUE PRIORITY DISTRIBUTION */}
-                    <ChartCard title="Issue Priority Distribution" category="Triage Matrix" snapshot={true} index={5}>
-                        {issuePriorityData.length > 0 ? (
-                            <ResponsiveContainer width="100%" height={260}>
-                                <BarChart data={issuePriorityData} layout="vertical" margin={{ top: 10, right: 30, left: 40, bottom: 5 }}>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#27272A" horizontal={false} />
-                                    <XAxis type="number" stroke="#71717A" fontSize={11} allowDecimals={false} />
-                                    <YAxis dataKey="name" type="category" stroke="#E4E4E7" fontSize={11} width={60} />
-                                    <Tooltip content={<CustomCountTooltip valueSuffix=" tasks" />} />
-                                    <Bar dataKey="value" name="Task Count" radius={[0, 6, 6, 0]}>
-                                        {issuePriorityData.map((entry, idx) => (
-                                            <Cell key={`cell-${idx}`} fill={entry.color || CHART_PALETTE[idx % CHART_PALETTE.length]} />
-                                        ))}
-                                    </Bar>
-                                </BarChart>
-                            </ResponsiveContainer>
-                        ) : (
-                            <ChartEmptyState message="No prioritized tasks in database" />
-                        )}
-                    </ChartCard>
+                            {/* B3. ISSUE TYPE DISTRIBUTION */}
+                            <ChartCard title="Issue Type Distribution" category="Composition" snapshot={true} index={4}>
+                                {issueTypeData.length > 0 ? (
+                                    <ResponsiveContainer width="100%" height={260}>
+                                        <PieChart>
+                                            <Pie
+                                                data={issueTypeData}
+                                                cx="50%"
+                                                cy="50%"
+                                                outerRadius={80}
+                                                dataKey="value"
+                                            >
+                                                {issueTypeData.map((entry, idx) => (
+                                                    <Cell key={`cell-${idx}`} fill={entry.color || CHART_PALETTE[idx % CHART_PALETTE.length]} stroke="#0a0a0a" strokeWidth={2} />
+                                                ))}
+                                            </Pie>
+                                            <Tooltip content={<CustomCountTooltip valueSuffix=" items" />} />
+                                            <Legend wrapperStyle={{ fontSize: '11px', color: '#A1A1AA' }} />
+                                        </PieChart>
+                                    </ResponsiveContainer>
+                                ) : (
+                                    <ChartEmptyState message="No issue types classified yet" />
+                                )}
+                            </ChartCard>
 
-                    {/* B5. COMPLETION RATE PER MEMBER */}
-                    <ChartCard title="Completion Rate Per Member" category="Execution Efficacy" index={6}>
-                        {completionRateData.length > 0 ? (
-                            <ResponsiveContainer width="100%" height={260}>
-                                <BarChart data={completionRateData} layout="vertical" margin={{ top: 10, right: 30, left: 40, bottom: 5 }}>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#27272A" horizontal={false} />
-                                    <XAxis type="number" domain={[0, 100]} unit="%" stroke="#71717A" fontSize={11} />
-                                    <YAxis dataKey="name" type="category" stroke="#E4E4E7" fontSize={11} width={80} />
-                                    <Tooltip content={<CustomCountTooltip valueSuffix="%" />} />
-                                    <Bar dataKey="rate" name="Completion Rate" fill={COLORS.green} radius={[0, 6, 6, 0]} />
-                                </BarChart>
-                            </ResponsiveContainer>
-                        ) : (
-                            <ChartEmptyState message="No task assignment data to calculate completion rate" />
-                        )}
-                    </ChartCard>
+                            {/* B4. ISSUE PRIORITY DISTRIBUTION */}
+                            <ChartCard title="Issue Priority Distribution" category="Triage Matrix" snapshot={true} index={5}>
+                                {issuePriorityData.length > 0 ? (
+                                    <ResponsiveContainer width="100%" height={260}>
+                                        <BarChart data={issuePriorityData} layout="vertical" margin={{ top: 10, right: 30, left: 40, bottom: 5 }}>
+                                            <CartesianGrid strokeDasharray="3 3" stroke="#27272A" horizontal={false} />
+                                            <XAxis type="number" stroke="#71717A" fontSize={11} allowDecimals={false} />
+                                            <YAxis dataKey="name" type="category" stroke="#E4E4E7" fontSize={11} width={60} />
+                                            <Tooltip content={<CustomCountTooltip valueSuffix=" tasks" />} />
+                                            <Bar dataKey="value" name="Task Count" radius={[0, 6, 6, 0]}>
+                                                {issuePriorityData.map((entry, idx) => (
+                                                    <Cell key={`cell-${idx}`} fill={entry.color || CHART_PALETTE[idx % CHART_PALETTE.length]} />
+                                                ))}
+                                            </Bar>
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                ) : (
+                                    <ChartEmptyState message="No prioritized tasks in database" />
+                                )}
+                            </ChartCard>
 
-                    {/* B6. SELF-CLAIMED VS LEADER-ASSIGNED SPLIT */}
-                    <ChartCard title="Self-Claimed vs Leader-Assigned" category="Initiative Split" index={7}>
-                        {assignmentSplitData.length > 0 ? (
-                            <ResponsiveContainer width="100%" height={260}>
-                                <BarChart data={assignmentSplitData} margin={{ top: 10, right: 20, left: 10, bottom: 5 }}>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#27272A" />
-                                    <XAxis dataKey="name" stroke="#71717A" fontSize={11} />
-                                    <YAxis stroke="#71717A" fontSize={11} allowDecimals={false} />
-                                    <Tooltip content={<CustomCountTooltip valueSuffix=" tasks" />} />
-                                    <Legend wrapperStyle={{ fontSize: '11px', color: '#A1A1AA' }} />
-                                    <Bar dataKey="SelfClaimed" name="Self Claimed" stackId="a" fill={COLORS.primary} radius={[0, 0, 0, 0]} />
-                                    <Bar dataKey="LeaderAssigned" name="Leader Assigned" stackId="a" fill={COLORS.secondary} radius={[6, 6, 0, 0]} />
-                                </BarChart>
-                            </ResponsiveContainer>
-                        ) : (
-                            <ChartEmptyState message="No assignment splits recorded for active members" />
-                        )}
-                    </ChartCard>
-                </div>
-            </div>
+                            {/* B5. COMPLETION RATE PER MEMBER */}
+                            <ChartCard title="Completion Rate Per Member" category="Execution Efficacy" index={6}>
+                                {completionRateData.length > 0 ? (
+                                    <ResponsiveContainer width="100%" height={260}>
+                                        <BarChart data={completionRateData} layout="vertical" margin={{ top: 10, right: 30, left: 40, bottom: 5 }}>
+                                            <CartesianGrid strokeDasharray="3 3" stroke="#27272A" horizontal={false} />
+                                            <XAxis type="number" domain={[0, 100]} unit="%" stroke="#71717A" fontSize={11} />
+                                            <YAxis dataKey="name" type="category" stroke="#E4E4E7" fontSize={11} width={80} />
+                                            <Tooltip content={<CustomCountTooltip valueSuffix="%" />} />
+                                            <Bar dataKey="rate" name="Completion Rate" fill={COLORS.green} radius={[0, 6, 6, 0]} />
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                ) : (
+                                    <ChartEmptyState message="No task assignment data to calculate completion rate" />
+                                )}
+                            </ChartCard>
 
-            {/* 5. CHARTS GRID — SECTION C: PROJECT HEALTH */}
-            <div className="space-y-4 pt-4">
-                <div className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-emerald-400 font-mono pl-1 border-l-2 border-emerald-500">
-                    Section C — Portfolio & Project Health
-                </div>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            {/* B6. SELF-CLAIMED VS LEADER-ASSIGNED SPLIT */}
+                            <ChartCard title="Self-Claimed vs Leader-Assigned" category="Initiative Split" index={7}>
+                                {assignmentSplitData.length > 0 ? (
+                                    <ResponsiveContainer width="100%" height={260}>
+                                        <BarChart data={assignmentSplitData} margin={{ top: 10, right: 20, left: 10, bottom: 5 }}>
+                                            <CartesianGrid strokeDasharray="3 3" stroke="#27272A" />
+                                            <XAxis dataKey="name" stroke="#71717A" fontSize={11} />
+                                            <YAxis stroke="#71717A" fontSize={11} allowDecimals={false} />
+                                            <Tooltip content={<CustomCountTooltip valueSuffix=" tasks" />} />
+                                            <Legend wrapperStyle={{ fontSize: '11px', color: '#A1A1AA' }} />
+                                            <Bar dataKey="SelfClaimed" name="Self Claimed" stackId="a" fill={COLORS.primary} radius={[0, 0, 0, 0]} />
+                                            <Bar dataKey="LeaderAssigned" name="Leader Assigned" stackId="a" fill={COLORS.secondary} radius={[6, 6, 0, 0]} />
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                ) : (
+                                    <ChartEmptyState message="No assignment splits recorded for active members" />
+                                )}
+                            </ChartCard>
+                        </div>
+                    </div>
 
-                    {/* C1. PROJECT STATUS BREAKDOWN */}
-                    <ChartCard title="Project Status Breakdown" category="Portfolio States" snapshot={true} index={8}>
-                        {projectStatusData.length > 0 ? (
-                            <ResponsiveContainer width="100%" height={260}>
-                                <PieChart>
-                                    <Pie
-                                        data={projectStatusData}
-                                        cx="50%"
-                                        cy="50%"
-                                        innerRadius={65}
-                                        outerRadius={88}
-                                        paddingAngle={4}
-                                        dataKey="value"
-                                    >
-                                        {projectStatusData.map((entry, idx) => (
-                                            <Cell key={`cell-${idx}`} fill={entry.color || CHART_PALETTE[idx % CHART_PALETTE.length]} stroke="#0a0a0a" strokeWidth={2} />
-                                        ))}
-                                    </Pie>
-                                    <Tooltip content={<CustomCountTooltip valueSuffix=" projects" />} />
-                                    <Legend wrapperStyle={{ fontSize: '11px', color: '#A1A1AA' }} />
-                                </PieChart>
-                            </ResponsiveContainer>
-                        ) : (
-                            <ChartEmptyState message="No project status entries in current team" />
-                        )}
-                    </ChartCard>
+                    {/* 5. CHARTS GRID — SECTION C: PROJECT HEALTH */}
+                    <div className="space-y-4 pt-4">
+                        <div className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-emerald-400 font-mono pl-1 border-l-2 border-emerald-500">
+                            Section C — Portfolio & Project Health
+                        </div>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-                    {/* C2. PROJECT PRIORITY BREAKDOWN */}
-                    <ChartCard title="Project Priority Breakdown" category="Strategic Weight" snapshot={true} index={9}>
-                        {projectPriorityData.length > 0 ? (
-                            <ResponsiveContainer width="100%" height={260}>
-                                <PieChart>
-                                    <Pie
-                                        data={projectPriorityData}
-                                        cx="50%"
-                                        cy="50%"
-                                        innerRadius={65}
-                                        outerRadius={88}
-                                        paddingAngle={4}
-                                        dataKey="value"
-                                    >
-                                        {projectPriorityData.map((entry, idx) => (
-                                            <Cell key={`cell-${idx}`} fill={entry.color || CHART_PALETTE[idx % CHART_PALETTE.length]} stroke="#0a0a0a" strokeWidth={2} />
-                                        ))}
-                                    </Pie>
-                                    <Tooltip content={<CustomCountTooltip valueSuffix=" projects" />} />
-                                    <Legend wrapperStyle={{ fontSize: '11px', color: '#A1A1AA' }} />
-                                </PieChart>
-                            </ResponsiveContainer>
-                        ) : (
-                            <ChartEmptyState message="No prioritized projects established yet" />
-                        )}
-                    </ChartCard>
-                </div>
-            </div>
+                            {/* C1. PROJECT STATUS BREAKDOWN */}
+                            <ChartCard title="Project Status Breakdown" category="Portfolio States" snapshot={true} index={8}>
+                                {projectStatusData.length > 0 ? (
+                                    <ResponsiveContainer width="100%" height={260}>
+                                        <PieChart>
+                                            <Pie
+                                                data={projectStatusData}
+                                                cx="50%"
+                                                cy="50%"
+                                                innerRadius={65}
+                                                outerRadius={88}
+                                                paddingAngle={4}
+                                                dataKey="value"
+                                            >
+                                                {projectStatusData.map((entry, idx) => (
+                                                    <Cell key={`cell-${idx}`} fill={entry.color || CHART_PALETTE[idx % CHART_PALETTE.length]} stroke="#0a0a0a" strokeWidth={2} />
+                                                ))}
+                                            </Pie>
+                                            <Tooltip content={<CustomCountTooltip valueSuffix=" projects" />} />
+                                            <Legend wrapperStyle={{ fontSize: '11px', color: '#A1A1AA' }} />
+                                        </PieChart>
+                                    </ResponsiveContainer>
+                                ) : (
+                                    <ChartEmptyState message="No project status entries in current team" />
+                                )}
+                            </ChartCard>
+
+                            {/* C2. PROJECT PRIORITY BREAKDOWN */}
+                            <ChartCard title="Project Priority Breakdown" category="Strategic Weight" snapshot={true} index={9}>
+                                {projectPriorityData.length > 0 ? (
+                                    <ResponsiveContainer width="100%" height={260}>
+                                        <PieChart>
+                                            <Pie
+                                                data={projectPriorityData}
+                                                cx="50%"
+                                                cy="50%"
+                                                innerRadius={65}
+                                                outerRadius={88}
+                                                paddingAngle={4}
+                                                dataKey="value"
+                                            >
+                                                {projectPriorityData.map((entry, idx) => (
+                                                    <Cell key={`cell-${idx}`} fill={entry.color || CHART_PALETTE[idx % CHART_PALETTE.length]} stroke="#0a0a0a" strokeWidth={2} />
+                                                ))}
+                                            </Pie>
+                                            <Tooltip content={<CustomCountTooltip valueSuffix=" projects" />} />
+                                            <Legend wrapperStyle={{ fontSize: '11px', color: '#A1A1AA' }} />
+                                        </PieChart>
+                                    </ResponsiveContainer>
+                                ) : (
+                                    <ChartEmptyState message="No prioritized projects established yet" />
+                                )}
+                            </ChartCard>
+                        </div>
+                    </div>
+                </>
+            )}
         </div>
     );
 };

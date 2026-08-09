@@ -61,6 +61,23 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
         }
     };
 
+    const handleEditLink = async (indexToEdit, updatedLinkData, callback) => {
+        setAddingLink(true);
+        try {
+            const updatedLinks = [...(issue.links || [])];
+            updatedLinks[indexToEdit] = updatedLinkData;
+            const res = await axios.patch(`${BASE_URL}/teams/${teamId}/issues/${issueId}`, { links: updatedLinks }, { withCredentials: true });
+            setIssue(res.data.issue);
+            setAlertData({ type: 'success', message: 'Issue link updated successfully!' });
+            if (callback) callback(true);
+        } catch (err) {
+            setAlertData({ type: 'error', message: err.response?.data?.error || "Failed to update issue link" });
+            if (callback) callback(false);
+        } finally {
+            setAddingLink(false);
+        }
+    };
+
     // Inline edit state
     const [isEditing, setIsEditing] = useState(false);
     const [editData, setEditData] = useState({ title: '', description: '', status: '', priority: '' });
@@ -419,6 +436,7 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                 myRole={myRole}
                 onAddLink={handleAddLink}
                 onRemoveLink={handleRemoveLink}
+                onEditLink={handleEditLink}
                 loading={addingLink}
             />
         </div>

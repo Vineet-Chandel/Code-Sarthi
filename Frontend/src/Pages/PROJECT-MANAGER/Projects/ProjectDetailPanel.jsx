@@ -150,6 +150,25 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
         }
     };
 
+    const handleEditLink = async (indexToEdit, updatedLinkData, callback) => {
+        setAddingLink(true);
+        try {
+            const updatedLinks = [...(project.links || [])];
+            updatedLinks[indexToEdit] = updatedLinkData;
+            const res = await axios.patch(`${BASE_URL}/teams/${teamId}/projects/${projectId}`, { links: updatedLinks }, { withCredentials: true });
+            setProject(res.data.project);
+            dispatch(setProjectDetail({ projectId, project: res.data.project }));
+            dispatch(updateProjectInTeam({ teamId, project: res.data.project }));
+            setAlertData({ type: 'success', message: 'Project link updated successfully!' });
+            if (callback) callback(true);
+        } catch (err) {
+            setAlertData({ type: 'error', message: err.response?.data?.error || "Failed to update project link" });
+            if (callback) callback(false);
+        } finally {
+            setAddingLink(false);
+        }
+    };
+
     if (loading) return <div className="text-zinc-500 animate-pulse">Loading project details...</div>;
     if (error) return <div className="text-red-400">{error}</div>;
 
@@ -336,6 +355,7 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
                 myRole={myRole}
                 onAddLink={handleAddLink}
                 onRemoveLink={handleRemoveLink}
+                onEditLink={handleEditLink}
                 loading={addingLink}
             />
         </div>
