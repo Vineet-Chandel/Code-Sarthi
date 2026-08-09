@@ -878,7 +878,8 @@ authRouter.get("/login/google/callback", async (req, res) => {
             success: false,
             message: "Google authentication failed"
         });
-    });
+    }
+});
 
 //email verification
 //get otp
