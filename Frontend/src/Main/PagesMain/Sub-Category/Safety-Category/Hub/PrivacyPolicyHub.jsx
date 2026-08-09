@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import Nav from '../../../../Nav';
 import Footer from '../../../../Footer';
+import { ShieldCheck, Mail, MapPin, AlertTriangle, ArrowRight, ExternalLink, FileText, CheckCircle, HelpCircle } from 'lucide-react';
 
 // ─── DATA ─────────────────────────────────────────────────────────────────────
 
@@ -184,164 +184,159 @@ const SECTIONS = [
     },
 ];
 
-// ─── TABLE OF CONTENTS ────────────────────────────────────────────────────────
+// ─── COMPONENTS ───────────────────────────────────────────────────────────────
 
 function TableOfContents({ active, onJump }) {
     return (
-        <nav style={{ position: 'sticky', top: '120px', alignSelf: 'flex-start', width: '220px', flexShrink: 0 }}>
-            <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '10px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(16,185,129,0.55)', marginBottom: '16px' }}>
-                Contents
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                {SECTIONS.map(sec => (
-                    <button
-                        key={sec.id}
-                        onClick={() => onJump(sec.id)}
-                        style={{
-                            display: 'flex', alignItems: 'center', gap: '10px',
-                            background: active === sec.id ? 'rgba(16,185,129,0.08)' : 'transparent',
-                            border: 'none', borderRadius: '8px', padding: '7px 10px',
-                            cursor: 'pointer', textAlign: 'left', transition: 'all 0.18s', width: '100%',
-                        }}
-                    >
-                        <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '10px', fontWeight: 700, color: active === sec.id ? '#6ee7b7' : 'rgba(255,255,255,0.2)', minWidth: '20px' }}>{sec.num}</span>
-                        <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '12px', color: active === sec.id ? '#6ee7b7' : 'rgba(255,255,255,0.35)', lineHeight: 1.4, transition: 'color 0.18s' }}>{sec.title}</span>
-                    </button>
-                ))}
+        <nav className="hidden lg:flex flex-col sticky top-28 w-72 shrink-0 bg-[#0a0a0a] p-6 rounded-3xl h-fit max-h-[calc(100vh-8rem)] overflow-y-auto [scrollbar-width:none]">
+            <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-widest text-neutral-400 mb-4 px-2">
+                <FileText className="w-4 h-4 text-white" />
+                <span>Contents</span>
+            </div>
+            <div className="flex flex-col gap-1">
+                {SECTIONS.map(sec => {
+                    const isActive = active === sec.id;
+                    return (
+                        <button
+                            key={sec.id}
+                            onClick={() => onJump(sec.id)}
+                            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all duration-200 ${
+                                isActive 
+                                    ? 'bg-black text-white font-bold shadow-inner border border-[#222222]' 
+                                    : 'text-neutral-500 hover:text-neutral-300 hover:bg-white/[0.02]'
+                            }`}
+                        >
+                            <span className={`text-xs font-mono w-5 ${isActive ? 'text-white font-bold' : 'text-neutral-600'}`}>
+                                {sec.num}
+                            </span>
+                            <span className="text-xs truncate tracking-tight">
+                                {sec.title}
+                            </span>
+                        </button>
+                    );
+                })}
             </div>
         </nav>
     );
 }
 
-// ─── SECTION BLOCK ────────────────────────────────────────────────────────────
-
 function SectionBlock({ sec }) {
-    const cardStyle = {
-        background: 'rgba(255,255,255,0.02)',
-        border: '1px solid rgba(255,255,255,0.05)',
-        borderLeft: '2px solid rgba(16,185,129,0.25)',
-        borderRadius: '0 10px 10px 0',
-        padding: '16px 20px',
-        marginBottom: '12px',
-    };
-
     return (
-        <section id={sec.id} style={{ marginBottom: '64px', scrollMarginTop: '140px' }}>
-            {/* Section header */}
-            <div style={{ display: 'flex', alignItems: 'flex-end', gap: '20px', marginBottom: '28px' }}>
-                <div style={{ fontFamily: "'Syne',sans-serif", fontSize: '50px', fontWeight: 800, color: 'rgba(16,185,129,0.4)', letterSpacing: '0.08em', paddingTop: '6px', flexShrink: 0, minWidth: '28px' }}>
-                    {sec.num}
-                </div>
-                <div style={{ fontFamily: "'Syne',sans-serif", fontSize: 'clamp(25px,3vw,30px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.1, borderBottom: '1px solid rgba(16,185,129,0.12)', width: '100%', background: '#10b981', border: '2px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'start', paddingLeft: '10px', height: '50px' }}>
-                    <div >
-                        {sec.title}
-                    </div>
-
-                </div>
+        <section id={sec.id} className="scroll-mt-36 p-6 sm:p-10 rounded-3xl bg-[#0a0a0a] transition-all duration-300 hover:bg-[#0d0d0d] shadow-xl">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-8 border-b border-[#1f1f1f] pb-6">
+                <span className="text-3xl sm:text-4xl font-mono font-extrabold text-neutral-600 tracking-tighter">
+                    #{sec.num}
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                    {sec.title}
+                </h2>
             </div>
 
-            <div style={{ marginLeft: '48px' }}>
-                {sec.intro && (
-                    <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.8, marginBottom: '20px' }}>
-                        {sec.intro}
-                    </p>
-                )}
+            {sec.intro && (
+                <p className="text-base text-neutral-300 font-normal mb-6 leading-relaxed bg-black/60 p-5 rounded-2xl border border-[#1b1b1b]">
+                    {sec.intro}
+                </p>
+            )}
 
-                {/* Subsections with labelled items */}
-                {sec.subsections && sec.subsections.map((sub, si) => (
-                    <div key={si} style={{ marginBottom: '24px' }}>
-                        <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(16,185,129,0.5)', marginBottom: '12px' }}>
-                            {sub.heading}
-                        </p>
+            {sec.subsections && sec.subsections.map((sub, si) => (
+                <div key={si} className="mb-6">
+                    <h4 className="text-xs sm:text-sm font-mono font-bold uppercase text-neutral-500 tracking-wider mb-4">
+                        {sub.heading}
+                    </h4>
+                    <div className="flex flex-col gap-4">
                         {sub.items.map((item, ii) => (
-                            <div key={ii} style={cardStyle}>
-                                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '11px', fontWeight: 600, color: 'rgba(16,185,129,0.65)', letterSpacing: '0.04em', marginBottom: '5px' }}>
+                            <div key={ii} className="bg-black/60 rounded-2xl p-5 sm:p-6 transition-colors hover:bg-black border border-[#171717]">
+                                <h5 className="text-sm font-bold text-neutral-200 tracking-wide mb-2">
                                     {item.label}
-                                </p>
-                                <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.8, margin: 0 }}>
+                                </h5>
+                                <p className="text-sm sm:text-base text-neutral-400 font-light leading-relaxed">
                                     {item.text}
                                 </p>
                             </div>
                         ))}
                     </div>
-                ))}
+                </div>
+            ))}
 
-                {/* Bullet list with icons */}
-                {sec.bullets && (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '12px' }}>
-                        {sec.bullets.map((b, i) => (
-                            <div key={i} style={{ display: 'flex', gap: '14px', alignItems: 'flex-start', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '10px', padding: '14px 16px' }}>
-                                <span style={{ fontSize: '16px', flexShrink: 0, marginTop: '1px' }}>{b.icon}</span>
-                                <div>
-                                    <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '13px', fontWeight: 600, color: 'rgba(255,255,255,0.7)' }}>{b.label} — </span>
-                                    <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.75 }}>{b.text}</span>
-                                </div>
+            {sec.bullets && (
+                <ul className="space-y-4 mb-6 pl-2">
+                    {sec.bullets.map((b, i) => (
+                        <li key={i} className="flex items-start gap-4 text-sm sm:text-base text-neutral-400 font-light leading-relaxed">
+                            <span className="mt-1 shrink-0 grayscale opacity-70 w-6 h-6 flex items-center justify-center">{b.icon || <div className="w-2 h-2 rounded-full bg-white" />}</span>
+                            <div>
+                                <strong className="text-white font-medium mr-2">{b.label}</strong>
+                                <span>{b.text}</span>
                             </div>
-                        ))}
-                    </div>
-                )}
+                        </li>
+                    ))}
+                </ul>
+            )}
 
-                {/* Plain content cards */}
-                {sec.content && sec.content.map((item, i) => (
-                    <div key={i} style={{ ...cardStyle }}>
-                        <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '11px', fontWeight: 600, color: 'rgba(16,185,129,0.65)', letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: '5px' }}>
-                            {item.heading}
-                        </p>
-                        <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.8, margin: 0 }}>
-                            {item.text}
-                        </p>
-                    </div>
-                ))}
+            {sec.content && (
+                <div className="flex flex-col gap-4">
+                    {sec.content.map((item, i) => (
+                        <div key={i} className="bg-black/60 rounded-2xl p-5 sm:p-6 transition-colors hover:bg-black border border-[#171717]">
+                            <h4 className="text-xs sm:text-sm font-mono font-bold uppercase text-neutral-200 tracking-wider mb-2">
+                                {item.heading}
+                            </h4>
+                            <p className="text-sm sm:text-base text-neutral-400 font-light leading-relaxed">
+                                {item.text}
+                            </p>
+                        </div>
+                    ))}
+                </div>
+            )}
+            
+            {sec.rights && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                    {sec.rights.map((r, i) => (
+                        <div key={i} className="bg-black/60 rounded-2xl p-5 sm:p-6 transition-colors hover:bg-black border border-[#171717]">
+                            <div className="mb-3 grayscale opacity-70 w-8 h-8 flex items-center justify-center">{r.icon}</div>
+                            <h5 className="text-sm font-bold text-neutral-200 tracking-wide mb-2">
+                                {r.right}
+                            </h5>
+                            <p className="text-sm sm:text-base text-neutral-400 font-light leading-relaxed">
+                                {r.desc}
+                            </p>
+                        </div>
+                    ))}
+                </div>
+            )}
 
-                {/* Data processing table */}
-                {sec.table && (
-                    <div style={{ overflowX: 'auto', marginBottom: '20px' }}>
-                        <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: "'DM Sans',sans-serif" }}>
-                            <thead>
-                                <tr>
-                                    {['Purpose', 'Data Used', 'Legal Basis'].map(h => (
-                                        <th key={h} style={{ padding: '10px 14px', textAlign: 'left', fontSize: '10px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(16,185,129,0.55)', borderBottom: '1px solid rgba(16,185,129,0.15)', background: 'rgba(16,185,129,0.03)' }}>
-                                            {h}
-                                        </th>
-                                    ))}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {sec.table.map((row, i) => (
-                                    <tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                                        <td style={{ padding: '11px 14px', fontSize: '13px', color: 'rgba(255,255,255,0.7)', fontWeight: 500 }}>{row.purpose}</td>
-                                        <td style={{ padding: '11px 14px', fontSize: '13px', color: 'rgba(255,255,255,0.45)' }}>{row.data}</td>
-                                        <td style={{ padding: '11px 14px' }}>
-                                            <span style={{ background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: '100px', padding: '2px 10px', fontSize: '11px', color: '#6ee7b7', whiteSpace: 'nowrap' }}>
-                                                {row.basis}
-                                            </span>
-                                        </td>
-                                    </tr>
+            {sec.table && (
+                <div className="overflow-x-auto mb-6 bg-black/60 rounded-2xl border border-[#171717]">
+                    <table className="w-full text-left border-collapse">
+                        <thead>
+                            <tr>
+                                {['Purpose', 'Data Used', 'Legal Basis'].map((h, i) => (
+                                    <th key={i} className="p-4 text-xs font-mono font-bold uppercase text-neutral-500 tracking-wider border-b border-[#1f1f1f] bg-black/40">
+                                        {h}
+                                    </th>
                                 ))}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {sec.table.map((row, i) => (
+                                <tr key={i} className="border-b border-[#1f1f1f] hover:bg-black/40 transition-colors">
+                                    <td className="p-4 text-sm font-medium text-neutral-300">{row.purpose}</td>
+                                    <td className="p-4 text-sm text-neutral-400 font-light">{row.data}</td>
+                                    <td className="p-4">
+                                        <span className="px-3 py-1 text-xs font-mono rounded-full bg-neutral-900 text-neutral-300 border border-[#222]">
+                                            {row.basis}
+                                        </span>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
 
-                {/* Rights grid */}
-                {sec.rights && (
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '10px', marginBottom: '20px' }}>
-                        {sec.rights.map((r, i) => (
-                            <div key={i} style={{ background: 'rgba(16,185,129,0.04)', border: '1px solid rgba(16,185,129,0.12)', borderRadius: '12px', padding: '16px' }}>
-                                <div style={{ fontSize: '20px', marginBottom: '8px' }}>{r.icon}</div>
-                                <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '13px', fontWeight: 600, color: '#6ee7b7', marginBottom: '5px' }}>{r.right}</div>
-                                <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '12px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.65 }}>{r.desc}</div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-
-                {sec.footer && (
-                    <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.3)', fontStyle: 'italic', lineHeight: 1.7, marginTop: '8px' }}>
-                        {sec.footer}
-                    </p>
-                )}
-            </div>
+            {sec.footer && (
+                <p className="text-sm text-neutral-500 italic mt-6 border-l-2 border-neutral-700 pl-4 py-1">
+                    {sec.footer}
+                </p>
+            )}
         </section>
     );
 }
@@ -359,18 +354,17 @@ const PrivacyPolicyHub = () => {
     }, []);
 
     useEffect(() => {
-        if (!visible) return;
         const observers = [];
         SECTIONS.forEach(sec => {
             const el = document.getElementById(sec.id);
             if (!el) return;
             const obs = new IntersectionObserver(
                 ([entry]) => {
-                    if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+                    if (entry.isIntersecting && entry.intersectionRatio > 0.4) {
                         setActiveId(sec.id);
                     }
                 },
-                { rootMargin: '-30% 0px -60% 0px' }
+                { rootMargin: '-20% 0px -60% 0px' }
             );
             obs.observe(el);
             observers.push(obs);
@@ -379,160 +373,220 @@ const PrivacyPolicyHub = () => {
     }, [visible]);
 
     const jumpTo = (id) => {
-        setActiveId(id); // 🔥 ADD THIS
+        setActiveId(id);
         const el = document.getElementById(id);
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
-    return (
-        <div style={{ minHeight: '100vh', width: '100%', background: '#060b09', overflowX: 'hidden', position: 'relative' }}>
-            <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
-            {/* Ambient green glow */}
-            <div style={{ position: 'fixed', top: '-180px', left: '50%', transform: 'translateX(-50%)', width: '900px', height: '600px', background: 'radial-gradient(ellipse, rgba(16,185,129,0.05) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
-            <div style={{ position: 'fixed', bottom: 0, right: '-200px', width: '500px', height: '500px', background: 'radial-gradient(ellipse, rgba(16,185,129,0.03) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
+    return (
+        <div className="min-h-screen w-full bg-black text-white selection:bg-white selection:text-black font-sans overflow-x-hidden relative">
+            
+            {/* Ambient background depth */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] bg-radial from-neutral-900/40 via-black to-black pointer-events-none -z-10" />
 
             <Nav />
 
-            {/* ── HERO ── */}
-            <div style={{
-                position: 'relative', zIndex: 1, maxWidth: '90%', margin: '0 auto',
-                padding: '130px 32px 72px',
-                opacity: visible ? 1 : 0,
-                transform: visible ? 'translateY(0)' : 'translateY(28px)',
-                transition: 'opacity 0.7s ease, transform 0.7s ease',
-            }}>
-                {/* Brand bar */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '36px' }}>
-                    <div style={{ width: '38px', height: '38px', borderRadius: '7px', background: 'rgba(16,185,129,0.12)', border: '1px solid rgba(16,185,129,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'DM Sans',sans-serif", fontSize: '11px', fontWeight: 700, color: '#6ee7b7', letterSpacing: '-0.5px' }}><img src="https://res.cloudinary.com/dggoaxqxl/image/upload/q_auto/f_auto/v1776693732/image_wxefat.png" alt="" className='rounded-xl' /></div>
-                    <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '12px', fontWeight: 600, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>CodeSarthi </span>
-                    <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '11px', color: 'rgba(255,255,255,0.2)' }}>·</span>
-                    <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '11px', color: 'rgba(16,185,129,0.55)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Privacy</span>
-                </div>
+            {/* ── HERO SECTION ── */}
+            <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-28 sm:pt-36 pb-16 transition-all duration-700 ${
+                visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+            }`}>
+                
+                <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10">
+                    <div className="flex-1">
+                        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#0a0a0a] border border-[#1d1d1d] text-neutral-300 text-xs font-mono uppercase tracking-widest mb-6">
+                            <ShieldCheck className="w-4 h-4 text-white" />
+                            <span>DPDP Act 2023 Compliant</span>
+                        </div>
 
-                <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: '24px' }}>
-                    <div>
-                        <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '11px', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(16,185,129,0.65)', marginBottom: '14px' }}>
-                            DPDP Act 2023 Compliant
-                        </p>
-                        <h1 style={{ fontFamily: "'Syne',sans-serif", fontSize: 'clamp(36px,6vw,64px)', fontWeight: 800, color: '#fff', lineHeight: 1.0, letterSpacing: '-0.03em', marginBottom: '16px' }}>
-                            Privacy<br /><span style={{ color: '#10b981' }}>Policy</span>
+                        <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold text-white tracking-tight leading-[1.05] mb-6">
+                            Privacy <br />
+                            <span className="text-neutral-400 font-light">Policy</span>
                         </h1>
-                        <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.35)', lineHeight: 1.8, maxWidth: '520px' }}>
+                        <p className="text-base sm:text-lg text-neutral-400 max-w-2xl leading-relaxed font-light">
                             CodeSarthi is committed to transparent, secure, and responsible data handling. This policy explains exactly what we collect, why we collect it, and how you control it — in plain language.
                         </p>
                     </div>
 
-                    {/* Meta card */}
-                    <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(16,185,129,0.15)', borderRadius: '14px', padding: '20px 24px', flexShrink: 0, minWidth: '220px' }}>
-                        <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '11px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '8px' }}>Last updated</div>
-                        <div style={{ fontFamily: "'Syne',sans-serif", fontSize: '18px', fontWeight: 700, color: '#fff', marginBottom: '14px' }}>April 20, 2026</div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                            {[
-                                { dot: '#10b981', label: 'DPDP Act 2023 compliant' },
-                                { dot: '#6ba3ff', label: 'GDPR ready (EU users)' },
-                                { dot: '#f59e0b', label: 'IT Act 2000 & SPI Rules' },
-                                { dot: '#a78bfa', label: 'No data sold ever' },
-                            ].map(item => (
-                                <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: item.dot, flexShrink: 0 }} />
-                                    <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '12px', color: 'rgba(255,255,255,0.45)' }}>{item.label}</span>
-                                </div>
-                            ))}
+                    {/* Metadata summary card */}
+                    <div className="bg-[#0a0a0a] p-6 sm:p-8 rounded-3xl border border-[#1b1b1b] shrink-0 w-full lg:w-80 shadow-2xl flex flex-col gap-4">
+                        <div>
+                            <span className="text-xs font-mono font-bold uppercase text-neutral-500 tracking-wider block mb-1">
+                                Last Updated
+                            </span>
+                            <span className="text-xl font-bold text-white tracking-tight block">
+                                April 20, 2026
+                            </span>
+                            <span className="text-xs text-emerald-400 font-mono flex items-center gap-1.5 mt-1">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse" />
+                                Effective Immediately
+                            </span>
                         </div>
-                    </div>
-                </div>
-
-                {/* DPO callout */}
-                <div style={{ marginTop: '32px', display: 'flex', alignItems: 'flex-start', gap: '14px', background: 'rgba(16,185,129,0.04)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: '12px', padding: '16px 20px' }}>
-                    <span style={{ fontSize: '16px', flexShrink: 0, marginTop: '1px' }}>🔒</span>
-                    <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.75, margin: 0 }}>
-                        <strong style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 600 }}>Questions about your data?</strong>{' '}
-                        Contact us at{' '} <a href="mailto:codesarthi.help@gmail.com" style={{ color: '#6ee7b7', textDecoration: 'none' }}>codesarthi.help@gmail.com</a>.
-                        We respond within 7 days.
-                    </p>
-                </div>
-            </div>
-
-            {/* ── BODY ── */}
-            <div style={{
-                position: 'relative', zIndex: 1, maxWidth: '90%', margin: '0 auto',
-                padding: '0 32px 120px', display: 'flex', gap: '48px', alignItems: 'flex-start',
-                opacity: visible ? 1 : 0, transition: 'opacity 0.7s ease 0.2s',
-            }}>
-                <TableOfContents active={activeId} onJump={jumpTo} />
-
-                <div style={{ flex: 1, minWidth: 0 }}>
-                    {SECTIONS.map(sec => <SectionBlock key={sec.id} sec={sec} />)}
-
-                    {/* Contact section */}
-                    <section style={{ marginBottom: '64px', scrollMarginTop: '140px' }}>
-                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '20px', marginBottom: '28px' }}>
-                            <div style={{ fontFamily: "'Syne',sans-serif", fontSize: '11px', fontWeight: 800, color: 'rgba(16,185,129,0.4)', letterSpacing: '0.08em', paddingTop: '6px', flexShrink: 0, minWidth: '28px' }}>13</div>
-                            <h2 style={{ fontFamily: "'Syne',sans-serif", fontSize: 'clamp(20px,3vw,26px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.1, borderBottom: '1px solid rgba(16,185,129,0.12)', paddingBottom: '16px', width: '100%' }}>
-                                Contact Information
-                            </h2>
-                        </div>
-                        <div style={{ marginLeft: '48px' }}>
-                            <div style={{ background: 'rgba(16,185,129,0.04)', border: '1px solid rgba(16,185,129,0.15)', borderRadius: '14px', padding: '28px 32px', marginBottom: '20px' }}>
-                                <div style={{ fontFamily: "'Syne',sans-serif", fontSize: '18px', fontWeight: 700, color: '#fff', marginBottom: '4px' }}>CodeSarthi </div>
-                                <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.3)', marginBottom: '20px' }}>Registered under the Indian Companies Act · CIN pending</div>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                                    {[
-                                        { icon: (<svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 14 14"><g fill="none"><path fill="#8fbffa" fillRule="evenodd" d="M7 1.5a3.25 3.25 0 0 0-3.25 3.25v2.5a.75.75 0 0 1-1.5 0v-2.5A4.75 4.75 0 0 1 7 0h.25A4.75 4.75 0 0 1 12 4.75v5.382c0 .892-.448 1.667-.993 2.198c-.534.521-1.274.92-2.007.92a.75.75 0 0 1 0-1.5c.221 0 .606-.148.96-.493c.341-.334.54-.743.54-1.125V4.75A3.25 3.25 0 0 0 7.25 1.5z" clipRule="evenodd"></path><path fill="#2859c5" d="M5 12.5A1.5 1.5 0 0 1 6.5 11H8a1.5 1.5 0 0 1 0 3H6.5A1.5 1.5 0 0 1 5 12.5m-5-6A1.5 1.5 0 0 1 1.5 5h2.25v4a1 1 0 0 1-1 1H1.5A1.5 1.5 0 0 1 0 8.5zM10.5 5h2A1.5 1.5 0 0 1 14 6.5v2a1.5 1.5 0 0 1-1.5 1.5h-2z"></path></g></svg>), label: 'General support', val: 'codesarthi.help@gmail.com', href: 'mailto:codesarthi.help@gmail.com' },
-                                        { icon: (<svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 14 14"><g fill="none"><path fill="#8fbffa" d="M1.75 0A1.75 1.75 0 0 0 0 1.75v3.257a9.31 9.31 0 0 0 6.57 8.895c.28.087.58.087.86 0A9.31 9.31 0 0 0 14 5.007V1.75A1.75 1.75 0 0 0 12.25 0z"></path><path fill="#2859c5" fillRule="evenodd" d="M9.25 4.25a2.25 2.25 0 1 1-4.5 0a2.25 2.25 0 0 1 4.5 0M7 7.5c1.657 0 3.143.733 4.152 1.893A7.8 7.8 0 0 1 7 12.465a7.8 7.8 0 0 1-4.152-3.072A5.5 5.5 0 0 1 7 7.5" clipRule="evenodd"></path></g></svg>), label: 'Data Protection Officer', val: 'dpo@codesarthi.in', href: 'mailto:dpo@codesarthi.in' },
-                                        { icon: (<svg xmlns="http://www.w3.org/2000/svg" width={25} height={25} viewBox="0 0 48 48"><path fill="#673ab7" d="M38 44H12V4h26c2.2 0 4 1.8 4 4v32c0 2.2-1.8 4-4 4"></path><path fill="#311b92" d="M10 4h2v40h-2c-2.2 0-4-1.8-4-4V8c0-2.2 1.8-4 4-4"></path><path fill="#fff" d="M36 24.2c-.1 4.8-3.1 6.9-5.3 6.7c-.6-.1-2.1-.1-2.9-1.6c-.8 1-1.8 1.6-3.1 1.6c-2.6 0-3.3-2.5-3.4-3.1c-.1-.7-.2-1.4-.1-2.2c.1-1 1.1-6.5 5.7-6.5c2.2 0 3.5 1.1 3.7 1.3l-.6 6.8c0 .3-.2 1.6 1.1 1.6c2.1 0 2.4-3.9 2.4-4.6c.1-1.2.3-8.2-7-8.2c-6.9 0-7.9 7.4-8 9.2c-.5 8.5 6 8.5 7.2 8.5c1.7 0 3.7-.7 3.9-.8l.4 2c-.3.2-2 1.1-4.4 1.1c-2.2 0-10.1-.4-9.8-10.8c.3-2.1 1.6-11.2 10.8-11.2S36 22.1 36 24.2m-11.9 1.3c-.1 1 0 1.8.2 2.3s.6.8 1.2.8c.1 0 .3 0 .4-.1c.2-.1.3-.1.5-.3c.2-.1.3-.3.5-.6c.2-.2.3-.6.4-1l.5-5.4c-.2-.1-.5-.1-.7-.1q-.75 0-1.2.3c-.3.2-.6.5-.9.8c-.2.4-.4.8-.6 1.3s-.2 1.3-.3 2"></path></svg>), label: 'Registered address', val: 'Kanpur, Uttar Pradesh, India', href: null },
-                                        { icon: (<svg xmlns="http://www.w3.org/2000/svg" width={25} height={25} viewBox="0 0 24 24"><g fill="none"><path fill="#e3e3e3" d="M17.261 8.652H6.74a1.913 1.913 0 0 0-1.913 1.913v10.522A1.913 1.913 0 0 0 6.74 23h10.522a1.913 1.913 0 0 0 1.913-1.913V10.565a1.913 1.913 0 0 0-1.913-1.913"></path><path fill="#fff" d="M12 8.652H6.74a1.913 1.913 0 0 0-1.914 1.913v10.522A1.913 1.913 0 0 0 6.74 23H12z"></path><path stroke="#ffffffff" strokeLinecap="round" strokeLinejoin="round" d="M17.261 8.652H6.74a1.913 1.913 0 0 0-1.913 1.913v10.522A1.913 1.913 0 0 0 6.74 23h10.522a1.913 1.913 0 0 0 1.913-1.913V10.565a1.913 1.913 0 0 0-1.913-1.913M7.926 5.83a5.76 5.76 0 0 1 8.148 0" strokeWidth={1}></path><path stroke="#ffffffff" strokeLinecap="round" strokeLinejoin="round" d="M5.704 3.608a8.905 8.905 0 0 1 12.593 0M12 17.26v2.87" strokeWidth={1}></path><path fill="#66e1ff" stroke="#000000ff" strokeLinecap="round" strokeLinejoin="round" d="M12 17.26a1.913 1.913 0 1 0 0-3.825a1.913 1.913 0 0 0 0 3.826" strokeWidth={1}></path><path stroke="#ffffffff" strokeLinecap="round" strokeLinejoin="round" d="M15.827 15.348a3.826 3.826 0 0 0-7.653 0" strokeWidth={1}></path></g></svg>), label: 'Website', val: 'codesarthi.in', href: 'https://codesarthi.in' },
-                                    ].map(item => (
-                                        <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                            <span style={{ fontSize: '14px', width: '20px', textAlign: 'center', flexShrink: 0 }}>{item.icon}</span>
-                                            <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '12px', color: 'rgba(255,255,255,0.3)', minWidth: '160px' }}>{item.label}</span>
-                                            {item.href ? (
-                                                <a href={item.href} style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '13px', color: '#6ee7b7', textDecoration: 'none' }}>{item.val}</a>
-                                            ) : (
-                                                <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.5)' }}>{item.val}</span>
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Compliance badges */}
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                                {['DPDP Act 2023', 'IT Act 2000', 'SPI Rules', 'GDPR (EU)', 'AES-256 Encryption', 'Zero Data Sales'].map(badge => (
-                                    <div key={badge} style={{ background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.15)', borderRadius: '100px', padding: '4px 14px', fontFamily: "'DM Sans',sans-serif", fontSize: '11px', color: '#6ee7b7', fontWeight: 500 }}>
-                                        {badge}
+                        
+                        <div className="h-[1px] w-full bg-[#1c1c1c]" />
+                        
+                        <div>
+                            <span className="text-xs font-mono uppercase text-neutral-500 tracking-wider block mb-1">
+                                Compliance
+                            </span>
+                            <div className="flex flex-col gap-2 mt-2">
+                                {[
+                                    { dot: '#fff', label: 'DPDP Act 2023 compliant' },
+                                    { dot: '#6ba3ff', label: 'GDPR ready (EU users)' },
+                                    { dot: '#f59e0b', label: 'IT Act 2000 & SPI Rules' },
+                                    { dot: '#a78bfa', label: 'No data sold ever' },
+                                ].map(item => (
+                                    <div key={item.label} className="flex items-center gap-2">
+                                        <div style={{ backgroundColor: item.dot }} className="w-1.5 h-1.5 rounded-full shrink-0" />
+                                        <span className="text-sm font-medium text-neutral-300">{item.label}</span>
                                     </div>
                                 ))}
                             </div>
                         </div>
-                    </section>
+                    </div>
+                </div>
 
-                    {/* Footer acknowledgement */}
-                    <div style={{ background: 'rgba(16,185,129,0.04)', border: '1px solid rgba(16,185,129,0.15)', borderRadius: '16px', padding: '28px 32px', textAlign: 'center' }}>
-                        <div style={{ fontSize: '24px', marginBottom: '12px', widt: 'full', display: 'flex', justifyContent: 'center' }}><svg xmlns="http://www.w3.org/2000/svg" width={55} height={55} viewBox="0 0 80 80"><g fill="none" fillRule="evenodd" clipRule="evenodd"><path fill="#f2c94c" d="M19.833 38.25c-1.012 0-1.833.82-1.833 1.833v26.334c0 1.012.82 1.833 1.833 1.833h40.334c1.012 0 1.833-.82 1.833-1.833V40.083c0-1.012-.82-1.833-1.833-1.833zM43 56.25a4.243 4.243 0 1 1-6-6a4.243 4.243 0 0 1 6 6"></path><path fill="#828282" d="M40 14.25c-8.56 0-15.5 6.94-15.5 15.5v8.5h4v-8.5c0-6.351 5.149-11.5 11.5-11.5s11.5 5.149 11.5 11.5v8.5h4v-8.5c0-8.56-6.94-15.5-15.5-15.5"></path></g></svg></div>
-                        <p style={{ fontFamily: "'Syne',sans-serif", fontSize: '18px', fontWeight: 700, color: '#fff', marginBottom: '10px' }}>
-                            We prioritise your privacy
+                {/* Legal Advisory Notice Banner */}
+                <div className="mt-10 p-5 sm:p-6 rounded-2xl bg-[#0a0a0a] border border-[#1f1f1f] flex flex-col sm:flex-row items-start gap-4 shadow-lg">
+                    <div className="p-2.5 rounded-xl bg-black text-white shrink-0 border border-[#262626]">
+                        <AlertTriangle className="w-6 h-6" />
+                    </div>
+                    <div>
+                        <h4 className="text-sm font-bold text-white mb-1 tracking-wide uppercase font-mono">
+                            Questions about your data?
+                        </h4>
+                        <p className="text-xs sm:text-sm text-neutral-400 font-light leading-relaxed">
+                            <strong className="text-white font-semibold">Contact us at <a href="mailto:codesarthi.help@gmail.com" className="hover:underline">codesarthi.help@gmail.com</a>.</strong> We respond within 7 days.
                         </p>
-                        <p style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.75, maxWidth: '480px', margin: '0 auto 20px' }}>
-                            This Policy complies with the Digital Personal Data Protection Act 2023. We are committed to transparent, secure, and responsible data handling — always.
-                        </p>
-                        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                            <button
-                                onClick={() => navigate('/terms-and-conditions')}
-                                style={{ background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.25)', borderRadius: '10px', padding: '10px 22px', fontSize: '13px', fontWeight: 600, color: '#6ee7b7', cursor: 'pointer', fontFamily: "'DM Sans',sans-serif" }}
-                            >
-                                View Terms & Conditions →
-                            </button>
-                            <a href="mailto:codesarthi.help@gmail.com" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', padding: '10px 22px', fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.45)', textDecoration: 'none', fontFamily: "'DM Sans',sans-serif" }}>
-                                Contact Support
-                            </a>
+                    </div>
+                </div>
+            </div>
+
+            {/* ── MAIN BODY: TOC + CONTENT ── */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pb-24 flex gap-10 items-start">
+                
+                {/* Desktop Sticky Table of Contents */}
+                <TableOfContents active={activeId} onJump={jumpTo} />
+
+                {/* Right Side Content Sections */}
+                <div className="flex-1 min-w-0 flex flex-col gap-10">
+                    {SECTIONS.map(sec => <SectionBlock key={sec.id} sec={sec} />)}
+
+                    {/* Contact block */}
+                    <section className="p-8 sm:p-12 rounded-3xl bg-[#0a0a0a] transition-all shadow-2xl mt-4">
+                        <div className="flex items-center gap-4 mb-6 border-b border-[#1f1f1f] pb-6">
+                            <span className="text-3xl sm:text-4xl font-mono font-extrabold text-neutral-600 tracking-tighter">
+                                #13
+                            </span>
+                            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                                Contact Information
+                            </h2>
                         </div>
+                        
+                        <div className="bg-black/60 rounded-2xl p-6 sm:p-8 border border-[#171717] flex flex-col gap-6">
+                            <div>
+                                <h3 className="text-lg sm:text-xl font-bold text-white mb-1">
+                                    CodeSarthi Technologies Private Limited
+                                </h3>
+                                <p className="text-sm text-neutral-400 font-light">
+                                    Registered under the Indian Companies Act &middot; CIN pending
+                                </p>
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-[#1a1a1a]">
+                                <a 
+                                    href="mailto:codesarthi.help@gmail.com" 
+                                    className="flex items-center gap-3 p-4 rounded-xl bg-[#0a0a0a] hover:bg-black transition-colors group"
+                                >
+                                    <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center text-neutral-400 group-hover:text-white transition-colors border border-[#222]">
+                                        <Mail className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <span className="text-xs text-neutral-500 font-mono block">General support</span>
+                                        <span className="text-sm font-medium text-white group-hover:underline">codesarthi.help@gmail.com</span>
+                                    </div>
+                                </a>
+
+                                <a 
+                                    href="mailto:dpo@codesarthi.in" 
+                                    className="flex items-center gap-3 p-4 rounded-xl bg-[#0a0a0a] hover:bg-black transition-colors group"
+                                >
+                                    <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center text-neutral-400 group-hover:text-white transition-colors border border-[#222]">
+                                        <ShieldCheck className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <span className="text-xs text-neutral-500 font-mono block">Data Protection Officer</span>
+                                        <span className="text-sm font-medium text-white group-hover:underline">dpo@codesarthi.in</span>
+                                    </div>
+                                </a>
+
+                                <div className="flex items-center gap-3 p-4 rounded-xl bg-[#0a0a0a]">
+                                    <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center text-neutral-400 border border-[#222]">
+                                        <MapPin className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <span className="text-xs text-neutral-500 font-mono block">Registered address</span>
+                                        <span className="text-sm font-medium text-white">Kanpur, Uttar Pradesh, India</span>
+                                    </div>
+                                </div>
+                                
+                                <a 
+                                    href="https://codesarthi.in" 
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="flex items-center gap-3 p-4 rounded-xl bg-[#0a0a0a] hover:bg-black transition-colors group"
+                                >
+                                    <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center text-neutral-400 group-hover:text-white transition-colors border border-[#222]">
+                                        <ExternalLink className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <span className="text-xs text-neutral-500 font-mono block">Website</span>
+                                        <span className="text-sm font-medium text-white group-hover:underline">codesarthi.in</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            {/* ── BOTTOM ACCEPTANCE BANNER ── */}
+            <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 pb-28">
+                <div className="p-8 sm:p-12 rounded-3xl bg-[#0a0a0a] text-center flex flex-col items-center justify-center gap-6 shadow-2xl relative overflow-hidden">
+                    <div className="w-16 h-16 rounded-full bg-white text-black flex items-center justify-center shadow-xl font-extrabold text-2xl mb-2 animate-pulse">
+                        <CheckCircle className="w-8 h-8 text-black stroke-[2.5]" />
+                    </div>
+
+                    <h3 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight max-w-xl">
+                        We prioritise your privacy
+                    </h3>
+                    
+                    <p className="text-neutral-400 text-sm sm:text-base max-w-2xl font-light leading-relaxed">
+                        This Policy complies with the Digital Personal Data Protection Act 2023. We are committed to transparent, secure, and responsible data handling — always.
+                    </p>
+
+                    <div className="flex flex-col sm:flex-row items-center gap-4 mt-4 w-full sm:w-auto justify-center">
+                        {/* MOST IMPORTANT BUTTON -> PURE WHITE */}
+                        <button
+                            onClick={() => navigate('/terms-and-conditions')}
+                            className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white hover:bg-neutral-200 text-black font-extrabold text-base transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.25)] hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
+                        >
+                            <span>View Terms &amp; Conditions</span>
+                            <ExternalLink className="w-4 h-4 text-black" />
+                        </button>
+
+                        {/* SECONDARY BUTTON -> #000000 / #0a0a0a styling */}
+                        <a 
+                            href="mailto:codesarthi.help@gmail.com"
+                            className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-[#000000] hover:bg-[#141414] text-neutral-300 hover:text-white font-bold text-base transition-all duration-300 border border-[#252525] flex items-center justify-center gap-2"
+                        >
+                            <span>Contact Support</span>
+                        </a>
                     </div>
                 </div>
             </div>
 
             <Footer />
-        </div >
+        </div>
     );
 };
 

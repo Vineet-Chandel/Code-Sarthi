@@ -24,10 +24,10 @@ import Developers from "./Main/PagesMain/Main-Category/Developers";
 import Engineering from "./Main/PagesMain/Sub-Category/Blog-Category/Engineering";
 import NewUpdates from "./Main/PagesMain/Sub-Category/Blog-Category/NewUpdates";
 
-import PolicyAndSafety from "./Main/PagesMain/Sub-Category/Blog-Category/PrivacyCenter"
+
 import UseCodeSarthi from "./Main/PagesMain/Sub-Category/Blog-Category/UseCodeSarthi";
 import HelpCenter from "./Main/PagesMain/Sub-Category/Support-Category/HelpCenter";
-import PrivacyCenter from "./Main/PagesMain/Sub-Category/Blog-Category/PrivacyCenter";
+
 import Feedback from "./Main/PagesMain/Sub-Category/Support-Category/Feedback";
 import SubmitARequest from "./Main/PagesMain/Sub-Category/Support-Category/SubmitARequest";
 
@@ -147,7 +147,7 @@ const App = () => {
 
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/submit-a-request" element={<SubmitARequest />} />
-          <Route path="/privacy-center" element={<PrivacyCenter />} />
+
           <Route path="/smart-scheduler---lakshya" element={<SmartSchedulerLakshya />} />
           <Route path="/review" element={<Review />} />
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
@@ -157,7 +157,7 @@ const App = () => {
           <Route path="/engineering" element={<Engineering />} />
           <Route path="/new-updates" element={<NewUpdates />} />
 
-          <Route path="/policy-and-safety" element={<PolicyAndSafety />} />
+
           <Route path="/how-to-use" element={<UseCodeSarthi />} />
 
 
