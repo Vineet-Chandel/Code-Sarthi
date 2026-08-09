@@ -867,12 +867,25 @@ authRouter.get("/login/google/callback", async (req, res) => {
 
     } catch (err) {
 
+    } catch (err) {
+
+        console.error("========== GOOGLE OAUTH ERROR ==========");
+        console.error("message:", err.message);
+        console.error("response:", err.response?.data);
+        console.error("status:", err.response?.status);
+        console.error("stack:", err.stack);
+        console.error("========================================");
 
         return res.status(400).json({
             success: false,
             message: "Google authentication failed"
         });
     }
+    return res.status(400).json({
+        success: false,
+        message: "Google authentication failed"
+    });
+}
 });
 
 //email verification
