@@ -744,6 +744,8 @@ authRouter.get("/login/google/callback", async (req, res) => {
                 message: "Authorization code missing"
             });
         }
+
+        const storedState = req.cookies.oauth_state;
         if (!state || !storedState || state !== storedState) {
             return res.status(403).json({
                 success: false,
