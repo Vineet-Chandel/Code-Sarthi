@@ -46,7 +46,7 @@ const Body = () => {
 
 
     useEffect(() => {
-        const wsUrl = BASE_URL.replace(/^http/, 'ws').replace(/\/api$/, '');
+        const wsUrl = BASE_URL.replace(/^http/, 'ws');
         const socket = new WebSocket(wsUrl);
 
         socket.onopen = () => {

@@ -17,7 +17,7 @@ export const SocketProvider = ({ children }) => {
 
     useEffect(() => {
 
-        const wsUrl = BASE_URL.replace(/^http/, 'ws').replace(/\/api$/, '');
+        const wsUrl = BASE_URL.replace(/^http/, 'ws');
         socketRef.current = new WebSocket(wsUrl);
 
         socketRef.current.onopen = () => {
