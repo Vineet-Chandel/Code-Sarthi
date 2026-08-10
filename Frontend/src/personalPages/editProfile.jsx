@@ -220,7 +220,7 @@ const EditProfile = () => {
                 if (val !== '' && Number(val) !== Number(user?.age)) {
                     updatedData[key] = Number(val);
                 }
-            } else if (typeof val === 'string' && val.trim() !== '' && val !== user?.[key]) {
+            } else if (typeof val === 'string' && val !== (user?.[key] || '')) {
                 updatedData[key] = val.trim();
             }
         });
@@ -345,18 +345,18 @@ const EditProfile = () => {
         <div className="w-screen min-h-screen bg-bg-100 flex justify-center items-start px-3 sm:px-6 md:px-10 py-6 overflow-y-auto bg-black">
             <ToastContainer toasts={toasts} removeToast={removeToast} />
 
-            <div className="w-full  relative mx-auto p-5 sm:p-8 md:p-10 rounded-[36px] bg-base-100 border border-white/10 shadow-[0_20px_80px_rgba(0,0,0,0.5)] flex flex-col gap-8 overflow-hidden">
+            <div className="w-full  relative mx-auto p-5 sm:p-8 md:p-10 rounded-[36px] bg-black shadow-[0_20px_80px_rgba(0,0,0,0.8)] flex flex-col gap-8 overflow-hidden">
 
                 {/* Ambient Background Gradients */}
-                <div className="pointer-events-none absolute -top-40 -left-40 w-96 h-96 bg-cyan-500/10 rounded-full blur-[120px]" />
-                <div className="pointer-events-none absolute top-1/2 -right-40 w-96 h-96 bg-indigo-500/10 rounded-full blur-[140px]" />
+                
+                
                 <div className="pointer-events-none absolute inset-0 rounded-[36px] bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.02),transparent_70%)]" />
 
                 {/* ================= HERO HEADER ================= */}
                 <div className="w-full flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 pb-6 border-b border-white/10 z-10">
                     <div>
                         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 mb-3">
-                            <Sparkles className="text-cyan-400 w-4 h-4" />
+                            <Sparkles className="text-white w-4 h-4" />
                             <span className="text-xs font-semibold uppercase tracking-wider text-cyan-300">Identity Hub</span>
                         </div>
                         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black bg-gradient-to-r from-white via-gray-100 to-cyan-400 bg-clip-text text-transparent tracking-tight">
@@ -372,12 +372,12 @@ const EditProfile = () => {
                 <div className="w-full grid grid-cols-1 xl:grid-cols-12 gap-8 z-10">
 
                     {/* ========== LEFT: DEVELOPER IDENTITY PREVIEW ========== */}
-                    <div className="xl:col-span-4 rounded-[32px] p-6 sm:p-8 bg-gradient-to-b from-white/[0.05] via-white/[0.02] to-transparent border border-white/10 flex flex-col items-center shadow-2xl relative overflow-hidden self-start">
-                        <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent" />
+                    <div className="xl:col-span-4 rounded-[32px] p-6 sm:p-8 bg-[#0a0a0a] flex flex-col items-center shadow-2xl relative overflow-hidden self-start">
+                        <div className="hidden" />
 
                         {/* Interactive Avatar Card */}
                         <div
-                            className="relative group w-[150px] h-[150px] sm:w-[170px] sm:h-[170px] rounded-3xl p-1.5 bg-gradient-to-tr from-cyan-500/40 via-purple-500/30 to-white/10 cursor-pointer transition-all duration-300 shadow-xl hover:shadow-[0_0_35px_rgba(34,211,238,0.25)]"
+                            className="relative group w-[150px] h-[150px] sm:w-[170px] sm:h-[170px] rounded-3xl p-1.5 bg-[#111111] cursor-pointer transition-all duration-300 shadow-xl hover:shadow-2xl"
                             onClick={() => editProfileIMGisOpen(true)}
                             onMouseEnter={() => setHoveringImg(true)}
                             onMouseLeave={() => setHoveringImg(false)}
@@ -389,11 +389,11 @@ const EditProfile = () => {
                                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                                 />
                                 <div className={`absolute inset-0 bg-black/60 backdrop-blur-sm flex flex-col gap-1 justify-center items-center transition-all duration-300 ${hoveringImg ? "opacity-100" : "opacity-0"}`}>
-                                    <Pencil className="text-cyan-400 w-8 h-8 drop-shadow-md" />
+                                    <Pencil className="text-white w-8 h-8 drop-shadow-md" />
                                     <span className="text-[11px] font-semibold tracking-wider uppercase text-white mt-1">Change Photo</span>
                                 </div>
                             </div>
-                            <div className="absolute -bottom-2 -right-2 bg-base-100 border border-white/20 rounded-full p-2 text-white shadow-lg group-hover:bg-cyan-500 group-hover:text-black transition-colors duration-300">
+                            <div className="absolute -bottom-2 -right-2 bg-base-100 border border-white/20 rounded-full p-2 text-white shadow-lg group-hover:bg-white group-hover:text-black transition-colors duration-300">
                                 <Pencil className="w-4 h-4" />
                             </div>
                         </div>
@@ -406,7 +406,7 @@ const EditProfile = () => {
                             <p className="text-sm font-medium text-gray-400 mt-1 flex justify-center items-center gap-1.5">
                                 @{user?.username || "username"}
                                 {user?.isVerified && (
-                                    <span className="text-cyan-400" title="Verified Member">
+                                    <span className="text-white" title="Verified Member">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
                                             <path fill="currentColor" fillRule="evenodd" d="M9.592 3.2a6 6 0 0 1-.495.399c-.298.2-.633.338-.985.408c-.153.03-.313.043-.632.068c-.801.064-1.202.096-1.536.214a2.71 2.71 0 0 0-1.655 1.655c-.118.334-.15.735-.214 1.536a6 6 0 0 1-.068.632c-.07.352-.208.687-.408.985c-.087.13-.191.252-.399.495c-.521.612-.782.918-.935 1.238c-.353.74-.353 1.6 0 2.34c.153.32.414.626.935 1.238c.208.243.312.365.399.495c.2.298.338.633.408.985c.03.153.043.313.068.632c.064.801.096 1.202.214 1.536a2.71 2.71 0 0 0 1.655 1.655c.334.118.735.15 1.536.214c.319.025.479.038.632.068c.352.07.687.209.985.408c.13.087.252.191.495.399c.612.521.918.782 1.238.935c.74.353 1.6.353 2.34 0c.32-.153.626-.414 1.238-.935c.243-.208.365-.312.495-.399c.298-.2.633-.338.985-.408c.153-.03.313-.043.632-.068c.801-.064 1.202-.096 1.536-.214a2.71 2.71 0 0 0 1.655-1.655c.118-.334.15-.735.214-1.536c.025-.319.038-.479.068-.632c.07-.352.209-.687.408-.985c.087-.13.191-.252.399-.495c.521-.612.782-.918.935-1.238c.353-.74.353-1.6 0-2.34c-.153-.32-.414-.626-.935-1.238a6 6 0 0 1-.399-.495a2.7 2.7 0 0 1-.408-.985a6 6 0 0 1-.068-.632c-.064-.801-.096-1.202-.214-1.536a2.71 2.71 0 0 0-1.655-1.655c-.334-.118-.735-.15-1.536-.214a6 6 0 0 1-.632-.068a2.7 2.7 0 0 1-.985-.408a6 6 0 0 1-.495-.399c-.612-.521-.918-.782-1.238-.935a2.71 2.71 0 0 0-2.34 0c-.32.153-.626.414-1.238.935" clipRule="evenodd" />
                                         </svg>
@@ -416,7 +416,7 @@ const EditProfile = () => {
                         </div>
 
                         {/* Email Copy Badge */}
-                        <div className="w-full mt-5 px-4 py-2.5 rounded-2xl bg-base-200/80 border border-white/5 flex items-center justify-between gap-3 text-sm transition-colors hover:border-white/15">
+                        <div className="w-full mt-5 px-4 py-2.5 rounded-2xl bg-[#0a0a0a] flex items-center justify-between gap-3 text-sm transition-colors hover:border-white/15">
                             <span className="text-gray-300 font-medium truncate flex items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" className="text-gray-400 shrink-0">
                                     <path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 4l-8 5l-8-5V6l8 5l8-5z" />
@@ -439,7 +439,7 @@ const EditProfile = () => {
                         <div className="w-full flex flex-col gap-3">
 
                             {/* Institution / College */}
-                            <div className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-colors">
+                            <div className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-[#0a0a0a]  transition-colors">
                                 <div className="p-2.5 rounded-xl  text-white">
                                     <Building2 className="w-6 h-6" />
                                 </div>
@@ -450,7 +450,7 @@ const EditProfile = () => {
                             </div>
 
                             {/* Profession */}
-                            <div className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-colors">
+                            <div className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-[#0a0a0a]  transition-colors">
                                 <div className="p-2.5 rounded-xl text-white">
                                     <Briefcase className="w-6 h-6" />
                                 </div>
@@ -462,18 +462,18 @@ const EditProfile = () => {
 
                             {/* Demographics */}
                             <div className="grid grid-cols-2 gap-3">
-                                <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 flex flex-col">
+                                <div className="p-3.5 rounded-2xl bg-[#0a0a0a] flex flex-col">
                                     <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Gender</span>
                                     <span className="text-sm font-semibold text-white capitalize mt-1">{user?.gender || "Unspecified"}</span>
                                 </div>
-                                <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 flex flex-col">
+                                <div className="p-3.5 rounded-2xl bg-[#0a0a0a] flex flex-col">
                                     <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Age</span>
                                     <span className="text-sm font-semibold text-white mt-1">{user?.age ? `${user.age} yrs` : "N/A"}</span>
                                 </div>
                             </div>
 
                             {/* About Bio */}
-                            <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-2">
+                            <div className="p-4 rounded-2xl bg-[#0a0a0a] space-y-2">
                                 <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
                                     <FileText className="w-3.5 h-3.5 text-white" /> Bio & About
                                 </span>
@@ -483,9 +483,9 @@ const EditProfile = () => {
                             </div>
 
                             {/* Tech Stack Chips */}
-                            <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-3">
+                            <div className="p-4 rounded-2xl bg-[#0a0a0a] space-y-3">
                                 <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
-                                    <Code2 className="w-3.5 h-3.5 text-cyan-400" /> Primary Tech Stack
+                                    <Code2 className="w-3.5 h-3.5 text-white" /> Primary Tech Stack
                                 </span>
                                 <div className="flex flex-wrap gap-2">
                                     {Array.isArray(user?.skills) && user.skills.length > 0 ? (
@@ -494,10 +494,10 @@ const EditProfile = () => {
                                             const sCat = skill?.category && skill.category !== "uncategorized" ? skill.category : null;
                                             if (sName === "No skills added yet") return null;
                                             return (
-                                                <span key={index} className="px-3 py-1 text-xs font-semibold rounded-xl bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 shadow-sm transition-transform duration-200 hover:scale-105 inline-flex items-center gap-1">
+                                                <span key={index} className="px-3 py-1 text-xs font-semibold rounded-xl bg-white text-black shadow-sm transition-transform duration-200 hover:scale-105 inline-flex items-center gap-1">
                                                     <span>{sName}</span>
                                                     {sCat && (
-                                                        <span className="text-[9px] font-mono uppercase tracking-tighter text-cyan-400/60 ml-0.5">
+                                                        <span className="text-[9px] font-mono uppercase tracking-tighter text-gray-600 ml-0.5">
                                                             [{sCat}]
                                                         </span>
                                                     )}
@@ -514,7 +514,7 @@ const EditProfile = () => {
                     </div>
 
                     {/* ========== RIGHT: EDIT PROFILE FORM ========== */}
-                    <div className="xl:col-span-8 rounded-[32px] p-6 sm:p-10 bg-base-200/60 border border-white/10 shadow-xl flex flex-col justify-between relative overflow-hidden">
+                    <div className="xl:col-span-8 rounded-[32px] p-6 sm:p-10 bg-[#0a0a0a] shadow-xl flex flex-col justify-between relative overflow-hidden">
 
                         <div>
                             <div className="mb-8 border-b border-white/10 pb-5">
@@ -530,7 +530,7 @@ const EditProfile = () => {
 
                                 {/* SECTION 1: PERSONAL IDENTITY */}
                                 <div className="space-y-4">
-                                    <h3 className="text-sm font-semibold text-cyan-400 uppercase tracking-wider flex items-center gap-2">
+                                    <h3 className="text-sm font-semibold text-white uppercase tracking-wider flex items-center gap-2">
                                         <User className="w-4 h-4" /> 1. Personal Identity
                                     </h3>
 
@@ -541,7 +541,7 @@ const EditProfile = () => {
                                                 id="firstName"
                                                 type="text"
                                                 placeholder="e.g. Vineet"
-                                                className="w-full rounded-2xl bg-[#212121] px-4 py-3 bg-base-100/90 border border-white/10 text-white placeholder-gray-600 text-sm transition-all duration-200 focus:outline-none focus:border-cyan-400/70 focus:ring-4 focus:ring-cyan-400/10"
+                                                className="w-full rounded-2xl bg-black px-4 py-3 text-white placeholder-gray-600 text-sm transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-white/30"
                                                 value={formData.firstName}
                                                 onChange={handleChange}
                                             />
@@ -553,7 +553,7 @@ const EditProfile = () => {
                                                 id="middleName"
                                                 type="text"
                                                 placeholder="Middle Name"
-                                                className="w-full rounded-2xl bg-[#212121] px-4 py-3 bg-base-100/90 border border-white/10 text-white placeholder-gray-600 text-sm transition-all duration-200 focus:outline-none focus:border-cyan-400/70 focus:ring-4 focus:ring-cyan-400/10"
+                                                className="w-full rounded-2xl bg-black px-4 py-3 text-white placeholder-gray-600 text-sm transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-white/30"
                                                 value={formData.middleName}
                                                 onChange={handleChange}
                                             />
@@ -565,7 +565,7 @@ const EditProfile = () => {
                                                 id="lastName"
                                                 type="text"
                                                 placeholder="e.g. Chandel"
-                                                className="w-full rounded-2xl bg-[#212121] px-4 py-3 bg-base-100/90 border border-white/10 text-white placeholder-gray-600 text-sm transition-all duration-200 focus:outline-none focus:border-cyan-400/70 focus:ring-4 focus:ring-cyan-400/10"
+                                                className="w-full rounded-2xl bg-black px-4 py-3 text-white placeholder-gray-600 text-sm transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-white/30"
                                                 value={formData.lastName}
                                                 onChange={handleChange}
                                             />
@@ -578,7 +578,7 @@ const EditProfile = () => {
                                             <div className="relative">
                                                 <select
                                                     id="gender"
-                                                    className="w-full rounded-2xl bg-[#212121] px-4 py-3 bg-base-100/90 border border-white/10 text-white text-sm appearance-none cursor-pointer transition-all duration-200 focus:outline-none focus:border-cyan-400/70 focus:ring-4 focus:ring-cyan-400/10"
+                                                    className="w-full rounded-2xl bg-black px-4 py-3 text-white text-sm appearance-none cursor-pointer transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-white/30"
                                                     value={formData.gender}
                                                     onChange={handleChange}
                                                 >
@@ -601,7 +601,7 @@ const EditProfile = () => {
                                                 min="10"
                                                 max="100"
                                                 placeholder="e.g. 21"
-                                                className="w-full rounded-2xl bg-[#212121] px-4 py-3 bg-base-100/90 border border-white/10 text-white placeholder-gray-600 text-sm transition-all duration-200 focus:outline-none focus:border-cyan-400/70 focus:ring-4 focus:ring-cyan-400/10 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                                className="w-full rounded-2xl bg-black px-4 py-3 text-white placeholder-gray-600 text-sm transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-white/30 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                                 value={formData.age}
                                                 onChange={handleChange}
                                             />
@@ -611,7 +611,7 @@ const EditProfile = () => {
 
                                 {/* SECTION 2: PROFESSIONAL & ACADEMICS */}
                                 <div className="space-y-4 pt-4 border-t border-white/10">
-                                    <h3 className="text-sm font-semibold text-cyan-400 uppercase tracking-wider flex items-center gap-2">
+                                    <h3 className="text-sm font-semibold text-white uppercase tracking-wider flex items-center gap-2">
                                         <Briefcase className="w-4 h-4" /> 2. Academic & Professional Background
                                     </h3>
 
@@ -622,7 +622,7 @@ const EditProfile = () => {
                                                 id="college"
                                                 type="text"
                                                 placeholder="e.g. IIT Kanpur / Google"
-                                                className="w-full rounded-2xl bg-[#212121] px-4 py-3 bg-base-100/90 border border-white/10 text-white placeholder-gray-600 text-sm transition-all duration-200 focus:outline-none focus:border-cyan-400/70 focus:ring-4 focus:ring-cyan-400/10"
+                                                className="w-full rounded-2xl bg-black px-4 py-3 text-white placeholder-gray-600 text-sm transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-white/30"
                                                 value={formData.college}
                                                 onChange={handleChange}
                                             />
@@ -634,7 +634,7 @@ const EditProfile = () => {
                                                 id="profession"
                                                 type="text"
                                                 placeholder="e.g. Full-Stack Engineer / AI Researcher"
-                                                className="w-full rounded-2xl bg-[#212121] px-4 py-3 bg-base-100/90 border border-white/10 text-white placeholder-gray-600 text-sm transition-all duration-200 focus:outline-none focus:border-cyan-400/70 focus:ring-4 focus:ring-cyan-400/10"
+                                                className="w-full rounded-2xl bg-black px-4 py-3 text-white placeholder-gray-600 text-sm transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-white/30"
                                                 value={formData.profession}
                                                 onChange={handleChange}
                                             />
@@ -645,7 +645,7 @@ const EditProfile = () => {
                                 {/* SECTION 3: BIO & TECH STACK */}
                                 <div className="space-y-6 pt-4 border-t border-white/10">
                                     <div>
-                                        <h3 className="text-sm font-semibold text-cyan-400 uppercase tracking-wider flex items-center gap-2">
+                                        <h3 className="text-sm font-semibold text-white uppercase tracking-wider flex items-center gap-2">
                                             <Code2 className="w-4 h-4" /> 3. Bio & Tech Stack Studio
                                         </h3>
                                         <p className="text-xs text-gray-400 mt-1">
@@ -653,7 +653,7 @@ const EditProfile = () => {
                                         </p>
 
                                         {/* Segmented Mode Toggle Control */}
-                                        <div className="inline-flex rounded-xl bg-[#171717] p-1 border border-white/10 mt-4 mb-1">
+                                        <div className="inline-flex rounded-xl bg-black p-1 mt-4 mb-1">
                                             <button
                                                 type="button"
                                                 onClick={() => handleSwitchSkillMode("simple")}
@@ -682,7 +682,7 @@ const EditProfile = () => {
                                     {/* MODE A: SIMPLE LIST */}
                                     {skillInputMode === "simple" ? (
                                         <div className="space-y-4">
-                                            <div className="p-4 rounded-2xl bg-[#000000] border border-white/10 space-y-2.5 shadow-inner">
+                                            <div className="p-4 rounded-2xl bg-black space-y-2.5">
                                                 <div className="flex justify-between items-center text-xs text-gray-300 font-semibold">
                                                     <span>Active Tech Stack ({formData.skills?.length || 0} configured)</span>
                                                     {formData.skills?.length > 0 && (
@@ -701,7 +701,7 @@ const EditProfile = () => {
                                                         formData.skills.map((s, idx) => (
                                                             <span 
                                                                 key={idx} 
-                                                                className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-xl bg-[#1f1f1f] text-gray-200 border border-white/15 shadow-sm transition-all"
+                                                                className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-xl bg-white text-black shadow-sm transition-all"
                                                             >
                                                                 <span>{s?.name || s}</span>
                                                                 {s?.category && s.category !== "uncategorized" && (
@@ -728,7 +728,7 @@ const EditProfile = () => {
                                                     id="flat-skills-input"
                                                     type="text"
                                                     placeholder="e.g. react, nextjs, nodejs, css"
-                                                    className="w-full rounded-2xl bg-[#212121] px-4 py-3 border border-white/10 text-white placeholder-gray-600 text-sm transition-all duration-200 focus:outline-none focus:border-white/40 focus:ring-2 focus:ring-white/5"
+                                                    className="w-full rounded-2xl bg-black px-4 py-3 text-white placeholder-gray-600 text-sm transition-all duration-200 focus:outline-none focus:border-white/40 focus:ring-2 focus:ring-white/5"
                                                     value={flatSkillsInput}
                                                     onChange={handleFlatSkillsChange}
                                                 />
@@ -742,7 +742,7 @@ const EditProfile = () => {
                                         <div className="space-y-4">
                                             <div className="space-y-3">
                                                 {categorizedRows.map((row, index) => (
-                                                    <div key={row.id || index} className="p-4 rounded-2xl bg-[#000000] border border-white/10 space-y-3 shadow-inner">
+                                                    <div key={row.id || index} className="p-4 rounded-2xl bg-black space-y-3">
                                                         <div className="flex items-center justify-between gap-3">
                                                             <div className="w-[200px] sm:w-[260px]">
                                                                 <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">
@@ -753,7 +753,7 @@ const EditProfile = () => {
                                                                     placeholder="e.g. frontend, backend, database"
                                                                     value={row.category}
                                                                     onChange={(e) => handleRowChange(index, "category", e.target.value)}
-                                                                    className="w-full rounded-xl bg-[#212121] px-3 py-1.5 border border-white/10 text-white text-xs uppercase tracking-wider font-semibold placeholder:normal-case placeholder:font-normal placeholder-gray-600 focus:outline-none focus:border-white/40"
+                                                                    className="w-full rounded-xl bg-[#0a0a0a] px-3 py-1.5 text-white text-xs uppercase tracking-wider font-semibold placeholder:normal-case placeholder:font-normal placeholder-gray-600 focus:outline-none focus:border-white/40"
                                                                 />
                                                             </div>
                                                             {categorizedRows.length > 1 && (
@@ -776,7 +776,7 @@ const EditProfile = () => {
                                                                 placeholder="e.g. react, tailwind, nextjs"
                                                                 value={row.skillsInput}
                                                                 onChange={(e) => handleRowChange(index, "skillsInput", e.target.value)}
-                                                                className="w-full rounded-xl bg-[#212121] px-3.5 py-2.5 border border-white/10 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-white/40"
+                                                                className="w-full rounded-xl bg-[#0a0a0a] px-3.5 py-2.5 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-white/40"
                                                             />
                                                         </div>
                                                         {/* Live chips preview for this category row */}
@@ -788,7 +788,7 @@ const EditProfile = () => {
                                                                 .map((sName, sIdx) => (
                                                                     <span
                                                                         key={sIdx}
-                                                                        className="inline-flex items-center px-2.5 py-0.5 rounded-lg bg-[#1a1a1a] border border-white/10 text-gray-300 text-[11px] font-medium"
+                                                                        className="inline-flex items-center px-2.5 py-0.5 rounded-lg bg-white text-black text-gray-300 text-[11px] font-medium"
                                                                     >
                                                                         {sName}
                                                                     </span>
@@ -802,7 +802,7 @@ const EditProfile = () => {
                                                 <button
                                                     type="button"
                                                     onClick={handleAddCategoryRow}
-                                                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#212121] border border-white/10 hover:bg-[#2a2a2a] text-white text-xs font-semibold transition-all cursor-pointer shadow-sm"
+                                                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-black hover:bg-[#2a2a2a] text-white text-xs font-semibold transition-all cursor-pointer shadow-sm"
                                                 >
                                                     <span>+ Add Category</span>
                                                 </button>
@@ -820,7 +820,7 @@ const EditProfile = () => {
                                             id="about"
                                             rows={4}
                                             placeholder="Tell the community about your passions, achievements, and technical goals..."
-                                            className="w-full rounded-2xl bg-[#212121] px-4 py-3 bg-base-100/90 border border-white/10 text-white placeholder-gray-600 text-sm leading-relaxed resize-y transition-all duration-200 focus:outline-none focus:border-cyan-400/70 focus:ring-4 focus:ring-cyan-400/10"
+                                            className="w-full rounded-2xl bg-black px-4 py-3 text-white placeholder-gray-600 text-sm leading-relaxed resize-y transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-white/30"
                                             value={formData.about}
                                             onChange={handleChange}
                                         />
@@ -832,7 +832,7 @@ const EditProfile = () => {
                                     <button
                                         type="submit"
                                         disabled={saving}
-                                        className="relative inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-2xl font-bold text-sm sm:text-base text-black bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 shadow-[0_0_25px_rgba(34,211,238,0.35)] hover:shadow-[0_0_40px_rgba(34,211,238,0.6)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:pointer-events-none cursor-pointer overflow-hidden"
+                                        className="relative inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-2xl font-bold text-sm sm:text-base text-black bg-white shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:pointer-events-none cursor-pointer overflow-hidden"
                                     >
                                         {saving ? (
                                             <>
@@ -865,12 +865,12 @@ const EditProfile = () => {
                         onClick={(e) => e.stopPropagation()}
                         className="relative w-full max-w-[440px] overflow-hidden rounded-3xl border border-white/15 bg-base-100 shadow-[0_25px_90px_rgba(0,0,0,0.7)] animate-in fade-in zoom-in-95 duration-200"
                     >
-                        <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-80" />
+                        <div className="absolute inset-x-0 top-0 h-[2px] hidden opacity-80" />
 
                         {/* HEADER */}
                         <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
                             <div className="flex items-center gap-3.5">
-                                <div className="flex items-center justify-center w-11 h-11 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
+                                <div className="flex items-center justify-center w-11 h-11 rounded-2xl bg-[#0a0a0a] text-white">
                                     <Sparkles className="w-5 h-5" />
                                 </div>
                                 <div>
@@ -894,7 +894,7 @@ const EditProfile = () => {
                         {/* BODY */}
                         <div className="p-6 space-y-5">
                             <div className="flex justify-center">
-                                <div className="relative p-1.5 rounded-full bg-gradient-to-tr from-cyan-400 to-indigo-500 shadow-2xl">
+                                <div className="relative p-1.5 rounded-full bg-[#0a0a0a] shadow-2xl">
                                     <img
                                         src={user?.photoUrl?.url || "https://geographyandyou.com/images/user-profile.png"}
                                         alt="Current avatar preview"
@@ -904,7 +904,7 @@ const EditProfile = () => {
                             </div>
 
                             <div className="space-y-2.5">
-                                <label className="group cursor-pointer flex items-center justify-center gap-2.5 w-full py-3.5 rounded-2xl bg-gradient-to-r from-cyan-400 to-teal-400 text-black font-bold text-sm shadow-lg hover:shadow-[0_0_25px_rgba(34,211,238,0.4)] hover:scale-[1.01] active:scale-[0.99] transition-all duration-200">
+                                <label className="group cursor-pointer flex items-center justify-center gap-2.5 w-full py-3.5 rounded-2xl bg-white text-black font-bold text-sm shadow-lg hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all duration-200">
                                     <Sparkles className="w-4 h-4" />
                                     <span>Upload New Avatar</span>
                                     <input
@@ -940,13 +940,13 @@ const EditProfile = () => {
             {/* ================= UPLOADING LOADER MODAL ================= */}
             {uploading && (
                 <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-md px-4 animate-in fade-in duration-200">
-                    <div className="absolute w-[450px] h-[450px] bg-cyan-500/10 blur-[120px] rounded-full animate-pulse" />
+                    <div className="absolute w-[450px] h-[450px] bg-white/5 blur-[120px] rounded-full animate-pulse" />
 
                     <div className="relative w-full max-w-[640px] overflow-hidden rounded-[36px] border border-white/15 bg-base-200 shadow-[0_25px_80px_rgba(0,0,0,0.7)] p-8 sm:p-12 flex flex-col items-center text-center">
-                        <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-90" />
+                        <div className="absolute inset-x-0 top-0 h-[2px] hidden opacity-90" />
 
-                        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-1.5 text-xs font-semibold text-cyan-300">
-                            <span className="h-2 w-2 rounded-full bg-cyan-400 animate-ping" />
+                        <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white text-black px-4 py-1.5 text-xs font-semibold">
+                            <span className="h-2 w-2 rounded-full bg-black animate-ping" />
                             Secure Cloud Synchronization
                         </div>
 
@@ -962,13 +962,13 @@ const EditProfile = () => {
                         </div>
 
                         <h3 className="text-2xl sm:text-3xl font-black text-white mt-6 tracking-tight">
-                            NOVA is upgrading <span className="bg-gradient-to-r from-cyan-400 to-teal-300 bg-clip-text text-transparent">your digital avatar</span>
+                            NOVA is upgrading <span className="text-white">your digital avatar</span>
                         </h3>
 
                         <div className="flex justify-center mt-5 gap-2">
-                            <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-bounce [animation-delay:-0.3s]" />
-                            <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-bounce [animation-delay:-0.15s]" />
-                            <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-bounce" />
+                            <span className="w-2.5 h-2.5 rounded-full bg-white animate-bounce [animation-delay:-0.3s]" />
+                            <span className="w-2.5 h-2.5 rounded-full bg-white animate-bounce [animation-delay:-0.15s]" />
+                            <span className="w-2.5 h-2.5 rounded-full bg-white animate-bounce" />
                         </div>
 
                         <p className="mt-5 max-w-[480px] text-xs sm:text-sm text-gray-400 leading-relaxed">
