@@ -14,7 +14,7 @@ const TransferOwnershipModal = ({ isOpen, onClose, teamId, targetUserId, members
 
     const isConfirmed = confirmText.trim().toLowerCase() === 'transfer';
 
-    const targetUser = members.find(m => m.userId._id === targetUserId)?.userId;
+    const targetUser = members.find(m => m.userId?._id === targetUserId)?.userId;
 
     const handleTransfer = async () => {
         if (!targetUserId) return;
