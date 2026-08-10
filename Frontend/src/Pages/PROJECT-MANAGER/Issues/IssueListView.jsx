@@ -201,7 +201,7 @@ const IssueListView = ({ teamId, projectId, myRole }) => {
                                                         <AssignIssueDropdown 
                                                             teamId={teamId} 
                                                             issueId={issue._id} 
-                                                            currentAssigneeId={issue.assignedTo._id}
+                                                            currentAssigneeId={issue.assignedTo?._id || issue.assignedTo}
                                                             onAssign={handleAssign}
                                                         />
                                                     </div>

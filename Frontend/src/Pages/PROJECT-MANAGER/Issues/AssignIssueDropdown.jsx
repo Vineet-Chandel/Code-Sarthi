@@ -75,6 +75,7 @@ const AssignIssueDropdown = ({ teamId, issueId, currentAssigneeId, onAssign }) =
                         <div className="max-h-60 overflow-y-auto custom-scrollbar space-y-0.5 px-1">
                             {members.map(member => {
                                 const user = member.userId;
+                                if (!user) return null;
                                 const isAssigned = currentAssigneeId === user._id;
 
                                 return (

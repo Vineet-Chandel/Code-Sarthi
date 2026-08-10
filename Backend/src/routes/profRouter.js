@@ -2637,6 +2637,45 @@ profileRouter.delete("/profile/me/delete", userAuth, async (req, res) => {
                         message: "User not found or already deleted"
                     });
                 }
+
+                // Cleanup related data to prevent ghost users
+                try {
+                    const Team = require("../models/team");
+                    const TeamMember = require("../models/teamMember");
+                    const connections = require("../models/connections");
+                    const ConnectionRequest = require("../models/connectionRequest");
+                    const blockConnection = require("../models/blockConnection");
+
+                    // 1. Handle connections
+                    await connections.deleteMany({ $or: [{ user1: user._id }, { user2: user._id }] });
+                    await ConnectionRequest.deleteMany({ $or: [{ fromUserId: user._id }, { toUserId: user._id }] });
+                    await blockConnection.deleteMany({ $or: [{ blockerId: user._id }, { blockedId: user._id }] });
+
+                    // 2. Handle team memberships
+                    const userMemberships = await TeamMember.find({ userId: user._id });
+                    for (const membership of userMemberships) {
+                        await Team.findByIdAndUpdate(membership.teamId, { $inc: { memberCount: -1 } });
+                    }
+                    await TeamMember.deleteMany({ userId: user._id });
+
+                    // 3. Handle teams owned by user
+                    const teamsOwned = await Team.find({ ownerId: user._id });
+                    for (const team of teamsOwned) {
+                        // Transfer ownership to oldest member, or archive if empty
+                        const oldestMember = await TeamMember.findOne({ teamId: team._id, userId: { $ne: user._id } }).sort({ createdAt: 1 });
+                        if (oldestMember) {
+                            team.ownerId = oldestMember.userId;
+                            await team.save();
+                            oldestMember.role = 'leader';
+                            await oldestMember.save();
+                        } else {
+                            team.status = 'archived';
+                            await team.save();
+                        }
+                    }
+                } catch (cleanupError) {
+                    console.error("Error during user cleanup:", cleanupError);
+                }
                 res.clearCookie("token", {
                     httpOnly: true,
                     secure: process.env.NODE_ENV === "production",
