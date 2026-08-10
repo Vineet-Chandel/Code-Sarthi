@@ -5,6 +5,8 @@ import {
     receiveMessage
 } from "../../src/utils/messageSlice";
 import { updateConversation } from "@/utils/chat-user-slice";
+import BASE_URL from "../Pages/auth/baseURL";
+
 const SocketContext = createContext(null);
 
 export const SocketProvider = ({ children }) => {
@@ -15,7 +17,8 @@ export const SocketProvider = ({ children }) => {
 
     useEffect(() => {
 
-        socketRef.current = new WebSocket("ws://localhost:3000");
+        const wsUrl = BASE_URL.replace(/^http/, 'ws').replace(/\/api$/, '');
+        socketRef.current = new WebSocket(wsUrl);
 
         socketRef.current.onopen = () => {
             console.log("✅ Socket Connected");

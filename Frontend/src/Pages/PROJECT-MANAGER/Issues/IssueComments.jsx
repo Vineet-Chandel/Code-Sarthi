@@ -67,7 +67,7 @@ const CommentItem = ({ comment, isAuthor, isEditing, setEditingCommentId, handle
         <motion.div 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex gap-4 group w-full max-w-full"
+            className={`flex gap-3 group w-full max-w-full ${isAuthor ? 'flex-row-reverse' : 'flex-row'}`}
         >
             <div className="w-9 h-9 rounded-full bg-[#111111] overflow-hidden shrink-0 mt-0.5 border border-white/[0.04] shadow-sm">
                 {comment.authorId?.photoUrl?.url && comment.authorId.photoUrl.url !== "https://geographyandyou.com/images/user-profile.png" ? (
@@ -78,9 +78,9 @@ const CommentItem = ({ comment, isAuthor, isEditing, setEditingCommentId, handle
                     </div>
                 )}
             </div>
-            <div className="flex-1 min-w-0 flex flex-col max-w-full">
-                <div className="flex items-center justify-between gap-2 mb-1.5 flex-wrap sm:flex-nowrap">
-                    <div className="flex items-baseline gap-2.5 min-w-0 flex-wrap">
+            <div className={`flex-1 min-w-0 flex flex-col max-w-full ${isAuthor ? 'items-end' : 'items-start'}`}>
+                <div className={`flex items-center gap-2 mb-1.5 flex-wrap sm:flex-nowrap ${isAuthor ? 'flex-row-reverse' : 'flex-row'}`}>
+                    <div className={`flex items-baseline gap-2.5 min-w-0 flex-wrap ${isAuthor ? 'flex-row-reverse' : 'flex-row'}`}>
                         <span className="text-[13px] font-bold text-zinc-200 tracking-tight truncate">{comment.authorId?.firstName} {comment.authorId?.lastName}</span>
                         <span className="text-[10px] text-zinc-500 font-medium shrink-0" title={new Date(comment.createdAt).toLocaleString()}>
                             {formatRelativeTime(comment.createdAt)}
@@ -91,9 +91,13 @@ const CommentItem = ({ comment, isAuthor, isEditing, setEditingCommentId, handle
                     </div>
                 </div>
                 
-                <div className="relative flex items-start gap-2">
+                <div className={`relative flex items-start gap-2 max-w-[85%] ${isAuthor ? 'flex-row-reverse' : 'flex-row'}`}>
                     {/* The Bubble */}
-                    <div className="bg-[#111111] rounded-2xl rounded-tl-sm px-4 py-3 text-[13px] text-zinc-300 leading-relaxed whitespace-pre-wrap break-words break-all sm:break-normal max-w-full overflow-hidden shadow-sm">
+                    <div className={`rounded-2xl px-4 py-3 text-[13px] leading-relaxed whitespace-pre-wrap break-words break-all sm:break-normal max-w-full overflow-hidden shadow-sm ${
+                        isAuthor 
+                        ? 'bg-blue-600/20 border border-blue-500/20 text-zinc-100 rounded-tr-sm' 
+                        : 'bg-[#111111] text-zinc-300 rounded-tl-sm'
+                    }`}>
                         {isEditing ? (
                             <div className="space-y-3 min-w-[200px] sm:min-w-[300px]">
                                 <textarea 
@@ -142,7 +146,7 @@ const CommentItem = ({ comment, isAuthor, isEditing, setEditingCommentId, handle
                                         animate={{ opacity: 1, scale: 1, y: 0 }}
                                         exit={{ opacity: 0, scale: 0.95, y: -5 }}
                                         transition={{ duration: 0.15 }}
-                                        className="absolute left-full top-0 ml-1 w-32 bg-[#0a0a0a] border border-white/[0.08] rounded-xl shadow-2xl overflow-hidden z-20 origin-top-left"
+                                        className={`absolute top-0 mt-6 w-32 bg-[#0a0a0a] border border-white/[0.08] rounded-xl shadow-2xl overflow-hidden z-20 ${isAuthor ? 'right-0 origin-top-right' : 'left-full ml-1 origin-top-left'}`}
                                     >
                                         <button 
                                             onClick={() => { setEditingCommentId(comment._id); setIsMenuOpen(false); }} 

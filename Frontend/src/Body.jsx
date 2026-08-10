@@ -46,7 +46,8 @@ const Body = () => {
 
 
     useEffect(() => {
-        const socket = new WebSocket("ws://localhost:3000");
+        const wsUrl = BASE_URL.replace(/^http/, 'ws').replace(/\/api$/, '');
+        const socket = new WebSocket(wsUrl);
 
         socket.onopen = () => {
             console.log("Connected");
