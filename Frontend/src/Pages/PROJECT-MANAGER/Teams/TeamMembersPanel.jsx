@@ -66,6 +66,8 @@ const TeamMembersPanel = ({ teamId, myRole, ownerId }) => {
             <div className="flex flex-col gap-1 p-2 max-h-[400px] overflow-y-auto custom-scrollbar">
                 {members.map(member => {
                     const user = member.userId;
+                    if (!user) return null;
+
                     const isLeader = member.role === 'leader';
                     const isAdmin = member.role === 'admin';
 
@@ -156,7 +158,7 @@ const TeamMembersPanel = ({ teamId, myRole, ownerId }) => {
                 title="Remove Member"
                 itemType="Member"
                 itemName={(() => {
-                    const u = members.find(m => m.userId._id === removingUserId)?.userId;
+                    const u = members.find(m => m.userId?._id === removingUserId)?.userId;
                     return u ? `${u.firstName || ''} ${u.lastName || ''}`.trim() || u.email : '';
                 })()}
                 requiredText="REMOVE"

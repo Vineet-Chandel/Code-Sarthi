@@ -190,7 +190,7 @@ const TeamDetail = ({ teamId, onBack }) => {
                         <TeamMembersPanel 
                             teamId={teamId} 
                             myRole={membership.role} 
-                            ownerId={team.ownerId._id} 
+                            ownerId={team.ownerId?._id || team.ownerId} 
                         />
                     )}
                     {activeTab === 'settings' && (
