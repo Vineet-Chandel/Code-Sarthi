@@ -158,6 +158,7 @@ const Nav = ({ ctaData }) => {
     /* ================= GSAP ================= */
     useGSAP(() => {
         Object.values(dropdownRefs.current).forEach((el) => {
+            if (!el) return;
             gsap.set(el, {
                 opacity: 0,
                 y: 12,
@@ -169,6 +170,7 @@ const Nav = ({ ctaData }) => {
 
     useEffect(() => {
         Object.entries(dropdownRefs.current).forEach(([id, el]) => {
+            if (!el) return;
             if (hoveredItem === id) {
                 gsap.to(el, {
                     opacity: 1,

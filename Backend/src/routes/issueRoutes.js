@@ -5,6 +5,7 @@ const { requireIssueOwnerOrLeader } = require('../middleware/issue');
 const { requireTeamMembership, requireTeamLeader, requireTeamLeaderOrAdmin } = require('../middleware/team');
 
 const {
+  listIssues,
   getIssueDetails,
   updateIssue,
   archiveIssue,
@@ -22,6 +23,7 @@ const {
 } = require('../controllers/commentController');
 
 // Mounted at /api/teams/:teamId/issues
+router.get('/', listIssues);
 router.get('/:issueId', getIssueDetails);
 router.patch('/:issueId', updateIssue);
 router.patch('/:issueId/archive', requireIssueOwnerOrLeader, archiveIssue);

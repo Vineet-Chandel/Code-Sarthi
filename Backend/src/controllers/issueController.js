@@ -60,7 +60,8 @@ async function listIssues(req, res) {
     const { projectId, teamId } = req.params;
     const { type, status, priority } = req.query;
 
-    const filter = { teamId, projectId, archivedAt: null };
+    const filter = { teamId, archivedAt: null };
+    if (projectId) filter.projectId = projectId;
     if (type) filter.type = type;
     if (status) filter.status = status;
     if (priority) filter.priority = priority;

@@ -56,6 +56,7 @@ const ContentAndSocial = () => {
     const [ageServer, setAgeServer] = useState(false);
 
     useEffect(() => {
+        if (!container.current) return;
         gsap.from(container.current, {
             opacity: 0,
             y: 30,

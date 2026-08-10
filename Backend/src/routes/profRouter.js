@@ -12,6 +12,14 @@ const { Resend } = require('resend');
 
 const resend = new Resend(String(process.env.RESEND_API_KEY));
 
+profileRouter.get("/users/me/activity-feed", userAuth, async (req, res) => {
+    try {
+        // Return null feed for now as handled by frontend gracefully
+        res.status(200).json({ feed: null });
+    } catch (err) {
+        res.status(400).send("ERROR : " + err.message);
+    }
+});
 
 profileRouter.get("/profile/me", userAuth, async (req, res) => {
     try {

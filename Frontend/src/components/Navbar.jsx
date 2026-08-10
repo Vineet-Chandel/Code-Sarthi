@@ -38,18 +38,26 @@ const NavBar = ({ setSelectedChatUser, selectedChatUser }) => {
     // Sidebar functions
     const openSidebar = () => {
         setShowSidebar(true);
-        // Animate in
-        gsap.fromTo(sidebarRef.current,
-            { x: -320 },
-            { x: 0, duration: 0.3, ease: "power2.out" }
-        );
-        gsap.fromTo(sidebarOverlayRef.current,
-            { opacity: 0 },
-            { opacity: 1, duration: 0.2, ease: "power2.out" }
-        );
+        // Animate in after render
+        setTimeout(() => {
+            if (sidebarRef.current && sidebarOverlayRef.current) {
+                gsap.fromTo(sidebarRef.current,
+                    { x: -320 },
+                    { x: 0, duration: 0.3, ease: "power2.out" }
+                );
+                gsap.fromTo(sidebarOverlayRef.current,
+                    { opacity: 0 },
+                    { opacity: 1, duration: 0.2, ease: "power2.out" }
+                );
+            }
+        }, 0);
     };
 
     const closeSidebar = () => {
+        if (!sidebarRef.current || !sidebarOverlayRef.current) {
+            setShowSidebar(false);
+            return;
+        }
         const tl = gsap.timeline();
         tl.to(sidebarRef.current, {
             x: -320,
@@ -67,18 +75,26 @@ const NavBar = ({ setSelectedChatUser, selectedChatUser }) => {
     // Profile functions
     const openProfile = () => {
         setShowProfile(true);
-        // Animate in
-        gsap.fromTo(profileRef.current,
-            { x: 320 },
-            { x: 0, duration: 0.3, ease: "power2.out" }
-        );
-        gsap.fromTo(profileOverlayRef.current,
-            { opacity: 0 },
-            { opacity: 1, duration: 0.2, ease: "power2.out" }
-        );
+        // Animate in after render
+        setTimeout(() => {
+            if (profileRef.current && profileOverlayRef.current) {
+                gsap.fromTo(profileRef.current,
+                    { x: 320 },
+                    { x: 0, duration: 0.3, ease: "power2.out" }
+                );
+                gsap.fromTo(profileOverlayRef.current,
+                    { opacity: 0 },
+                    { opacity: 1, duration: 0.2, ease: "power2.out" }
+                );
+            }
+        }, 0);
     };
 
     const closeProfile = () => {
+        if (!profileRef.current || !profileOverlayRef.current) {
+            setShowProfile(false);
+            return;
+        }
         const tl = gsap.timeline();
         tl.to(profileRef.current, {
             x: 320,
