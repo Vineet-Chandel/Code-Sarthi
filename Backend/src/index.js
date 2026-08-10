@@ -27,6 +27,7 @@ const requestRouter = require("./routes/request");
 const userPreference = require("./routes/userPreferennce");
 const passwordManagment = require("./routes/passwordManagment");
 const chatRouter = require("./routes/chatController");
+const { startOutboxProcessor } = require("./workers/outboxProcessor");
 const fileUpload = require("./routes/profilePic")
 const redis = require("./configs/redis")
 const cloudinary = require("cloudinary").v2;
@@ -90,6 +91,7 @@ const PORT = process.env.PORT || 8000;
 
         server.listen(PORT, () => {
             console.log(`🚀 Server running at http://localhost:${PORT}`);
+            startOutboxProcessor(); // Start the outbox processor loop
         });
 
     } catch (error) {

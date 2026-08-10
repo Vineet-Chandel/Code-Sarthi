@@ -7,6 +7,7 @@ const ContributionLog = require("../models/contributionLog");
 const AssignmentEvent = require("../models/assignmentEvent");
 const { handleRouteError } = require("../utils/handleRouteError");
 const { nanoid } = require("nanoid");
+const { executeSuccession } = require("../services/teamSuccession");
 
 // Create team
 async function createTeam(req, res) {
@@ -236,30 +237,14 @@ async function leaveTeam(req, res) {
   const { teamId } = req.params;
   try {
     const team = await Team.findById(teamId);
-
-    if (String(team.ownerId) === String(req.user._id)) {
-      return res.status(400).json({
-        error: 'Transfer ownership before leaving the team'
-      });
+    if (!team) {
+        return res.status(404).json({ error: 'Team not found' });
     }
 
-    const session = await mongoose.startSession();
-    session.startTransaction();
-    try {
-      await TeamMember.updateOne(
-        { teamId, userId: req.user._id },
-        { status: 'left' },
-        { session }
-      );
-      await Team.updateOne({ _id: teamId }, { $inc: { memberCount: -1 } }, { session });
-      await session.commitTransaction();
-      res.json({ success: true });
-    } catch (err) {
-      await session.abortTransaction();
-      throw err;
-    } finally {
-      session.endSession();
-    }
+    // Call the atomic succession service which handles everything
+    await executeSuccession(teamId, req.user._id, 'VOLUNTARY_LEAVE');
+
+    res.json({ success: true });
   } catch (err) {
     return handleRouteError(err, res);
   }

@@ -2651,26 +2651,14 @@ profileRouter.delete("/profile/me/delete", userAuth, async (req, res) => {
                     await ConnectionRequest.deleteMany({ $or: [{ fromUserId: user._id }, { toUserId: user._id }] });
                     await blockConnection.deleteMany({ $or: [{ blockerId: user._id }, { blockedId: user._id }] });
 
-                    // 2. Handle team memberships
+                    // 2. Handle team memberships & automated succession
+                    const { executeSuccession } = require("../services/teamSuccession");
                     const userMemberships = await TeamMember.find({ userId: user._id });
                     for (const membership of userMemberships) {
-                        await Team.findByIdAndUpdate(membership.teamId, { $inc: { memberCount: -1 } });
-                    }
-                    await TeamMember.deleteMany({ userId: user._id });
-
-                    // 3. Handle teams owned by user
-                    const teamsOwned = await Team.find({ ownerId: user._id });
-                    for (const team of teamsOwned) {
-                        // Transfer ownership to oldest member, or archive if empty
-                        const oldestMember = await TeamMember.findOne({ teamId: team._id, userId: { $ne: user._id } }).sort({ createdAt: 1 });
-                        if (oldestMember) {
-                            team.ownerId = oldestMember.userId;
-                            await team.save();
-                            oldestMember.role = 'leader';
-                            await oldestMember.save();
-                        } else {
-                            team.status = 'archived';
-                            await team.save();
+                        try {
+                            await executeSuccession(membership.teamId, user._id, 'ACCOUNT_DELETION');
+                        } catch (err) {
+                            console.error(`Succession failed for team ${membership.teamId}:`, err);
                         }
                     }
                 } catch (cleanupError) {
