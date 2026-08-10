@@ -14,6 +14,13 @@ const {
   unclaimIssue
 } = require('../controllers/issueController');
 
+const {
+  getIssueComments,
+  createIssueComment,
+  updateIssueComment,
+  deleteIssueComment
+} = require('../controllers/commentController');
+
 // Mounted at /api/teams/:teamId/issues
 router.get('/:issueId', getIssueDetails);
 router.patch('/:issueId', updateIssue);
@@ -24,5 +31,11 @@ router.delete('/:issueId', requireTeamLeaderOrAdmin, deleteIssue);
 router.post('/:issueId/claim', claimIssue);
 router.post('/:issueId/assign', requireTeamLeaderOrAdmin, assignIssue);
 router.post('/:issueId/unclaim', unclaimIssue);
+
+// Comments
+router.get('/:issueId/comments', getIssueComments);
+router.post('/:issueId/comments', createIssueComment);
+router.patch('/:issueId/comments/:commentId', updateIssueComment);
+router.delete('/:issueId/comments/:commentId', deleteIssueComment);
 
 module.exports = router;

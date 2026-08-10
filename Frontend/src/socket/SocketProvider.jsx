@@ -29,7 +29,7 @@ export const SocketProvider = ({ children }) => {
         socketRef.current.onerror = (err) => {
             console.log(err);
         };
-        socketRef.current.onmessage = (event) => {
+        const handleMessage = (event) => {
 
 
 
@@ -69,8 +69,14 @@ export const SocketProvider = ({ children }) => {
                     break;
             }
         };
+
+        socketRef.current.addEventListener("message", handleMessage);
+
         return () => {
-            socketRef.current.close();
+            if (socketRef.current) {
+                socketRef.current.removeEventListener("message", handleMessage);
+                socketRef.current.close();
+            }
         };
 
     }, []);

@@ -8,9 +8,10 @@ import TimerWidget from '../TimerWidget';
 import DeleteConfirmModal from '../DeleteConfirmModal';
 import AlertModal from '../AlertModal';
 import IssueLinksModal from './IssueLinksModal';
+import IssueComments from './IssueComments';
 
 const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
-    const user = useSelector(store => store.user);
+    const user = useSelector(store => store.user?.user?.DATA || store.user);
     const [issue, setIssue] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -108,7 +109,7 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
         setSaving(true);
         try {
             const res = await axios.patch(`${BASE_URL}/teams/${teamId}/issues/${issueId}`, editData, { withCredentials: true });
-            
+
             // Note: The patch might not return populated assignedTo if the backend doesn't populate it on patch,
             // so we might just fetch the issue again to ensure we have the populated object.
             fetchIssue();
@@ -298,8 +299,11 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                 </div>
             ) : (
                 <div>
-                    <div className="mb-4">
+                    <div className="mb-4 flex items-center justify-between">
                         {getTypeIcon(issue.type)}
+                        <div className="pr-16">
+                            <TimerWidget teamId={teamId} issueId={issueId} issueTitle={issue.title} inline={true} />
+                        </div>
                     </div>
                     <div className="flex items-center gap-3 mb-3">
                         <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">{issue.title}</h2>
@@ -317,10 +321,6 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                         </span>
                     </div>
 
-                    <div className="mb-8">
-                        <TimerWidget teamId={teamId} issueId={issueId} issueTitle={issue.title} inline={true} />
-                    </div>
-
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-4 border-t border-white/[0.06]">
                         <div className="md:col-span-2">
                             <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2.5">Description</h3>
@@ -330,7 +330,7 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                         </div>
                         <div>
                             <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2.5">Assignment</h3>
-                            
+
                             {issue.assignedTo ? (
                                 <div className="bg-[#000000] border border-white/[0.06] rounded-xl p-5 shadow-sm">
                                     <div className="flex items-center gap-3 mb-4">
@@ -349,7 +349,7 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
 
                                     <div className="flex items-center gap-2 pt-3 border-t border-white/[0.06]">
                                         {String(issue.assignedTo._id) === String(user._id) && (
-                                            <button 
+                                            <button
                                                 onClick={handleUnclaim}
                                                 className="text-xs font-semibold text-zinc-400 hover:text-red-400 transition-colors px-3 py-1.5 rounded-lg hover:bg-white/[0.05] w-full text-center border border-transparent hover:border-red-400/20"
                                             >
@@ -358,9 +358,9 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                                         )}
                                         {(myRole === 'leader' || myRole === 'admin') && (
                                             <div className="flex-1">
-                                                <AssignIssueDropdown 
-                                                    teamId={teamId} 
-                                                    issueId={issue._id} 
+                                                <AssignIssueDropdown
+                                                    teamId={teamId}
+                                                    issueId={issue._id}
                                                     currentAssigneeId={issue.assignedTo._id}
                                                     onAssign={() => fetchIssue()}
                                                 />
@@ -375,20 +375,20 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                                     </div>
                                     <div className="text-sm font-bold text-zinc-300 mb-1">Unassigned</div>
                                     <p className="text-xs text-zinc-500 mb-4">No team member is currently taking ownership of this task.</p>
-                                    
+
                                     <div className="flex flex-col gap-2.5">
-                                        <button 
+                                        <button
                                             onClick={handleClaim}
                                             className="w-full text-sm font-bold text-white hover:text-black bg-white/10 hover:bg-white border border-white/20 transition-all px-4 py-2.5 rounded-xl shadow-sm active:scale-95"
                                         >
                                             Claim this Issue
                                         </button>
-                                        
+
                                         {(myRole === 'leader' || myRole === 'admin') && (
                                             <div className="mt-1">
-                                                <AssignIssueDropdown 
-                                                    teamId={teamId} 
-                                                    issueId={issue._id} 
+                                                <AssignIssueDropdown
+                                                    teamId={teamId}
+                                                    issueId={issue._id}
                                                     currentAssigneeId={null}
                                                     onAssign={() => fetchIssue()}
                                                 />
@@ -399,6 +399,8 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                             )}
                         </div>
                     </div>
+
+                    <IssueComments issueId={issueId} teamId={teamId} currentUserId={user?._id} />
                 </div>
             )}
 
@@ -439,7 +441,7 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                 onEditLink={handleEditLink}
                 loading={addingLink}
             />
-        </div>
+        </div >
     );
 };
 

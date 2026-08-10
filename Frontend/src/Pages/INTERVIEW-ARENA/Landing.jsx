@@ -49,7 +49,8 @@ const Landing = () => {
     const user = useSelector(store => store?.user?.user?.DATA || {});
     const [clicked, setClicked] = useState(false);
     const [clicked2, setClicked2] = useState(false);
-
+    const [showIncompleteModal, setShowIncompleteModal] = useState(false);
+    const resData = useSelector((state) => state.res);
     const cardsData = [
         {
             Heading: "Create Career Profile",
@@ -118,19 +119,42 @@ const Landing = () => {
         return () => clearInterval(timer);
     }, [defenseQuestions.length]);
 
-    const CTAcreateResume = ({ type }) => {
+    const CTAcreateResume = ({ type, resData }) => {
+
+        let points = 0;
+
+        if (resData?.summaryBody) points++;
+        if (resData?.skills?.length) points++;
+        if (resData?.projects?.length) points++;
+        if (resData?.education?.length) points++;
+        if (resData?.experience?.length) points++;
+        if (resData?.achievements?.length) points++;
+        if (resData?.certifications?.length) points++;
+        if (resData?.header?.summaryTitle) points++;
+        if (resData?.header?.location) points++;
+        if (resData?.header?.github || resData?.header?.linkedin) points++;
+
+        const isIncomplete = points < 4;
+
+        const handleAction = (actionFn) => {
+            if (isIncomplete) {
+                setShowIncompleteModal(true);
+            } else {
+                actionFn();
+            }
+        };
+
         return (
             <div className='flex flex-col sm:flex-row gap-4 justify-center items-center mt-10 w-full max-w-2xl mx-auto'>
                 {/* Important primary action button -> Pure White with Black text */}
                 <button
-                    // disabled={true}
-                    onClick={() => {
+                    onClick={() => handleAction(() => {
                         if (type === "career") {
                             setClicked(prev => !prev);
                         } else {
                             setClicked2(prev => !prev);
                         }
-                    }}
+                    })}
                     className='h-[54px] text-base font-bold transition-all duration-200 bg-white hover:bg-zinc-200 text-black rounded-3xl px-8 flex justify-center items-center gap-2 shadow-lg w-full sm:flex-1'
                 >
                     <Sparkles className='w-5 h-5 fill-black/10' />
@@ -139,7 +163,13 @@ const Landing = () => {
 
                 {/* Secondary buttons -> #0a0a0a dark card styling with #212121 borders */}
                 <button
-                    onClick={() => navigate(type === 'career' ? '/app/build-resume' : '/app/interview-arena')}
+                    onClick={() => {
+                        if (type === 'career') {
+                            navigate('/app/build-resume');
+                        } else {
+                            handleAction(() => navigate('/app/interview-arena'));
+                        }
+                    }}
                     className='h-[54px] text-base font-bold transition-all duration-200 bg-[#0a0a0a] hover:bg-zinc-900 border border-[#212121] hover:border-zinc-700 text-zinc-300 hover:text-white rounded-3xl px-8 flex justify-center items-center gap-2 shadow-md w-full sm:flex-1'
                 >
                     <span>{type === 'career' ? "Edit Career Profile" : "Past Analyses & Records"}</span>
@@ -147,7 +177,7 @@ const Landing = () => {
 
                 {type === 'career' && (
                     <button
-                        onClick={() => navigate("/app/resume-templates")}
+                        onClick={() => handleAction(() => navigate("/app/resume-templates"))}
                         className='h-[54px] text-base font-bold transition-all duration-200 bg-white hover:bg-zinc-200 text-black rounded-3xl px-8 flex justify-center items-center gap-2 shadow-lg w-full sm:flex-1'
                     >
                         <span>Create Resume</span>
@@ -259,7 +289,7 @@ const Landing = () => {
                         </div>
                     </div>
 
-                    <CTAcreateResume type={"career"} />
+                    <CTAcreateResume type={"career"} resData={resData} />
                 </div>
 
                 {/* NEW BLOCK 2: The 4-Stage Interview Success Architecture */}
@@ -421,7 +451,7 @@ const Landing = () => {
                     </div>
 
                     <div className="mt-10 pt-8 border-t border-[#212121]">
-                        <CTAcreateResume type={"interviews"} />
+                        <CTAcreateResume type={"interviews"} resData={resData} />
                     </div>
                 </div>
 
@@ -513,6 +543,54 @@ const Landing = () => {
             {/* Modals & Popups */}
             {clicked && <ClickedResume clicked={clicked} setClicked={setClicked} />}
             {clicked2 && <ClickedInterviews clicked2={clicked2} setClicked2={setClicked2} />}
+            
+            <AnimatePresence>
+                {showIncompleteModal && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                        <motion.div 
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            className="bg-[#121212] border border-[#212121] rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative"
+                        >
+                            <button 
+                                onClick={() => setShowIncompleteModal(false)}
+                                className="absolute top-4 right-4 text-zinc-400 hover:text-white bg-[#212121] hover:bg-zinc-700 p-1.5 rounded-full transition-colors"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                            
+                            <div className="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center mb-6 border border-red-500/20">
+                                <Sparkles className="w-6 h-6 text-red-500" />
+                            </div>
+                            
+                            <h3 className="text-2xl font-bold text-white mb-3">Profile Incomplete</h3>
+                            <p className="text-zinc-400 text-sm mb-8 leading-relaxed">
+                                Your career profile points are low. To access advanced features like mock interviews and resume analysis, please complete your profile first.
+                            </p>
+                            
+                            <div className="flex gap-3">
+                                <button 
+                                    onClick={() => setShowIncompleteModal(false)}
+                                    className="flex-1 py-3 px-4 rounded-xl font-bold text-sm bg-[#0a0a0a] border border-[#212121] text-zinc-300 hover:text-white hover:bg-zinc-900 transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    onClick={() => {
+                                        setShowIncompleteModal(false);
+                                        navigate('/app/build-resume');
+                                    }}
+                                    className="flex-1 py-3 px-4 rounded-xl font-bold text-sm bg-white text-black hover:bg-zinc-200 transition-colors flex items-center justify-center gap-2"
+                                >
+                                    Complete Profile
+                                    <ArrowRight className="w-4 h-4" />
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };
