@@ -46,7 +46,8 @@ const Body = () => {
 
 
     useEffect(() => {
-        const wsUrl = BASE_URL.replace(/^http/, 'ws');
+        // Append a trailing slash to prevent NGINX 301 redirects which WebSockets cannot follow
+        const wsUrl = BASE_URL.replace(/^http/, 'ws') + '/';
         const socket = new WebSocket(wsUrl);
 
         socket.onopen = () => {
