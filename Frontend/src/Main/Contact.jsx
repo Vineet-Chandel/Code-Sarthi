@@ -22,7 +22,7 @@ const MainCTAbutton = ({ ClassName = "" }) => {
         <div onClick={() => navigate("/signup")} className={` flex items-center justify-between cursor-pointer text-black  font-bold ${ClassName}`}>
 
             <span className="text-white relative -right-[1px]" >
-                <svg className='h-[33px] sm:h-[40px]' viewBox="0 0 15 40" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" transform="matrix(-1,0,0,1,0,0)">
+                <svg className='h-[33px] sm:h-[40px]' viewBox="0 0 15 40" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlnsXlink="http://www.w3.org/1999/xlink" transform="matrix(-1,0,0,1,0,0)">
                     <path d="M0 .5h11A3.5 3.5 0 0 1 14.5 4v20.523a5.5 5.5 0 0 1-1.416 3.684l-8.547 9.477A5.5 5.5 0 0 1 .453 39.5H0" data-stroke="true"
                         fill="#fff"
                     ></path>
@@ -48,7 +48,7 @@ const MainCTAbutton2 = ({ ClassName = "" }) => {
         <div onClick={() => navigate("/signup")} className={` flex items-center justify-between cursor-pointer text-black  font-bold ${ClassName}`}>
 
             <span className="text-white relative -right-[1px]" >
-                <svg className='h-[33px] sm:h-[40px]' viewBox="0 0 15 40" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" transform="matrix(-1,0,0,1,0,0)">
+                <svg className='h-[33px] sm:h-[40px]' viewBox="0 0 15 40" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlnsXlink="http://www.w3.org/1999/xlink" transform="matrix(-1,0,0,1,0,0)">
                     <path d="M0 .5h11A3.5 3.5 0 0 1 14.5 4v20.523a5.5 5.5 0 0 1-1.416 3.684l-8.547 9.477A5.5 5.5 0 0 1 .453 39.5H0" data-stroke="true"
                         strokeWidth='2'
                         stroke='#ffffff'

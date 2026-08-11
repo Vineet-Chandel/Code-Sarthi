@@ -411,7 +411,7 @@ const Stage1 = ({ strategyData }) => {
                                                     <path d="M0 0h80v80H0z" fill="none" />
                                                     <g fill="none">
                                                         <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z" />
-                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6" d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177" />
+                                                        <path stroke="currentColor" strokeLinecap="round" stroke-linejoin="round" strokeWidth="6" d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177" />
                                                     </g>
                                                 </svg>
                                                 ) : (
@@ -420,7 +420,7 @@ const Stage1 = ({ strategyData }) => {
                                                         <path d="M0 0h80v80H0z" fill="none" />
                                                         <g fill="none">
                                                             <path fill="currentColor" d="M36.964 17.7a3 3 0 1 1 6 .004zm3 .078l3 .002zm0 .889l-3-.003zm0 .888l3 .002zm-.001.89l3 .001zm-.001.888l-3-.002zm0 .889h-3v-.002zm3 20.074a3 3 0 0 1-6 0zm-6 .037a3 3 0 0 1 6 0zm6 21.667a3 3 0 0 1-6 0zm.002-46.296v.075l-6-.003V17.7zm0 .075v.89l-6-.005v-.888zm0 .89v.888l-6-.004v-.889zm0 .888l-.001.89l-6-.005v-.889zm-.001.89l-.001.888l-6-.004v-.889zm-.001.888v.889l-6-.004v-.889zm0 .887v20.074h-6V22.222zm0 20.111V64h-6V42.333z" />
-                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="6" d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177" />
+                                                            <path stroke="currentColor" strokeLinecap="round" stroke-linejoin="round" strokeWidth="6" d="m15.11 39.11l21.177-21.176a5.25 5.25 0 0 1 7.425 0l21.176 21.177" />
                                                         </g>
                                                     </svg>
                                                 )}

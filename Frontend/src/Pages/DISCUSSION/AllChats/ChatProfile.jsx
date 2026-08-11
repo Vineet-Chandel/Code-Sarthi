@@ -156,7 +156,7 @@ const ChatProfile = ({ selectedChatUser, setSelectedChatUser }) => {
 
                                 <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 12 24">
                                     <path d="M0 0h12v24H0z" fill="none" />
-                                    <path fill="#fff" fill-rule="evenodd" d="M10.157 12.711L4.5 18.368l-1.414-1.414l4.95-4.95l-4.95-4.95L4.5 5.64l5.657 5.657a1 1 0 0 1 0 1.414" />
+                                    <path fill="#fff" fillRule="evenodd" d="M10.157 12.711L4.5 18.368l-1.414-1.414l4.95-4.95l-4.95-4.95L4.5 5.64l5.657 5.657a1 1 0 0 1 0 1.414" />
                                 </svg>
 
                                 {selectedChatUser?.info?.username}
@@ -181,7 +181,7 @@ const ChatProfile = ({ selectedChatUser, setSelectedChatUser }) => {
 
                                 <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 12 24">
                                     <path d="M0 0h12v24H0z" fill="none" />
-                                    <path fill="#fff" fill-rule="evenodd" d="M10.157 12.711L4.5 18.368l-1.414-1.414l4.95-4.95l-4.95-4.95L4.5 5.64l5.657 5.657a1 1 0 0 1 0 1.414" />
+                                    <path fill="#fff" fillRule="evenodd" d="M10.157 12.711L4.5 18.368l-1.414-1.414l4.95-4.95l-4.95-4.95L4.5 5.64l5.657 5.657a1 1 0 0 1 0 1.414" />
                                 </svg>
 
 

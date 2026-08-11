@@ -44,7 +44,7 @@ const AmanGuptaDynamicClassic = ({ data, ref }) => {
                 <h2 className="text-center font-bold uppercase text-sm border-b border-gray-300 mb-3 py-1 bg-gray-50 tracking-widest">Technical Skills</h2>
                 <div className="grid grid-cols-2 gap-x-12 px-4 text-[12px]">
                     {skills.map((item, idx) => {
-                        return (<div className="space-y-2">
+                        return (<div key={idx} className="space-y-2">
                             <p> ● <strong>{item.skillCategory} :</strong> {item.skills}</p>
                         </div>)
                     })}
@@ -118,14 +118,14 @@ const AmanGuptaDynamicClassic = ({ data, ref }) => {
                             {edu.percentage && <span>Score: {edu.percentage}</span>}
                         </div>
                         {edu.bullets && (
-                            <p className="text-[11px] text-gray-500 mt-1">
+                            <div className="text-[11px] text-gray-500 mt-1">
                                 {(edu.bullets || []).map((b, idx) => (
                                     <div key={idx} style={{ display: 'flex', gap: 6, fontSize: 12, color: '#475569', alignItems: 'flex-start' }}>
                                         ●
                                         <span dangerouslySetInnerHTML={{ __html: b }} />
                                     </div>
                                 ))}
-                            </p>
+                            </div>
                         )}
                     </div>
                 ))}

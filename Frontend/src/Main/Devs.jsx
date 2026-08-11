@@ -235,9 +235,9 @@ md:text-lg border bg-gray-400/40 mx-auto cursor-pointer group border-white/10 fo
                     ease: "easeInOut",
                   }}
                   className="group-hover:scale-110 transition-all duration-500 w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M5 10C5 8.13077 5 7.19615 5.40192 6.5C5.66523 6.04394 6.04394 5.66523 6.5 5.40192C7.19615 5 8.13077 5 10 5H14C15.8692 5 16.8038 5 17.5 5.40192C17.9561 5.66523 18.3348 6.04394 18.5981 6.5C19 7.19615 19 8.13077 19 10H5Z" fill="#7E869E" fill-opacity="0.25" />
-                  <rect x="5" y="5" width="14" height="14" rx="3" stroke="#fff" stroke-width="1.2" />
-                  <path d="M5 10H19" stroke="#fff" stroke-width="1.2" stroke-linecap="round" />
+                  <path d="M5 10C5 8.13077 5 7.19615 5.40192 6.5C5.66523 6.04394 6.04394 5.66523 6.5 5.40192C7.19615 5 8.13077 5 10 5H14C15.8692 5 16.8038 5 17.5 5.40192C17.9561 5.66523 18.3348 6.04394 18.5981 6.5C19 7.19615 19 8.13077 19 10H5Z" fill="#7E869E" fillOpacity="0.25" />
+                  <rect x="5" y="5" width="14" height="14" rx="3" stroke="#fff" strokeWidth="1.2" />
+                  <path d="M5 10H19" stroke="#fff" strokeWidth="1.2" strokeLinecap="round" />
                 </motion.svg>
 
 

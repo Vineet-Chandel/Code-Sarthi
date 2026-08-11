@@ -632,7 +632,7 @@ md:text-3xl flex flex-row items-center justify-start mb-4 font-extrabold trackin
                                     {data.experience ? (
 
                                         data?.experience.map((item, idx) => (
-                                            <div>
+                                            <div key={idx}>
                                                 {idx != 0 && < span className="flex items-center justif-center gap-2 mt-3 mb-3" >
                                                     <span className="w-full bg-black h-[1px] rounded-full flex items-center"></span>
                                                     <span>

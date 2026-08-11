@@ -76,7 +76,6 @@ const Template = ({ idx, ref }) => {
         );
     }
 
-    console.log("efkwne")
     switch (idx) {
         case 1:
             return <ResumeTemplate1 data={data} ref={ref} />
