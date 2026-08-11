@@ -10,7 +10,7 @@ const messageHandler = async (clientMessageId, conversationId, socket, content, 
 
     try {
 
-        console.log(type);
+
         const result = await saveMessage({
 
             senderId: socket.userId,
@@ -33,6 +33,8 @@ const messageHandler = async (clientMessageId, conversationId, socket, content, 
             conversation: result.conversation,
             message: result.message
         };
+
+
         broadcastService(
             result.conversation.members,
             payload

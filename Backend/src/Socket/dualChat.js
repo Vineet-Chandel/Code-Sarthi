@@ -23,8 +23,8 @@ module.exports = (server) => {
     const wss = new WebSocketServer({
         server
     });
-    const allUser = getOnlineUsers()
     const interval = setInterval(() => {
+        const allUser = getOnlineUsers()
         allUser.forEach((sockets, userId) => {
 
             sockets.forEach((ws) => {

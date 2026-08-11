@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     messages: {},
+    conversationMappings: {},
 };
 
 const messageSlice = createSlice({
@@ -27,45 +28,138 @@ const messageSlice = createSlice({
 
 
         receiveMessage: (state, action) => {
+            const {
+                clientMessageId,
+                message,
+                localChatKey
+            } = action.payload;
 
-            const { clientMessageId, message, localChatKey } = action.payload;
+            const realConversationId =
+                String(message.conversation_id);
 
-            const conversationId = message.conversation_id;
+            // =========================================
+            // NEW CONVERSATION
+            // =========================================
+
+            if (localChatKey) {
+
+                const tempMessages =
+                    state.messages[localChatKey] || [];
+
+                // Find the optimistic message using
+                // the SAME clientMessageId
+                const tempIndex = tempMessages.findIndex(
+                    msg =>
+                        String(msg.clientMessageId) ===
+                        String(clientMessageId)
+                );
+
+                console.log("========== MESSAGE REPLACEMENT ==========");
+
+                console.log("localChatKey:", localChatKey);
+
+                console.log("realConversationId:", realConversationId);
+
+                console.log("clientMessageId:", clientMessageId);
+
+                console.log(
+                    "TEMP MESSAGES:",
+                    state.messages[localChatKey]
+                );
+
+                console.log(
+                    "TEMP IDS:",
+                    state.messages[localChatKey]?.map(
+                        msg => msg.clientMessageId
+                    )
+                );
+
+                console.log(
+                    "TEMP MESSAGE INDEX:",
+                    tempIndex
+                );
+
+                if (tempIndex !== -1) {
+
+                    // Replace optimistic message
+                    tempMessages[tempIndex] = {
+                        ...message,
+
+                        clientMessageId,
+
+                        isTemporary: false
+                    };
+
+                } else {
+
+                    // Safety fallback
+                    tempMessages.push({
+                        ...message,
+
+                        clientMessageId,
+
+                        isTemporary: false
+                    });
+
+                }
+
+                // Move temporary conversation bucket
+                // to the real conversation ID
+                state.messages[realConversationId] =
+                    tempMessages;
+
+                delete state.messages[localChatKey];
+                
+                state.conversationMappings[localChatKey] = realConversationId;
+
+                return;
+            }
+
+
+            // =========================================
+            // EXISTING CONVERSATION
+            // =========================================
+
+            if (!state.messages[realConversationId]) {
+                state.messages[realConversationId] = [];
+            }
+
+            const messages =
+                state.messages[realConversationId];
+
+
+            const existingIndex = messages.findIndex(
+                msg =>
+                    String(msg.clientMessageId) ===
+                    String(clientMessageId)
+            );
 
 
             if (
-                localChatKey &&
-                state.messages[localChatKey]
+                clientMessageId &&
+                existingIndex !== -1
             ) {
-                state.messages[message.conversation_id] =
-                    state.messages[localChatKey];
 
+                messages[existingIndex] = {
+                    ...message,
 
-                delete state.messages[localChatKey];
-            }
-            if (!state.messages[conversationId]) {
-                state.messages[conversationId] = [];
-            }
-            const messages = state.messages[conversationId];
+                    clientMessageId,
 
-            // Replace only when clientMessageId exists
-            if (clientMessageId) {
-                const index = messages.findIndex(
-                    msg => msg.clientMessageId === clientMessageId
-                );
+                    isTemporary: false
+                };
 
-                if (index !== -1) {
-                    messages[index] = {
-                        ...message,
-                        clientMessageId
-                    };
-
-                    return;
-                }
+                return;
             }
 
-            // Receiver or no temporary message
-            messages.push(message);
+
+            // Normal incoming message
+            messages.push({
+                ...message,
+
+                clientMessageId,
+
+                isTemporary: false
+            });
         },
         clearConversation: (state, action) => {
             delete state.messages[action.payload];

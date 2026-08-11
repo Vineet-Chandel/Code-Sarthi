@@ -1,76 +1,71 @@
-
-
 const onlineUsers = new Map();
 
-const getSocket = (userId) => {
-    return onlineUsers.get(userId);
+const normalizeUserId = (userId) => {
+    return userId?.toString();
 };
 
-
 const getOnlineUsers = () => {
-
-
-
-
-
     return onlineUsers;
+};
 
-}
+const getSockets = (userId) => {
+    userId = normalizeUserId(userId);
 
+    return onlineUsers.get(userId) || new Set();
+};
 
-const addSocket = (userID, socket) => {
+const addSocket = (userId, socket) => {
+    userId = normalizeUserId(userId);
 
-    if (!onlineUsers.has(userID)) {
-        onlineUsers.set(userID, new Set());
+    if (!onlineUsers.has(userId)) {
+        onlineUsers.set(userId, new Set());
     }
 
-    // it will add the socket for the particular user ID
-    onlineUsers.get(userID).add(socket);
+    onlineUsers.get(userId).add(socket);
 
-}
+    console.log(`🟢 Added socket for ${userId}`);
+    debug();
+};
 
+const removeSocket = (userId, socket) => {
+    userId = normalizeUserId(userId);
 
-const removeSocket = (userID, socket) => {
-    if (onlineUsers.has(userID)) {
-        onlineUsers.get(userID).delete(socket)
+    const sockets = onlineUsers.get(userId);
 
+    if (!sockets) return;
 
-        if (onlineUsers.get(userID).size === 0) {
-            onlineUsers.delete(userID);
-        }
+    sockets.delete(socket);
+
+    if (sockets.size === 0) {
+        onlineUsers.delete(userId);
     }
 
-}
+    debug();
+};
 
+const isOnline = (userId) => {
+    userId = normalizeUserId(userId);
 
+    const sockets = onlineUsers.get(userId);
 
-const isOnline = (userID, socket) => {
+    return !!sockets && sockets.size > 0;
+};
 
-    if (onlineUsers.has(userID)) {
+const debug = () => {
+    console.log("========== ONLINE USERS ==========");
 
-        if (onlineUsers.get(userID).size !== 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-}
-
-
-const debug = (userID, socket) => {
     onlineUsers.forEach((sockets, userId) => {
-        console.log(
-            `${userId} -> ${sockets.size} socket(s)`
-        );
+        console.log(`${userId} -> ${sockets.size} socket(s)`);
     });
-}
 
+    console.log("==================================");
+};
 
-
-
-
-
-
-
-module.exports = { getOnlineUsers, getSocket, debug, addSocket, removeSocket, isOnline }
+module.exports = {
+    getOnlineUsers,
+    getSockets,
+    addSocket,
+    removeSocket,
+    isOnline,
+    debug
+};

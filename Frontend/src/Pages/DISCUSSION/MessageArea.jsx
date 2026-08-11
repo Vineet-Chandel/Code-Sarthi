@@ -154,7 +154,15 @@ const MessageArea = ({ newConvoFinded, subLoading, forwardTabOpen, setForwardTab
                         const lastClass =
                             "rounded-2xl rounded-tr-md";
 
+                        const getSenderId = (sender) => {
+                            if (!sender) return null;
 
+                            if (typeof sender === "object") {
+                                return String(sender._id ?? sender.id);
+                            }
+
+                            return String(sender);
+                        };
                         return (
 
                             <div key={items?._id} className='relative '>
@@ -178,7 +186,7 @@ const MessageArea = ({ newConvoFinded, subLoading, forwardTabOpen, setForwardTab
                                             )}
                                         </div>
                                     )}
-                                {items?.sender_id !== user?._id ? (
+                                {getSenderId(items.sender_id) !== String(user?._id) ? (
                                     <div
                                         onContextMenu={(e) => {
                                             e.preventDefault();
@@ -198,7 +206,7 @@ const MessageArea = ({ newConvoFinded, subLoading, forwardTabOpen, setForwardTab
                                         <motion.div
                                             layout
                                             initial={{ opacity: 0, y: 10 }}
-                                            animate={!items.isTemporary && { opacity: 1, y: 0 }}
+                                            animate={{ opacity: 1, y: 0 }}
                                             exit={{ opacity: 0 }}
 
                                             className={` text-sm sm:text-md lg:text-xl max-w-[80%]

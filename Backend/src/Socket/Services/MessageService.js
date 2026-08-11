@@ -213,7 +213,7 @@ const saveMessage = async ({
     ])
 
 
-    console.log(convoForPayload)
+
     return {
         conversation: convoForPayload,
         message: messageStored

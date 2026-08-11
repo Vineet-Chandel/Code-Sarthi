@@ -211,7 +211,9 @@ userPreference.get("/user/requests/received", userAuth, async (req, res) => {
         const connectionRequests = await ConnectionRequest.find({
             receiverId: loggedInUser._id,
             status: "REQUESTED",
-        }).populate("requesterId", "firstName middleName lastName username skills about profession college isVerified gender age photoUrl");
+        })
+        .sort({ createdAt: -1 })
+        .populate("requesterId", "firstName middleName lastName username skills about profession college isVerified gender age photoUrl");
 
         if (!connectionRequests || connectionRequests.length === 0) {
             return res.status(200).json({
@@ -247,7 +249,9 @@ userPreference.get("/user/requests/send", userAuth, async (req, res) => {
         const requests = await ConnectionRequest.find({
             requesterId: loggedInUserId,
             status: STATUS_INTERESTED
-        }).populate("receiverId", USER_SAFE_DATA);
+        })
+        .sort({ createdAt: -1 })
+        .populate("receiverId", USER_SAFE_DATA);
 
         if (!requests || requests.length === 0) {
             return res.status(200).json({
@@ -382,6 +386,7 @@ userPreference.get("/user/feed", userAuth, async (req, res) => {
                 { _id: { $ne: loggedInUser._id } },
             ],
         })
+            .sort({ updatedAt: -1 })
             .select("firstName middleName lastName username gender photoUrl about college skills age profession ")
             .skip(skip)
             .limit(limit);

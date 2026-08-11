@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import BASE_URL from '../../auth/baseURL';
-import { useSocket } from '../../../socket/SocketProvider';
+import { useSocket } from '../../../socket/SocketContext';
 
 const formatRelativeTime = (dateStr) => {
     const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });

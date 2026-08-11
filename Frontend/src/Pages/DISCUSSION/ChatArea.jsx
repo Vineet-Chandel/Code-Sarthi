@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import { useSocket } from "../../socket/SocketProvider";
+import { useSocket } from "../../socket/SocketContext";
 import {
 
     MoreVertical,
@@ -53,6 +53,17 @@ const useLongPress = (callback, ms = 500, setClassLongPress) => {
 const ChatArea = ({ setNewConvoFinded, newConvoFinded, subLoading, forwardTabOpen, setForwardTabOpen, selectedChatUser, setSelectedChatUser, addToast, setlastMsgStatus, lastMsgStatus }) => {
     const dispatch = useDispatch()
     const user = useSelector(state => state?.user?.user?.DATA);
+    const conversationMappings = useSelector(state => state?.messages?.conversationMappings || {});
+    
+    useEffect(() => {
+        if (selectedChatUser?.convoId && conversationMappings[selectedChatUser.convoId]) {
+            setSelectedChatUser(prev => ({
+                ...prev,
+                convoId: conversationMappings[prev.convoId]
+            }));
+        }
+    }, [conversationMappings, selectedChatUser?.convoId, setSelectedChatUser]);
+
     const socketRef = useSocket();
     const [clipTab, setClipTab] = useState(false)
     const [emojiTab, setEmojiTab] = useState(false)
