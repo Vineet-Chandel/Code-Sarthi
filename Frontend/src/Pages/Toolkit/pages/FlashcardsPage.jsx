@@ -1,9 +1,102 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Menu, Zap } from "lucide-react";
+import { X, Menu, Zap, ChevronLeft, ChevronRight } from "lucide-react";
 import { getFlashcardsForTech } from "../data/flashcards";
 import { getTechById, technologies } from "../data/technologies";
+
+function FlashcardFeedItem({ card }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const nextImage = (e) => {
+    e.stopPropagation();
+    if (activeIndex < card.images.length - 1) {
+      setActiveIndex((prev) => prev + 1);
+    }
+  };
+
+  const prevImage = (e) => {
+    e.stopPropagation();
+    if (activeIndex > 0) {
+      setActiveIndex((prev) => prev - 1);
+    }
+  };
+
+  return (
+    <div className="w-full bg-[#0a0a0a] overflow-hidden scrollbar-none flex flex-col rounded-3xl mx-auto max-w-4xl shadow-2xl">
+      {/* Images Carousel */}
+      {card.images && card.images.length > 0 && (
+        <div
+          className="relative overflow-hidden bg-black group"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          <div
+            className="flex transition-transform duration-300 ease-in-out"
+            style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+          >
+            {card.images.map((img, i) => (
+              <div key={i} className="min-w-full flex-shrink-0 flex items-center justify-center">
+                <img
+                  src={img}
+                  alt={`${card.title} - ${i + 1}`}
+                  className="w-full h-auto object-contain max-h-[70vh] select-none"
+                  draggable={false}
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Left Arrow Button */}
+          {isHovered && activeIndex > 0 && (
+            <button
+              onClick={prevImage}
+              className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-black/50 hover:bg-black/80 text-white rounded-full transition-all duration-200 backdrop-blur-sm z-10"
+              aria-label="Previous image"
+            >
+              <ChevronLeft size={24} />
+            </button>
+          )}
+
+          {/* Right Arrow Button */}
+          {isHovered && activeIndex < card.images.length - 1 && (
+            <button
+              onClick={nextImage}
+              className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-black/50 hover:bg-black/80 text-white rounded-full transition-all duration-200 backdrop-blur-sm z-10"
+              aria-label="Next image"
+            >
+              <ChevronRight size={24} />
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* Post Content */}
+      <div className="p-4 sm:p-5 flex flex-col gap-2">
+        {/* Pagination Dots (if multiple images) */}
+        {card.images && card.images.length > 1 && (
+          <div className="flex justify-center gap-1.5 mb-2">
+            {card.images.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setActiveIndex(i)}
+                className={`h-1.5 w-1.5 rounded-full transition-all ${
+                  i === activeIndex ? "bg-white w-3" : "bg-white/20 hover:bg-white/40"
+                }`}
+                aria-label={`Go to slide ${i + 1}`}
+              />
+            ))}
+          </div>
+        )}
+        {card.title && <h2 className="text-base font-bold text-white">{card.title}</h2>}
+        {card.description && (
+          <p className="text-sm text-white/80 whitespace-pre-wrap leading-relaxed">{card.description}</p>
+        )}
+      </div>
+    </div>
+  );
+}
 
 export default function FlashcardsPage() {
   const { techId } = useParams();
@@ -164,35 +257,7 @@ export default function FlashcardsPage() {
         ) : (
           <div className="w-full flex flex-col gap-12 pb-20">
             {flashcards.map((card, index) => (
-              <div key={card.id || index} className="w-full bg-[#0a0a0a] overflow-hidden scrollbar-none flex flex-col rounded-3xl mx-auto max-w-4xl shadow-2xl">
-
-                {/* Images Carousel */}
-                {card.images && card.images.length > 0 && (
-                  <div className="flex overflow-x-auto snap-x snap-mandatory scrollbar-none bg-black">
-                    {card.images.map((img, i) => (
-                      <div key={i} className="min-w-full flex-shrink-0 snap-center flex items-center justify-center">
-                        <img src={img} alt={`${card.title} - ${i + 1}`} className="w-full h-auto object-contain max-h-[70vh]" />
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {/* Post Content */}
-                <div className="p-4 sm:p-5 flex flex-col gap-2">
-                  {/* Pagination Dots (if multiple images) */}
-                  {card.images && card.images.length > 1 && (
-                    <div className="flex justify-center gap-1.5 mb-2">
-                      {card.images.map((_, i) => (
-                        <div key={i} className="h-1.5 w-1.5 rounded-full bg-white/20" />
-                      ))}
-                    </div>
-                  )}
-                  {card.title && <h2 className="text-base font-bold text-white">{card.title}</h2>}
-                  {card.description && (
-                    <p className="text-sm text-white/80 whitespace-pre-wrap leading-relaxed">{card.description}</p>
-                  )}
-                </div>
-              </div>
+              <FlashcardFeedItem key={card.id || index} card={card} />
             ))}
           </div>
         )}

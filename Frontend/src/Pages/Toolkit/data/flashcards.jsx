@@ -313,6 +313,72 @@ export const flashcardsData = {
         "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617267/Screenshot_2026-08-13_at_4.03.14_PM_dr16ey.png",
         "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617267/Screenshot_2026-08-13_at_4.03.21_PM_bncfqp.png"
       ]
+    },
+    {
+      id: 2,
+      title: "Types of the Datastructure",
+      images: [
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786618339/Screenshot_2026-08-13_at_4.20.15_PM_swldgo.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786618335/Screenshot_2026-08-13_at_4.20.26_PM_akx23i.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786618348/Screenshot_2026-08-13_at_4.20.34_PM_exqhtp.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786618334/Screenshot_2026-08-13_at_4.20.43_PM_frxxkh.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786618339/Screenshot_2026-08-13_at_4.21.02_PM_j60p3w.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786618336/Screenshot_2026-08-13_at_4.21.16_PM_xjhlq6.png"
+      ]
+    },
+    {
+      id: 3,
+      title: "Roadmap to learn DSA from scratch",
+      images: [
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786618216/Screenshot_2026-08-13_at_4.15.39_PM_n8kg9q.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786618215/Screenshot_2026-08-13_at_4.16.05_PM_fmkrwg.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786618217/Screenshot_2026-08-13_at_4.16.15_PM_m2jhe6.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786618213/Screenshot_2026-08-13_at_4.16.26_PM_xnty9x.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786618243/Screenshot_2026-08-13_at_4.16.38_PM_j8c8f0.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786618310/Screenshot_2026-08-13_at_4.16.49_PM_y2k4dt.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786618310/Screenshot_2026-08-13_at_4.16.58_PM_im8af5.png"
+      ]
+    },
+    {
+      id: 4,
+      title: "7 tips to make you better at problem solving in DS & Algo",
+      images: [
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786618154/Screenshot_2026-08-13_at_4.13.16_PM_rgwjpm.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786618146/Screenshot_2026-08-13_at_4.13.41_PM_bfu17g.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786618148/Screenshot_2026-08-13_at_4.13.46_PM_hhsvnb.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786618150/Screenshot_2026-08-13_at_4.13.52_PM_ofanak.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786618151/Screenshot_2026-08-13_at_4.13.57_PM_q78yje.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786618151/Screenshot_2026-08-13_at_4.14.01_PM_gza49m.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786618155/Screenshot_2026-08-13_at_4.14.26_PM_tphjoc.png"
+      ]
+    },
+    {
+      id: 5,
+      title: "How to start the DSA",
+      images: [
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617753/Screenshot_2026-08-13_at_4.11.31_PM_xwuvly.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617754/Screenshot_2026-08-13_at_4.11.37_PM_ymdi91.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617769/Screenshot_2026-08-13_at_4.11.46_PM_bwys0c.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617769/Screenshot_2026-08-13_at_4.11.52_PM_acey73.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617777/Screenshot_2026-08-13_at_4.11.58_PM_ensndo.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617722/Screenshot_2026-08-13_at_4.12.02_PM_qkq1gi.png"
+      ]
+    },
+    {
+      id: 6,
+      title: "Important DSA Topics & Concepts",
+      images: [
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617732/Screenshot_2026-08-13_at_4.09.34_PM_gaicmj.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617730/Screenshot_2026-08-13_at_4.09.45_PM_r0wt78.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617735/Screenshot_2026-08-13_at_4.09.52_PM_ba5ajq.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617734/Screenshot_2026-08-13_at_4.10.00_PM_yefplg.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617736/Screenshot_2026-08-13_at_4.10.08_PM_bvrzgn.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617736/Screenshot_2026-08-13_at_4.10.17_PM_c9brmz.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617733/Screenshot_2026-08-13_at_4.10.26_PM_wnesej.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617734/Screenshot_2026-08-13_at_4.10.34_PM_rxpyrm.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617735/Screenshot_2026-08-13_at_4.10.42_PM_ntjrhh.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617739/Screenshot_2026-08-13_at_4.10.50_PM_ia8hkl.png"
+      ]
     }
   ]
 };
