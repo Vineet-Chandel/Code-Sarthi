@@ -46,6 +46,7 @@ export const technologies = [
   { id: "matlab", name: "MATLAB", tagline: "Numerical computing", description: "A proprietary multi-paradigm programming language and numeric computing environment used heavily by engineers and scientists.", color: "#E16737", icon: "BarChart2", category: "languages" },
   { id: "numpy", name: "NumPy", tagline: "Python array computing", description: "The fundamental package for scientific computing with Python, offering powerful N-dimensional array objects.", color: "#4DABCF", icon: "Calculator", category: "languages" },
   { id: "pandas", name: "Pandas", tagline: "Python data analysis", description: "A fast, powerful, flexible and easy to use open source data analysis and manipulation tool built on top of Python.", color: "#9775FA", icon: "Table2", category: "languages" },
+  { id: "dsa", name: "DSA", tagline: "Data Structures & Algorithms", description: "Essential Data Structures, Algorithms, problem-solving techniques, patterns, and golden rules for technical coding interviews.", color: "#F59E0B", icon: "Network", category: "languages" },
 
   // ─── App Development ────────────────────────────────────────────────────────
   { id: "swift", name: "Swift", tagline: "iOS & macOS apps", description: "A powerful and intuitive programming language for iOS, iPadOS, macOS, tvOS, and watchOS created by Apple.", color: "#F05138", icon: "AppleIcon", category: "app" },

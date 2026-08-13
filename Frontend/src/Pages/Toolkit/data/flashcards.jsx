@@ -294,6 +294,26 @@ export const flashcardsData = {
         "https://res.cloudinary.com/dj0ivep44/image/upload/v1786108006/photo_2026-08-07_18.33.31_itu0iq.jpg"
       ]
     }
+  ],
+  dsa: [
+    {
+      id: 1,
+      title: "Send the link for 'Golden Rules for solving a Coding Qn in an Interview'",
+      description: "Essential step-by-step strategies, mindset, and golden rules for tackling coding interview questions effectively.",
+      images: [
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617254/Screenshot_2026-08-13_at_4.01.58_PM_drqoev.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617254/Screenshot_2026-08-13_at_4.02.14_PM_qiyqvv.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617253/Screenshot_2026-08-13_at_4.02.23_PM_tg7ubw.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617254/Screenshot_2026-08-13_at_4.02.31_PM_ldscph.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617254/Screenshot_2026-08-13_at_4.02.38_PM_xvualc.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617254/Screenshot_2026-08-13_at_4.02.44_PM_cn4x2s.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617256/Screenshot_2026-08-13_at_4.02.52_PM_ln0mjn.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617268/Screenshot_2026-08-13_at_4.03.00_PM_zwcw6i.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617266/Screenshot_2026-08-13_at_4.03.07_PM_acwrt1.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617267/Screenshot_2026-08-13_at_4.03.14_PM_dr16ey.png",
+        "https://res.cloudinary.com/dj0ivep44/image/upload/v1786617267/Screenshot_2026-08-13_at_4.03.21_PM_bncfqp.png"
+      ]
+    }
   ]
 };
 

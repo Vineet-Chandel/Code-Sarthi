@@ -38,6 +38,7 @@ import bash       from "./bash.js";
 import matlab     from "./matlab.js";
 import numpy      from "./numpy.js";
 import pandas     from "./pandas.js";
+import dsa        from "./dsa.js";
 
 // ─── App Development ────────────────────────────────────────────────────────
 import swift       from "./swift.js";
@@ -76,7 +77,7 @@ const contentMap = {
 
   // Programming Languages
   javascript, typescript, python, java,
-  c, cpp, csharp, rust, ruby, bash, matlab, numpy, pandas,
+  c, cpp, csharp, rust, ruby, bash, matlab, numpy, pandas, dsa,
 
   // App Development
   swift, dart, reactnative, flutter,
