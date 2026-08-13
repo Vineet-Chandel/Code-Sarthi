@@ -1,7 +1,35 @@
 export default {
+  categories: [
+    {
+      title: "CSS Basics",
+      topicIds: ["css-introduction", "css-syntax", "css-combinators", "css-selectors", "css-comments"]
+    },
+    {
+      title: "Styling & Properties",
+      topicIds: ["css-colors", "css-background", "css-borders", "css-margins", "css-padding", "css-overflow", "css-height-width"]
+    },
+    {
+      title: "Text & Fonts",
+      topicIds: ["css-text-formatting", "css-fonts", "css-text-align", "css-text-decoration"]
+    },
+    {
+      title: "Layouts & Design",
+      topicIds: ["css-box-model", "css-display-property", "css-float-clear", "css-overflow-property", "css-z-index-property"]
+    },
+    {
+      title: "Modern Layout Systems",
+      topicIds: ["flexbox", "css-justify-content-property", "css-align-items-property", "css-align-content-property", "grid", "css-grid-template-columns-property", "css-grid-gap-property"]
+    },
+    {
+      title: "Effects, Animations & Advanced CSS",
+      topicIds: ["css-transitions", "css-transform-property", "animations", "css-box-shadow", "css-text-shadow", "css-specificity", "custom-properties", "css-variables", "css-pseudo-classes", "css-pseudo-elements"]
+    }
+  ],
   topics: [
     {
       id: "css-introduction",
+      category: "CSS Basics",
+      shortTitle: "Introduction",
       title: "CSS Introduction",
       sections: [
         {
@@ -69,6 +97,8 @@ export default {
     },
     {
       id: "css-syntax",
+      category: "CSS Basics",
+      shortTitle: "Syntax",
       title: "CSS Syntax",
       sections: [
         {
@@ -122,6 +152,8 @@ export default {
     },
     {
       id: "css-combinators",
+      category: "CSS Basics",
+      shortTitle: "Combinators",
       title: "CSS Combinators",
       sections: [
         {
@@ -155,12 +187,12 @@ export default {
 
 <body>
     <div>General sibling selector property</div>
-    <p>GeeksforGeeks</p>
+    <p>Code Sarthi</p>
     <div>
         <div>child div content</div>
-        <p>G4G</p>
+        <p>CS</p>
     </div>
-    <p>Geeks</p>
+    <p>Sarthi</p>
     <p>Hello</p>
 </body>
   
@@ -194,12 +226,12 @@ export default {
 
 <body>
     <div>Adjacent sibling selector property</div>
-    <p>GeeksforGeeks</p>
+    <p>Code Sarthi</p>
     <div>
         <div>child div content</div>
-        <p>G4G</p>
+        <p>CS</p>
     </div>
-    <p>Geeks</p>
+    <p>Sarthi</p>
     <p>Hello</p>
 </body>
   
@@ -234,12 +266,12 @@ export default {
 
 <body>
     <div>Child selector property</div>
-    <p>GeeksforGeeks</p>
+    <p>Code Sarthi</p>
     <div>
         <div>child div content</div>
-        <p>G4G</p>
+        <p>CS</p>
     </div>
-    <p>Geeks</p>
+    <p>Sarthi</p>
     <p>Hello</p>
 </body>
   
@@ -274,13 +306,13 @@ export default {
 
 <body>
     <div>Descendant selector property</div>
-    <p>GeeksforGeeks</p>
+    <p>Code Sarthi</p>
     <div>
         <div>child div content</div>
-        <p>G4G</p>
+        <p>CS</p>
         <p>Descendant selector</p>
     </div>
-    <p>Geeks</p>
+    <p>Sarthi</p>
     <p>Hello</p>
 </body>
   
@@ -295,6 +327,8 @@ export default {
     },
     {
       id: "css-selectors",
+      category: "CSS Basics",
+      shortTitle: "Selectors",
       title: "CSS Selectors",
       sections: [
         {
@@ -695,7 +729,7 @@ export default {
     }
 </style>
 <body>
-    <h1 tabindex="0">Welcome to GFG</h1>
+    <h1 tabindex="0">Welcome to CodeSarthi</h1>
 </body>
 </html>`,
         },
@@ -712,7 +746,7 @@ export default {
     }
 </style>
 <body>
-    <h1 tabindex="0">Welcome to GFG</h1>
+    <h1 tabindex="0">Welcome to CodeSarthi</h1>
 </body>
 </html>`,
         },
@@ -729,8 +763,8 @@ export default {
     }
 </style>
 <body>
-    <p>Welcome to GFG<br>
-        Hello GFG</p>
+    <p>Welcome to CodeSarthi<br>
+        Hello CodeSarthi</p>
 </body>
 </html>`,
         },
@@ -747,7 +781,7 @@ export default {
     }
 </style>
 <body>
-    <p>Welcome to GFG</p>
+    <p>Welcome to CodeSarthi</p>
 </body>
 </html>`,
         },
@@ -773,6 +807,8 @@ export default {
     },
     {
       id: "css-comments",
+      category: "CSS Basics",
+      shortTitle: "Comments",
       title: "CSS Comments",
       sections: [
         {
@@ -847,6 +883,8 @@ export default {
     },
     {
       id: "css-colors",
+      category: "Styling & Properties",
+      shortTitle: "Colors",
       title: "CSS Colors",
       sections: [
         {
@@ -1040,6 +1078,8 @@ export default {
     },
     {
       id: "css-background",
+      category: "Styling & Properties",
+      shortTitle: "Background",
       title: "CSS Background",
       sections: [
         {
@@ -1052,7 +1092,7 @@ export default {
     <style>
         body {
             background: lightblue url(
-            "https://media.geeksforgeeks.org/wp-content/cdn-uploads/20190417124305/250.png")
+            "https://media.Code Sarthi.org/wp-content/cdn-uploads/20190417124305/250.png")
             no-repeat center fixed;
         }
     </style>
@@ -1074,7 +1114,7 @@ export default {
     </style>
 </head>
 <body>
-    <h1>Geeksforgeeks</h1>
+    <h1>Code Sarthi</h1>
 </body>
 </html>`,
         },
@@ -1088,12 +1128,12 @@ export default {
     <style>
         body {
             background-image:
-                url("https://media.geeksforgeeks.org/wp-content/cdn-uploads/20190417124305/250.png");
+                url("https://media.Code Sarthi.org/wp-content/cdn-uploads/20190417124305/250.png");
         }
     </style>
 </head>
 <body>
-    <h1>Geeksforgeeks</h1>
+    <h1>Code Sarthi</h1>
 </body>
 </html>`,
         },
@@ -1107,7 +1147,7 @@ export default {
     <style>
         body {
             background-image:
-                url("https://media.geeksforgeeks.org/wp-content/cdn-uploads/20190417124305/250.png");
+                url("https://media.Code Sarthi.org/wp-content/cdn-uploads/20190417124305/250.png");
             background-repeat: repeat-x;
         }
     </style>
@@ -1127,13 +1167,13 @@ export default {
     <style>
         body {
             background-image:
-                url("https://media.geeksforgeeks.org/wp-content/cdn-uploads/20190417124305/250.png");
+                url("https://media.Code Sarthi.org/wp-content/cdn-uploads/20190417124305/250.png");
             background-attachment: fixed;
         }
     </style>
 </head>
 <body>
-    <h1>Geeksforgeeks</h1>
+    <h1>Code Sarthi</h1>
 </body>
 </html>`,
         },
@@ -1147,14 +1187,14 @@ export default {
     <style>
         body {
             background-image:
-                url("https://media.geeksforgeeks.org/wp-content/cdn-uploads/20190417124305/250.png");
+                url("https://media.Code Sarthi.org/wp-content/cdn-uploads/20190417124305/250.png");
             background-repeat: no-repeat;
             background-position: center;
         }
     </style>
 </head>
 <body>
-    <h1>Geeksforgeeks</h1>
+    <h1>Code Sarthi</h1>
 </body>
 </html>`,
         },
@@ -1195,6 +1235,8 @@ export default {
     },
     {
       id: "css-borders",
+      category: "Styling & Properties",
+      shortTitle: "Borders",
       title: "CSS Borders",
       sections: [
         {
@@ -1335,6 +1377,8 @@ export default {
     },
     {
       id: "css-margins",
+      category: "Styling & Properties",
+      shortTitle: "Margins Padding",
       title: "CSS Margins",
       sections: [
         {
@@ -1493,6 +1537,8 @@ export default {
     },
     {
       id: "css-padding",
+      category: "Styling & Properties",
+      shortTitle: "Padding",
       title: "CSS Padding",
       sections: [
         {
@@ -1697,6 +1743,8 @@ export default {
     },
     {
       id: "css-overflow",
+      category: "Styling & Properties",
+      shortTitle: "Overflow",
       title: "CSS Overflow",
       sections: [
         {
@@ -1748,7 +1796,7 @@ div {
     </style>
 </head>
 <body>
-    <h2>GEEKSFORGEEKS</h2>
+    <h2>Code Sarthi</h2>
     <p>
         The CSS overflow controls big content.
         It tells whether to clip content or to
@@ -1775,7 +1823,7 @@ div {
     </style>
 </head>
 <body>
-    <h2>GEEKSFORGEEKS</h2>
+    <h2>Code Sarthi</h2>
     <p>
         The CSS overflow controls big content.
         It tells whether to clip content or
@@ -1802,7 +1850,7 @@ div {
     </style>
 </head>
 <body>
-    <h2>GEEKSFORGEEKS</h2>
+    <h2>Code Sarthi</h2>
     <p>
         The CSS overflow controls big content.
         It tells whether to clip content or
@@ -1815,6 +1863,8 @@ div {
     },
     {
       id: "css-height-width",
+      category: "Styling & Properties",
+      shortTitle: "Height & Width",
       title: "CSS Height and Width",
       sections: [
         {
@@ -1825,14 +1875,14 @@ div {
         {
           heading: "Width and Height",
           description:
-            "The width and height properties in CSS are used to define the dimensions of an element. The values can be set in various units, such as pixels (px), centimeters (cm), percentages (%), etc.\n\n- .GFG styling: Sets width, border, text color, size, alignment, padding, and margin for the div.\n- HTML div: Displays \"GeeksforGeeks\" with the applied styles.",
+            "The width and height properties in CSS are used to define the dimensions of an element. The values can be set in various units, such as pixels (px), centimeters (cm), percentages (%), etc.\n\n- .CodeSarthi styling: Sets width, border, text color, size, alignment, padding, and margin for the div.\n- HTML div: Displays \"Code Sarthi\" with the applied styles.",
           language: "html",
           code: `<!DOCTYPE html>
 <html>
 <head>
     <title>width and height</title>
     <style>
-        .GFG {
+        .CodeSarthi {
             width: 40%;
             border: 3px solid black;
             font-size: 22px;
@@ -1845,21 +1895,21 @@ div {
     </style>
 </head>
 <body>
-    <div class="GFG">GeeksforGeeks</div>
+    <div class="CodeSarthi">Code Sarthi</div>
 </body>
 </html>`,
         },
         {
           heading: "Height and Width of Image",
           description:
-            "To set the height and width of an image, the width and height properties are used. These values can be specified in pixels, percentages, or other units.\n\n- .GFG styling: Sets the image width to 100px, height to 50px, and adds a 2px black border.\n- HTML image: Displays the image with the applied size and border styles.",
+            "To set the height and width of an image, the width and height properties are used. These values can be specified in pixels, percentages, or other units.\n\n- .CodeSarthi styling: Sets the image width to 100px, height to 50px, and adds a 2px black border.\n- HTML image: Displays the image with the applied size and border styles.",
           language: "html",
           code: `<!DOCTYPE html>
 <html>
 <head>
     <title>Height and width of image</title>
     <style>
-        .GFG {
+        .CodeSarthi {
             width: 100px;
             height: 50px;
             border: 2px solid black;
@@ -1868,21 +1918,21 @@ div {
 </head>
 <body>
     <h3>Set the width and height of an Image</h3>
-    <img class="GFG" src="https://media.geeksforgeeks.org/wp-content/uploads/20210224031038/Capture4-300x174.PNG">
+    <img class="CodeSarthi" src="https://media.Code Sarthi.org/wp-content/uploads/20210224031038/Capture4-300x174.PNG">
 </body>
 </html>`,
         },
         {
           heading: "max-width",
           description:
-            "The max-width property is used to set the maximum width of a box. Its effect can be seen by resizing the browser window.\n\n- .GFG styling: Limits the div's width to a maximum of 500px, sets font size to 12px, and adds a 2px black border.\n- HTML div content: Displays a heading and paragraph that will not exceed 500px in width.",
+            "The max-width property is used to set the maximum width of a box. Its effect can be seen by resizing the browser window.\n\n- .CodeSarthi styling: Limits the div's width to a maximum of 500px, sets font size to 12px, and adds a 2px black border.\n- HTML div content: Displays a heading and paragraph that will not exceed 500px in width.",
           language: "html",
           code: `<!DOCTYPE html>
 <html>
 <head>
     <title>max-width of element</title>
     <style>
-        .GFG {
+        .CodeSarthi {
             max-width: 500px;
             font-size: 12px;
             border: 2px solid black;
@@ -1890,12 +1940,12 @@ div {
     </style>
 </head>
 <body>
-    <div class="GFG">
-        <h3>GeeksforGeeks</h3>
+    <div class="CodeSarthi">
+        <h3>Code Sarthi</h3>
         <p>
-            GeeksforGeeks is a computer science platform
+            Code Sarthi is a computer science platform
             where you can learn programming. It is a Computer
-            Science portal for geeks.
+            Science portal for Sarthi.
         </p>
     </div>
 </body>
@@ -1911,7 +1961,7 @@ div {
 <head>
     <title>min-width of element</title>
     <style>
-        .GFG {
+        .CodeSarthi {
             min-width: 400px;
             font-size: 13px;
             border: 2px solid black;
@@ -1919,12 +1969,12 @@ div {
     </style>
 </head>
 <body>
-    <div class="GFG">
-        <h3>GeeksforGeeks</h3>
+    <div class="CodeSarthi">
+        <h3>Code Sarthi</h3>
         <p>
-            GeeksforGeeks is a computer science platform
+            Code Sarthi is a computer science platform
             where you can learn programming. It is a Computer
-            Science portal for geeks.
+            Science portal for Sarthi.
         </p>
     </div>
 </body>
@@ -1933,26 +1983,26 @@ div {
         {
           heading: "max-height",
           description:
-            "The max-height property is used to set the maximum height of a box. Its effect can be seen by resizing the browser window.\n\n- .GFG styling: Sets a maximum height of 100px and adds a 2px black border to the div.\n- HTML div content: Displays a heading and paragraph, which will be restricted to the max height of 100px.",
+            "The max-height property is used to set the maximum height of a box. Its effect can be seen by resizing the browser window.\n\n- .CodeSarthi styling: Sets a maximum height of 100px and adds a 2px black border to the div.\n- HTML div content: Displays a heading and paragraph, which will be restricted to the max height of 100px.",
           language: "html",
           code: `<!DOCTYPE html>
 <html>
 <head>
     <title>max-height of element</title>
     <style>
-        .GFG {
+        .CodeSarthi {
             max-height: 100px;
             border: 2px solid black;
         }
     </style>
 </head>
 <body>
-    <div class="GFG">
-        <h3>GeeksforGeeks</h3>
+    <div class="CodeSarthi">
+        <h3>Code Sarthi</h3>
         <p>
-            GeeksforGeeks is a computer science platform
+            Code Sarthi is a computer science platform
             where you can learn programming. It is a Computer
-            Science portal for geeks.
+            Science portal for Sarthi.
         </p>
     </div>
 </body>
@@ -1961,26 +2011,26 @@ div {
         {
           heading: "min-height",
           description:
-            "The min-height property is used to set the minimum height of a box. Its effect can be seen by resizing the browser window.\n\n- .GFG styling: Sets a minimum height of 50px and adds a 2px black border to the div.\n- HTML div content: Ensures the div is at least 50px tall while displaying the heading and paragraph.",
+            "The min-height property is used to set the minimum height of a box. Its effect can be seen by resizing the browser window.\n\n- .CodeSarthi styling: Sets a minimum height of 50px and adds a 2px black border to the div.\n- HTML div content: Ensures the div is at least 50px tall while displaying the heading and paragraph.",
           language: "html",
           code: `<!DOCTYPE html>
 <html>
 <head>
     <title>min-height of element</title>
     <style>
-        .GFG {
+        .CodeSarthi {
             min-height: 50px;
             border: 2px solid black;
         }
     </style>
 </head>
 <body>
-    <div class="GFG">
-        <h3>GeeksforGeeks</h3>
+    <div class="CodeSarthi">
+        <h3>Code Sarthi</h3>
         <p>
-            GeeksforGeeks is a computer science platform
+            Code Sarthi is a computer science platform
             where you can learn programming. It is a Computer
-            Science portal for geeks.
+            Science portal for Sarthi.
         </p>
     </div>
 </body>
@@ -1990,6 +2040,8 @@ div {
     },
     {
       id: "css-text-formatting",
+      category: "Text & Fonts",
+      shortTitle: "Text Formatting",
       title: "CSS Text Formatting",
       sections: [
         {
@@ -2054,7 +2106,7 @@ div {
     </style>
 </head>
 <body>
-    <p>Hello GFG</p>
+    <p>Hello CodeSarthi</p>
 </body>
 </html>`,
         },
@@ -2242,7 +2294,7 @@ div {
     </style>
 </head>
 <body>
-    <h1>NEWSPAPER GeeksforGeeks</h1>
+    <h1>NEWSPAPER Code Sarthi</h1>
     <div>
         CSS Text Formatting refers to applying styles to text elements to control appearance and layout.
         This includes properties for color, alignment, decoration, indentation, justification, shadows,
@@ -2289,7 +2341,7 @@ div {
     </style>
 </head>
 <body>
-    <p>Welcome to GeeksforGeeks</p>
+    <p>Welcome to Code Sarthi</p>
 </body>
 </html>`,
         },
@@ -2310,7 +2362,7 @@ div {
     </style>
 </head>
 <body>
-    <p>Welcome to GeeksforGeeks</p>
+    <p>Welcome to Code Sarthi</p>
 </body>
 </html>`,
         },
@@ -2331,7 +2383,7 @@ div {
     </style>
 </head>
 <body>
-    <bdo dir="rtl">Welcome to GeeksforGeeks</bdo>
+    <bdo dir="rtl">Welcome to Code Sarthi</bdo>
 </body>
 </html>`,
         },
@@ -2339,6 +2391,8 @@ div {
     },
     {
       id: "css-fonts",
+      category: "Text & Fonts",
+      shortTitle: "Fonts",
       title: "CSS Fonts",
       sections: [
         {
@@ -2349,7 +2403,7 @@ div {
           code: `<html>
 <head>
     <style>
-        .gfg {
+        .CodeSarthi {
             font-family: Arial, Helvetica, sans-serif;
             font-size: 60px;
             color: #090;
@@ -2358,7 +2412,7 @@ div {
     </style>
 </head>
 <body>
-    <div class="gfg">GeeksforGeeks</div>
+    <div class="CodeSarthi">Code Sarthi</div>
 </body>
 </html>`,
         },
@@ -2466,6 +2520,8 @@ p {
     },
     {
       id: "css-text-align",
+      category: "Text & Fonts",
+      shortTitle: "Text Align Property",
       title: "CSS text-align Property",
       sections: [
         {
@@ -2505,27 +2561,27 @@ p {
         .main {
             border: 1px solid black;
         }
-        .gfg1 {
+        .CodeSarthi1 {
             text-align: left;
         }
-        .gfg2 {
+        .CodeSarthi2 {
             text-align: right;
         }
-        .gfg3 {
+        .CodeSarthi3 {
             text-align: center;
         }
-        .gfg4 {
+        .CodeSarthi4 {
             text-align: justify;
         }
     </style>
 </head>
 <body>
-    <h1>GeeksforGeeks</h1>
+    <h1>Code Sarthi</h1>
     <h2>text-align property</h2>
 
     <div class="main">
         <h3>text-align: left;</h3>
-        <div class="gfg1">
+        <div class="CodeSarthi1">
             The course is designed for students as well as working professionals to
             prepare for coding interviews. This course is going to have coding questions
             from school level to the level needed for product based companies like Amazon,
@@ -2535,7 +2591,7 @@ p {
     <br>
     <div class="main">
         <h3 style="text-align: right;">text-align: right;</h3>
-        <div class="gfg2">
+        <div class="CodeSarthi2">
             The course is designed for students as well as working professionals to
             prepare for coding interviews. This course is going to have coding questions
             from school level to the level needed for product based companies like Amazon,
@@ -2545,7 +2601,7 @@ p {
     <br>
     <div class="main">
         <h3 style="text-align: center;">text-align: center;</h3>
-        <div class="gfg3">
+        <div class="CodeSarthi3">
             The course is designed for students as well as working professionals to
             prepare for coding interviews. This course is going to have coding questions
             from school level to the level needed for product based companies like Amazon,
@@ -2555,7 +2611,7 @@ p {
     <br>
     <div class="main">
         <h3 style="text-align: justify;">text-align: justify;</h3>
-        <div class="gfg4">
+        <div class="CodeSarthi4">
             The course is designed for students as well as working professionals to
             prepare for coding interviews. This course is going to have coding questions
             from school level to the level needed for product based companies like Amazon,
@@ -2569,6 +2625,8 @@ p {
     },
     {
       id: "css-text-decoration",
+      category: "Text & Fonts",
+      shortTitle: "Text Decoration Property",
       title: "CSS text-decoration Property",
       sections: [
         {
@@ -2636,6 +2694,8 @@ p {
     },
     {
       id: "css-box-model",
+      category: "Layouts & Design",
+      shortTitle: "Box Model",
       title: "CSS Box Model",
       sections: [
         {
@@ -2672,7 +2732,7 @@ p {
     </style>
 </head>
 <body>
-    <div>Hello GFG</div>
+    <div>Hello CodeSarthi</div>
 </body>
 </html>`,
           image: {
@@ -2700,7 +2760,7 @@ p {
     </style>
 </head>
 <body>
-    <div>Hello GFG</div>
+    <div>Hello CodeSarthi</div>
 </body>
 </html>`,
           image: {
@@ -2831,6 +2891,8 @@ p {
     },
     {
       id: "css-display-property",
+      category: "Layouts & Design",
+      shortTitle: "Display Property",
       title: "CSS Display Property",
       sections: [
         {
@@ -2886,35 +2948,35 @@ p {
           code: `<html>
 <head>
     <style>
-        #geeks1 {
+        #Sarthi1 {
             height: 100px;
             width: 200px;
             background: teal;
             display: block;
         }
 
-        #geeks2 {
+        #Sarthi2 {
             height: 100px;
             width: 200px;
             background: cyan;
             display: block;
         }
 
-        #geeks3 {
+        #Sarthi3 {
             height: 100px;
             width: 200px;
             background: green;
             display: block;
         }
 
-        .gfg {
+        .CodeSarthi {
             margin-left: 20px;
             font-size: 42px;
             font-weight: bold;
             color: #009900;
         }
 
-        .geeks {
+        .Sarthi {
             font-size: 25px;
             margin-left: 30px;
         }
@@ -2926,12 +2988,12 @@ p {
     </style>
 </head>
 <body>
-    <div class="gfg">GeeksforGeeks</div>
-    <div class="geeks">display: block; property</div>
+    <div class="CodeSarthi">Code Sarthi</div>
+    <div class="Sarthi">display: block; property</div>
     <div class="main">
-        <div id="geeks1">Block 1</div>
-        <div id="geeks2">Block 2</div>
-        <div id="geeks3">Block 3</div>
+        <div id="Sarthi1">Block 1</div>
+        <div id="Sarthi2">Block 2</div>
+        <div id="Sarthi3">Block 3</div>
     </div>
 </body>
 </html>`,
@@ -2941,20 +3003,20 @@ p {
           description:
             "This is the default property for <div> elements. It places them vertically, one after another. You can adjust the height and width of a block-level element.",
           language: "css",
-          code: `#geeks1 {
+          code: `#Sarthi1 {
        background: teal;
        display: block;
 }
-#geeks2 {
+#Sarthi2 {
        background: cyan;
        display: block;
 }
-#geeks3 {
+#Sarthi3 {
        background: green;
        display: block;
 }`,
           image: {
-            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1785597212/952a8ac1-e89e-4dc6-ba0a-51d09036cb48.png",
+            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1786524618/952a8ac1-e89e-4dc6-ba0a-51d09036cb48.png",
             alt: "Display block output",
           },
         },
@@ -2963,20 +3025,20 @@ p {
           description:
             "Use this property to display an element inline. It doesn’t start a new line and respects the content flow.",
           language: "css",
-          code: `#geeks1 {
+          code: `#Sarthi1 {
        background: teal;
        display: inline;
 }
-#geeks2 {
+#Sarthi2 {
        background: cyan;
        display: inline;
 }
-#geeks3 {
+#Sarthi3 {
        background: green;
        display: inline;
 }`,
           image: {
-            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1785597239/8ef93f48-ef84-4201-8645-b50a496d988e.png",
+            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1786524704/8ef93f48-ef84-4201-8645-b50a496d988e.png",
             alt: "Display inline output",
           },
         },
@@ -2985,20 +3047,20 @@ p {
           description:
             "Combining characteristics of both block and inline, this value allows elements to flow inline while still having block-level properties. It’s useful for creating responsive layouts.",
           language: "css",
-          code: `#geeks1 {
+          code: `#Sarthi1 {
         background: teal;
         display: inline-block;
 } 
-#geeks2 {
+#Sarthi2 {
         background: cyan;
         display: inline-block; 
 } 
-#geeks3 {
+#Sarthi3 {
         background: green;
         display: inline-block;
 }`,
           image: {
-            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1785597264/e66c2c12-f32e-4ddc-9f34-444cfd34b2e3.png",
+            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1786524813/e66c2c12-f32e-4ddc-9f34-444cfd34b2e3.png",
             alt: "Display inline-block output",
           },
         },
@@ -3007,12 +3069,12 @@ p {
           description:
             "This property hides the div or the container which uses this property. Applying it on block 2 completely removes it from the layout flow.",
           language: "css",
-          code: `#geeks2 {
+          code: `#Sarthi2 {
          background: cyan;
          display: none;
 }`,
           image: {
-            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1785597286/87ee2405-5b79-4b66-8215-302784c55cdf.png",
+            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1786525011/87ee2405-5b79-4b66-8215-302784c55cdf.png",
             alt: "Display none output on block 2",
           },
         },
@@ -3030,6 +3092,8 @@ p {
     },
     {
       id: "css-float-clear",
+      category: "Layouts & Design",
+      shortTitle: "Float and Clear",
       title: "CSS Layout - Float and Clear",
       sections: [
         {
@@ -3252,6 +3316,8 @@ p {
     },
     {
       id: "css-overflow-property",
+      category: "Layouts & Design",
+      shortTitle: "Overflow Property",
       title: "CSS overflow Property",
       sections: [
         {
@@ -3286,7 +3352,7 @@ p {
 </head>
 
 <body>
-    <h1>GeeksforGeeks</h1>
+    <h1>Code Sarthi</h1>
 
     <h3>CSS overflow Property</h3>
 
@@ -3330,7 +3396,7 @@ p {
 </head>
 
 <body>
-    <h1>GeeksforGeeks</h1>
+    <h1>Code Sarthi</h1>
     <h3>CSS overflow Property</h3>
     <p>
         CSS (Cascading Style Sheets) is used to 
@@ -3347,7 +3413,7 @@ p {
 </body>
 </html>`,
           image: {
-            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1785597634/83790c77-7e59-44c2-b9f2-23468c0462dc.png",
+            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1786526699/83790c77-7e59-44c2-b9f2-23468c0462dc.png",
             alt: "CSS overflow hidden output example",
           },
         },
@@ -3360,6 +3426,8 @@ p {
     },
     {
       id: "css-z-index-property",
+      category: "Layouts & Design",
+      shortTitle: "Index Property",
       title: "CSS z-index Property",
       sections: [
         {
@@ -3543,6 +3611,8 @@ p {
     },
     {
       id: "flexbox",
+      category: "Modern Layout Systems",
+      shortTitle: "Flexbox",
       title: "CSS Flexbox",
       sections: [
         {
@@ -3721,6 +3791,8 @@ p {
     },
     {
       id: "css-justify-content-property",
+      category: "Modern Layout Systems",
+      shortTitle: "Content Property",
       title: "CSS justify-content Property",
       sections: [
         {
@@ -3756,22 +3828,22 @@ p {
 <body>
     <div id="box">
         <div>1
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
         <div>2
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
         <div>3
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
         <div>4
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
     </div>
 </body>
 </html>`,
           image: {
-            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1785598233/fb5a0c78-139a-4ea3-9217-a65450ceaa1b.png",
+            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1786527418/1259998d-52ff-4439-91ce-3829e302dfe8.png",
             alt: "CSS justify-content flex-start visual output",
           },
         },
@@ -3803,22 +3875,22 @@ p {
 <body>
     <div id="box">
         <div>1
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
         <div>2
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
         <div>3
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
         <div>4
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
     </div>
 </body>
 </html>`,
           image: {
-            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1785598268/ea6db904-341d-496b-9521-67349543f29f.png",
+            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1786612364/f7267ff0-5be9-4b2f-ac4f-7dd60cda5605.png",
             alt: "CSS justify-content flex-end visual output",
           },
         },
@@ -3850,22 +3922,22 @@ p {
 <body>
     <div id="box">
         <div>1
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
         <div>2
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
         <div>3
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
         <div>4
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
     </div>
 </body>
 </html>`,
           image: {
-            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1785599092/540b0f02-dd49-4eb6-b68f-10a2365f238f.png",
+            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1786612505/540b0f02-dd49-4eb6-b68f-10a2365f238f.png",
             alt: "CSS justify-content center visual output",
           },
         },
@@ -3897,22 +3969,22 @@ p {
 <body>
     <div id="box">
         <div>1
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
         <div>2
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
         <div>3
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
         <div>4
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
     </div>
 </body>
 </html>`,
           image: {
-            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1785599138/54e549ce-0165-464a-9bd4-fc77c28dc990.png",
+            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1786612867/54e549ce-0165-464a-9bd4-fc77c28dc990.png",
             alt: "CSS justify-content space-between visual output",
           },
         },
@@ -3944,22 +4016,22 @@ p {
 <body>
     <div id="box">
         <div>1
-            <p>GeeksForGeeks</p>
+            <p>Code Sarthi</p>
         </div>
         <div>2
-            <p>GeeksForGeeks</p>
+            <p>Code Sarthi</p>
         </div>
         <div>3
-            <p>GeeksForGeeks</p>
+            <p>Code Sarthi</p>
         </div>
         <div>4
-            <p>GeeksForGeeks</p>
+            <p>Code Sarthi</p>
         </div>
     </div>
 </body>
 </html>`,
           image: {
-            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1785599151/77f66cdc-479a-40f3-bd06-c7e5bc39995c.png",
+            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1786612954/77f66cdc-479a-40f3-bd06-c7e5bc39995c.png",
             alt: "CSS justify-content space-around visual output",
           },
         },
@@ -3991,22 +4063,22 @@ p {
 <body>
     <div id="box">
         <div>1
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
         <div>2
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
         <div>3
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
         <div>4
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
     </div>
 </body>
 </html>`,
           image: {
-            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1785599184/eb9b9e7b-bd53-4ca4-a42d-ff8b07ba7ee1.png",
+            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1786613020/eb9b9e7b-bd53-4ca4-a42d-ff8b07ba7ee1.png",
             alt: "CSS justify-content space-evenly visual output",
           },
         },
@@ -4038,22 +4110,22 @@ p {
 <body>
     <div id="box">
         <div>1
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
         <div>2
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
         <div>3
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
         <div>4
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
     </div>
 </body>
 </html>`,
           image: {
-            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1785599225/f7267ff0-5be9-4b2f-ac4f-7dd60cda5605.png",
+            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1786527418/1259998d-52ff-4439-91ce-3829e302dfe8.png",
             alt: "CSS justify-content initial visual output",
           },
         },
@@ -4085,22 +4157,22 @@ p {
 <body>
     <div id="box">
         <div>1
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
         <div>2
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
         <div>3
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
         <div>4
-            <p>GeeksforGeeks</p>
+            <p>Code Sarthi</p>
         </div>
     </div>
 </body>
 </html>`,
           image: {
-            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1785599239/1259998d-52ff-4439-91ce-3829e302dfe8.png",
+            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1786527418/1259998d-52ff-4439-91ce-3829e302dfe8.png",
             alt: "CSS justify-content inherit visual output",
           },
         },
@@ -4113,6 +4185,8 @@ p {
     },
     {
       id: "css-align-items-property",
+      category: "Modern Layout Systems",
+      shortTitle: "Align Items Property",
       title: "CSS align-items Property",
       sections: [
         {
@@ -4144,7 +4218,7 @@ p {
 
 <body>
     <center>
-        <h1 style="color:green;">GeeksforGeeks</h1>
+        <h1 style="color:green;">Code Sarthi</h1>
 
         <div id="normal">
             <div style="background-color:blue;">
@@ -4158,7 +4232,7 @@ p {
 </body>
 </html>`,
           image: {
-            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1785599372/dbca687f-53b4-43a8-9ec9-2a5f6d73c2eb.png",
+            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1786615411/dbca687f-53b4-43a8-9ec9-2a5f6d73c2eb.png",
             alt: "CSS align-items normal visual output",
           },
         },
@@ -4186,7 +4260,7 @@ p {
 
 <body>
     <center>
-        <h1 style="color:green;">GeeksforGeeks</h1>
+        <h1 style="color:green;">Code Sarthi</h1>
 
         <div id="stretch">
             <div style="background-color:Purple;">
@@ -4200,7 +4274,7 @@ p {
 </body>
 </html>`,
           image: {
-            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1785599406/dd15121d-1101-49bd-8d38-94a4ae9422e0.png",
+            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1786615785/dd15121d-1101-49bd-8d38-94a4ae9422e0.png",
             alt: "CSS align-items stretch visual output",
           },
         },
@@ -4228,7 +4302,7 @@ p {
 
 <body>
     <center>
-        <h1 style="color:green;">GeeksforGeeks</h1>
+        <h1 style="color:green;">Code Sarthi</h1>
 
         <div id="center">
             <div style="background-color:Purple;">
@@ -4241,6 +4315,11 @@ p {
     </center>
 </body>
 </html>`,
+
+          image: {
+            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1786616112/edf9d685-495e-471f-bf48-142f0732a476.png",
+            alt: "CSS align-items stretch visual output",
+          },
         },
         {
           heading: "4. flex-start Value",
@@ -4266,7 +4345,7 @@ p {
 
 <body>
     <center>
-        <h1 style="color:green;">GeeksforGeeks</h1>
+        <h1 style="color:green;">Code Sarthi</h1>
 
         <div id="flex-start">
             <div style="background-color:Purple;">
@@ -4280,7 +4359,7 @@ p {
 </body>
 </html>`,
           image: {
-            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1785599467/1d96f713-fc8f-46c9-af1c-44cb405dded9.png",
+            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1786615840/1d96f713-fc8f-46c9-af1c-44cb405dded9.png",
             alt: "CSS align-items flex-start visual output",
           },
         },
@@ -4308,7 +4387,7 @@ p {
 
 <body>
     <center>
-        <h1 style="color:green;">GeeksforGeeks</h1>
+        <h1 style="color:green;">Code Sarthi</h1>
 
         <div id="flex-end">
             <div style="background-color:Purple;">
@@ -4322,7 +4401,7 @@ p {
 </body>
 </html>`,
           image: {
-            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1785599534/1b19df9c-bd9d-4123-a502-7fbd1a833ad0.png",
+            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1786616321/1b19df9c-bd9d-4123-a502-7fbd1a833ad0.png",
             alt: "CSS align-items flex-end visual output",
           },
         },
@@ -4350,7 +4429,7 @@ p {
 
 <body>
     <center>
-        <h1 style="color:green;">GeeksforGeeks</h1>
+        <h1 style="color:green;">Code Sarthi</h1>
 
         <div id="baseline">
             <div style="background-color:Purple;">
@@ -4364,7 +4443,7 @@ p {
 </body>
 </html>`,
           image: {
-            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1785599569/1be3e875-08ed-47ad-a07f-18d9c91e4b54.png",
+            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1786615840/1d96f713-fc8f-46c9-af1c-44cb405dded9.png",
             alt: "CSS align-items baseline visual output",
           },
         },
@@ -4392,7 +4471,7 @@ p {
 
 <body>
     <center>
-        <h1 style="color:green;">GeeksforGeeks</h1>
+        <h1 style="color:green;">Code Sarthi</h1>
 
         <div id="initial">
             <div style="background-color:Purple;">
@@ -4406,7 +4485,7 @@ p {
 </body>
 </html>`,
           image: {
-            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1785599609/76a1085f-85c5-4d34-838b-1f302f540471.png",
+            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1786615785/dd15121d-1101-49bd-8d38-94a4ae9422e0.png",
             alt: "CSS align-items initial visual output",
           },
         },
@@ -4442,7 +4521,7 @@ p {
 
 <body>
     <center>
-        <h1 style="color:green;">GeeksforGeeks</h1>
+        <h1 style="color:green;">Code Sarthi</h1>
 
         <div id="parent">
             <div style="background-color:Purple;">
@@ -4465,7 +4544,7 @@ p {
 </body>
 </html>`,
           image: {
-            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1785599644/d558f5ac-add9-4dce-9c2a-c34a6b14d61a.png",
+            url: "https://res.cloudinary.com/dj0ivep44/image/upload/v1786616636/d558f5ac-add9-4dce-9c2a-c34a6b14d61a.png",
             alt: "CSS align-items inherit visual output",
           },
         },
@@ -4478,6 +4557,8 @@ p {
     },
     {
       id: "css-align-content-property",
+      category: "Modern Layout Systems",
+      shortTitle: "Align Content Property",
       title: "CSS align-content Property",
       sections: [
         {
@@ -4513,7 +4594,7 @@ p {
             h2 {
                 text-align:center;
             }
-            .geeks {
+            .Sarthi {
                 font-size:40px;
                 text-align:center;
                 color:#009900;
@@ -4522,7 +4603,7 @@ p {
         </style>
     </head>
     <body>
-        <div class="geeks">GeeksforGeeks</div>
+        <div class="Sarthi">Code Sarthi</div>
         <h2>align-content: center;</h2>
         <div class="main-container">
             <div>1</div>
@@ -4571,7 +4652,7 @@ p {
             h2 {
                 text-align:center;
             }
-            .geeks {
+            .Sarthi {
                 font-size:40px;
                 text-align:center;
                 color:#009900;
@@ -4580,7 +4661,7 @@ p {
         </style>
     </head>
     <body>
-        <div class="geeks">GeeksforGeeks</div>
+        <div class="Sarthi">Code Sarthi</div>
         <h2>align-content: stretch;</h2>
         <div class="main-container">
             <div>1</div>
@@ -4629,7 +4710,7 @@ p {
             h2 {
                 text-align:center;
             }
-            .geeks {
+            .Sarthi {
                 font-size:40px;
                 text-align:center;
                 color:#009900;
@@ -4638,7 +4719,7 @@ p {
         </style>
     </head>
     <body>
-        <div class="geeks">GeeksforGeeks</div>
+        <div class="Sarthi">Code Sarthi</div>
         <h2>align-content: flex-start;</h2>
         <div class="main-container">
             <div>1</div>
@@ -4687,7 +4768,7 @@ p {
             h2 {
                 text-align:center;
             }
-            .geeks {
+            .Sarthi {
                 font-size:40px;
                 text-align:center;
                 color:#009900;
@@ -4696,7 +4777,7 @@ p {
         </style>
     </head>
     <body>
-        <div class="geeks">GeeksforGeeks</div>
+        <div class="Sarthi">Code Sarthi</div>
         <h2>align-content: flex-end;</h2>
         <div class="main-container">
             <div>1</div>
@@ -4745,7 +4826,7 @@ p {
             h2 {
                 text-align:center;
             }
-            .geeks {
+            .Sarthi {
                 font-size:40px;
                 text-align:center;
                 color:#009900;
@@ -4754,7 +4835,7 @@ p {
         </style>
     </head>
     <body>
-        <div class="geeks">GeeksforGeeks</div>
+        <div class="Sarthi">Code Sarthi</div>
         <h2>align-content: space-around;</h2>
         <div class="main-container">
             <div>1</div>
@@ -4803,7 +4884,7 @@ p {
             h2 {
                 text-align:center;
             }
-            .geeks {
+            .Sarthi {
                 font-size:40px;
                 text-align:center;
                 color:#009900;
@@ -4812,7 +4893,7 @@ p {
         </style>
     </head>
     <body>
-        <div class="geeks">GeeksforGeeks</div>
+        <div class="Sarthi">Code Sarthi</div>
         <h2>align-content: space-between;</h2>
         <div class="main-container">
             <div>1</div>
@@ -4842,6 +4923,8 @@ p {
     },
     {
       id: "grid",
+      category: "Modern Layout Systems",
+      shortTitle: "Grid Layout",
       title: "CSS Grid Layout Module",
       sections: [
         {
@@ -5007,6 +5090,8 @@ footer  { grid-area: footer; }`,
     },
     {
       id: "css-grid-template-columns-property",
+      category: "Modern Layout Systems",
+      shortTitle: "Grid Template Columns Property",
       title: "CSS grid-template-columns Property",
       sections: [
         {
@@ -5027,7 +5112,7 @@ footer  { grid-area: footer; }`,
     </title>
 
     <style>
-        .geeks {
+        .Sarthi {
             background-color: green;
             padding: 30px;
             display: grid;
@@ -5035,7 +5120,7 @@ footer  { grid-area: footer; }`,
             grid-gap: 10px;
         }
 
-        .GFG {
+        .CodeSarthi {
             background-color: white;
             border: 1px solid white;
             font-size: 30px;
@@ -5045,15 +5130,15 @@ footer  { grid-area: footer; }`,
 </head>
 
 <body>
-    <div class="geeks">
-        <div class="GFG">A</div>
-        <div class="GFG">B</div>
-        <div class="GFG">C</div>
-        <div class="GFG">D</div>
-        <div class="GFG">E</div>
-        <div class="GFG">F</div>
-        <div class="GFG">G</div>
-        <div class="GFG">H</div>
+    <div class="Sarthi">
+        <div class="CodeSarthi">A</div>
+        <div class="CodeSarthi">B</div>
+        <div class="CodeSarthi">C</div>
+        <div class="CodeSarthi">D</div>
+        <div class="CodeSarthi">E</div>
+        <div class="CodeSarthi">F</div>
+        <div class="CodeSarthi">G</div>
+        <div class="CodeSarthi">H</div>
     </div>
 </body>
 </html>`,
@@ -5075,7 +5160,7 @@ footer  { grid-area: footer; }`,
     </title>
 
     <style>
-        .geeks {
+        .Sarthi {
             background-color: green;
             padding: 30px;
             display: grid;
@@ -5084,7 +5169,7 @@ footer  { grid-area: footer; }`,
             grid-gap: 10px;
         }
 
-        .GFG {
+        .CodeSarthi {
             background-color: white;
             border: 1px solid white;
             font-size: 30px;
@@ -5094,15 +5179,15 @@ footer  { grid-area: footer; }`,
 </head>
 
 <body>
-    <div class="geeks">
-        <div class="GFG">Geeks</div>
-        <div class="GFG">GFG</div>
-        <div class="GFG">C</div>
-        <div class="GFG">D</div>
-        <div class="GFG">E</div>
-        <div class="GFG">F</div>
-        <div class="GFG">G</div>
-        <div class="GFG">H</div>
+    <div class="Sarthi">
+        <div class="CodeSarthi">Sarthi</div>
+        <div class="CodeSarthi">CodeSarthi</div>
+        <div class="CodeSarthi">C</div>
+        <div class="CodeSarthi">D</div>
+        <div class="CodeSarthi">E</div>
+        <div class="CodeSarthi">F</div>
+        <div class="CodeSarthi">G</div>
+        <div class="CodeSarthi">H</div>
     </div>
 </body>
 </html>`,
@@ -5120,6 +5205,8 @@ footer  { grid-area: footer; }`,
     },
     {
       id: "css-grid-gap-property",
+      category: "Modern Layout Systems",
+      shortTitle: "Grid Gap Property",
       title: "CSS grid-gap Property",
       sections: [
         {
@@ -5167,7 +5254,7 @@ footer  { grid-area: footer; }`,
 </head>
 
 <body>
-    <h1>GeeksforGeeks</h1>
+    <h1>Code Sarthi</h1>
     <h2>Grid-gap property</h2>
     <p>This grid has a 50px gap between
         columns and 10px gap between rows:
@@ -5227,7 +5314,7 @@ footer  { grid-area: footer; }`,
 </head>
 
 <body>
-    <h1>GeeksforGeeks</h1>
+    <h1>Code Sarthi</h1>
     <h2>Grid-gap property</h2>
     <p>This grid has a 8% gap between columns
         and 5% gap between rows:
@@ -5256,6 +5343,8 @@ footer  { grid-area: footer; }`,
     },
     {
       id: "custom-properties",
+      category: "Effects, Animations & Advanced CSS",
+      shortTitle: "Custom Properties",
       title: "Custom Properties",
       sections: [
         {
@@ -5309,6 +5398,8 @@ body {
     },
     {
       id: "css-transitions",
+      category: "Effects, Animations & Advanced CSS",
+      shortTitle: "Transitions",
       title: "CSS Transitions",
       sections: [
         {
@@ -5467,6 +5558,8 @@ body {
     },
     {
       id: "css-transform-property",
+      category: "Effects, Animations & Advanced CSS",
+      shortTitle: "Transform Property",
       title: "CSS transform Property",
       sections: [
         {
@@ -5483,7 +5576,7 @@ body {
         background-color: green;
     }
     
-    .GFG {
+    .CodeSarthi {
         text-align: center;
         font-size: 35px;
         background-color: white;
@@ -5494,7 +5587,7 @@ body {
 </head>
 <body>
     <div class="main">
-        <div class="GFG">GeeksforGeeks</div>
+        <div class="CodeSarthi">Code Sarthi</div>
     </div>
 </body>
 </html>`,
@@ -5507,7 +5600,7 @@ body {
         {
           heading: "Example 1: Without the transform Property",
           description:
-            "This baseline demonstration displays a standard un-transformed card layout element (`.GFG`) rendered inside a green grid wrapper (`.main`) without any `transform` geometry applied, providing a visual reference point.",
+            "This baseline demonstration displays a standard un-transformed card layout element (`.CodeSarthi`) rendered inside a green grid wrapper (`.main`) without any `transform` geometry applied, providing a visual reference point.",
           language: "html",
           code: `<html>
 <head>
@@ -5518,7 +5611,7 @@ body {
         background-color: green;
     }
     
-    .GFG {
+    .CodeSarthi {
         text-align: center;
         font-size: 35px;
         background-color: white;
@@ -5529,7 +5622,7 @@ body {
 
 <body>
     <div class="main">
-        <div class="GFG">GeeksforGeeks</div>
+        <div class="CodeSarthi">Code Sarthi</div>
     </div>
 </body>
 </html>`,
@@ -5549,7 +5642,7 @@ body {
         transform-style: preserve-3d;
     }
     
-    .GFG {
+    .CodeSarthi {
         text-align: center;
         font-size: 35px;
         background-color: white;
@@ -5563,7 +5656,7 @@ body {
 
 <body>
     <div class="main">
-        <div class="GFG">GeeksforGeeks</div>
+        <div class="CodeSarthi">Code Sarthi</div>
     </div>
 </body>
 </html>`,
@@ -5581,7 +5674,7 @@ body {
         padding: 30px;
         background-color: green;
     }
-    .GFG {
+    .CodeSarthi {
         text-align: center;
         font-size: 35px;
         background-color: white;
@@ -5592,7 +5685,7 @@ body {
 </head>
 <body>
     <div class="main">
-        <div class="GFG">GeeksforGeeks</div>
+        <div class="CodeSarthi">Code Sarthi</div>
     </div>
 </body>
 </html>`,
@@ -5610,7 +5703,7 @@ body {
         padding: 30px;
         background-color: green;
     }
-    .GFG {
+    .CodeSarthi {
         text-align: center;
         font-size: 35px;
         background-color: white;
@@ -5621,7 +5714,7 @@ body {
 </head>
 <body>
     <div class="main">
-        <div class="GFG">GeeksforGeeks</div>
+        <div class="CodeSarthi">Code Sarthi</div>
     </div>
 </body>
 </html>`,
@@ -5639,7 +5732,7 @@ body {
         padding: 30px;
         background-color: green;
     }
-    .GFG {
+    .CodeSarthi {
         text-align: center;
         font-size: 35px;
         background-color: white;
@@ -5650,7 +5743,7 @@ body {
 </head>
 <body>
     <div class="main">
-        <div class="GFG">GeeksforGeeks</div>
+        <div class="CodeSarthi">Code Sarthi</div>
     </div>
 </body>
 </html>`,
@@ -5668,7 +5761,7 @@ body {
         padding: 30px;
         background-color: green;
     }
-    .GFG {
+    .CodeSarthi {
         text-align: center;
         font-size: 35px;
         background-color: white;
@@ -5679,7 +5772,7 @@ body {
 </head>
 <body>
     <div class="main">
-        <div class="GFG">GeeksforGeeks</div>
+        <div class="CodeSarthi">Code Sarthi</div>
     </div>
 </body>
 </html>`,
@@ -5697,7 +5790,7 @@ body {
         padding: 30px;
         background-color: green;
     }
-    .GFG {
+    .CodeSarthi {
         text-align: center;
         font-size: 35px;
         background-color: white;
@@ -5708,7 +5801,7 @@ body {
 </head>
 <body>
     <div class="main">
-        <div class="GFG">GeeksforGeeks</div>
+        <div class="CodeSarthi">Code Sarthi</div>
     </div>
 </body>
 </html>`,
@@ -5726,7 +5819,7 @@ body {
         padding: 30px;
         background-color: green;
     }
-    .GFG {
+    .CodeSarthi {
         text-align: center;
         font-size: 35px;
         background-color: white;
@@ -5737,7 +5830,7 @@ body {
 </head>
 <body>
     <div class="main">
-        <div class="GFG">GeeksforGeeks</div>
+        <div class="CodeSarthi">Code Sarthi</div>
     </div>
 </body>
 </html>`,
@@ -5755,7 +5848,7 @@ body {
         padding: 30px;
         background-color: green;
     }
-    .GFG {
+    .CodeSarthi {
         text-align: center;
         font-size: 35px;
         background-color: white;
@@ -5766,7 +5859,7 @@ body {
 </head>
 <body>
     <div class="main">
-        <div class="GFG">GeeksforGeeks</div>
+        <div class="CodeSarthi">Code Sarthi</div>
     </div>
 </body>
 </html>`,
@@ -5784,7 +5877,7 @@ body {
         padding: 30px;
         background-color: green;
     }
-    .GFG {
+    .CodeSarthi {
         text-align: center;
         font-size: 35px;
         background-color: white;
@@ -5795,7 +5888,7 @@ body {
 </head>
 <body>
     <div class="main">
-        <div class="GFG">GeeksforGeeks</div>
+        <div class="CodeSarthi">Code Sarthi</div>
     </div>
 </body>
 </html>`,
@@ -5813,7 +5906,7 @@ body {
         padding: 30px;
         background-color: green;
     }
-    .GFG {
+    .CodeSarthi {
         text-align: center;
         font-size: 35px;
         background-color: white;
@@ -5824,7 +5917,7 @@ body {
 </head>
 <body>
     <div class="main">
-        <div class="GFG">GeeksforGeeks</div>
+        <div class="CodeSarthi">Code Sarthi</div>
     </div>
 </body>
 </html>`,
@@ -5842,7 +5935,7 @@ body {
         padding: 30px;
         background-color: green;
     }
-    .GFG {
+    .CodeSarthi {
         text-align: center;
         font-size: 35px;
         background-color: white;
@@ -5853,7 +5946,7 @@ body {
 </head>
 <body>
     <div class="main">
-        <div class="GFG">GeeksforGeeks</div>
+        <div class="CodeSarthi">Code Sarthi</div>
     </div>
 </body>
 </html>`,
@@ -5871,7 +5964,7 @@ body {
         padding: 30px;
         background-color: green;
     }
-    .GFG {
+    .CodeSarthi {
         text-align: center;
         font-size: 35px;
         background-color: white;
@@ -5882,7 +5975,7 @@ body {
 </head>
 <body>
     <div class="main">
-        <div class="GFG">GeeksforGeeks</div>
+        <div class="CodeSarthi">Code Sarthi</div>
     </div>
 </body>
 </html>`,
@@ -5900,7 +5993,7 @@ body {
         padding: 30px;
         background-color: green;
     }
-    .GFG {
+    .CodeSarthi {
         text-align: center;
         font-size: 35px;
         background-color: white;
@@ -5912,7 +6005,7 @@ body {
 
 <body>
     <div class="main">
-        <div class="GFG">GeeksforGeeks</div>
+        <div class="CodeSarthi">Code Sarthi</div>
     </div>
 </body>
 </html>`,
@@ -5930,7 +6023,7 @@ body {
         padding: 30px;
         background-color: green;
     }
-    .GFG {
+    .CodeSarthi {
         text-align: center;
         font-size: 35px;
         background-color: white;
@@ -5941,7 +6034,7 @@ body {
 </head>
 <body>
     <div class="main">
-        <div class="GFG">GeeksforGeeks</div>
+        <div class="CodeSarthi">Code Sarthi</div>
     </div>
 </body>
 </html>`,
@@ -5959,7 +6052,7 @@ body {
         padding: 30px;
         background-color: green;
     }
-    .GFG {
+    .CodeSarthi {
         text-align: center;
         font-size: 35px;
         background-color: white;
@@ -5970,7 +6063,7 @@ body {
 </head>
 <body>
     <div class="main">
-        <div class="GFG">GeeksforGeeks</div>
+        <div class="CodeSarthi">Code Sarthi</div>
     </div>
 </body>
 </html>`,
@@ -5988,7 +6081,7 @@ body {
         padding: 30px;
         background-color: green;
     }
-    .GFG {
+    .CodeSarthi {
         text-align: center;
         font-size: 35px;
         background-color: white;
@@ -5999,7 +6092,7 @@ body {
 </head>
 <body>
     <div class="main">
-        <div class="GFG">GeeksforGeeks</div>
+        <div class="CodeSarthi">Code Sarthi</div>
     </div>
 </body>
 </html>`,
@@ -6017,7 +6110,7 @@ body {
         padding: 30px;
         background-color: green;
     }
-    .GFG {
+    .CodeSarthi {
         text-align: center;
         font-size: 35px;
         background-color: white;
@@ -6028,7 +6121,7 @@ body {
 </head>
 <body>
     <div class="main">
-        <div class="GFG">GeeksforGeeks</div>
+        <div class="CodeSarthi">Code Sarthi</div>
     </div>
 </body>
 </html>`,
@@ -6046,7 +6139,7 @@ body {
         padding: 30px;
         background-color: green;
     }
-    .GFG {
+    .CodeSarthi {
         text-align: center;
         font-size: 35px;
         background-color: white;
@@ -6057,7 +6150,7 @@ body {
 </head>
 <body>
     <div class="main">
-        <div class="GFG">GeeksforGeeks</div>
+        <div class="CodeSarthi">Code Sarthi</div>
     </div>
 </body>
 </html>`,
@@ -6075,7 +6168,7 @@ body {
         padding: 30px;
         background-color: green;
     }
-    .GFG {
+    .CodeSarthi {
         text-align: center;
         font-size: 35px;
         background-color: white;
@@ -6086,7 +6179,7 @@ body {
 </head>
 <body>
     <div class="main">
-        <div class="GFG">GeeksforGeeks</div>
+        <div class="CodeSarthi">Code Sarthi</div>
     </div>
 </body>
 </html>`,
@@ -6104,7 +6197,7 @@ body {
         padding: 30px;
         background-color: green;
     }
-    .GFG {
+    .CodeSarthi {
         text-align: center;
         font-size: 35px;
         background-color: white;
@@ -6115,7 +6208,7 @@ body {
 </head>
 <body>
     <div class="main">
-        <div class="GFG">GeeksforGeeks</div>
+        <div class="CodeSarthi">Code Sarthi</div>
     </div>
 </body>
 </html>`,
@@ -6123,7 +6216,7 @@ body {
         {
           heading: "Example 22: inherit Property Value",
           description:
-            "This demonstration shows a child element inheriting transformation geometry directly from its DOM wrapper container (`.main` applies `rotateX(45deg)` while `.GFG` declares `transform: inherit;`), multiplying the total forward tilting angle.",
+            "This demonstration shows a child element inheriting transformation geometry directly from its DOM wrapper container (`.main` applies `rotateX(45deg)` while `.CodeSarthi` declares `transform: inherit;`), multiplying the total forward tilting angle.",
           language: "html",
           code: `<html>
 <head>
@@ -6134,7 +6227,7 @@ body {
         background-color: green;
         transform: rotateX(45deg);
     }
-    .GFG {
+    .CodeSarthi {
         text-align: center;
         font-size: 35px;
         background-color: white;
@@ -6145,7 +6238,7 @@ body {
 </head>
 <body>
     <div class="main">
-        <div class="GFG">GeeksforGeeks</div>
+        <div class="CodeSarthi">Code Sarthi</div>
     </div>
 </body>
 </html>`,
@@ -6159,6 +6252,8 @@ body {
     },
     {
       id: "animations",
+      category: "Effects, Animations & Advanced CSS",
+      shortTitle: "Animations",
       title: "CSS Animations",
       sections: [
         {
@@ -6508,6 +6603,8 @@ body {
     },
     {
       id: "css-box-shadow",
+      category: "Effects, Animations & Advanced CSS",
+      shortTitle: "Box Shadow Property",
       title: "CSS box-shadow Property",
       sections: [
         {
@@ -6523,7 +6620,7 @@ body {
         {
           heading: "Example 1: Basic Box Shadow with Horizontal, Vertical Offset, and Blur",
           description:
-            "In this practical implementation, we apply the CSS `box-shadow` property across two distinct container elements (`.gfg1` and `.gfg2`).\n- The first box declares a horizontal offset of `5px`, vertical displacement of `10px`, and a moderate blur radius of `10px` (`box-shadow: 5px 10px 10px;`).\n- The second container matches exact displacement coordinates but increases blur radius to `28px` (`box-shadow: 5px 10px 28px;`), diffusing light distribution to produce a considerably softer visual elevation.",
+            "In this practical implementation, we apply the CSS `box-shadow` property across two distinct container elements (`.CodeSarthi1` and `.CodeSarthi2`).\n- The first box declares a horizontal offset of `5px`, vertical displacement of `10px`, and a moderate blur radius of `10px` (`box-shadow: 5px 10px 10px;`).\n- The second container matches exact displacement coordinates but increases blur radius to `28px` (`box-shadow: 5px 10px 28px;`), diffusing light distribution to produce a considerably softer visual elevation.",
           language: "html",
           code: `<!DOCTYPE html>
 <html>
@@ -6531,7 +6628,7 @@ body {
 <head>
     <title>CSS box-shadow Property</title>
     <style>
-        .gfg1 {
+        .CodeSarthi1 {
             border: 1px solid;
             padding: 10px;
 
@@ -6539,7 +6636,7 @@ body {
             box-shadow: 5px 10px 10px;
         }
 
-        .gfg2 {
+        .CodeSarthi2 {
             border: 1px solid;
             padding: 10px;
 
@@ -6550,11 +6647,11 @@ body {
 </head>
 
 <body>
-    <div class="gfg1">
-        <h1>Welcome to GeeksforGeeks!</h1>
+    <div class="CodeSarthi1">
+        <h1>Welcome to Code Sarthi!</h1>
     </div>
     <br><br>
-    <div class="gfg2"> A computer Science portal </div>
+    <div class="CodeSarthi2"> A computer Science portal </div>
 </body>
 
 </html>`,
@@ -6574,7 +6671,7 @@ body {
 <head>
     <title>CSS box-shadow Property</title>
     <style>
-        .gfg1 {
+        .CodeSarthi1 {
             border: 1px solid;
             padding: 10px;
 
@@ -6583,7 +6680,7 @@ body {
             box-shadow: 5px 10px 10px 10px;
         }
 
-        .gfg2 {
+        .CodeSarthi2 {
             border: 1px solid;
             padding: 10px;
 
@@ -6595,11 +6692,11 @@ body {
 </head>
 
 <body>
-    <div class="gfg1">
-        <h1>Welcome to GeeksforGeeks!</h1>
+    <div class="CodeSarthi1">
+        <h1>Welcome to Code Sarthi!</h1>
     </div>
     <br><br>
-    <div class="gfg2"> A computer Science portal </div>
+    <div class="CodeSarthi2"> A computer Science portal </div>
 </body>
 
 </html>`,
@@ -6619,7 +6716,7 @@ body {
 <head>
     <title>CSS box-shadow Property</title>
     <style>
-        .gfg1 {
+        .CodeSarthi1 {
             border: 1px solid;
             padding: 10px;
 
@@ -6628,7 +6725,7 @@ body {
             box-shadow: 5px 10px 10px 10px green;
         }
 
-        .gfg2 {
+        .CodeSarthi2 {
             border: 1px solid;
             padding: 10px;
 
@@ -6640,11 +6737,11 @@ body {
 </head>
 
 <body>
-    <div class="gfg1">
-        <h1>Welcome to GeeksforGeeks!</h1>
+    <div class="CodeSarthi1">
+        <h1>Welcome to Code Sarthi!</h1>
     </div>
     <br><br>
-    <div class="gfg2"> A computer Science portal </div>
+    <div class="CodeSarthi2"> A computer Science portal </div>
 </body>
 
 </html>`,
@@ -6664,7 +6761,7 @@ body {
 <head>
     <title>CSS box-shadow Property</title>
     <style>
-        .gfg1 {
+        .CodeSarthi1 {
             border: 1px solid;
             padding: 10px;
             /* box-shadow: h-offset v-offset blur 
@@ -6672,7 +6769,7 @@ body {
             box-shadow: 5px 10px 10px 10px green inset;
         }
 
-        .gfg2 {
+        .CodeSarthi2 {
             border: 1px solid;
             padding: 10px;
 
@@ -6684,11 +6781,11 @@ body {
 </head>
 
 <body>
-    <div class="gfg1">
-        <h1>Welcome to GeeksforGeeks!</h1>
+    <div class="CodeSarthi1">
+        <h1>Welcome to Code Sarthi!</h1>
     </div>
     <br><br>
-    <div class="gfg2"> A computer Science portal </div>
+    <div class="CodeSarthi2"> A computer Science portal </div>
 </body>
 
 </html>`,
@@ -6708,7 +6805,7 @@ body {
 <head>
     <title>CSS box-shadow Property</title>
     <style>
-        .gfg1 {
+        .CodeSarthi1 {
             border: 1px solid;
             padding: 10px;
 
@@ -6716,7 +6813,7 @@ body {
             box-shadow: initial;
         }
 
-        .gfg2 {
+        .CodeSarthi2 {
             border: 1px solid;
             padding: 10px;
 
@@ -6727,11 +6824,11 @@ body {
 </head>
 
 <body>
-    <div class="gfg1">
-        <h1>Welcome to GeeksforGeeks!</h1>
+    <div class="CodeSarthi1">
+        <h1>Welcome to Code Sarthi!</h1>
     </div>
     <br><br>
-    <div class="gfg2"> A computer Science portal </div>
+    <div class="CodeSarthi2"> A computer Science portal </div>
 </body>
 
 </html>`,
@@ -6749,6 +6846,8 @@ body {
     },
     {
       id: "css-text-shadow",
+      category: "Effects, Animations & Advanced CSS",
+      shortTitle: "Text Shadow Property",
       title: "CSS text-shadow Property",
       sections: [
         {
@@ -6775,7 +6874,7 @@ body {
     </style>
 </head>
 <body>
-    <h1> GeeksforGeeks </h1>
+    <h1> Code Sarthi </h1>
 </body>
 </html>`,
         },
@@ -6830,6 +6929,8 @@ body {
     },
     {
       id: "css-specificity",
+      category: "Effects, Animations & Advanced CSS",
+      shortTitle: "Specificity",
       title: "CSS Specificity",
       sections: [
         {
@@ -6939,6 +7040,8 @@ body {
     },
     {
       id: "css-variables",
+      category: "Effects, Animations & Advanced CSS",
+      shortTitle: "Variables",
       title: "CSS Variables",
       sections: [
         {
@@ -7029,6 +7132,8 @@ body {
     },
     {
       id: "css-pseudo-classes",
+      category: "Effects, Animations & Advanced CSS",
+      shortTitle: "Pseudo Classes",
       title: "CSS Pseudo-classes",
       sections: [
         {
@@ -7725,6 +7830,8 @@ body {
     },
     {
       id: "css-pseudo-elements",
+      category: "Effects, Animations & Advanced CSS",
+      shortTitle: "Pseudo Elements",
       title: "CSS Pseudo-elements",
       sections: [
         {

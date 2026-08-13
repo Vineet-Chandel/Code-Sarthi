@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
+import clsx from "clsx";
 import { useParams, Navigate, Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import * as Icons from "lucide-react";
@@ -12,6 +13,7 @@ import {
   Sparkles,
   BookOpen,
   ZoomIn,
+  ArrowUpRight,
 } from "lucide-react";
 import { technologies, getTechById } from "../data/technologies";
 import { getContentForTech } from "../data/content";
@@ -110,6 +112,38 @@ export default function DocPage() {
     return content.topics.reduce((acc, t) => acc + (t.sections?.length || 0), 0);
   }, [content]);
 
+  // Structured categories for mobile drawer
+  const structuredCategories = useMemo(() => {
+    if (!content) return null;
+    if (content.categories && Array.isArray(content.categories)) {
+      return content.categories
+        .map((cat) => {
+          const catTopics = (cat.topicIds || cat.topics || [])
+            .map((tId) => (typeof tId === "string" ? content.topics.find((t) => t.id === tId) : tId))
+            .filter(Boolean);
+          return {
+            title: cat.title || cat.name,
+            topics: catTopics,
+          };
+        })
+        .filter((cat) => cat.topics.length > 0);
+    }
+    const hasTopicCategories = content.topics.some((t) => t.category);
+    if (hasTopicCategories) {
+      const groups = {};
+      content.topics.forEach((t) => {
+        const cat = t.category || "General";
+        if (!groups[cat]) groups[cat] = [];
+        groups[cat].push(t);
+      });
+      return Object.entries(groups).map(([title, catTopics]) => ({
+        title,
+        topics: catTopics,
+      }));
+    }
+    return null;
+  }, [content]);
+
   // Setup Intersection Observer to highlight sidebar as user scrolls
   useEffect(() => {
     if (!content || filterQuery) return;
@@ -183,7 +217,7 @@ export default function DocPage() {
     <main ref={mainRef} className="mx-auto  px-4 md:px-20 pb-24 bg-black">
       {/* Header */}
       <div className="flex flex-col gap-6 pt-10 pb-8 border-b border-white/[0.08]">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <Link
               to="/app/toolkit"
@@ -205,19 +239,24 @@ export default function DocPage() {
                 <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-xs text-white/50 font-medium">
                   {totalSnippets} snippets
                 </span>
-                {getFlashcardsForTech(tech.id).length > 0 && (
-                  <button 
-                    onClick={() => navigate(`/app/toolkit/docs/${tech.id}/flashcard`)}
-                    className="flex items-center gap-1.5 rounded-full border border-white/10 bg-[#0a0a0a] px-2.5 py-0.5 text-xs text-white/70 font-medium hover:bg-[#121212] transition-colors"
-                  >
-                    <BookOpen size={12} />
-                    Flashcards
-                  </button>
-                )}
               </div>
               <p className="text-sm text-white/45 mt-0.5">{tech.tagline}</p>
             </div>
           </div>
+
+          {/* Premium Flashcards Action Button on Extreme Right */}
+          {getFlashcardsForTech(tech.id).length > 0 && (
+            <button
+              onClick={() => navigate(`/app/toolkit/docs/${tech.id}/flashcard`)}
+              className="group relative flex items-center gap-2.5 rounded-xl border border-blue-500/40 bg-gradient-to-r from-blue-600/20 via-indigo-600/20 to-purple-600/20 px-4 py-2 text-xs font-semibold text-white shadow-lg shadow-blue-500/10 backdrop-blur-md transition-all duration-300 hover:scale-[1.03] hover:border-blue-400 hover:from-blue-600/35 hover:to-purple-600/35 hover:shadow-blue-500/25 active:scale-95 shrink-0 self-start sm:self-auto"
+            >
+              <span className="flex items-center gap-1.5 text-blue-400 group-hover:text-blue-300 transition-colors">
+                <BookOpen size={15} className="group-hover:rotate-6 transition-transform duration-300" />
+              </span>
+              <span>Flashcards</span>
+              <ArrowUpRight size={15} className="text-white/60 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
+            </button>
+          )}
         </div>
 
         {/* Quick In-Page Search Filter Bar */}
@@ -250,6 +289,7 @@ export default function DocPage() {
           {/* Desktop Table of Contents Sidebar */}
           <Sidebar
             topics={content.topics}
+            categories={content.categories}
             activeTopic={activeTopic}
             onSelect={handleSelectTopic}
           />
@@ -440,19 +480,45 @@ export default function DocPage() {
                 </button>
               </div>
 
-              <nav className="flex flex-col gap-1.5">
-                {content.topics.map((topic) => (
-                  <button
-                    key={topic.id}
-                    onClick={() => handleSelectTopic(topic.id)}
-                    className="flex items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-medium text-white/80 hover:bg-white/5 active:bg-accent/10 active:text-accent"
-                  >
-                    <span>{topic.title}</span>
-                    <span className="text-xs text-white/30 font-mono">
-                      {topic.sections?.length || 0}
-                    </span>
-                  </button>
-                ))}
+              <nav className="flex flex-col gap-3">
+                {structuredCategories ? (
+                  structuredCategories.map((category) => (
+                    <div key={category.title} className="flex flex-col gap-1">
+                      <div className="px-2 py-1 text-xs font-bold uppercase tracking-wider text-blue-400">
+                        {category.title}
+                      </div>
+                      <div className="flex flex-col gap-1 pl-2 border-l border-white/10">
+                        {category.topics.map((topic) => (
+                          <button
+                            key={topic.id}
+                            onClick={() => handleSelectTopic(topic.id)}
+                            className={clsx(
+                              "flex items-center justify-between rounded-xl px-3 py-2 text-left text-xs font-medium transition-colors",
+                              activeTopic === topic.id
+                                ? "bg-blue-500/20 text-blue-400 font-semibold"
+                                : "text-white/80 hover:bg-white/5"
+                            )}
+                          >
+                            <span>{topic.shortTitle || topic.title}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  content.topics.map((topic) => (
+                    <button
+                      key={topic.id}
+                      onClick={() => handleSelectTopic(topic.id)}
+                      className="flex items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-medium text-white/80 hover:bg-white/5 active:bg-accent/10 active:text-accent"
+                    >
+                      <span>{topic.shortTitle || topic.title}</span>
+                      <span className="text-xs text-white/30 font-mono">
+                        {topic.sections?.length || 0}
+                      </span>
+                    </button>
+                  ))
+                )}
               </nav>
             </motion.div>
           </motion.div>
