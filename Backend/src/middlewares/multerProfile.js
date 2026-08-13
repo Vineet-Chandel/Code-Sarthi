@@ -5,12 +5,20 @@ const storage = multer.memoryStorage();
 
 // MIME filter
 const fileFilter = (req, file, cb) => {
-    const allowed = ["image/jpeg", "image/png", "image/webp"];
 
-    if (allowed.includes(file.mimetype)) {
+
+    const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+        "image/jpg"
+    ];
+
+    if (allowedTypes.includes(file.mimetype)) {
         cb(null, true);
     } else {
-        cb(new Error("Invalid file type"), false);
+        console.log("Rejected MIME type:", file.mimetype);
+        cb(new Error(`Invalid file type: ${file.mimetype}`), false);
     }
 };
 
