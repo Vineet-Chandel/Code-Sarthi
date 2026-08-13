@@ -137,7 +137,7 @@ Team collaboration and project management.
 
 ```bash
 # Clone
-git clone [REPO_LINK]
+git clone https://github.com/Vineet-Chandel/Code-Sarthi
 cd code-sarthi
 
 # Backend
@@ -161,7 +161,7 @@ The project ships with a `docker-compose.yml` at the root that builds three serv
 
 ```bash
 # Clone
-git clone [REPO_LINK]
+git clone https://github.com/Vineet-Chandel/Code-Sarthi
 cd code-sarthi
 
 # Ensure Backend/.env exists with all required variables
@@ -299,5 +299,5 @@ License details are coming soon.
 
 ## Links
 
-- **Repository**: [REPO_LINK]
+- **Repository**: [REPO_LINK](https://github.com/Vineet-Chandel/Code-Sarthi)
 - **Live**: [codesarthi.in](https://codesarthi.in)
