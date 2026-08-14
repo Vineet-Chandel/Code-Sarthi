@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-const SearchDrawer = ({ showCreateTab, setShowCreateTab }) => {
+const SearchDrawer = ({ showCreateTab, setShowCreateTab, handleOpenSavedMessages }) => {
 
 
     return (
@@ -39,7 +39,13 @@ const SearchDrawer = ({ showCreateTab, setShowCreateTab }) => {
                             </span>  Create Team
 
                         </h1>
-                        <h1 className="text-sm cursor-pointer hover:bg-gray-300 p-1 px-3 rounded-md mb-3 font-semibold text-gray-800 flex items-center gap-1">
+                        <h1 
+                            className="text-sm cursor-pointer hover:bg-gray-300 p-1 px-3 rounded-md mb-3 font-semibold text-gray-800 flex items-center gap-1"
+                            onClick={() => {
+                                handleOpenSavedMessages();
+                                setShowCreateTab(false);
+                            }}
+                        >
 
                             <span>
                                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

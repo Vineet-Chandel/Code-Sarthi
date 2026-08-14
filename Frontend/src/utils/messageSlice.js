@@ -168,6 +168,23 @@ const messageSlice = createSlice({
         clearAllMessages: (state) => {
             state.messages = {};
         },
+
+        updateMessage: (state, action) => {
+            const { conversation_id, _id, content } = action.payload;
+            if (state.messages[conversation_id]) {
+                const idx = state.messages[conversation_id].findIndex(m => m._id === _id);
+                if (idx !== -1) {
+                    state.messages[conversation_id][idx].content = content;
+                    state.messages[conversation_id][idx].edited = true;
+                }
+            }
+        },
+        removeMessage: (state, action) => {
+            const { conversation_id, _id } = action.payload;
+            if (state.messages[conversation_id]) {
+                state.messages[conversation_id] = state.messages[conversation_id].filter(m => m._id !== _id);
+            }
+        }
     },
 });
 
@@ -176,7 +193,9 @@ export const {
     addMessage,
     clearConversation,
     clearAllMessages,
-    receiveMessage
+    receiveMessage,
+    updateMessage,
+    removeMessage
 } = messageSlice.actions;
 
 export default messageSlice.reducer;

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { MessageSquare } from 'lucide-react';
 import { useTeamChat } from './TeamChatContext';
 
-const CollapsedChatRail = () => {
+const CollapsedChatRail = ({ onBackToDMs }) => {
   const { activeTeamId, setActiveTeam, exitTeamMode } = useTeamChat();
   const chats = useSelector(state => state.chats.users || []);
   const loggedUser = useSelector(store => store.user.user.DATA);
@@ -15,7 +15,10 @@ const CollapsedChatRail = () => {
     <div className="w-[56px] h-full bg-[#0a0a0a] border-r border-white/5 flex flex-col items-center py-4 gap-4 overflow-y-auto scrollbar-none shrink-0">
       {/* Back to DM / default chat */}
       <button
-        onClick={exitTeamMode}
+        onClick={() => {
+            exitTeamMode();
+            if (onBackToDMs) onBackToDMs();
+        }}
         className="w-10 h-10 rounded-xl bg-zinc-950 border border-white/10 hover:border-white/20 transition-all flex items-center justify-center text-zinc-500 hover:text-white shrink-0"
         title="Direct Messages"
       >

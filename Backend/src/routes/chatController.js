@@ -23,7 +23,7 @@ chatRouter.get("/chats", userAuth, async (req, res) => {
             { path: "admins", select: "firstName lastName gmail username profession photoUrl  college about middleName skills isVerified" },
             { path: "createdBy", select: "firstName lastName gmail username profession photoUrl  college about middleName skills isVerified" },
             { path: "lastMessage", populate: { path: "sender_id", select: "firstName lastName photoUrl gmail username profession college about middleName skills isVerified" } },
-            { path: "teamId", select: "name status ownerId inviteCode" }
+            { path: "teamId", select: "name status ownerId inviteCode logo description" }
         ])
 
         //chats are there not 
@@ -479,4 +479,110 @@ chatRouter.post("/get-message/:conversationId", userAuth, async (req, res) => {
 //     }
 
 // });
+// ==========================================
+// SAVED MESSAGES ROUTES
+// ==========================================
+
+// Get or Create Saved Messages Chat
+chatRouter.get("/saved-messages", userAuth, async (req, res) => {
+    try {
+        const userId = req.user._id;
+        
+        let savedChat = await Conversation.findOne({
+            type: "saved_messages",
+            createdBy: userId
+        }).populate([
+            { path: "members", select: "firstName lastName gmail username profession photoUrl college about middleName skills isVerified" },
+            { path: "createdBy", select: "firstName lastName gmail username profession photoUrl college about middleName skills isVerified" },
+            { path: "lastMessage", populate: { path: "sender_id", select: "firstName lastName photoUrl gmail username profession college about middleName skills isVerified" } }
+        ]);
+
+        if (!savedChat) {
+            savedChat = await Conversation.create({
+                name: "Saved Messages",
+                createdBy: userId,
+                type: "saved_messages",
+                members: [userId],
+                admins: [userId]
+            });
+            // populate it
+            savedChat = await Conversation.findById(savedChat._id).populate([
+                { path: "members", select: "firstName lastName gmail username profession photoUrl college about middleName skills isVerified" },
+                { path: "createdBy", select: "firstName lastName gmail username profession photoUrl college about middleName skills isVerified" },
+                { path: "lastMessage", populate: { path: "sender_id", select: "firstName lastName photoUrl gmail username profession college about middleName skills isVerified" } }
+            ]);
+        }
+
+        res.status(200).json({
+            success: true,
+            data: savedChat
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// Clear Saved Messages Chat
+chatRouter.delete("/saved-messages/clear", userAuth, async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const savedChat = await Conversation.findOne({
+            type: "saved_messages",
+            createdBy: userId
+        });
+
+        if (savedChat) {
+            await message.deleteMany({ conversationId: savedChat._id });
+            savedChat.lastMessage = null;
+            await savedChat.save();
+        }
+
+        res.status(200).json({ success: true, message: "Saved messages cleared" });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// Edit Message
+chatRouter.put("/messages/:id", userAuth, async (req, res) => {
+    try {
+        const msgId = req.params.id;
+        const userId = req.user._id;
+        const { content } = req.body;
+
+        const msg = await message.findOne({ _id: msgId, sender_id: userId });
+        if (!msg) {
+            return res.status(404).json({ success: false, message: "Message not found or unauthorized" });
+        }
+
+        msg.content = content;
+        msg.edited = true;
+        await msg.save();
+
+        res.status(200).json({ success: true, data: msg });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// Delete Message
+chatRouter.delete("/messages/:id", userAuth, async (req, res) => {
+    try {
+        const msgId = req.params.id;
+        const userId = req.user._id;
+
+        const msg = await message.findOne({ _id: msgId, sender_id: userId });
+        if (!msg) {
+            return res.status(404).json({ success: false, message: "Message not found or unauthorized" });
+        }
+
+        // We can actually delete the message doc
+        await message.deleteOne({ _id: msgId });
+
+        res.status(200).json({ success: true, message: "Message deleted" });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
 module.exports = chatRouter;

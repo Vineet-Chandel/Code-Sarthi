@@ -4,7 +4,10 @@ import { useSelector } from 'react-redux';
 import SearchDrawer from './SearchDrawer';
 
 
-const SearchChats = ({ loading, setLoading }) => {
+import axios from 'axios';
+import BASE_URL from "../auth/baseURL";
+
+const SearchChats = ({ loading, setLoading, setSelectedChatUser }) => {
     const [showCreateTab, setShowCreateTab] = useState(false)
     const user = useSelector(state => state.user.user.DATA)
     const inputRef = useRef(null);
@@ -12,16 +15,33 @@ const SearchChats = ({ loading, setLoading }) => {
         inputRef.current.focus();
     }
 
-
-
     const [search, setSearch] = useState("");
 
+    const handleOpenSavedMessages = async () => {
+        try {
+            setLoading(true);
+            const res = await axios.get(BASE_URL + "/api/saved-messages", {
+                withCredentials: true
+            });
+            if (res.data.success) {
+                // Wrap in info so it works correctly with ChatArea
+                setSelectedChatUser({ 
+                    info: res.data.data,
+                    id: user?._id,
+                    convoId: res.data.data._id
+                });
+            }
+        } catch (error) {
+            console.error("Failed to load saved messages", error);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     return (
-        <div className='flex gap-3 pr-1'>
+        <div className='flex gap-2 pr-1'>
 
-
-            <div className="ml-3 flex items-center justify-center " onClick={() => setShowCreateTab(prev => !prev)}>
+            <div className="flex items-center justify-center cursor-pointer hover:bg-white/10 p-1 rounded-full transition-all" onClick={() => setShowCreateTab(prev => !prev)}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="1.6em" height="1.6em" viewBox="0 0 24 24"><path fill="#edebebff" fillRule="evenodd" d="M20.75 7a.75.75 0 0 1-.75.75H4a.75.75 0 0 1 0-1.5h16a.75.75 0 0 1 .75.75m0 5a.75.75 0 0 1-.75.75H4a.75.75 0 0 1 0-1.5h16a.75.75 0 0 1 .75.75m0 5a.75.75 0 0 1-.75.75H4a.75.75 0 0 1 0-1.5h16a.75.75 0 0 1 .75.75" clipRule="evenodd"></path></svg>
             </div>
 
@@ -29,7 +49,7 @@ const SearchChats = ({ loading, setLoading }) => {
                 onClick={focusInput}
                 className="h-[50px] group w-full flex items-center gap-3  border border-base-300 border px-1 py-1 rounded-full  bg-[#2c2c2c]  transition-all duration-300 "
             >
-                <SearchDrawer showCreateTab={showCreateTab} setShowCreateTab={setShowCreateTab} />
+                <SearchDrawer showCreateTab={showCreateTab} setShowCreateTab={setShowCreateTab} handleOpenSavedMessages={handleOpenSavedMessages} />
                 {/* LEFT ICON */}
                 <span className=" ml-2.5">
 

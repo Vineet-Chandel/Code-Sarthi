@@ -65,7 +65,7 @@ const ChatArea = ({ setNewConvoFinded, newConvoFinded, subLoading, forwardTabOpe
         }
         return 'issue-thread';
     };
-    
+
     useEffect(() => {
         if (selectedChatUser?.convoId && conversationMappings[selectedChatUser.convoId]) {
             setSelectedChatUser(prev => ({
@@ -251,21 +251,59 @@ const ChatArea = ({ setNewConvoFinded, newConvoFinded, subLoading, forwardTabOpe
     return (
         <div className=" flex h-full w-full flex-col overflow-hidden rounded-2xl  bg-transparent ">
 
-            {/* Header / Breadcrumb (only in team mode) */}
-            {activeTeamId && teamWorkspace && (
-                <div className="h-[53px] px-6 border-b border-white/5 flex items-center bg-[#0a0a0a] shrink-0 text-white select-none">
-                    <span className="text-xs text-zinc-500 font-medium uppercase tracking-wider">
-                        {teamWorkspace.team?.name}
-                    </span>
-                    <span className="mx-2.5 text-zinc-700">/</span>
-                    <span className="text-xs font-bold text-white uppercase tracking-widest font-mono">
-                        {activeConversationId === teamWorkspace.generalConversationId 
-                            ? 'general-chat' 
-                            : getActiveIssueName()
-                        }
-                    </span>
+            {/* Header / Breadcrumb (only in team mode or saved messages) */}
+            {(activeTeamId && teamWorkspace) || selectedChatUser?.info?.type === "saved_messages" ? (
+                <div className="h-[53px] px-6 border-b border-white/5 flex items-center justify-between bg-[#0a0a0a] shrink-0 text-white select-none relative">
+                    {activeTeamId && teamWorkspace ? (
+                        <div className="flex items-center">
+                            <span className="text-xs text-zinc-500 font-medium uppercase tracking-wider">
+                                {teamWorkspace.team?.name}
+                            </span>
+                            <span className="mx-2.5 text-zinc-700">/</span>
+                            <span className="text-xs font-bold text-white uppercase tracking-widest font-mono">
+                                {activeConversationId === teamWorkspace.generalConversationId
+                                    ? 'general-chat'
+                                    : getActiveIssueName()
+                                }
+                            </span>
+                        </div>
+                    ) : (
+                        <div className="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1.4em" height="1.4em" viewBox="0 0 24 24" fill="none" stroke="#edebebff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" /></svg>
+                            <span className="text-sm font-bold text-white uppercase tracking-widest font-mono">
+                                Saved Messages
+                            </span>
+                        </div>
+                    )}
+
+                    {selectedChatUser?.info?.type === "saved_messages" && (
+                        <div className="relative group cursor-pointer p-2">
+                            <MoreVertical size={18} className="text-zinc-400 hover:text-white transition-colors" />
+                            <div className="absolute right-0 top-full mt-1 hidden group-hover:flex flex-col bg-[#212121] rounded-xl shadow-xl overflow-hidden z-50 w-48 border border-white/10">
+                                <button
+                                    onClick={async () => {
+                                        if (window.confirm("Delete all saved messages? This cannot be undone.")) {
+                                            try {
+                                                const res = await axios.delete(BASE_URL + "/api/saved-messages/clear", { withCredentials: true });
+                                                if (res.data.success) {
+                                                    dispatch({ type: 'messages/clearConversation', payload: selectedChatUser.info._id });
+                                                    if (addToast) addToast({ type: "success", title: "Cleared", message: "Saved messages cleared" });
+                                                }
+                                            } catch (err) {
+                                                console.error(err);
+                                            }
+                                        }
+                                    }}
+                                    className="px-4 py-3 text-sm text-red-500 hover:bg-white/5 text-left flex items-center gap-2"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z"></path></svg>
+                                    Clear all messages
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </div>
-            )}
+            ) : null}
 
             {clipTab &&
 

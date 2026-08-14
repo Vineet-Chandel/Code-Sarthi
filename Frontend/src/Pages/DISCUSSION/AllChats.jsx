@@ -216,7 +216,7 @@ const AllChats = ({ setNewConvoFinded, newConvoFinded, setForwardTabOpen, forwar
                     <div className='mt-3 p-0 w-[100%] '>
                         {chatsARR?.map((chatUser, idx) => {
                             return (chatUser.members.map((user, index) => {
-                                if (chatUser.type === "team_general" || chatUser.type === "team_issue") {
+                                if (chatUser.type === "team_general") {
                                     if (index !== 0) return null;
                                     const team = chatUser.teamId;
                                     if (!team) return null;

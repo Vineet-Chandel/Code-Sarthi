@@ -16,7 +16,7 @@ const ConvoSchema = new Schema({
   },
   type: {
     type: String,
-    enum: ["private", "group", "team_general", "team_issue"],
+    enum: ["private", "group", "team_general", "team_issue", "saved_messages"],
     default: "private"
   },
 

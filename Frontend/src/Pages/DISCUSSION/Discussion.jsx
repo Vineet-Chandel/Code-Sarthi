@@ -186,17 +186,17 @@ const DiscussionContent = () => {
 
       <ToastContainer toasts={toasts} removeToast={removeToast} />
 
-      {activeTeamId ? (
+      {activeTeamId || selectedChatUser?.info?.type === "saved_messages" ? (
         <>
           {/* Collapsed Rail + Team Workspace panel (acts as sidebar) */}
-          <div className={`${activeConversationId ? "hidden md:flex" : "flex"} h-full shrink-0 gap-1 rounded-3xl overflow-hidden`}>
-            <CollapsedChatRail />
-            <TeamWorkspacePanel />
+          <div className={`${activeConversationId || selectedChatUser?.info?.type === "saved_messages" ? "hidden md:flex" : "flex"} h-full shrink-0 gap-1 rounded-3xl overflow-hidden`}>
+            <CollapsedChatRail onBackToDMs={() => setSelectedChatUser({ info: null, isOpenTab: false, id: null })} />
+            {activeTeamId && <TeamWorkspacePanel />}
           </div>
 
           {/* Chat area */}
-          <div className={` ${activeConversationId ? "flex" : "hidden md:flex"} flex-1 h-full sm:relative bg-black rounded-2xl bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:40px_40px] flex justify-center items-center flex-col`}>
-            {activeConversationId ? (
+          <div className={` ${activeConversationId || selectedChatUser?.info?.type === "saved_messages" ? "flex" : "hidden md:flex"} flex-1 h-full sm:relative bg-black rounded-2xl bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:40px_40px] flex justify-center items-center flex-col`}>
+            {activeConversationId || selectedChatUser?.info?.type === "saved_messages" ? (
               <ChatArea 
                 newConvoFinded={newConvoFinded} 
                 setNewConvoFinded={setNewConvoFinded} 
@@ -228,7 +228,7 @@ const DiscussionContent = () => {
           <div className={`    ${selectedChatUser?.info ? "hidden md:block" : "block"} h-full w-full  sm:relative md:w-[340px] lg:w-[380px] xl:w-[420px]  bg-[#212121] rounded-3xl pl-2 pr-1 p-3`}>
 
             <div className='h-[53px] '>
-              <SearchChats loading={loading} setLoading={setLoading} />
+              <SearchChats loading={loading} setLoading={setLoading} setSelectedChatUser={setSelectedChatUser} />
             </div>
 
 
