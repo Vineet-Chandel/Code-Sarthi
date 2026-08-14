@@ -11,30 +11,32 @@ import Step from "../Step";
 import ProgressMeter from "../ProgressMeter";
 import CTA from "../CTA";
 
-const Preview = ({ resumeData }) => {
+const Preview = ({ resumeData, username, viewedUser }) => {
     const location = useLocation();
     const dispatch = useDispatch();
     const resData = useSelector((state) => state.res);
+    const user = useSelector((store) => store.user);
 
     const Navigate = useNavigate()
-    let data = location.state?.resumeData || {};
-    data = {
-        ...location.state?.resumeData,
-        ...resData,
-        ...(resData?.header || {})
-    }
-
     const [globalProfileLoading, setGlobalProfileLoading] = useState(false);
+    const [localResume, setLocalResume] = useState(null);
 
-
+    const displayUser = username ? viewedUser : user?.user?.DATA;
 
     const getResumeIfExist = async () => {
         try {
-            setGlobalProfileLoading(true)
-            const res = await axios.get(`${BASE_URL}/build-resume/get-resume`, { withCredentials: true })
+            setGlobalProfileLoading(true);
+            const url = username 
+                ? `${BASE_URL}/build-resume/get-resume/${username}` 
+                : `${BASE_URL}/build-resume/get-resume`;
+            const res = await axios.get(url, { withCredentials: true });
 
             if (res.data.success === true) {
-                dispatch(setRes(res.data.data));
+                if (username) {
+                    setLocalResume(res.data.data);
+                } else {
+                    dispatch(setRes(res.data.data));
+                }
             }
 
         } catch (err) {
@@ -46,12 +48,17 @@ const Preview = ({ resumeData }) => {
 
     useEffect(() => {
         getResumeIfExist();
-    }, [])
+    }, [username])
 
+    const effectiveRes = username ? localResume : resData;
+    let data = location.state?.resumeData || {};
+    data = {
+        ...location.state?.resumeData,
+        ...effectiveRes,
+        ...(effectiveRes?.header || {})
+    }
 
-
-
-    const user = useSelector((store) => store.user);
+    const isOwner = !username;
     const parentVariant = {
         initial: {},
         hover: {},
@@ -69,43 +76,46 @@ const Preview = ({ resumeData }) => {
             scale: 1.3,
         },
     };
+    const isBlurred = username && !user?.user;
+
     return (
-        // visible
-        <div className="w-full min-h-screen bg-white p-2  mt-2">
+        <div className={`w-full min-h-screen ${username ? 'bg-transparent p-0 mt-0' : 'bg-white p-2 mt-2'} relative`}>
 
-            <div className="flex flex-col min-[480px]:flex-row items-center justify-around min-[480px]:justify-center gap-5 min-[480px]:gap-3 bg-black px-2 py-3.5 border-b border-slate-700 sm:px-5 rounded-t-3xl ">
-                {/* Step Counter */}
-                <span className="w-full flex justify-center min-[480px]:justify-start min-[480px]:w-1/5">
-                    <Step index={7} />
-                </span>
-
-                {/* Progress Meter Container */}
-                <span className="flex min-[480px]:w-[70%] justify-center  w-full min-[480px]:justify-end sm:w-3/5 ">
-                    <ProgressMeter index={7} resumeData={resumeData} />
-                </span>
-                <div onClick={() => {
-                    Navigate("/app/interview-arena");
-                }} className={` flex items-center justify-between cursor-pointer text-black  font-bold `}>
-
-                    <span className="text-white">
-                        <svg height="40" viewBox="0 0 15 40" width="15" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlnsXlink="http://www.w3.org/1999/xlink" transform="matrix(-1,0,0,1,0,0)">
-                            <path d="M0 .5h11A3.5 3.5 0 0 1 14.5 4v20.523a5.5 5.5 0 0 1-1.416 3.684l-8.547 9.477A5.5 5.5 0 0 1 .453 39.5H0" data-stroke="true"
-                                fill="#fff"
-                            ></path>
-                        </svg>
+            {isOwner && (
+                <div className="flex flex-col min-[480px]:flex-row items-center justify-around min-[480px]:justify-center gap-5 min-[480px]:gap-3 bg-black px-2 py-3.5 border-b border-slate-700 sm:px-5 rounded-t-3xl ">
+                    {/* Step Counter */}
+                    <span className="w-full flex justify-center min-[480px]:justify-start min-[480px]:w-1/5">
+                        <Step index={7} />
                     </span>
-                    <button className="bg-white flex px-4 py-[7.5px] gap-1"><p className='font-extrabold'>Next : </p> Analyse Your Profile </button>
-                    <span className="text-white">
-                        <svg height="40" viewBox="0 0 15 40" width="15" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M0 .5h11A3.5 3.5 0 0 1 14.5 4v20.523a5.5 5.5 0 0 1-1.416 3.684l-8.547 9.477A5.5 5.5 0 0 1 .453 39.5H0"
-                                fill="#fff"
-                            />
-                        </svg>
+
+                    {/* Progress Meter Container */}
+                    <span className="flex min-[480px]:w-[70%] justify-center  w-full min-[480px]:justify-end sm:w-3/5 ">
+                        <ProgressMeter index={7} resumeData={resumeData} />
                     </span>
+                    <div onClick={() => {
+                        Navigate("/app/interview-arena");
+                    }} className={` flex items-center justify-between cursor-pointer text-black  font-bold `}>
+
+                        <span className="text-white">
+                            <svg height="40" viewBox="0 0 15 40" width="15" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlnsXlink="http://www.w3.org/1999/xlink" transform="matrix(-1,0,0,1,0,0)">
+                                <path d="M0 .5h11A3.5 3.5 0 0 1 14.5 4v20.523a5.5 5.5 0 0 1-1.416 3.684l-8.547 9.477A5.5 5.5 0 0 1 .453 39.5H0" data-stroke="true"
+                                    fill="#fff"
+                                ></path>
+                            </svg>
+                        </span>
+                        <button className="bg-white flex px-4 py-[7.5px] gap-1"><p className='font-extrabold'>Next : </p> Analyse Your Profile </button>
+                        <span className="text-white">
+                            <svg height="40" viewBox="0 0 15 40" width="15" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M0 .5h11A3.5 3.5 0 0 1 14.5 4v20.523a5.5 5.5 0 0 1-1.416 3.684l-8.547 9.477A5.5 5.5 0 0 1 .453 39.5H0"
+                                    fill="#fff"
+                                />
+                            </svg>
+                        </span>
+                    </div>
+
                 </div>
-
-            </div>
+            )}
 
 
             {globalProfileLoading && <div className='fixed bg-black/80 h-screen w-screen z-50 inset-0 flex items-center justify-center'>
@@ -133,12 +143,7 @@ const Preview = ({ resumeData }) => {
 
 
             <div
-                className="w-full min-h-screen  bg-black rounded-b-xl flex
-flex-col
-sm:flex-row
-gap-3
-sm:justify-between
-sm:items-start gap-2 ">
+                className={`w-full min-h-screen bg-black rounded-b-xl flex flex-col sm:flex-row gap-3 sm:justify-between sm:items-start gap-2 ${isBlurred ? "blur-md select-none pointer-events-none" : ""}`}>
 
 
 
@@ -182,25 +187,27 @@ md:h-44
 lg:w-48
 lg:h-48
 xl:w-52
-xl:h-52 object-cover rounded-full" src={user?.user?.DATA?.photoUrl?.url} alt="" />
-                                        <svg onClick={() => Navigate("/app/build-resume/header-content")} className="hidden group-hover:flex cursor-pointer absolute top-0 right-0 w-5 h-5 sm:w-6 sm:h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                            <g fill="#000">
-                                                <path d="M8 7a1 1 0 0 1-1 1H6a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-1a1 1 0 0 1 2 0v1a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3h1a1 1 0 0 1 1 1"></path>
-                                                <path d="m14.596 5.011l4.392 4.392l-6.28 6.303A1 1 0 0 1 12 16H9a1 1 0 0 1-1-1v-3a1 1 0 0 1 .294-.708zm6.496-2.103a3.097 3.097 0 0 1 .165 4.203l-.164.18l-.693.694l-4.387-4.387l.695-.69a3.1 3.1 0 0 1 4.384 0"></path>
-                                            </g>
-                                        </svg>
+xl:h-52 object-cover rounded-full" src={displayUser?.photoUrl?.url || displayUser?.photoUrl || "/default-avatar.png"} alt="" />
+                                        {isOwner && (
+                                            <svg onClick={() => Navigate("/app/build-resume/header-content")} className="hidden group-hover:flex cursor-pointer absolute top-0 right-0 w-5 h-5 sm:w-6 sm:h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                <g fill="#000">
+                                                    <path d="M8 7a1 1 0 0 1-1 1H6a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-1a1 1 0 0 1 2 0v1a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3h1a1 1 0 0 1 1 1"></path>
+                                                    <path d="m14.596 5.011l4.392 4.392l-6.28 6.303A1 1 0 0 1 12 16H9a1 1 0 0 1-1-1v-3a1 1 0 0 1 .294-.708zm6.496-2.103a3.097 3.097 0 0 1 .165 4.203l-.164.18l-.693.694l-4.387-4.387l.695-.69a3.1 3.1 0 0 1 4.384 0"></path>
+                                                </g>
+                                            </svg>
+                                        )}
 
                                     </div>
 
                                     <h2 className="text-lg
 sm:text-xl
 md:text-2xl mt-1 font-extrabold text-black ">
-                                        {data.fname ? data.fname : user?.user?.DATA?.firstName}  {data.lname ? data.lname : user?.user?.DATA?.lastName}
+                                        {data.fname ? data.fname : displayUser?.firstName}  {data.lname ? data.lname : displayUser?.lastName}
                                     </h2>
                                     <p className="text-sm
 sm:text-base
 md:text-lg  font-bold text-accent ">
-                                        {data.summaryTitle ? data.summaryTitle : user?.user?.DATA?.profession}
+                                        {data.summaryTitle ? data.summaryTitle : displayUser?.profession}
                                     </p>
 
 
@@ -236,7 +243,7 @@ md:text-lg  mb-2 font-bold text-accent ">
                                     <h2 className="text-xl flex gap-3 items-center font-medium tracking-tight text-white">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                                             <path fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="m2.357 7.714l6.98 4.654c.963.641 1.444.962 1.964 1.087c.46.11.939.11 1.398 0c.52-.125 1.001-.446 1.964-1.087l6.98-4.654M7.157 19.5h9.686c1.68 0 2.52 0 3.162-.327a3 3 0 0 0 1.31-1.311c.328-.642.328-1.482.328-3.162V9.3c0-1.68 0-2.52-.327-3.162a3 3 0 0 0-1.311-1.311c-.642-.327-1.482-.327-3.162-.327H7.157c-1.68 0-2.52 0-3.162.327a3 3 0 0 0-1.31 1.311c-.328.642-.328 1.482-.328 3.162v5.4c0 1.68 0 2.52.327 3.162a3 3 0 0 0 1.311 1.311c.642.327 1.482.327 3.162.327"></path>
-                                        </svg> {data.email ? data.email : user?.user?.DATA?.gmail}
+                                        </svg> {data.email ? data.email : displayUser?.gmail}
                                     </h2>
                                     <h2 className="text-xl flex gap-2 items-center font-medium tracking-tight text-info">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
@@ -1017,7 +1024,29 @@ md:text-2xl justify-center mb-5 text-center items-center flex font-extrabold">No
 
                     </div>
                 </div>
-            </div >
+
+            {isBlurred && (
+                <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm p-4 text-center">
+                    <div className="max-w-sm w-full bg-white border border-gray-200 rounded-3xl p-8 shadow-2xl flex flex-col items-center">
+                        <div className="h-16 w-16 bg-gray-100 rounded-full flex items-center justify-center mb-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                        </div>
+                        <h3 className="text-2xl font-bold text-black mb-2">Login Required</h3>
+                        <p className="text-gray-600 text-sm mb-6 leading-relaxed">
+                            Log in to view the full career profile and unlock networking features.
+                        </p>
+                        <button 
+                            onClick={() => Navigate("/login")}
+                            className="w-full py-3 bg-black text-white font-bold rounded-full hover:bg-zinc-800 transition-colors shadow-lg"
+                        >
+                            Login to Continue
+                        </button>
+                    </div>
+                </div>
+            )}
+        </div >
 
 
 

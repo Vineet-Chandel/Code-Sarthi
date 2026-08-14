@@ -2,7 +2,7 @@ import React from 'react'
 import Preview from '../CARRER-PROFILE-CREATION/2/08_PREVIEW/Preview'
 import { useNavigate } from 'react-router-dom'
 
-const ShortPreview = () => {
+const ShortPreview = ({ username, viewedUser }) => {
     const navigate = useNavigate();
     return (
         <div>
@@ -17,7 +17,7 @@ const ShortPreview = () => {
 
 
 
-                <Preview />
+                <Preview username={username} viewedUser={viewedUser} />
             </div>
         </div>
     )

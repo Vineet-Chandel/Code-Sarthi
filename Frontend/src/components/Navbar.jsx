@@ -302,7 +302,7 @@ const NavBar = ({ setSelectedChatUser, selectedChatUser }) => {
                     }
 
 
-                    <div className="logo flex  sm:h-auto h-[42px] justify-center items-center  border px-3 py-1 rounded-xl border-base-300  bg-white group" >
+                    <div className="logo flex  sm:h-auto h-[42px] justify-center items-center  border px-3 py-1 rounded-xl border-base-300  bg-white group cursor-pointer" onClick={openSidebar} >
 
                         <button
                             className="Nav_svg border border-secondary p-[5px] h-6 w-6 rounded cursor-pointer  bg-black transition-colors duration-200 flex justify-center items-center"

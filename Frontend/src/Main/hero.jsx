@@ -12,6 +12,7 @@ import ContentThird from "./ContentThird";
 import Devs from "./Devs";
 import Main2 from "./Main2";
 import Lines2 from "./Lines2";
+import FullScreenImage from "./FullScreenImage";
 import SecondLanding from "./SecondLanding";
 import { useNavigate } from "react-router-dom";
 import BASE_URL from "@/Pages/auth/baseURL";
@@ -80,17 +81,21 @@ const Hero = () => {
         <div className="h-screen bg-gray-200 overflow-y-auto scrollbar-none">
             {loading && <Preloader />}
 
+
             <Main2 ctaData={ctaData} />
 
             <ContentFirst />
 
             <SecondLanding />
+            <FullScreenImage />
             <DashboardBento />
+
             <GoalTrackerBento />
             <ProjectManagerBento />
 
             <Third />
-            <ContentSecond />
+            {/* <ContentSecond /> */}
+
             <Lines2 />
 
             <ContentSecond2 />

@@ -1,6 +1,7 @@
 const express = require("express");
 const { userAuth } = require("../middlewares/userAuth.js");
 const ResumeProfileSchema = require("../models/ResumeProfileSchema.js");
+const User = require("../models/user.js");
 const {
     validateSignUpData,
     validateEditProfileData,
@@ -317,6 +318,35 @@ resRouter.get("/build-resume/get-resume", userAuth, async (req, res) => {
         }
 
         const resume = await ResumeProfileSchema.findOne({ userId: req.user._id });
+
+        if (!resume) {
+            return res.status(200).json({
+                success: false,
+                message: "No resume found for this user.",
+                data: null,
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Resume fetched successfully",
+            data: resume,
+        });
+
+    } catch (err) {
+        return handleRouteError(err, res);
+    }
+});
+
+resRouter.get("/build-resume/get-resume/:username", async (req, res) => {
+    try {
+        const { username } = req.params;
+        const targetUser = await User.findOne({ username });
+        if (!targetUser) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        const resume = await ResumeProfileSchema.findOne({ userId: targetUser._id });
 
         if (!resume) {
             return res.status(200).json({
