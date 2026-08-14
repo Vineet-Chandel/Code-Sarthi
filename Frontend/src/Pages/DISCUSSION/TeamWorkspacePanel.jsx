@@ -92,7 +92,7 @@ const TeamWorkspacePanel = () => {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      navigator.clipboard.writeText(team.inviteCode || '');
+                      navigator.clipboard.writeText(window.location.origin + '/invite/' + (team.inviteCode || ''));
                       setCopiedInviteCode(true);
                       setTimeout(() => {
                         setCopiedInviteCode(false);

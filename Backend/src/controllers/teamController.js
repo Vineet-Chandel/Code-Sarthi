@@ -148,6 +148,26 @@ async function generateInviteCode(req, res) {
   }
 }
 
+// Get Invite Details
+async function getInviteDetails(req, res) {
+  const { code } = req.params;
+  try {
+    const team = await Team.findOne({ inviteCode: code, status: 'active' })
+      .select('name description logo ownerId inviteCodeExpiresAt')
+      .populate('ownerId', 'firstName lastName photoUrl username');
+
+    if (!team) return res.status(404).json({ error: 'Invalid or expired invite code' });
+
+    if (team.inviteCodeExpiresAt && team.inviteCodeExpiresAt < new Date()) {
+      return res.status(410).json({ error: 'Invite code has expired' });
+    }
+
+    res.json({ success: true, team });
+  } catch (err) {
+    return handleRouteError(err, res);
+  }
+}
+
 // Join team via invite code
 async function joinTeam(req, res) {
   const { code } = req.body;
@@ -501,5 +521,6 @@ module.exports = {
   leaveTeam,
   transferOwnership,
   getTeamWorkspace,
-  uploadTeamLogo
+  uploadTeamLogo,
+  getInviteDetails
 };

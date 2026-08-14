@@ -35,6 +35,7 @@ import SubmitARequest from "./Main/PagesMain/Sub-Category/Support-Category/Submi
 /* ===== AUTH ===== */
 import Login from "./Pages/auth/Login";
 import Signup from "./Pages/auth/Signup";
+import InvitePage from "./Pages/InvitePage";
 
 /* ===== APP (PROTECTED) ===== */
 import Dashboard from "./Pages/MainDashboard";
@@ -128,6 +129,7 @@ const App = () => {
           <Route path="/" element={<Hero />} />
           {/* 📌 PAGE NOT FOUND ROUTE */}
           <Route path="*" element={<PageNotFound />} />
+          <Route path="/invite/:code" element={<InvitePage />} />
           <Route path="/developers" element={<Developers />} />
           <Route path="/safety" element={<Safety />} />
           <Route path="/blogs" element={<Blogs />} />

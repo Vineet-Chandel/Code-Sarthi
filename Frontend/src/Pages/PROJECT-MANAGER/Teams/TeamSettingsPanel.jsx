@@ -64,7 +64,7 @@ const TeamSettingsPanel = ({ team, myRole, onUpdate, onArchive, onDelete }) => {
             const res = await axios.post(`${BASE_URL}/teams/${team._id}/invite`, {}, { withCredentials: true });
             setInviteCode(res.data.inviteCode);
             setIsRegenerateModalOpen(false);
-            setAlertData({ type: 'success', title: 'Code Regenerated', message: "New team invite code is ready to share." });
+            setAlertData({ type: 'success', title: 'Link Revoked', message: "Old invite link revoked. A new link has been generated." });
         } catch (err) {
             setAlertData({ type: 'error', message: err.response?.data?.error || "Failed to regenerate invite code" });
         } finally {
@@ -73,15 +73,16 @@ const TeamSettingsPanel = ({ team, myRole, onUpdate, onArchive, onDelete }) => {
     };
 
     const copyCode = () => {
-        navigator.clipboard.writeText(inviteCode);
-        setAlertData({ type: 'success', title: 'Copied!', message: "Invite code copied to clipboard!" });
+        const fullLink = window.location.origin + '/invite/' + inviteCode;
+        navigator.clipboard.writeText(fullLink);
+        setAlertData({ type: 'success', title: 'Copied!', message: "Invite link copied to clipboard!" });
     };
 
     return (
         <div className="space-y-6">
             <div className="bg-[#0a0a0a] rounded-2xl p-7 shadow-2xl">
                 <h3 className="text-lg font-bold text-white mb-6">General Settings</h3>
-                
+
                 {/* Logo picker */}
                 <div className="flex items-center gap-4 mb-6">
                     <div className="w-[80px] h-[80px] rounded-2xl bg-black border border-white/10 flex items-center justify-center text-white text-2xl font-black shrink-0 overflow-hidden relative group">
@@ -100,12 +101,12 @@ const TeamSettingsPanel = ({ team, myRole, onUpdate, onArchive, onDelete }) => {
                         <div>
                             <label className="cursor-pointer bg-[#121212] hover:bg-white hover:text-black text-white text-xs font-bold py-2 px-4 rounded-xl border border-white/10 transition-all select-none">
                                 {uploadingLogo ? 'Uploading...' : 'Change Logo'}
-                                <input 
-                                    type="file" 
-                                    accept="image/*" 
-                                    className="hidden" 
-                                    onChange={handleLogoChange} 
-                                    disabled={uploadingLogo} 
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={handleLogoChange}
+                                    disabled={uploadingLogo}
                                 />
                             </label>
                             <span className="block text-[10px] text-zinc-500 mt-1.5 font-medium">Recommended: Square image, max 2MB.</span>
@@ -150,13 +151,13 @@ const TeamSettingsPanel = ({ team, myRole, onUpdate, onArchive, onDelete }) => {
 
             {isLeader && (
                 <div className="bg-[#0a0a0a] rounded-2xl p-7 shadow-2xl">
-                    <h3 className="text-lg font-bold text-white mb-2">Invite Code</h3>
-                    <p className="text-sm text-zinc-400 mb-6">Share this code with others so they can join your team.</p>
+                    <h3 className="text-lg font-bold text-white mb-2">Invite Link</h3>
+                    <p className="text-sm text-zinc-400 mb-6">Share this link with others so they can join your team.</p>
 
                     <div className="flex items-center gap-4">
-                        <div className="bg-black rounded-xl px-4 py-3.5 flex-1 flex items-center justify-between shadow-inner">
-                            <span className="font-mono text-lg font-bold text-white tracking-widest">{inviteCode}</span>
-                            <button onClick={copyCode} className="text-zinc-400 hover:text-white transition-colors" title="Copy to clipboard">
+                        <div className="bg-black rounded-xl px-4 py-3.5 flex-1 flex items-center justify-between shadow-inner overflow-hidden">
+                            <span className="font-mono text-sm text-zinc-300 truncate mr-2">{window.location.origin}/invite/{inviteCode}</span>
+                            <button onClick={copyCode} className="text-zinc-400 hover:text-white transition-colors shrink-0" title="Copy to clipboard">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 8m0 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z" /><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" /></svg>
                             </button>
                         </div>
@@ -165,7 +166,7 @@ const TeamSettingsPanel = ({ team, myRole, onUpdate, onArchive, onDelete }) => {
                             disabled={generatingCode}
                             className="bg-[#121212] hover:bg-white hover:text-black text-white font-bold py-3.5 px-5 rounded-xl transition-all disabled:opacity-50 whitespace-nowrap shadow-sm"
                         >
-                            Regenerate
+                            Revoke Link
                         </button>
                     </div>
                 </div>
@@ -210,13 +211,13 @@ const TeamSettingsPanel = ({ team, myRole, onUpdate, onArchive, onDelete }) => {
                 isOpen={isRegenerateModalOpen}
                 onClose={() => setIsRegenerateModalOpen(false)}
                 onConfirm={handleRegenerateCode}
-                title="Regenerate Invite Code"
-                itemType="Code"
+                title="Revoke Invite Link"
+                itemType="Link"
                 itemName={team?.name}
-                requiredText="REGENERATE"
-                description="You are about to generate a new invitation code for this team."
-                warning="Generating a new code will immediately invalidate the existing invite code."
-                buttonText="Regenerate Code"
+                requiredText="REVOKE"
+                description="You are about to revoke the current invitation link."
+                warning="This will immediately invalidate the existing link. Anyone with the old link will not be able to join."
+                buttonText="Revoke Link"
                 theme="amber"
                 loading={generatingCode}
             />

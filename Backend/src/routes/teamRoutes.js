@@ -23,7 +23,8 @@ const {
   leaveTeam,
   transferOwnership,
   getTeamWorkspace,
-  uploadTeamLogo
+  uploadTeamLogo,
+  getInviteDetails
 } = require('../controllers/teamController');
 const uploadFile = require('../middlewares/multerProfile');
 
@@ -34,7 +35,10 @@ const joinLimiter = rateLimit({
   message: { error: 'Too many join attempts, please try again after 15 minutes' }
 });
 
-router.use(userAuth); // All routes require authentication
+// Public routes
+router.get('/invite/:code', getInviteDetails);
+
+router.use(userAuth); // All routes below require authentication
 
 // Global team routes
 router.post('/', createTeam);
