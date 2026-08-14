@@ -9,7 +9,9 @@ const TeamSchema = new Schema({
   memberCount: { type: Number, default: 1 }, // denormalized; updated transactionally on join/remove/leave
   inviteCode: { type: String, unique: true, sparse: true },
   inviteCodeExpiresAt: { type: Date, default: null }, // null = never expires (v1 default)
-  status: { type: String, enum: ['active', 'archived'], default: 'active' }
+  status: { type: String, enum: ['active', 'archived'], default: 'active' },
+  generalConversationId: { type: Schema.Types.ObjectId, ref: 'conversation', default: null },
+  logo: { type: String, default: "" }
 }, { timestamps: true });
 
 TeamSchema.index({ ownerId: 1 });

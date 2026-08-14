@@ -1,22 +1,39 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import BASE_URL from '../../auth/baseURL';
 
-const CreateIssueModal = ({ isOpen, onClose, teamId, projectId, onSuccess }) => {
+const CreateIssueModal = ({ isOpen, onClose, teamId, projectId, projects = [], onSuccess }) => {
     const [type, setType] = useState('issue');
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [priority, setPriority] = useState('medium');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [localProjectId, setLocalProjectId] = useState(projectId || '');
+
+    useEffect(() => {
+        if (projectId) {
+            setLocalProjectId(projectId);
+        } else if (projects.length > 0) {
+            setLocalProjectId(projects[0]._id);
+        }
+    }, [projectId, projects, isOpen]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
+        
+        const targetProjectId = projectId || localProjectId;
+        if (!targetProjectId) {
+            setError('Please select a project');
+            setLoading(false);
+            return;
+        }
+
         try {
-            const res = await axios.post(`${BASE_URL}/teams/${teamId}/projects/${projectId}/issues`, {
+            const res = await axios.post(`${BASE_URL}/teams/${teamId}/projects/${targetProjectId}/issues`, {
                 type, title, description, priority
             }, { withCredentials: true });
             onSuccess(res.data.issue);
@@ -75,6 +92,21 @@ const CreateIssueModal = ({ isOpen, onClose, teamId, projectId, onSuccess }) => 
                                     ))}
                                 </div>
                             </div>
+
+                            {!projectId && projects.length > 0 && (
+                                <div>
+                                    <label className="block text-xs font-medium text-zinc-400 uppercase tracking-wider mb-1.5 font-semibold">Select Project *</label>
+                                    <select
+                                        value={localProjectId}
+                                        onChange={(e) => setLocalProjectId(e.target.value)}
+                                        className="w-full bg-[#000000] border border-white/[0.06] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white/[0.2] transition-all font-semibold"
+                                    >
+                                        {projects.map(p => (
+                                            <option key={p._id} value={p._id}>{p.title}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            )}
 
                             <div>
                                 <label className="block text-xs font-medium text-zinc-400 uppercase tracking-wider mb-1.5">Title *</label>

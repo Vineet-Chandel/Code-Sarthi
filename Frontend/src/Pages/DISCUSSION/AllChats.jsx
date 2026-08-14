@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import BASE_URL from '../auth/baseURL';
 import axios from 'axios';
 import { addConnectionUser } from '@/utils/connectionSlice';
+import { useTeamChat } from './TeamChatContext';
 
 import { useNavigate, useOutletContext } from "react-router-dom";
 
@@ -12,6 +13,7 @@ import ChatProfile from './AllChats/ChatProfile';
 import EmptyChats from './AllChats/ChatList/EmptyChats';
 
 const AllChats = ({ setNewConvoFinded, newConvoFinded, setForwardTabOpen, forwardTabOpen, loading, setLoading, addToast, selectedChatUser, setSelectedChatUser, lastMsgStatus }) => {
+    const { setActiveTeam } = useTeamChat();
 
     const navigate = useNavigate()
 
@@ -214,6 +216,64 @@ const AllChats = ({ setNewConvoFinded, newConvoFinded, setForwardTabOpen, forwar
                     <div className='mt-3 p-0 w-[100%] '>
                         {chatsARR?.map((chatUser, idx) => {
                             return (chatUser.members.map((user, index) => {
+                                if (chatUser.type === "team_general" || chatUser.type === "team_issue") {
+                                    if (index !== 0) return null;
+                                    const team = chatUser.teamId;
+                                    if (!team) return null;
+                                    const unreadCount =
+                                        chatUser?.unreadCounts?.find(
+                                            (item) => item.user === loggedUser._id
+                                        )?.count ?? 0;
+                                    return (
+                                        <div
+                                            key={chatUser._id}
+                                            onClick={() => {
+                                                if (forwardTabOpen) {
+                                                    setForwardTabOpen(false);
+                                                }
+                                                setActiveTeam(team._id);
+                                            }}
+                                            className="group text-white h-auto w-full cursor-pointer rounded-2xl my-2 flex items-center gap-2 p-1.5 hover:bg-white/5 transition-colors bg-transparent border border-white/5"
+                                        >
+                                            <div className='w-full flex items-center gap-1 h-full bg-transparent rounded-2xl'>
+                                                <div className="w-[60px] h-[60px] rounded-xl bg-zinc-950 border border-white/10 flex items-center justify-center text-white text-xl font-extrabold shrink-0 overflow-hidden">
+                                                    {team.logo ? (
+                                                        <img src={team.logo} className="w-full h-full object-cover" alt="" />
+                                                    ) : (
+                                                        team.name?.[0]?.toUpperCase() || 'T'
+                                                    )}
+                                                </div>
+                                                <div className='w-full h-full rounded-2xl bg-transparent px-1'>
+                                                    <div className="flex justify-between items-center ">
+                                                        <span className="font-semibold text-md truncate text-white">{team.name}</span>
+                                                        <span className="text-sm text-gray-400">
+                                                            {chatUser?.lastMessage?.updatedAt ?
+                                                                new Date(chatUser?.lastMessage?.updatedAt).toLocaleTimeString("en-US", {
+                                                                    hour: "numeric",
+                                                                    minute: "2-digit",
+                                                                    hour12: true,
+                                                                })
+                                                                : ""
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex justify-between items-center ">
+                                                        <span className="text-sm pl-1 line-clamp-1 break-words text-zinc-500">
+                                                            {chatUser?.type === "team_general" ? (team.description || "No description") : "Issue thread"}
+                                                        </span>
+                                                        <div className="flex items-center gap-1">
+                                                            {unreadCount > 0 && (
+                                                                <span className="min-w-5 h-5 px-1 rounded-full bg-white text-black text-xs font-bold flex items-center justify-center">
+                                                                    {unreadCount}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                }
                                 const unreadCount =
                                     chatUser?.unreadCounts?.find(
                                         (item) => item.user === user._id

@@ -2,8 +2,12 @@ const mongoose = require("mongoose");
 const Issue = require("../models/issue");
 const Project = require("../models/project");
 const TeamMember = require("../models/teamMember");
+const Team = require("../models/team");
+const Conversation = require("../models/conversation");
+const Message = require("../models/message");
 const AssignmentEvent = require("../models/assignmentEvent");
 const Goals = require("../models/goals");
+const { broadcastToTeam } = require("../Socket/Services/teamBroadcast");
 const { handleRouteError } = require("../utils/handleRouteError");
 const { mapIssueStatusToGoalStatus, mapIssuePriorityToGoalPriority } = require("../utils/statusMapping");
 
@@ -47,6 +51,35 @@ async function createIssue(req, res) {
       description,
       priority: priority || 'medium',
       createdBy: req.user._id
+    });
+
+    const team = await Team.findById(teamId);
+    const leaderId = team ? team.ownerId : req.user._id;
+
+    const members = await TeamMember.find({ teamId, status: "active" });
+    const memberIds = members.map(m => m.userId);
+
+    const convo = await Conversation.create({
+      type: "team_issue",
+      teamId,
+      projectId,
+      issueId: issue._id,
+      name: issue.title,
+      createdBy: req.user._id,
+      members: memberIds,
+      admins: [leaderId],
+      unreadCounts: memberIds.map(id => ({ user: id, count: 0 }))
+    });
+
+    issue.conversationId = convo._id;
+    await issue.save();
+
+    // Broadcast WebSocket event
+    await broadcastToTeam(teamId, {
+      type: "team:issue:created",
+      teamId,
+      projectId,
+      issue
     });
 
     res.status(201).json({ issue });
@@ -138,6 +171,13 @@ async function archiveIssue(req, res) {
     }
 
     res.json({ success: true });
+
+    // Broadcast WebSocket event
+    await broadcastToTeam(teamId, {
+      type: "team:issue:archived",
+      teamId,
+      issueId
+    });
   } catch (err) {
     return handleRouteError(err, res);
   }
@@ -303,6 +343,20 @@ async function deleteIssue(req, res) {
         { status: 'Removed', isArchived: true, lastUpdated: Date.now() }
       );
     }
+
+    // Clean up conversation and messages
+    const convo = await Conversation.findOne({ issueId });
+    if (convo) {
+      await Message.deleteMany({ conversation_id: convo._id });
+      await Conversation.deleteOne({ _id: convo._id });
+    }
+
+    // Broadcast WebSocket event
+    await broadcastToTeam(teamId, {
+      type: "team:issue:deleted",
+      teamId,
+      issueId
+    });
 
     res.json({ success: true });
   } catch (err) {

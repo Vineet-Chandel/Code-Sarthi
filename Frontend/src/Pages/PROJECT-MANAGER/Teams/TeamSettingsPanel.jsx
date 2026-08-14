@@ -12,8 +12,34 @@ const TeamSettingsPanel = ({ team, myRole, onUpdate, onArchive, onDelete }) => {
     const [generatingCode, setGeneratingCode] = useState(false);
     const [isRegenerateModalOpen, setIsRegenerateModalOpen] = useState(false);
     const [alertData, setAlertData] = useState(null);
+    const [logoPreview, setLogoPreview] = useState(team.logo || '');
+    const [uploadingLogo, setUploadingLogo] = useState(false);
 
+    const soccerRef = null;
     const isLeader = myRole === 'leader';
+
+    const handleLogoChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        setUploadingLogo(true);
+        const uploadForm = new FormData();
+        uploadForm.append("logo", file);
+
+        try {
+            const res = await axios.post(`${BASE_URL}/teams/${team._id}/logo/upload`, uploadForm, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+                withCredentials: true
+            });
+            setLogoPreview(res.data.logo);
+            onUpdate({ ...team, logo: res.data.logo });
+            setAlertData({ type: 'success', title: 'Logo Uploaded', message: 'Team logo updated successfully!' });
+        } catch (err) {
+            setAlertData({ type: 'error', message: err.response?.data?.message || 'Failed to upload logo' });
+        } finally {
+            setUploadingLogo(false);
+        }
+    };
 
     const handleSave = async (e) => {
         e.preventDefault();
@@ -55,6 +81,38 @@ const TeamSettingsPanel = ({ team, myRole, onUpdate, onArchive, onDelete }) => {
         <div className="space-y-6">
             <div className="bg-[#0a0a0a] rounded-2xl p-7 shadow-2xl">
                 <h3 className="text-lg font-bold text-white mb-6">General Settings</h3>
+                
+                {/* Logo picker */}
+                <div className="flex items-center gap-4 mb-6">
+                    <div className="w-[80px] h-[80px] rounded-2xl bg-black border border-white/10 flex items-center justify-center text-white text-2xl font-black shrink-0 overflow-hidden relative group">
+                        {logoPreview ? (
+                            <img src={logoPreview} className="w-full h-full object-cover" alt="" />
+                        ) : (
+                            name?.[0]?.toUpperCase() || 'T'
+                        )}
+                        {uploadingLogo && (
+                            <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
+                                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                            </div>
+                        )}
+                    </div>
+                    {isLeader && (
+                        <div>
+                            <label className="cursor-pointer bg-[#121212] hover:bg-white hover:text-black text-white text-xs font-bold py-2 px-4 rounded-xl border border-white/10 transition-all select-none">
+                                {uploadingLogo ? 'Uploading...' : 'Change Logo'}
+                                <input 
+                                    type="file" 
+                                    accept="image/*" 
+                                    className="hidden" 
+                                    onChange={handleLogoChange} 
+                                    disabled={uploadingLogo} 
+                                />
+                            </label>
+                            <span className="block text-[10px] text-zinc-500 mt-1.5 font-medium">Recommended: Square image, max 2MB.</span>
+                        </div>
+                    )}
+                </div>
+
                 <form onSubmit={handleSave} className="space-y-4">
                     <div>
                         <label className="block text-xs font-medium text-zinc-400 uppercase tracking-wider mb-1.5">Team Name</label>

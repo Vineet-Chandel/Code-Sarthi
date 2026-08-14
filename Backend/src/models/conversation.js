@@ -16,9 +16,27 @@ const ConvoSchema = new Schema({
   },
   type: {
     type: String,
-    enum: ["private", "group"],
+    enum: ["private", "group", "team_general", "team_issue"],
     default: "private"
   },
+
+  // ─── Team-scoped references (required when type starts with "team_") ──────
+  teamId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Team",
+    default: null
+  },
+  projectId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Project",
+    default: null   // required only for type = "team_issue"
+  },
+  issueId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Issue",
+    default: null   // required only for type = "team_issue"
+  },
+
   members: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "Users",
@@ -50,12 +68,11 @@ const ConvoSchema = new Schema({
     }
   ],
 
-
-
-
   updatedAt: {
     type: Date
   }
 }, { timestamps: true })
+
+ConvoSchema.index({ teamId: 1, type: 1 });
 
 module.exports = mongoose.model("conversation", ConvoSchema, "conversation");

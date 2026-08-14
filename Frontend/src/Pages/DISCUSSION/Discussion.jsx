@@ -11,8 +11,12 @@ import { addMessage, setConversationMessages } from "../../utils/messageSlice"
 import Toast from '../CARRER-PROFILE-CREATION/2/Toast'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useOutletContext } from 'react-router-dom'
+import { TeamChatProvider, useTeamChat } from './TeamChatContext'
+import CollapsedChatRail from './CollapsedChatRail'
+import TeamWorkspacePanel from './TeamWorkspacePanel'
+import { useSocket } from '../../socket/SocketContext'
 
-const Discussion = () => {
+const DiscussionContent = () => {
   const [forwardTabOpen, setForwardTabOpen] = useState(false);
   const {
     selectedChatUser,
@@ -22,6 +26,57 @@ const Discussion = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [subLoading, setSubLoading] = useState(false)
+  const socketRef = useSocket();
+  const { 
+    activeTeamId, 
+    activeConversationId, 
+    teamWorkspace, 
+    refreshWorkspace, 
+    exitTeamMode, 
+    setActiveConversation 
+  } = useTeamChat();
+
+  useEffect(() => {
+    if (!socketRef || !socketRef.current) return;
+
+    const handleTeamSocketMessage = (event) => {
+      try {
+        const payload = JSON.parse(event.data);
+        
+        if (payload.type === "team:issue:created") {
+          if (String(payload.teamId) === String(activeTeamId)) {
+            refreshWorkspace();
+          }
+        }
+        
+        if (payload.type === "team:member:removed") {
+          if (String(payload.teamId) === String(activeTeamId)) {
+            exitTeamMode();
+          }
+        }
+
+        if (payload.type === "team:issue:deleted" || payload.type === "team:issue:archived") {
+          if (String(payload.teamId) === String(activeTeamId)) {
+            if (String(activeConversationId) === String(payload.conversationId || payload.issueId)) {
+              if (teamWorkspace) {
+                setActiveConversation(teamWorkspace.generalConversationId);
+              }
+            }
+            refreshWorkspace();
+          }
+        }
+      } catch (err) {
+        console.error("Error processing team socket event:", err);
+      }
+    };
+
+    socketRef.current.addEventListener("message", handleTeamSocketMessage);
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.removeEventListener("message", handleTeamSocketMessage);
+      }
+    };
+  }, [socketRef, activeTeamId, activeConversationId, teamWorkspace]);
 
   const [lastMsgStatus, setlastMsgStatus] = useState({
     lastMsg: null,
@@ -34,7 +89,7 @@ const Discussion = () => {
   const messages = async (id) => {
     try {
       setSubLoading(true)
-      if (!id || id.toString() === `temp_${selectedChatUser?.info?._id}`) {
+      if (!id || (!activeTeamId && selectedChatUser?.info?._id && id.toString() === `temp_${selectedChatUser?.info?._id}`)) {
         console.log("returning")
         setSubLoading(false);
         setLoading(false);
@@ -69,12 +124,15 @@ const Discussion = () => {
 
 
   useEffect(() => {
-    const messagesPeek = allMessages?.messages?.[selectedChatUser?.convoId];
-    if (selectedChatUser?.info?._id && !messagesPeek) {
-      messages(selectedChatUser?.convoId)
+    const convoId = activeTeamId ? activeConversationId : selectedChatUser?.convoId;
+    if (convoId) {
+      const messagesPeek = allMessages?.messages?.[convoId];
+      const shouldFetch = activeTeamId ? !!activeConversationId : !!selectedChatUser?.info?._id;
+      if (shouldFetch && !messagesPeek) {
+        messages(convoId)
+      }
     }
-
-  }, [selectedChatUser])
+  }, [selectedChatUser, activeConversationId, activeTeamId])
 
 
   const [toasts, setToasts] = useState([]);
@@ -127,47 +185,92 @@ const Discussion = () => {
 
 
       <ToastContainer toasts={toasts} removeToast={removeToast} />
-      <div className={`    ${selectedChatUser?.info ? "hidden md:block" : "block"} h-full w-full  sm:relative md:w-[340px] lg:w-[380px] xl:w-[420px]  bg-[#212121] rounded-3xl pl-2 pr-1 p-3`}>
 
-        <div className='h-[53px] '>
-          <SearchChats loading={loading} setLoading={setLoading} />
-        </div>
+      {activeTeamId ? (
+        <>
+          {/* Collapsed Rail + Team Workspace panel (acts as sidebar) */}
+          <div className={`${activeConversationId ? "hidden md:flex" : "flex"} h-full shrink-0 gap-1 rounded-3xl overflow-hidden`}>
+            <CollapsedChatRail />
+            <TeamWorkspacePanel />
+          </div>
+
+          {/* Chat area */}
+          <div className={` ${activeConversationId ? "flex" : "hidden md:flex"} flex-1 h-full sm:relative bg-black rounded-2xl bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:40px_40px] flex justify-center items-center flex-col`}>
+            {activeConversationId ? (
+              <ChatArea 
+                newConvoFinded={newConvoFinded} 
+                setNewConvoFinded={setNewConvoFinded} 
+                subLoading={subLoading} 
+                forwardTabOpen={forwardTabOpen} 
+                setForwardTabOpen={setForwardTabOpen} 
+                setSelectedChatUser={setSelectedChatUser} 
+                selectedChatUser={selectedChatUser} 
+                addToast={addToast} 
+                setlastMsgStatus={setlastMsgStatus} 
+                lastMsgStatus={lastMsgStatus} 
+              />
+            ) : (
+              <div className="flex flex-col items-center justify-center">
+                <svg className='w-[400px] h-[400px]' viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="4" y="6" width="16" height="12" rx="2" fill="#7E869E" fillOpacity="0.25" stroke="#fffefeff" strokeWidth="1.2" />
+                  <path d="M11.1056 12.5528L4 9V16C4 17.1046 4.89543 18 6 18H18C19.1046 18 20 17.1046 20 16V9L12.8944 12.5528C12.3314 12.8343 11.6686 12.8343 11.1056 12.5528Z" fill="#fff" />
+                </svg>
+                <h1 className='text-2xl font-extrabold font-poppins relative text-center -top-[80px] text-info'>
+                  Select an issue or General chat
+                </h1>
+              </div>
+            )}
+          </div>
+        </>
+      ) : (
+        <>
+          {/* Default two-column layout for DMs / Group chats */}
+          <div className={`    ${selectedChatUser?.info ? "hidden md:block" : "block"} h-full w-full  sm:relative md:w-[340px] lg:w-[380px] xl:w-[420px]  bg-[#212121] rounded-3xl pl-2 pr-1 p-3`}>
+
+            <div className='h-[53px] '>
+              <SearchChats loading={loading} setLoading={setLoading} />
+            </div>
 
 
 
-        <div className='h-[calc(100%-53px)]'>
-          <AllChats setNewConvoFinded={setNewConvoFinded} newConvoFinded={newConvoFinded} forwardTabOpen={forwardTabOpen} setForwardTabOpen={setForwardTabOpen} loading={loading} setLoading={setLoading} selectedChatUser={selectedChatUser} setSelectedChatUser={setSelectedChatUser} addToast={addToast} setlastMsgStatus={setlastMsgStatus} lastMsgStatus={lastMsgStatus} />
-        </div>
+            <div className='h-[calc(100%-53px)]'>
+              <AllChats setNewConvoFinded={setNewConvoFinded} newConvoFinded={newConvoFinded} forwardTabOpen={forwardTabOpen} setForwardTabOpen={setForwardTabOpen} loading={loading} setLoading={setLoading} selectedChatUser={selectedChatUser} setSelectedChatUser={setSelectedChatUser} addToast={addToast} setlastMsgStatus={setlastMsgStatus} lastMsgStatus={lastMsgStatus} />
+            </div>
+
+          </div>
+          <div className={`  ${selectedChatUser?.info
+            ? "flex"
+            : "hidden md:flex"
+            }    flex-1 h-full   sm:relative bg-black rounded-2xl  bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.1)_1px,transparent_1px)]
+        bg-[size:40px_40px]  flex justify-center items-center flex-col`}>
 
 
+            {selectedChatUser?.info === null && (<><svg className='w-[400px] h-[400px]  ' viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="4" y="6" width="16" height="12" rx="2" fill="#7E869E" fillOpacity="0.25" stroke="#fffefeff" strokeWidth="1.2" />
+              <path d="M11.1056 12.5528L4 9V16C4 17.1046 4.89543 18 6 18H18C19.1046 18 20 17.1046 20 16V9L12.8944 12.5528C12.3314 12.8343 11.6686 12.8343 11.1056 12.5528Z" fill="#fff" />
+            </svg>
+              <h1 className='text-2xl font-extrabold font-poppins relative text-center -top-[80px] text-info'>
+                Discuss solutions <br /> Not distractions
+              </h1>
+
+            </>)}
 
 
+            {selectedChatUser?.info !== null && <ChatArea newConvoFinded={newConvoFinded} setNewConvoFinded={setNewConvoFinded} subLoading={subLoading} forwardTabOpen={forwardTabOpen} setForwardTabOpen={setForwardTabOpen} setSelectedChatUser={setSelectedChatUser} selectedChatUser={selectedChatUser} addToast={addToast} setlastMsgStatus={setlastMsgStatus} lastMsgStatus={lastMsgStatus} />}
 
-
-      </div>
-      <div className={`  ${selectedChatUser?.info
-        ? "flex"
-        : "hidden md:flex"
-        }    flex-1 h-full   sm:relative bg-black rounded-2xl  bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.1)_1px,transparent_1px)]
-    bg-[size:40px_40px]  flex justify-center items-center flex-col`}>
-
-
-        {selectedChatUser?.info === null && (<><svg className='w-[400px] h-[400px]  ' viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="4" y="6" width="16" height="12" rx="2" fill="#7E869E" fillOpacity="0.25" stroke="#fffefeff" strokeWidth="1.2" />
-          <path d="M11.1056 12.5528L4 9V16C4 17.1046 4.89543 18 6 18H18C19.1046 18 20 17.1046 20 16V9L12.8944 12.5528C12.3314 12.8343 11.6686 12.8343 11.1056 12.5528Z" fill="#fff" />
-        </svg>
-          <h1 className='text-2xl font-extrabold font-poppins relative text-center -top-[80px] text-info'>
-            Discuss solutions <br /> Not distractions
-          </h1>
-
-        </>)}
-
-
-        {selectedChatUser?.info !== null && <ChatArea newConvoFinded={newConvoFinded} setNewConvoFinded={setNewConvoFinded} subLoading={subLoading} forwardTabOpen={forwardTabOpen} setForwardTabOpen={setForwardTabOpen} setSelectedChatUser={setSelectedChatUser} selectedChatUser={selectedChatUser} addToast={addToast} setlastMsgStatus={setlastMsgStatus} lastMsgStatus={lastMsgStatus} />}
-
-      </div>
+          </div>
+        </>
+      )}
 
     </div >
+  )
+}
+
+const Discussion = () => {
+  return (
+    <TeamChatProvider>
+      <DiscussionContent />
+    </TeamChatProvider>
   )
 }
 

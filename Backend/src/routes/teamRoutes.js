@@ -21,8 +21,11 @@ const {
   removeMember,
   updateMemberRole,
   leaveTeam,
-  transferOwnership
+  transferOwnership,
+  getTeamWorkspace,
+  uploadTeamLogo
 } = require('../controllers/teamController');
+const uploadFile = require('../middlewares/multerProfile');
 
 // Rate limiter for joining via invite code to prevent brute forcing
 const joinLimiter = rateLimit({
@@ -40,6 +43,7 @@ router.post('/join', joinLimiter, joinTeam);
 
 // Routes requiring team membership
 router.get('/:teamId', requireTeamMembership, getTeamDetails);
+router.get('/:teamId/workspace', requireTeamMembership, getTeamWorkspace);
 router.get('/:teamId/members', requireTeamMembership, listMembers);
 router.post('/:teamId/leave', requireTeamMembership, leaveTeam);
 
@@ -51,6 +55,7 @@ router.post('/:teamId/invite', requireTeamMembership, requireTeamLeader, generat
 router.delete('/:teamId/members/:userId', requireTeamMembership, requireTeamLeader, removeMember);
 router.patch('/:teamId/members/:userId/role', requireTeamMembership, requireTeamLeader, updateMemberRole);
 router.post('/:teamId/transfer-ownership', requireTeamMembership, requireTeamLeader, transferOwnership);
+router.post('/:teamId/logo/upload', requireTeamMembership, requireTeamLeader, uploadFile.single('logo'), uploadTeamLogo);
 
 // Mount Sub-modules
 router.use('/:teamId/projects', projectRoutes);

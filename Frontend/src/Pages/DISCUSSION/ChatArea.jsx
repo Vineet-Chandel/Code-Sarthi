@@ -17,6 +17,7 @@ import BASE_URL from "../auth/baseURL";
 import { useDispatch, useSelector } from "react-redux";
 import { addMessage } from "@/utils/messageSlice";
 import ForwardTab from './ForwardTab';
+import { useTeamChat } from './TeamChatContext';
 
 
 const useLongPress = (callback, ms = 500, setClassLongPress) => {
@@ -54,6 +55,16 @@ const ChatArea = ({ setNewConvoFinded, newConvoFinded, subLoading, forwardTabOpe
     const dispatch = useDispatch()
     const user = useSelector(state => state?.user?.user?.DATA);
     const conversationMappings = useSelector(state => state?.messages?.conversationMappings || {});
+    const { activeTeamId, activeConversationId, teamWorkspace } = useTeamChat();
+
+    const getActiveIssueName = () => {
+        if (!teamWorkspace || !teamWorkspace.projects) return 'issue-thread';
+        for (const project of teamWorkspace.projects) {
+            const issue = project.issues?.find(i => i.conversationId === activeConversationId);
+            if (issue) return issue.title;
+        }
+        return 'issue-thread';
+    };
     
     useEffect(() => {
         if (selectedChatUser?.convoId && conversationMappings[selectedChatUser.convoId]) {
@@ -109,11 +120,25 @@ const ChatArea = ({ setNewConvoFinded, newConvoFinded, subLoading, forwardTabOpe
 
         try {
             const clientMessageId = crypto.randomUUID();
-            const conversationKey = `temp_${selectedChatUser.id}`;
+            const conversationKey = activeTeamId ? activeConversationId : `temp_${selectedChatUser?.id}`;
 
 
             let payload = {}
-            if (!selectedChatUser.isNew) {
+            if (activeTeamId) {
+                payload = {
+                    clientMessageId,
+                    message: message,
+                    type: "group",
+                    conversationId: activeConversationId,
+                    content: message,
+                    replyTo: isReply ? {
+                        userId: messageTab.setMsg?.sender_id,
+                        content: messageTab.setMsg?.content
+                    } : null,
+                    does: messageType,
+                    messageType: "text"
+                }
+            } else if (!selectedChatUser.isNew) {
                 payload = {
                     clientMessageId,
                     message: message,
@@ -225,6 +250,22 @@ const ChatArea = ({ setNewConvoFinded, newConvoFinded, subLoading, forwardTabOpe
 
     return (
         <div className=" flex h-full w-full flex-col overflow-hidden rounded-2xl  bg-transparent ">
+
+            {/* Header / Breadcrumb (only in team mode) */}
+            {activeTeamId && teamWorkspace && (
+                <div className="h-[53px] px-6 border-b border-white/5 flex items-center bg-[#0a0a0a] shrink-0 text-white select-none">
+                    <span className="text-xs text-zinc-500 font-medium uppercase tracking-wider">
+                        {teamWorkspace.team?.name}
+                    </span>
+                    <span className="mx-2.5 text-zinc-700">/</span>
+                    <span className="text-xs font-bold text-white uppercase tracking-widest font-mono">
+                        {activeConversationId === teamWorkspace.generalConversationId 
+                            ? 'general-chat' 
+                            : getActiveIssueName()
+                        }
+                    </span>
+                </div>
+            )}
 
             {clipTab &&
 

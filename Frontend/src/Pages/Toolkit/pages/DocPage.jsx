@@ -210,6 +210,22 @@ export default function DocPage() {
     }
   };
 
+  const renderFormattedText = (text) => {
+    if (typeof text !== "string") return text;
+    const parts = text.split(/(\*\*.*?\*\*)/g);
+    return parts.map((part, idx) => {
+      if (part.startsWith("**") && part.endsWith("**")) {
+        const cleanText = part.slice(2, -2);
+        return (
+          <strong key={idx} style={{ color: tech?.color }} className="font-bold">
+            {cleanText}
+          </strong>
+        );
+      }
+      return part;
+    });
+  };
+
   if (!tech) return <Navigate to="/" replace />;
   const Icon = Icons[tech.icon] ?? Icons.Code2;
 
@@ -328,7 +344,7 @@ export default function DocPage() {
                         </h3>
                         {section.description && (
                           <p className="text-[20px] text-white/50 leading-relaxed whitespace-pre-wrap">
-                            {section.description}
+                            {renderFormattedText(section.description)}
                           </p>
                         )}
                         {section.code && (
@@ -371,7 +387,7 @@ export default function DocPage() {
                               <thead className="border-b border-white/10 bg-white/5 text-white/90">
                                 <tr>
                                   {section.table.headers.map((h, idx) => (
-                                    <th key={idx} className="px-4 py-3 font-semibold">{h}</th>
+                                    <th key={idx} className="px-4 py-3 font-semibold">{renderFormattedText(h)}</th>
                                   ))}
                                 </tr>
                               </thead>
@@ -380,7 +396,7 @@ export default function DocPage() {
                                   <tr key={rIdx} className="hover:bg-white/[0.02] transition-colors">
                                     {row.map((cell, cIdx) => (
                                       <td key={cIdx} className="px-4 py-3 align-top leading-relaxed">
-                                        {cell}
+                                        {renderFormattedText(cell)}
                                       </td>
                                     ))}
                                   </tr>

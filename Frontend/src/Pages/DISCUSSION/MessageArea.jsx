@@ -5,14 +5,13 @@ import { useRef } from "react";
 import axios from 'axios';
 import BASE_URL from '../auth/baseURL';
 import { useSelector } from 'react-redux';
-
-
-
+import { useTeamChat } from './TeamChatContext';
 
 
 const MessageArea = ({ newConvoFinded, subLoading, forwardTabOpen, setForwardTabOpen, selectedChatUser, setReplyHandeler, replyHandeler, setlastMsgStatus, lastMsgStatus, messageTab, setMessageTab, handelSend }) => {
     const user = useSelector(state => state?.user?.user?.DATA);
     const allMessages = useSelector(state => state.messages);
+    const { activeTeamId, activeConversationId, teamWorkspace } = useTeamChat();
     const [readMore, setReadMore] = useState({
         idx: null,
         isOpen: false,
@@ -42,7 +41,8 @@ const MessageArea = ({ newConvoFinded, subLoading, forwardTabOpen, setForwardTab
     }, []);
 
 
-    const messages = allMessages?.messages?.[selectedChatUser?.convoId];
+    const convoId = activeTeamId ? activeConversationId : selectedChatUser?.convoId;
+    const messages = allMessages?.messages?.[convoId];
 
 
 
@@ -59,7 +59,7 @@ const MessageArea = ({ newConvoFinded, subLoading, forwardTabOpen, setForwardTab
                 lastMsg: last.content,
                 lastMsgTime: last.createdAt,
                 msgId: last._id,
-                convoId: selectedChatUser?.convoId
+                convoId: convoId
             })
 
 
@@ -258,7 +258,11 @@ xl:max-w-[55%]  break-words [overflow-wrap:anywhere] whitespace-pre-wrap overflo
                                                             <p className="text-lg font-semibold text-white truncate">
                                                                 {items.replyTo?.userId === user._id
                                                                     ? "You"
-                                                                    : selectedChatUser?.info?.firstName + " " + selectedChatUser?.info?.lastName || "Unknown User"}
+                                                                    : activeTeamId
+                                                                        ? (teamWorkspace?.members?.find(m => String(m._id) === String(items.replyTo?.userId))
+                                                                            ? `${teamWorkspace?.members?.find(m => String(m._id) === String(items.replyTo?.userId))?.firstName} ${teamWorkspace?.members?.find(m => String(m._id) === String(items.replyTo?.userId))?.lastName}`
+                                                                            : "Team Member")
+                                                                        : selectedChatUser?.info?.firstName + " " + selectedChatUser?.info?.lastName || "Unknown User"}
                                                             </p>
 
                                                             <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 break-words">

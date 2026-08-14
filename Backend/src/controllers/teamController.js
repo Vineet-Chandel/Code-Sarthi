@@ -5,9 +5,14 @@ const Project = require("../models/project");
 const Issue = require("../models/issue");
 const ContributionLog = require("../models/contributionLog");
 const AssignmentEvent = require("../models/assignmentEvent");
+const Conversation = require("../models/conversation");
+const Message = require("../models/message");
+const { broadcastService } = require("../Socket/Services/BroadcastService");
 const { handleRouteError } = require("../utils/handleRouteError");
 const { nanoid } = require("nanoid");
 const { executeSuccession } = require("../services/teamSuccession");
+const cloudinary = require("cloudinary").v2;
+const getDataUrl = require("../utils/buffer");
 
 // Create team
 async function createTeam(req, res) {
@@ -29,6 +34,19 @@ async function createTeam(req, res) {
       role: 'leader',
       invitedBy: null
     }], { session });
+
+    const [convo] = await Conversation.create([{
+      type: "team_general",
+      teamId: team._id,
+      name: team.name,
+      createdBy: req.user._id,
+      members: [req.user._id],
+      admins: [req.user._id],
+      unreadCounts: [{ user: req.user._id, count: 0 }]
+    }], { session });
+
+    team.generalConversationId = convo._id;
+    await team.save({ session });
 
     await session.commitTransaction();
     const populatedTeam = await Team.findById(team._id).populate('ownerId', 'firstName lastName photoUrl');
@@ -101,8 +119,8 @@ async function getTeamDetails(req, res) {
 // Update team details
 async function updateTeam(req, res) {
   try {
-    const { name, description } = req.body;
-    const team = await Team.findByIdAndUpdate(req.params.teamId, { name, description }, { new: true });
+    const { name, description, logo } = req.body;
+    const team = await Team.findByIdAndUpdate(req.params.teamId, { name, description, logo }, { new: true });
     res.json({ team });
   } catch (err) {
     return handleRouteError(err, res);
@@ -161,6 +179,24 @@ async function joinTeam(req, res) {
         }], { session });
       }
       await Team.updateOne({ _id: team._id }, { $inc: { memberCount: 1 } }, { session });
+
+      // Add user to all conversations of this team
+      await Conversation.updateMany(
+        { teamId: team._id },
+        { 
+          $pull: { unreadCounts: { user: req.user._id } }
+        },
+        { session }
+      );
+      await Conversation.updateMany(
+        { teamId: team._id },
+        { 
+          $addToSet: { members: req.user._id },
+          $push: { unreadCounts: { user: req.user._id, count: 0 } }
+        },
+        { session }
+      );
+
       await session.commitTransaction();
       const populatedTeam = await Team.findById(team._id).populate('ownerId', 'firstName lastName photoUrl');
       const teamMembers = await TeamMember.find({ teamId: team._id, status: 'active' }).populate('userId', 'firstName lastName photoUrl email');
@@ -219,7 +255,27 @@ async function removeMember(req, res) {
         { session }
       );
       await Team.updateOne({ _id: teamId }, { $inc: { memberCount: -1 } }, { session });
+
+      // Pull removed member from all team conversations
+      await Conversation.updateMany(
+        { teamId },
+        {
+          $pull: {
+            members: userId,
+            unreadCounts: { user: userId }
+          }
+        },
+        { session }
+      );
+
       await session.commitTransaction();
+
+      // Broadcast to the removed user so they exit team workspace immediately
+      broadcastService([{ _id: userId }], {
+        type: "team:member:removed",
+        teamId
+      });
+
       res.json({ success: true });
     } catch (err) {
       await session.abortTransaction();
@@ -296,6 +352,13 @@ async function transferOwnership(req, res) {
 async function deleteTeam(req, res) {
   try {
     const teamId = req.params.teamId;
+    
+    // Clean up conversations and messages
+    const convos = await Conversation.find({ teamId });
+    const convoIds = convos.map(c => c._id);
+    await Message.deleteMany({ conversation_id: { $in: convoIds } });
+    await Conversation.deleteMany({ teamId });
+
     await Team.findByIdAndDelete(teamId);
     await TeamMember.deleteMany({ teamId });
     await Project.deleteMany({ teamId });
@@ -335,6 +398,94 @@ async function updateMemberRole(req, res) {
   }
 }
 
+// Get team workspace
+async function getTeamWorkspace(req, res) {
+  try {
+    const { teamId } = req.params;
+    
+    // Find the team
+    const team = await Team.findById(teamId).populate('ownerId', 'firstName lastName photoUrl');
+    if (!team) {
+      return res.status(404).json({ error: 'Team not found' });
+    }
+
+    // Find active members
+    const memberships = await TeamMember.find({ teamId, status: 'active' })
+      .populate('userId', 'firstName lastName photoUrl email');
+    
+    const members = memberships.filter(m => m.userId).map(m => ({
+      _id: m.userId._id,
+      firstName: m.userId.firstName,
+      lastName: m.userId.lastName,
+      photoUrl: m.userId.photoUrl,
+      email: m.userId.email,
+      role: m.role
+    }));
+
+    // Find all projects of the team
+    const projects = await Project.find({ teamId, archivedAt: null }).sort({ createdAt: -1 });
+
+    // Find all active issues of the team
+    const issues = await Issue.find({ teamId, archivedAt: null }).sort({ createdAt: -1 });
+
+    // Group issues by projectId
+    const projectsWithIssues = projects.map(p => {
+      const projectIssues = issues.filter(issue => issue.projectId.toString() === p._id.toString());
+      return {
+        ...p.toObject(),
+        issues: projectIssues
+      };
+    });
+
+    res.json({
+      team,
+      members,
+      generalConversationId: team.generalConversationId,
+      projects: projectsWithIssues
+    });
+  } catch (err) {
+    return handleRouteError(err, res);
+  }
+}
+
+// Upload team logo
+async function uploadTeamLogo(req, res) {
+  try {
+    const { teamId } = req.params;
+    const file = req.file;
+
+    if (!file) {
+      return res.status(400).json({ success: false, message: "No file uploaded" });
+    }
+
+    // convert buffer → dataURL
+    const fileBuffer = getDataUrl(file);
+
+    // upload to cloudinary
+    const cloud = await cloudinary.uploader.upload(fileBuffer.content, {
+      folder: "CodeSarthi-TeamLogos",
+      resource_type: "image",
+      transformation: [
+        { width: 500, height: 500, crop: "thumb", quality: "auto", fetch_format: "auto" }
+      ]
+    });
+
+    const team = await Team.findByIdAndUpdate(
+      teamId,
+      { logo: cloud.secure_url },
+      { new: true }
+    );
+
+    res.json({
+      success: true,
+      logo: team.logo,
+      message: "Team logo uploaded successfully"
+    });
+  } catch (err) {
+    return handleRouteError(err, res);
+  }
+}
+
 module.exports = {
   createTeam,
   listMyTeams,
@@ -348,5 +499,7 @@ module.exports = {
   removeMember,
   updateMemberRole,
   leaveTeam,
-  transferOwnership
+  transferOwnership,
+  getTeamWorkspace,
+  uploadTeamLogo
 };

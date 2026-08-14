@@ -141,6 +141,19 @@ async function executeSuccession(teamId, departingUserId, triggerEvent) {
         team.memberCount = Math.max(0, team.memberCount - 1);
         await team.save({ session });
 
+        // Pull departing member from all team conversations
+        const Conversation = require('../models/conversation');
+        await Conversation.updateMany(
+            { teamId },
+            {
+                $pull: {
+                    members: departingUserId,
+                    unreadCounts: { user: departingUserId }
+                }
+            },
+            { session }
+        );
+
         await session.commitTransaction();
     } catch (error) {
         await session.abortTransaction();

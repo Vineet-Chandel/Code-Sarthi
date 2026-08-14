@@ -22,7 +22,8 @@ chatRouter.get("/chats", userAuth, async (req, res) => {
             { path: "members", select: "firstName lastName gmail username profession photoUrl  college about middleName skills isVerified" },
             { path: "admins", select: "firstName lastName gmail username profession photoUrl  college about middleName skills isVerified" },
             { path: "createdBy", select: "firstName lastName gmail username profession photoUrl  college about middleName skills isVerified" },
-            { path: "lastMessage", populate: { path: "sender_id", select: "firstName lastName photoUrl gmail username profession college about middleName skills isVerified" } }
+            { path: "lastMessage", populate: { path: "sender_id", select: "firstName lastName photoUrl gmail username profession college about middleName skills isVerified" } },
+            { path: "teamId", select: "name status ownerId inviteCode" }
         ])
 
         //chats are there not 
