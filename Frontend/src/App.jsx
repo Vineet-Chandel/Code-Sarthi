@@ -96,6 +96,7 @@ import Goal from "./Pages/PROJECT-MANAGER/Goal";
 import GoalDetail from "./Pages/PROJECT-MANAGER/GoalDetail";
 import SearchPalette from "./Pages/Toolkit/components/docs/SearchPalette";
 import ProfileOther from "./BasePages/ProfileOther";
+import QuickCaptureModal from "./components/QuickCaptureModal";
 import Projects from "./Pages/Projects";
 import CompleteProfile from "./Pages/auth/CompleteProfile";
 // import CustomCursor from "./Cursor"
@@ -103,12 +104,21 @@ import CompleteProfile from "./Pages/auth/CompleteProfile";
 const App = () => {
 
   const [searchOpen, setSearchOpen] = useState(false);
-  useEffect(() => {
+  const [quickCaptureOpen, setQuickCaptureOpen] = useState(false);
 
+  useEffect(() => {
     const handler = (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k" && !e.shiftKey) {
         e.preventDefault();
         setSearchOpen(true);
+      }
+      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setQuickCaptureOpen(true);
+      }
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "j") {
+        e.preventDefault();
+        setQuickCaptureOpen(true);
       }
     };
     document.addEventListener("keydown", handler);
@@ -264,6 +274,7 @@ const App = () => {
         </Routes>
 
         <SearchPalette open={searchOpen} onClose={() => setSearchOpen(false)} />
+        <QuickCaptureModal open={quickCaptureOpen} onClose={() => setQuickCaptureOpen(false)} />
       </BrowserRouter>
     </Provider>
   );

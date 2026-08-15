@@ -39,6 +39,8 @@ const botRouter = require("./routes/bot.routes");
 const goalsRouter = require("./routes/goalsRoute");
 const schedulesRouter = require("./routes/schedulesRoute");
 const teamRoutes = require("./routes/teamRoutes");
+const noteRoutes = require("./routes/noteRoutes");
+const folderRoutes = require("./routes/folderRoutes");
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
     api_key: process.env.CLOUD_KEY,
@@ -60,6 +62,8 @@ app.use("/api", resRouter);
 app.use("/api", botRouter);
 app.use("/api", goalsRouter);
 app.use("/api", schedulesRouter);
+app.use("/api", noteRoutes);
+app.use("/api", folderRoutes);
 app.use("/api/teams", teamRoutes);
 
 
@@ -78,6 +82,8 @@ app.use("/", resRouter);
 app.use("/", botRouter);
 app.use("/", goalsRouter);
 app.use("/", schedulesRouter);
+app.use("/", noteRoutes);
+app.use("/", folderRoutes);
 app.use("/teams", teamRoutes);
 const PORT = process.env.PORT || 8000;
 
