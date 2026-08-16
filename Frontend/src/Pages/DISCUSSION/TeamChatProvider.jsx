@@ -1,8 +1,7 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import BASE_URL from '../auth/baseURL';
-
-const TeamChatContext = createContext(null);
+import { TeamChatContext } from './TeamChatContext';
 
 export const TeamChatProvider = ({ children }) => {
   const [activeTeamId, setActiveTeamId] = useState(null);
@@ -73,10 +72,4 @@ export const TeamChatProvider = ({ children }) => {
   );
 };
 
-export const useTeamChat = () => {
-  const context = useContext(TeamChatContext);
-  if (!context) {
-    throw new Error('useTeamChat must be used within a TeamChatProvider');
-  }
-  return context;
-};
+export default TeamChatProvider;

@@ -48,6 +48,11 @@ import {
   MessageSquare
 } from "lucide-react";
 import BASE_URL from "./auth/baseURL";
+import Modal from "../components/Modal/Modal";
+import ConfirmModal from "../components/Modal/ConfirmModal";
+import InputModal from "../components/Modal/InputModal";
+import FeedbackToast from "../components/Modal/FeedbackToast";
+import LoadingButton from "../components/Modal/LoadingButton";
 
 // --- CUSTOM AUTORESIZE TEXTAREA ---
 const AutoResizeTextarea = ({
@@ -115,7 +120,7 @@ const NOTE_TEMPLATES = {
       { id: "d-9", type: "paragraph", content: "- [ ] Optimize message acknowledgment queue.\n- [ ] Implement local database caching." }
     ]
   },
-  bugfix: {
+  "bug-fix": {
     name: "Bug Fix Log",
     description: "Record a technical issue, its root cause, and the fix.",
     blocks: [
@@ -158,7 +163,7 @@ const NOTE_TEMPLATES = {
       { id: "dsa-8", type: "code", content: "function twoSum(nums, target) {\n  const map = new Map();\n  for (let i = 0; i < nums.length; i++) {\n    const complement = target - nums[i];\n    if (map.has(complement)) {\n      return [map.get(complement), i];\n    }\n    map.set(nums[i], i);\n  }\n  return [];\n}", properties: { language: "javascript", lineNumbers: true } }
     ]
   },
-  adr: {
+  "architecture-decision": {
     name: "Architecture Decision (ADR)",
     description: "Record structural decisions, alternatives, and trade-offs.",
     blocks: [
@@ -186,7 +191,7 @@ const NOTE_TEMPLATES = {
       { id: "cmd-7", type: "paragraph", content: "When deploying or testing a containerized web application locally." }
     ]
   },
-  apiref: {
+  "api-reference": {
     name: "API Reference",
     description: "Document endpoints, requests, responses, and authorization details.",
     blocks: [
@@ -282,6 +287,44 @@ const Notes = () => {
   // Undo/Redo stacks
   const [undoStack, setUndoStack] = useState([]);
   const [redoStack, setRedoStack] = useState([]);
+
+  // --- CUSTOM MODALS & TOAST STATES ---
+  const [toastMessage, setToastMessage] = useState("");
+  const [isToastVisible, setIsToastVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Folder creation
+  const [isCreateFolderOpen, setIsCreateFolderOpen] = useState(false);
+  // Folder renaming
+  const [isRenameFolderOpen, setIsRenameFolderOpen] = useState(false);
+  const [folderToRename, setFolderToRename] = useState(null);
+  // Folder deletion
+  const [isDeleteFolderOpen, setIsDeleteFolderOpen] = useState(false);
+  const [folderToDelete, setFolderToDelete] = useState(null);
+
+  // Note renaming / deletion
+  const [isRenameNoteOpen, setIsRenameNoteOpen] = useState(false);
+  const [noteToRename, setNoteToRename] = useState(null);
+  const [isDeleteNoteOpen, setIsDeleteNoteOpen] = useState(false);
+  const [noteToDelete, setNoteToDelete] = useState(null);
+  const [isPermanentDeleteOpen, setIsPermanentDeleteOpen] = useState(false);
+  const [noteToPermanentDelete, setNoteToPermanentDelete] = useState(null);
+
+  // Error modal states
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [errorModalTitle, setErrorModalTitle] = useState("");
+  const [errorModalMsg, setErrorModalMsg] = useState("");
+
+  const showToast = (message) => {
+    setToastMessage(message);
+    setIsToastVisible(true);
+  };
+
+  const showError = (title, message) => {
+    setErrorModalTitle(title);
+    setErrorModalMsg(message);
+    setIsErrorModalOpen(true);
+  };
 
   // References
   const blockRefs = useRef({});
@@ -598,44 +641,66 @@ const Notes = () => {
   // --- FOLDER CRUD ACTIONS ---
   const handleCreateFolder = async (folderName) => {
     if (!folderName || !folderName.trim()) return;
+    if (isLoading) return;
+    setIsLoading(true);
     try {
       const res = await axios.post(`${BASE_URL}/folders`, { name: folderName.trim() }, { withCredentials: true });
       setFolders(prev => [...prev, res.data]);
+      setIsCreateFolderOpen(false);
+      showToast("Folder created");
     } catch (err) {
       console.error("Failed to create folder:", err);
-      alert(err.response?.data?.message || "Error creating folder.");
+      showError("Unable to create folder", err.response?.data?.message || "Please check your network and try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleRenameFolder = async (folderId, newName) => {
-    if (!newName || !newName.trim()) return;
+  const handleRenameFolder = async (newName) => {
+    if (!folderToRename || !newName || !newName.trim()) return;
+    if (isLoading) return;
+    setIsLoading(true);
     try {
-      const res = await axios.put(`${BASE_URL}/folders/${folderId}`, { name: newName.trim() }, { withCredentials: true });
-      setFolders(prev => prev.map(f => f._id === folderId ? res.data : f));
-      setRenamingFolderId(null);
+      const res = await axios.put(`${BASE_URL}/folders/${folderToRename._id}`, { name: newName.trim() }, { withCredentials: true });
+      setFolders(prev => prev.map(f => f._id === folderToRename._id ? res.data : f));
+      setIsRenameFolderOpen(false);
+      setFolderToRename(null);
+      showToast("Folder renamed");
     } catch (err) {
       console.error("Failed to rename folder:", err);
-      alert(err.response?.data?.message || "Error renaming folder.");
+      showError("Unable to rename folder", err.response?.data?.message || "Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleDeleteFolder = async (folderId) => {
-    if (!window.confirm("Are you sure you want to delete this folder? Notes inside this folder will not be deleted.")) return;
+  const handleDeleteFolder = async () => {
+    if (!folderToDelete) return;
+    if (isLoading) return;
+    setIsLoading(true);
     try {
-      await axios.delete(`${BASE_URL}/folders/${folderId}`, { withCredentials: true });
-      setFolders(prev => prev.filter(f => f._id !== folderId));
-      if (activeFolderId === folderId) {
+      await axios.delete(`${BASE_URL}/folders/${folderToDelete._id}`, { withCredentials: true });
+      setFolders(prev => prev.filter(f => f._id !== folderToDelete._id));
+      if (activeFolderId === folderToDelete._id) {
         setActiveFolderId(null);
       }
+      setIsDeleteFolderOpen(false);
+      setFolderToDelete(null);
       fetchNotes(false);
+      showToast("Folder deleted");
     } catch (err) {
       console.error("Failed to delete folder:", err);
+      showError("Unable to delete folder", "Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   // --- CONVERT NOTE TO ISSUE ---
   const handleConvertToIssue = async () => {
     if (!activeNote) return;
+    if (isLoading) return;
+    setIsLoading(true);
     try {
       const res = await axios.post(
         `${BASE_URL}/notes/${activeNote._id}/convert-to-issue`,
@@ -650,16 +715,19 @@ const Notes = () => {
       setNotes(prev => prev.map(n => n._id === activeNote._id ? res.data.note : n));
       setActiveNote(res.data.note);
       setShowIssueModal(false);
-      alert("Converted to Issue successfully!");
+      showToast("Converted to Issue");
     } catch (err) {
       console.error("Failed to convert note to issue:", err);
-      alert(err.response?.data?.message || "Error converting note to issue.");
+      showError("Conversion failed", err.response?.data?.message || "Please check your input and try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   // --- POST TO DISCUSSION ---
   const handlePostToDiscussion = async () => {
     if (!activeNote || !selectedChatId) return;
+    if (discussionLoading) return;
     setDiscussionLoading(true);
     try {
       const chat = discussionChats.find(c => c._id === selectedChatId);
@@ -677,10 +745,10 @@ const Notes = () => {
       );
 
       setShowDiscussionModal(false);
-      alert("Posted to Discussion successfully!");
+      showToast("Posted to Discussion");
     } catch (err) {
       console.error("Failed to post message to discussion:", err);
-      alert("Error posting discussion message.");
+      showError("Share failed", "Failed to post discussion message.");
     } finally {
       setDiscussionLoading(false);
     }
@@ -744,7 +812,7 @@ const Notes = () => {
       setSelectedTag(null);
     } catch (err) {
       console.error("Failed to create note:", err);
-      alert("Error creating note. Please check server connection.");
+      showError("Creation failed", "Failed to create note. Please check server connection.");
     }
   };
 
@@ -814,39 +882,60 @@ const Notes = () => {
     }
   };
 
-  const handlePermanentDelete = async () => {
+  const handlePermanentDelete = () => {
     if (!activeNote) return;
-    if (!window.confirm("Are you sure you want to permanently delete this note? This action is irreversible.")) return;
+    setNoteToPermanentDelete(activeNote);
+    setIsPermanentDeleteOpen(true);
+  };
 
+  const handlePermanentDeleteConfirm = async () => {
+    if (!noteToPermanentDelete) return;
+    if (isLoading) return;
+    setIsLoading(true);
     try {
-      await axios.delete(`${BASE_URL}/notes/${activeNote._id}/permanent`, { withCredentials: true });
-      localStorage.removeItem(getLocalDraftKey(activeNote._id));
-      const deletedId = activeNote._id;
+      await axios.delete(`${BASE_URL}/notes/${noteToPermanentDelete._id}/permanent`, { withCredentials: true });
+      localStorage.removeItem(getLocalDraftKey(noteToPermanentDelete._id));
+      const deletedId = noteToPermanentDelete._id;
       setNotes(prev => prev.filter(n => n._id !== deletedId));
 
-      const remaining = notes.filter(n => n._id !== deletedId);
-      if (remaining.length > 0) {
-        loadNoteIntoEditor(remaining[0]);
-      } else {
-        setActiveNote(null);
+      if (activeNote && activeNote._id === deletedId) {
+        const remaining = notes.filter(n => n._id !== deletedId);
+        if (remaining.length > 0) {
+          loadNoteIntoEditor(remaining[0]);
+        } else {
+          setActiveNote(null);
+        }
       }
+      setIsPermanentDeleteOpen(false);
+      setNoteToPermanentDelete(null);
+      showToast("Permanently deleted note");
     } catch (err) {
       console.error("Failed to permanently delete note:", err);
+      showError("Delete failed", "Failed to permanently delete the note. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleRenameNote = async (noteId, newTitle) => {
-    setRenamingNoteId(null);
-    if (!newTitle.trim()) return;
+  const handleRenameNote = async (newTitle) => {
+    if (!noteToRename || !newTitle || !newTitle.trim()) return;
+    if (isLoading) return;
+    setIsLoading(true);
     try {
-      const res = await axios.put(`${BASE_URL}/notes/${noteId}`, { title: newTitle.trim() }, { withCredentials: true });
-      setNotes(prev => prev.map(n => n._id === noteId ? res.data : n));
-      if (activeNote && activeNote._id === noteId) {
-        setEditorTitle(res.data.title);
+      const res = await axios.put(`${BASE_URL}/notes/${noteToRename._id}`, { title: newTitle.trim() }, { withCredentials: true });
+      setNotes(prev => prev.map(n => n._id === noteToRename._id ? res.data : n));
+      if (activeNote && activeNote._id === noteToRename._id) {
         setActiveNote(res.data);
+        setEditorTitle(res.data.title || "");
       }
+      setIsRenameNoteOpen(false);
+      setNoteToRename(null);
+      showToast("Note renamed");
     } catch (err) {
       console.error("Failed to rename note:", err);
+      showError("Unable to rename note", err.response?.data?.message || "Please check your network connection and try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -1272,10 +1361,7 @@ const Notes = () => {
                     Folders
                   </h3>
                   <button
-                    onClick={() => {
-                      const name = window.prompt("Enter new folder name:");
-                      if (name) handleCreateFolder(name);
-                    }}
+                    onClick={() => setIsCreateFolderOpen(true)}
                     className="text-[10px] text-zinc-500 hover:text-white font-medium"
                   >
                     + New
@@ -1288,25 +1374,6 @@ const Notes = () => {
                     {folders.map((folder) => {
                       const isFolderActive = activeFolderId === folder._id;
                       const noteCount = notes.filter(n => n.folderId === folder._id && !n.isDeleted).length;
-
-                      if (renamingFolderId === folder._id) {
-                        return (
-                          <div key={folder._id} className="px-3 py-1">
-                            <input
-                              type="text"
-                              value={folderRenameValue}
-                              onChange={(e) => setFolderRenameValue(e.target.value)}
-                              onKeyDown={(e) => {
-                                if (e.key === "Enter") handleRenameFolder(folder._id, folderRenameValue);
-                                if (e.key === "Escape") setRenamingFolderId(null);
-                              }}
-                              onBlur={() => handleRenameFolder(folder._id, folderRenameValue)}
-                              className="w-full bg-black border border-zinc-800 rounded px-2 py-0.5 text-xs text-white focus:outline-none"
-                              autoFocus
-                            />
-                          </div>
-                        );
-                      }
 
                       return (
                         <div
@@ -1334,10 +1401,10 @@ const Notes = () => {
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                setRenamingFolderId(folder._id);
-                                setFolderRenameValue(folder.name);
+                                setFolderToRename(folder);
+                                setIsRenameFolderOpen(true);
                               }}
-                              className="opacity-0 group-hover/folder:opacity-100 text-[10px] text-zinc-500 hover:text-white"
+                              className="opacity-0 group-hover/folder:opacity-100 text-[10px] text-zinc-500 hover:text-white font-medium"
                               title="Rename folder"
                             >
                               Edit
@@ -1345,9 +1412,10 @@ const Notes = () => {
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                handleDeleteFolder(folder._id);
+                                setFolderToDelete(folder);
+                                setIsDeleteFolderOpen(true);
                               }}
-                              className="opacity-0 group-hover/folder:opacity-100 text-[10px] text-zinc-500 hover:text-red-400"
+                              className="opacity-0 group-hover/folder:opacity-100 text-[10px] text-zinc-500 hover:text-red-400 font-medium"
                               title="Delete folder"
                             >
                               &times;
@@ -1444,33 +1512,7 @@ const Notes = () => {
               const textContent = note.blocks ? note.blocks.map(b => b.content).join(" ") : note.content || "";
               const previewText = textContent.slice(0, 70) + (textContent.length > 70 ? "..." : "");
 
-              if (renamingNoteId === note._id) {
-                return (
-                  <div
-                    key={note._id}
-                    onClick={(e) => e.stopPropagation()}
-                    className="p-4 bg-zinc-950 border border-zinc-900 rounded-lg m-2 select-none"
-                  >
-                    <input
-                      type="text"
-                      value={renameValue}
-                      onChange={(e) => setRenameValue(e.target.value)}
-                      onKeyDown={async (e) => {
-                        if (e.key === "Enter") {
-                          await handleRenameNote(note._id, renameValue);
-                        } else if (e.key === "Escape") {
-                          setRenamingNoteId(null);
-                        }
-                      }}
-                      onBlur={async () => {
-                        await handleRenameNote(note._id, renameValue);
-                      }}
-                      className="w-full bg-black border border-zinc-800 rounded px-2 py-1 text-xs text-white focus:outline-none focus:border-zinc-700"
-                      autoFocus
-                    />
-                  </div>
-                );
-              }
+
 
               return (
                 <div
@@ -1528,15 +1570,11 @@ const Notes = () => {
                                 Restore
                               </button>
                               <button
-                                onClick={async (e) => {
+                                onClick={(e) => {
                                   e.stopPropagation();
                                   setActiveMenuNoteId(null);
-                                  if (!window.confirm("Permanently delete this note?")) return;
-                                  try {
-                                    await axios.delete(`${BASE_URL}/notes/${note._id}/permanent`, { withCredentials: true });
-                                    setNotes(prev => prev.filter(n => n._id !== note._id));
-                                    if (activeNote && activeNote._id === note._id) setActiveNote(null);
-                                  } catch (err) { console.error(err); }
+                                  setNoteToPermanentDelete(note);
+                                  setIsPermanentDeleteOpen(true);
                                 }}
                                 className="w-full text-left px-3 py-1.5 hover:bg-zinc-900 transition text-red-500 font-medium"
                               >
@@ -1549,8 +1587,8 @@ const Notes = () => {
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   setActiveMenuNoteId(null);
-                                  setRenamingNoteId(note._id);
-                                  setRenameValue(note.title || "");
+                                  setNoteToRename(note);
+                                  setIsRenameNoteOpen(true);
                                 }}
                                 className="w-full text-left px-3 py-1.5 hover:bg-zinc-900 transition text-zinc-300 hover:text-white"
                               >
@@ -1760,7 +1798,10 @@ const Notes = () => {
                     <option value="bug-fix">Bug Fix Log</option>
                     <option value="learning">Learning Log</option>
                     <option value="dsa">DSA Practice</option>
-                    <option value="adr">Architecture ADR</option>
+                    <option value="architecture-decision">Architecture ADR</option>
+                    <option value="command">Command Reference</option>
+                    <option value="api-reference">API Reference</option>
+                    <option value="interview">Interview Concept</option>
                   </select>
                 </div>
               </div>
@@ -2499,13 +2540,15 @@ const Notes = () => {
                 >
                   Cancel
                 </button>
-                <button
+                <LoadingButton
                   onClick={handleConvertToIssue}
+                  isLoading={isLoading}
                   disabled={!issueProjectId || !issueTitle.trim()}
+                  loadingText="Converting..."
                   className="px-3 py-1.5 bg-white text-black font-semibold hover:bg-zinc-200 rounded-md text-xs transition disabled:bg-zinc-800 disabled:text-zinc-500"
                 >
                   Convert & Link
-                </button>
+                </LoadingButton>
               </div>
             </div>
           </div>
@@ -2576,17 +2619,119 @@ const Notes = () => {
                 >
                   Cancel
                 </button>
-                <button
+                <LoadingButton
                   onClick={handlePostToDiscussion}
-                  disabled={discussionLoading || !selectedChatId}
+                  isLoading={discussionLoading}
+                  disabled={!selectedChatId}
+                  loadingText="Posting..."
                   className="px-3 py-1.5 bg-white text-black font-semibold hover:bg-zinc-200 rounded-md text-xs transition disabled:bg-zinc-800 disabled:text-zinc-500"
                 >
-                  {discussionLoading ? "Posting..." : "Post Message"}
-                </button>
+                  Post Message
+                </LoadingButton>
               </div>
             </div>
           </div>
         )}
+        {/* Custom Feedback Toast */}
+        <FeedbackToast
+          message={toastMessage}
+          isVisible={isToastVisible}
+          onClose={() => setIsToastVisible(false)}
+        />
+
+        {/* Input Modal for Folder Creation */}
+        <InputModal
+          isOpen={isCreateFolderOpen}
+          onClose={() => setIsCreateFolderOpen(false)}
+          onSubmit={handleCreateFolder}
+          title="Create Folder"
+          description="Organize your developer knowledge."
+          placeholder="Folder name (e.g. Backend Notes)"
+          confirmText="Create"
+          isLoading={isLoading}
+        />
+
+        {/* Input Modal for Folder Rename */}
+        <InputModal
+          isOpen={isRenameFolderOpen}
+          onClose={() => {
+            setIsRenameFolderOpen(false);
+            setFolderToRename(null);
+          }}
+          onSubmit={handleRenameFolder}
+          defaultValue={folderToRename?.name || ""}
+          title="Rename Folder"
+          placeholder="Enter new folder name..."
+          confirmText="Save"
+          isLoading={isLoading}
+        />
+
+        {/* Confirm Modal for Folder Delete */}
+        <ConfirmModal
+          isOpen={isDeleteFolderOpen}
+          onClose={() => {
+            setIsDeleteFolderOpen(false);
+            setFolderToDelete(null);
+          }}
+          onConfirm={handleDeleteFolder}
+          title="Delete Folder?"
+          description="Are you sure you want to delete this folder? Notes inside this folder will not be deleted."
+          confirmText="Delete"
+          isDestructive={true}
+          isLoading={isLoading}
+        />
+
+        {/* Input Modal for Note Rename */}
+        <InputModal
+          isOpen={isRenameNoteOpen}
+          onClose={() => {
+            setIsRenameNoteOpen(false);
+            setNoteToRename(null);
+          }}
+          onSubmit={handleRenameNote}
+          defaultValue={noteToRename?.title || ""}
+          title="Rename Note"
+          placeholder="Enter note title..."
+          confirmText="Save"
+          isLoading={isLoading}
+        />
+
+        {/* Confirm Modal for Permanent Note Deletion */}
+        <ConfirmModal
+          isOpen={isPermanentDeleteOpen}
+          onClose={() => {
+            setIsPermanentDeleteOpen(false);
+            setNoteToPermanentDelete(null);
+          }}
+          onConfirm={handlePermanentDeleteConfirm}
+          title="Delete Permanently?"
+          description="This action cannot be undone. All content, history, and metadata will be permanently erased."
+          confirmText="Delete Permanently"
+          isDestructive={true}
+          isLoading={isLoading}
+        />
+
+        {/* Global Error Modal */}
+        <Modal
+          isOpen={isErrorModalOpen}
+          onClose={() => setIsErrorModalOpen(false)}
+          size="sm"
+          closeOnBackdrop={true}
+        >
+          <div className="p-5 text-left">
+            <h3 className="text-sm font-semibold text-white tracking-tight">{errorModalTitle}</h3>
+            <p className="text-xs text-zinc-500 mt-2 leading-relaxed">{errorModalMsg}</p>
+            <div className="flex justify-end mt-5">
+              <button
+                type="button"
+                onClick={() => setIsErrorModalOpen(false)}
+                className="px-3 py-1.5 rounded bg-white hover:bg-zinc-200 text-black text-xs font-semibold border border-white transition duration-150"
+              >
+                Try Again
+              </button>
+            </div>
+          </div>
+        </Modal>
       </div>
     </div>
   );

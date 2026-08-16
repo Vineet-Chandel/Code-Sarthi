@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { X, Sparkles } from "lucide-react";
+import LoadingButton from "./Modal/LoadingButton";
 
 const BASE_URL = "/api";
 
@@ -31,6 +32,17 @@ const NOTE_TEMPLATES = {
       { id: "b6", type: "paragraph", content: "" }
     ]
   },
+  "architecture-decision": {
+    name: "Architecture Decision (ADR)",
+    blocks: [
+      { id: "b1", type: "heading-2", content: "Context" },
+      { id: "b2", type: "paragraph", content: "" },
+      { id: "b3", type: "heading-2", content: "Decision" },
+      { id: "b4", type: "paragraph", content: "" },
+      { id: "b5", type: "heading-2", content: "Consequences" },
+      { id: "b6", type: "paragraph", content: "" }
+    ]
+  },
   command: {
     name: "Command Reference",
     blocks: [
@@ -38,6 +50,17 @@ const NOTE_TEMPLATES = {
       { id: "b2", type: "code", content: "", properties: { language: "bash", lineNumbers: true } },
       { id: "b3", type: "heading-2", content: "Purpose & Usage" },
       { id: "b4", type: "paragraph", content: "" }
+    ]
+  },
+  "api-reference": {
+    name: "API Reference",
+    blocks: [
+      { id: "b1", type: "heading-2", content: "Endpoint & Method" },
+      { id: "b2", type: "paragraph", content: "" },
+      { id: "b3", type: "heading-2", content: "Request Parameters" },
+      { id: "b4", type: "paragraph", content: "" },
+      { id: "b5", type: "heading-2", content: "Response Body" },
+      { id: "b6", type: "code", content: "", properties: { language: "json", lineNumbers: true } }
     ]
   }
 };
@@ -50,6 +73,7 @@ const QuickCaptureModal = ({ open, onClose }) => {
   const [projects, setProjects] = useState([]);
   const [saving, setSaving] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
     if (!open) {
@@ -57,6 +81,7 @@ const QuickCaptureModal = ({ open, onClose }) => {
       setContent("");
       setSelectedTemplate("blank");
       setSuccessMsg("");
+      setErrorMsg("");
       return;
     }
 
@@ -131,7 +156,7 @@ const QuickCaptureModal = ({ open, onClose }) => {
       }, 800);
     } catch (err) {
       console.error("Quick Capture failed:", err);
-      alert("Failed to capture note. Please try again.");
+      setErrorMsg("Failed to capture note. Please try again.");
     } finally {
       setSaving(false);
     }
@@ -167,6 +192,11 @@ const QuickCaptureModal = ({ open, onClose }) => {
             </div>
           ) : (
             <>
+              {errorMsg && (
+                <div className="text-red-500 text-xs text-center font-medium bg-red-950/20 border border-red-900/30 py-2 rounded-lg">
+                  {errorMsg}
+                </div>
+              )}
               {/* Template & Project Metadata */}
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1 text-left">
@@ -181,7 +211,9 @@ const QuickCaptureModal = ({ open, onClose }) => {
                     <option value="blank">Blank Note</option>
                     <option value="diary">Developer Diary</option>
                     <option value="bug-fix">Bug Fix Log</option>
+                    <option value="architecture-decision">Architecture ADR</option>
                     <option value="command">Command Reference</option>
+                    <option value="api-reference">API Reference</option>
                   </select>
                 </div>
 
@@ -242,13 +274,14 @@ const QuickCaptureModal = ({ open, onClose }) => {
                   >
                     Cancel
                   </button>
-                  <button
+                  <LoadingButton
                     onClick={handleCapture}
-                    disabled={saving}
+                    isLoading={saving}
+                    loadingText="Capturing..."
                     className="px-3 py-1.5 bg-white text-black font-semibold hover:bg-zinc-200 rounded-md transition"
                   >
-                    {saving ? "Capturing..." : "Capture Note"}
-                  </button>
+                    Capture Note
+                  </LoadingButton>
                 </div>
               </div>
             </>
