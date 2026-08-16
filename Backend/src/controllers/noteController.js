@@ -210,10 +210,25 @@ const restoreNote = async (req, res) => {
 // @route   DELETE /api/notes/:id/permanent
 const permanentDeleteNote = async (req, res) => {
   try {
-    const result = await Note.deleteOne({ _id: req.params.id, owner: req.user._id });
-    if (result.deletedCount === 0) {
+    const note = await Note.findOne({ _id: req.params.id, owner: req.user._id });
+    if (!note) {
       return res.status(404).json({ message: "Note not found" });
     }
+
+    // Safely delete any Cloudinary images inside blocks
+    if (note.blocks && Array.isArray(note.blocks)) {
+      const cloudinary = require("cloudinary").v2;
+      const imageBlocks = note.blocks.filter(b => b.type === "image" && b.properties?.public_id);
+      for (const block of imageBlocks) {
+        try {
+          await cloudinary.uploader.destroy(block.properties.public_id);
+        } catch (destroyErr) {
+          console.error(`Failed to destroy Cloudinary image ${block.properties.public_id}:`, destroyErr);
+        }
+      }
+    }
+
+    await Note.deleteOne({ _id: req.params.id, owner: req.user._id });
     res.status(200).json({ message: "Note permanently deleted" });
   } catch (error) {
     console.error("Error in permanentDeleteNote:", error);

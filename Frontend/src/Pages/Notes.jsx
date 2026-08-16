@@ -45,7 +45,8 @@ import {
   FileText,
   AlertTriangle,
   PlusCircle,
-  MessageSquare
+  MessageSquare,
+  Image as ImageIcon
 } from "lucide-react";
 import BASE_URL from "./auth/baseURL";
 import Modal from "../components/Modal/Modal";
@@ -59,6 +60,7 @@ const AutoResizeTextarea = ({
   value,
   onChange,
   onKeyDown,
+  onPaste,
   placeholder,
   className,
   textareaRef,
@@ -87,6 +89,7 @@ const AutoResizeTextarea = ({
         adjustHeight();
       }}
       onKeyDown={onKeyDown}
+      onPaste={onPaste}
       placeholder={placeholder}
       className={`resize-none overflow-hidden bg-transparent focus:outline-none w-full ${className}`}
       rows={1}
@@ -328,9 +331,12 @@ const Notes = () => {
 
   // References
   const blockRefs = useRef({});
+  const fileInputRef = useRef(null);
   const saveTimeoutRef = useRef(null);
   const toastTimeoutRef = useRef(null);
   const pendingSaveRef = useRef(null);
+
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
 
   // --- GET ALL TAGS ---
   const allTags = useMemo(() => {
@@ -969,23 +975,26 @@ const Notes = () => {
 
     const targetBlock = editorBlocks.find(b => b.id === id);
     if (targetBlock && targetBlock.type === "paragraph") {
-      if (content.startsWith("## ")) {
-        finalType = "heading-2";
-        finalContent = content.substring(3);
-      } else if (content.startsWith("### ")) {
-        finalType = "heading-3";
-        finalContent = content.substring(4);
-      } else if (content.startsWith("- [ ] ")) {
-        finalType = "checklist";
-        finalContent = content.substring(6);
-        updatedProps = { checked: false };
-      } else if (content.startsWith("- ") || content.startsWith("* ")) {
-        finalType = "bullet-list";
-        finalContent = content.substring(2);
-      } else if (content.startsWith("```")) {
-        finalType = "code";
-        finalContent = content.substring(3);
-        updatedProps = { language: "javascript", lineNumbers: true, wordWrap: true };
+      const isMultiline = content.includes("\n");
+      if (!isMultiline) {
+        if (content.startsWith("## ")) {
+          finalType = "heading-2";
+          finalContent = content.substring(3);
+        } else if (content.startsWith("### ")) {
+          finalType = "heading-3";
+          finalContent = content.substring(4);
+        } else if (content.startsWith("- [ ] ")) {
+          finalType = "checklist";
+          finalContent = content.substring(6);
+          updatedProps = { checked: false };
+        } else if (content.startsWith("- ") || content.startsWith("* ")) {
+          finalType = "bullet-list";
+          finalContent = content.substring(2);
+        } else if (content.startsWith("```")) {
+          finalType = "code";
+          finalContent = content.substring(3);
+          updatedProps = { language: "javascript", lineNumbers: true, wordWrap: true };
+        }
       }
     }
 
@@ -1044,6 +1053,90 @@ const Notes = () => {
       const targetEl = blockRefs.current[newBlock.id];
       if (targetEl) targetEl.focus();
     }, 50);
+  };
+
+  const uploadAndInsertImage = async (file) => {
+    if (!activeNote) return;
+
+    // Validate size (max 10MB)
+    const MAX_SIZE = 10 * 1024 * 1024;
+    if (file.size > MAX_SIZE) {
+      showError("File Too Large", "Images must be smaller than 10MB. Please resize or select another image.");
+      return;
+    }
+
+    // Validate format
+    const allowed = ["image/png", "image/jpeg", "image/jpg", "image/webp", "image/gif"];
+    if (!allowed.includes(file.type)) {
+      showError("Invalid Format", "Only PNG, JPG, JPEG, WEBP, and GIF images are supported.");
+      return;
+    }
+
+    // Insert a temporary block of type 'image' with empty content (uploading state placeholder)
+    recordHistory(editorBlocks);
+    const tempBlockId = `block-${Math.random().toString(36).substr(2, 9)}`;
+    const tempBlock = {
+      id: tempBlockId,
+      type: "image",
+      content: "",
+      properties: { width: "100%" }
+    };
+
+    // Find the currently active block to insert after
+    let updated;
+    const activeIndex = editorBlocks.findIndex(b => blockRefs.current[b.id] === document.activeElement);
+    if (activeIndex === -1) {
+      // Insert at the top (below heading)
+      updated = [tempBlock, ...editorBlocks];
+    } else {
+      updated = [
+        ...editorBlocks.slice(0, activeIndex + 1),
+        tempBlock,
+        ...editorBlocks.slice(activeIndex + 1)
+      ];
+    }
+
+    setEditorBlocks(updated); // Optimistic UI update
+
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const res = await axios.post(`${BASE_URL}/notes/upload-image`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+        withCredentials: true
+      });
+
+      if (res.data && res.data.success) {
+        const finalBlocks = updated.map(b => {
+          if (b.id === tempBlockId) {
+            return {
+              ...b,
+              content: res.data.url,
+              properties: {
+                ...b.properties,
+                public_id: res.data.public_id,
+                alt: "",
+                caption: ""
+              }
+            };
+          }
+          return b;
+        });
+
+        setEditorBlocks(finalBlocks);
+        handleNoteUpdate("blocks", finalBlocks);
+        showToast("Image uploaded successfully");
+      } else {
+        throw new Error(res.data?.message || "Failed to upload.");
+      }
+    } catch (err) {
+      console.error("Image upload failed:", err);
+      const revertedBlocks = updated.filter(b => b.id !== tempBlockId);
+      setEditorBlocks(revertedBlocks);
+      handleNoteUpdate("blocks", revertedBlocks);
+      showError("Upload Failed", err.response?.data?.message || err.message || "Failed to upload image.");
+    }
   };
 
   const deleteBlock = (id) => {
@@ -1189,6 +1282,29 @@ const Notes = () => {
         handleUndo();
       }
     }
+  };
+
+  // --- PASTE HANDLER ---
+  const handlePaste = async (e, blockId, index) => {
+    const files = e.clipboardData?.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      if (file && file.type.startsWith("image/")) {
+        e.preventDefault();
+        await uploadAndInsertImage(file);
+        return;
+      }
+    }
+
+    // Let the native paste event proceed so the text is fully inserted as a single block.
+    // Afterwards, recalculate the height to match the text length.
+    setTimeout(() => {
+      const textarea = e.target;
+      if (textarea) {
+        textarea.style.height = "auto";
+        textarea.style.height = `${textarea.scrollHeight}px`;
+      }
+    }, 0);
   };
 
   // --- SLASH COMMANDS HELPERS ---
@@ -1808,6 +1924,32 @@ const Notes = () => {
 
               {/* Utility buttons */}
               <div className="flex items-center gap-1.5">
+                {!activeNote.isDeleted && (
+                  <>
+                    <button
+                      onClick={() => fileInputRef.current?.click()}
+                      className="p-1.5 rounded-lg border border-transparent text-zinc-300 hover:bg-zinc-900 flex items-center gap-1.5 text-xs transition duration-150"
+                      title="Insert Image (Upload/Paste)"
+                    >
+                      <ImageIcon size={15} className="text-zinc-400" />
+                      <span>Add Image</span>
+                    </button>
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          await uploadAndInsertImage(file);
+                        }
+                        e.target.value = "";
+                      }}
+                      className="hidden"
+                      accept="image/png, image/jpeg, image/jpg, image/webp, image/gif"
+                    />
+                  </>
+                )}
+
                 <button
                   onClick={handleTogglePin}
                   className={`p-1.5 rounded-lg hover:bg-zinc-900 border transition duration-150 ${activeNote.pinned ? "border-zinc-700 bg-zinc-900/60 text-white" : "border-transparent text-zinc-400"}`}
@@ -1996,7 +2138,26 @@ const Notes = () => {
             )}
 
             {/* Note Editor Area */}
-            <div className="flex-1 overflow-y-auto px-16 py-12 scrollbar-none flex flex-col">
+            <div
+              className={`flex-1 overflow-y-auto px-16 py-12 scrollbar-none flex flex-col transition-all duration-200 ${isDraggingOver ? "border-2 border-dashed border-zinc-800 bg-[#020202]" : ""}`}
+              onDragOver={(e) => {
+                e.preventDefault();
+                if (!activeNote.isDeleted) setIsDraggingOver(true);
+              }}
+              onDragLeave={() => setIsDraggingOver(false)}
+              onDrop={async (e) => {
+                e.preventDefault();
+                setIsDraggingOver(false);
+                if (activeNote.isDeleted) return;
+                const files = e.dataTransfer.files;
+                if (files && files.length > 0) {
+                  const file = files[0];
+                  if (file && file.type.startsWith("image/")) {
+                    await uploadAndInsertImage(file);
+                  }
+                }
+              }}
+            >
               {/* Note Title Input */}
               <div className="mb-6">
                 <AutoResizeTextarea
@@ -2058,6 +2219,96 @@ const Notes = () => {
 
                       {/* Render block according to its type */}
                       <div className="flex-1 w-full text-left">
+                        {/* --- IMAGE BLOCK --- */}
+                        {block.type === "image" && (
+                          <div className="group/image relative my-4 w-full">
+                            {/* Image element */}
+                            <div className="relative rounded-lg overflow-hidden border border-zinc-900 bg-[#050505] inline-block max-w-full">
+                              {block.content ? (
+                                <img
+                                  src={block.content}
+                                  alt={block.properties?.alt || "Note Image"}
+                                  className="rounded-lg object-contain max-h-[500px] transition-all duration-300"
+                                  style={{
+                                    width: block.properties?.width || "100%",
+                                    maxWidth: "100%"
+                                  }}
+                                />
+                              ) : (
+                                // Uploading state placeholder
+                                <div className="p-8 flex flex-col items-center justify-center border border-dashed border-zinc-800 rounded-lg w-[400px] max-w-full min-h-[150px] bg-[#0A0A0A]">
+                                  <div className="h-2 w-24 bg-zinc-800 rounded overflow-hidden relative">
+                                    <div className="h-full w-1/2 bg-blue-500 rounded animate-pulse"></div>
+                                  </div>
+                                  <span className="text-xs text-zinc-500 mt-3 font-medium animate-pulse">Uploading image...</span>
+                                </div>
+                              )}
+
+                              {/* Overlay controls when hovering */}
+                              {block.content && !activeNote.isDeleted && (
+                                <div className="absolute top-2 right-2 opacity-0 group-hover/image:opacity-100 transition duration-150 flex items-center gap-1.5 bg-black/80 backdrop-blur border border-zinc-800/80 rounded-md p-1">
+                                  {/* Resize options */}
+                                  <select
+                                    value={block.properties?.width || "100%"}
+                                    onChange={(e) => {
+                                      updateBlockProperties(block.id, { width: e.target.value });
+                                    }}
+                                    className="bg-transparent text-zinc-400 hover:text-white border-none outline-none text-[10px] font-medium cursor-pointer"
+                                  >
+                                    <option value="25%">Small</option>
+                                    <option value="50%">Medium</option>
+                                    <option value="75%">Large</option>
+                                    <option value="100%">Full Width</option>
+                                  </select>
+
+                                  <div className="h-3 w-px bg-zinc-800"></div>
+
+                                  {/* Delete */}
+                                  <button
+                                    onClick={() => deleteBlock(block.id)}
+                                    className="text-zinc-400 hover:text-red-400 p-0.5 hover:bg-zinc-900 rounded transition"
+                                    title="Delete Image"
+                                  >
+                                    <Trash2 size={12} />
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Caption Input */}
+                            {block.content && (
+                              <div className="mt-1.5 text-left">
+                                <input
+                                  type="text"
+                                  placeholder="Add an optional caption..."
+                                  value={block.properties?.caption || ""}
+                                  onChange={(e) => {
+                                    updateBlockProperties(block.id, { caption: e.target.value });
+                                  }}
+                                  disabled={activeNote.isDeleted}
+                                  className="bg-transparent border-none outline-none text-xs text-zinc-500 placeholder-zinc-700 w-full focus:text-zinc-300 transition font-sans"
+                                />
+                              </div>
+                            )}
+
+                            {/* Alt Text Input */}
+                            {block.content && (
+                              <div className="mt-1 text-left font-sans">
+                                <input
+                                  type="text"
+                                  placeholder="Add optional alt text..."
+                                  value={block.properties?.alt || ""}
+                                  onChange={(e) => {
+                                    updateBlockProperties(block.id, { alt: e.target.value });
+                                  }}
+                                  disabled={activeNote.isDeleted}
+                                  className="bg-transparent border-none outline-none text-[10px] text-zinc-600 placeholder-zinc-800 w-full focus:text-zinc-400 transition"
+                                />
+                              </div>
+                            )}
+                          </div>
+                        )}
+
                         {/* --- PARAGRAPH BLOCK --- */}
                         {block.type === "paragraph" && (
                           <AutoResizeTextarea
@@ -2065,6 +2316,7 @@ const Notes = () => {
                             value={block.content}
                             onChange={(e) => updateBlockContent(block.id, e.target.value)}
                             onKeyDown={(e) => handleBlockKeyDown(e, block, index)}
+                            onPaste={(e) => handlePaste(e, block.id, index)}
                             placeholder="Type '/' for commands..."
                             className="text-base text-zinc-300 font-normal leading-relaxed placeholder-zinc-800"
                             disabled={activeNote.isDeleted}
@@ -2078,6 +2330,7 @@ const Notes = () => {
                             value={block.content}
                             onChange={(e) => updateBlockContent(block.id, e.target.value)}
                             onKeyDown={(e) => handleBlockKeyDown(e, block, index)}
+                            onPaste={(e) => handlePaste(e, block.id, index)}
                             placeholder="Heading 1"
                             className="text-2xl font-bold tracking-tight text-white placeholder-zinc-800"
                             disabled={activeNote.isDeleted}
@@ -2091,6 +2344,7 @@ const Notes = () => {
                             value={block.content}
                             onChange={(e) => updateBlockContent(block.id, e.target.value)}
                             onKeyDown={(e) => handleBlockKeyDown(e, block, index)}
+                            onPaste={(e) => handlePaste(e, block.id, index)}
                             placeholder="Heading 2"
                             className="text-xl font-semibold text-white placeholder-zinc-800"
                             disabled={activeNote.isDeleted}
@@ -2104,6 +2358,7 @@ const Notes = () => {
                             value={block.content}
                             onChange={(e) => updateBlockContent(block.id, e.target.value)}
                             onKeyDown={(e) => handleBlockKeyDown(e, block, index)}
+                            onPaste={(e) => handlePaste(e, block.id, index)}
                             placeholder="Heading 3"
                             className="text-lg font-medium text-white placeholder-zinc-800"
                             disabled={activeNote.isDeleted}
@@ -2131,6 +2386,7 @@ const Notes = () => {
                               value={block.content}
                               onChange={(e) => updateBlockContent(block.id, e.target.value)}
                               onKeyDown={(e) => handleBlockKeyDown(e, block, index)}
+                              onPaste={(e) => handlePaste(e, block.id, index)}
                               placeholder="To-do item"
                               className={`text-base leading-relaxed ${block.properties?.checked ? "line-through text-zinc-500 decoration-zinc-700" : "text-zinc-300"}`}
                               disabled={activeNote.isDeleted}
@@ -2147,6 +2403,7 @@ const Notes = () => {
                               value={block.content}
                               onChange={(e) => updateBlockContent(block.id, e.target.value)}
                               onKeyDown={(e) => handleBlockKeyDown(e, block, index)}
+                              onPaste={(e) => handlePaste(e, block.id, index)}
                               placeholder="List item"
                               className="text-base text-zinc-300 leading-relaxed"
                               disabled={activeNote.isDeleted}
@@ -2162,6 +2419,7 @@ const Notes = () => {
                               value={block.content}
                               onChange={(e) => updateBlockContent(block.id, e.target.value)}
                               onKeyDown={(e) => handleBlockKeyDown(e, block, index)}
+                              onPaste={(e) => handlePaste(e, block.id, index)}
                               placeholder="Empty quote..."
                               className="text-base text-zinc-400 font-serif leading-relaxed"
                               disabled={activeNote.isDeleted}
