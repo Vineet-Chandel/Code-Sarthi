@@ -51,7 +51,11 @@ async function getProjectDetails(req, res) {
     const { projectId, teamId } = req.params;
     const project = await Project.findOne({ _id: projectId, teamId, archivedAt: null }).populate('createdBy', 'firstName lastName photoUrl');
     if (!project) return res.status(404).json({ error: 'Project not found' });
-    res.json({ project });
+    
+    const Repository = require('../models/repository');
+    const repository = await Repository.findOne({ projectId: project._id });
+    
+    res.json({ project, repository });
   } catch (err) {
     return handleRouteError(err, res);
   }
@@ -283,14 +287,14 @@ const gitHubAccSetup = async (req, res) => {
 
     console.log("Matched install state:", installState);
 
+    const project = await Project.findById(installState.projectId);
+    if (project) {
+      project.githubInstallationId = Number(installation_id);
+      await project.save();
+    }
 
-
-    // Next:
-    // 1. Validate GitHub installation
-    // 2. Store installation_id against the project
-    // 3. Generate installation access token
-    // 4. Fetch repositories
-    // 5. Redirect to repository selection page
+    installState.used = true;
+    await installState.save();
 
     const frontendUrl = process.env.AT_FRONT || "http://localhost:5173";
     return res.redirect(`${frontendUrl}/app/projects?githubConnected=true`);
@@ -304,6 +308,251 @@ const gitHubAccSetup = async (req, res) => {
     });
   }
 };
+
+const getGithubRepositories = async (req, res) => {
+  try {
+    const { projectId } = req.query;
+    const userId = req.user._id.toString();
+
+    if (!projectId) {
+      return res.status(400).json({
+        success: false,
+        message: "projectId is required",
+      });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(projectId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid projectId format",
+      });
+    }
+
+    const project = await Project.findById(projectId);
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        message: "Project not found",
+      });
+    }
+
+    // Verify team membership
+    const TeamMember = require("../models/teamMember");
+    const membership = await TeamMember.findOne({
+      teamId: project.teamId,
+      userId: req.user._id,
+      status: 'active'
+    });
+    if (!membership) {
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized to access this project",
+      });
+    }
+
+    if (!project.githubInstallationId) {
+      return res.status(200).json({
+        success: true,
+        repositories: []
+      });
+    }
+
+    // Fetch repositories
+    const githubService = require("../services/githubService");
+    const repositories = await githubService.getInstallationRepositories(project.githubInstallationId);
+
+    return res.status(200).json({
+      success: true,
+      repositories
+    });
+  } catch (error) {
+    console.error("Failed to load repositories:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to load GitHub repositories",
+    });
+  }
+};
+
+const connectProjectRepository = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const { repositoryId } = req.body;
+    const userId = req.user._id.toString();
+
+    if (!projectId || !repositoryId) {
+      return res.status(400).json({
+        success: false,
+        message: "projectId and repositoryId are required",
+      });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(projectId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid projectId format",
+      });
+    }
+
+    const project = await Project.findById(projectId);
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        message: "Project not found",
+      });
+    }
+
+    // Verify team membership
+    const TeamMember = require("../models/teamMember");
+    const membership = await TeamMember.findOne({
+      teamId: project.teamId,
+      userId: req.user._id,
+      status: 'active'
+    });
+    if (!membership) {
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized to access this project",
+      });
+    }
+
+    if (!project.githubInstallationId) {
+      return res.status(400).json({
+        success: false,
+        message: "GitHub installation not connected for this project",
+      });
+    }
+
+    // Fetch repositories and verify repositoryId belongs to the installation
+    const githubService = require("../services/githubService");
+    const repositories = await githubService.getInstallationRepositories(project.githubInstallationId);
+
+    const selectedRepo = repositories.find(r => r.id === Number(repositoryId));
+    if (!selectedRepo) {
+      return res.status(400).json({
+        success: false,
+        message: "Repository does not belong to the authorized installation",
+      });
+    }
+
+    // Create or update the Repository record in CodeSarthi
+    const RepositoryModel = require("../models/repository");
+    const repositoryRecord = await RepositoryModel.findOneAndUpdate(
+      { githubRepositoryId: selectedRepo.id },
+      {
+        teamId: project.teamId,
+        projectId: project._id,
+        owner: selectedRepo.owner.login,
+        name: selectedRepo.name,
+        defaultBranch: selectedRepo.default_branch || 'main',
+        installationId: project.githubInstallationId
+      },
+      { upsert: true, new: true }
+    );
+
+    // Save Project <-> Repository connection
+    project.githubRepo = selectedRepo.html_url;
+    await project.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Repository connected successfully",
+      project,
+      repository: repositoryRecord
+    });
+  } catch (error) {
+    console.error("Failed to connect repository:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to connect repository",
+    });
+  }
+};
+
+const syncProjectRepository = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const userId = req.user._id.toString();
+
+    if (!projectId) {
+      return res.status(400).json({
+        success: false,
+        message: "projectId is required",
+      });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(projectId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid projectId format",
+      });
+    }
+
+    const project = await Project.findById(projectId);
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        message: "Project not found",
+      });
+    }
+
+    // Verify team membership
+    const TeamMember = require("../models/teamMember");
+    const membership = await TeamMember.findOne({
+      teamId: project.teamId,
+      userId: req.user._id,
+      status: 'active'
+    });
+    if (!membership) {
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized to access this project",
+      });
+    }
+
+    // Verify repository is connected
+    const RepositoryModel = require("../models/repository");
+    const repository = await RepositoryModel.findOne({ projectId: project._id });
+    if (!repository) {
+      return res.status(400).json({
+        success: false,
+        message: "No connected GitHub repository found for this project",
+      });
+    }
+
+    // Update repository sync status to QUEUED
+    repository.syncStatus = 'QUEUED';
+    await repository.save();
+
+    // Create Outbox Event for synchronization
+    const EventOutbox = require("../models/eventOutbox");
+    const outboxEvent = await EventOutbox.create({
+      type: 'GITHUB_REPO_SYNC',
+      payload: {
+        projectId: project._id,
+        repositoryId: repository._id
+      }
+    });
+
+    // Run outbox processor asynchronously to trigger the sync immediately
+    const { processOutbox } = require("../workers/outboxProcessor");
+    processOutbox().catch(err => console.error("Async outbox process error:", err));
+
+    return res.status(202).json({
+      success: true,
+      message: "Initial repository synchronization enqueued",
+      syncStatus: repository.syncStatus
+    });
+
+  } catch (error) {
+    console.error("Failed to enqueue repository sync:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to start repository sync",
+    });
+  }
+};
+
 module.exports = {
   createProject,
   listProjects,
@@ -313,5 +562,8 @@ module.exports = {
   deleteProject,
   notifyLeaderToLink,
   startGithubInstall,
-  gitHubAccSetup
+  gitHubAccSetup,
+  getGithubRepositories,
+  connectProjectRepository,
+  syncProjectRepository
 };

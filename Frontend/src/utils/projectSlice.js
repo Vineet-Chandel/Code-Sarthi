@@ -84,8 +84,8 @@ const projectSlice = createSlice({
 
         // Project Detail
         setProjectDetail: (state, action) => {
-            const { projectId, project } = action.payload;
-            state.projectDetails[projectId] = { project, isFetched: true };
+            const { projectId, project, repository } = action.payload;
+            state.projectDetails[projectId] = { project, repository, isFetched: true };
         },
         invalidateProjectDetail: (state, action) => {
             if (state.projectDetails[action.payload]) {

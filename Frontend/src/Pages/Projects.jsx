@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import BASE_URL from './auth/baseURL';
 import { setTeams } from '../utils/projectSlice';
@@ -10,6 +10,7 @@ import ProjectDetailPanel from './PROJECT-MANAGER/Projects/ProjectDetailPanel';
 const Projects = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
     const { teams, isTeamsFetched } = useSelector((store) => store.projects || { teams: [], isTeamsFetched: false });
 
     const [allProjects, setAllProjects] = useState([]);
@@ -26,6 +27,17 @@ const Projects = () => {
     useEffect(() => {
         fetchData();
     }, []);
+
+    useEffect(() => {
+        const projectIdParam = searchParams.get('projectId');
+        if (projectIdParam && allProjects.length > 0) {
+            const projectToSelect = allProjects.find(p => p._id === projectIdParam);
+            if (projectToSelect) {
+                setSelectedProject(projectToSelect);
+                setSearchParams({});
+            }
+        }
+    }, [allProjects, searchParams]);
 
     const fetchData = async () => {
         setLoading(true);

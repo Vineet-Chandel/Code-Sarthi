@@ -50,6 +50,14 @@ async function processOutbox() {
                         <p>An admin has left the team <strong>${teamName}</strong>. Any incomplete tasks assigned to them have been temporarily reassigned to you to prevent orphaned issues.</p>
                         <p>Please review your team's active issues and reassign them as needed.</p>
                     `;
+                } else if (event.type === 'GITHUB_REPO_SYNC') {
+                    const { projectId, repositoryId } = event.payload;
+                    const { syncRepositoryData } = require('./githubSyncWorker');
+                    await syncRepositoryData(projectId, repositoryId);
+                    event.status = 'processed';
+                    event.processedAt = new Date();
+                    await event.save();
+                    continue;
                 } else {
                     event.status = 'processed'; // Unknown type, just skip
                     await event.save();

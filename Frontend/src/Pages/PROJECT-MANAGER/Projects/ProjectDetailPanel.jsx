@@ -32,6 +32,14 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
     const [disconnecting, setDisconnecting] = useState(false);
     const [notifying, setNotifying] = useState(false);
 
+    // Repository selection states
+    const [repositories, setRepositories] = useState([]);
+    const [fetchingRepos, setFetchingRepos] = useState(false);
+    const [selectedRepoId, setSelectedRepoId] = useState('');
+    const [connectingRepo, setConnectingRepo] = useState(false);
+    const [repository, setRepository] = useState(cachedDetail?.repository || null);
+    const [syncing, setSyncing] = useState(false);
+
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -57,6 +65,7 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
             fetchProject();
         } else {
             setProject(cachedDetail.project);
+            setRepository(cachedDetail.repository || null);
             setEditData({
                 title: cachedDetail.project.title,
                 description: cachedDetail.project.description,
@@ -67,22 +76,63 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
         }
     }, [projectId, cachedDetail?.isFetched]);
 
+    // Polling sync status
+    useEffect(() => {
+        let timer;
+        if (repository && (repository.syncStatus === 'SYNCING' || repository.syncStatus === 'QUEUED')) {
+            timer = setInterval(async () => {
+                try {
+                    const res = await axios.get(`${BASE_URL}/teams/${teamId}/projects/${projectId}`, { withCredentials: true });
+                    if (res.data.repository) {
+                        setRepository(res.data.repository);
+                        dispatch(setProjectDetail({ projectId, project: res.data.project, repository: res.data.repository }));
+                    }
+                } catch (err) {
+                    console.error("Polling repository sync status failed:", err);
+                }
+            }, 3000);
+        }
+        return () => clearInterval(timer);
+    }, [repository?.syncStatus, projectId, teamId]);
+
     const fetchProject = async () => {
         setLoading(true);
         try {
             const res = await axios.get(`${BASE_URL}/teams/${teamId}/projects/${projectId}`, { withCredentials: true });
             setProject(res.data.project);
+            setRepository(res.data.repository || null);
             setEditData({
                 title: res.data.project.title,
                 description: res.data.project.description,
                 status: res.data.project.status,
                 priority: res.data.project.priority
             });
-            dispatch(setProjectDetail({ projectId, project: res.data.project }));
+            dispatch(setProjectDetail({ projectId, project: res.data.project, repository: res.data.repository }));
         } catch (err) {
             setError(err.response?.data?.error || "Failed to load project");
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleSyncGitHub = async () => {
+        setSyncing(true);
+        try {
+            const res = await axios.post(`${BASE_URL}/projects/${projectId}/github/sync`, {}, { withCredentials: true });
+            setAlertData({
+                type: 'success',
+                title: 'Sync Enqueued',
+                message: 'Initial repository synchronization has been enqueued.'
+            });
+            setRepository(prev => ({ ...prev, syncStatus: 'QUEUED' }));
+        } catch (err) {
+            setAlertData({
+                type: 'error',
+                title: 'Sync Failed',
+                message: err.response?.data?.message || 'Failed to start synchronization.'
+            });
+        } finally {
+            setSyncing(false);
         }
     };
 
@@ -197,6 +247,48 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
             setAlertData({ type: 'error', message: err.response?.data?.error || 'Failed to connect GitHub' });
         } finally {
             setConnecting(false);
+        }
+    };
+
+    useEffect(() => {
+        if (project && project.githubInstallationId && !project.githubRepo) {
+            fetchRepositories();
+        }
+    }, [project?.githubInstallationId, project?.githubRepo]);
+
+    const fetchRepositories = async () => {
+        setFetchingRepos(true);
+        try {
+            const res = await axios.get(`${BASE_URL}/github/repositories?projectId=${projectId}`, { withCredentials: true });
+            setRepositories(res.data.repositories || []);
+            if (res.data.repositories?.length > 0) {
+                setSelectedRepoId(res.data.repositories[0].id.toString());
+            }
+        } catch (err) {
+            setAlertData({ type: 'error', message: err.response?.data?.message || 'Failed to load GitHub repositories' });
+        } finally {
+            setFetchingRepos(false);
+        }
+    };
+
+    const handleConnectRepository = async (e) => {
+        if (e) e.preventDefault();
+        if (!selectedRepoId) return;
+        setConnectingRepo(true);
+        try {
+            const res = await axios.post(
+                `${BASE_URL}/projects/${projectId}/github/repository`,
+                { repositoryId: selectedRepoId },
+                { withCredentials: true }
+            );
+            setProject(res.data.project);
+            dispatch(setProjectDetail({ projectId, project: res.data.project }));
+            dispatch(updateProjectInTeam({ teamId, project: res.data.project }));
+            setAlertData({ type: 'success', message: 'GitHub repository linked successfully!' });
+        } catch (err) {
+            setAlertData({ type: 'error', message: err.response?.data?.message || 'Failed to link repository' });
+        } finally {
+            setConnectingRepo(false);
         }
     };
 
@@ -396,26 +488,133 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
                         </div>
 
                         {project.githubRepo ? (
-                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-emerald-500/5 border border-emerald-500/20 rounded-xl p-4">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400">
-                                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                                            <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.137 20.162 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
-                                        </svg>
+                            <div className="space-y-4">
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-emerald-500/5 border border-emerald-500/20 rounded-xl p-4">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+                                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.137 20.162 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <span className="text-xs font-bold text-zinc-300 block">Linked Repository</span>
+                                            <a href={project.githubRepo} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-emerald-400 hover:underline">{project.githubRepo}</a>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <span className="text-xs font-bold text-zinc-300 block">Linked Repository</span>
-                                        <a href={project.githubRepo} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-emerald-400 hover:underline">{project.githubRepo}</a>
-                                    </div>
+                                    {myRole === 'leader' && (
+                                        <button
+                                            onClick={handleDisconnectGitHub}
+                                            disabled={disconnecting}
+                                            className="bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 font-bold px-4 py-2 rounded-xl text-xs transition-colors"
+                                        >
+                                            {disconnecting ? 'Disconnecting...' : 'Disconnect'}
+                                        </button>
+                                    )}
                                 </div>
-                                {myRole === 'leader' && (
+
+                                <div className="bg-[#000000] border border-white/[0.06] rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                    <div className="space-y-1">
+                                        <span className="text-xs font-bold text-zinc-400 block">Repository Synchronization</span>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-sm font-semibold text-zinc-200">Status:</span>
+                                            <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+                                                repository?.syncStatus === 'COMPLETED' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                                                repository?.syncStatus === 'SYNCING' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20 animate-pulse' :
+                                                repository?.syncStatus === 'QUEUED' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20 animate-pulse' :
+                                                repository?.syncStatus === 'FAILED' ? 'bg-red-500/10 text-red-400 border border-red-500/20' :
+                                                'bg-zinc-500/10 text-zinc-400 border border-zinc-500/20'
+                                            }`}>
+                                                {repository?.syncStatus || 'NOT_STARTED'}
+                                            </span>
+                                        </div>
+                                        {repository?.lastSyncAt && (
+                                            <span className="text-[10px] text-zinc-500 block">
+                                                Last Synced: {new Date(repository.lastSyncAt).toLocaleString()}
+                                            </span>
+                                        )}
+                                        {repository?.lastSyncError && (
+                                            <span className="text-[10px] text-red-400 block">
+                                                Error: {repository.lastSyncError}
+                                            </span>
+                                        )}
+                                    </div>
                                     <button
-                                        onClick={handleDisconnectGitHub}
-                                        disabled={disconnecting}
-                                        className="bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 font-bold px-4 py-2 rounded-xl text-xs transition-colors"
+                                        onClick={handleSyncGitHub}
+                                        disabled={syncing || repository?.syncStatus === 'SYNCING' || repository?.syncStatus === 'QUEUED'}
+                                        className="bg-white hover:bg-zinc-200 disabled:opacity-50 text-black font-bold px-4 py-2 rounded-xl text-xs transition-opacity flex items-center gap-2 self-start sm:self-center"
                                     >
-                                        {disconnecting ? 'Disconnecting...' : 'Disconnect'}
+                                        {(repository?.syncStatus === 'SYNCING' || repository?.syncStatus === 'QUEUED') ? (
+                                            <>
+                                                <div className="animate-spin rounded-full h-3 w-3 border-2 border-black/20 border-t-black" />
+                                                Syncing...
+                                            </>
+                                        ) : (
+                                            'Sync Repository'
+                                        )}
                                     </button>
+                                </div>
+                            </div>
+                        ) : project.githubInstallationId ? (
+                            <div className="bg-[#000000] border border-white/[0.06] rounded-xl p-4 space-y-4">
+                                <div>
+                                    <span className="text-xs font-bold text-zinc-400 block">GitHub Authorized</span>
+                                    <span className="text-sm font-semibold text-zinc-300">Select a repository to link with this project.</span>
+                                </div>
+                                {fetchingRepos ? (
+                                    <div className="flex items-center gap-2 text-xs text-zinc-400">
+                                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-white/20 border-t-white" />
+                                        Fetching authorized repositories...
+                                    </div>
+                                ) : repositories.length === 0 ? (
+                                    <div className="space-y-3">
+                                        <p className="text-xs text-amber-400/90 bg-amber-500/5 border border-amber-500/20 p-3 rounded-lg leading-normal">
+                                            No repositories found. Ensure the GitHub App has been granted access to at least one repository.
+                                        </p>
+                                        {myRole === 'leader' && (
+                                            <button
+                                                onClick={handleConnectGitHub}
+                                                className="bg-white hover:bg-zinc-200 text-black font-extrabold px-4 py-2 rounded-xl text-xs transition-all"
+                                            >
+                                                Configure App Access
+                                            </button>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <form onSubmit={handleConnectRepository} className="space-y-3">
+                                        <div className="flex flex-col gap-2">
+                                            <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Repository</label>
+                                            <select
+                                                value={selectedRepoId}
+                                                onChange={(e) => setSelectedRepoId(e.target.value)}
+                                                className="bg-[#0a0a0a] border border-white/[0.06] rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-white/[0.2] transition-colors"
+                                                disabled={connectingRepo}
+                                            >
+                                                {repositories.map(repo => (
+                                                    <option key={repo.id} value={repo.id}>
+                                                        {repo.full_name}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        {myRole === 'leader' && (
+                                            <div className="flex gap-2">
+                                                <button
+                                                    type="submit"
+                                                    disabled={connectingRepo}
+                                                    className="bg-white hover:bg-zinc-200 text-black font-extrabold px-4 py-2 rounded-xl text-xs transition-all shadow-[0_0_10px_rgba(255,255,255,0.05)]"
+                                                >
+                                                    {connectingRepo ? 'Linking...' : 'Link Repository'}
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={handleConnectGitHub}
+                                                    className="bg-zinc-800 hover:bg-zinc-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition-all"
+                                                >
+                                                    Configure/Update App
+                                                </button>
+                                            </div>
+                                        )}
+                                    </form>
                                 )}
                             </div>
                         ) : (
