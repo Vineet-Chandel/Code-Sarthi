@@ -272,6 +272,7 @@ const Notes = () => {
   const [issueTitle, setIssueTitle] = useState("");
   const [issueDescription, setIssueDescription] = useState("");
   const [issueProjectId, setIssueProjectId] = useState("");
+  const [issueDeadline, setIssueDeadline] = useState("");
 
   // Post to Discussion Modal states
   const [showDiscussionModal, setShowDiscussionModal] = useState(false);
@@ -713,7 +714,8 @@ const Notes = () => {
         {
           title: issueTitle || `Issue: ${activeNote.title}`,
           description: issueDescription || editorBlocks.map(b => b.content).join("\n"),
-          projectId: issueProjectId || activeNote.projectId
+          projectId: issueProjectId || activeNote.projectId,
+          deadline: issueDeadline || undefined
         },
         { withCredentials: true }
       );
@@ -1982,6 +1984,7 @@ const Notes = () => {
                         setIssueTitle(activeNote.title || "");
                         setIssueDescription(editorBlocks.map(b => b.content).join("\n"));
                         setIssueProjectId(activeNote.projectId || "");
+                        setIssueDeadline("");
                         setShowIssueModal(true);
                       }}
                       className="p-1.5 rounded-lg border border-transparent text-zinc-300 hover:bg-zinc-900 flex items-center gap-1.5 text-xs transition duration-150"
@@ -2787,6 +2790,16 @@ const Notes = () => {
                     onChange={(e) => setIssueDescription(e.target.value)}
                     className="w-full h-32 bg-[#121212] border border-zinc-900 rounded-lg p-3 text-xs text-white placeholder-zinc-700 focus:outline-none resize-none font-mono"
                     placeholder="Write detailed logs/explanation..."
+                  />
+                </div>
+                
+                <div className="space-y-1">
+                  <label className="text-[10px] uppercase tracking-wider text-zinc-500 font-semibold">Deadline</label>
+                  <input
+                    type="date"
+                    value={issueDeadline}
+                    onChange={(e) => setIssueDeadline(e.target.value)}
+                    className="w-full bg-[#121212] border border-zinc-900 rounded-lg px-3 py-2 text-xs text-white focus:outline-none"
                   />
                 </div>
               </div>

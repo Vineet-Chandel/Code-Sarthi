@@ -8,7 +8,8 @@ const {
   getProjectDetails,
   updateProject,
   archiveProject,
-  deleteProject
+  deleteProject,
+  notifyLeaderToLink
 } = require('../controllers/projectController');
 
 const {
@@ -25,6 +26,7 @@ router.get('/:projectId', getProjectDetails);
 router.patch('/:projectId', updateProject);
 router.patch('/:projectId/archive', requireTeamLeader, archiveProject);
 router.delete('/:projectId', requireTeamLeader, deleteProject);
+router.post('/:projectId/notify-leader', notifyLeaderToLink);
 
 // Issue endpoints tied to projects
 router.post('/:projectId/issues', createIssue);

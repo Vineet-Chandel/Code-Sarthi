@@ -3,6 +3,59 @@ import { motion } from 'framer-motion';
 import axios from 'axios';
 import BASE_URL from '../../auth/baseURL';
 
+const getDeadlineSlang = (deadline, status) => {
+    if (!deadline) return { text: "No rush... for now 👀", color: "text-zinc-500 bg-zinc-500/10 border-zinc-500/20" };
+    if (status === 'done') return { text: "Done & dusted! ✅", color: "text-emerald-400 bg-emerald-400/10 border-emerald-400/20" };
+
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+    const target = new Date(deadline);
+    target.setHours(0, 0, 0, 0);
+
+    const diffTime = target.getTime() - now.getTime();
+    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays < 0) {
+        const slangs = [
+            "Deadline crossed! 💀",
+            "Overdue! Rip ⚰️",
+            "Code rotting... 🫠",
+            "Too slow! 🐌",
+            "This died! 👻",
+            "Missed it, big oof! 💀"
+        ];
+        const idx = Math.abs(target.getTime()) % slangs.length;
+        return { text: slangs[idx], color: "text-rose-500 bg-rose-500/10 border-rose-500/20 font-bold animate-pulse" };
+    }
+
+    if (diffDays === 0) {
+        const slangs = [
+            "TODAY IS THE DAY! 🚨",
+            "Last chance! ⏳",
+            "Sweating yet? 🥵",
+            "Tick tock! ⏰"
+        ];
+        const idx = Math.abs(target.getTime()) % slangs.length;
+        return { text: slangs[idx], color: "text-amber-500 bg-amber-500/10 border-amber-500/20 font-bold" };
+    }
+
+    if (diffDays === 1) {
+        const slangs = [
+            "One day left !! 🔥",
+            "Tomorrow! Wake up! ⏰",
+            "Panic mode: active! 😱"
+        ];
+        const idx = Math.abs(target.getTime()) % slangs.length;
+        return { text: slangs[idx], color: "text-orange-400 bg-orange-400/10 border-orange-400/20 font-semibold" };
+    }
+
+    if (diffDays <= 3) {
+        return { text: `${diffDays} days left! Hurry! 🏃‍♂️`, color: "text-yellow-400 bg-yellow-400/10 border-yellow-400/20 font-medium" };
+    }
+
+    return { text: `${diffDays} days left. Cool 😎`, color: "text-zinc-400 bg-zinc-400/10 border-zinc-400/20" };
+};
+
 const KanbanColumn = ({ title, priority, issues, colorClass, teamId, onRefresh }) => {
     return (
         <div className="flex flex-col bg-[#0a0a0a] rounded-2xl border border-white/[0.05] shadow-lg flex-1 min-w-[250px]">
@@ -73,9 +126,17 @@ const KanbanCard = ({ issue, teamId, onRefresh }) => {
                     {(issue.status || 'open').replace('_', ' ')}
                 </span>
             </div>
-            <h4 className="text-sm font-bold text-white mb-3 line-clamp-2 leading-tight group-hover:text-zinc-200 transition-colors">
+            <h4 className="text-sm font-bold text-white mb-2 line-clamp-2 leading-tight group-hover:text-zinc-200 transition-colors">
                 {issue.title}
             </h4>
+            
+            {issue.deadline && (
+                <div className="mb-3">
+                    <span className={`text-[9px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded border ${getDeadlineSlang(issue.deadline, issue.status).color}`}>
+                        {getDeadlineSlang(issue.deadline, issue.status).text}
+                    </span>
+                </div>
+            )}
             
             {/* Assignee Footer */}
             <div className="flex items-center justify-between mt-auto pt-3 border-t border-white/[0.05]">

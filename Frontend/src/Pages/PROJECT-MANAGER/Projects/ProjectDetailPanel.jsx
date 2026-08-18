@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { motion } from 'framer-motion';
 import axios from 'axios';
 import BASE_URL from '../../auth/baseURL';
 import { setProjectDetail, updateProjectInTeam, removeProjectFromTeam } from '../../../utils/projectSlice';
@@ -23,6 +24,13 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
     const [addingLink, setAddingLink] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef(null);
+
+    // Settings tab states
+    const [activeTab, setActiveTab] = useState('issues');
+    const [githubUrl, setGithubUrl] = useState('');
+    const [connecting, setConnecting] = useState(false);
+    const [disconnecting, setDisconnecting] = useState(false);
+    const [notifying, setNotifying] = useState(false);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -169,6 +177,62 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
         }
     };
 
+    const handleConnectGitHub = async (e) => {
+        if (e) e.preventDefault();
+        setConnecting(true);
+
+        // Generate a valid-looking dummy repository URL based on project title
+        const projectTitleSlug = project?.title 
+            ? project.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+            : 'project';
+        const dummyUrl = `https://github.com/codesarthi-projects/${projectTitleSlug}-${projectId.substring(18)}`;
+
+        try {
+            const res = await axios.patch(`${BASE_URL}/teams/${teamId}/projects/${projectId}`, {
+                githubRepo: dummyUrl
+            }, { withCredentials: true });
+            
+            setProject(res.data.project);
+            dispatch(setProjectDetail({ projectId, project: res.data.project }));
+            dispatch(updateProjectInTeam({ teamId, project: res.data.project }));
+            setAlertData({ type: 'success', message: 'GitHub repository connected successfully!' });
+        } catch (err) {
+            setAlertData({ type: 'error', message: err.response?.data?.error || 'Failed to connect GitHub' });
+        } finally {
+            setConnecting(false);
+        }
+    };
+
+    const handleDisconnectGitHub = async () => {
+        setDisconnecting(true);
+        try {
+            const res = await axios.patch(`${BASE_URL}/teams/${teamId}/projects/${projectId}`, {
+                githubRepo: null
+            }, { withCredentials: true });
+            
+            setProject(res.data.project);
+            dispatch(setProjectDetail({ projectId, project: res.data.project }));
+            dispatch(updateProjectInTeam({ teamId, project: res.data.project }));
+            setAlertData({ type: 'info', message: 'GitHub repository disconnected.' });
+        } catch (err) {
+            setAlertData({ type: 'error', message: err.response?.data?.error || 'Failed to disconnect GitHub' });
+        } finally {
+            setDisconnecting(false);
+        }
+    };
+
+    const handleNotifyLeader = async () => {
+        setNotifying(true);
+        try {
+            await axios.post(`${BASE_URL}/teams/${teamId}/projects/${projectId}/notify-leader`, {}, { withCredentials: true });
+            setAlertData({ type: 'success', message: 'Team leader has been notified in general chat!' });
+        } catch (err) {
+            setAlertData({ type: 'error', message: err.response?.data?.error || 'Failed to notify leader.' });
+        } finally {
+            setNotifying(false);
+        }
+    };
+
     if (loading) return <div className="text-zinc-500 animate-pulse">Loading project details...</div>;
     if (error) return <div className="text-red-400">{error}</div>;
 
@@ -225,25 +289,6 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
                                     {project.links?.length || 0}
                                 </span>
                             </button>
-                            {myRole === 'leader' && (
-                                <>
-                                    <div className="border-t border-white/[0.06] my-1" />
-                                    <button
-                                        onClick={() => { setIsMenuOpen(false); setIsArchiveModalOpen(true); }}
-                                        className="w-full text-left px-4 py-2.5 text-xs font-semibold text-amber-400 hover:bg-amber-500/10 flex items-center gap-2.5 transition-colors"
-                                    >
-                                        <svg className="w-4 h-4 text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
-                                        Archive Project
-                                    </button>
-                                    <button
-                                        onClick={() => { setIsMenuOpen(false); setIsDeleteModalOpen(true); }}
-                                        className="w-full text-left px-4 py-2.5 text-xs font-semibold text-red-400 hover:bg-red-500/10 flex items-center gap-2.5 transition-colors"
-                                    >
-                                        <svg className="w-4 h-4 text-red-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                                        Delete Project
-                                    </button>
-                                </>
-                            )}
                         </div>
                     )}
                 </div>
@@ -316,10 +361,125 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
                 )}
             </div>
 
-            <div className="mt-8">
-                <h3 className="text-xl font-bold text-white mb-4">Issues</h3>
-                <IssueListView teamId={teamId} projectId={projectId} myRole={myRole} />
+            {/* Tab Navigation */}
+            <div className="flex border-b border-white/[0.06] gap-6 mt-8 mb-6 relative">
+                <button
+                    onClick={() => setActiveTab('issues')}
+                    className={`pb-3 text-sm font-bold transition-all relative ${activeTab === 'issues' ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
+                >
+                    Issues
+                    {activeTab === 'issues' && (
+                        <motion.div layoutId="activeTabUnderline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-white" />
+                    )}
+                </button>
+                <button
+                    onClick={() => setActiveTab('settings')}
+                    className={`pb-3 text-sm font-bold transition-all relative ${activeTab === 'settings' ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
+                >
+                    Settings
+                    {activeTab === 'settings' && (
+                        <motion.div layoutId="activeTabUnderline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-white" />
+                    )}
+                </button>
             </div>
+
+            {/* Tab Contents */}
+            {activeTab === 'issues' ? (
+                <div className="space-y-4">
+                    <IssueListView teamId={teamId} projectId={projectId} myRole={myRole} />
+                </div>
+            ) : (
+                <div className="space-y-6 max-w-3xl">
+                    {/* GitHub Connection Settings */}
+                    <div className="bg-[#0a0a0a] border border-white/[0.05] rounded-2xl p-6 space-y-4 shadow-lg relative">
+                        <div className="absolute top-0 left-0 right-0 h-px bg-white/10" />
+                        <div>
+                            <h4 className="text-lg font-bold text-white mb-1 tracking-tight">GitHub Connection</h4>
+                            <p className="text-xs text-zinc-400">Manage linking this project to a repository. A repository connection is required to log tasks and issues.</p>
+                        </div>
+
+                        {project.githubRepo ? (
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-emerald-500/5 border border-emerald-500/20 rounded-xl p-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+                                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.137 20.162 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <span className="text-xs font-bold text-zinc-300 block">Linked Repository</span>
+                                        <a href={project.githubRepo} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-emerald-400 hover:underline">{project.githubRepo}</a>
+                                    </div>
+                                </div>
+                                {myRole === 'leader' && (
+                                    <button
+                                        onClick={handleDisconnectGitHub}
+                                        disabled={disconnecting}
+                                        className="bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 font-bold px-4 py-2 rounded-xl text-xs transition-colors"
+                                    >
+                                        {disconnecting ? 'Disconnecting...' : 'Disconnect'}
+                                    </button>
+                                )}
+                            </div>
+                        ) : (
+                            <div className="space-y-4">
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-zinc-500/5 border border-white/[0.06] rounded-xl p-4">
+                                    <div>
+                                        <span className="text-xs font-bold text-zinc-400 block">Connection Status</span>
+                                        <span className="text-sm font-semibold text-zinc-300">Not linked to GitHub</span>
+                                    </div>
+                                    {myRole !== 'leader' && (
+                                        <button
+                                            onClick={handleNotifyLeader}
+                                            disabled={notifying}
+                                            className="bg-white hover:bg-zinc-200 text-black font-bold px-4 py-2.5 rounded-xl text-xs transition-all active:scale-95 shadow-[0_0_15px_rgba(255,255,255,0.1)] flex items-center justify-center gap-1.5"
+                                        >
+                                            {notifying ? 'Notifying Leader...' : 'Notify Leader to Link'}
+                                        </button>
+                                    )}
+                                </div>
+
+                                {myRole === 'leader' && (
+                                    <button
+                                        onClick={handleConnectGitHub}
+                                        disabled={connecting}
+                                        className="bg-white hover:bg-zinc-200 text-black font-extrabold px-5 py-2.5 rounded-xl text-sm transition-all active:scale-95 shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+                                    >
+                                        {connecting ? 'Connecting...' : 'Connect GitHub'}
+                                    </button>
+                                )}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Danger Zone (Leader Only) */}
+                    {myRole === 'leader' && (
+                        <div className="bg-[#0a0a0a] border border-red-500/10 rounded-2xl p-6 space-y-4 shadow-lg relative">
+                            <div className="absolute top-0 left-0 right-0 h-px bg-red-500/20" />
+                            <div>
+                                <h4 className="text-lg font-bold text-red-400 mb-1 tracking-tight">Danger Zone</h4>
+                                <p className="text-xs text-zinc-400">Irreversible administrative actions for this project.</p>
+                            </div>
+                            <div className="flex flex-col sm:flex-row gap-4">
+                                <button
+                                    onClick={() => setIsArchiveModalOpen(true)}
+                                    className="flex-1 border border-amber-500/20 bg-amber-500/5 hover:bg-amber-500/10 text-amber-400 font-bold py-3 px-4 rounded-xl text-xs transition-colors flex items-center justify-center gap-2"
+                                >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
+                                    Archive Project
+                                </button>
+                                <button
+                                    onClick={() => setIsDeleteModalOpen(true)}
+                                    className="flex-1 border border-red-500/20 bg-red-500/5 hover:bg-red-500/10 text-red-400 font-bold py-3 px-4 rounded-xl text-xs transition-colors flex items-center justify-center gap-2"
+                                >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                    Delete Project
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            )}
 
             <DeleteConfirmModal
                 isOpen={isDeleteModalOpen}

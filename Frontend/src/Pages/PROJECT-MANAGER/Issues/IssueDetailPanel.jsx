@@ -10,6 +10,59 @@ import AlertModal from '../AlertModal';
 import IssueLinksModal from './IssueLinksModal';
 import IssueComments from './IssueComments';
 
+const getDeadlineSlang = (deadline, status) => {
+    if (!deadline) return { text: "No rush... for now 👀", color: "text-zinc-500 bg-zinc-500/10 border-zinc-500/20" };
+    if (status === 'done') return { text: "Done & dusted! ✅", color: "text-emerald-400 bg-emerald-400/10 border-emerald-400/20" };
+
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+    const target = new Date(deadline);
+    target.setHours(0, 0, 0, 0);
+
+    const diffTime = target.getTime() - now.getTime();
+    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays < 0) {
+        const slangs = [
+            "Deadline crossed! 💀",
+            "Overdue! Rip ⚰️",
+            "Code rotting... 🫠",
+            "Too slow! 🐌",
+            "This died! 👻",
+            "Missed it, big oof! 💀"
+        ];
+        const idx = Math.abs(target.getTime()) % slangs.length;
+        return { text: slangs[idx], color: "text-rose-500 bg-rose-500/10 border-rose-500/20 font-bold animate-pulse" };
+    }
+
+    if (diffDays === 0) {
+        const slangs = [
+            "TODAY IS THE DAY! 🚨",
+            "Last chance! ⏳",
+            "Sweating yet? 🥵",
+            "Tick tock! ⏰"
+        ];
+        const idx = Math.abs(target.getTime()) % slangs.length;
+        return { text: slangs[idx], color: "text-amber-500 bg-amber-500/10 border-amber-500/20 font-bold" };
+    }
+
+    if (diffDays === 1) {
+        const slangs = [
+            "One day left !! 🔥",
+            "Tomorrow! Wake up! ⏰",
+            "Panic mode: active! 😱"
+        ];
+        const idx = Math.abs(target.getTime()) % slangs.length;
+        return { text: slangs[idx], color: "text-orange-400 bg-orange-400/10 border-orange-400/20 font-semibold" };
+    }
+
+    if (diffDays <= 3) {
+        return { text: `${diffDays} days left! Hurry! 🏃‍♂️`, color: "text-yellow-400 bg-yellow-400/10 border-yellow-400/20 font-medium" };
+    }
+
+    return { text: `${diffDays} days left. Cool 😎`, color: "text-zinc-400 bg-zinc-400/10 border-zinc-400/20" };
+};
+
 const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
     const user = useSelector(store => store.user?.user?.DATA || store.user);
     const [issue, setIssue] = useState(null);
@@ -81,7 +134,7 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
 
     // Inline edit state
     const [isEditing, setIsEditing] = useState(false);
-    const [editData, setEditData] = useState({ title: '', description: '', status: '', priority: '' });
+    const [editData, setEditData] = useState({ title: '', description: '', status: '', priority: '', deadline: '' });
     const [saving, setSaving] = useState(false);
 
     useEffect(() => {
@@ -96,7 +149,8 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                 title: res.data.issue.title,
                 description: res.data.issue.description,
                 status: res.data.issue.status,
-                priority: res.data.issue.priority
+                priority: res.data.issue.priority,
+                deadline: res.data.issue.deadline ? new Date(res.data.issue.deadline).toISOString().split('T')[0] : ''
             });
         } catch (err) {
             setError(err.response?.data?.error || "Failed to load issue");
@@ -267,26 +321,41 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                         rows={4}
                         className="w-full bg-[#000000] border border-white/[0.08] rounded-xl px-4 py-2.5 text-white text-sm resize-none focus:outline-none focus:border-white/[0.2] transition-colors"
                     />
-                    <div className="flex gap-3">
-                        <select
-                            value={editData.status}
-                            onChange={e => setEditData({ ...editData, status: e.target.value })}
-                            className="bg-[#000000] border border-white/[0.08] rounded-xl px-3.5 py-2 text-white text-sm font-semibold focus:outline-none focus:border-white/[0.2] transition-colors"
-                        >
-                            <option value="open">Open</option>
-                            <option value="in_progress">In Progress</option>
-                            <option value="done">Done</option>
-                        </select>
-                        <select
-                            value={editData.priority}
-                            onChange={e => setEditData({ ...editData, priority: e.target.value })}
-                            className="bg-[#000000] border border-white/[0.08] rounded-xl px-3.5 py-2 text-white text-sm font-semibold focus:outline-none focus:border-white/[0.2] transition-colors"
-                        >
-                            <option value="low">Low</option>
-                            <option value="medium">Medium</option>
-                            <option value="high">High</option>
-                            <option value="urgent">Urgent</option>
-                        </select>
+                    <div className="flex flex-wrap gap-3 items-end">
+                        <div className="flex flex-col gap-1">
+                            <label className="text-[10px] text-zinc-500 uppercase font-semibold">Status</label>
+                            <select
+                                value={editData.status}
+                                onChange={e => setEditData({ ...editData, status: e.target.value })}
+                                className="bg-[#000000] border border-white/[0.08] rounded-xl px-3.5 py-2 text-white text-sm font-semibold focus:outline-none focus:border-white/[0.2] transition-colors"
+                            >
+                                <option value="open">Open</option>
+                                <option value="in_progress">In Progress</option>
+                                <option value="done">Done</option>
+                            </select>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <label className="text-[10px] text-zinc-500 uppercase font-semibold">Priority</label>
+                            <select
+                                value={editData.priority}
+                                onChange={e => setEditData({ ...editData, priority: e.target.value })}
+                                className="bg-[#000000] border border-white/[0.08] rounded-xl px-3.5 py-2 text-white text-sm font-semibold focus:outline-none focus:border-white/[0.2] transition-colors"
+                            >
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                                <option value="urgent">Urgent</option>
+                            </select>
+                        </div>
+                        <div className="flex flex-col gap-1 min-w-[150px]">
+                            <label className="text-[10px] text-zinc-500 uppercase font-semibold">Deadline</label>
+                            <input
+                                type="date"
+                                value={editData.deadline || ''}
+                                onChange={e => setEditData({ ...editData, deadline: e.target.value })}
+                                className="bg-[#000000] border border-white/[0.08] rounded-xl px-3.5 py-2 text-white text-sm font-semibold focus:outline-none focus:border-white/[0.2] transition-colors"
+                            />
+                        </div>
                     </div>
                     <div className="flex gap-2 pt-2">
                         <button onClick={handleSave} disabled={saving} className="bg-white hover:bg-zinc-200 text-black font-bold px-5 py-2 rounded-xl text-sm transition-all shadow-[0_0_15px_rgba(255,255,255,0.15)] active:scale-95">
@@ -312,12 +381,15 @@ const IssueDetailPanel = ({ teamId, issueId, onBack, myRole }) => {
                         </button>
                     </div>
 
-                    <div className="flex items-center gap-2.5 mb-8">
+                    <div className="flex flex-wrap items-center gap-2.5 mb-8">
                         <span className={`text-[11px] uppercase tracking-wider font-extrabold px-3 py-1 rounded-lg border ${getStatusColor(issue.status)}`}>
                             {issue.status.replace('_', ' ')}
                         </span>
                         <span className={`text-[11px] uppercase tracking-wider font-extrabold px-3 py-1 rounded-lg border ${getPriorityColor(issue.priority)}`}>
                             {issue.priority}
+                        </span>
+                        <span className={`text-[11px] uppercase tracking-wider font-extrabold px-3 py-1 rounded-lg border ${getDeadlineSlang(issue.deadline, issue.status).color}`}>
+                            {getDeadlineSlang(issue.deadline, issue.status).text}
                         </span>
                     </div>
 

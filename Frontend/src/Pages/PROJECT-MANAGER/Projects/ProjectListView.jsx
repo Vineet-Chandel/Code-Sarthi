@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import BASE_URL from '../../auth/baseURL';
-import { setTeamProjects, addProjectToTeam } from '../../../utils/projectSlice';
+import { setTeamProjects, addProjectToTeam, updateProjectInTeam } from '../../../utils/projectSlice';
 import CreateProjectModal from './CreateProjectModal';
 
 const ProjectListView = ({ teamId, onProjectSelect }) => {
@@ -150,8 +150,12 @@ const ProjectListView = ({ teamId, onProjectSelect }) => {
                 onClose={() => setCreateModalOpen(false)}
                 teamId={teamId}
                 onSuccess={(newProject) => {
-                    setCreateModalOpen(false);
-                    dispatch(addProjectToTeam({ teamId, project: newProject }));
+                    const exists = cachedProjects?.projects?.some(p => p._id === newProject._id);
+                    if (exists) {
+                        dispatch(updateProjectInTeam({ teamId, project: newProject }));
+                    } else {
+                        dispatch(addProjectToTeam({ teamId, project: newProject }));
+                    }
                 }}
             />
         </div>

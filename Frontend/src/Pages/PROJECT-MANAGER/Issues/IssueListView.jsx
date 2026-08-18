@@ -8,6 +8,59 @@ import AssignIssueDropdown from './AssignIssueDropdown';
 import { useSelector } from 'react-redux';
 import AlertModal from '../AlertModal';
 
+const getDeadlineSlang = (deadline, status) => {
+    if (!deadline) return { text: "No rush... for now 👀", color: "text-zinc-500 bg-zinc-500/10 border-zinc-500/20" };
+    if (status === 'done') return { text: "Done & dusted! ✅", color: "text-emerald-400 bg-emerald-400/10 border-emerald-400/20" };
+
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+    const target = new Date(deadline);
+    target.setHours(0, 0, 0, 0);
+
+    const diffTime = target.getTime() - now.getTime();
+    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays < 0) {
+        const slangs = [
+            "Deadline crossed! 💀",
+            "Overdue! Rip ⚰️",
+            "Code rotting... 🫠",
+            "Too slow! 🐌",
+            "This died! 👻",
+            "Missed it, big oof! 💀"
+        ];
+        const idx = Math.abs(target.getTime()) % slangs.length;
+        return { text: slangs[idx], color: "text-rose-500 bg-rose-500/10 border-rose-500/20 font-bold animate-pulse" };
+    }
+
+    if (diffDays === 0) {
+        const slangs = [
+            "TODAY IS THE DAY! 🚨",
+            "Last chance! ⏳",
+            "Sweating yet? 🥵",
+            "Tick tock! ⏰"
+        ];
+        const idx = Math.abs(target.getTime()) % slangs.length;
+        return { text: slangs[idx], color: "text-amber-500 bg-amber-500/10 border-amber-500/20 font-bold" };
+    }
+
+    if (diffDays === 1) {
+        const slangs = [
+            "One day left !! 🔥",
+            "Tomorrow! Wake up! ⏰",
+            "Panic mode: active! 😱"
+        ];
+        const idx = Math.abs(target.getTime()) % slangs.length;
+        return { text: slangs[idx], color: "text-orange-400 bg-orange-400/10 border-orange-400/20 font-semibold" };
+    }
+
+    if (diffDays <= 3) {
+        return { text: `${diffDays} days left! Hurry! 🏃‍♂️`, color: "text-yellow-400 bg-yellow-400/10 border-yellow-400/20 font-medium" };
+    }
+
+    return { text: `${diffDays} days left. Cool 😎`, color: "text-zinc-400 bg-zinc-400/10 border-zinc-400/20" };
+};
+
 const IssueListView = ({ teamId, projectId, myRole }) => {
     const user = useSelector(store => store.user);
     const [issues, setIssues] = useState([]);
@@ -235,12 +288,15 @@ const IssueListView = ({ teamId, projectId, myRole }) => {
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
+                            <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto shrink-0">
                                 <span className={`text-[10px] uppercase tracking-wider font-extrabold px-2.5 py-1 rounded-lg border ${getStatusColor(issue.status)}`}>
                                     {issue.status.replace('_', ' ')}
                                 </span>
                                 <span className={`text-[10px] uppercase tracking-wider font-extrabold px-2.5 py-1 rounded-lg border ${getPriorityColor(issue.priority)}`}>
                                     {issue.priority}
+                                </span>
+                                <span className={`text-[10px] uppercase tracking-wider font-extrabold px-2.5 py-1 rounded-lg border ${getDeadlineSlang(issue.deadline, issue.status).color}`}>
+                                    {getDeadlineSlang(issue.deadline, issue.status).text}
                                 </span>
                             </div>
                         </div>

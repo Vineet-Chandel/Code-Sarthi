@@ -75,7 +75,13 @@ const Projects = () => {
             teamName: targetTeam ? targetTeam.name : 'Team',
             myRole: targetTeam ? targetTeam.myRole : 'member'
         };
-        setAllProjects(prev => [enrichedProject, ...prev]);
+        setAllProjects(prev => {
+            const exists = prev.some(p => p._id === enrichedProject._id);
+            if (exists) {
+                return prev.map(p => p._id === enrichedProject._id ? enrichedProject : p);
+            }
+            return [enrichedProject, ...prev];
+        });
         setSelectedProject(enrichedProject);
     };
 
@@ -112,7 +118,7 @@ const Projects = () => {
 
     // Filtered project stream
     const filteredProjects = allProjects.filter(project => {
-        const matchesSearch = !searchQuery.trim() || 
+        const matchesSearch = !searchQuery.trim() ||
             (project.title && project.title.toLowerCase().includes(searchQuery.toLowerCase())) ||
             (project.description && project.description.toLowerCase().includes(searchQuery.toLowerCase()));
         const matchesTeam = !selectedTeamFilter || project.teamId === selectedTeamFilter;
@@ -186,7 +192,7 @@ const Projects = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     {/* Total Projects Card */}
                     <div
-                        onClick={() => { resetFilters(); navigate('/projects'); }}
+                        onClick={() => { resetFilters(); navigate('/app/projects'); }}
                         className="group relative bg-[#0a0a0a] border border-white/[0.05] hover:border-white/[0.12] rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-0.5 overflow-hidden flex items-center justify-between"
                     >
                         <div className="relative z-10">
@@ -215,7 +221,7 @@ const Projects = () => {
 
                     {/* Total Teams Card */}
                     <div
-                        onClick={() => navigate('/teams')}
+                        onClick={() => navigate('/app/teams')}
                         className="group relative bg-[#0a0a0a] border border-white/[0.05] hover:border-white/[0.12] rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-0.5 overflow-hidden flex items-center justify-between"
                     >
                         <div className="relative z-10">
@@ -336,8 +342,8 @@ const Projects = () => {
                             {isFiltered ? "No projects found matching filters" : "No projects across your teams"}
                         </h3>
                         <p className="text-sm text-zinc-400 max-w-md mb-8">
-                            {isFiltered 
-                                ? "try adjusting or clearing your search queries and dropdown filters above." 
+                            {isFiltered
+                                ? "try adjusting or clearing your search queries and dropdown filters above."
                                 : "Get started by launching your team's first project initiative to structure issues, links, and milestones."}
                         </p>
                         {isFiltered ? (

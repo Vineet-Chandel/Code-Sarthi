@@ -32,7 +32,8 @@ const IssueSchema = new Schema({
   }, // field exists now so Phase 3 doesn't need a migration; logic stays untouched here
   assignedAt: { type: Date, default: null },
   archivedAt: { type: Date, default: null },
-  conversationId: { type: Schema.Types.ObjectId, ref: 'conversation', default: null }
+  conversationId: { type: Schema.Types.ObjectId, ref: 'conversation', default: null },
+  deadline: { type: Date, default: null }
 }, { timestamps: true });
 
 IssueSchema.index({ projectId: 1, status: 1 });

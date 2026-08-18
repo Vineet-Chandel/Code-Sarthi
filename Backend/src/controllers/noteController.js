@@ -241,7 +241,7 @@ const permanentDeleteNote = async (req, res) => {
 const convertToIssue = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, description, projectId } = req.body;
+    const { title, description, projectId, deadline } = req.body;
 
     const note = await Note.findOne({ _id: id, owner: req.user._id });
     if (!note) {
@@ -258,6 +258,11 @@ const convertToIssue = async (req, res) => {
       return res.status(404).json({ message: "Project not found" });
     }
 
+    const hasGitHubLink = !!project.githubRepo;
+    if (!hasGitHubLink) {
+      return res.status(403).json({ message: "Cannot convert note to issue: project must be linked with GitHub first." });
+    }
+
     const newIssue = new Issue({
       teamId: project.teamId,
       projectId: resolvedProjectId,
@@ -266,7 +271,8 @@ const convertToIssue = async (req, res) => {
       description: `${description || ""}\n\n---\n*Origin: Developer Note → [${note.title || "Untitled"}](http://localhost:5173/app/notes)*`,
       createdBy: req.user._id,
       status: "open",
-      priority: "medium"
+      priority: "medium",
+      deadline: deadline || null
     });
 
     const savedIssue = await newIssue.save();

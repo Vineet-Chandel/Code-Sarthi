@@ -16,6 +16,7 @@ const ProjectSchema = new Schema({
     default: 'medium'
   },
   createdBy: { type: Schema.Types.ObjectId, ref: 'Users', required: true },
+  githubRepo: { type: String, default: null },
   links: [{
     title: { type: String, required: true, trim: true, maxlength: 100 },
     url: { type: String, required: true, trim: true, maxlength: 500 },
