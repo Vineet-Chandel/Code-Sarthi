@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
 const { requireTeamMembership, requireTeamLeader } = require('../middleware/team');
+const { userAuth } = require('../middlewares/userAuth');
 
 const {
   createProject,
@@ -9,7 +10,8 @@ const {
   updateProject,
   archiveProject,
   deleteProject,
-  notifyLeaderToLink
+  notifyLeaderToLink,
+  startGithubInstall
 } = require('../controllers/projectController');
 
 const {
@@ -32,4 +34,9 @@ router.post('/:projectId/notify-leader', notifyLeaderToLink);
 router.post('/:projectId/issues', createIssue);
 router.get('/:projectId/issues', listIssues);
 
+router.get(
+  "/github/install",
+  userAuth,
+  startGithubInstall
+);
 module.exports = router;

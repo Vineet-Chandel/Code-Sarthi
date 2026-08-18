@@ -44,11 +44,11 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
 
     // Inline edit state
     const [isEditing, setIsEditing] = useState(false);
-    const [editData, setEditData] = useState({ 
-        title: cachedDetail?.project?.title || '', 
-        description: cachedDetail?.project?.description || '', 
-        status: cachedDetail?.project?.status || '', 
-        priority: cachedDetail?.project?.priority || '' 
+    const [editData, setEditData] = useState({
+        title: cachedDetail?.project?.title || '',
+        description: cachedDetail?.project?.description || '',
+        status: cachedDetail?.project?.status || '',
+        priority: cachedDetail?.project?.priority || ''
     });
     const [saving, setSaving] = useState(false);
 
@@ -181,21 +181,18 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
         if (e) e.preventDefault();
         setConnecting(true);
 
-        // Generate a valid-looking dummy repository URL based on project title
-        const projectTitleSlug = project?.title 
-            ? project.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')
-            : 'project';
-        const dummyUrl = `https://github.com/codesarthi-projects/${projectTitleSlug}-${projectId.substring(18)}`;
-
         try {
-            const res = await axios.patch(`${BASE_URL}/teams/${teamId}/projects/${projectId}`, {
-                githubRepo: dummyUrl
-            }, { withCredentials: true });
-            
-            setProject(res.data.project);
-            dispatch(setProjectDetail({ projectId, project: res.data.project }));
-            dispatch(updateProjectInTeam({ teamId, project: res.data.project }));
-            setAlertData({ type: 'success', message: 'GitHub repository connected successfully!' });
+            const res = await axios.get(
+                `${BASE_URL}/teams/${teamId}/projects/github/install?projectId=${projectId}`,
+                { withCredentials: true }
+            );
+
+            if (res.data.url) {
+                setAlertData({ type: 'success', message: 'Redirecting to GitHub installation...' });
+                window.location.href = res.data.url;
+            } else {
+                setAlertData({ type: 'error', message: 'Failed to retrieve GitHub installation link' });
+            }
         } catch (err) {
             setAlertData({ type: 'error', message: err.response?.data?.error || 'Failed to connect GitHub' });
         } finally {
@@ -209,7 +206,7 @@ const ProjectDetailPanel = ({ teamId, projectId, onBack, myRole }) => {
             const res = await axios.patch(`${BASE_URL}/teams/${teamId}/projects/${projectId}`, {
                 githubRepo: null
             }, { withCredentials: true });
-            
+
             setProject(res.data.project);
             dispatch(setProjectDetail({ projectId, project: res.data.project }));
             dispatch(updateProjectInTeam({ teamId, project: res.data.project }));

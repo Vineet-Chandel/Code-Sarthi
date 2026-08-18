@@ -65,25 +65,19 @@ const CreateProjectModal = ({ isOpen, onClose, teamId, availableTeams = [], onSu
         setGithubError(null);
         setGithubSuccess(false);
 
-        // Generate a valid-looking dummy repository URL based on project title
-        const projectTitleSlug = createdProject?.title 
-            ? createdProject.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')
-            : 'project';
-        const dummyUrl = `https://github.com/codesarthi-projects/${projectTitleSlug}-${createdProject._id.substring(18)}`;
-
         try {
             const targetTeamId = teamId || selectedTeamId;
-            const res = await axios.patch(`${BASE_URL}/teams/${targetTeamId}/projects/${createdProject._id}`, {
-                githubRepo: dummyUrl
-            }, { withCredentials: true });
+            const res = await axios.get(
+                `${BASE_URL}/teams/${targetTeamId}/projects/github/install?projectId=${createdProject._id}`,
+                { withCredentials: true }
+            );
 
-            // Notify parent with the updated project details (including links)
-            onSuccess(res.data.project, targetTeamId);
-            setGithubSuccess(true);
-
-            setTimeout(() => {
-                handleClose();
-            }, 1500);
+            if (res.data.url) {
+                setGithubSuccess(true);
+                window.location.href = res.data.url;
+            } else {
+                setGithubError('Failed to retrieve GitHub installation link');
+            }
         } catch (err) {
             setGithubError(err.response?.data?.message || err.response?.data?.error || 'Failed to connect to GitHub');
         } finally {

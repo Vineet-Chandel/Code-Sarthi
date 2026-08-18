@@ -13,8 +13,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
     cors({
-        origin: process.env.AT_FRONT,
-        // origin: process.env.AT_SYSTEM_API,
+        // origin: process.env.AT_FRONT,
+        origin: process.env.AT_SYSTEM_API,
         credentials: true
     })
 );
@@ -41,6 +41,7 @@ const schedulesRouter = require("./routes/schedulesRoute");
 const teamRoutes = require("./routes/teamRoutes");
 const noteRoutes = require("./routes/noteRoutes");
 const folderRoutes = require("./routes/folderRoutes");
+const githubRouter = require("./routes/githubRoutes");
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
     api_key: process.env.CLOUD_KEY,
@@ -64,6 +65,7 @@ app.use("/api", goalsRouter);
 app.use("/api", schedulesRouter);
 app.use("/api", noteRoutes);
 app.use("/api", folderRoutes);
+app.use("/api", githubRouter);
 app.use("/api/teams", teamRoutes);
 
 
@@ -84,6 +86,7 @@ app.use("/", goalsRouter);
 app.use("/", schedulesRouter);
 app.use("/", noteRoutes);
 app.use("/", folderRoutes);
+app.use("/", githubRouter);
 app.use("/teams", teamRoutes);
 const PORT = process.env.PORT || 8000;
 
