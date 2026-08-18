@@ -263,20 +263,28 @@ const gitHubAccSetup = async (req, res) => {
     console.log("installation_id:", installation_id);
     console.log("state:", state);
 
-    if (!installation_id || !state) {
+    if (!installation_id) {
       return res.status(400).json({
         success: false,
-        message: "installation_id and state are required"
+        message: "installation_id is required"
       });
     }
 
-    // Find the state that we created before sending
-    // the user to GitHub.
-    const installState = await GithubInstallState.findOne({
-      state,
-      used: false,
-      expiresAt: { $gt: new Date() }
-    });
+    let installState;
+    if (state) {
+      // Find the specific state we created
+      installState = await GithubInstallState.findOne({
+        state,
+        used: false,
+        expiresAt: { $gt: new Date() }
+      });
+    } else {
+      // Fallback: Find the latest active and unused install state
+      installState = await GithubInstallState.findOne({
+        used: false,
+        expiresAt: { $gt: new Date() }
+      }).sort({ createdAt: -1 });
+    }
 
     if (!installState) {
       return res.status(400).json({
