@@ -196,6 +196,7 @@ const App = () => {
               <Route path="shastraAI" element={<Shastra />} />
               <Route path="teams" element={<Teams />} />
               <Route path="projects" element={<Projects />} />
+              <Route path="projects/:username/:projectId" element={<Projects />} />
               <Route path="manager" element={<ProjectManager />} />
               <Route path="scheduler" element={<Scheduler />} />
               <Route path="study" element={<Study />} />

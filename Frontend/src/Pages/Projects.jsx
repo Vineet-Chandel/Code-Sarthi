@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import BASE_URL from './auth/baseURL';
 import { setTeams } from '../utils/projectSlice';
@@ -10,7 +10,8 @@ import ProjectDetailPanel from './PROJECT-MANAGER/Projects/ProjectDetailPanel';
 const Projects = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [searchParams, setSearchParams] = useSearchParams();
+    const { projectId } = useParams();
+    const loggedInUser = useSelector(store => store.user?.user);
     const { teams, isTeamsFetched } = useSelector((store) => store.projects || { teams: [], isTeamsFetched: false });
 
     const [allProjects, setAllProjects] = useState([]);
@@ -29,15 +30,15 @@ const Projects = () => {
     }, []);
 
     useEffect(() => {
-        const projectIdParam = searchParams.get('projectId');
-        if (projectIdParam && allProjects.length > 0) {
-            const projectToSelect = allProjects.find(p => p._id === projectIdParam);
+        if (projectId && allProjects.length > 0) {
+            const projectToSelect = allProjects.find(p => p._id === projectId);
             if (projectToSelect) {
                 setSelectedProject(projectToSelect);
-                setSearchParams({});
             }
+        } else if (!projectId) {
+            setSelectedProject(null);
         }
-    }, [allProjects, searchParams]);
+    }, [allProjects, projectId]);
 
     const fetchData = async () => {
         setLoading(true);
@@ -94,7 +95,8 @@ const Projects = () => {
             }
             return [enrichedProject, ...prev];
         });
-        setSelectedProject(enrichedProject);
+        const username = loggedInUser?.username || loggedInUser?._id || 'user';
+        navigate(`/app/projects/${username}/${enrichedProject._id}`);
     };
 
     const getStatusColor = (status = '') => {
@@ -158,7 +160,7 @@ const Projects = () => {
                         projectId={selectedProject._id}
                         myRole={selectedProject.myRole}
                         onBack={() => {
-                            setSelectedProject(null);
+                            navigate('/app/projects');
                             fetchData();
                         }}
                     />
@@ -386,7 +388,10 @@ const Projects = () => {
                             return (
                                 <div
                                     key={project._id}
-                                    onClick={() => setSelectedProject(project)}
+                                    onClick={() => {
+                                        const username = loggedInUser?.username || loggedInUser?._id || 'user';
+                                        navigate(`/app/projects/${username}/${project._id}`);
+                                    }}
                                     className="group relative bg-[#0a0a0a] hover:bg-[#111111] border border-white/[0.05] hover:border-white/[0.12] rounded-2xl p-6 cursor-pointer transition-all duration-300 flex flex-col justify-between overflow-hidden min-h-[260px]"
                                 >
                                     <div>

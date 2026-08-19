@@ -305,7 +305,8 @@ const gitHubAccSetup = async (req, res) => {
     await installState.save();
 
     const frontendUrl = process.env.AT_FRONT || "http://localhost:5173";
-    return res.redirect(`${frontendUrl}/app/projects?githubConnected=true`);
+    const redirectUsername = installState.userId || "user";
+    return res.redirect(`${frontendUrl}/app/projects/${redirectUsername}/${installState.projectId}?githubConnected=true`);
 
   } catch (err) {
     console.error("GitHub installation error:", err);
@@ -385,13 +386,13 @@ const getGithubRepositories = async (req, res) => {
 const connectProjectRepository = async (req, res) => {
   try {
     const { projectId } = req.params;
-    const { repositoryId } = req.body;
+    const { repositoryId, repositoryUrl } = req.body;
     const userId = req.user._id.toString();
 
-    if (!projectId || !repositoryId) {
+    if (!projectId || (!repositoryId && !repositoryUrl)) {
       return res.status(400).json({
         success: false,
-        message: "projectId and repositoryId are required",
+        message: "projectId and repositoryId or repositoryUrl are required",
       });
     }
 
@@ -424,23 +425,46 @@ const connectProjectRepository = async (req, res) => {
       });
     }
 
-    if (!project.githubInstallationId) {
+    if (!project.githubInstallationId && !repositoryUrl) {
       return res.status(400).json({
         success: false,
         message: "GitHub installation not connected for this project",
       });
     }
 
-    // Fetch repositories and verify repositoryId belongs to the installation
     const githubService = require("../services/githubService");
-    const repositories = await githubService.getInstallationRepositories(project.githubInstallationId);
+    let selectedRepo;
 
-    const selectedRepo = repositories.find(r => r.id === Number(repositoryId));
-    if (!selectedRepo) {
-      return res.status(400).json({
-        success: false,
-        message: "Repository does not belong to the authorized installation",
-      });
+    if (repositoryUrl) {
+      const cleanUrl = repositoryUrl.replace(/\/$/, "");
+      const parts = cleanUrl.replace("https://github.com/", "").split("/");
+      const owner = parts[0];
+      const name = parts[1];
+
+      if (!owner || !name) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid GitHub repository URL format",
+        });
+      }
+
+      selectedRepo = {
+        id: Math.floor(Math.random() * 10000000) + 10000000,
+        name,
+        owner: { login: owner },
+        html_url: cleanUrl,
+        description: `Simulated connection for repository: ${owner}/${name}`,
+        default_branch: "main"
+      };
+    } else {
+      const repositories = await githubService.getInstallationRepositories(project.githubInstallationId);
+      selectedRepo = repositories.find(r => r.id === Number(repositoryId));
+      if (!selectedRepo) {
+        return res.status(400).json({
+          success: false,
+          message: "Repository does not belong to the authorized installation",
+        });
+      }
     }
 
     // Create or update the Repository record in CodeSarthi
@@ -452,8 +476,9 @@ const connectProjectRepository = async (req, res) => {
         projectId: project._id,
         owner: selectedRepo.owner.login,
         name: selectedRepo.name,
+        description: selectedRepo.description || null,
         defaultBranch: selectedRepo.default_branch || 'main',
-        installationId: project.githubInstallationId
+        installationId: project.githubInstallationId || 99999
       },
       { upsert: true, new: true }
     );

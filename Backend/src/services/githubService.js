@@ -56,6 +56,7 @@ async function getInstallationRepositories(installationId) {
         id: 9912345,
         name: "auth-service",
         full_name: "codesarthi-projects/auth-service",
+        description: "Core backend authorization and credentials validation service",
         owner: { login: "codesarthi-projects" },
         default_branch: "main",
         html_url: "https://github.com/codesarthi-projects/auth-service",
@@ -65,6 +66,7 @@ async function getInstallationRepositories(installationId) {
         id: 9912346,
         name: "frontend",
         full_name: "codesarthi-projects/frontend",
+        description: "Interactive dashboard interface and task workspace client",
         owner: { login: "codesarthi-projects" },
         default_branch: "main",
         html_url: "https://github.com/codesarthi-projects/frontend",
@@ -74,6 +76,7 @@ async function getInstallationRepositories(installationId) {
         id: 9912347,
         name: "notification-service",
         full_name: "codesarthi-projects/notification-service",
+        description: "Background messaging, alert trigger and outbox dispatch service",
         owner: { login: "codesarthi-projects" },
         default_branch: "develop",
         html_url: "https://github.com/codesarthi-projects/notification-service",
@@ -101,15 +104,250 @@ async function getInstallationRepositories(installationId) {
   }
 }
 
+const MOCK_DATA = {
+  "auth-service": {
+    branches: [
+      { name: "main", commit: { sha: "authmainsha123" }, protected: true },
+      { name: "develop", commit: { sha: "authdevsha456" }, protected: false },
+      { name: "feature/argon2-hash", commit: { sha: "authhashsha789" }, protected: false }
+    ],
+    commits: [
+      {
+        sha: "authmainsha123",
+        commit: {
+          author: { name: "Vineet Chandel", email: "vineet@codesarthi.in", date: new Date().toISOString() },
+          committer: { name: "Vineet Chandel", email: "vineet@codesarthi.in", date: new Date().toISOString() },
+          message: "feat: add argon2 password hashing (#112)",
+          tree: { sha: "authtree1" }
+        },
+        parents: [],
+        html_url: "https://github.com/codesarthi-projects/auth-service/commit/authmainsha123"
+      },
+      {
+        sha: "authdevsha456",
+        commit: {
+          author: { name: "Jane Smith", email: "jane@example.com", date: new Date(Date.now() - 3600000).toISOString() },
+          committer: { name: "Jane Smith", email: "jane@example.com", date: new Date(Date.now() - 3600000).toISOString() },
+          message: "fix: update token expiration to 24h",
+          tree: { sha: "authtree2" }
+        },
+        parents: [{ sha: "authmainsha123" }],
+        html_url: "https://github.com/codesarthi-projects/auth-service/commit/authdevsha456"
+      }
+    ],
+    prs: [
+      {
+        id: 881201,
+        number: 112,
+        title: "Implement argon2 password hashing",
+        body: "Closes #112. Replaces basic bcrypt with argon2id hashing strategy.",
+        state: "open",
+        html_url: "https://github.com/codesarthi-projects/auth-service/pull/112",
+        head: { ref: "feature/argon2-hash", sha: "authhashsha789" },
+        base: { ref: "main", sha: "authmainsha123" },
+        user: { id: 112201, login: "vineetchandel" },
+        merged_at: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+    ],
+    workflowRuns: [
+      {
+        id: 7728001,
+        name: "Security Audits & Auth Tests",
+        head_branch: "main",
+        head_sha: "authmainsha123",
+        status: "completed",
+        conclusion: "success",
+        html_url: "https://github.com/codesarthi-projects/auth-service/actions/runs/7728001",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+    ]
+  },
+  "frontend": {
+    branches: [
+      { name: "main", commit: { sha: "frmainsha123" }, protected: true },
+      { name: "develop", commit: { sha: "frdevsha456" }, protected: false },
+      { name: "feature/dashboard-widgets", commit: { sha: "frwidgetsha789" }, protected: false }
+    ],
+    commits: [
+      {
+        sha: "frmainsha123",
+        commit: {
+          author: { name: "Vineet Chandel", email: "vineet@codesarthi.in", date: new Date().toISOString() },
+          committer: { name: "Vineet Chandel", email: "vineet@codesarthi.in", date: new Date().toISOString() },
+          message: "feat: implement interactive dashboard widgets (#142)",
+          tree: { sha: "frtree1" }
+        },
+        parents: [],
+        html_url: "https://github.com/codesarthi-projects/frontend/commit/frmainsha123"
+      },
+      {
+        sha: "frdevsha456",
+        commit: {
+          author: { name: "Alex Green", email: "alex@example.com", date: new Date(Date.now() - 3600000).toISOString() },
+          committer: { name: "Alex Green", email: "alex@example.com", date: new Date(Date.now() - 3600000).toISOString() },
+          message: "style: fix alignment on project details panel",
+          tree: { sha: "frtree2" }
+        },
+        parents: [{ sha: "frmainsha123" }],
+        html_url: "https://github.com/codesarthi-projects/frontend/commit/frdevsha456"
+      }
+    ],
+    prs: [
+      {
+        id: 881202,
+        number: 142,
+        title: "Design glassmorphism sidebar widgets",
+        body: "Closes #142 and resolves responsive layout issues.",
+        state: "open",
+        html_url: "https://github.com/codesarthi-projects/frontend/pull/142",
+        head: { ref: "feature/dashboard-widgets", sha: "frwidgetsha789" },
+        base: { ref: "main", sha: "frmainsha123" },
+        user: { id: 112202, login: "vineetchandel" },
+        merged_at: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+    ],
+    workflowRuns: [
+      {
+        id: 7728002,
+        name: "Vite Lint & Production Build",
+        head_branch: "main",
+        head_sha: "frmainsha123",
+        status: "completed",
+        conclusion: "success",
+        html_url: "https://github.com/codesarthi-projects/frontend/actions/runs/7728002",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+    ]
+  },
+  "notification-service": {
+    branches: [
+      { name: "main", commit: { sha: "ntmainsha123" }, protected: true },
+      { name: "develop", commit: { sha: "ntdevsha456" }, protected: false },
+      { name: "feature/resend-outbox", commit: { sha: "ntresendsha789" }, protected: false }
+    ],
+    commits: [
+      {
+        sha: "ntmainsha123",
+        commit: {
+          author: { name: "Vineet Chandel", email: "vineet@codesarthi.in", date: new Date().toISOString() },
+          committer: { name: "Vineet Chandel", email: "vineet@codesarthi.in", date: new Date().toISOString() },
+          message: "feat: integrate Resend API client (#105)",
+          tree: { sha: "nttree1" }
+        },
+        parents: [],
+        html_url: "https://github.com/codesarthi-projects/notification-service/commit/ntmainsha123"
+      },
+      {
+        sha: "ntdevsha456",
+        commit: {
+          author: { name: "Sarah Connor", email: "sarah@example.com", date: new Date(Date.now() - 3600000).toISOString() },
+          committer: { name: "Sarah Connor", email: "sarah@example.com", date: new Date(Date.now() - 3600000).toISOString() },
+          message: "fix: handle retry loop on network failure",
+          tree: { sha: "nttree2" }
+        },
+        parents: [{ sha: "ntmainsha123" }],
+        html_url: "https://github.com/codesarthi-projects/notification-service/commit/ntdevsha456"
+      }
+    ],
+    prs: [
+      {
+        id: 881203,
+        number: 105,
+        title: "Add email outbox templates",
+        body: "Closes #105. Incorporates responsive HTML outbox template mappings.",
+        state: "open",
+        html_url: "https://github.com/codesarthi-projects/notification-service/pull/105",
+        head: { ref: "feature/resend-outbox", sha: "ntresendsha789" },
+        base: { ref: "main", sha: "ntmainsha123" },
+        user: { id: 112203, login: "vineetchandel" },
+        merged_at: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+    ],
+    workflowRuns: [
+      {
+        id: 7728003,
+        name: "Outbox Queue Integration Checks",
+        head_branch: "main",
+        head_sha: "ntmainsha123",
+        status: "completed",
+        conclusion: "success",
+        html_url: "https://github.com/codesarthi-projects/notification-service/actions/runs/7728003",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+    ]
+  }
+};
+
+function getMockDataForRepo(repo) {
+  if (MOCK_DATA[repo]) {
+    return MOCK_DATA[repo];
+  }
+  const cleanName = repo.replace(/[^a-zA-Z0-9]/g, ' ').trim();
+  return {
+    branches: [
+      { name: "main", commit: { sha: `${repo}sha123` }, protected: true },
+      { name: "develop", commit: { sha: `${repo}sha456` }, protected: false },
+      { name: `feature/${repo}-init`, commit: { sha: `${repo}sha789` }, protected: false }
+    ],
+    commits: [
+      {
+        sha: `${repo}sha123`,
+        commit: {
+          author: { name: "Developer", email: "dev@codesarthi.in", date: new Date().toISOString() },
+          committer: { name: "Developer", email: "dev@codesarthi.in", date: new Date().toISOString() },
+          message: `feat: initialize ${cleanName} configuration (#101)`,
+          tree: { sha: `${repo}tree1` }
+        },
+        parents: [],
+        html_url: `https://github.com/codesarthi-projects/${repo}/commit/${repo}sha123`
+      }
+    ],
+    prs: [
+      {
+        id: Math.floor(Math.random() * 100000) + 100000,
+        number: 101,
+        title: `Configure base setup for ${cleanName}`,
+        body: `Closes #101. Integrates starting workspace config files for ${repo}.`,
+        state: "open",
+        html_url: `https://github.com/codesarthi-projects/${repo}/pull/101`,
+        head: { ref: `feature/${repo}-init`, sha: `${repo}sha789` },
+        base: { ref: "main", sha: `${repo}sha123` },
+        user: { id: 99999, login: "developer" },
+        merged_at: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+    ],
+    workflowRuns: [
+      {
+        id: Math.floor(Math.random() * 1000000) + 7000000,
+        name: `${cleanName} Checks`,
+        head_branch: "main",
+        head_sha: `${repo}sha123`,
+        status: "completed",
+        conclusion: "success",
+        html_url: `https://github.com/codesarthi-projects/${repo}/actions/runs/7000000`,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+    ]
+  };
+}
+
 async function getInstallationBranches(installationId, owner, repo) {
   const privateKey = getPrivateKey();
   if (!privateKey) {
     console.warn("Using mock branches because GITHUB_APP_PRIVATE_KEY is not configured.");
-    return [
-      { name: "main", commit: { sha: "abc123sha" }, protected: true },
-      { name: "develop", commit: { sha: "def456sha" }, protected: false },
-      { name: "feature/jwt-validation", commit: { sha: "ghi789sha" }, protected: false }
-    ];
+    return getMockDataForRepo(repo).branches;
   }
 
   try {
@@ -135,30 +373,7 @@ async function getInstallationCommits(installationId, owner, repo, sha = "main",
   const privateKey = getPrivateKey();
   if (!privateKey) {
     console.warn("Using mock commits because GITHUB_APP_PRIVATE_KEY is not configured.");
-    return [
-      {
-        sha: "abc123sha",
-        commit: {
-          author: { name: "John Doe", email: "john@example.com", date: new Date().toISOString() },
-          committer: { name: "John Doe", email: "john@example.com", date: new Date().toISOString() },
-          message: "feature: Add JWT validation (#142)",
-          tree: { sha: "tree123" }
-        },
-        parents: [],
-        html_url: `https://github.com/${owner}/${repo}/commit/abc123sha`
-      },
-      {
-        sha: "def456sha",
-        commit: {
-          author: { name: "Jane Smith", email: "jane@example.com", date: new Date(Date.now() - 3600000).toISOString() },
-          committer: { name: "Jane Smith", email: "jane@example.com", date: new Date(Date.now() - 3600000).toISOString() },
-          message: "fix: resolve auth validation loop",
-          tree: { sha: "tree456" }
-        },
-        parents: [{ sha: "abc123sha" }],
-        html_url: `https://github.com/${owner}/${repo}/commit/def456sha`
-      }
-    ];
+    return getMockDataForRepo(repo).commits;
   }
 
   try {
@@ -185,22 +400,8 @@ async function getInstallationPullRequests(installationId, owner, repo, state = 
   const privateKey = getPrivateKey();
   if (!privateKey) {
     console.warn("Using mock PRs because GITHUB_APP_PRIVATE_KEY is not configured.");
-    return [
-      {
-        id: 881234,
-        number: 184,
-        title: "Add JWT validation middleware",
-        body: "Closes #142 and resolves JWT issues.",
-        state: "open",
-        html_url: `https://github.com/${owner}/${repo}/pull/184`,
-        head: { ref: "feature/jwt-validation", sha: "ghi789sha" },
-        base: { ref: "main", sha: "abc123sha" },
-        user: { id: 112233, login: "johndoe" },
-        merged_at: null,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      }
-    ];
+    const mockData = getMockDataForRepo(repo);
+    return mockData.prs.filter(pr => pr.state === state);
   }
 
   try {
@@ -227,19 +428,7 @@ async function getInstallationWorkflowRuns(installationId, owner, repo, perPage 
   const privateKey = getPrivateKey();
   if (!privateKey) {
     console.warn("Using mock workflow runs because GITHUB_APP_PRIVATE_KEY is not configured.");
-    return [
-      {
-        id: 7728374,
-        name: "CI Build",
-        head_branch: "main",
-        head_sha: "abc123sha",
-        status: "completed",
-        conclusion: "success",
-        html_url: `https://github.com/${owner}/${repo}/actions/runs/7728374`,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      }
-    ];
+    return getMockDataForRepo(repo).workflowRuns;
   }
 
   try {

@@ -146,7 +146,6 @@ const CompleteProfile = () => {
                 { username },
                 { withCredentials: true }
             );
-
             if (checkResponse.data.message != "Username is available") {
                 addToast({
                     type: "error",

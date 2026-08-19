@@ -7,6 +7,7 @@ const RepositorySchema = new Schema({
   githubRepositoryId: { type: Number, required: true, unique: true },
   owner: { type: String, required: true, trim: true },
   name: { type: String, required: true, trim: true },
+  description: { type: String, default: null },
   defaultBranch: { type: String, default: 'main' },
   installationId: { type: Number, required: true },
   syncStatus: {
