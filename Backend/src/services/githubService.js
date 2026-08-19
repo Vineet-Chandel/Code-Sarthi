@@ -50,39 +50,7 @@ async function getInstallationAccessToken(installationId) {
 async function getInstallationRepositories(installationId) {
   const privateKey = getPrivateKey();
   if (!privateKey) {
-    console.warn("Using mock repositories because GITHUB_APP_PRIVATE_KEY is not configured.");
-    return [
-      {
-        id: 9912345,
-        name: "auth-service",
-        full_name: "codesarthi-projects/auth-service",
-        description: "Core backend authorization and credentials validation service",
-        owner: { login: "codesarthi-projects" },
-        default_branch: "main",
-        html_url: "https://github.com/codesarthi-projects/auth-service",
-        private: true,
-      },
-      {
-        id: 9912346,
-        name: "frontend",
-        full_name: "codesarthi-projects/frontend",
-        description: "Interactive dashboard interface and task workspace client",
-        owner: { login: "codesarthi-projects" },
-        default_branch: "main",
-        html_url: "https://github.com/codesarthi-projects/frontend",
-        private: false,
-      },
-      {
-        id: 9912347,
-        name: "notification-service",
-        full_name: "codesarthi-projects/notification-service",
-        description: "Background messaging, alert trigger and outbox dispatch service",
-        owner: { login: "codesarthi-projects" },
-        default_branch: "develop",
-        html_url: "https://github.com/codesarthi-projects/notification-service",
-        private: true,
-      }
-    ];
+    throw new Error("GITHUB_APP_PRIVATE_KEY is not configured in .env. Please add your GitHub App Private Key to see your actual repositories.");
   }
 
   try {
