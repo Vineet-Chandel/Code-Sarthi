@@ -51,10 +51,10 @@ async function getProjectDetails(req, res) {
     const { projectId, teamId } = req.params;
     const project = await Project.findOne({ _id: projectId, teamId, archivedAt: null }).populate('createdBy', 'firstName lastName photoUrl');
     if (!project) return res.status(404).json({ error: 'Project not found' });
-    
+
     const Repository = require('../models/repository');
     const repository = await Repository.findOne({ projectId: project._id });
-    
+
     res.json({ project, repository });
   } catch (err) {
     return handleRouteError(err, res);
@@ -304,7 +304,7 @@ const gitHubAccSetup = async (req, res) => {
     installState.used = true;
     await installState.save();
 
-    const frontendUrl = process.env.AT_FRONT || "http://localhost:5173";
+    const frontendUrl = process.env.AT_SYSTEM_API || "http://localhost:5173";
     const redirectUsername = installState.userId || "user";
     return res.redirect(`${frontendUrl}/app/projects/${redirectUsername}/${installState.projectId}?githubConnected=true`);
 
